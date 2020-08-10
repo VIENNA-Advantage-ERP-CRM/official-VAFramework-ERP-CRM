@@ -690,10 +690,26 @@ function VCard(fields, record) {
             }
             else value = null;
         }
-
+        // JID_1826 Amount is showing as per browser culture
+        else if (VIS.DisplayType.Amount == dt) {
+            var val = VIS.Utility.Util.getValueOfDecimal(value);
+            value = (val).toLocaleString();
+        }
+        // JID_1826 Quantity is showing as per browser culture
+        else if (VIS.DisplayType.Quantity == dt) {
+            var val = VIS.Utility.Util.getValueOfDecimal(value);
+            value = (val).toLocaleString();
+        }
         if (!value && value != 0)
             value = ' -- ';
         value = w2utils.encodeTags(value);
+
+        if (field.getIsEncryptedField()) {
+            value = value.replace(/\w|\W/g, "*");
+        }
+        if (field.getObscureType()) {
+            value = VIS.Env.getObscureValue(field.getObscureType(), value);
+        }
 
         var span = "";
         //if (i != 0)

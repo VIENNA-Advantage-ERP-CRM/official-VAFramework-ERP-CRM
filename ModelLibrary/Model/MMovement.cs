@@ -1012,8 +1012,11 @@ namespace VAdvantage.Model
                             if (Util.GetValueOfString(DB.ExecuteScalar(sql)) == "N")
                             {
 
-                                sql = "SELECT pcat.A_Asset_Group_ID FROM M_Product prd INNER JOIN M_Product_Category pcat ON prd.M_Product_Category_ID=pcat.M_Product_Category_ID WHERE prd.M_Product_ID=" + line.GetM_Product_ID();
-                                if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
+                                //sql = "SELECT pcat.A_Asset_Group_ID FROM M_Product prd INNER JOIN M_Product_Category pcat ON prd.M_Product_Category_ID=pcat.M_Product_Category_ID WHERE prd.M_Product_ID=" + line.GetM_Product_ID();
+                                //if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
+
+                                // Check Asset ID instead of Asset Group to consider Asset Movement.
+                                if(line.GetA_Asset_ID() > 0)
                                 {
                                     isAsset = true;
                                 }
@@ -1022,7 +1025,6 @@ namespace VAdvantage.Model
                                     isAsset = false;
                                 }
                             }
-
                             else
                             {
                                 isAsset = false;

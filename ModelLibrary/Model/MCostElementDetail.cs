@@ -71,6 +71,7 @@ namespace VAdvantage.Model
                 {
                     ced.SetC_InvoiceLine_ID(cd.GetC_InvoiceLine_ID());
                 }
+                ced.Set_Value("VAFAM_AssetDisposal_ID", cd.Get_Value("VAFAM_AssetDisposal_ID"));
                 ced.SetM_InventoryLine_ID(cd.GetM_InventoryLine_ID());
                 ced.SetM_MovementLine_ID(cd.GetM_MovementLine_ID());
                 ced.SetC_ProjectIssue_ID(cd.GetC_ProjectIssue_ID());

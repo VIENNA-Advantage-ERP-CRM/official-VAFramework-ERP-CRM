@@ -458,5 +458,7 @@ input:not([type=button]), select, textarea{
 }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
     font-family: inherit;
+
     /*font-size: 1rem;*/
+
 }

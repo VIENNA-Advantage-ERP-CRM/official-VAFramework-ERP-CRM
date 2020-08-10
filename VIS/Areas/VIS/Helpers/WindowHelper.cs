@@ -874,7 +874,7 @@ namespace VIS.Helpers
                     else
                     {
                         sb.Append(" AND ");
-                        colHeaders.Append(", " );
+                        colHeaders.Append(", ");
                     }
 
                     colHeaders.Append(wField.Name);
@@ -896,7 +896,7 @@ namespace VIS.Helpers
 
                             sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
                         }
-                        else if(DisplayType.YesNo == displayType)
+                        else if (DisplayType.YesNo == displayType)
                         {
                             string boolval = "N";
                             if (VAdvantage.Utility.Util.GetValueOfBool(colval))
@@ -910,28 +910,28 @@ namespace VIS.Helpers
                     }
                 }
 
+                sb.Append(" AND " + inn.TableName + "_ID != " + Record_ID);
+
                 //Check value in DB 
                 int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString()));
                 sb = null;
-                if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
+                if (count > 0)
                 {
                     outt.IsError = true;
                     outt.FireEEvent = true;
-                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = colHeaders.ToString() , IsError = true };
+                    outt.EventParam = new EventParamOut() { Msg = "SaveErrorNotUnique", Info = colHeaders.ToString(), IsError = true };
                     outt.Status = GridTable.SAVE_ERROR;
                     return;
 
                 }
             }
-        
 
 
-            //    if (!m_fields[valIndex].IsVirtualColumn)
-            //    {
 
             //        //Check value in DB 
             //        int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(1) FROM " + inn.TableName + " WHERE Value='" + rowData["value"] 
             //            + "' AND AD_Client_ID=" + ctx.GetAD_Client_ID()));
+
 
             //        if ((count > 0 && inserting) /*new*/  || (count > 1 && !inserting)/*update*/)
             //        {
@@ -1071,7 +1071,7 @@ namespace VIS.Helpers
             }
             else
                 if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey))
-                    return;
+                return;
 
             if (!po.Save())
             {
@@ -1286,7 +1286,7 @@ namespace VIS.Helpers
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                 Object oldValue = isEmpty ? null : _rowData[columnName.ToLower()];// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
 
-                if (field.IsEncryptedColumn)
+                if (field.IsEncryptedColumn || field.IsObscure)
                 {
                     value = SecureEngineBridge.DecryptByClientKey((string)rowData[columnName.ToLower()], key);// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                     oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -1618,6 +1618,14 @@ namespace VIS.Helpers
 
                             rowData[colLower] = Decrypt(rowData[colLower]);
                         }
+                        if (field.IsObscure && displayType != DisplayType.YesNo)
+                        {
+                            if (!SecureEngine.IsEncrypted(Convert.ToString(rowData[colLower])))
+                            {
+                                rowData[colLower] = SecureEngine.Encrypt(rowData[colLower]);
+                            }
+                            rowData[colLower] = Decrypt(rowData[colLower]);
+                        }
                     }
                 }
             }
@@ -1891,7 +1899,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID)
+        internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
         {
             WindowRecordOut retVal = new WindowRecordOut();
 
@@ -1917,6 +1925,9 @@ namespace VIS.Helpers
                 return null;
 
             bool checkEncrypted = encryptedColNames != null && encryptedColNames.Count > 0;
+
+            if (!checkEncrypted)
+                checkEncrypted = obscureFields != null && obscureFields.Count > 0;
             key = ctx.GetSecureKey();
 
             for (int table = 0; table < ds.Tables.Count; table++)
@@ -1952,7 +1963,9 @@ namespace VIS.Helpers
                         //var c = new Dictionary<string,object>();
                         //c[dt.Columns[column].ColumnName.ToLower()] = dt.Rows[row][column];
 
-                        if (checkEncrypted && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                        if (checkEncrypted
+                            && ((encryptedColNames != null && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                            || (obscureFields != null && obscureFields.Contains(dt.Columns[column].ColumnName.ToLower()))))
                         {
                             r.cells[dt.Columns[column].ColumnName.ToLower()] = SecureEngineBridge.EncryptFromSeverToClient(dt.Rows[row][column].ToString(), key);
                             continue;

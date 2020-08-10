@@ -202,6 +202,8 @@ namespace ViennaAdvantage.Process
         //private String Generate(IDataReader idr)
         private String Generate(DataTable dt)
         {
+            //JID_1139 Avoided the duplicate charge line created Invoice(customer)
+            bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
             foreach (DataRow dr in dt.Rows)
             {
                 MOrder order = new MOrder(GetCtx(), dr, Get_TrxName());
@@ -332,32 +334,41 @@ namespace ViennaAdvantage.Process
                         {
                             continue;
                         }
-                        //
-                        CreateLine(order, shipment, shipLine);
-                    }	//	shipment lines                        
-                    for (int i = 0; i < oLines.Length; i++)
-                    {
-                        MOrderLine oLine = oLines[i];
-                        if (oLine.GetC_Charge_ID() > 0)
+                        //JID_1139 Avoided the duplicate charge records
+                        if(shipLine.GetM_Product_ID() >0 || isAllownonItem )
                         {
-                            Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
-                            log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
-                            Decimal qtyEntered = toInvoice;
-                            //	Correct UOM for QtyEntered
-                            if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                            CreateLine(order, shipment, shipLine);
+                        }           
+                    }//	shipment lines
+
+                    //JID_1139 Avoided the duplicate charge records
+                    if (!isAllownonItem)
+                    {
+                        for (int i = 0; i < oLines.Length; i++)
+                        {
+                            MOrderLine oLine = oLines[i];
+                            if (oLine.GetC_Charge_ID() > 0)
                             {
-                                qtyEntered = Decimal.Round(Decimal.Divide(Decimal.Multiply(
-                                    toInvoice, oLine.GetQtyEntered()),
-                                    oLine.GetQtyOrdered()), 12, MidpointRounding.AwayFromZero);
-                            }
-                            //
-                            if (oLine.IsContract() == false)
-                            {
-                                CreateLine(order, oLine, toInvoice, qtyEntered);
-                                log.Info("ID " + oLine.Get_ID() + "Qty Ordered " + oLine.GetQtyOrdered() + " Qty Invoiced " + oLine.GetQtyInvoiced());
+                                Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
+                                log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
+                                Decimal qtyEntered = toInvoice;
+                                //	Correct UOM for QtyEntered
+                                if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
+                                {
+                                    qtyEntered = Decimal.Round(Decimal.Divide(Decimal.Multiply(
+                                        toInvoice, oLine.GetQtyEntered()),
+                                        oLine.GetQtyOrdered()), 12, MidpointRounding.AwayFromZero);
+                                }
+                               //
+                                if (oLine.IsContract() == false)
+                                {
+                                    CreateLine(order, oLine, toInvoice, qtyEntered);
+                                    log.Info("ID " + oLine.Get_ID() + "Qty Ordered " + oLine.GetQtyOrdered() + " Qty Invoiced " + oLine.GetQtyInvoiced());
+                                }
                             }
                         }
                     }
+                    
                 }
                 //	After Order Delivered, Immediate
                 else
@@ -389,7 +400,7 @@ namespace ViennaAdvantage.Process
                                         oLine.GetQtyOrdered()), 12, MidpointRounding.AwayFromZero);
                                 }
                                 //
-                                if (oLine.IsContract() == false)
+                                if (oLine.IsContract() == false && !isAllownonItem)
                                 {
                                     CreateLine(order, oLine, toInvoice, qtyEntered);
                                     log.Info("ID " + oLine.Get_ID() + "Qty Ordered " + oLine.GetQtyOrdered() + " Qty Invoiced " + oLine.GetQtyInvoiced());

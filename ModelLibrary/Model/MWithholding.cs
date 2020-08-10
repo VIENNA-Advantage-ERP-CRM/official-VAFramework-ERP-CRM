@@ -48,6 +48,8 @@ namespace VAdvantage.Model
             {
                 SetInvCalculation(null);
                 SetInvPercentage(0);
+                //JID_1857
+                SetC_WithholdingCategory_ID(0);
             }
 
             // Applicable on Payment = false, then clear values

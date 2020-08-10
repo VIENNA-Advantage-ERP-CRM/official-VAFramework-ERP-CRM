@@ -860,6 +860,10 @@
 
 
                                 ve.setReadOnly(!rw);
+
+                                if (ve.showObscureButton) {
+                                    ve.showObscureButton(rw);
+                                }
                                 //	log.log(Level.FINEST, "RW=" + rw + " " + mField);
                                 ve.setMandatory(mField.getIsMandatory(true));
                                 //mField.validateValue();

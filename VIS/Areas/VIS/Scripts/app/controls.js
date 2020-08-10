@@ -757,7 +757,7 @@
             //}
             var oldVal = this.oldValue;
             this.oldValue = "";
-           // this.valSetting = true;
+            // this.valSetting = true;
             this.setValue(oldVal);
             return;
         }
@@ -862,22 +862,44 @@
     function VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, vFormat, obscureType, isPwdField) {
 
         var displayType = VIS.DisplayType.String;
-
+        this.obscureType = obscureType;
+        var src = "fa fa-credit-card";
         //Init Control
         var $ctrl = $('<input>', { type: (isPwdField) ? 'password' : 'text', name: columnName, maxlength: fieldLength });
-
-
+        var $btnSearch = $('<button class="input-group-text" style="display:none"><i class="' + src + '" /></button>');
+        //if (obscureType && !isReadOnly)
+        //    $ctrl.append($btnSearch);
 
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
-        if (isReadOnly || !isUpdateable) {
+        if (isReadOnly || !isUpdateable || obscureType) {
             this.setReadOnly(true);
-            //this.Enabled = false;
         }
         else {
             this.setReadOnly(false);
         }
+
+        this.getBtn = function (index) {
+            if (index == 0 && obscureType) {
+                this.setReadOnly(true);
+                return $btnSearch;
+            }
+        };
+
+
+        this.showObscureButton = function (show) {
+            if (show && obscureType) {
+                $btnSearch.css("display", "");
+            }
+            else {
+                $btnSearch.css("display", "none");
+            }
+        };
+
+        this.getBtnCount = function () {
+            return 1;
+        };
 
         var self = this; //self pointer
 
@@ -893,14 +915,47 @@
             }
         });
 
+        $btnSearch.on("click", function () {
+            if (self.mField.getIsEditable(true)) {
+                self.setReadOnly(false,true);
+                $ctrl.val(self.mField.getValue());
+            }
+        });
+
         this.disposeComponent = function () {
             $ctrl.off("change"); //u bind event
             $ctrl = null;
             self = null;
         }
+
+
+
+
     };
 
     VIS.Utility.inheritPrototype(VTextBox, IControl);//Inherit from IControl
+
+
+    //VTextBox.prototype.setReadOnly = function (readOnly) {
+    //    this.isReadOnly = readOnly;
+    //    this.ctrl.prop('disabled', readOnly ? true : false);
+    //    this.setBackground(false);
+    //    if (this.obscureType) {
+    //        obscureType
+    //    }
+
+    //};
+
+
+    VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
+        if (!readOnly && this.obscureType && !forceWritable) {
+            readOnly = true;
+        }
+        this.isReadOnly = readOnly;
+        this.ctrl.prop('disabled', readOnly ? true : false);
+        this.setBackground(false);
+    };
+
 
     /** 
      *  set value 
@@ -910,7 +965,13 @@
         if (this.oldValue != newValue) {
             this.oldValue = newValue;
             //console.log(newValue);
-            this.ctrl.val(newValue);
+
+            if (this.obscureType) {
+                this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
+                this.setReadOnly(true);
+            }
+            else
+                this.ctrl.val(newValue);
             //this.setBackground("white");
         }
     };
@@ -3558,8 +3619,13 @@
         $ctrl.on("blur", function (e) {
             e.stopPropagation();
             $ctrl.attr("type", "text");
+            var val = $ctrl.val()
+            if (!self.dotFormatter) {
+                val = val.replace(".", ",");
+            }
+            
 
-            var _value = self.format.GetConvertedString($ctrl.val(), self.dotFormatter);
+            var _value = self.format.GetConvertedString(val, self.dotFormatter);
 
             var _val = self.format.GetFormatAmount(_value, "formatOnly", self.dotFormatter);
             $ctrl.val(_val);
@@ -4047,11 +4113,12 @@
             if (self.isReadOnly) {
                 return;
             }
-            //	Warehouse/Product
+            //	Organization/Warehouse/Product
+            var OrgId = self.getOnlyOrgID();
             var warehouseId = self.getOnlyWarehouseID();
             var productId = self.getOnlyProductID();
-
-            self.showLocatorForm(warehouseId, productId);
+            // JID_0932 In validation of locator need consider organization also
+            self.showLocatorForm(OrgId,warehouseId, productId);
 
         });
 
@@ -4131,6 +4198,21 @@
 
     VIS.Utility.inheritPrototype(VLocator, IControl);
 
+    VLocator.prototype.getOnlyOrgID = function () {
+        var ctx = VIS.Env.getCtx();
+        var Only_Org = ctx.getContext(this.windowNum, "AD_Org_ID", true);
+        var Only_Org_ID = 0;
+        try {
+            if (Only_Org != null && Only_Org.length > 0) {
+                Only_Org_ID = Number(Only_Org);
+            }
+        }
+        catch (ex) {
+            // log.Log(Logging.Level.SEVERE, ex.Message);
+        }
+        return Only_Org_ID;
+    };
+
     VLocator.prototype.getOnlyWarehouseID = function () {
         var ctx = VIS.Env.getCtx();
         // gwu: do not restrict locators by warehouse when in Import Inventory Transactions window 
@@ -4176,12 +4258,13 @@
     };
 
     //Function which show form
-    VLocator.prototype.showLocatorForm = function (warehouseId, productId) {
+    VLocator.prototype.showLocatorForm = function (OrgId, warehouseId, productId) {
         var M_Locator_ID = 0;
         if (this.value != null) {
             M_Locator_ID = Number(this.value);
         }
 
+        this.lookup.setOnlyOrgID(OrgId);
         this.lookup.setOnlyWarehouseID(warehouseId);
         this.lookup.setOnlyProductID(productId);
 

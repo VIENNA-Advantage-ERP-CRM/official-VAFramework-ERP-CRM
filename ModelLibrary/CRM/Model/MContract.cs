@@ -670,7 +670,7 @@ namespace VAdvantage.Model
          * 	Set Business Partner Location (Ship+Bill)
          *	@param C_BPartner_Location_ID bp location
          */
-        public  void SetC_BPartner_Location_ID(int C_BPartner_Location_ID)
+        public void SetC_BPartner_Location_ID(int C_BPartner_Location_ID)
         {
             SetC_BPartner_Location_ID(C_BPartner_Location_ID);
             SetBill_Location_ID(C_BPartner_Location_ID);
@@ -681,7 +681,7 @@ namespace VAdvantage.Model
         /// Set Business Partner Contact (Ship+Bill)
         /// </summary>
         /// <param name="AD_User_ID">user</param>
-        public  void SetAD_User_ID(int AD_User_ID)
+        public void SetAD_User_ID(int AD_User_ID)
         {
             SetAD_User_ID(AD_User_ID);
             SetBill_User_ID(AD_User_ID);
@@ -718,7 +718,7 @@ namespace VAdvantage.Model
          * 	Set Warehouse
          *	@param M_Warehouse_ID warehouse
          */
-        public  void SetM_Warehouse_ID(int M_Warehouse_ID)
+        public void SetM_Warehouse_ID(int M_Warehouse_ID)
         {
             // base.SetM_Warehouse_ID(M_Warehouse_ID);
         }
@@ -727,7 +727,7 @@ namespace VAdvantage.Model
          * 	Set Drop Ship
          *	@param IsDropShip drop ship
          */
-        public  void SetIsDropShip(bool IsDropShip)
+        public void SetIsDropShip(bool IsDropShip)
         {
             // base.SetIsDropShip(IsDropShip);
         }
@@ -754,7 +754,7 @@ namespace VAdvantage.Model
                 }
                 SetDateOrdered(dateOrdered);
             }
-            catch 
+            catch
             {
                 //  // MessageBox.Show("MOrder--SetDateOrdered");
             }
@@ -763,7 +763,7 @@ namespace VAdvantage.Model
         /**
          *	Set Date Ordered and Acct Date
          */
-        public  void SetDateOrdered(DateTime? dateOrdered)
+        public void SetDateOrdered(DateTime? dateOrdered)
         {
             // base.SetDateOrdered(dateOrdered);
             //  base.SetDateAcct(dateOrdered);
@@ -1007,7 +1007,7 @@ namespace VAdvantage.Model
                     SetIsReturnTrx(false);
                 }
             }
-            catch 
+            catch
             {
                 //// MessageBox.Show("MOrder--SetC_DocTypeTarget_ID");
             }
@@ -1030,7 +1030,7 @@ namespace VAdvantage.Model
                     SetIsReturnTrx(dt.IsReturnTrx());
                 }
             }
-            catch 
+            catch
             {
                 //// MessageBox.Show("MOrder--SetC_DocTypeTarget_ID(int C_DocTypeTarget_ID, bool setReturnTrx)");
             }
@@ -1066,7 +1066,7 @@ namespace VAdvantage.Model
                     SetIsReturnTrx(false);
                 }
             }
-            catch 
+            catch
             {
                 // // MessageBox.Show("MOrder--SetC_DocTypeTarget_ID()");
             }
@@ -1130,7 +1130,7 @@ namespace VAdvantage.Model
                 //    log.Log(Level.SEVERE, "Line difference - From=" + fromLines.Length + " <> Saved=" + count);
                 //}
             }
-            catch 
+            catch
             {
                 // // MessageBox.Show("MOrder--CopyLinesFrom");
             }
@@ -1278,7 +1278,7 @@ namespace VAdvantage.Model
             }
             catch
             {
-                
+
             }
             finally
             {
@@ -1306,7 +1306,7 @@ namespace VAdvantage.Model
                 //    }
                 //}
             }
-            catch 
+            catch
             {
                 // // MessageBox.Show("MOrder--SetM_ReturnPolicy_ID()");
             }
@@ -1350,7 +1350,7 @@ namespace VAdvantage.Model
                 // SetDeliveryViaRule(origOrder.GetDeliveryViaRule());
                 // SetFreightCostRule(origOrder.GetFreightCostRule());
             }
-            catch 
+            catch
             {
                 // // MessageBox.Show("MOrder--SetOrigOrder");
             }
@@ -1383,7 +1383,7 @@ namespace VAdvantage.Model
                     SetOrigOrder(origOrder);
                 }
             }
-            catch 
+            catch
             {
                 // // MessageBox.Show("MOrder--SetOrig_Order_ID-callout");
             }
@@ -1410,7 +1410,7 @@ namespace VAdvantage.Model
                 //  SetUser1_ID(origInOut.GetUser1_ID());
                 //  SetUser2_ID(origInOut.GetUser2_ID());
             }
-            catch 
+            catch
             {
                 //  // MessageBox.Show("MOrder--SetOrigInOut");
             }
@@ -1906,8 +1906,60 @@ namespace VAdvantage.Model
                 log.SaveWarning("ValidateOrg", "");
                 return false;
             }
-           
+
+            // calculate tax amount and surcharge amount 
+            if (newRecord || Is_ValueChanged("C_Tax_ID") || Is_ValueChanged("M_PriceList_ID")
+                || Is_ValueChanged("QtyEntered") || Is_ValueChanged("PriceActual") || Is_ValueChanged("Discount"))
+            {
+                CalculateAndUpdateTaxes();
+            }
+
             return true;
+        }
+
+        /// <summary>
+        /// Calculat and update Tax Amounts
+        /// </summary>
+        private void CalculateAndUpdateTaxes()
+        {
+            // PriceList Object
+            MPriceList priceList = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), Get_Trx());
+            // Currency Object
+            MCurrency currency = MCurrency.Get(GetCtx(), priceList.GetC_Currency_ID());
+            //Tax Object 
+            MTax tax = new MTax(GetCtx(), GetC_Tax_ID(), Get_Trx());
+
+            Decimal surchargeAmt = Env.ZERO;
+            Decimal TaxAmt = Env.ZERO;
+            Decimal LineNetAmt = Decimal.Multiply(GetPriceActual(), GetQtyEntered());
+
+            // whn surchage field available then calculate surcharge also
+            if (Get_ColumnIndex("SurchargeAmt") > 0 && tax.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && tax.GetSurcharge_Tax_ID() > 0)
+            {
+                TaxAmt = tax.CalculateSurcharge(LineNetAmt, priceList.IsTaxIncluded(), currency.GetStdPrecision(), out surchargeAmt);
+            }
+            else
+            {
+                TaxAmt = tax.CalculateTax(LineNetAmt, priceList.IsTaxIncluded(), currency.GetStdPrecision());
+            }
+
+            // set tax amount
+            SetTaxAmt(TaxAmt);
+            // update Surcharge amount
+            if (Get_ColumnIndex("SurchargeAmt") > 0)
+            {
+                SetSurchargeAmt(surchargeAmt);
+            }
+
+            if (!priceList.IsTaxIncluded())
+            {
+                SetGrandTotal(LineNetAmt + TaxAmt + surchargeAmt);
+            }
+            else
+            {
+                SetGrandTotal(LineNetAmt);
+            }
+
         }
 
         /* 	After Save
@@ -1917,7 +1969,7 @@ namespace VAdvantage.Model
          */
         protected override bool AfterSave(bool newRecord, bool success)
         {
-           
+
             return true;
         }
 
@@ -1958,7 +2010,7 @@ namespace VAdvantage.Model
                 //    }
                 //}
             }
-            catch 
+            catch
             {
                 //// MessageBox.Show("Error in MOrder--BeforeDelete");
                 return false;
@@ -2489,7 +2541,7 @@ namespace VAdvantage.Model
                 does not get recreated in the afterSave procedure of the MOrderLine class */
                 SetProcessed(true);
 
-              
+
 
                 ////	Create SO Shipment - Force Shipment
 
@@ -2504,7 +2556,7 @@ namespace VAdvantage.Model
                     {
 
                     }
-                    catch 
+                    catch
                     {
                         // // MessageBox.Show("tSet not null");
                     }
@@ -2522,7 +2574,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-                log.Severe("MOrder--CompleteIt"+ex.Message);
+                log.Severe("MOrder--CompleteIt" + ex.Message);
             }
             return DocActionVariables.STATUS_COMPLETED;
         }
@@ -2858,7 +2910,7 @@ namespace VAdvantage.Model
 
                 _processMsg = Info.ToString();
             }
-            catch 
+            catch
             {
                 //// MessageBox.Show("MOrder--CreateReversals");
             }
@@ -2980,7 +3032,7 @@ namespace VAdvantage.Model
                 SetDocAction(DOCACTION_Complete);
                 SetProcessed(false);
             }
-            catch 
+            catch
             {
                 //// MessageBox.Show("MOrder--ReActivateIt");
             }
@@ -3101,7 +3153,7 @@ namespace VAdvantage.Model
         #region DocAction Members
 
 
-        
+
         public void SetProcessMsg(string processMsg)
         {
 

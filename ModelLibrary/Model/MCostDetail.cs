@@ -127,6 +127,10 @@ namespace VAdvantage.Model
                 {
                     cd.SetM_InventoryLine_ID(inventoryLine.GetM_InventoryLine_ID());
                 }
+                if (WindowName == "AssetDisposal")
+                {
+                    cd.Set_Value("VAFAM_AssetDisposal_ID", po.Get_Value("VAFAM_AssetDisposal_ID"));
+                }
                 else if (WindowName == "Production Execution" || WindowName.Equals("PE-FinishGood"))
                 {
                     cd.SetVAMFG_M_WrkOdrTrnsctionLine_ID(Util.GetValueOfInt(po.Get_Value("VAMFG_M_WrkOdrTrnsctionLine_ID")));
@@ -312,6 +316,10 @@ namespace VAdvantage.Model
                             if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
                             {
                                 isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM M_InventoryLine WHERE M_InventoryLine_ID =  " + cd.GetM_InventoryLine_ID(), null, Get_Trx()));
+                            }
+                            if (windowName == "AssetDisposal")
+                            {
+                                isCostImmediate = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCostImmediate FROM VAFAM_AssetDisposal WHERE VAFAM_AssetDisposal_ID = " + cd.Get_Value("VAFAM_AssetDisposal_ID"), null, Get_Trx()));
                             }
                             else if (windowName == "Inventory Move")
                             {
@@ -1626,7 +1634,8 @@ namespace VAdvantage.Model
                 || GetC_ProjectIssue_ID() != 0
                 || GetM_WorkOrderTransactionLine_ID() != 0
                 || GetVAMFG_M_WrkOdrTrnsctionLine_ID() != 0
-                || GetM_WorkOrderResourceTxnLine_ID() != 0)
+                || GetM_WorkOrderResourceTxnLine_ID() != 0
+                || Util.GetValueOfInt(Get_Value("VAFAM_AssetDisposal_ID")) != 0)
             {
                 bool addition = Env.Signum(qty) > 0;
                 if (GetM_InOutLine_ID() > 0)
@@ -1731,7 +1740,7 @@ namespace VAdvantage.Model
                                 //}
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -2004,7 +2013,7 @@ namespace VAdvantage.Model
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             // Quantity to be increased
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -2255,7 +2264,7 @@ namespace VAdvantage.Model
                     }
                     else if (!windowName.Equals("Return To Vendor"))
                     {
-                        // for Physical Inventory / Internal use Inventory / Inventory move / Production Execution
+                        // for Physical Inventory / Internal use Inventory / Inventory move / Production Execution / Asset Disposal
                         if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                         {
                             return false;
@@ -2328,7 +2337,7 @@ namespace VAdvantage.Model
                                 }
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -2338,7 +2347,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }
+                        }                    
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -2608,7 +2617,7 @@ namespace VAdvantage.Model
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             // Quantity to be increased
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -2874,7 +2883,7 @@ namespace VAdvantage.Model
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -2884,7 +2893,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }
+                        }                    
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -3117,7 +3126,7 @@ namespace VAdvantage.Model
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory")|| windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -3127,7 +3136,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }
+                        }                     
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -3307,7 +3316,7 @@ namespace VAdvantage.Model
                                 }
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory")|| windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -3317,7 +3326,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
-                        }
+                        }                    
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -3514,7 +3523,7 @@ namespace VAdvantage.Model
                                 //}
                             }
                         }
-                        else if (windowName.Equals("Internal Use Inventory"))
+                        else if (windowName.Equals("Internal Use Inventory") || windowName.Equals("AssetDisposal"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
                             {
@@ -3525,6 +3534,7 @@ namespace VAdvantage.Model
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                             }
                         }
+                      
                         else if (windowName.Equals("Production Execution"))
                         {
                             if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -3850,7 +3860,7 @@ namespace VAdvantage.Model
                     MMovementLine moveline = null;
                     // Cost combination not calculate for this Transaction
                     if (windowName.Equals("Return To Vendor") || windowName.Equals("Shipment") ||
-                        windowName.Equals("Internal Use Inventory") || windowName.Equals("Production Execution"))
+                        windowName.Equals("Internal Use Inventory") || windowName.Equals("Production Execution") || windowName.Equals("AssetDisposal"))
                     {
                         isCurrentCostprice = false;
                     }
@@ -4034,6 +4044,7 @@ namespace VAdvantage.Model
                     cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Convert.ToInt32(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
                     if ((cd.GetQty() < 0 ||
                         windowName.Equals("Internal Use Inventory") ||
+                        windowName.Equals("AssetDisposal") ||
                         windowName.Equals("Physical Inventory") ||
                         windowName.Equals("Return To Vendor") ||
                         windowName.Equals("Shipment") ||

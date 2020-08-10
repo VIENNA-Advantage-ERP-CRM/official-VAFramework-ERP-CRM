@@ -2326,7 +2326,7 @@ findImg {
 .vis-allocation-inputLabels {
     width: 100%;
     float: left;
-    margin: 10px 0;
+    margin: 10px 0 5px 0;
 }
 
 .vis-allocation-currencycmb, .vis-allocation-docTypecmb, .vis-allocation-docNo, .vis-allocation-fromDate, .vis-allocation-toDate {
@@ -4951,6 +4951,7 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     flex: 1;
     text-align: right;
 }
+
 .vis-formouterwrpdiv input:not([type="checkbox"]):not([type="radio"]):not([type="button"]) {
     padding: 5px 10px;
 }
@@ -4964,6 +4965,7 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     align-items: center;
     background: rgba(var(--v-c-on-secondary), 1);
 }
+
 
 
 /*busy indicator css for vis*/

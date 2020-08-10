@@ -3461,6 +3461,9 @@ namespace VIS.Controllers
                 sbColName.Clear();
                 sbColValue.Clear();
                 sbColName.Append(Util.GetValueOfString(dsColumns.Tables[0].Rows[i]["ColumnName"]));
+                if (!dr.Table.Columns.Contains(sbColName.ToString()))
+                    continue;
+
                 if (defColNames.Contains(sbColName.ToString()) || (sbColName.ToString() == origTableName + "_ID") || (sbColName.ToString() == origTableName + "_Ver_ID"))
                     continue;
 

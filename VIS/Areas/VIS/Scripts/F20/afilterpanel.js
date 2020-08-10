@@ -840,17 +840,19 @@
 
 
         this.curTab = this.curGC.getMTab();
-        this.curTabfields = this.curTab.getFields();
+         var curTabfieldlist = this.curTab.getFields();
         this.selectionfields = [];
-
+        this.curTabfields = [];
 
         var html = '<option value="-1"> </option>';
 
         //Fill Dynamic Column List 
-        for (var c = 0; c < this.curTabfields.length; c++) {
+        for (var c = 0; c < curTabfieldlist.length; c++) {
             // get field
-            var field = jQuery.extend(true, {}, this.curTabfields[c]); 
-            field.lookup = jQuery.extend(true, {}, this.curTabfields[c].lookup);
+            var field = jQuery.extend(true, {}, curTabfieldlist[c]); 
+            field.lookup = jQuery.extend(true, {}, curTabfieldlist[c].lookup);
+            this.curTabfields.push(field);
+
             if (field.getIsEncrypted())
                 continue;
             // get field's column name

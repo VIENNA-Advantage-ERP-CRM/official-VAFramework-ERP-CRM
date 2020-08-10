@@ -491,8 +491,11 @@ namespace VAdvantage.Common
         /// <returns></returns>
         public static string ValidatePassword(string oldPassword, string NewPassword, string ConfirmNewPasseword)
         {
-
-            if (NewPassword == null || !NewPassword.Equals(ConfirmNewPasseword))
+            if (NewPassword == null)
+            {
+                return "mustMatchCriteria";
+            }
+            if (NewPassword != null && !NewPassword.Equals(ConfirmNewPasseword))
             {
                 return "BothPwdNotMatch";
             }

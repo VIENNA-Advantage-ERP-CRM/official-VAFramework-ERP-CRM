@@ -116,7 +116,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID)
+        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID,List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -133,7 +133,7 @@ namespace VIS.Controllers
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
-                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID);
+                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, obscureFields);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
@@ -1070,18 +1070,22 @@ namespace VIS.Controllers
         public ContentResult MsgForToastr()
         {
             Ctx ctx = Session["ctx"] as Ctx;
-            string sessionID = ctx.GetAD_Session_ID().ToString();
-            JavaScriptSerializer ser = new JavaScriptSerializer();
             string serializedObject = null;
-            IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
-            if (newDic != null && newDic.Count() > 0)
+            if (ctx != null)
             {
-                for (int i = 0; i < newDic.Count();)
+                string sessionID = ctx.GetAD_Session_ID().ToString();
+                JavaScriptSerializer ser = new JavaScriptSerializer();
+                
+                IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
+                if (newDic != null && newDic.Count() > 0)
                 {
-                    KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
-                    toastrMessage.Remove(keyVal.Key);
-                    serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
-                    return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
+                    for (int i = 0; i < newDic.Count();)
+                    {
+                        KeyValuePair<string, string> keyVal = newDic.ElementAt(i);
+                        toastrMessage.Remove(keyVal.Key);
+                        serializedObject = ser.Serialize(new { item = keyVal.Value, message = keyVal.Value });
+                        return Content(string.Format("data: {0}\n\n", serializedObject), "text/event-stream");
+                    }
                 }
             }
             JavaScriptSerializer se1r = new JavaScriptSerializer();

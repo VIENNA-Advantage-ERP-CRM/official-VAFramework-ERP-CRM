@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                 // When Discounting PDC is true, No need to check Check Date with Account Date.
                 if (Env.IsModuleInstalled("VA027_") && IsVA027_DiscountingPDC())
                 {
-
+                    
                 }
                 else
                 {
@@ -542,7 +542,7 @@ namespace VAdvantage.Model
                             return false;
                         }
                         // set currency type from invoice
-                        SetC_ConversionType_ID(invoice.GetC_ConversionType_ID());
+                        // SetC_ConversionType_ID(invoice.GetC_ConversionType_ID());
                         // Change By Mohit Asked By Amardeep Sir 02/03/2016
                         SetPOReference(invoice.GetPOReference());
                         // Changes Done by Bharat on 20 June 2017 to not allow more than Schedule Amount.
@@ -576,8 +576,16 @@ namespace VAdvantage.Model
                         // Change By Mohit Asked By Amardeep Sir 02/03/2016
                         SetPOReference(order.GetPOReference());
                         // set conversion type from order
-                        SetC_ConversionType_ID(order.GetC_ConversionType_ID());
+                        //SetC_ConversionType_ID(order.GetC_ConversionType_ID());
                     }
+                }
+
+                if (GetC_Charge_ID() == 0)
+                {
+                    // when charge is not defined then set Value as Zero
+                    SetC_Tax_ID(0);
+                    SetTaxAmount(0);
+                    Set_Value("SurchargeAmt", 0);
                 }
 
                 //	We have a charge
@@ -697,27 +705,28 @@ namespace VAdvantage.Model
                 //                || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
                 //}
 
-                if (GetC_Charge_ID() != 0)
-                {
-                    string sqlAdvCharge = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
-                    string isAdvCharge = "";
-                    try
-                    {
-                        isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sqlAdvCharge, null, null));
-                    }
-                    catch
-                    {
+                // Already written above
+                //if (GetC_Charge_ID() != 0)
+                //{
+                //    string sqlAdvCharge = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
+                //    string isAdvCharge = "";
+                //    try
+                //    {
+                //        isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sqlAdvCharge, null, null));
+                //    }
+                //    catch
+                //    {
 
-                    }
-                    if (isAdvCharge.Equals("Y"))
-                    {
-                        SetIsPrepayment(true);
-                    }
-                    else
-                    {
-                        SetIsPrepayment(false);
-                    }
-                }
+                //    }
+                //    if (isAdvCharge.Equals("Y"))
+                //    {
+                //        SetIsPrepayment(true);
+                //    }
+                //    else
+                //    {
+                //        SetIsPrepayment(false);
+                //    }
+                //}
 
                 if (IsPrepayment())
                 {
@@ -788,6 +797,13 @@ namespace VAdvantage.Model
                     {
                         SetTenderType("A");
                     }
+
+                    // JID_1676 -- set Payment Execution as "In-Progress if not defined
+                    if (String.IsNullOrEmpty(GetVA009_ExecutionStatus()))
+                    {
+                        SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_In_Progress);
+                    }
+
 
                     //change by amit // for letter of credit
                     if (Env.IsModuleInstalled("VA026_"))
@@ -1173,7 +1189,7 @@ namespace VAdvantage.Model
             param[2].SqlDbType = SqlDbType.Int;
             param[2].Direction = ParameterDirection.Output;
 
-            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);            
+            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);
 
             if (param != null && param.Length > 0) // If Record Found
             {
@@ -1241,7 +1257,7 @@ namespace VAdvantage.Model
             Decimal? alloc = GetAllocatedAmt();
             if (alloc == null)
                 alloc = Env.ZERO;
-            Decimal total = GetPayAmt();
+            Decimal total = GetPayAmt() + (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetBackupWithholdingAmount() + GetWithholdingAmt()) : 0);
 
             if (!IsReceipt())
                 total = Decimal.Negate(total);
@@ -2613,7 +2629,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-   
+
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
@@ -2657,7 +2673,7 @@ namespace VAdvantage.Model
                     }
 
                     //JID_0880 Show message on completion of Payment
-                    _processMsg =  order.GetProcessMsg();
+                    _processMsg = order.GetProcessMsg();
                     GetCtx().SetContext("prepayOrder", _processMsg);
 
                     order.Save(Get_Trx());
@@ -2680,7 +2696,7 @@ namespace VAdvantage.Model
                 }
                 //	WaitingPayment
             }
-          
+
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
             {
@@ -2775,7 +2791,7 @@ namespace VAdvantage.Model
          * 	Complete Document
          * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
          */
-        public String  CompleteIt()
+        public String CompleteIt()
         {
             //	Re-Check
             if (!_justPrepared)
@@ -3167,7 +3183,7 @@ namespace VAdvantage.Model
             }
             else if (Env.IsModuleInstalled("VA009_") && GetVA009_OrderPaySchedule_ID() != 0)
             {
-            
+
                 if (GetVA009_OrderPaySchedule_ID() != 0 && GetDescription() != null && GetDescription().Contains("{->"))
                 {
                     // also need to set Execution Status As Awaited
@@ -3179,12 +3195,14 @@ namespace VAdvantage.Model
                 {
                     if (GetVA009_OrderPaySchedule_ID() != 0)
                     {
-                        Decimal basePaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt();
-                        Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt();
+                        Decimal basePaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
+                            (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
+                        Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
+                            (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                         MClientInfo client = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
                         MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetC_AcctSchema1_ID());
-                 
+
                         if (order.GetC_Currency_ID() != GetC_Currency_ID())
                         {
                             orderPaidAmt = MConversionRate.Convert(GetCtx(), orderPaidAmt, GetC_Currency_ID(), order.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
@@ -3321,15 +3339,15 @@ namespace VAdvantage.Model
             {
                 return DocActionVariables.STATUS_INVALID;
             }
-           
+
             //JID_0880 Show message on completion of Payment
             if (GetCtx().GetContext("prepayOrder") != null)
             {
-                _processMsg += ","+ GetCtx().GetContext("prepayOrder");
+                _processMsg += "," + GetCtx().GetContext("prepayOrder");
                 GetCtx().SetContext("prepayOrder", "");
             }
 
-            
+
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -3414,7 +3432,7 @@ namespace VAdvantage.Model
                     if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
                         : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false,
                         Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]), IsPaymentAllocate))
                     {
                         SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                         return false;
@@ -3426,7 +3444,7 @@ namespace VAdvantage.Model
                     {
                         if (!CalculateWithholdingAmount(GetBackupWithholding_ID(), true,
                             Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]), IsPaymentAllocate))
                         {
                             SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                             return false;
@@ -3490,12 +3508,12 @@ namespace VAdvantage.Model
                         if (IsPaymentAllocate)
                         {
                             withholdingAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT COALESCE(SUM(PaymentAmount),0) - COALESCE(SUM(TaxAmount),0) 
-                                                FROM C_Payment WHERE C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx()));
+                                               - COALESCE(SUM(SurchargeAmt),0) FROM C_Payment WHERE C_Payment_ID = " + GetC_Payment_ID(), null, Get_Trx()));
                             SetPaymentAmount(withholdingAmt);
                         }
                         else
                         {
-                            withholdingAmt = GetPaymentAmount() - GetTaxAmount();
+                            withholdingAmt = GetPaymentAmount() - GetTaxAmount() - Util.GetValueOfDecimal(Get_Value("SurchargeAmt"));
                         }
                     }
 
@@ -4565,9 +4583,7 @@ namespace VAdvantage.Model
                 MAllocationLine aLine = null;
                 if (IsReceipt())
                 {
-                    aLine = new MAllocationLine(alloc, (pa.GetAmount() -
-                        (Get_ColumnIndex("WithholdingAmt") > 0 && dr != null ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
-                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
+                    aLine = new MAllocationLine(alloc, pa.GetAmount(),
                         pa.GetDiscountAmt(), pa.GetWriteOffAmt(), pa.GetOverUnderAmt());
                     if (dr != null)
                     {
@@ -4577,9 +4593,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    aLine = new MAllocationLine(alloc, Decimal.Negate((pa.GetAmount()) -
-                        (Get_ColumnIndex("WithholdingAmt") > 0 && dr != null ? (Util.GetValueOfDecimal(dr[0]["withholdingAmt"])
-                        + Util.GetValueOfDecimal(dr[0]["BackupwithholdingAmt"])) : 0)),
+                    aLine = new MAllocationLine(alloc, Decimal.Negate(pa.GetAmount()),
                         Decimal.Negate(pa.GetDiscountAmt()), Decimal.Negate(pa.GetWriteOffAmt()), Decimal.Negate(pa.GetOverUnderAmt()));
                     if (dr != null)
                     {
@@ -4618,8 +4632,8 @@ namespace VAdvantage.Model
             try
             {
                 //	calculate actual allocation
-                Decimal allocationAmt = GetPayAmt();			//	underpayment
-                if (Env.Signum(GetOverUnderAmt()) < 0 && Env.Signum(GetPayAmt()) > 0)
+                Decimal allocationAmt = GetPaymentAmount();			//	underpayment
+                if (Env.Signum(GetOverUnderAmt()) < 0 && Env.Signum(GetPaymentAmount()) > 0)
                     allocationAmt = Decimal.Add(allocationAmt, GetOverUnderAmt());	//	overpayment (negative)
 
                 MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,
@@ -4899,7 +4913,7 @@ namespace VAdvantage.Model
             //	If on Bank Statement, don't void it - reverse it
             if (GetC_BankStatementLine_ID() > 0)
                 return ReverseCorrectIt();
-
+            
             //	Not Processed
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
                 || DOCSTATUS_Invalid.Equals(GetDocStatus())
@@ -4989,17 +5003,25 @@ namespace VAdvantage.Model
 
         public Boolean ReverseCorrectIt()
         {
-            //added by shubham (JID_1472) To check payment is reconciled or not
+            log.Info(ToString());
+
+            // (JID_1472) To check payment is reconciled or not
             if (IsReconciled())
             {
-
                 _processMsg = Msg.GetMsg(GetCtx(), "PaymentAlreadyReconciled");
                 return false;
-
             }
-            //if (GetCostAllocationID() == 0 || GetCostAlloactionDocStatus().Equals("CO"))
-            //{
-            log.Info(ToString());
+
+            // JID_1276
+            if (GetC_Order_ID() > 0 && GetVA009_OrderPaySchedule_ID() > 0)
+            {
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_OrderLine_ID) FROM C_OrderLine 
+                                    WHERE (QtyInvoiced != 0 OR QtyDelivered != 0) AND C_Order_ID = " + GetC_Order_ID(), null, Get_Trx())) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "InvoiceOrGrnAlreadyCreated");
+                    return false;
+                }
+            }
 
             //	Std Period open?
             DateTime? dateAcct = GetDateAcct();
@@ -5009,7 +5031,17 @@ namespace VAdvantage.Model
 
             //	Auto Reconcile if not on Bank Statement
             Boolean reconciled = false; //	GetC_BankStatementLine_ID() == 0;
+          
+            // if Payment aginst PDC is voided remove reference of payment from chequedetials and set Payment Generated to false on Header
+                if ( Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0 )
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment='N' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
+                    if (count > 0)
+                    {
+                        DB.ExecuteScalar("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID=  " + GetVA027_PostDatedCheck_ID(), null, Get_Trx());
+                    }
 
+                }
             //	Create Reversal
             MPayment reversal = new MPayment(GetCtx(), 0, Get_Trx());
             CopyValues(this, reversal);
@@ -5026,6 +5058,11 @@ namespace VAdvantage.Model
             reversal.SetDiscountAmt(Decimal.Negate(GetDiscountAmt()));
             reversal.SetWriteOffAmt(Decimal.Negate(GetWriteOffAmt()));
             reversal.SetOverUnderAmt(Decimal.Negate(GetOverUnderAmt()));
+            //Remove PDC reference
+            if (Env.IsModuleInstalled("VA027_"))
+            {
+                reversal.SetVA027_PostDatedCheck_ID(0);
+            }
 
             //negate witholding amount - 
             if (Get_ColumnIndex("WithholdingAmt") > 0)
@@ -5083,7 +5120,7 @@ namespace VAdvantage.Model
             }
 
             reversal.Save(Get_Trx());
-
+           
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
@@ -5171,6 +5208,11 @@ namespace VAdvantage.Model
             SetDocStatus(DOCSTATUS_Reversed);
             SetDocAction(DOCACTION_None);
             SetProcessed(true);
+            //Remove PostdatedCheck Reference
+            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID()>0)
+            {
+               SetVA027_PostDatedCheck_ID(0);
+            }
 
             // new change when allocation exist for already made payments then it will create allocation 
             // otherwise it will not create allocation against that payment

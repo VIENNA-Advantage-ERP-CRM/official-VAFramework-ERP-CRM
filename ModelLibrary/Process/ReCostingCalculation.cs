@@ -88,6 +88,9 @@ namespace VAdvantage.Process
         PO po_WrkOdrTransaction = null;
         PO po_WrkOdrTrnsctionLine = null;
         String woTrxType = null;
+        int table_AssetDisposal = 0;
+        MTable tbl_AssetDisposal = null;
+        PO po_AssetDisposal = null;
 
         //Production
         int CountCostNotAvialable = 1;
@@ -109,7 +112,7 @@ namespace VAdvantage.Process
         string conversionNotFound = "";
 
         List<ReCalculateRecord> ListReCalculatedRecords = new List<ReCalculateRecord>();
-        public enum windowName { Shipment = 0, CustomerReturn, ReturnVendor, MaterialReceipt, MatchInvoice, Inventory, Movement, CreditMemo }
+        public enum windowName { Shipment = 0, CustomerReturn, ReturnVendor, MaterialReceipt, MatchInvoice, Inventory, Movement, CreditMemo, AssetDisposal }
 
         protected override void Prepare()
         {
@@ -151,6 +154,9 @@ namespace VAdvantage.Process
                 //int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
                 count = Env.IsModuleInstalled("VAMFG_") ? 1 : 0;
 
+                // check VAFAM Modeule exist or not
+                int countVAFAM = Env.IsModuleInstalled("VAFAM_") ? 1 : 0;
+
                 // check Gomel Modeule exist or not
                 //int countGOM01 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='GOM01_' AND Isactive = 'Y' "));
                 countGOM01 = Env.IsModuleInstalled("GOM01_") ? 1 : 0;
@@ -164,7 +170,7 @@ namespace VAdvantage.Process
 
                 if (onlyDeleteCosting.Equals("Y"))
                     return Msg.GetMsg(GetCtx(), "VIS_DeleteCostingImpacts");
-
+                             
                 // check IsCostAdjustmentOnLost exist on product 
                 sql.Clear();
                 sql.Append(@"SELECT COUNT(*) FROM AD_Column WHERE IsActive = 'Y' AND 
@@ -183,6 +189,11 @@ namespace VAdvantage.Process
 
                     table_WrkOdrTrnsctionLine = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename = 'VAMFG_M_WrkOdrTrnsctionLine' AND IsActive = 'Y' "));
                     tbl_WrkOdrTrnsctionLine = new MTable(GetCtx(), table_WrkOdrTrnsctionLine, null);
+                }
+                if (countVAFAM > 0)
+                {
+                    table_AssetDisposal = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename = 'VAFAM_AssetDisposal' AND IsActive = 'Y' "));
+                    tbl_AssetDisposal = new MTable(GetCtx(), table_AssetDisposal, null);
                 }
 
                 int diff = (int)(Math.Ceiling((DateTime.Now.Date - minDateRecord.Value.Date).TotalDays));
@@ -214,7 +225,7 @@ namespace VAdvantage.Process
                          UNION 
                          SELECT i.ad_client_id ,  i.ad_org_id , i.isactive ,to_char(mi.created, 'DD-MON-YY HH24:MI:SS') as  created ,  i.createdby ,  TO_CHAR(mi.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
                                 i.updatedby ,  mi.documentno ,  M_MatchInv_Id AS Record_Id ,  i.issotrx ,  i.isreturntrx ,  ''           AS IsInternalUse,  'M_MatchInv' AS TableName,
-                                i.docstatus,  i.DateAcct AS DateAcct,  mi.iscostcalculated ,  i.isreversedcostcalculated
+                                i.docstatus,i.DateAcct AS DateAcct,  mi.iscostcalculated ,  i.isreversedcostcalculated
                          FROM M_MatchInv mi INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id INNER JOIN C_Invoice i ON i.c_invoice_id       = il.c_invoice_id
                               WHERE mi.M_Product_ID IN ( " + ((!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID)) ? pc : productID) + @" )
                               AND mi.dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND i.isactive        = 'Y' AND (i.docstatus       IN ('CO' , 'CL') AND mi.iscostcalculated = 'N' )
@@ -222,7 +233,7 @@ namespace VAdvantage.Process
                          UNION 
                          SELECT i.ad_client_id ,  i.ad_org_id , i.isactive ,to_char(mi.created, 'DD-MON-YY HH24:MI:SS') as  created ,  i.createdby ,  TO_CHAR(mi.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
                                 i.updatedby ,  null AS documentno ,  M_MatchInvCostTrack_Id AS Record_Id ,  i.issotrx ,  i.isreturntrx ,  ''           AS IsInternalUse,  'M_MatchInvCostTrack' AS TableName,
-                                i.docstatus,  i.DateAcct AS DateAcct,  mi.iscostcalculated ,  mi.iscostimmediate AS isreversedcostcalculated
+                                i.docstatus, i.DateAcct AS DateAcct,  mi.iscostcalculated ,  mi.iscostimmediate AS isreversedcostcalculated
                           FROM M_MatchInvCostTrack mi INNER JOIN c_invoiceline il ON il.c_invoiceline_id = mi.c_invoiceline_id INNER JOIN C_Invoice i ON i.c_invoice_id       = il.c_invoice_id
                           WHERE  mi.M_Product_ID IN ( " + ((!String.IsNullOrEmpty(productCategoryID) && String.IsNullOrEmpty(productID)) ? pc : productID) + @" )
                            AND mi.updated >= " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND mi.updated < " + GlobalVariable.TO_DATE(minDateRecord.Value.AddDays(1), true) + @"  AND i.isactive        = 'Y' AND (i.docstatus       IN ('RE' , 'VO') )
@@ -230,7 +241,7 @@ namespace VAdvantage.Process
                         UNION
                          SELECT DISTINCT il.ad_client_id ,il.ad_org_id ,il.isactive ,to_char(i.created, 'DD-MON-YY HH24:MI:SS') as created ,   i.createdby , TO_CHAR(i.updated, 'DD-MON-YY HH24:MI:SS') AS updated ,
                               i.updatedby , I.DOCUMENTNO , LCA.C_LANDEDCOSTALLOCATION_ID AS RECORD_ID ,   '' AS ISSOTRX , '' AS ISRETURNTRX , '' AS ISINTERNALUSE,
-                              'LandedCost' as TABLENAME,  I.DOCSTATUS,  DATEACCT as DATEACCT , LCA.ISCOSTCALCULATED , 'N' as ISREVERSEDCOSTCALCULATED
+                              'LandedCost' as TABLENAME,  I.DOCSTATUS, DATEACCT as DATEACCT , LCA.ISCOSTCALCULATED , 'N' as ISREVERSEDCOSTCALCULATED
                         FROM C_LANDEDCOSTALLOCATION LCA INNER JOIN C_INVOICELINE IL ON IL.C_INVOICELINE_ID = LCA.C_INVOICELINE_ID
                         INNER JOIN c_invoice i ON I.C_INVOICE_ID = IL.C_INVOICE_ID
                         WHERE i.dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND il.isactive     = 'Y' AND 
@@ -240,7 +251,7 @@ namespace VAdvantage.Process
                          UNION
                          SELECT ad_client_id , ad_org_id , isactive ,to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,
                                 documentno , m_Inventory_id AS Record_Id , '' AS issotrx , '' AS isreturntrx , IsInternalUse, 'M_Inventory' AS TableName,
-                                docstatus,  movementdate AS DateAcct ,  iscostcalculated ,  isreversedcostcalculated 
+                                docstatus, movementdate AS DateAcct ,  iscostcalculated ,  isreversedcostcalculated 
                          FROM m_Inventory WHERE movementdate = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive       = 'Y'
                               AND ((docstatus   IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                               AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%')) 
@@ -254,7 +265,7 @@ namespace VAdvantage.Process
                          UNION
                          SELECT ad_client_id , ad_org_id , isactive ,to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby , 
                                 name AS documentno ,  M_Production_ID AS Record_Id , IsReversed AS issotrx , ''  AS isreturntrx , ''  AS IsInternalUse,  'M_Production'  AS TableName,
-                                '' AS docstatus,  movementdate AS DateAcct ,  iscostcalculated ,  isreversedcostcalculated 
+                                '' AS docstatus, movementdate AS DateAcct ,  iscostcalculated ,  isreversedcostcalculated 
                          FROM M_Production WHERE movementdate = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive       = 'Y'
                                AND ((PROCESSED = 'Y' AND iscostcalculated = 'N' AND IsReversed = 'N' ) OR (PROCESSED = 'Y' AND iscostcalculated  = 'Y'
                                AND ISREVERSEDCOSTCALCULATED= 'N' AND IsReversed = 'Y' AND Name LIKE '%{->%'))");
@@ -267,11 +278,21 @@ namespace VAdvantage.Process
                                             AND m_product_id = VAMFG_M_WrkOdrTransaction.m_product_id) > 0 THEN 'Y'
                                       WHEN (SELECT COUNT(*) FROM m_product WHERE m_product_ID IN (" + (String.IsNullOrEmpty(productID) ? 0.ToString() : productID) + @") 
                                             AND m_product_id = VAMFG_M_WrkOdrTransaction.m_product_id) > 0 THEN 'Y' END AS issotrx ,
-                                '' AS isreturntrx , '' AS IsInternalUse,  'VAMFG_M_WrkOdrTransaction'  AS TableName,
-                                docstatus,  vamfg_dateacct AS DateAcct , iscostcalculated ,  isreversedcostcalculated 
+                                '' AS isreturntrx  , '' AS IsInternalUse,  'VAMFG_M_WrkOdisreturntrxrTransaction'  AS TableName,
+                                docstatus, vamfg_dateacct AS DateAcct , iscostcalculated ,  isreversedcostcalculated 
                          FROM VAMFG_M_WrkOdrTransaction WHERE VAMFG_WorkOrderTxnType IN ('CI', 'CR' , 'AR' , 'AI') AND vamfg_dateacct = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" 
                               AND isactive  = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                               AND ISREVERSEDCOSTCALCULATED  = 'N' AND VAMFG_description LIKE '%{->%')) ");
+                    }
+                    if (countVAFAM > 0)
+                    {
+                        sql.Append(@" UNION
+                        SELECT ad_client_id , ad_org_id , isactive ,to_char(created, 'DD-MON-YY HH24:MI:SS') as created , createdby ,  to_char(updated, 'DD-MON-YY HH24:MI:SS') as updated , updatedby ,
+                                documentno , VAFAM_AssetDisposal_ID AS Record_Id , '' AS issotrx , '' AS isreturntrx ,'' AS IsInternalUse ,'VAFAM_AssetDisposal' AS TableName,
+                                docstatus , vafam_trxdate AS DateAcct ,  iscostcalculated ,  isreversedcostcalculated 
+                         FROM VAFAM_AssetDisposal WHERE vafam_trxdate = " + GlobalVariable.TO_DATE(minDateRecord, true) + @" AND isactive = 'Y'
+                              AND ((docstatus   IN ('CO' , 'CL') AND iscostcalculated = 'N' ) OR (docstatus IN ('RE' , 'VO') AND iscostcalculated ='Y'
+                              AND ISREVERSEDCOSTCALCULATED= 'N' AND ReversalDoc_ID!= 0) )");
                     }
                     sql.Append(@" ) t order by dateacct , created");
                     dsRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
@@ -1095,6 +1116,21 @@ namespace VAdvantage.Process
                             }
                             catch { }
                             #endregion
+
+                            #region Cost Calculation for Asset Disposal
+                            try
+                            {
+                                if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]).Equals("VAFAM_AssetDisposal"))
+                                {
+                                    po_AssetDisposal = tbl_AssetDisposal.GetPO(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    CalculateCostForAssetDisposal(Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Util.GetValueOfInt(Util.GetValueOfInt(po_AssetDisposal.Get_Value("M_Product_ID"))));
+
+                                    continue;
+                                }
+                            }
+                            catch { }
+                            #endregion
+
 
                             #region Cost Calculation for Inventory Move --
                             try
@@ -2225,6 +2261,17 @@ namespace VAdvantage.Process
                     }
                 }
                 catch { }
+                try
+                {
+                    sql.Clear();
+                    sql.Append("SELECT Min(VAFAM_trxdate) FROM VAFAM_AssetDisposal WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N'))");
+                    tempDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
+                    if (minDate == null || (Util.GetValueOfDateTime(minDate) > Util.GetValueOfDateTime(tempDate) && tempDate != null))
+                    {
+                        minDate = tempDate;
+                    }
+                }
+                catch { }
 
                 sql.Clear();
                 sql.Append("SELECT Min(DateAcct) FROM C_Invoice WHERE isactive = 'Y' AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' AND ISREVERSEDCOSTCALCULATED= 'N' AND description like '%{->%'))");
@@ -2323,6 +2370,11 @@ namespace VAdvantage.Process
                                        WHERE m_inventory_ID IN ( 
                                         SELECT m_inventory_ID FROM m_inventoryline WHERE  M_Product_ID IN 
                                         (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) ) )", null, Get_Trx());
+
+                // for VAFAM_AssetDisposal
+                DB.ExecuteQuery(@"UPDATE VAFAM_AssetDisposal SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N'
+                                                 WHERE M_Product_ID IN 
+                                                 (SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID IN (" + productCategoryID + " ) )", null, Get_Trx());
 
                 // for M_Movement / M_MovementLine
                 countRecord = 0;
@@ -2441,6 +2493,9 @@ namespace VAdvantage.Process
                     DB.ExecuteQuery(@"UPDATE m_movement  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N'
                                        WHERE m_movement_ID IN ( 
                                         SELECT m_movement_ID FROM m_movementline WHERE  M_Product_ID IN (" + productID + " ) )", null, Get_Trx());
+                // for VAFAM_AssetDisposal
+                DB.ExecuteQuery(@"UPDATE vafam_assetdisposal SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' 
+                                                 WHERE M_Product_ID IN  (" + productID + " ) ", null, Get_Trx());
 
                 // for M_Production / M_ProductionLine
                 countRecord = 0;
@@ -2507,6 +2562,9 @@ namespace VAdvantage.Process
                 // for M_Inventory / M_InventoryLine
                 DB.ExecuteQuery(@"UPDATE m_inventoryline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0 , PostCurrentCostPrice = 0  WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
                 DB.ExecuteQuery(@"UPDATE m_inventory  SET  iscostcalculated = 'N',  isreversedcostcalculated = 'N' WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
+
+                // for VAFAM_AssetDisposal
+                DB.ExecuteQuery(@"UPDATE vafam_assetdisposal SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N'  WHERE AD_client_ID =  " + GetAD_Client_ID(), null, Get_Trx());
 
                 // for M_Movement / M_MovementLine
                 DB.ExecuteQuery(@"UPDATE m_movementline SET iscostimmediate = 'N' , iscostcalculated = 'N',  isreversedcostcalculated = 'N' , CurrentCostPrice = 0 
@@ -4076,6 +4134,48 @@ namespace VAdvantage.Process
         }
 
         /// <summary>
+        /// Is used to calculate cost for AssetDisposal
+        /// </summary>
+        /// <param name="VAFAM_AssetDisposal_ID">AssetDisposal reference</param>
+        /// <param name="M_Product_ID">AssetDisposal reference</param>
+        private void CalculateCostForAssetDisposal(int VAFAM_AssetDisposal_ID, int M_Product_ID)
+        {
+            #region for Asset Disposal
+            try
+            {
+
+                product = new MProduct(GetCtx(), M_Product_ID, Get_Trx());
+                if (product.GetProductType() == "I") // for Item Type product
+                {
+                    quantity = 0;
+                    quantity = Decimal.Negate(Util.GetValueOfDecimal(po_AssetDisposal.Get_Value("VAFAM_Qty")));
+                    if (!MCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_AssetDisposal.Get_Value("AD_Client_ID")), Util.GetValueOfInt(po_AssetDisposal.Get_Value("AD_Org_ID")),
+                        product, Util.GetValueOfInt(po_AssetDisposal.Get_Value("GetM_AttributeSetInstance_ID")), "AssetDisposal", null, null, null, null, po_AssetDisposal, 0, quantity, Get_Trx(), out conversionNotFoundInventory))
+                    {
+                        _log.Info("Cost not Calculated for Asset Dispose ID = " + VAFAM_AssetDisposal_ID);
+                        ListReCalculatedRecords.Add(new ReCalculateRecord { WindowName = (int)windowName.AssetDisposal, HeaderId = VAFAM_AssetDisposal_ID, LineId = VAFAM_AssetDisposal_ID, IsReversal = false });
+                    }
+                    else
+                    {
+                        if (Util.GetValueOfInt(po_AssetDisposal.Get_Value("ReversalDoc_ID")) > 0)
+                        {
+                            DB.ExecuteQuery("UPDATE VAFAM_AssetDisposal SET IsReversedCostCalculated='Y' WHERE VAFAM_AssetDisposal_ID = " + VAFAM_AssetDisposal_ID, null, Get_Trx());
+                        }
+                        else
+                        {
+                            DB.ExecuteQuery("UPDATE VAFAM_AssetDisposal SET ISCostCalculated='Y' WHERE VAFAM_AssetDisposal_ID = " + VAFAM_AssetDisposal_ID, null, Get_Trx());
+                        }
+                        _log.Fine("Cost Calculation updated for VAFAM_AssetDispoal= " + VAFAM_AssetDisposal_ID);
+                        Get_Trx().Commit();
+                    }
+                }
+            }
+            catch { }
+            #endregion
+
+        }
+
+        /// <summary>
         /// Is used to calculate cost againt Inventory Move
         /// </summary>
         /// <param name="M_Movement_ID">Movement id reference</param>
@@ -4821,6 +4921,11 @@ namespace VAdvantage.Process
                     {
                         CalculationCostCreditMemo(objReCalculateRecord.HeaderId);
                     }
+                }
+                else if (objReCalculateRecord.WindowName == (int)windowName.AssetDisposal)
+                {
+                    po_AssetDisposal = tbl_AssetDisposal.GetPO(GetCtx(), objReCalculateRecord.HeaderId, Get_Trx());
+                    CalculateCostForAssetDisposal(objReCalculateRecord.HeaderId, Util.GetValueOfInt(Util.GetValueOfInt(po_AssetDisposal.Get_Value("M_Product_ID"))));
                 }
             }
         }

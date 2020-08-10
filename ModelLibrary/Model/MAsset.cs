@@ -473,7 +473,8 @@ namespace VAdvantage.Model
         public new Decimal GetQty()
         {
             Decimal qty = base.GetQty();
-            if (qty == null || qty.Equals(Env.ZERO))
+            // In Case of Disposal, no need to set Asset Qty to One.
+            if (qty.Equals(Env.ZERO) && !IsDisposed())
                 SetQty(Env.ONE);
             return base.GetQty();
         }
@@ -723,7 +724,16 @@ namespace VAdvantage.Model
             {
                 string name = "";
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());
-                name = ctl.CreateSerNo();
+
+                // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
+                if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
+                {
+                    name = ctl.CreateDefiniteSerNo(this);
+                }
+                else
+                {
+                    name = ctl.CreateSerNo();
+                }
                 SetValue(name);
             }
             #region Fixed Asset Management

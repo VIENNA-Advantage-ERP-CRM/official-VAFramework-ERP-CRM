@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Security.Authentication;
 using System.Text;
@@ -14,8 +15,9 @@ namespace VAdvantage.DataBase
         /**	Logger	*/
         private static VLogger log = VLogger.GetVLogger(typeof(LDAP).FullName);
 
-        public static bool Validate(String ldapURL, String domain, String userName, String password, string adminUser, string adminPwd)
+        public static bool Validate(String ldapURL, String domain, String userName, String password, string adminUser, string adminPwd, out string output)
         {
+            output = "";
             if (String.IsNullOrEmpty(password))
                 return false;
             //LdapConnection
@@ -43,6 +45,7 @@ namespace VAdvantage.DataBase
                     if (null == result)
                     {
                         log.Warning("Error in LDAP: User Not Found" + userName);
+                        output = "UserNotFound";
                         return false;
                     }
                 }
@@ -64,9 +67,17 @@ namespace VAdvantage.DataBase
                         result = search.FindOne();
                         log.Info("LDAP Admin user Credentials and user verified");
                     }
+                    catch (DirectoryServicesCOMException exception)
+                    {
+                        log.Severe("Error in LDAP for  Admin user " + userName + " : " + exception.Message);
+                        output = LDAPExceptions.TreatErrorMessage(exception,true);
+                        return false;
+                    }
                     catch (Exception e)
                     {
                         log.Severe("Error in LDAP for Admin user. User not found " + userName + " : " + e.Message);
+                        output = e.Message;
+                       
                         return false;
                     }
 
@@ -74,6 +85,8 @@ namespace VAdvantage.DataBase
                     if (null == result)
                     {
                         log.Warning("Error in LDAP for Admin User: User Not Found: " + userName);
+                        output = "UserNotFound";
+                       
                         return false;
                     }
                     else if (result != null)
@@ -89,6 +102,7 @@ namespace VAdvantage.DataBase
                         if (null == result)
                         {
                             log.Warning("Error in LDAP: User Not Found" + userName);
+                            output = "UserNotFound";
                             return false;
                         }
                         string guid = BitConverter.ToString((byte[])result.Properties["objectguid"][0]);
@@ -100,6 +114,7 @@ namespace VAdvantage.DataBase
                         else
                         {
                             log.Warning("Error in LDAP: User Not Found" + userName);
+                            output = "UserNotFound";
                             return false;
                         }
 
@@ -109,14 +124,16 @@ namespace VAdvantage.DataBase
 
 
             }
-            catch (AuthenticationException e)
+            catch (DirectoryServicesCOMException exception)
             {
-                log.Severe("Authentication Error in LDAP for user " + userName + " : " + e.Message);
+                log.Severe("Error in LDAP for user " + userName + " : " + exception.Message);
+                output = LDAPExceptions.TreatErrorMessage(exception,false);
                 return false;
             }
             catch (Exception e)
             {
                 log.Severe("Error in LDAP for user " + userName + " : " + e.Message);
+                output = e.Message;
                 return false;
             }
             if (log.IsLoggable(Level.INFO)) log.Info("OK: " + userName);
@@ -125,5 +142,51 @@ namespace VAdvantage.DataBase
         }	//	validate
 
 
+    }
+
+
+    public class LDAPExceptions
+    {
+        public static string TreatErrorMessage(DirectoryServicesCOMException e, bool isAdmin)
+        {
+            /** http://www-01.ibm.com/support/docview.wss?uid=swg21290631
+             * 525 - user not found
+             * 52e - invalid credentials
+             * 530 - not permitted to logon at this time
+             * 531 - not permitted to logon at this workstation
+             * 532 - password expired
+             * 533 - account disabled
+             * 534 - The user has not been granted the requested logon type at this machine
+             * 701 - account expired
+             * 773 - user must reset password
+             * 775 - user account locked */
+
+            string msg = e.ExtendedErrorMessage ?? "";
+            if (msg.Contains("525"))
+            {
+                return isAdmin? "AdminUserNotFound": "UserNotFound";
+            }
+            if (msg.Contains("52e"))
+            {
+                return isAdmin ? "AdminUserPwdError":"UserPwdError";
+            }
+            if (msg.Contains("532"))
+            {
+                return isAdmin ? "AdminPwdExpired":"PwdExpired";
+            }
+            if (msg.Contains("533"))
+            {
+                return isAdmin ? "AdminActDisabled": "ActDisabled";
+            }
+            if (msg.Contains("701"))
+            {
+                return isAdmin ? "AdminActExpired":"ActExpired";
+            }
+            if (msg.Contains("775"))
+            {
+                return isAdmin ? "AdminMaxFailedLoginAttempts":"MaxFailedLoginAttempts";
+            }
+            return e.Message;
+        }
     }
 }

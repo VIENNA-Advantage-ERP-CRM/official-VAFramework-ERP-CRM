@@ -138,13 +138,21 @@ Globalize.addCultureInfo( "ms-MY", "default", {
         "UserNotFound": "Nama pengguna tidak betul.",
         "RoleNotDefined": "Tiada peranan yang ditentukan untuk pengguna ini",
         "oldNewSamePwd": "kata laluan lama dan kata laluan baru mesti berbeza.",
-        "NewPassword": "Kata laluan baharu",
-        "NewCPassword": "Sahkan Kata Laluan Baru",
+        "NewPassword": "Kata Laluan VA Baru",
+        "NewCPassword": "Sahkan Kata Laluan VA Baru",
         "EnterOTP": "Masukkan OTP",
         "WrongOTP": "OTP Salah Dimasukkan",
         "ScanQRCode": "Imbas kod dengan Google Authenticator",
-        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi mudah alih anda"
-
+        "EnterVerCode": "Masukkan OTP yang dihasilkan oleh aplikasi mudah alih anda",
+        "PwdExpired": "Kata Laluan Pengguna Tamat Tempoh",
+        "ActDisabled": "Akaun telah dilumpuhkan",
+        "ActExpired": "Akaun telah Tamat Tempoh",
+        "AdminUserNotFound": "Nama Pengguna Pentadbir tidak betul.",
+        "AdminUserPwdError": "Pengguna Pentadbir tidak sepadan dengan kata laluan",
+        "AdminPwdExpired": "Kata Laluan Pengguna Pentadbir Tamat Tempoh",
+        "AdminActDisabled": "Akaun Pentadbir telah dilumpuhkan",
+        "AdminActExpired": "Akaun Pentadbir Tamat Tempoh",
+        "AdminMaxFailedLoginAttempts": "Akaun Pengguna Pentadbir dikunci. Percubaan masuk yang gagal maksimum melebihi had yang ditentukan. Sila hubungi pentadbir.",
     }
 });
 

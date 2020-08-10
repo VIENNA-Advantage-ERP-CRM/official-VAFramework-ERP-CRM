@@ -270,6 +270,8 @@
                     else {
                         if (cntrl.attr("class").contains("vis-gc-vpanel-table-mandatory") && cntrl.val().trim().length == 0) {
                             VIS.ADialog.warn("FillMandatoryFields", true, null);
+                            // stop loader
+                            setBusy(false);
                             result = false;
                             return result;
                         }

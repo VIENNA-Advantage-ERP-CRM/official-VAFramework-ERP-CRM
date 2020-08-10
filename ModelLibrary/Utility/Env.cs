@@ -64,7 +64,7 @@ namespace VAdvantage.Utility
 
         public static String ApplicationURL = "";
 
-        private static CCache<string, Tuple<string, string, string, string>> _cacheModules = new CCache<string,Tuple<string,string,string,string>>("ModuleCache",0);
+        private static CCache<string, Tuple<string, string, string, string>> _cacheModules = new CCache<string, Tuple<string, string, string, string>>("ModuleCache", 0);
         private static CCache<string, Tuple<string, string, string, string>> _cacheVISModules = new CCache<string, Tuple<string, string, string, string>>("ModuleVISCache", 0);
 
         #region "WindowNumber"
@@ -742,7 +742,7 @@ namespace VAdvantage.Utility
             //
             VLogMgt.Shutdown();
             //
-           
+
             if (VAdvantage.DataBase.Ini.IsClient())
                 Environment.Exit(status);
         }	//	close
@@ -874,7 +874,7 @@ namespace VAdvantage.Utility
             return true;
         }
 
-       
+
 
 
         ///////////////////Manfacturing//////////////////////////////
@@ -981,7 +981,7 @@ namespace VAdvantage.Utility
                         {
                             result.parameters.Add(Utility.Util.GetValueOfDecimal(ctxInfo));
                         }
-                        catch 
+                        catch
                         {
                             result.parameters.Add(ctxInfo);
                         }
@@ -1015,11 +1015,11 @@ namespace VAdvantage.Utility
         /// <param name="name">name to match</param>
         /// <param name="asmInfo">out module asembly info</param>
         /// <returns>true , if has module prefix</returns>
-        public static bool HasModulePrefix(string name, out Tuple<string, string,string> asmInfo)
+        public static bool HasModulePrefix(string name, out Tuple<string, string, string> asmInfo)
         {
             bool retVal = false;
 
-           
+
             asmInfo = null;
 
             LoadAllModules();
@@ -1030,7 +1030,7 @@ namespace VAdvantage.Utility
                 if (_cacheModules.ContainsKey(prefix))
                 {
                     Tuple<string, string, string, string> val = _cacheModules[prefix];
-                    asmInfo = new Tuple<string, string,string>(val.Item1, val.Item2,val.Item3);
+                    asmInfo = new Tuple<string, string, string>(val.Item1, val.Item2, val.Item3);
                     retVal = true;
                 }
             }
@@ -1039,7 +1039,7 @@ namespace VAdvantage.Utility
             #region Commented Code
             ///* Tuple */
             ///* [Assembly Name, Vesion=version] , [Namespace]  */
-           
+
             //if (name != null && name.Contains("_") && name.IndexOf('_') > 2)
             //{
             //    /* prefix */
@@ -1071,8 +1071,8 @@ namespace VAdvantage.Utility
 
             //        //// Change
 
-                    
-                   
+
+
 
             //    }
             //    catch
@@ -1088,17 +1088,17 @@ namespace VAdvantage.Utility
 
         public static string GetVISInstalledVersion(string name)
         {
-           if(_cacheVISModules.ContainsKey(name))
-           {
+            if (_cacheVISModules.ContainsKey(name))
+            {
 
-               return _cacheVISModules[name].Item3;
+                return _cacheVISModules[name].Item3;
             }
-           return "";
+            return "";
         }
 
 
 
-        public static bool GetModulePrefix(string name, out string retPrefix,out string nspace)
+        public static bool GetModulePrefix(string name, out string retPrefix, out string nspace)
         {
             retPrefix = "";
             nspace = "";
@@ -1109,7 +1109,7 @@ namespace VAdvantage.Utility
                 string prefix = name.Substring(0, name.IndexOf('_') + 1);
                 if (_cacheModules.ContainsKey(prefix))
                 {
-                    var s =  _cacheModules[prefix];
+                    var s = _cacheModules[prefix];
                     retPrefix = prefix;
                     nspace = s.Item2;
                     return true;
@@ -1188,7 +1188,7 @@ namespace VAdvantage.Utility
         }
 
         //AssemblyName,NameSpace, VersionNo,VersionID,prefix
-       public static bool? IsModuleAlreadyInstalled(string prefix, string versionNo, string name)
+        public static bool? IsModuleAlreadyInstalled(string prefix, string versionNo, string name)
         {
             bool? retValue = false;
             Version vInstalled = null, vImport = null;
@@ -1303,16 +1303,16 @@ namespace VAdvantage.Utility
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _log.Config("Error Loading Modules"+ex.Message);
+                _log.Config("Error Loading Modules" + ex.Message);
                 if (dr != null)
                 {
                     dr.Close();
                     dr = null;
                 }
             }
-            
+
 
         }
 
@@ -1359,6 +1359,8 @@ namespace VAdvantage.Utility
         {
             return ctx.GetApplicationUrl();
         }
+
+        
     }
 
 
@@ -1412,7 +1414,7 @@ namespace VAdvantage.Utility
             {
                 try
                 {
-                    Tuple<String, String,String> aInfo = null;
+                    Tuple<String, String, String> aInfo = null;
                     if (Env.HasModulePrefix(name, out aInfo))
                     {
                         asm = System.Reflection.Assembly.Load(aInfo.Item1);

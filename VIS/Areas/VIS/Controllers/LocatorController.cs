@@ -51,5 +51,6 @@ namespace VIS.Controllers
             LocatorModel model = new LocatorModel();
             return Json(JsonConvert.SerializeObject(model.GetWarehouseData(Locator_ID, ct)), JsonRequestBehavior.AllowGet);
         }
+
     }
 }
