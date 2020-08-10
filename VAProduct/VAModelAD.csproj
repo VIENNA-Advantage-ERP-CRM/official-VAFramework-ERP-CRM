@@ -53,7 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Class1.cs" />
+    <Compile Include="Classes\Class1.cs" />
+    <Compile Include="Classes\Evaluator.cs" />
+    <Compile Include="Classes\Query.cs" />
+    <Compile Include="Classes\ZoomTarget.cs" />
+    <Compile Include="Lookup\MAccountLookup.cs" />
+    <Compile Include="Lookup\MAmtDivision.cs" />
+    <Compile Include="Lookup\MLocatorLookup.cs" />
+    <Compile Include="Lookup\MLookup.cs" />
+    <Compile Include="Lookup\MLookupCache.cs" />
+    <Compile Include="Lookup\MPAttributeLookup.cs" />
+    <Compile Include="Lookup\MProductContainerLookup.cs" />
+    <Compile Include="Lookup\VLookUpFactory.cs" />
     <Compile Include="ModelAD\html\MRole.cs" />
     <Compile Include="ModelAD\html\MTableAccess.cs" />
     <Compile Include="ModelAD\html\MTree.cs" />
