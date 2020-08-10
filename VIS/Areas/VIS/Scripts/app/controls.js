@@ -917,7 +917,7 @@
 
         $btnSearch.on("click", function () {
             if (self.mField.getIsEditable(true)) {
-                self.setReadOnly(false);
+                self.setReadOnly(false,true);
                 $ctrl.val(self.mField.getValue());
             }
         });
@@ -927,6 +927,10 @@
             $ctrl = null;
             self = null;
         }
+
+
+
+
     };
 
     VIS.Utility.inheritPrototype(VTextBox, IControl);//Inherit from IControl
@@ -941,6 +945,16 @@
     //    }
 
     //};
+
+
+    VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
+        if (!readOnly && this.obscureType && !forceWritable) {
+            readOnly = true;
+        }
+        this.isReadOnly = readOnly;
+        this.ctrl.prop('disabled', readOnly ? true : false);
+        this.setBackground(false);
+    };
 
 
     /** 
