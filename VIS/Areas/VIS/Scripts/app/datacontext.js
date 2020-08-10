@@ -143,8 +143,8 @@
             })
         };
 
-        function getWindowRecords(sqlIn, fields, rowCount, SQL_Count, AD_Table_ID, callback) {
-            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, AD_Table_ID: AD_Table_ID };
+        function getWindowRecords(sqlIn, fields, rowCount, SQL_Count, AD_Table_ID, obscureFields, callback) {
+            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, AD_Table_ID: AD_Table_ID, obscureFields: obscureFields };
 
             $.ajax({
                 url: windowRecordsUrl,

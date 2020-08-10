@@ -116,7 +116,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID)
+        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID,List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -133,7 +133,7 @@ namespace VIS.Controllers
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
-                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID);
+                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, obscureFields);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);

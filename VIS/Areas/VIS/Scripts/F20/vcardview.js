@@ -704,6 +704,13 @@ function VCard(fields, record) {
             value = ' -- ';
         value = w2utils.encodeTags(value);
 
+        if (field.getIsEncryptedField()) {
+            value = value.replace(/\w|\W/g, "*");
+        }
+        if (field.getObscureType()) {
+            value = VIS.Env.getObscureValue(field.getObscureType(), value);
+        }
+
         var span = "";
         //if (i != 0)
         //    span = "<p>" + field.getHeader() + " : <strong>" + value + "<strong></p>";

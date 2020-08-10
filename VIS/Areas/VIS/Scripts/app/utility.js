@@ -170,7 +170,7 @@
                 }
             } else {
                 //return String(String(num).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ","));
-
+               
                 _tStr = num.match(/[,]+/g);
                 if (_tStr != null && _tStr.length > 1) {
                     return "";
@@ -469,7 +469,7 @@
         var WINDOW_PAGE_SIZE = 50;
         var window_height = 400;
         var NULLString = "NULLValue";
-
+        var obscureTypes = { DigitButLast4: "904", DigitButFirstLast4: "944", AlphanumButLast4: "A04", AlphaNumButFirstLast4: "A44" };
 
         function getWindowNo() {
             return windowNo++;
@@ -538,6 +538,23 @@
             }
             outStr += value;						// add the rest of the string
             return outStr;
+        };
+
+        function getObscureValue(type, value) {
+            if (value) {
+                if (type == obscureTypes.DigitButLast4) {
+                    return value.replace(/\d(?=\w{4})/g, "*");
+                }
+                else if (type == obscureTypes.DigitButFirstLast4) {
+                    return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "*");
+                }
+                else if (type == obscureTypes.AlphanumButLast4) {
+                    return value.replace(/[_\W]/g, "*").replace(/[\w](?=\w{4})/g, "*");
+                }
+                else if (type == obscureTypes.AlphaNumButFirstLast4) {
+                    return value.replace(/[_\W]/g, "*").replace(/(?<=\w{4})[\w](?=\w{4})/g, "*");
+                }
+            }
         };
 
         function getWINDOW_PAGE_SIZE() {
@@ -796,7 +813,8 @@
             SHOW_ORG_ONLY: 2,
             HIDE_CLIENT_ORG: 3,
             NULLString: NULLString,
-            approveCol: "IsApproved"
+            approveCol: "IsApproved",
+            getObscureValue: getObscureValue
         }
     }();
     // ******************** END ENV *********************//
