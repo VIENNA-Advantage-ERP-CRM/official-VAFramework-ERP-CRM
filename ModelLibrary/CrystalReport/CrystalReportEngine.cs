@@ -516,7 +516,7 @@ namespace VAdvantage.CrystalReport
                     }
 
                     DataSet ds = DB.ExecuteDataset(sqlQ);
-
+                    log.Severe("CrystalReport Query: " + sqlQ);
                     if (ds == null)
                     {
                         ValueNamePair error = VLogger.RetrieveError();
@@ -1512,7 +1512,11 @@ namespace VAdvantage.CrystalReport
 
         private string GetObscureSql(string tableName, string sql)
         {
-            MColumn[] columns = MTable.Get(_ctx, tableName).GetColumns(true);
+            MTable table = MTable.Get(_ctx, tableName);
+            if (table == null)
+                return sql;
+
+            MColumn[] columns = table.GetColumns(true);
             List<MColumn> cols = columns.Where(a => a.GetObscureType() != null && a.GetObscureType().Length > 0).ToList<MColumn>();
             if (cols != null && cols.Count > 0)
             {
