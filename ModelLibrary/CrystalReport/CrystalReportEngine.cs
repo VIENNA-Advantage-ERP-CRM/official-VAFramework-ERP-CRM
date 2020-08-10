@@ -477,6 +477,11 @@ namespace VAdvantage.CrystalReport
                         //}
                     }
 
+
+                    string tablename = sql.Substring(sql.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
+
+                    sql = GetObscureSql(tablename, sql);
+
                     if (sb.Length > 7)
                         sql = sql + sb.ToString();
 
@@ -691,6 +696,11 @@ namespace VAdvantage.CrystalReport
                             if (index > -1)
                             {
                                 sqlQ = sqls[index].ToUpper();
+
+                                string tablname = sqlQ.Substring(sqlQ.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
+
+                                sqlQ = GetObscureSql(tablname, sqlQ);
+
                                 //if (sqlQ.ToUpper().Contains("T_CrystalParameters"))
                                 //{
                                 //    sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
@@ -886,7 +896,7 @@ namespace VAdvantage.CrystalReport
                         oStream.Close();
                         log.Severe("CrystalReport Info: Creating Stream End");
                     }
-                    catch(Exception exx)
+                    catch (Exception exx)
                     {
                         bytes = null;
                         log.Severe(exx.Message);
@@ -1236,6 +1246,10 @@ namespace VAdvantage.CrystalReport
                         }
                     }
 
+                    string tablname = sql.Substring(sql.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
+
+                    sql = GetObscureSql(tablname, sql);
+
                     if (sb.Length > 7)
                         sql = sql + sb.ToString();
 
@@ -1374,7 +1388,7 @@ namespace VAdvantage.CrystalReport
                         }
 
                         DataRow dr = ds.Tables[0].NewRow();
-                        
+
                         dr["ORGLOGO"] = orgLogo;
                         ds.Tables[0].Rows.Add(dr);
 
@@ -1394,6 +1408,10 @@ namespace VAdvantage.CrystalReport
                             if (index > -1)
                             {
                                 sqlQ = sqls[index];
+
+                                string tablename = sqlQ.Substring(sqlQ.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
+
+                                sqlQ = GetObscureSql(tablename, sqlQ);
 
                                 //Check if AD_PInstance_ID exist in query, only then apply AD_PInstance_ID in where clause.
                                 sqlQ = sqlQ.ToUpper();
@@ -1490,6 +1508,25 @@ namespace VAdvantage.CrystalReport
                 throw e1;
             }
             return true;
+        }
+
+        private string GetObscureSql(string tableName, string sql)
+        {
+            MColumn[] columns = MTable.Get(_ctx, tableName).GetColumns(true);
+            List<MColumn> cols = columns.Where(a => a.GetObscureType() != null && a.GetObscureType().Length > 0).ToList<MColumn>();
+            if (cols != null && cols.Count > 0)
+            {
+                foreach (MColumn col in cols)
+                {
+                    string Name = col.GetColumnName();
+                    if (sql.Contains(Name))
+                    {
+                        string obscureColumn = DBFunctionCollection.GetObscureColumn(col.GetObscureType(), tableName, Name);
+                        sql = sql.Replace(Name, obscureColumn);
+                    }
+                }
+            }
+            return sql;
         }
 
     }
