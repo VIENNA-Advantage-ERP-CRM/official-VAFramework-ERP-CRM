@@ -54,6 +54,28 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-wallet:before {
+  content: "\e9c2";
+}
+.vis-coin-dollar:before {
+  content: "\e9c3";
+}
+.vis-mobile-card:before {
+  content: "\e9c4";
+}
+.vis-bank-transfer:before {
+  content: "\e9bf";
+}
+.vis-cash-bag:before {
+  content: "\e9c0";
+}
+.vis-cheque:before {
+  content: "\e9c1";
+}
+.vis-split:before {
+  content: "\e9c5";
+}
+
 .vis-scandoc:before {
     content: "\e9be";
 }

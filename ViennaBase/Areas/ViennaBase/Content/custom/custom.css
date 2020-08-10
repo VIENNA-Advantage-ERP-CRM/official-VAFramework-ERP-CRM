@@ -234,11 +234,11 @@ html[dir="rtl"] .ui-dialog .ui-dialog-titlebar-close {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     color: inherit;
 }
-    .ui-widget input:not([type="checkbox"]), .ui-widget select, .ui-widget textarea, .ui-widget button {
-        font-family: var(--v-c-font-family);
-        outline: none;
-        min-height: 30px;
-    }
+.ui-widget input:not([type="checkbox"]):not([type="radio"]), .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: var(--v-c-font-family);
+    outline: none;
+    min-height: 30px;
+}
 
     .ui-widget input[type="radio"] {
         min-height: auto;
@@ -458,5 +458,7 @@ input:not([type=button]), select, textarea{
 }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
     font-family: inherit;
-    font-size: 1rem;
+
+    /*font-size: 1rem;*/
+
 }
