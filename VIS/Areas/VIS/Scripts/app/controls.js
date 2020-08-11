@@ -935,22 +935,11 @@
 
     VIS.Utility.inheritPrototype(VTextBox, IControl);//Inherit from IControl
 
-
-    //VTextBox.prototype.setReadOnly = function (readOnly) {
-    //    this.isReadOnly = readOnly;
-    //    this.ctrl.prop('disabled', readOnly ? true : false);
-    //    this.setBackground(false);
-    //    if (this.obscureType) {
-    //        obscureType
-    //    }
-
-    //};
-
-
     VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
         if (!readOnly && this.obscureType && !forceWritable) {
             readOnly = true;
         }
+
         this.isReadOnly = readOnly;
         this.ctrl.prop('disabled', readOnly ? true : false);
         this.setBackground(false);
