@@ -478,9 +478,9 @@ namespace VAdvantage.CrystalReport
                     }
 
 
-                    string tablename = sql.Substring(sql.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
+                    
 
-                    sql = GetObscureSql(tablename, sql);
+                    sql = GetObscureSql(sql);
 
                     if (sb.Length > 7)
                         sql = sql + sb.ToString();
@@ -697,9 +697,9 @@ namespace VAdvantage.CrystalReport
                             {
                                 sqlQ = sqls[index].ToUpper();
 
-                                string tablname = sqlQ.Substring(sqlQ.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
+                               
 
-                                sqlQ = GetObscureSql(tablname, sqlQ);
+                                sqlQ = GetObscureSql(sqlQ);
 
                                 //if (sqlQ.ToUpper().Contains("T_CrystalParameters"))
                                 //{
@@ -1246,9 +1246,7 @@ namespace VAdvantage.CrystalReport
                         }
                     }
 
-                    string tablname = sql.Substring(sql.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
-
-                    sql = GetObscureSql(tablname, sql);
+                    sql = GetObscureSql(sql);
 
                     if (sb.Length > 7)
                         sql = sql + sb.ToString();
@@ -1409,9 +1407,7 @@ namespace VAdvantage.CrystalReport
                             {
                                 sqlQ = sqls[index];
 
-                                string tablename = sqlQ.Substring(sqlQ.IndexOf("FROM")).Split(' ')[0].ToString().Trim();
-
-                                sqlQ = GetObscureSql(tablename, sqlQ);
+                                sqlQ = GetObscureSql(sqlQ);
 
                                 //Check if AD_PInstance_ID exist in query, only then apply AD_PInstance_ID in where clause.
                                 sqlQ = sqlQ.ToUpper();
@@ -1510,8 +1506,10 @@ namespace VAdvantage.CrystalReport
             return true;
         }
 
-        private string GetObscureSql(string tableName, string sql)
+        private string GetObscureSql(string sql)
         {
+            string tableName = sql.Substring(sql.IndexOf("FROM") + 4).Trim().Split(' ')[0].ToString().Trim();
+
             MTable table = MTable.Get(_ctx, tableName);
             if (table == null)
                 return sql;
