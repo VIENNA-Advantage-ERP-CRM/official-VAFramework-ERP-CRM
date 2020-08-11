@@ -4513,7 +4513,7 @@
         try {
 
             sql = VIS.secureEngine.encrypt(sql);
-            dr = VIS.dataContext.getWindowRecord(sql, this.createGridFieldArr(this.gridFields, true));
+            dr = VIS.dataContext.getWindowRecord(sql, this.createGridFieldArr(this.gridFields, true), this.createObsecureFields(this.gridFields));
             //	only one row
             if (dr.read())
                 rowDataDB = this.readData(dr);
