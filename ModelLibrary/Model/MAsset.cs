@@ -724,7 +724,16 @@ namespace VAdvantage.Model
             {
                 string name = "";
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());
-                name = ctl.CreateSerNo();
+
+                // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
+                if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
+                {
+                    name = ctl.CreateDefiniteSerNo(this);
+                }
+                else
+                {
+                    name = ctl.CreateSerNo();
+                }
                 SetValue(name);
             }
             #region Fixed Asset Management

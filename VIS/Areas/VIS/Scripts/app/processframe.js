@@ -101,8 +101,8 @@
 
             $divOuterMain.append($busyDiv);
             $cmbType = $('<select style="display:none;width:100%">');
-            $chkIsBG = $('<label  class="vis-ec-col-lblchkbox" style="display: none;"><input type="checkbox">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
-            //$lblIsBG = $('<label  class="vis-process-background-label">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+            $lblIsBG  = $('<label  class="vis-ec-col-lblchkbox" style="display: none;"><input type="checkbox">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+            $chkIsBG = $($lblIsBG.find('input')[0]);
             $text = $("<span class='vis-process-description-Span' style='height: 40px;'>").val("asassasasasasaasa");
             //ProcessDialog
             $contentGrid.append($text);
@@ -112,7 +112,7 @@
             var divrptType = $('<div style="display:inherit"></div>');
             self.parameterFixedArea.append($DivInputWrap);
             $DivInputWrap.append($DivInputCtrlWrap);
-            $DivInputCtrlWrap.append($chkIsBG).append($cmbType).append($lblRptTypeHeader)/*.append($lblIsBG)*/;
+            $DivInputCtrlWrap.append($lblIsBG).append($cmbType).append($lblRptTypeHeader)/*.append($lblIsBG)*/;
 
             $contentGrid.append(divrptType);
             $contentGrid.append($btnOK).append($btnClose);
@@ -376,12 +376,12 @@
         this.showBackgroundProcess = function (value) {
             if (value) {
                 self.parameterFixedArea.addClass('vis-process-pram-checkbox-text');
-                $chkIsBG.css('display', 'flex');
+                $lblIsBG.css('display', 'flex');
                 //$lblIsBG.css('display', 'block');
             }
             else {
                 self.parameterFixedArea.removeClass('vis-process-pram-checkbox-text');
-                $chkIsBG.css('display', 'none');
+                $lblIsBG.css('display', 'none');
                 //$lblIsBG.css('display', 'none');
             }
 

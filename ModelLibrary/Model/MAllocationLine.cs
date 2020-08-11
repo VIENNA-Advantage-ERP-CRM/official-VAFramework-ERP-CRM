@@ -428,7 +428,8 @@ namespace VAdvantage.Model
                                     {
                                         // when payment created with invoice refernce direct
                                         // convert payment amount in invoice amt with payment date and payment conversion type
-                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add(payment.GetPayAmt(), payment.GetDiscountAmt()),
+                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add((payment.GetPayAmt() +
+                                            (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
                                             payment.GetWriteOffAmt())), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
                                             payment.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                     }
@@ -452,7 +453,8 @@ namespace VAdvantage.Model
                                     {
                                         // when we create payment with invoice reference direct
                                         // convert payment amount in invoice amt with payment date and payment conversion type
-                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add(payment.GetPayAmt(), payment.GetDiscountAmt()),
+                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add((payment.GetPayAmt() +
+                                            (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
                                             payment.GetWriteOffAmt()), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
                                             payment.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                     }

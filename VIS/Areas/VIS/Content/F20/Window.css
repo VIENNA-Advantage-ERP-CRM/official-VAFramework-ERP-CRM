@@ -843,9 +843,8 @@ span.vis-ad-w-p-tb-rc-action {
     padding-bottom: 5px;
 }
 
-
-.vis-css-treewindow input {
-    position: absolute;
+.vis-css-treewindow input[type="checkbox"] {
+    position: absolute !important;
     opacity: 0;
 }
 
@@ -880,11 +879,10 @@ span.vis-ad-w-p-tb-rc-action {
             margin: 0 4px;
         }
 
-    .vis-css-treewindow > ul {
-        /*-- color: #00f;*/
-        margin: 10px 10px 0px 0px;
-        width: auto;
-    }
+.vis-css-treewindow > ul {
+    padding: 2px 10px 0px 7px;
+    width: auto;
+}
 
     .vis-css-treewindow a:hover {
         /*text-decoration: underline;*/

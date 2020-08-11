@@ -132,7 +132,16 @@ Globalize.addCultureInfo( "sv-SE", "default", {
         "EnterOTP": "Ange OTP",
         "WrongOTP": "Fel OTP anges",
         "ScanQRCode": "Skanna koden med Google Authenticator",
-        "EnterVerCode": "Ange OTP genererad av din mobilapplikation"
+        "EnterVerCode": "Ange OTP genererad av din mobilapplikation",
+        "PwdExpired": "Användarens lösenord har gått ut",
+        "ActDisabled": "Kontot har inaktiverats",
+        "ActExpired": "Kontot har gått ut",
+        "AdminUserNotFound": "Administratörens användarnamn är felaktigt.",
+        "AdminUserPwdError": "Adminanvändare matchar inte lösenordet",
+        "AdminPwdExpired": "Administratörs lösenord har gått ut",
+        "AdminActDisabled": "Administratörskonto har inaktiverats",
+        "AdminActExpired": "Administratörskonto har gått ut",
+        "AdminMaxFailedLoginAttempts": "Admin-användarkontot är låst. Maximalt misslyckade inloggningsförsök överskrider den definierade gränsen. Vänligen kontakta till administratören.",
 	}
 });
 

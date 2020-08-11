@@ -60,7 +60,12 @@
         }
 
 
+        var elements = [
+            "AmtAcctCr",
+            "AmtAcctDr",
+        ];
 
+        VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
 
 
         this.ELEMENTTYPE_AD_Reference_ID = 181;
@@ -888,10 +893,21 @@
                 var line = {};
                 for (var j = 0; j < dataObj.Columns.length; j++) {
                     if ($self.arrListColumns.length != dataObj.Columns.length) {
-                        $self.arrListColumns.push({
-                            field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
-                                dataObj.Columns[j]), sortable: true, size: '16%', hidden: false
-                        });
+                        // alignment of Credit and Debit field
+                        if (row[j] != null && typeof (row[j]) == "number" &&
+                            (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
+                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
+                            $self.arrListColumns.push({
+                                field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
+                                    dataObj.Columns[j]), sortable: true, size: '16%', hidden: false, style: 'text-align: right'
+                            });
+                        }
+                        else {
+                            $self.arrListColumns.push({
+                                field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
+                                    dataObj.Columns[j]), sortable: true, size: '16%', hidden: false
+                            });
+                        }
                     }
                     if (row[j] != null && typeof (row[j]) == "object") {
                         line[dataObj.Columns[j]] = row[j].Name;
@@ -905,8 +921,8 @@
                             }
                         }
                         else if (row[j] != null && typeof (row[j]) == "number" &&
-                            (VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctCr") == dataObj.Columns[j] ||
-                                VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctDr") == dataObj.Columns[j])) {
+                            (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
+                            VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
                             line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
                         }
                         else {
@@ -1235,11 +1251,14 @@
             $FrmControlWrap.append(chkSelectDoc);
 
              tr = $("<tr>");
+
             td = $("<td>");
             var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
             var $FrmControlWrap = $('<div class="vis-control-wrap">');
             var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
+
              tble.append(tr);
+
             tr.append(td);
             td.append($FrmInputWrap);
             $FrmInputWrap.append($FrmControlWrap);
