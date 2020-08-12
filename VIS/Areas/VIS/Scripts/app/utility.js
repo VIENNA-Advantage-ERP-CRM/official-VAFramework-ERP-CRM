@@ -149,7 +149,7 @@
         };
 
         this.GetConvertedNumber = function (val, dotFormatter) {
-    if (dotFormatter) {
+            if (dotFormatter) {
                 return Number(String(val).replace(/[^0-9.-]+/g, ""));
             } else {
                 return Number(String(val).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, "."));
@@ -170,7 +170,7 @@
                 }
             } else {
                 //return String(String(num).replace(/[^0-9,-]+/g, "").replace(/[,]+/g, ","));
-               
+
                 _tStr = num.match(/[,]+/g);
                 if (_tStr != null && _tStr.length > 1) {
                     return "";
@@ -543,13 +543,14 @@
         function getObscureValue(type, value) {
             if (value) {
                 if (type == obscureTypes.DigitButLast4) {
-                    return value.replace(/\d(?=\w{4})/g, "*");
+                    //return value.replace(/\d(?=\w{4})/g, "*");
+                    return value.replace(/[^a-zA-Z0-9\.\-\@]/gi, '').replace(/[0-9](?=[\w\.\-\@]{4})/g, "*");
                 }
                 else if (type == obscureTypes.DigitButFirstLast4) {
-                    return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "*");
+                    //return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "*");
+                    return value.replace(/[^a-zA-Z0-9\.\-\@\s]/gi, '').replace(/(?<=[\w\.\-\@\s]{4})[0-9](?=[\w\.\-\@\s]{4})/g, "*");
                 }
                 else if (type == obscureTypes.AlphanumButLast4) {
-
                     return value.replace(/[^a-zA-Z0-9\.\s\@\-]/gi, '').replace(/[a-zA-Z0-9\s\.\@\-](?=[a-zA-Z0-9\s\.\@\-]{4})/g, "*");
                     //return value.replace(/[_\W]/g, "*").replace(/[^a-z0-9\s]/gi, '').replace(/[\w](?=\w{4})/g, "*");
                 }
@@ -557,7 +558,6 @@
                     //.replace(/[^a-z0-9\.\s]/gi, '').replace(/(?<=\w{4})[\w]|[\W](?=\w{4})/g, "*")
                     //return value.replace(/[_\W]/g, "*").replace(/[^a-z0-9\s]/gi, '').replace(/(?<=\w{4})[\w](?=\w{4})/g, "*");
                     return value.replace(/[^a-zA-Z0-9\@\.\s\-]/gi, '').replace(/(?<=[a-zA-Z0-9\@\.\s\-]{4})([\w]|[\W])(?=[a-zA-Z0-9\s\@\.\-]{4})/g, "*");
-
                 }
             }
         };
