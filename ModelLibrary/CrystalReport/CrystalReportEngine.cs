@@ -1525,7 +1525,7 @@ namespace VAdvantage.CrystalReport
                     string Name = col.GetColumnName();
                     if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetAD_Table_ID(), col.GetAD_Column_ID(), false))
                     {
-                        string obscureColumn = DBFunctionCollection.GetObscureColumn(col.GetObscureType(), tableName, Name);
+                        string obscureColumn = DBFunctionCollection.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name ;
                         sql = sql.Replace(Name, obscureColumn);
                     }
                 }
