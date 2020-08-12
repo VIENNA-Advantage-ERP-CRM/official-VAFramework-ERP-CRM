@@ -920,7 +920,7 @@
 
         $btnSearch.on("click", function () {
             if (self.mField.getIsEditable(true)) {
-                self.setReadOnly(false, true);
+                self.setReadOnly(false, true,true);
                 $ctrl.val(self.mField.getValue());
             }
         });
@@ -939,17 +939,14 @@
     VIS.Utility.inheritPrototype(VTextBox, IControl);//Inherit from IControl
 
 
-    VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
+    VTextBox.prototype.setReadOnly = function (readOnly, forceWritable, manuallAction) {
         if (!readOnly && this.obscureType && !forceWritable) {
             readOnly = true;
         }
 
-        if (!readOnly && forceWritable && this.ctrl.val().length > 0) {
+        if (!manuallAction && !readOnly && forceWritable  && this.ctrl.val()!=null && this.ctrl.val().length > 0) {
             readOnly = true;
         }
-
-
-        
 
         this.isReadOnly = readOnly;
         this.ctrl.prop('disabled', readOnly ? true : false);
