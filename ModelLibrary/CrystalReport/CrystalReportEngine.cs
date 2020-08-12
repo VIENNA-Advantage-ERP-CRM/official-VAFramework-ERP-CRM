@@ -478,7 +478,7 @@ namespace VAdvantage.CrystalReport
                     }
 
 
-                    
+
 
                     sql = GetObscureSql(sql);
 
@@ -514,7 +514,7 @@ namespace VAdvantage.CrystalReport
                             sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                         }
                     }
-
+                    sqlQ = sqlQ.ToLower();
                     DataSet ds = DB.ExecuteDataset(sqlQ);
                     log.Severe("CrystalReport Query: " + sqlQ);
                     if (ds == null)
@@ -697,7 +697,7 @@ namespace VAdvantage.CrystalReport
                             {
                                 sqlQ = sqls[index].ToUpper();
 
-                               
+
 
                                 sqlQ = GetObscureSql(sqlQ);
 
@@ -716,6 +716,7 @@ namespace VAdvantage.CrystalReport
                                         sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                                     }
                                 }
+                                sqlQ = sqlQ.ToLower();
                                 ds = DB.ExecuteDataset(sqlQ);
                                 log.Severe("CrystalReport Query: " + sqlQ);
                                 subRepDoc.SetDataSource(ds.Tables[0]);
@@ -1267,7 +1268,7 @@ namespace VAdvantage.CrystalReport
                             sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                         }
                     }
-
+                    sqlQ = sqlQ.ToLower();
                     DataSet ds = DB.ExecuteDataset(sqlQ);
                     log.Severe("CrystalReport Query: " + sqlQ);
 
@@ -1423,6 +1424,7 @@ namespace VAdvantage.CrystalReport
                                         sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                                     }
                                 }
+                                sqlQ = sqlQ.ToLower();
                                 ds = DB.ExecuteDataset(sqlQ);
                                 log.Severe("CrystalReport Query: " + sqlQ);
                                 subRepDoc.SetDataSource(ds.Tables[0]);
@@ -1521,7 +1523,7 @@ namespace VAdvantage.CrystalReport
                 foreach (MColumn col in cols)
                 {
                     string Name = col.GetColumnName();
-                    if (sql.Contains(Name))
+                    if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetAD_Table_ID(), col.GetAD_Column_ID(), false))
                     {
                         string obscureColumn = DBFunctionCollection.GetObscureColumn(col.GetObscureType(), tableName, Name);
                         sql = sql.Replace(Name, obscureColumn);
