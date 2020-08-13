@@ -4836,6 +4836,19 @@ namespace VAdvantage.Model
                     _processMsg= Msg.GetMsg(GetCtx(), "LinkedDocStatus");
                     return false;
                 }
+                else
+                {
+                    string sql = "SELECT COUNT(Va027_CheckAllocate_ID) FROM Va027_CheckAllocate i INNER JOIN va027_chequeDetails ii ON" +
+                        " i.va027_chequedetails_ID = ii.va027_chequedetails_ID" +
+                        " INNER JOIN va027_postdatedcheck iii on ii.va027_postdatedcheck_id = iii.va027_postdatedcheck_id" +
+                        " WHERE iii. DocStatus NOT IN ('RE', 'VO') And i.C_invoice_id = " + GetC_Invoice_ID();
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+                    {
+                        _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
+                        return false;
+                    }
+
+                }
 
             }
             log.Info(ToString());

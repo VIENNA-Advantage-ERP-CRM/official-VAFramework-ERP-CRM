@@ -1173,7 +1173,7 @@ namespace VAdvantage.Model
             param[2].SqlDbType = SqlDbType.Int;
             param[2].Direction = ParameterDirection.Output;
 
-            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);            
+            param = DB.ExecuteProcedure("GETCHECKNO", param, trx);
 
             if (param != null && param.Length > 0) // If Record Found
             {
@@ -2613,7 +2613,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-   
+
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
@@ -2680,7 +2680,7 @@ namespace VAdvantage.Model
                 }
                 //	WaitingPayment
             }
-          
+
             //	Consistency of Invoice / Document Type and IsReceipt
             if (!VerifyDocType())
             {
@@ -3167,7 +3167,7 @@ namespace VAdvantage.Model
             }
             else if (Env.IsModuleInstalled("VA009_") && GetVA009_OrderPaySchedule_ID() != 0)
             {
-            
+
                 if (GetVA009_OrderPaySchedule_ID() != 0 && GetDescription() != null && GetDescription().Contains("{->"))
                 {
                     // also need to set Execution Status As Awaited
@@ -3184,7 +3184,7 @@ namespace VAdvantage.Model
                         MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                         MClientInfo client = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
                         MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetC_AcctSchema1_ID());
-                 
+
                         if (order.GetC_Currency_ID() != GetC_Currency_ID())
                         {
                             orderPaidAmt = MConversionRate.Convert(GetCtx(), orderPaidAmt, GetC_Currency_ID(), order.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
@@ -3321,7 +3321,7 @@ namespace VAdvantage.Model
             {
                 return DocActionVariables.STATUS_INVALID;
             }
-           
+
             //JID_0880 Show message on completion of Payment
             if (GetCtx().GetContext("prepayOrder") != null)
             {
@@ -3329,7 +3329,7 @@ namespace VAdvantage.Model
                 GetCtx().SetContext("prepayOrder", "");
             }
 
-            
+
             return DocActionVariables.STATUS_COMPLETED;
         }
 
@@ -3426,7 +3426,7 @@ namespace VAdvantage.Model
                     {
                         if (!CalculateWithholdingAmount(GetBackupWithholding_ID(), true,
                             Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                            Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]), IsPaymentAllocate))
                         {
                             SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                             return false;
@@ -4899,7 +4899,7 @@ namespace VAdvantage.Model
             //	If on Bank Statement, don't void it - reverse it
             if (GetC_BankStatementLine_ID() > 0)
                 return ReverseCorrectIt();
-            
+
             //	Not Processed
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
                 || DOCSTATUS_Invalid.Equals(GetDocStatus())
@@ -5009,17 +5009,16 @@ namespace VAdvantage.Model
 
             //	Auto Reconcile if not on Bank Statement
             Boolean reconciled = false; //	GetC_BankStatementLine_ID() == 0;
-          
-            // if Payment aginst PDC is voided remove reference of payment from chequedetials and set Payment Generated to false on Header
-                if ( Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0 )
-                {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment='N' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
-                    if (count > 0)
-                    {
-                        DB.ExecuteScalar("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID=  " + GetVA027_PostDatedCheck_ID(), null, Get_Trx());
-                    }
 
+            // if Payment aginst PDC is voided remove reference of payment from chequedetials and set Payment Generated to false on Header
+            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0)
+            {
+                int count = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment ='N', VA027_PaymentGenerated ='N' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
+                if (count > 0)
+                {
+                    DB.ExecuteQuery("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID=  " + GetVA027_PostDatedCheck_ID(), null, Get_Trx());
                 }
+            }
             //	Create Reversal
             MPayment reversal = new MPayment(GetCtx(), 0, Get_Trx());
             CopyValues(this, reversal);
@@ -5098,7 +5097,7 @@ namespace VAdvantage.Model
             }
 
             reversal.Save(Get_Trx());
-           
+
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
@@ -5187,9 +5186,9 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_None);
             SetProcessed(true);
             //Remove PostdatedCheck Reference
-            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID()>0)
+            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0)
             {
-               SetVA027_PostDatedCheck_ID(0);
+                SetVA027_PostDatedCheck_ID(0);
             }
 
             // new change when allocation exist for already made payments then it will create allocation 
