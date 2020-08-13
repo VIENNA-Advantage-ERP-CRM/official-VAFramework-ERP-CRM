@@ -894,6 +894,7 @@
             }
             else {
                 $btnSearch.css("display", "none");
+                $btnSearch.off("click");
             }
         };
 
@@ -920,7 +921,7 @@
 
         $btnSearch.on("click", function () {
             if (self.mField.getIsEditable(true)) {
-                self.setReadOnly(false, true,true);
+                self.setReadOnly(false, true, true);
                 $ctrl.val(self.mField.getValue());
             }
         });
@@ -939,12 +940,8 @@
     VIS.Utility.inheritPrototype(VTextBox, IControl);//Inherit from IControl
 
 
-    VTextBox.prototype.setReadOnly = function (readOnly, forceWritable, manuallAction) {
-        if (!readOnly && this.obscureType && !forceWritable) {
-            readOnly = true;
-        }
-
-        if (!manuallAction && !readOnly && forceWritable  && this.ctrl.val()!=null && this.ctrl.val().length > 0) {
+    VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
+        if (!readOnly && this.obscureType && !forceWritable && !this.mField.getIsInserting()) {
             readOnly = true;
         }
 
@@ -963,7 +960,7 @@
             this.oldValue = newValue;
             //console.log(newValue);
 
-            if (this.obscureType) {
+            if (this.obscureType && !this.mField.getIsInserting()) {
                 this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
                 this.setReadOnly(true);
             }

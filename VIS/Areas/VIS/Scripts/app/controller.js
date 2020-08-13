@@ -5343,6 +5343,10 @@
         this.gridTab = gridTab;
     };
 
+    GridField.prototype.getIsInserting = function () {
+        return this.inserting;
+    };
+
     GridField.prototype.getIsDisplayed = function (checkContext) {
         if (arguments.length == 0) {
             return this.vo.IsDisplayedf;
