@@ -143,8 +143,8 @@
             })
         };
 
-        function getWindowRecords(sqlIn, fields, rowCount, SQL_Count, AD_Table_ID, callback) {
-            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, AD_Table_ID: AD_Table_ID };
+        function getWindowRecords(sqlIn, fields, rowCount, SQL_Count, AD_Table_ID, obscureFields, callback) {
+            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, AD_Table_ID: AD_Table_ID, obscureFields: obscureFields };
 
             $.ajax({
                 url: windowRecordsUrl,
@@ -189,7 +189,7 @@
         };
 
 
-        function getWindowRecord(sql, fields) {
+        function getWindowRecord(sql, fields, obscureFields) {
             var result = null;
             $.ajax({
                 url: baseUrl + "JsonData/GetWindowRecord",
@@ -197,7 +197,7 @@
                 datatype: "json",
                 contentType: "application/json; charset=utf-8",
                 async: false,
-                data: JSON.stringify({ sql: sql, fields: fields })
+                data: JSON.stringify({ sql: sql, fields: fields,obscureFields: obscureFields })
             }).done(function (jString) {
                 if (jString)
                     result = new VIS.DB.DataReader().toJson(jString);

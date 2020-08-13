@@ -1250,12 +1250,15 @@
             $FrmInputWrap.append($FrmControlWrap);
             $FrmControlWrap.append(chkSelectDoc);
 
-            tr = $("<tr>");
+             tr = $("<tr>");
+
             td = $("<td>");
             var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
             var $FrmControlWrap = $('<div class="vis-control-wrap">');
             var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
-            tble.append(tr);
+
+             tble.append(tr);
+
             tr.append(td);
             td.append($FrmInputWrap);
             $FrmInputWrap.append($FrmControlWrap);

@@ -1286,7 +1286,7 @@ namespace VIS.Helpers
                 Object value = rowData[columnName.ToLower()];// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                 Object oldValue = isEmpty ? null : _rowData[columnName.ToLower()];// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
 
-                if (field.IsEncryptedColumn)
+                if (field.IsEncryptedColumn || field.IsObscure)
                 {
                     value = SecureEngineBridge.DecryptByClientKey((string)rowData[columnName.ToLower()], key);// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                     oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
@@ -1618,6 +1618,14 @@ namespace VIS.Helpers
 
                             rowData[colLower] = Decrypt(rowData[colLower]);
                         }
+                        if (field.IsObscure && displayType != DisplayType.YesNo)
+                        {
+                            if (!SecureEngine.IsEncrypted(Convert.ToString(rowData[colLower])))
+                            {
+                                rowData[colLower] = SecureEngine.Encrypt(rowData[colLower]);
+                            }
+                            rowData[colLower] = Decrypt(rowData[colLower]);
+                        }
                     }
                 }
             }
@@ -1891,7 +1899,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID)
+        internal object GetWindowRecords(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
         {
             WindowRecordOut retVal = new WindowRecordOut();
 
@@ -1917,6 +1925,9 @@ namespace VIS.Helpers
                 return null;
 
             bool checkEncrypted = encryptedColNames != null && encryptedColNames.Count > 0;
+
+            if (!checkEncrypted)
+                checkEncrypted = obscureFields != null && obscureFields.Count > 0;
             key = ctx.GetSecureKey();
 
             for (int table = 0; table < ds.Tables.Count; table++)
@@ -1952,7 +1963,9 @@ namespace VIS.Helpers
                         //var c = new Dictionary<string,object>();
                         //c[dt.Columns[column].ColumnName.ToLower()] = dt.Rows[row][column];
 
-                        if (checkEncrypted && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                        if (checkEncrypted
+                            && ((encryptedColNames != null && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                            || (obscureFields != null && obscureFields.Contains(dt.Columns[column].ColumnName.ToLower()))))
                         {
                             r.cells[dt.Columns[column].ColumnName.ToLower()] = SecureEngineBridge.EncryptFromSeverToClient(dt.Rows[row][column].ToString(), key);
                             continue;
@@ -2080,7 +2093,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColNames">list of encrypted columna names</param>
         /// <param name="ctx"></param>
         /// <returns>JTable object</returns>
-        internal object GetWindowRecord(string sql, List<string> encryptedColNames, Ctx ctx)
+        internal object GetWindowRecord(string sql, List<string> encryptedColNames, Ctx ctx, List<string> obscureFields)
         {
 
             var h = new SqlHelper();
@@ -2095,6 +2108,10 @@ namespace VIS.Helpers
             key = ctx.GetSecureKey();
 
             bool checkEncrypted = encryptedColNames != null && encryptedColNames.Count > 0;
+
+
+            if (!checkEncrypted)
+                checkEncrypted = obscureFields != null && obscureFields.Count > 0;
 
             obj = new JTable();
 
@@ -2125,7 +2142,9 @@ namespace VIS.Helpers
                     //var c = new Dictionary<string,object>();
                     //c[dt.Columns[column].ColumnName.ToLower()] = dt.Rows[row][column];
 
-                    if (checkEncrypted && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                    if (checkEncrypted
+                             && ((encryptedColNames != null && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                             || (obscureFields != null && obscureFields.Contains(dt.Columns[column].ColumnName.ToLower()))))
                     {
                         r.cells[dt.Columns[column].ColumnName.ToLower()] = SecureEngineBridge.EncryptFromSeverToClient(dt.Rows[row][column].ToString(), key);
                         continue;
@@ -2148,7 +2167,7 @@ namespace VIS.Helpers
         /// <param name="encryptedColnames">lsit encrypted column of window</param>
         /// <param name="ctx">context</param>
         /// <returns>Json cutom equalvalent to dataset</returns>
-        internal object GetWindowRecordsForTreeNode(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID)
+        internal object GetWindowRecordsForTreeNode(SqlParamsIn sqlIn, List<string> encryptedColNames, Ctx ctx, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID, List<string> obscureFields)
         {
             List<JTable> outO = new List<JTable>();
             JTable obj = null;
@@ -2212,6 +2231,11 @@ namespace VIS.Helpers
                 return null;
 
             bool checkEncrypted = encryptedColNames != null && encryptedColNames.Count > 0;
+
+            if (!checkEncrypted)
+                checkEncrypted = obscureFields != null && obscureFields.Count > 0;
+
+
             key = ctx.GetSecureKey();
 
 
@@ -2248,7 +2272,9 @@ namespace VIS.Helpers
                         //var c = new Dictionary<string,object>();
                         //c[dt.Columns[column].ColumnName.ToLower()] = dt.Rows[row][column];
 
-                        if (checkEncrypted && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                        if (checkEncrypted
+                             && ((encryptedColNames != null && encryptedColNames.Contains(dt.Columns[column].ColumnName.ToLower()))
+                             || (obscureFields != null && obscureFields.Contains(dt.Columns[column].ColumnName.ToLower()))))
                         {
                             r.cells[dt.Columns[column].ColumnName.ToLower()] = SecureEngineBridge.EncryptFromSeverToClient(dt.Rows[row][column].ToString(), key);
                             continue;

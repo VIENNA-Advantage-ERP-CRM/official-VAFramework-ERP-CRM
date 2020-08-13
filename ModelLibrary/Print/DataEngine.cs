@@ -509,8 +509,17 @@ namespace VAdvantage.Print
                         }
                         else if (index == -1)
                         {
-                            //	=> Table.Column,
-                            sb.Append(tableName).Append(".").Append(ColumnName).Append(",");
+                            MColumn col = new MColumn(ctx, AD_Column_ID, null);
+                            string obscureType = col.GetObscureType();
+                            if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetAD_Table_ID(),AD_Column_ID,false))
+                            {
+                                sb.Append(DBFunctionCollection.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
+                            }
+                            else
+                            {
+                                //	=> Table.Column,
+                                sb.Append(tableName).Append(".").Append(ColumnName).Append(",");
+                            }
                             sqlSELECT.Append(sb);
                             if (!IsGroupFunction)
                                 sqlGROUP.Append(sb).Append(",");

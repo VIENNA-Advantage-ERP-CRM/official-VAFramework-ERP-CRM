@@ -857,9 +857,14 @@
                                 //   mField.vo.tabReadOnly = this.gTab.getIsReadOnly();
                                 var rw = mField.getIsEditable(true) && !this.gTab.getIsReadOnly();	//  r/w - check Context
 
+                                
+
+                                ve.setReadOnly(!rw, this.gTab.getTableModel().getIsInserting());
 
 
-                                ve.setReadOnly(!rw);
+                                if (ve.showObscureButton) {
+                                    ve.showObscureButton(rw);
+                                }
                                 //	log.log(Level.FINEST, "RW=" + rw + " " + mField);
                                 ve.setMandatory(mField.getIsMandatory(true));
                                 //mField.validateValue();

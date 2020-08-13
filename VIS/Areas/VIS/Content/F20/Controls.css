@@ -227,6 +227,7 @@ select.vis-ev-col-mandatory {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 35px;
 }
 
 

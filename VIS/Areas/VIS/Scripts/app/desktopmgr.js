@@ -152,7 +152,7 @@
                             }
                         });
 
-                        $($target.siblings('label')).css('border', '1px solid #1aa0ed');
+                        $($target.siblings('label')).css('border', '1px solid rgba(var(--v-c-primary), 1)');
                     });
 
                     $('#vis_divTree').on('focusout', 'li', function (e) {
