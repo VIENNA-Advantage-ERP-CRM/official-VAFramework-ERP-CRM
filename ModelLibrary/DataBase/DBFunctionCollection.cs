@@ -733,11 +733,11 @@ namespace VAdvantage.DataBase
             {
                 if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButLast4))
                 {
-                    return " REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]|[^A-Z0-9 ]|[[:space:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
+                    return " REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
                 }
                 else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButFirstLast4))
                 {
-                    return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]|[^A-Z0-9 ]|[[:space:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
+                    return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]','*') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
                 }
                 else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButLast4))
                 {
@@ -752,11 +752,11 @@ namespace VAdvantage.DataBase
             {
                 if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButLast4))
                 {
-                    return " REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]|[^A-Z0-9 ]|[[:space:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
+                    return " REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",0,LENGTH(" + tableName + "." + columnName + ")-4) ,'[[:digit:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3) ";
                 }
                 else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureDigitsButFirstLast4))
                 {
-                    return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]|[^A-Z0-9 ]|[[:space:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
+                    return "SUBSTR(" + tableName + "." + columnName + ",0,4) || REGEXP_REPLACE(SUBSTR(" + tableName + "." + columnName + ",4,LENGTH(" + tableName + "." + columnName + ")-8) ,'[[:digit:]]','*','g') || SUBSTR(" + tableName + "." + columnName + ",LENGTH(" + tableName + "." + columnName + ")-3)";
                 }
                 else if (obscureType.Equals(X_AD_Column.OBSCURETYPE_ObscureAlphaNumericButLast4))
                 {
