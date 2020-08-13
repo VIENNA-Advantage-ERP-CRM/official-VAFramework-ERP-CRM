@@ -18,6 +18,8 @@ using VAdvantage.Logging;
 using VAdvantage.Print;
 using VAdvantage.ProcessEngine;
 using System.IO;
+using VAModelAD.Model;
+
 namespace VAdvantage.Model
 {
     public class MScheduler : X_AD_Scheduler, ViennaProcessor
@@ -188,7 +190,7 @@ namespace VAdvantage.Model
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param);
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -220,7 +222,7 @@ namespace VAdvantage.Model
             String sql = "DELETE FROM AD_SchedulerLog "
                 + "WHERE AD_Scheduler_ID=" + GetAD_Scheduler_ID()
                 + " AND (Created+" + GetKeepLogDays() + ") < SysDate";
-            int no = BaseLibrary.DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             return no;
         }	//	deleteLog
 

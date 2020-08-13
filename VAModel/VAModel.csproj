@@ -31,8 +31,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IKVM.OpenJDK.ClassLibrary">
+      <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.OpenJDK.ClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Excel">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Mail">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SecureEngineUtility">
+      <HintPath>..\ViennaAdvantageWeb\Dll\SecureEngineUtility.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +63,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acct\Doc.cs" />
+    <Compile Include="Acct\DocLine.cs" />
+    <Compile Include="Acct\DocLine_Allocation.cs" />
+    <Compile Include="Acct\DocLine_Bank.cs" />
+    <Compile Include="Acct\DocLine_Cash.cs" />
+    <Compile Include="Acct\DocTax.cs" />
+    <Compile Include="Acct\Doc_Allocation.cs" />
+    <Compile Include="Acct\Doc_AllocationTax.cs" />
+    <Compile Include="Acct\Doc_Bank.cs" />
+    <Compile Include="Acct\Doc_Cash.cs" />
+    <Compile Include="Acct\Doc_CostUpdate.cs" />
+    <Compile Include="Acct\Doc_GLJournal.cs" />
+    <Compile Include="Acct\Doc_IncomeTax.cs" />
+    <Compile Include="Acct\Doc_InOut.cs" />
+    <Compile Include="Acct\Doc_Inventory.cs" />
+    <Compile Include="Acct\Doc_Invoice.cs" />
+    <Compile Include="Acct\Doc_MatchInv.cs" />
+    <Compile Include="Acct\Doc_MatchPO.cs" />
+    <Compile Include="Acct\Doc_Movement.cs" />
+    <Compile Include="Acct\Doc_Order.cs" />
+    <Compile Include="Acct\Doc_Payment.cs" />
+    <Compile Include="Acct\Doc_Production.cs" />
+    <Compile Include="Acct\Doc_ProfitLoss.cs" />
+    <Compile Include="Acct\Doc_ProjectIssue.cs" />
+    <Compile Include="Acct\Doc_Requisition.cs" />
+    <Compile Include="Acct\Fact.cs" />
+    <Compile Include="Acct\FactLine.cs" />
+    <Compile Include="Classes\Common.cs" />
     <Compile Include="CM\CacheClearAll.cs" />
     <Compile Include="CM\CacheClearServer.cs" />
     <Compile Include="CM\CacheHandler.cs" />
@@ -89,12 +139,20 @@
     <Compile Include="CRM\Process\SubscribeInterestArea.cs" />
     <Compile Include="CRM\Process\TransferOwnerShip.cs" />
     <Compile Include="CRM\Process\UpdateVersion.cs" />
+    <Compile Include="DataBase\DBFunctionCollection.cs" />
+    <Compile Include="ImpExp\ExcelHelper.cs" />
+    <Compile Include="ImpExp\ExcelReader.cs" />
+    <Compile Include="ImpExp\ExcelWrapper.cs" />
+    <Compile Include="Interface\AccountingInterface.cs" />
+    <Compile Include="Interface\BankStatementLoaderInterface.cs" />
+    <Compile Include="Interface\BankStatementMatcherInterface.cs" />
+    <Compile Include="Interface\ReplenishInterface.cs" />
+    <Compile Include="Interface\UserPricingInterface.cs" />
     <Compile Include="ModelAD\MClient.cs" />
     <Compile Include="ModelAD\MClientInfo.cs" />
     <Compile Include="ModelAD\MOrg.cs" />
     <Compile Include="ModelAD\MOrgInfo.cs" />
-    <Compile Include="ModelAD\MPrintColor.cs" />
-    <Compile Include="ModelAD\MPrintPaper.cs" />
+    <Compile Include="ModelAD\MSetup.cs" />
     <Compile Include="ModelAD\MTreeNode.cs" />
     <Compile Include="ModelAD\MTreeNodeBP.cs" />
     <Compile Include="ModelAD\MTreeNodeCMC.cs" />
@@ -104,11 +162,7 @@
     <Compile Include="ModelAD\MTreeNodeMM.cs" />
     <Compile Include="ModelAD\MTreeNodePR.cs" />
     <Compile Include="Model\AcctViewerData.cs" />
-    <Compile Include="Model\BankStatementLoaderInterface.cs" />
-    <Compile Include="Model\BankStatementMatcherInterface.cs" />
-    <Compile Include="Model\BankVerificationInterface.cs" />
-    <Compile Include="Model\Callout.cs" />
-    <Compile Include="Model\CalloutEngine.cs" />
+    <Compile Include="Interface\BankVerificationInterface.cs" />
     <Compile Include="Model\CTreeNode.cs" />
     <Compile Include="Model\ListBoxVO.cs" />
     <Compile Include="Model\MAccessProfile.cs" />
@@ -283,8 +337,6 @@
     <Compile Include="Model\MLocator.cs" />
     <Compile Include="Model\MLot.cs" />
     <Compile Include="Model\MLotCtl.cs" />
-    <Compile Include="Model\MMailMsg.cs" />
-    <Compile Include="Model\MMailText.cs" />
     <Compile Include="Model\MManufacturer.cs" />
     <Compile Include="Model\MMatchInv.cs" />
     <Compile Include="Model\MMatchPO.cs" />
@@ -386,7 +438,6 @@
     <Compile Include="Model\MSalesOffice.cs" />
     <Compile Include="Model\MSalesRegion.cs" />
     <Compile Include="Model\MSerNoCtl.cs" />
-    <Compile Include="Model\MSetup.cs" />
     <Compile Include="Model\MSharedUser.cs" />
     <Compile Include="Model\MShipper.cs" />
     <Compile Include="Model\MSource.cs" />
@@ -429,12 +480,228 @@
     <Compile Include="Model\Tax.cs" />
     <Compile Include="Model\UserPricingInterface.cs" />
     <Compile Include="Model\UserPricingVO.cs" />
+    <Compile Include="Process\AcctSchemaCopyAcct.cs" />
+    <Compile Include="Process\AcctSchemaDefaultCopy.cs" />
+    <Compile Include="Process\ActivateProductContainer.cs" />
+    <Compile Include="Process\Aging.cs" />
+    <Compile Include="Process\AllocationAuto.cs" />
+    <Compile Include="Process\AllocationReset.cs" />
+    <Compile Include="Process\ApplyDiscountInvoiceVendor.cs" />
+    <Compile Include="Process\ApplyDiscountOnOrder.cs" />
+    <Compile Include="Process\AssetDelivery.cs" />
+    <Compile Include="Process\AttachMailToBP.cs" />
+    <Compile Include="Process\BankStatementMatcher.cs" />
+    <Compile Include="Process\BankStatementMatchInfo.cs" />
+    <Compile Include="Process\BankStatementPayment.cs" />
+    <Compile Include="Process\BOMValidate.cs" />
+    <Compile Include="Process\BPartnerOrgLink.cs" />
+    <Compile Include="Process\BPartnerOrgUnLink.cs" />
+    <Compile Include="Process\BPartnerValidate.cs" />
+    <Compile Include="Process\BPGroupAcctCopy.cs" />
+    <Compile Include="Process\CalculateForeignCost.cs" />
+    <Compile Include="Process\CommissionAPInvoice.cs" />
+    <Compile Include="Process\CommissionCalc.cs" />
+    <Compile Include="Process\CommissionCopy.cs" />
+    <Compile Include="Process\CopyAllGroups.cs" />
+    <Compile Include="Process\CopyFromInvoice.cs" />
+    <Compile Include="Process\CopyFromJournal.cs" />
+    <Compile Include="Process\CopyFromLine.cs" />
+    <Compile Include="Process\CopyFromOrder.cs" />
+    <Compile Include="Process\CopyFromProject.cs" />
+    <Compile Include="Process\CopyOrder.cs" />
+    <Compile Include="Process\CopyTranslationEntries.cs" />
+    <Compile Include="Process\CostCreate.cs" />
+    <Compile Include="Process\CostingCalculation.cs" />
+    <Compile Include="Process\CostUpdate.cs" />
+    <Compile Include="Process\CreateAppointment.cs" />
+    <Compile Include="Process\CreateContractInvoice.cs" />
+    <Compile Include="Process\CreateConversionEntries.cs" />
+    <Compile Include="Process\CreateCurrencySourceEntries.cs" />
+    <Compile Include="Process\CreateInviteeList.cs" />
+    <Compile Include="Process\CreatePendingTranslations.cs" />
+    <Compile Include="Process\CreateReleaseDocFromBO.cs" />
+    <Compile Include="Process\CreateRFQFromRequisition.cs" />
+    <Compile Include="Process\CreateSalesContract.cs" />
+    <Compile Include="Process\CreateTargetList.cs" />
+    <Compile Include="Process\CreateTaxLines.cs" />
+    <Compile Include="Process\DiscountSchemaReSeq.cs" />
+    <Compile Include="Process\DistributionRun.cs" />
+    <Compile Include="Process\DistributionVerify.cs" />
+    <Compile Include="Process\DocAction.cs" />
+    <Compile Include="Process\DocTypeCounterValidate.cs" />
+    <Compile Include="Process\DocumentEngine.cs" />
+    <Compile Include="Process\DocumentTypeVerify.cs" />
+    <Compile Include="Process\DropFullMoveContainerLines.cs" />
+    <Compile Include="Process\DunningPrint.cs" />
+    <Compile Include="Process\DunningRunCreate.cs" />
+    <Compile Include="Process\EMailTest.cs" />
+    <Compile Include="Process\ExpenseAPInvoice.cs" />
+    <Compile Include="Process\ExpenseSOrder.cs" />
+    <Compile Include="Process\FactAcctReset.cs" />
+    <Compile Include="Process\GenerateAccount.cs" />
+    <Compile Include="Process\GenerateExpenseReport.cs" />
+    <Compile Include="Process\GenerateGroupSubGroup.cs" />
+    <Compile Include="Process\GenerateOrder.cs" />
+    <Compile Include="Process\GenerateQuotation.cs" />
+    <Compile Include="Process\ImportAccount.cs" />
+    <Compile Include="Process\ImportBankStatement.cs" />
+    <Compile Include="Process\ImportBPartner.cs" />
+    <Compile Include="Process\ImportContact.cs" />
+    <Compile Include="Process\ImportConversionRate.cs" />
+    <Compile Include="Process\ImportDelete.cs" />
+    <Compile Include="Process\ImportedDataCompletion.cs" />
+    <Compile Include="Process\ImportGLJournal.cs" />
+    <Compile Include="Process\ImportInOutConfirm.cs" />
+    <Compile Include="Process\ImportInventory.cs" />
+    <Compile Include="Process\ImportInvoice.cs" />
+    <Compile Include="Process\ImportOrder.cs" />
+    <Compile Include="Process\ImportPayment.cs" />
+    <Compile Include="Process\ImportProduct.cs" />
+    <Compile Include="Process\ImportReportLine.cs" />
+    <Compile Include="Process\ImportRequest.cs" />
+    <Compile Include="Process\ImpotCOATemp.cs" />
+    <Compile Include="Process\InOutCreateConfirm.cs" />
+    <Compile Include="Process\InventoryCountCreate.cs" />
+    <Compile Include="Process\InventoryCountUpdate.cs" />
+    <Compile Include="Process\InventoryValue.cs" />
+    <Compile Include="Process\InviteeCopyToSelectedCampaign.cs" />
+    <Compile Include="Process\InvoiceBatchProcess.cs" />
+    <Compile Include="Process\InvoiceCreateInOut.cs" />
+    <Compile Include="Process\InvoiceNGL.cs" />
+    <Compile Include="Process\InvoicePayScheduleValidate.cs" />
+    <Compile Include="Process\InvoicePrint.cs" />
+    <Compile Include="Process\InvoiceWriteOff.cs" />
+    <Compile Include="Process\IssueReport.cs" />
+    <Compile Include="Process\KIndexRerun.cs" />
+    <Compile Include="Process\LandedCostDistribute.cs" />
+    <Compile Include="Process\LeadProject.cs" />
+    <Compile Include="Process\LeadRequest.cs" />
+    <Compile Include="Process\LoadBankStatement.cs" />
+    <Compile Include="Process\MasterForecast.cs" />
+    <Compile Include="Process\MatchInvDelete.cs" />
+    <Compile Include="Process\MatchPODelete.cs" />
+    <Compile Include="Process\MergeProcess.cs" />
+    <Compile Include="Process\MMBOMValidate.cs" />
+    <Compile Include="Process\NoteDelete.cs" />
+    <Compile Include="Process\OLineCreateSalesContract.cs" />
+    <Compile Include="Process\OpportunityGeneration.cs" />
+    <Compile Include="Process\OrderBatchProcess.cs" />
+    <Compile Include="Process\OrderOpen.cs" />
+    <Compile Include="Process\OrderPOCreate.cs" />
+    <Compile Include="Process\OrderRePrice.cs" />
+    <Compile Include="Process\OrgOwnership.cs" />
+    <Compile Include="Process\PackageCreate.cs" />
+    <Compile Include="Process\PaymentTermValidate.cs" />
+    <Compile Include="Process\PaySelectionCreateCheck.cs" />
+    <Compile Include="Process\PaySelectionCreateFrom.cs" />
+    <Compile Include="Process\PeriodControlStatus.cs" />
+    <Compile Include="Process\PeriodStatus.cs" />
+    <Compile Include="Process\PriceListCreate.cs" />
+    <Compile Include="Process\ProcessContract.cs" />
+    <Compile Include="Process\ProcessForecast.cs" />
+    <Compile Include="Process\ProductCategoryAcctCopy.cs" />
+    <Compile Include="Process\ProductionReverse.cs" />
+    <Compile Include="Process\ProductStockSummary.cs" />
+    <Compile Include="Process\ProfitLossClosing.cs" />
+    <Compile Include="Process\ProjectClose.cs" />
+    <Compile Include="Process\ProjectGenOrder.cs" />
+    <Compile Include="Process\ProjectGenPO.cs" />
+    <Compile Include="Process\ProjectLinePricing.cs" />
+    <Compile Include="Process\ProjectPhaseGenOrder.cs" />
+    <Compile Include="Process\ReCostingCalculation.cs" />
+    <Compile Include="Process\Recurring.cs" />
+    <Compile Include="Process\RecurringMenu.cs" />
+    <Compile Include="Process\RecurringScheduler.cs" />
+    <Compile Include="Process\RegisterSystem.cs" />
+    <Compile Include="Process\RenewContract.cs" />
+    <Compile Include="Process\ReplenishReport.cs" />
+    <Compile Include="Process\ReportColumnSet_Copy.cs" />
+    <Compile Include="Process\ReportLineSet_Copy.cs" />
+    <Compile Include="Process\RequestInvoice.cs" />
+    <Compile Include="Process\RequestReOpen.cs" />
+    <Compile Include="Process\RequisitionPOCreate.cs" />
+    <Compile Include="Process\RfQClose.cs" />
+    <Compile Include="Process\RfQCopyLines.cs" />
+    <Compile Include="Process\RfQCreate.cs" />
+    <Compile Include="Process\RfQCreatePO.cs" />
+    <Compile Include="Process\RfQCreateSO.cs" />
+    <Compile Include="Process\RfQResponseCComplete.cs" />
+    <Compile Include="Process\RfQResponseInvite.cs" />
+    <Compile Include="Process\RfQResponseRank.cs" />
+    <Compile Include="Process\ScheduleContract.cs" />
+    <Compile Include="Process\SendMailText.cs" />
+    <Compile Include="Process\SendRequestNotification.cs" />
+    <Compile Include="Process\StorageCleanup.cs" />
+    <Compile Include="Process\SubscribeCustomerInterestArea.cs" />
+    <Compile Include="Process\TaxDeclarationCreate.cs" />
+    <Compile Include="Process\TransactionSummary.cs" />
+    <Compile Include="Process\TransferOwnerShip.cs" />
+    <Compile Include="Process\UpdateVersion.cs" />
+    <Compile Include="Process\ValidateCurrencyApiKey.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\AccoutingReport.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\ActivateForAssignment.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\BalanceReport.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\BOMValidate.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CopyOrder.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CreateAPInvoice.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CreateARInvoice.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CreateCalendarYearPeriod.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CreateCostForCombination.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CreateMovementCountList.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CreatePayment.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\CurrentQtyCorrection.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\DeleteDuplicateTransaction.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\GenerateCashBookTransferEntry.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\GenrateProjectTask.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\GetCurrencyConversionRate.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\ImportCOA.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\InOutCreateInvoice.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\InOutGenerate.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\InvoiceGenerate.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\LeadBPartner.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\LeadToOpportunity.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\PaymentOnline.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\ProfitLossReport.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\ProjectIssue.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\ProjectSetType.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\ProspectToOpportunity.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\StockDetail.cs" />
+    <Compile Include="Process\ViennaAdvantageProcess\SubscribeInterestArea.cs" />
+    <Compile Include="Process\XmlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\FinBalance.cs" />
+    <Compile Include="Report\FinReport.cs" />
+    <Compile Include="Report\FinReportPeriod.cs" />
+    <Compile Include="Report\FinStatement.cs" />
+    <Compile Include="Report\MReport.cs" />
+    <Compile Include="Report\MReportColumn.cs" />
+    <Compile Include="Report\MReportColumnSet.cs" />
+    <Compile Include="Report\MReportLine.cs" />
+    <Compile Include="Report\MReportLineSet.cs" />
+    <Compile Include="Report\MReportSource.cs" />
+    <Compile Include="Report\MReportTree.cs" />
+    <Compile Include="Report\TrialBalance.cs" />
+    <Compile Include="TimeExpense\Process\CreateAPInvoice.cs" />
+    <Compile Include="TimeExpense\Process\CreateARInvoice.cs" />
+    <Compile Include="VOS\DocActionConstants.cs" />
+    <Compile Include="VOS\ProductInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseLibrary\CoreLibrary.csproj">
       <Project>{2609163f-87ce-4796-86e9-d3e5de2044cd}</Project>
       <Name>CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseModel\BaseLibrary.csproj">
+      <Project>{e2af5f6b-8107-4d3a-a6f0-ec2b83447b9f}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAProduct\VAModelAD.csproj">
+      <Project>{0ed818be-cb22-47df-8c2b-3caaffa36d92}</Project>
+      <Name>VAModelAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
+      <Name>XModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

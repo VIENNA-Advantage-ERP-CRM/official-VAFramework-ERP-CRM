@@ -16,5 +16,10 @@ namespace VAdvantage.Print
         bool StartReport(Utility.Ctx ctx, ProcessEngine.ProcessInfo pi, DataBase.Trx trx);
     }
 
-    
+    public interface IReportView
+    {
+        View GetView();
+        MPrintFormat GetPrintFormat();
+        void SetPrintFormat(MPrintFormat pf);
+    }
 }

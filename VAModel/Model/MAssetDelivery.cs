@@ -18,12 +18,12 @@ using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
 using VAdvantage.Utility;
-using System.Windows.Forms;
+//////using System.Windows.Forms;
 //using VAdvantage.Controls;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Web.UI;
+//using System.Web.UI;
 
 
 namespace VAdvantage.Model

@@ -767,7 +767,7 @@ namespace VAdvantage.Model
             try
             {
                 //IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
-                DataSet dr = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
+                DataSet dr = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 MTree tree = null;
                 for (int i = 0; i <= dr.Tables[0].Rows.Count - 1; i++)
                 {

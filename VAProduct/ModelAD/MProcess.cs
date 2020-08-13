@@ -67,7 +67,7 @@ namespace VAdvantage.Model
 
             try
             {
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param);
+                ds = DataBase.DB.ExecuteDataset(sql, param);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
@@ -107,7 +107,7 @@ namespace VAdvantage.Model
             IDataReader idr=null; 
             try
             {
-                idr= BaseLibrary.DataBase.DB.ExecuteReader(sql, param);
+                idr= DataBase.DB.ExecuteReader(sql, param);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -222,7 +222,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = BaseLibrary.DataBase.DB.ExecuteReader(sql, param);
+                idr = DataBase.DB.ExecuteReader(sql, param);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -370,7 +370,7 @@ namespace VAdvantage.Model
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@instanceid", AD_PInstance_ID);
-                int i = BaseLibrary.DataBase.DB.ExecuteQuery(sql, param);
+                int i = DataBase.DB.ExecuteQuery(sql, param);
             }
             catch (Exception e)
             {

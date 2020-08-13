@@ -10,6 +10,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.VOS;
 //using VAdvantage.VOS;
+//using VAdvantage.VOS;
 
 namespace VAdvantage.Model
 {

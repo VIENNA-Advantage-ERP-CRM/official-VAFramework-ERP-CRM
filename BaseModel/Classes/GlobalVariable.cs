@@ -18,7 +18,7 @@ namespace VAdvantage.DataBase
     public sealed class GlobalVariable
     
     {
-
+        public static string AD_BASE_LANGUAGE = "en-US";
 
         public  static  string ACCESSKEY = "caff4eb4fbd6273e37e8a325e19f0991";
         private static bool _isEditor = false;

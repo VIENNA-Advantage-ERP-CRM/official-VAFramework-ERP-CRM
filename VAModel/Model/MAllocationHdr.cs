@@ -353,7 +353,7 @@ namespace VAdvantage.Model
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
             if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
             {
-                _processMsg = Common.Common.NONBUSINESSDAY;
+                _processMsg = VAModel.Classes.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
             }
 
@@ -943,7 +943,7 @@ namespace VAdvantage.Model
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
             if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateTrx(), GetAD_Org_ID()))
             {
-                throw new Exception(Common.Common.NONBUSINESSDAY);
+                throw new Exception(VAModel.Classes.Common.NONBUSINESSDAY);
             }
 
             //	Set Inactive

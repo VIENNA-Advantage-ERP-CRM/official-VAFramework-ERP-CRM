@@ -5,7 +5,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-using System.Windows.Forms;
+//////////using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -206,7 +206,7 @@ namespace VAdvantage.Model
                 foreach (MStorage storage in storageMap.Values)
                 {
                     //storage.SetIsBulkUpdate(bulkUpdate);
-                    MessageBox.Show("bulkUpdate of StorageClass");
+                    //MessageBox.Show("bulkUpdate of StorageClass");
                 }
             }
 
@@ -958,7 +958,8 @@ namespace VAdvantage.Model
                 //        reservationAttributeSetInstance_ID, diffQtyDedicated,
                 //        X_Ref_Quantity_Type.DEDICATED, trx))
                 //    return false;
-                MessageBox.Show("Storage-AddQtys-if (diffQtyDedicated != null && diffQtyDedicated.CompareTo(Env.ZERO) != 0)");
+                // MessageBox.Show("Storage-AddQtys-if (diffQtyDedicated != null && diffQtyDedicated.CompareTo(Env.ZERO) != 0)");
+                VLogger.Get().Severe("Storage-AddQtys-if (diffQtyDedicated != null && diffQtyDedicated.CompareTo(Env.ZERO) != 0)");
             }
             if (diffQtyAllocated.CompareTo(Env.ZERO) != 0)
             {
@@ -967,7 +968,8 @@ namespace VAdvantage.Model
                 //        reservationAttributeSetInstance_ID, diffQtyAllocated,
                 //        X_Ref_Quantity_Type.ALLOCATED, trx))
                 //    return false;
-                MessageBox.Show("Storage-AddQtys-if (diffQtyAllocated != null && diffQtyAllocated.CompareTo(Env.ZERO) != 0)");
+                //MessageBox.Show("Storage-AddQtys-if (diffQtyAllocated != null && diffQtyAllocated.CompareTo(Env.ZERO) != 0)");
+                VLogger.Get().Severe("Storage-AddQtys-if (diffQtyDedicated != null && diffQtyDedicated.CompareTo(Env.ZERO) != 0)");
             }
             if ( diffQtyExpected.CompareTo(Env.ZERO) != 0)
             {
@@ -976,7 +978,8 @@ namespace VAdvantage.Model
                 //        reservationAttributeSetInstance_ID, diffQtyExpected,
                 //        X_Ref_Quantity_Type.EXPECTED, trx))
                 //    return false;
-                MessageBox.Show("Storage-AddQtys- if (diffQtyExpected != null && diffQtyExpected.CompareTo(Env.ZERO) != 0)");
+               // MessageBox.Show("Storage-AddQtys- if (diffQtyExpected != null && diffQtyExpected.CompareTo(Env.ZERO) != 0)");
+                VLogger.Get().Severe("Storage-AddQtys-if (diffQtyDedicated != null && diffQtyDedicated.CompareTo(Env.ZERO) != 0)");
             }
             return true;
         }

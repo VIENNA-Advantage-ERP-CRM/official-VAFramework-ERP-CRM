@@ -24,7 +24,7 @@ namespace VAdvantage.Process
 
     class CreateInviteeList : SvrProcess
     {
-        HttpApplication app = new HttpApplication();
+        
         //int Record_ID;
         string url = "";
         protected override void Prepare()
