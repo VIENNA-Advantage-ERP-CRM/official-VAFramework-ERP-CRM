@@ -859,7 +859,7 @@
 
                                 
 
-                                ve.setReadOnly(!rw, this.gTab.getTableModel().getIsInserting());
+                                ve.setReadOnly(!rw);
 
 
                                 if (ve.showObscureButton) {
