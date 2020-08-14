@@ -2387,9 +2387,17 @@ namespace VAdvantage.Model
                     if (value == null)  //	not overwritten by DocType and not manually entered
                     {
                         if (masDet != null && masDet.TableName != null && masDet.TableName != "")
-                            value = MSequence.GetDocumentNo(GetAD_Client_ID(), masDet.TableName, _trx, GetCtx());
+                        {
+                            // Handled to get DocumentNo based on Organization
+                            //value = MSequence.GetDocumentNo(GetAD_Client_ID(), masDet.TableName, _trx, GetCtx());
+                            value = MSequence.GetDocumentNo(masDet.TableName, _trx, GetCtx(), this);
+                        }
                         else
-                            value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                        {
+                            // Handled to get DocumentNo based on Organization
+                            //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                            value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
+                        }
                     }
                     Set_ValueNoCheck(columnName, value);
                 }
