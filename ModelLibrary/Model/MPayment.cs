@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                 // When Discounting PDC is true, No need to check Check Date with Account Date.
                 if (Env.IsModuleInstalled("VA027_") && IsVA027_DiscountingPDC())
                 {
-                    
+
                 }
                 else
                 {
@@ -914,7 +914,7 @@ namespace VAdvantage.Model
                     }
                 }
                 // when post dated check module is not installed then system check Cheque date can not be greater than Current Date
-                if (Env.IsModuleInstalled("VA027_"))
+                if (Env.IsModuleInstalled("VA027_") && !IsReversal())
                 {
                     // validate when we giving check (Payable)
                     if (string.IsNullOrEmpty(GetPDCType()) && dt1.GetDocBaseType() != "ARR")
@@ -2775,7 +2775,7 @@ namespace VAdvantage.Model
          * 	Complete Document
          * 	@return new status (Complete, In Progress, Invalid, Waiting ..)
          */
-        public String  CompleteIt()
+        public String CompleteIt()
         {
             //	Re-Check
             if (!_justPrepared)
@@ -3325,7 +3325,7 @@ namespace VAdvantage.Model
             //JID_0880 Show message on completion of Payment
             if (GetCtx().GetContext("prepayOrder") != null)
             {
-                _processMsg += ","+ GetCtx().GetContext("prepayOrder");
+                _processMsg += "," + GetCtx().GetContext("prepayOrder");
                 GetCtx().SetContext("prepayOrder", "");
             }
 
@@ -3414,7 +3414,7 @@ namespace VAdvantage.Model
                     if (!CalculateWithholdingAmount(IsReceipt() ? Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Withholding_ID"])
                         : Util.GetValueOfInt(ds.Tables[0].Rows[0]["AP_WithholdingTax_ID"]), false,
                         Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Region_ID"]),
-                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]) , IsPaymentAllocate))
+                        Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Country_ID"]), IsPaymentAllocate))
                     {
                         SetProcessMsg(Msg.GetMsg(GetCtx(), "WrongWithholdingTax"));
                         return false;
@@ -5096,7 +5096,19 @@ namespace VAdvantage.Model
                 reversal.SetTempDocumentNo("");
             }
 
-            reversal.Save(Get_Trx());
+            if (!reversal.Save(Get_Trx()))
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null)
+                {
+                    _processMsg = pp.GetName();
+                    if (String.IsNullOrEmpty(_processMsg))
+                    {
+                        _processMsg = pp.GetValue();
+                    }
+                }
+                return false;
+            }
 
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
