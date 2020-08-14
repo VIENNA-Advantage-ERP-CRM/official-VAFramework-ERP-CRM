@@ -52,7 +52,13 @@ namespace VAdvantage.DBPort
             }
 
             String statement = ReplaceQuotedStrings(sqlStatement, retVars);
-            statement = ConvertWithConvertMap(statement);
+
+            // Replace Oracle Pattern in case of UPDATE/INSERT
+            if (statement.ToUpper().IndexOf("UPDATE ") < 0 && statement.ToUpper().IndexOf("INSERT ") < 0)
+            {
+                statement = ConvertWithConvertMap(statement);
+            }
+
             statement = statement.Replace(DB_PostgreSQL.NATIVE_MARKER, "");
 
             String cmpString = statement.ToUpper();
