@@ -221,8 +221,6 @@ namespace VAdvantage.Controller
                         vo.mandatoryLogic = dr[i].ToString();
                     else if (columnName.Equals("OBSCURETYPE"))
                         vo.ObscureType = dr[i].ToString();
-                    else if (columnName.Equals("OBSCUREFIELDTYPE"))
-                        vo.ObscureFieldType = dr[i].ToString();
                     else if (columnName.Equals("ISDEFAULTFOCUS"))
                         vo.IsDefaultFocus = "Y".Equals(dr[i].ToString());
                     //
@@ -855,7 +853,6 @@ namespace VAdvantage.Controller
             clone.FieldGroupDefault = FieldGroupDefault;
             clone.ShowFilterOption = ShowFilterOption;
             clone.IsUnique = IsUnique;
-            clone.ObscureFieldType = ObscureFieldType;
             return clone;
         }
 

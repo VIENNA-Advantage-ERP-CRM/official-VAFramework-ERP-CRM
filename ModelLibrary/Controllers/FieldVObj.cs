@@ -183,8 +183,6 @@ namespace VAdvantage.Controller
         public String ReadOnlyLogic = "";
         /**	Display Obscure	*/
         public String ObscureType = null;
-        /**	Display Obscure	*/
-        public String ObscureFieldType = null;
         /** Default Focus	*/
         public bool IsDefaultFocus = false;
 
