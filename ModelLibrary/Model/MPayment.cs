@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                 // When Discounting PDC is true, No need to check Check Date with Account Date.
                 if (Env.IsModuleInstalled("VA027_") && IsVA027_DiscountingPDC())
                 {
-                    
+
                 }
                 else
                 {
@@ -930,7 +930,7 @@ namespace VAdvantage.Model
                     }
                 }
                 // when post dated check module is not installed then system check Cheque date can not be greater than Current Date
-                if (Env.IsModuleInstalled("VA027_"))
+                if (Env.IsModuleInstalled("VA027_") && !IsReversal())
                 {
                     // validate when we giving check (Payable)
                     if (string.IsNullOrEmpty(GetPDCType()) && dt1.GetDocBaseType() != "ARR")
@@ -5118,7 +5118,19 @@ namespace VAdvantage.Model
                 reversal.SetTempDocumentNo("");
             }
 
-            reversal.Save(Get_Trx());
+            if (!reversal.Save(Get_Trx()))
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null)
+                {
+                    _processMsg = pp.GetName();
+                    if (String.IsNullOrEmpty(_processMsg))
+                    {
+                        _processMsg = pp.GetValue();
+                    }
+                }
+                return false;
+            }
 
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
