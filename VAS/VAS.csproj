@@ -213,7 +213,6 @@
     <Compile Include="Areas\VAS\Models\Callouts\MUOMConversionModel.cs" />
     <Compile Include="Areas\VAS\Models\Callouts\MUOMModel.cs" />
     <Compile Include="Areas\VAS\Models\Callouts\MWarehouseModel.cs" />
-    <Compile Include="Areas\VAS\Models\PAttributesModel.cs" />
     <Compile Include="Areas\VAS\Models\PaymentAllocation.cs" />
     <Compile Include="Areas\VAS\Models\PaymentAllocationModel.cs" />
     <Compile Include="Areas\VAS\Models\PaymentModel.cs" />

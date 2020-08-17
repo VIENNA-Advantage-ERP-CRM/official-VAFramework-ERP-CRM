@@ -159,12 +159,10 @@
     <Compile Include="ProcessAD\YearCreatePeriods.cs" />
     <Compile Include="ProcessEngine\MCrystalInstance.cs" />
     <Compile Include="ProcessEngine\MCrystalInstancePara.cs" />
-    <Compile Include="ProcessEngine\MPInstance.cs" />
     <Compile Include="ProcessEngine\MPInstanceLog.cs" />
     <Compile Include="ProcessEngine\MPInstancePara.cs" />
     <Compile Include="ProcessEngine\ProcessCall.cs" />
     <Compile Include="ProcessEngine\ProcessCtl.cs" />
-    <Compile Include="ProcessEngine\ProcessInfo.cs" />
     <Compile Include="ProcessEngine\ProcessInfoLog.cs" />
     <Compile Include="ProcessEngine\ProcessInfoParameter.cs" />
     <Compile Include="ProcessEngine\ProcessInfoUtil.cs" />
