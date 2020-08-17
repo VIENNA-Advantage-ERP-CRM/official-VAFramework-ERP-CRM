@@ -164,14 +164,6 @@
     <Compile Include="ModelAD\MOrg.cs" />
     <Compile Include="ModelAD\MOrgInfo.cs" />
     <Compile Include="ModelAD\MSetup.cs" />
-    <Compile Include="ModelAD\MTreeNode.cs" />
-    <Compile Include="ModelAD\MTreeNodeBP.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMC.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMM.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMS.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMT.cs" />
-    <Compile Include="ModelAD\MTreeNodeMM.cs" />
-    <Compile Include="ModelAD\MTreeNodePR.cs" />
     <Compile Include="Model\AcctViewerData.cs" />
     <Compile Include="Interface\BankVerificationInterface.cs" />
     <Compile Include="Model\CTreeNode.cs" />
@@ -697,16 +689,16 @@
     <Compile Include="VOS\ProductInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaseLibrary\CoreLibrary.csproj">
-      <Project>{2609163f-87ce-4796-86e9-d3e5de2044cd}</Project>
-      <Name>CoreLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BaseModel\BaseLibrary.csproj">
-      <Project>{e2af5f6b-8107-4d3a-a6f0-ec2b83447b9f}</Project>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{f38800cb-fb57-4705-bfc0-123724a5da41}</Project>
       <Name>BaseLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VAProduct\VAModelAD.csproj">
-      <Project>{0ed818be-cb22-47df-8c2b-3caaffa36d92}</Project>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
+      <Project>{de905ae2-56bf-45d5-b083-76050830e58b}</Project>
       <Name>VAModelAD</Name>
     </ProjectReference>
     <ProjectReference Include="..\XModel\XModel.csproj">

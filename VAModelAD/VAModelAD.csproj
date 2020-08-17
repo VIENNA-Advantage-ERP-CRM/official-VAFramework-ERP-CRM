@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DE905AE2-56BF-45D5-B083-76050830E58B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VAModelAD</RootNamespace>
+    <AssemblyName>VAModelAD</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=10.5.3700.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ViennaAdvantageWeb\Dll\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\ViennaAdvantageWeb\Dll\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.ClassLibrary">
+      <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.OpenJDK.ClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime">
+      <HintPath>..\ViennaAdvantageWeb\Dll\IKVM.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Excel">
+      <HintPath>..\ViennaAdvantageWeb\Dll\Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\ViennaAdvantageWeb\Dll\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Common.cs" />
+    <Compile Include="Classes\Evaluator.cs" />
+    <Compile Include="Classes\Query.cs" />
+    <Compile Include="Classes\WindowCtx.cs" />
+    <Compile Include="Classes\ZoomTarget.cs" />
+    <Compile Include="Controller\FieldVObj.cs" />
+    <Compile Include="Controller\GridField.cs" />
+    <Compile Include="Controller\GridFieldVO.cs" />
+    <Compile Include="Controller\GridTab.cs" />
+    <Compile Include="Controller\GridTable.cs" />
+    <Compile Include="Controller\GridTabPanel.cs" />
+    <Compile Include="Controller\GridTabPanelVO.cs" />
+    <Compile Include="Controller\GridTabVO.cs" />
+    <Compile Include="Controller\GridWindow.cs" />
+    <Compile Include="Controller\GridWindowVO.cs" />
+    <Compile Include="Controller\GridWorkbench.cs" />
+    <Compile Include="Controller\HeaderPanelItemsVO.cs" />
+    <Compile Include="CrystalReport\CrystalParams.cs" />
+    <Compile Include="CrystalReport\CrystalReportEngine.cs" />
+    <Compile Include="Install\LanguageMaintenance.cs" />
+    <Compile Include="Install\Translation.cs" />
+    <Compile Include="Install\TranslationHandler.cs" />
+    <Compile Include="Lookup\MAccountLookup.cs" />
+    <Compile Include="Lookup\MAmtDivision.cs" />
+    <Compile Include="Lookup\MLocationLookup.cs" />
+    <Compile Include="Lookup\MLocatorLookup.cs" />
+    <Compile Include="Lookup\MLookup.cs" />
+    <Compile Include="Lookup\MLookupCache.cs" />
+    <Compile Include="Lookup\MPAttributeLookup.cs" />
+    <Compile Include="Lookup\MProductContainerLookup.cs" />
+    <Compile Include="Lookup\VLookUpFactory.cs" />
+    <Compile Include="MailBox\Classes\SMTPConfig.cs" />
+    <Compile Include="ModelAD\html\MRole.cs" />
+    <Compile Include="ModelAD\html\MTableAccess.cs" />
+    <Compile Include="ModelAD\html\MTree.cs" />
+    <Compile Include="ModelAD\MAccessLog.cs" />
+    <Compile Include="ModelAD\MAppointment.cs" />
+    <Compile Include="ModelAD\MAppointmentsInfo.cs" />
+    <Compile Include="ModelAD\MArchive.cs" />
+    <Compile Include="ModelAD\MAssignCriteria.cs" />
+    <Compile Include="ModelAD\MAssignLog.cs" />
+    <Compile Include="ModelAD\MAssignSet.cs" />
+    <Compile Include="ModelAD\MAssignTarget.cs" />
+    <Compile Include="ModelAD\MAttachment.cs" />
+    <Compile Include="ModelAD\MAttachmentEntry.cs" />
+    <Compile Include="ModelAD\MAttachmentNote.cs" />
+    <Compile Include="ModelAD\MAttachmentReference.cs" />
+    <Compile Include="ModelAD\MCardView.cs" />
+    <Compile Include="ModelAD\MCardViewColumn.cs" />
+    <Compile Include="ModelAD\MCardViewCondition.cs" />
+    <Compile Include="ModelAD\MCardViewRole.cs" />
+    <Compile Include="ModelAD\MChart.cs" />
+    <Compile Include="ModelAD\MChartAccess.cs" />
+    <Compile Include="ModelAD\MChat.cs" />
+    <Compile Include="ModelAD\MChatEntry.cs" />
+    <Compile Include="ModelAD\MClientShare.cs" />
+    <Compile Include="ModelAD\MColor.cs" />
+    <Compile Include="ModelAD\MColumn.cs" />
+    <Compile Include="ModelAD\MColumnAccess.cs" />
+    <Compile Include="ModelAD\MExportToClient.cs" />
+    <Compile Include="ModelAD\MField.cs" />
+    <Compile Include="ModelAD\MFieldGroup.cs" />
+    <Compile Include="ModelAD\MForm.cs" />
+    <Compile Include="ModelAD\MFormAccess.cs" />
+    <Compile Include="ModelAD\MGmailConfiguration.cs" />
+    <Compile Include="ModelAD\MGroupForm.cs" />
+    <Compile Include="ModelAD\MGroupProcess.cs" />
+    <Compile Include="ModelAD\MGroupWindow.cs" />
+    <Compile Include="ModelAD\MGroupWorkflow.cs" />
+    <Compile Include="ModelAD\MImage.cs" />
+    <Compile Include="ModelAD\MImpFormat.cs" />
+    <Compile Include="ModelAD\MImpFormatRow.cs" />
+    <Compile Include="ModelAD\MInfoColumn.cs" />
+    <Compile Include="ModelAD\MInfoWindow.cs" />
+    <Compile Include="ModelAD\MLanguage.cs" />
+    <Compile Include="ModelAD\MMailAttachment1.cs" />
+    <Compile Include="ModelAD\MMailMsg.cs" />
+    <Compile Include="ModelAD\MMailText.cs" />
+    <Compile Include="ModelAD\MMenu.cs" />
+    <Compile Include="ModelAD\MMessage.cs" />
+    <Compile Include="ModelAD\MModuleDBSchema.cs" />
+    <Compile Include="ModelAD\MModuleField.cs" />
+    <Compile Include="ModelAD\MModuleForm.cs" />
+    <Compile Include="ModelAD\MModuleInfo.cs" />
+    <Compile Include="ModelAD\MModuleProcess.cs" />
+    <Compile Include="ModelAD\MModuleTab.cs" />
+    <Compile Include="ModelAD\MModuleTable.cs" />
+    <Compile Include="ModelAD\MModuleWindow.cs" />
+    <Compile Include="ModelAD\MNote.cs" />
+    <Compile Include="ModelAD\MPrintColor.cs" />
+    <Compile Include="ModelAD\MPrintPaper.cs" />
+    <Compile Include="ModelAD\MPrivateAccess.cs" />
+    <Compile Include="ModelAD\MProcess.cs" />
+    <Compile Include="ModelAD\MProcessAccess.cs" />
+    <Compile Include="ModelAD\MProcessPara.cs" />
+    <Compile Include="ModelAD\MQueryLog.cs" />
+    <Compile Include="ModelAD\MRecordAccess.cs" />
+    <Compile Include="ModelAD\MReference.cs" />
+    <Compile Include="ModelAD\MRefList.cs" />
+    <Compile Include="ModelAD\MRefTable.cs" />
+    <Compile Include="ModelAD\MRoleOrgAccess.cs" />
+    <Compile Include="ModelAD\MSchedule.cs" />
+    <Compile Include="ModelAD\MSchedulerLog.cs" />
+    <Compile Include="ModelAD\MSchedulerPara.cs" />
+    <Compile Include="ModelAD\MSchedulerRecipient.cs" />
+    <Compile Include="ModelAD\MSequence.cs" />
+    <Compile Include="ModelAD\MSeries.cs" />
+    <Compile Include="ModelAD\MSeriesFilter.cs" />
+    <Compile Include="ModelAD\MSystem.cs" />
+    <Compile Include="ModelAD\MTab.cs" />
+    <Compile Include="ModelAD\MTable.cs" />
+    <Compile Include="ModelAD\MTabPanel.cs" />
+    <Compile Include="ModelAD\MTask.cs" />
+    <Compile Include="ModelAD\MTreeNode.cs" />
+    <Compile Include="ModelAD\MTreeNodeBP.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMC.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMM.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMS.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMT.cs" />
+    <Compile Include="ModelAD\MTreeNodeMM.cs" />
+    <Compile Include="ModelAD\MTreeNodePR.cs" />
+    <Compile Include="ModelAD\MUser.cs" />
+    <Compile Include="ModelAD\MUserMail.cs" />
+    <Compile Include="ModelAD\MUserMailConfigration.cs" />
+    <Compile Include="ModelAD\MUserOrgAccess.cs" />
+    <Compile Include="ModelAD\MUserPreference.cs" />
+    <Compile Include="ModelAD\MUserQuery.cs" />
+    <Compile Include="ModelAD\MUserQueryLine.cs" />
+    <Compile Include="ModelAD\MUserRoles.cs" />
+    <Compile Include="ModelAD\MViewColumn.cs" />
+    <Compile Include="ModelAD\MViewComponent.cs" />
+    <Compile Include="ModelAD\MWindow.cs" />
+    <Compile Include="ModelAD\MWindowAccess.cs" />
+    <Compile Include="ModelAD\M_Element.cs" />
+    <Compile Include="ModelAD\M_Registration.cs" />
+    <Compile Include="ModelAD\RColumn.cs" />
+    <Compile Include="ModelAD\RModel.cs" />
+    <Compile Include="ModelAD\RModelData.cs" />
+    <Compile Include="ModelAD\SubTableUtil.cs" />
+    <Compile Include="ModelAD\TranslationTable.cs" />
+    <Compile Include="ModelAD\ViennaProcessorLog.cs" />
+    <Compile Include="ModelAD\ViennatProcessor.cs" />
+    <Compile Include="Model\Callout.cs" />
+    <Compile Include="Model\CalloutEngine.cs" />
+    <Compile Include="Model\MClient.cs" />
+    <Compile Include="Model\MLocation.cs" />
+    <Compile Include="Model\POValidator.cs" />
+    <Compile Include="Print\AmtInWords_AR.cs" />
+    <Compile Include="Print\AmtInWords_EN.cs" />
+    <Compile Include="Print\AReport.cs" />
+    <Compile Include="Print\BarcodeElement.cs" />
+    <Compile Include="Print\BarcodeGenerator.cs" />
+    <Compile Include="Print\BoxElement.cs" />
+    <Compile Include="Print\CPaper.cs" />
+    <Compile Include="Print\DataEngine.cs" />
+    <Compile Include="Print\GridElement.cs" />
+    <Compile Include="Print\HeaderFooter.cs" />
+    <Compile Include="Print\HTMLElement.cs" />
+    <Compile Include="Print\ImageElement.cs" />
+    <Compile Include="Print\IReportEngine.cs" />
+    <Compile Include="Print\LayoutEngine.cs" />
+    <Compile Include="Print\LocationElement.cs" />
+    <Compile Include="Print\MPrintFont.cs" />
+    <Compile Include="Print\MPrintFormat.cs" />
+    <Compile Include="Print\MPrintFormatItem.cs" />
+    <Compile Include="Print\MPrintFormatProcess.cs" />
+    <Compile Include="Print\MPrintTableFormat.cs" />
+    <Compile Include="Print\Page.cs" />
+    <Compile Include="Print\ParameterElement.cs" />
+    <Compile Include="Print\PrintData.cs" />
+    <Compile Include="Print\PrintDataElement.cs" />
+    <Compile Include="Print\PrintDataFunction.cs" />
+    <Compile Include="Print\PrintDataGroup.cs" />
+    <Compile Include="Print\PrintElement.cs" />
+    <Compile Include="Print\PrintFormatUtil.cs" />
+    <Compile Include="Print\PrintInfo.cs" />
+    <Compile Include="Print\ReportCtl.cs" />
+    <Compile Include="Print\ReportEngine_N.cs" />
+    <Compile Include="Print\StringElement.cs" />
+    <Compile Include="Print\TableElement.cs" />
+    <Compile Include="Print\TableReference.cs" />
+    <Compile Include="Print\View.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProcessEngine\MCrystalInstance.cs" />
+    <Compile Include="ProcessEngine\MCrystalInstancePara.cs" />
+    <Compile Include="ProcessEngine\MPInstance.cs" />
+    <Compile Include="ProcessEngine\MPInstanceLog.cs" />
+    <Compile Include="ProcessEngine\MPInstancePara.cs" />
+    <Compile Include="ProcessEngine\ProcessCall.cs" />
+    <Compile Include="ProcessEngine\ProcessCtl.cs" />
+    <Compile Include="ProcessEngine\ProcessInfo.cs" />
+    <Compile Include="ProcessEngine\ProcessInfoLog.cs" />
+    <Compile Include="ProcessEngine\ProcessInfoParameter.cs" />
+    <Compile Include="ProcessEngine\ProcessInfoUtil.cs" />
+    <Compile Include="ProcessEngine\ProcessParameter.cs" />
+    <Compile Include="ProcessEngine\SvrProcess.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Report\ReportFormatEngine.cs" />
+    <Compile Include="Utility\EMail.cs" />
+    <Compile Include="Utility\NativeDigitConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{f38800cb-fb57-4705-bfc0-123724a5da41}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAPrintUtility\VAPrintLib.csproj">
+      <Project>{64b1d750-7031-41a4-80d1-21bd0a88c184}</Project>
+      <Name>VAPrintLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
+      <Name>XModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\vienna.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tick1.gif" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

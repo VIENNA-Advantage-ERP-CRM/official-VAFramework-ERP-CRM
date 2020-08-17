@@ -157,17 +157,6 @@
     <Compile Include="ProcessAD\VerifyQueryForAlert.cs" />
     <Compile Include="ProcessAD\ViewImport.cs" />
     <Compile Include="ProcessAD\YearCreatePeriods.cs" />
-    <Compile Include="ProcessEngine\MCrystalInstance.cs" />
-    <Compile Include="ProcessEngine\MCrystalInstancePara.cs" />
-    <Compile Include="ProcessEngine\MPInstanceLog.cs" />
-    <Compile Include="ProcessEngine\MPInstancePara.cs" />
-    <Compile Include="ProcessEngine\ProcessCall.cs" />
-    <Compile Include="ProcessEngine\ProcessCtl.cs" />
-    <Compile Include="ProcessEngine\ProcessInfoLog.cs" />
-    <Compile Include="ProcessEngine\ProcessInfoParameter.cs" />
-    <Compile Include="ProcessEngine\ProcessInfoUtil.cs" />
-    <Compile Include="ProcessEngine\ProcessParameter.cs" />
-    <Compile Include="ProcessEngine\SvrProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\AcctService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -179,7 +168,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="System\class1.cs" />
     <Compile Include="Utility\BankVerificationInterface.cs" />
     <Compile Include="Utility\EmailMessageSerializable.cs" />
     <Compile Include="Utility\EmailMSMQ.cs" />
@@ -284,12 +272,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BaseLibrary\CoreLibrary.csproj">
-      <Project>{2609163f-87ce-4796-86e9-d3e5de2044cd}</Project>
-      <Name>CoreLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\CloudService\configuration91.svcinfo" />
