@@ -69,7 +69,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_OrgInfo WHERE AD_Org_ID=" + AD_Org_ID;
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     DataRow dr = ds.Tables[0].Rows[0];

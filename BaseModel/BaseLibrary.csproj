@@ -84,6 +84,7 @@
     <Compile Include="Audit\X_AD_Session.cs" />
     <Compile Include="Process\Class1.cs" />
     <Compile Include="Utility\Env.cs" />
+    <Compile Include="Utility\StackTraceElement.cs" />
     <Compile Include="Utility\Task.cs" />
     <Compile Include="WF\DocWorkflowMgr.cs" />
     <Compile Include="ModelAD\PO.cs" />

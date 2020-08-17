@@ -63,7 +63,7 @@ namespace VAdvantage.ReportFormat
     }
 }
 
-namespace VAdvanatge.Report
+namespace VAdvantge.Report
 {
 
 

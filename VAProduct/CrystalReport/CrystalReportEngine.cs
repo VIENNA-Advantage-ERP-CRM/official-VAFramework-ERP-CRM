@@ -17,7 +17,7 @@ using VAdvantage.Print;
 using VAdvantage.Classes;
 using Oracle.ManagedDataAccess.Client;
 using CrystalDecisions.Shared;
-using VAdvantage.Report;
+
 
 namespace VAdvantage.CrystalReport
 {

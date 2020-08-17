@@ -10,6 +10,7 @@ using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.Print;
 using VAdvantage.ProcessEngine;
+using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 
 namespace VAdvantage.Common

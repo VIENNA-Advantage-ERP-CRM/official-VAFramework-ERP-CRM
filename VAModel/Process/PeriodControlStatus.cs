@@ -20,7 +20,10 @@ using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 using System.Data;
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+using CoreLibrary.Classes;
+
+namespace VAdvantage.Process
 {
     public class PeriodControlStatus : ProcessEngine.SvrProcess
     {

@@ -365,7 +365,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public override bool Equals(Object cmp)
         {
-            MessageBox.Show("Note:--Check interface value for \n 'IEquatable<Object> //Comparator<PO> interface'");
+            //MessageBox.Show("Note:--Check interface value for \n 'IEquatable<Object> //Comparator<PO> interface'");
             if (cmp == null)
             {
                 return false;

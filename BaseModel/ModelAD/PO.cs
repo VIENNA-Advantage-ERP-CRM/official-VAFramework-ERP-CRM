@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         private int _idOld = 0;
 
         /**	Attachment with entriess	*/
-        private object _attachment = null;
+        private dynamic _attachment = null;
         /** Document Value Workflow Manager		*/
         private static DocWorkflowMgr s_docWFMgr = null;
 
@@ -3834,7 +3834,7 @@ namespace VAdvantage.Model
         protected Lookup Get_ColumnLookup(int index)
         {
             POInfoColumn col = p_info.GetColumnInfo(index);
-            return POActionEngine.Get().GetLookup(col);
+            return POActionEngine.Get().GetLookup(GetCtx(),col);
         }
 
         /**
@@ -4922,7 +4922,7 @@ namespace VAdvantage.Model
             return Get_ValueAsInt(index);
         }
 
-       
+
 
         /// <summary>
         /// Create/return Attachment for PO.
@@ -4931,63 +4931,63 @@ namespace VAdvantage.Model
         /// <returns>attachment</returns>
         /// <date>07-march-2011</date>
         /// <writer>raghu</writer>
-        //public MAttachment CreateAttachment()
-        //{
-        //    GetAttachment(false);
-        //    if (_attachment == null)
-        //        _attachment = new MAttachment(GetCtx(), p_info.GetAD_Table_ID(), Get_ID(), null);
-        //    return _attachment;
-        //}
+        public dynamic CreateAttachment()
+        {
+            GetAttachment(false);
+            if (_attachment == null)
+                _attachment = POActionEngine.Get().CreateAttachment(GetCtx(), p_info.GetAD_Table_ID(), Get_ID(), null);
+            return _attachment;
+        }
 
         ///// <summary>
         /////Get Attachments.	An attachment may have multiple entries
         ///// </summary>
         ///// <returns> Attachment or null</returns>
-        //public MAttachment GetAttachment()
-        //{
-        //    return GetAttachment(false);
-        //}
+        public dynamic GetAttachment()
+        {
+            return GetAttachment(false);
+        }
         ///// <summary>
         ///// Get Attachments
         ///// </summary>
         ///// <param name="requery">requery</param>
         ///// <returns>Attachment or null</returns>
-        //public MAttachment GetAttachment(bool requery)
-        //{
-        //    if (_attachment == null || requery)
-        //        _attachment = MAttachment.Get(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
-        //    return _attachment;
-        //}
+        public dynamic GetAttachment(bool requery)
+        {
+            if (_attachment == null || requery)
+                _attachment = POActionEngine.Get().GetAttachment(GetCtx(), p_info.getAD_Table_ID(), Get_ID());
+            return _attachment;
+        }
 
         /// <summary>
         /// Do we have a PDF Attachment
         /// </summary>
         /// <returns>true if there is a PDF attachment</returns>
-        //public bool IsPdfAttachment()
-        //{
-        //    return IsAttachment(".pdf");
-        //}
+        public bool IsPdfAttachment()
+        {
+            return IsAttachment(".pdf");
+        }
 
         /// <summary>
         /// Do we have a Attachment of type
         /// </summary>
         /// <param name="extension">extension e.g. .pdf</param>
         /// <returns>true if there is a attachment of type</returns>
-        //public bool IsAttachment(String extension)
-        //{
-        //    GetAttachment(false);
-        //    if (_attachment == null)
-        //        return false;
-        //    for (int i = 0; i < _attachment.GetEntryCount(); i++)
-        //    {
-        //        if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
-        //        {
-        //            log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
+        public bool IsAttachment(String extension)
+        {
+            GetAttachment(false);
+            if (_attachment == null)
+                return false;
+            for (int i = 0; i < _attachment.GetEntryCount(); i++)
+            {
+                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
+                {
+                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
 
@@ -5005,21 +5005,21 @@ namespace VAdvantage.Model
         ///// </summary>
         ///// <param name="extension">extension e.g. .pdf</param>
         ///// <returns>data or null</returns>
-        //public byte[] GetAttachmentData(String extension)
-        //{
-        //    GetAttachment(false);
-        //    if (_attachment == null)
-        //        return null;
-        //    for (int i = 0; i < _attachment.GetEntryCount(); i++)
-        //    {
-        //        if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
-        //        {
-        //            log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
-        //            return _attachment.GetEntryData(i);
-        //        }
-        //    }
-        //    return null;
-        //}
+        public byte[] GetAttachmentData(String extension)
+        {
+            GetAttachment(false);
+            if (_attachment == null)
+                return null;
+            for (int i = 0; i < _attachment.GetEntryCount(); i++)
+            {
+                if (_attachment.GetEntryName(i).ToLower().EndsWith(extension.ToLower()))
+                {
+                    log.Fine("#" + i.ToString() + ": " + _attachment.GetEntryName(i));
+                    return _attachment.GetEntryData(i);
+                }
+            }
+            return null;
+        }
 
         public void ExecuteWF()
         {

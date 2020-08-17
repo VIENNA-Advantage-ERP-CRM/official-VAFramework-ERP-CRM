@@ -82,7 +82,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_Org WHERE issummary = 'N' AND IsOrgUnit = 'N' AND IsActive = 'Y' AND AD_Client_ID=" + po.GetAD_Client_ID() + " ORDER BY Value";
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
                 if (ds.Tables.Count > 0)
                 {
                     DataRow dr = null;
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
             if (linkedBPartner == -1)
             {
                 string sql = "SELECT C_BPartner_ID FROM C_BPartner WHERE AD_OrgBP_ID=" + GetAD_Org_ID();
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
                 int C_BPartner_ID = 0;
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {

@@ -64,7 +64,7 @@ namespace VAdvantage.Model
             try
             {
                 VConnection vcon = VConnection.Get();
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
+                ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];

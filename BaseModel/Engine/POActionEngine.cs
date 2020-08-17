@@ -21,8 +21,9 @@ namespace BaseLibrary.Engine
         string GetDocumentNo(int id, PO pO);
         int GetNextID(int AD_Client_ID, string TableName, Trx trx);
        string  GetDocumentNo(PO po);
-        Lookup GetLookup(POInfoColumn colInfo);
-
+        Lookup GetLookup(Ctx ctx,POInfoColumn colInfo);
+        dynamic GetAttachment(Ctx ctx, int aD_Table_ID, int id);
+        dynamic CreateAttachment(Ctx ctx, int aD_Table_ID, int id, Trx trx);
     }
 
 
@@ -121,11 +122,25 @@ namespace BaseLibrary.Engine
             return null;
         }
 
-        public Lookup GetLookup(POInfoColumn colInfo)
+        public Lookup GetLookup(Ctx ctx, POInfoColumn colInfo)
         {
             if (_action != null)
-                return _action.GetLookup(colInfo);
+                return _action.GetLookup(ctx,colInfo);
             return null;
+        }
+
+        public dynamic GetAttachment(Ctx ctx, int AD_Table_ID, int id)
+        {
+            if (_action != null)
+                return _action.GetAttachment(ctx,AD_Table_ID,id);
+            return null;
+        }
+
+        public dynamic CreateAttachment(Ctx ctx, int AD_Table_ID, int id, Trx trx)
+        {
+            if (_action != null)
+                return _action.CreateAttachment(ctx,AD_Table_ID,id,trx);
+            return null; 
         }
     }
 }

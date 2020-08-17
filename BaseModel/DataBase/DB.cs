@@ -1007,6 +1007,11 @@ namespace VAdvantage.DataBase
             //    throw new ArgumentException("Required parameter missing");
             //return s_cc.GetDatabase().TO_CHAR(columnName, displayType, AD_Language);
         }   //  TO
+
+        public static String NULL(String sqlClause, String dataType)
+        {
+            return CoreLibrary.DataBase.DB.NULL(sqlClause, dataType);
+        }
     }
 #pragma warning restore 612, 618
 }

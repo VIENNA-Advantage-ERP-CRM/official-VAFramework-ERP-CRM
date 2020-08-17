@@ -181,7 +181,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_Client";
             try
             {
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {

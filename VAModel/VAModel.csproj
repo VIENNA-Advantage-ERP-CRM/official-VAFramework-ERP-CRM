@@ -52,6 +52,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -99,6 +104,11 @@
     <Compile Include="CM\MediaDirectDeploy.cs" />
     <Compile Include="CM\TemplateValidate.cs" />
     <Compile Include="CM\WebProjectDeploy.cs" />
+    <Compile Include="Connected Services\AcctService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="CRM\Model\MCampaignPhase.cs" />
     <Compile Include="CRM\Model\MCampaignTask.cs" />
     <Compile Include="CRM\Model\MCampaignType.cs" />
@@ -150,6 +160,7 @@
     <Compile Include="Interface\UserPricingInterface.cs" />
     <Compile Include="ModelAD\MClient.cs" />
     <Compile Include="ModelAD\MClientInfo.cs" />
+    <Compile Include="ModelAD\MCloudSetup.cs" />
     <Compile Include="ModelAD\MOrg.cs" />
     <Compile Include="ModelAD\MOrgInfo.cs" />
     <Compile Include="ModelAD\MSetup.cs" />
@@ -224,7 +235,6 @@
     <Compile Include="Model\MChangeRequest.cs" />
     <Compile Include="Model\MCharge.cs" />
     <Compile Include="Model\MChatType.cs" />
-    <Compile Include="Model\MCloudSetup.cs" />
     <Compile Include="Model\MCommission.cs" />
     <Compile Include="Model\MCommissionAmt.cs" />
     <Compile Include="Model\MCommissionDetail.cs" />
@@ -703,6 +713,43 @@
       <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
       <Name>XModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Connected Services\AcctService\AccountService.wsdl" />
+    <None Include="Connected Services\AcctService\VAModel.AcctService.AccountingFileInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AcctService\VAModel.AcctService.CurrencyRateConversionUrlInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AcctService\VAModel.AcctService.PaymentTerm.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AcctService\VAModel.AcctService.TaxMgmt.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\AcctService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AcctService\AccountService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AcctService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AcctService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AcctService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -16,6 +16,31 @@ namespace VAdvantage.Model
 {
     public sealed class MCloudSetup
     {
+        static private List<string> lstTableName = null;
+        static private bool ISTENATRUNNINGFORERP = false;
+
+        public static void GetAllTable()
+        {
+            if (lstTableName.Count == 0)
+            {
+                lstTableName = new List<string>();
+                DataSet ds = DB.ExecuteDataset("select tablename from ad_table where isactive='Y'");
+
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 350)
+                    {
+                        ISTENATRUNNINGFORERP = true;
+                    }
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        lstTableName.Add(Convert.ToString(ds.Tables[0].Rows[i]["TABLENAME"]));
+                    }
+
+                }
+            }
+
+        }
 
 
         /// <summary>
@@ -341,7 +366,7 @@ namespace VAdvantage.Model
             String name = null;
             String sql = null;
             int no = 0;
-            Common.Common.GetAllTable();
+            GetAllTable();
             /**
              *  Create Client
              */
@@ -388,7 +413,7 @@ namespace VAdvantage.Model
             }
 
             //  Trees and Client Info
-            if (!m_client.SetupClientInfo(m_lang) && Common.Common.ISTENATRUNNINGFORERP)
+            if (!m_client.SetupClientInfo(m_lang) && ISTENATRUNNINGFORERP)
             {
                 String err = "Client Info NOT created";
                 log.Log(Level.SEVERE, err);
@@ -598,12 +623,12 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "UserRole ClientUser+Admin NOT inserted");
 
             //	Processors
-            if (Common.Common.lstTableName.Contains("C_AcctProcessor")) // Update by Paramjeet Singh
+            if (lstTableName.Contains("C_AcctProcessor")) // Update by Paramjeet Singh
             {
                 MAcctProcessor ap = new MAcctProcessor(m_client, AD_User_ID);
                 ap.Save();
             }
-            if (Common.Common.lstTableName.Contains("R_RequestProcessor")) // Update by Paramjeet Singh
+            if (lstTableName.Contains("R_RequestProcessor")) // Update by Paramjeet Singh
             {
                 MRequestProcessor rp = new MRequestProcessor(m_client, AD_User_ID);
                 rp.Save();
@@ -965,7 +990,7 @@ namespace VAdvantage.Model
         private void CreateAccountingGroup()
         {
             tableName = "C_AccountGroupBatch";
-            if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName))// Update by Paramjeet Singh
             {
                 string sqlBatch = @"select * from C_AccountGroupBatch where ad_client_id=0 and ad_org_id=0 AND IsForNewTenant='Y' ";
                 DataSet dsBatch = DB.ExecuteDataset(sqlBatch);
@@ -1201,7 +1226,7 @@ namespace VAdvantage.Model
         private void CreateKpi(int role_ID)
         {
             tableName = "RC_KPI";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_KPI Where AD_Client_ID=0 AND AD_ORG_ID=0 AND IsForNewTenant='Y'");
                 DataSet dsAccess = null;
@@ -1351,7 +1376,7 @@ namespace VAdvantage.Model
         private void CreateKPIPane()
         {
             tableName = "RC_KPIPane";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_KPIPane WHERE AD_CLIENT_ID=0 AND AD_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
@@ -1427,7 +1452,7 @@ namespace VAdvantage.Model
         private void CreateChartPane()
         {
             tableName = "RC_ChartPane";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_ChartPane WHERE AD_CLIENT_ID=0 AND AD_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
@@ -1470,7 +1495,7 @@ namespace VAdvantage.Model
         private void CreateView(int adminRole_ID)
         {
             tableName = "RC_View";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_View WHERE AD_CLIENT_ID=0 AND AD_ORG_ID=0 AND IsForNewTenant='Y'");
                 DataSet dsUsrQry = null;
@@ -1813,7 +1838,7 @@ namespace VAdvantage.Model
         {
             // throw new NotImplementedException();
             tableName = "appointmentcategory";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 DataSet ds = DB.ExecuteDataset("Select * from appointmentcategory WHERE AD_CLIENT_ID=0 AND AD_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
@@ -1848,7 +1873,7 @@ namespace VAdvantage.Model
         }
         private void CreateCostElement()
         {
-            if (!Common.Common.lstTableName.Contains("M_CostElement"))
+            if (!lstTableName.Contains("M_CostElement"))
             {
                 return;
             }
@@ -1861,7 +1886,7 @@ namespace VAdvantage.Model
                 {
                     cost = new MCostElement(m_ctx, 0, m_trx);
                     //tableName = cost.Get_TableName();
-                    //if (Common.Common.lstTableName.Contains(tableName))
+                    //if (lstTableName.Contains(tableName))
                     //{
 
                     cost.SetAD_Client_ID(m_client.Get_ID());
@@ -1909,7 +1934,7 @@ namespace VAdvantage.Model
         private void CopyRoleCenter(int role_ID)
         {
             tableName = "RC_RoleCenterManager";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_RoleCenterManager WHERE AD_CLIENT_ID=0 AND AD_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
@@ -2022,7 +2047,7 @@ namespace VAdvantage.Model
         private void CopyDashBoard(int role_ID)
         {
             tableName = "D_Chart";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 DataSet ds = DB.ExecuteDataset("SELECT * FROM D_Chart WHERE AD_CLient_ID=0 AND AD_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
@@ -2328,7 +2353,7 @@ namespace VAdvantage.Model
             /**
              *  Create Calendar
              */
-            if (Common.Common.lstTableName.Contains("C_Calendar")) // Update by Paramjeet Singh
+            if (lstTableName.Contains("C_Calendar")) // Update by Paramjeet Singh
             {
                 m_calendar = new MCalendar(m_client);
 
@@ -2356,7 +2381,7 @@ namespace VAdvantage.Model
             name = m_clientName + " " + Msg.Translate(m_lang, "Account_ID");
             int C_ElementValue_ID = 0;
             int C_Element_ID = 0;
-            if (Common.Common.lstTableName.Contains("C_Element")) // Update by Paramjeet Singh
+            if (lstTableName.Contains("C_Element")) // Update by Paramjeet Singh
             {
                 MElement element = new MElement(m_client, name, MElement.ELEMENTTYPE_Account, m_AD_Tree_Account_ID);
 
@@ -2409,7 +2434,7 @@ namespace VAdvantage.Model
             /**
              *  Create AccountingSchema
              */
-            if (Common.Common.lstTableName.Contains("C_AcctSchema"))// Update by Paramjeet Singh
+            if (lstTableName.Contains("C_AcctSchema"))// Update by Paramjeet Singh
             {
                 m_as = new MAcctSchema(m_client, currency);
                 if (!m_as.Save())
@@ -2441,7 +2466,7 @@ namespace VAdvantage.Model
 
             try
             {
-                if (Common.Common.lstTableName.Contains("C_AcctSchema_Element"))// Update by Paramjeet Singh
+                if (lstTableName.Contains("C_AcctSchema_Element"))// Update by Paramjeet Singh
                 {
                     int AD_Client_ID = m_client.GetAD_Client_ID();
                     DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql2, null, m_trx);
@@ -2511,7 +2536,7 @@ namespace VAdvantage.Model
                         if (IsMandatory != null)
                         {
                             //tableName = "C_AcctSchema_Element";
-                            //if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
+                            //if (lstTableName.Contains(tableName))// Update by Paramjeet Singh
                             //{
                             sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_Element(");
                             sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_Element_ID,C_AcctSchema_ID,")
@@ -2573,7 +2598,7 @@ namespace VAdvantage.Model
             //  Create GL Accounts
             m_accountsOK = true;
             tableName = "C_AcctSchema_GL";
-            if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName))// Update by Paramjeet Singh
             {
                 sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_GL (");
                 sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_ID,"
@@ -2632,7 +2657,7 @@ namespace VAdvantage.Model
             }
             //	Create Std Accounts
             tableName = "C_AcctSchema_GL";
-            if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName))// Update by Paramjeet Singh
             {
                 sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_Default (");
                 sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_ID,"
@@ -2769,7 +2794,7 @@ namespace VAdvantage.Model
             }
             //  GL Categories
             tableName = "GL_Category";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 CreateGLCategory("Standard", MGLCategory.CATEGORYTYPE_Manual, true);
                 int GL_None = CreateGLCategory("None", MGLCategory.CATEGORYTYPE_Document, false);
@@ -3080,7 +3105,7 @@ namespace VAdvantage.Model
 
         public bool CreateEntities(int C_Country_ID, String City, int C_Region_ID, int C_Currency_ID)
         {
-            if (m_as == null && Common.Common.ISTENATRUNNINGFORERP)
+            if (m_as == null && ISTENATRUNNINGFORERP)
             {
                 log.Severe("No AcctountingSChema");
                 m_trx.Rollback();
@@ -3098,7 +3123,7 @@ namespace VAdvantage.Model
 
             //	Create Marketing Channel/Campaign
             tableName = "C_Channel";
-            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 int C_Channel_ID = GetNextID(GetAD_Client_ID(), "C_Channel");
                 sqlCmd = new StringBuilder("INSERT INTO C_Channel ");
@@ -3124,7 +3149,7 @@ namespace VAdvantage.Model
                 if (m_hasMCampaign)
                 {
                     //  Default
-                    if (Common.Common.lstTableName.Contains("C_AcctSchema_Element"))
+                    if (lstTableName.Contains("C_AcctSchema_Element"))
                     {
                         sqlCmd = new StringBuilder("UPDATE C_AcctSchema_Element SET ");
                         sqlCmd.Append("C_Campaign_ID=").Append(C_Campaign_ID);
@@ -3139,7 +3164,7 @@ namespace VAdvantage.Model
 
                 //	Create Sales Region
                 int C_SalesRegion_ID = 0;
-                if (Common.Common.lstTableName.Contains("C_SalesRegion"))
+                if (lstTableName.Contains("C_SalesRegion"))
                 {
                     C_SalesRegion_ID = GetNextID(GetAD_Client_ID(), "C_SalesRegion");
                     sqlCmd = new StringBuilder("INSERT INTO C_SalesRegion ");
@@ -3157,7 +3182,7 @@ namespace VAdvantage.Model
                 if (m_hasSRegion)
                 {
                     //  Default
-                    if (Common.Common.lstTableName.Contains("C_SalesRegion") && C_SalesRegion_ID > 0)
+                    if (lstTableName.Contains("C_SalesRegion") && C_SalesRegion_ID > 0)
                     {
                         sqlCmd = new StringBuilder("UPDATE C_AcctSchema_Element SET ");
                         sqlCmd.Append("C_SalesRegion_ID=").Append(C_SalesRegion_ID);
@@ -3176,7 +3201,7 @@ namespace VAdvantage.Model
             //  Create BP Group
             MBPartner bp = null;
             MBPGroup bpg = null;
-            if (Common.Common.lstTableName.Contains("C_BP_Group"))// Update by Paramjeet Singh
+            if (lstTableName.Contains("C_BP_Group"))// Update by Paramjeet Singh
             {
                 bpg = new MBPGroup(m_ctx, 0, m_trx);
 
@@ -3204,7 +3229,7 @@ namespace VAdvantage.Model
             MLocation bpLoc = new MLocation(m_ctx, C_Country_ID, C_Region_ID, City, m_trx);
             bpLoc.Save();
             MProduct product = null;
-            if (Common.Common.lstTableName.Contains("M_Product") && bp != null) // Update by Paramjeet Singh
+            if (lstTableName.Contains("M_Product") && bp != null) // Update by Paramjeet Singh
             {
 
 
@@ -3316,7 +3341,7 @@ namespace VAdvantage.Model
             }
 
             //   Locator
-            if (Common.Common.lstTableName.Contains("M_Locator") && bp != null) // Update by Paramjeet Singh
+            if (lstTableName.Contains("M_Locator") && bp != null) // Update by Paramjeet Singh
             {
                 MLocator locator = new MLocator(wh, defaultName);
                 locator.SetIsDefault(true);
@@ -3325,7 +3350,7 @@ namespace VAdvantage.Model
 
             }
             //  Update ClientInfo
-            //if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            //if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             //{
 
 
@@ -3363,7 +3388,7 @@ namespace VAdvantage.Model
              */
             //  PriceList
 
-            if (Common.Common.lstTableName.Contains("M_PriceList"))
+            if (lstTableName.Contains("M_PriceList"))
             {
                 MPriceList pl = new MPriceList(m_ctx, 0, m_trx);
                 pl.SetName(defaultName);
@@ -3422,7 +3447,7 @@ namespace VAdvantage.Model
 
             //	Create Sales Rep for Client-Admin
             MBPartner bpCA = null;
-            if (Common.Common.lstTableName.Contains("C_BPartner"))
+            if (lstTableName.Contains("C_BPartner"))
             {
                 bpCA = new MBPartner(m_ctx, 0, m_trx);
                 bpCA.SetValue(AD_User_Name);
@@ -3435,7 +3460,7 @@ namespace VAdvantage.Model
                 else
                     log.Log(Level.SEVERE, "SalesRep (Admin) NOT inserted");
 
-                if (Common.Common.lstTableName.Contains("C_BPartner_Location"))
+                if (lstTableName.Contains("C_BPartner_Location"))
                 {
                     //  Location for Client-Admin
                     MLocation bpLocCA = new MLocation(m_ctx, C_Country_ID, C_Region_ID, City, m_trx);
@@ -3460,7 +3485,7 @@ namespace VAdvantage.Model
 
 
             //  Payment Term
-            if (Common.Common.lstTableName.Contains("C_PaymentTerm"))
+            if (lstTableName.Contains("C_PaymentTerm"))
             {
                 int C_PaymentTerm_ID = GetNextID(GetAD_Client_ID(), "C_PaymentTerm");
                 sqlCmd = new StringBuilder("INSERT INTO C_PaymentTerm ");
@@ -3473,7 +3498,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "PaymentTerm NOT inserted");
             }
             //  Project Cycle
-            if (Common.Common.lstTableName.Contains("C_Cycle"))
+            if (lstTableName.Contains("C_Cycle"))
             {
                 C_Cycle_ID = GetNextID(GetAD_Client_ID(), "C_Cycle");
                 sqlCmd = new StringBuilder("INSERT INTO C_Cycle ");
@@ -3490,7 +3515,7 @@ namespace VAdvantage.Model
              */
 
             //	Create Default Project
-            if (Common.Common.lstTableName.Contains("C_Project"))
+            if (lstTableName.Contains("C_Project"))
             {
                 int C_Project_ID = GetNextID(GetAD_Client_ID(), "C_Project");
                 sqlCmd = new StringBuilder("INSERT INTO C_Project ");
@@ -3518,7 +3543,7 @@ namespace VAdvantage.Model
                 }
             }
             //  CashBook
-            if (Common.Common.lstTableName.Contains("C_CashBook"))
+            if (lstTableName.Contains("C_CashBook"))
             {
                 MCashBook cb = new MCashBook(m_ctx, 0, m_trx);
                 cb.SetName(defaultName);
@@ -3573,7 +3598,7 @@ namespace VAdvantage.Model
         private int GetNextID(int AD_Client_ID, String TableName)
         {
             //	TODO: Exception 
-            return CoreLibrary.DataBase.DB.GetNextID(AD_Client_ID, TableName, m_trx);
+            return DataBase.DB.GetNextID(AD_Client_ID, TableName, m_trx);
         }	//	GetNextID
 
 
@@ -3661,7 +3686,7 @@ namespace VAdvantage.Model
             //int Remittance_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_PRINTFORMAT_ID FROM AD_PRINTFORMAT WHERE REF_PRINTFORMAT='Remittance Print Format' AND AD_CLIENT_ID=" + AD_Client_ID));
             //	TODO: MPrintForm	
             //	MPrintForm form = new MPrintForm(); 
-            int AD_PrintForm_ID = CoreLibrary.DataBase.DB.GetNextID(AD_Client_ID, "AD_PrintForm", null);
+            int AD_PrintForm_ID = DataBase.DB.GetNextID(AD_Client_ID, "AD_PrintForm", null);
             String sql = "INSERT INTO AD_PrintForm(AD_Client_ID,AD_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,AD_PrintForm_ID,"
                 + "Name,Order_PrintFormat_ID,Invoice_PrintFormat_ID,Remittance_PrintFormat_ID,Shipment_PrintFormat_ID)"
                 //

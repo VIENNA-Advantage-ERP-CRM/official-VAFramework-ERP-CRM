@@ -200,7 +200,7 @@ namespace VAdvantage.Model
             }
             catch
             {
-                MessageBox.Show("MRequisitionLine--SetPrice(int M_PriceList_ID)");
+               // MessageBox.Show("MRequisitionLine--SetPrice(int M_PriceList_ID)");
             }
         }
 

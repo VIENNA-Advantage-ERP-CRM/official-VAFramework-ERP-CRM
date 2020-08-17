@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
+using VAModelAD.Classes;
+using VAModelAD.Model;
 
 namespace VAProduct.Model
 {
     public class POValidator : POAction
     {
-        
-
 
         /// <summary>
         ///Insert id data into Tree
@@ -57,7 +57,7 @@ namespace VAProduct.Model
             // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
             if (AD_Table_ID == X_AD_Org.Table_ID)
             {
-                MOrg Org = new MOrg(po.GetCtx(), id, null);
+                X_AD_Org Org = new X_AD_Org(po.GetCtx(), id, null);
                 if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
                 {
                     if (Org.IsOrgUnit())
@@ -232,7 +232,8 @@ namespace VAProduct.Model
 
         public bool BeforeDelete(PO po)
         {
-            throw new NotImplementedException();
+            return true;
+            //throw new NotImplementedException();
         }
 
         public bool AfterDelete(PO po, bool success)
@@ -263,8 +264,7 @@ namespace VAProduct.Model
             }
             return value;
         }
-
-
+        
         public int GetNextID(int AD_Client_ID, string TableName, Trx trx)
         {
             return MSequence.GetNextID(AD_Client_ID, TableName, trx);
@@ -284,8 +284,7 @@ namespace VAProduct.Model
             }
             return value;
         }
-
-
+        
         /// <summary>
         /// Copy record from Version table to Master table
         /// </summary>
@@ -397,9 +396,19 @@ namespace VAProduct.Model
 
         }
 
-        public Lookup GetLookup(POInfoColumn colInfo)
+        public Lookup GetLookup(Ctx ctx, POInfoColumn colInfo)
         {
-            throw new NotImplementedException();
+           return  Common.GetColumnLookup(ctx, colInfo);
+        }
+
+        public dynamic GetAttachment(Ctx ctx, int aD_Table_ID, int id)
+        {
+           return  MAttachment.Get(ctx, aD_Table_ID, id);
+        }
+
+        public dynamic CreateAttachment(Ctx ctx, int aD_Table_ID, int id, Trx trx)
+        {
+            return new  MAttachment(ctx, aD_Table_ID, id, trx);
         }
     }
 }

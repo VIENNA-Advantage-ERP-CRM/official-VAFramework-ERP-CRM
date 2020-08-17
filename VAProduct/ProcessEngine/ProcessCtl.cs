@@ -14,12 +14,13 @@ using VAdvantage.Utility;
 using VAdvantage.Print;
 using System.Threading;
 using System.Windows.Forms;
-using VAdvantage.CrystalReport;
+
 using VAdvantage.Logging;
 using VAdvantage.Classes;
 using System.ComponentModel;
 using System.IO;
 using VAdvantage.Model;
+using VAdvantage.CrystalReport;
 //using Npgsql;
 
 namespace VAdvantage.ProcessEngine
@@ -847,7 +848,7 @@ namespace VAdvantage.ProcessEngine
                             _pi.SetIsSupportPaging(isSupportPaging);
                             _pi.SetDynamicAction(dynamicAction);
 
-                            re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, assemblyName, cName);
+                            re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, assemblyName, cName);
                         }
                     }
                     catch (Exception e)
@@ -865,7 +866,7 @@ namespace VAdvantage.ProcessEngine
                 {
                     _pi.SetIsReportFormat(true);
                     _pi.SetPrintAllPages(false);
-                    re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
+                    re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
                     Unlock();
 
                     // "#REPORT_PAGE_SIZE"
@@ -878,14 +879,14 @@ namespace VAdvantage.ProcessEngine
 
                 else if (IsBIReport)
                 {
-                    re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
+                    re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
                 }
 
                 else if (IsJasperReport)
                 {
                     _pi.SetIsJasperReport(true);
 
-                    re = VAdvanatge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
+                    re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
                 }
                 else if (!IsCrystalReport)
                 {

@@ -113,7 +113,6 @@
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\CleanUp.cs" />
     <Compile Include="Classes\ContactsInfo.cs" />
-    <Compile Include="Classes\CrystalParams.cs" />
     <Compile Include="Classes\DocumentAction.cs" />
     <Compile Include="Classes\Evaluator.cs" />
     <Compile Include="Classes\ManageSkippedWF.cs" />
@@ -123,11 +122,6 @@
     <Compile Include="Classes\SessionEventHandler.cs" />
     <Compile Include="Classes\TableSQL.cs" />
     <Compile Include="Common\Common.cs" />
-    <Compile Include="CrystalReport\CrystalReportEngine.cs" />
-    <Compile Include="CrystalReport\ReportFormatEngine.cs" />
-    <Compile Include="Install\LanguageMaintenance.cs" />
-    <Compile Include="Install\Translation.cs" />
-    <Compile Include="Install\TranslationHandler.cs" />
     <Compile Include="LoginProcess.cs" />
     <Compile Include="Classes\GetMessage.cs" />
     <Compile Include="ProcessAD\CacheReset.cs" />
@@ -194,7 +188,6 @@
     <Compile Include="Utility\EmailSingleton.cs" />
     <Compile Include="Utility\ReplenishInterface.cs" />
     <Compile Include="Utility\Sms.cs" />
-    <Compile Include="Utility\StackTraceElement.cs" />
     <Compile Include="Utility\ViewUtil.cs" />
     <Compile Include="WF\DocWorkflowManager.cs" />
     <Compile Include="WF\DocWorkflowMgr.cs" />

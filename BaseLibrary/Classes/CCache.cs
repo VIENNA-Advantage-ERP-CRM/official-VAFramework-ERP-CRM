@@ -21,16 +21,7 @@ using VAdvantage.Classes;
 
 namespace CoreLibrary.Classes
 {
-    /// <summary>
-    ///  Define basic function
-    /// </summary>
-    public interface ICacheInterface
-    {
-        int Reset();
-        int Size();
-        String GetName();
-        int SizeNoExpire();
-    }
+    
 
     /// <summary>
     /// Cache class
@@ -198,7 +189,7 @@ namespace CoreLibrary.Classes
                 {
                     //_changeSupport.fireVetoableChange(PROPERTYNAME, super.size(), 0);
                 }
-                catch 
+                catch
                 {
                     //System.out.println ("CCache.clear - " + e);
                     return;
@@ -379,7 +370,7 @@ namespace CoreLibrary.Classes
             {
                 v = cacheDic[key];
             }
-            
+
             //if ((ctx != null) && (v is PO))
             //{
             //    PO b = (PO)Convert.ChangeType(v, typeof(V));
@@ -389,7 +380,20 @@ namespace CoreLibrary.Classes
             return v;
         }
     }
+}
 
+    namespace VAdvantage.Classes
+{
+    /// <summary>
+    ///  Define basic function
+    /// </summary>
+    public interface ICacheInterface
+    {
+        int Reset();
+        int Size();
+        String GetName();
+        int SizeNoExpire();
+    }
     /// <summary>
     /// 
     /// </summary>

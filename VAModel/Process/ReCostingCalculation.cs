@@ -7,7 +7,7 @@
     * Amit Bansal     08-June-2018
 ******************************************************/
 
-using Oracle.ManagedDataAccess.Client;
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -1159,14 +1159,14 @@ namespace VAdvantage.Process
                                         IDbConnection dbConnection = Get_Trx().GetConnection();
                                         if (dbConnection != null)
                                         {
-                                            // execute procedure for updating cost of components
-                                            OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                                            cmd.CommandType = CommandType.StoredProcedure;
-                                            cmd.Connection = (OracleConnection)dbConnection;
-                                            cmd.CommandText = "UpdateProductionLineWithCost";
-                                            cmd.Parameters.Add("p_Record_Id", Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]));
+                                            //// execute procedure for updating cost of components
+                                            //OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+                                            //cmd.CommandType = CommandType.StoredProcedure;
+                                            //cmd.Connection = (OracleConnection)dbConnection;
+                                            //cmd.CommandText = "UpdateProductionLineWithCost";
+                                            //cmd.Parameters.Add("p_Record_Id", Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]));
 
-                                            cmd.ExecuteNonQuery();
+                                            //cmd.ExecuteNonQuery();
                                         }
                                     }
                                     #endregion
@@ -1216,19 +1216,19 @@ namespace VAdvantage.Process
                                                     if (dbConnection != null)
                                                     {
                                                         // execute procedure for calculating cost
-                                                        OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
-                                                        cmd.CommandType = CommandType.StoredProcedure;
-                                                        cmd.Connection = (OracleConnection)dbConnection;
-                                                        cmd.CommandText = "createcostqueueNotFRPT";
-                                                        cmd.Parameters.Add("p_M_Product_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]));
-                                                        cmd.Parameters.Add("p_M_AttributeSetInstance_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_AttributeSetInstance_ID"]));
-                                                        cmd.Parameters.Add("p_AD_Org_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Org_ID"]));
-                                                        cmd.Parameters.Add("p_AD_Client_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Client_ID"]));
-                                                        cmd.Parameters.Add("p_Quantity", Util.GetValueOfDecimal(dsChildRecord.Tables[0].Rows[j]["MovementQty"]));
-                                                        cmd.Parameters.Add("p_M_ProductionLine_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_ProductionLine_ID"]));
-                                                        cmd.Parameters.Add("p_M_Warehouse_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Warehouse_ID"]));
+                                                        //OracleCommand cmd = (OracleCommand)dbConnection.CreateCommand();
+                                                        //cmd.CommandType = CommandType.StoredProcedure;
+                                                        //cmd.Connection = (OracleConnection)dbConnection;
+                                                        //cmd.CommandText = "createcostqueueNotFRPT";
+                                                        //cmd.Parameters.Add("p_M_Product_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Product_ID"]));
+                                                        //cmd.Parameters.Add("p_M_AttributeSetInstance_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_AttributeSetInstance_ID"]));
+                                                        //cmd.Parameters.Add("p_AD_Org_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Org_ID"]));
+                                                        //cmd.Parameters.Add("p_AD_Client_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["AD_Client_ID"]));
+                                                        //cmd.Parameters.Add("p_Quantity", Util.GetValueOfDecimal(dsChildRecord.Tables[0].Rows[j]["MovementQty"]));
+                                                        //cmd.Parameters.Add("p_M_ProductionLine_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_ProductionLine_ID"]));
+                                                        //cmd.Parameters.Add("p_M_Warehouse_ID", Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_Warehouse_ID"]));
 
-                                                        cmd.ExecuteNonQuery();
+                                                        //cmd.ExecuteNonQuery();
 
                                                         // update prodution header 
                                                         if (Util.GetValueOfString(dsChildRecord.Tables[0].Rows[j]["IsCostCalculated"]).Equals("N"))

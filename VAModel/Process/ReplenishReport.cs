@@ -22,6 +22,8 @@ using VAdvantage.Utility;
 
 
 using VAdvantage.ProcessEngine;
+using VAdvantage.Interface;
+
 namespace VAdvantage.Process
 {
     public class ReplenishReport : ProcessEngine.SvrProcess
@@ -257,7 +259,7 @@ namespace VAdvantage.Process
                     + ", r.M_Warehouse_ID, r.M_Product_ID, r.AD_Client_ID, r.AD_Org_ID,"
                     + " r.ReplenishType, r.Level_Min, r.Level_Max,"
                     //jz + " null, 1, 1, 0, ";
-                    + DataBase.DB.NULL("I", Types.VARCHAR)
+                    + VAdvantage.DataBase.DB.NULL("I", Types.VARCHAR)
                     + " , 1, 1, 0, ";
                 if (_ReplenishmentCreate == null)
                 {

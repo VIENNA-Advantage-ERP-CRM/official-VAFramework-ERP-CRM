@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
+using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Model;
+using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 
 namespace VAdvantage.Common
@@ -92,6 +93,48 @@ namespace VAdvantage.Common
                 report = null;
             }
             return d;
+        }
+
+        /// <summary>
+        /// if Doctype or targetDocType column exist in window, then check print format attached to that Doc type. and open that one.
+        /// </summary>
+        /// <param name="_pi">Process Info.</param>
+        private static void TryPrintFromDocType(ProcessInfo _pi)
+        {
+            try
+            {
+                string colName = "C_DocTypeTarget_ID";
+                string sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
+                int id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                if (id < 1)
+                {
+                    colName = "C_DocType_ID";
+                    sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocType_ID'";
+                    id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                    if (id < 1)
+                    {
+                        return;
+                    }
+                }
+                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + _pi.GetTable_ID()));
+                sql = "SELECT " + colName + " FROM " + tableName + " WHERE " + tableName + "_ID =" + _pi.GetRecord_ID();
+                id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                if (id < 1)
+                {
+                    return;
+                }
+                sql = "SELECT AD_ReportFormat_ID FROM C_DocType WHERE C_DocType_ID=" + id;
+                id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                if (id > 0)
+                {
+                    _pi.SetAD_ReportFormat_ID(id);
+                }
+
+            }
+            catch
+            {
+                return;
+            }
         }
     }
 }

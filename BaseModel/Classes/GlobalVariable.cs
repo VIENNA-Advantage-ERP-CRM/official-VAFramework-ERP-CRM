@@ -241,7 +241,7 @@ namespace VAdvantage.DataBase
             set { _LAST_EXECUTED_QUERY = value; }
         }
 
-        //---------------Created By - Harwinder-------------//
+        //---------------Created By - -------------//
 
      
         
@@ -408,5 +408,15 @@ namespace VAdvantage.DataBase
         public static int Year = 1;
 
         #endregion
+
+        public static string GetLanguageCode()
+        {
+            return "en_US";
+            //return Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language();
+            //if (AD_LANGUAGE != "")
+            //    return    AD_LANGUAGE.Replace("-", "_");
+            //else
+            //    return "";
+        }
     }
 }
