@@ -288,12 +288,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaseLibrary\CoreLibrary.csproj">
-      <Project>{2609163f-87ce-4796-86e9-d3e5de2044cd}</Project>
-      <Name>CoreLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\CloudService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
