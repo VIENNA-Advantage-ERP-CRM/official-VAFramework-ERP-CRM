@@ -164,14 +164,6 @@
     <Compile Include="ModelAD\MOrg.cs" />
     <Compile Include="ModelAD\MOrgInfo.cs" />
     <Compile Include="ModelAD\MSetup.cs" />
-    <Compile Include="ModelAD\MTreeNode.cs" />
-    <Compile Include="ModelAD\MTreeNodeBP.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMC.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMM.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMS.cs" />
-    <Compile Include="ModelAD\MTreeNodeCMT.cs" />
-    <Compile Include="ModelAD\MTreeNodeMM.cs" />
-    <Compile Include="ModelAD\MTreeNodePR.cs" />
     <Compile Include="Model\AcctViewerData.cs" />
     <Compile Include="Interface\BankVerificationInterface.cs" />
     <Compile Include="Model\CTreeNode.cs" />

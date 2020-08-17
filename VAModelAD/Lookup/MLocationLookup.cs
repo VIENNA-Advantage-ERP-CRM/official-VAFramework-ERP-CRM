@@ -57,7 +57,8 @@ namespace VAdvantage.Model
         {
             if (value == null)
                 return null;
-            MLocation loc = GetLocation(value, null);
+            //MLocation loc = GetLocation(value, null);
+            dynamic loc = GetLocation(value, null);
             if (loc == null)
                 return null;
             return new KeyNamePair(loc.GetC_Location_ID(), loc.ToString());

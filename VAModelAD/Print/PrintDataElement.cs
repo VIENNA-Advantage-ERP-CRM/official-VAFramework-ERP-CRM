@@ -209,7 +209,7 @@ namespace VAdvantage.Print
                 int C_Location_ID = int.Parse(GetValueKey());
                 if (C_Location_ID != 0)
                 {
-                    dynamic loc = new VAModelAD.Model.MLocation(Env.GetContext(), C_Location_ID, null);
+                    dynamic loc = VAModelAD.Model.MLocation.Get(Env.GetContext(), C_Location_ID, null);
                     if (loc != null)
                         return loc.ToStringCR();
                 }

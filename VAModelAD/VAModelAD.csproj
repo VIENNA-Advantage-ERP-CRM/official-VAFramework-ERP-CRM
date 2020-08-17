@@ -185,6 +185,14 @@
     <Compile Include="ModelAD\MTable.cs" />
     <Compile Include="ModelAD\MTabPanel.cs" />
     <Compile Include="ModelAD\MTask.cs" />
+    <Compile Include="ModelAD\MTreeNode.cs" />
+    <Compile Include="ModelAD\MTreeNodeBP.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMC.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMM.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMS.cs" />
+    <Compile Include="ModelAD\MTreeNodeCMT.cs" />
+    <Compile Include="ModelAD\MTreeNodeMM.cs" />
+    <Compile Include="ModelAD\MTreeNodePR.cs" />
     <Compile Include="ModelAD\MUser.cs" />
     <Compile Include="ModelAD\MUserMail.cs" />
     <Compile Include="ModelAD\MUserMailConfigration.cs" />
@@ -296,6 +304,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\vienna.png" />
   </ItemGroup>
   <ItemGroup>
