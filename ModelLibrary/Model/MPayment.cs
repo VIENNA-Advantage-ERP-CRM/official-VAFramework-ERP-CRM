@@ -5016,7 +5016,7 @@ namespace VAdvantage.Model
                 int count = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment ='N', VA027_PaymentGenerated ='N', C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
                 if (count > 0)
                 {
-                    DB.ExecuteQuery("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID=  " + GetVA027_PostDatedCheck_ID(), null, Get_Trx());
+                    DB.ExecuteQuery("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID=  " + GetVA027_PostDatedCheck_ID() + "AND C_Payment_ID= "+GetC_Payment_ID(), null, Get_Trx());
                 }
             }
             //	Create Reversal
