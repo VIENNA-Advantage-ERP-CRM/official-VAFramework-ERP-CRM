@@ -5027,7 +5027,9 @@ namespace VAdvantage.Model
             {
                 try
                 {
-                   s_docWFMgr = (DocWorkflowMgr)Activator.GetObject(typeof(DocWorkflowMgr), "VAdvantage.WF.DocWorkflowManager");
+                    System.Reflection.Assembly asm = System.Reflection.Assembly.Load("VAWorkflow");
+                    s_docWFMgr = (DocWorkflowMgr)asm.GetType("VAdvantage.WF.DocWorkflowManager").GetMethod("Get").Invoke(null,null);
+                    //(DocWorkflowMgr)Activator.GetObject(typeof(DocWorkflowMgr), "VAdvantage.WF.DocWorkflowManager");
                     //s_docWFMgr = DocWorkflowManager.Get();
                 }
                 catch
