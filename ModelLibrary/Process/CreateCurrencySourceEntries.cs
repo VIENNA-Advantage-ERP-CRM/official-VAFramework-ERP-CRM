@@ -36,9 +36,9 @@ namespace VAdvantage.Process
                 MaxReceivedMessageSize = int.MaxValue,
                 MaxBufferSize = int.MaxValue
             };
-            var client= new VAModel.AcctService.AccountServiceSoapClient(binding, new EndpointAddress(URL));
+            var client= new ModelLibrary.AcctService.AccountServiceSoapClient(binding, new EndpointAddress(URL));
 
-            VAModel.AcctService.CurrencyRateConversionUrlInfo urlInfo= client.GetCurrencySourceUrl(KEY);
+            ModelLibrary.AcctService.CurrencyRateConversionUrlInfo urlInfo= client.GetCurrencySourceUrl(KEY);
 
             client.Close();
             if (urlInfo != null)            

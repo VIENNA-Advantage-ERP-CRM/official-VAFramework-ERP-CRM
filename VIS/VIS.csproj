@@ -942,10 +942,6 @@
       <Project>{de905ae2-56bf-45d5-b083-76050830e58b}</Project>
       <Name>VAModelAD</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VAModel\VAModel.csproj">
-      <Project>{70b3c9a6-631e-40d0-bf47-d573b4478980}</Project>
-      <Name>VAModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XModel\XModel.csproj">
       <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
       <Name>XModel</Name>

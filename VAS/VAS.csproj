@@ -273,10 +273,6 @@
       <Project>{e2af5f6b-8107-4d3a-a6f0-ec2b83447b9f}</Project>
       <Name>BaseLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VAModel\VAModel.csproj">
-      <Project>{70b3c9a6-631e-40d0-bf47-d573b4478980}</Project>
-      <Name>VAModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XModel\XModel.csproj">
       <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
       <Name>XModel</Name>

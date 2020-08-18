@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelLibrary", "ModelLibrar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViennaBase", "ViennaBase\ViennaBase.csproj", "{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAModel", "VAModel\VAModel.csproj", "{70B3C9A6-631E-40D0-BF47-D573B4478980}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAPrintLib", "VAPrintUtility\VAPrintLib.csproj", "{64B1D750-7031-41A4-80D1-21BD0A88C184}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XModel", "XModel\XModel.csproj", "{383D4E75-F51A-4546-8EE2-1BF2BF57F32A}"
@@ -26,6 +24,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAS", "VAS\VAS.csproj", "{2346DD41-ED74-4D87-A2AD-B736E7B78C9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VAWorkflow", "VAWorkflow\VAWorkflow.csproj", "{B00FC0D9-1BD7-4D3D-9BFF-92B55415D972}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VISModel", "VISModel\VISModel.csproj", "{64A1254E-73BF-4C0C-A4E2-95A558F2BA3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VASModel", "VASModel\VASModel.csproj", "{60B12BA6-6EC4-47C7-8A2C-9B61746DE7C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +51,6 @@ Global
 		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{349C7A2B-FAD9-428A-BCD1-7F7262A0419D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70B3C9A6-631E-40D0-BF47-D573B4478980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70B3C9A6-631E-40D0-BF47-D573B4478980}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70B3C9A6-631E-40D0-BF47-D573B4478980}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70B3C9A6-631E-40D0-BF47-D573B4478980}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64B1D750-7031-41A4-80D1-21BD0A88C184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64B1D750-7031-41A4-80D1-21BD0A88C184}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64B1D750-7031-41A4-80D1-21BD0A88C184}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -81,6 +79,14 @@ Global
 		{B00FC0D9-1BD7-4D3D-9BFF-92B55415D972}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B00FC0D9-1BD7-4D3D-9BFF-92B55415D972}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B00FC0D9-1BD7-4D3D-9BFF-92B55415D972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64A1254E-73BF-4C0C-A4E2-95A558F2BA3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64A1254E-73BF-4C0C-A4E2-95A558F2BA3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64A1254E-73BF-4C0C-A4E2-95A558F2BA3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64A1254E-73BF-4C0C-A4E2-95A558F2BA3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60B12BA6-6EC4-47C7-8A2C-9B61746DE7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60B12BA6-6EC4-47C7-8A2C-9B61746DE7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60B12BA6-6EC4-47C7-8A2C-9B61746DE7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60B12BA6-6EC4-47C7-8A2C-9B61746DE7C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2523,9 +2523,9 @@ namespace VAdvantage.Model
                 MaxBufferSize = int.MaxValue
             };
             System.Net.ServicePointManager.Expect100Continue = false;
-            var client = new VAModel.AcctService.AccountServiceSoapClient(binding, new EndpointAddress(URL));
+            var client = new ModelLibrary.AcctService.AccountServiceSoapClient(binding, new EndpointAddress(URL));
 
-            VAModel.AcctService.CurrencyRateConversionUrlInfo urlInfo = client.GetCurrencySourceUrl(GlobalVariable.ACCESSKEY);
+            ModelLibrary.AcctService.CurrencyRateConversionUrlInfo urlInfo = client.GetCurrencySourceUrl(GlobalVariable.ACCESSKEY);
 
             client.Close();
             if (urlInfo != null)

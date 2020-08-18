@@ -86,7 +86,7 @@ namespace VAdvantage.Process
                         myCurrency = ds.Tables[0].Rows[i]["ISO_Code"].ToString();
                         myCurrencyID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_Currency_ID"]);
 
-                        var client = new VAModel.AcctService.AccountServiceSoapClient(binding, new EndpointAddress(URL));
+                        var client = new ModelLibrary.AcctService.AccountServiceSoapClient(binding, new EndpointAddress(URL));
                         if (!String.IsNullOrEmpty(myCurrency)
                         && !String.IsNullOrEmpty(baseCurrency)
                         && !String.IsNullOrEmpty(currencySourceName))

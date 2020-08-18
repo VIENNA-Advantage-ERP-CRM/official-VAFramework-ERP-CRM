@@ -6,7 +6,7 @@ using VAdvantage.Model;
 using VAdvantage.Logging;
 using VAdvantage.ProcessEngine;
 using VAdvantage.DataBase;
-
+using CoreLibrary.Classes;
 
 namespace VAdvantage.Classes
 {

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VAModel")]
+[assembly: AssemblyTitle("VISModel")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Oracle.com")]
-[assembly: AssemblyProduct("VAModel")]
-[assembly: AssemblyCopyright("Copyright © Oracle.com 2020")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("VISModel")]
+[assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("70b3c9a6-631e-40d0-bf47-d573b4478980")]
+[assembly: Guid("64a1254e-73bf-4c0c-a4e2-95a558f2ba3c")]
 
 // Version information for an assembly consists of the following four values:
 //
