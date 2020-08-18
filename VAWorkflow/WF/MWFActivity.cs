@@ -24,6 +24,8 @@ using VAdvantage.Print;
 using System.Net;
 using System.Threading;
 using System.Reflection;
+using VAWorkflow.Classes;
+
 namespace VAdvantage.WF
 {
     public class MWFActivity : X_AD_WF_Activity
@@ -853,7 +855,7 @@ namespace VAdvantage.WF
                 //cal.add(_node.GetDurationCalendarField(), _node.GetWaitTime());
                 //SetEndWaitTime(new Timestamp(cal.getTimeInMillis()));
 
-                DateTime dtTime = CommonFunctions.AddDate(_node.GetDurationCalendarField(), _node.GetWaitTime());
+                DateTime dtTime = GlobalVariable.AddDate(_node.GetDurationCalendarField(), _node.GetWaitTime());
                 SetEndWaitTime(dtTime);
                 return false;		//	not done
             }
@@ -3163,7 +3165,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 bool issaved = mailQueue.Save();
 
                 // Call singleton class function which will send Email from its infinite thread at background
-                ModelLibrary.Utility.EmailSingleton.Instance.StartEmailing();
+               EmailSingleton.Instance.StartEmailing();
 
                 // If data is saved to database then return true else retrun false
                 if (issaved)
@@ -3946,7 +3948,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             if (node.Get_ColumnIndex("AD_TextTemplate_ID") > 0 && node.GetAD_TextTemplate_ID() > 0)
             {
                 string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM AD_TextTemplate WHERE AD_TextTemplate_ID = " + node.GetAD_TextTemplate_ID()));
-                sb.Append(CommonFunctions.Parse(mailtext, po));
+                sb.Append(VAdvantage.Common.Common.Parse(mailtext, po));
                 //sb.Replace("<br>", "●");
             }
             else

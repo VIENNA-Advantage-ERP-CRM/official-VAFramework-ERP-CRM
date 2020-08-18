@@ -4995,10 +4995,10 @@ namespace VAdvantage.Model
         /// 
         /// </summary>
         /// <returns></returns>
-        //public byte[] GetPdfAttachment()
-        //{
-        //    return GetAttachmentData(".pdf");
-        //}
+        public byte[] GetPdfAttachment()
+        {
+            return GetAttachmentData(".pdf");
+        }
 
         ///// <summary>
         ///// Get Attachment Data of type

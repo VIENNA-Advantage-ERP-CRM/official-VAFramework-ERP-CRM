@@ -66,6 +66,7 @@
     <Compile Include="Audit\X_AD_WindowLog.cs" />
     <Compile Include="Classes\AccessSqlParser.cs" />
     <Compile Include="Classes\CCache.cs" />
+    <Compile Include="Classes\CommonFunctions.cs" />
     <Compile Include="Classes\GlobalVariable.cs" />
     <Compile Include="Classes\Info_Column.cs" />
     <Compile Include="Classes\Ini.cs" />
