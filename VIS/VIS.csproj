@@ -830,6 +830,7 @@
     <Compile Include="Areas\VIS\Models\InfoWindowModel.cs" />
     <Compile Include="Areas\VIS\Models\LocationModel.cs" />
     <Compile Include="Areas\VIS\Models\LocatorModel.cs" />
+    <Compile Include="Areas\VIS\Models\PAttributesModel.cs" />
     <Compile Include="Areas\VIS\Models\ProductContainerModel.cs" />
     <Compile Include="Areas\VIS\Models\RecordAccessModel.cs" />
     <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
@@ -929,9 +930,25 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
-      <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
-      <Name>ModelLibrary</Name>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{f38800cb-fb57-4705-bfc0-123724a5da41}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
+      <Project>{de905ae2-56bf-45d5-b083-76050830e58b}</Project>
+      <Name>VAModelAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModel\VAModel.csproj">
+      <Project>{70b3c9a6-631e-40d0-bf47-d573b4478980}</Project>
+      <Name>VAModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
+      <Name>XModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

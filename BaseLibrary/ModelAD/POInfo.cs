@@ -187,6 +187,11 @@ namespace VAdvantage.Model
             return false;
         }
 
+        public POInfoColumn[] GetPoInfoColumns()
+        {
+            return m_columns;
+        }
+
         /// <summary>
         /// POInfo Factory
         /// </summary>

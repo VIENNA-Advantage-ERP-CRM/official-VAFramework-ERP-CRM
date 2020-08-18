@@ -385,9 +385,11 @@ namespace VIS.Controllers
 
                 int AD_Table_ID = MTable.Get_Table_ID(TableName);
 
+                CommonModel objCommonModel = new CommonModel();
+
                 POInfo inf = POInfo.GetPOInfo(ctx, AD_Table_ID);
                 // Get SQL Query from PO Info for selected table
-                string sqlCol = inf.GetSQLQuery();
+                string sqlCol = objCommonModel.GetSQLQuery(ctx, AD_Table_ID, inf.GetPoInfoColumns());
 
                 // Append where Clause, passed in the parameter
                 string whClause = Util.GetValueOfString(paramValue[2]);
@@ -407,7 +409,7 @@ namespace VIS.Controllers
                     }
                     sqlCol += " ORDER BY " + TableName + ".VERSIONVALIDFROM DESC, " + TableName + ".RecordVersion DESC";
                 }
-                CommonModel objCommonModel = new CommonModel();
+               
                 retJSON = JsonConvert.SerializeObject(objCommonModel.GetIDTextData(ctx, sqlCol));
                 return Json(retJSON, JsonRequestBehavior.AllowGet);
             }
@@ -727,7 +729,7 @@ namespace VIS.Controllers
                     item.M_Product_ID = Util.GetValueOfString(data.Tables[0].Rows[i]["product"]);
                     item.M_AttributeSetInstance_ID = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_attributesetinstance_id"]);
                     //Product search key added
-                    item.M_Product_SearchKey= Util.GetValueOfString(data.Tables[0].Rows[i]["productsearchkey"]); 
+                    item.M_Product_SearchKey = Util.GetValueOfString(data.Tables[0].Rows[i]["productsearchkey"]);
 
                     //
                     if (data.Tables[0].Columns.Contains("C_PaymentTerm_ID"))
@@ -882,7 +884,7 @@ namespace VIS.Controllers
                         item.C_Order_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_orderline_id"]);
                         item.M_InOut_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["m_inoutline_id"]);
                         item.C_Invoice_ID_K = 0;
-                    }                 
+                    }
 
                     item.QuantityPending = item.QuantityEntered;
                     item.C_UOM_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["c_uom_id"]);
@@ -1524,7 +1526,7 @@ namespace VIS.Controllers
                                 " , IsDefault, AD_Theme_ID  FROM AD_Theme WHERE IsActive='Y'";
             DataSet ds = DB.ExecuteDataset(qry);
 
-            if(ds != null && ds.Tables.Count >0)
+            if (ds != null && ds.Tables.Count > 0)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -1537,7 +1539,7 @@ namespace VIS.Controllers
                     obj.IsDefault = Util.GetValueOfString(dr["IsDefault"]);
                     retObj.Add(obj);
                 }
-                
+
             }
             return retObj;
         }
@@ -3444,7 +3446,7 @@ namespace VIS.Controllers
 
             POInfo inf = POInfo.GetPOInfo(ctx, Util.GetValueOfInt(od.TblID.Value));
             // Get SQL Query from PO Info for selected table
-            string sqlCol = inf.GetSQLQuery();
+            string sqlCol = GetSQLQuery(ctx, Util.GetValueOfInt(od.TblID.Value), inf.GetPoInfoColumns());
 
             //DataSet dsRec = DB.ExecuteDataset("SELECT * FROM " + TableName + " WHERE " + sbSQL.ToString() + " AND RecordVersion < " + od["recordversion"].Value + " ORDER BY RecordVersion DESC");
             //DataSet dsRec = DB.ExecuteDataset("SELECT * FROM " + TableName + " WHERE " + sbSQL.ToString() + " AND RecordVersion = " + Util.GetValueOfInt(od["oldversion"].Value));
@@ -3501,6 +3503,70 @@ namespace VIS.Controllers
 
             return data;
         }
+
+        public string GetSQLQuery(Ctx m_ctx, int _AD_Table_ID, POInfoColumn[] m_columns)
+        {
+            StringBuilder _querySQL = new StringBuilder("");
+            if (m_columns.Length > 0)
+            {
+                _querySQL.Append("SELECT ");
+                MTable tbl = new MTable(m_ctx, _AD_Table_ID, null);
+                // append all columns from table and get comma separated string
+                _querySQL.Append(tbl.GetSelectColumns());
+                foreach (var column in m_columns)
+                {
+                    // check if column name length is less than 26, then only add this column in selection column
+                    // else only ID will be displayed
+                    // as limitation in oracle to restrict column name to 30 characters
+                    if ((column.ColumnName.Length + 4) < 30)
+                    {
+                        // for Lookup type of columns
+                        if (DisplayType.IsLookup(column.DisplayType))
+                        {
+                            VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
+                                column.AD_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+                                column.IsParent, column.ValidationCode);
+
+                            if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")
+                            {
+                                if (lookupInfo.queryDirect.Length > 0)
+                                {
+                                    // create columnname as columnname_TXT for lookup type of columns
+                                    lookupInfo.displayColSubQ = " (SELECT MAX(" + lookupInfo.displayColSubQ + ") " + lookupInfo.queryDirect.Substring(lookupInfo.queryDirect.LastIndexOf(" FROM " + lookupInfo.tableName + " "), lookupInfo.queryDirect.Length - (lookupInfo.queryDirect.LastIndexOf(" FROM " + lookupInfo.tableName + " "))) + ") AS " + column.ColumnName + "_TXT";
+
+                                    lookupInfo.displayColSubQ = lookupInfo.displayColSubQ.Replace("@key", tbl.GetTableName() + "." + column.ColumnName);
+                                }
+                                _querySQL.Append(", " + lookupInfo.displayColSubQ);
+                            }
+                        }
+                        // case for Location type of columns
+                        else if (column.DisplayType == DisplayType.Location)
+                        {
+                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_LOC");
+                        }
+                        // case for Locator type of columns
+                        else if (column.DisplayType == DisplayType.Locator)
+                        {
+                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_LTR");
+                        }
+                        // case for Attribute Set Instance & General Attribute columns
+                        else if (column.DisplayType == DisplayType.PAttribute || column.DisplayType == DisplayType.GAttribute)
+                        {
+                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_ASI");
+                        }
+                        // case for Account type of columns
+                        else if (column.DisplayType == DisplayType.Account)
+                        {
+                            _querySQL.Append(", " + column.ColumnName + " AS " + column.ColumnName + "_ACT");
+                        }
+                    }
+                }
+                // Append FROM table name to query
+                _querySQL.Append(" FROM " + tbl.GetTableName());
+            }
+            return _querySQL.ToString();
+        }
+
     }
 
     public class AccountViewClass
@@ -3526,4 +3592,20 @@ namespace VIS.Controllers
         public int C_Invoice_ID_K { get; set; }
 
     }
+
+    public class GetTableLoadVmatch
+    {
+        public int _ID { get; set; }
+        public string DocNo { get; set; }
+        public DateTime Date { get; set; }
+        public int CBPartnerID { get; set; }
+        public string CBPartnerIDK { get; set; }
+        public string Line { get; set; }
+        public string Line_K { get; set; }
+        public int MProductID { get; set; }
+        public string MProductIDK { get; set; }
+        public decimal Qty { get; set; }
+        public string Matched { get; set; }
+    }
+
 }
