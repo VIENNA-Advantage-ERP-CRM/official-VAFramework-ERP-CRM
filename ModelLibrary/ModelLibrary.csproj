@@ -121,7 +121,6 @@
     <Compile Include="Classes\ServerEndPoint.cs" />
     <Compile Include="Classes\SessionEventHandler.cs" />
     <Compile Include="Classes\TableSQL.cs" />
-    <Compile Include="Common\Common.cs" />
     <Compile Include="LoginProcess.cs" />
     <Compile Include="Classes\GetMessage.cs" />
     <Compile Include="ProcessAD\CacheReset.cs" />
@@ -142,6 +141,7 @@
     <Compile Include="ProcessAD\RoleAccessUpdate.cs" />
     <Compile Include="ProcessAD\SchedulerRun.cs" />
     <Compile Include="ProcessAD\SequenceCheck.cs" />
+    <Compile Include="ProcessAD\StateEngine.cs" />
     <Compile Include="ProcessAD\SynchronizeTerminology.cs" />
     <Compile Include="ProcessAD\SystemValidate.cs" />
     <Compile Include="ProcessAD\TabCreateFields.cs" />
@@ -175,10 +175,6 @@
     <Compile Include="Utility\ReplenishInterface.cs" />
     <Compile Include="Utility\Sms.cs" />
     <Compile Include="Utility\ViewUtil.cs" />
-    <Compile Include="WF\DocWorkflowManager.cs" />
-    <Compile Include="WF\DocWorkflowMgr.cs" />
-    <Compile Include="WF\MWFProcess.cs" />
-    <Compile Include="WF\MWorkflow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

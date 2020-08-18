@@ -571,7 +571,7 @@ namespace VIS.Helpers
                             //	LOB
                             else if (field.DisplayType == DisplayType.TextLong)
                             {
-                                PO_LOB lob = new PO_LOB(tableName, columnName,
+                                VAdvantage.Process.PO_LOB lob = new VAdvantage.Process.PO_LOB(tableName, columnName,
                                         null, field.DisplayType, newVal);
                                 LobAdd(lob);
                                 type = "CLOB";
@@ -580,7 +580,7 @@ namespace VIS.Helpers
                             else if (field.DisplayType == DisplayType.Binary
                                     || field.DisplayType == DisplayType.Image)
                             {
-                                PO_LOB lob = new PO_LOB(tableName, columnName,
+                                VAdvantage.Process.PO_LOB lob = new VAdvantage.Process.PO_LOB(tableName, columnName,
                                         null, field.DisplayType, newVal);
                                 LobAdd(lob);
                                 type = "BLOB";

@@ -256,6 +256,7 @@
     <Compile Include="Print\View.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ProcessAD\PO_LOB.cs" />
     <Compile Include="ProcessEngine\MCrystalInstance.cs" />
     <Compile Include="ProcessEngine\MCrystalInstancePara.cs" />
     <Compile Include="ProcessEngine\MPInstance.cs" />
