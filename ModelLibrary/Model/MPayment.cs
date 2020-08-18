@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                 // When Discounting PDC is true, No need to check Check Date with Account Date.
                 if (Env.IsModuleInstalled("VA027_") && IsVA027_DiscountingPDC())
                 {
-                    
+
                 }
                 else
                 {
@@ -930,7 +930,7 @@ namespace VAdvantage.Model
                     }
                 }
                 // when post dated check module is not installed then system check Cheque date can not be greater than Current Date
-                if (Env.IsModuleInstalled("VA027_"))
+                if (Env.IsModuleInstalled("VA027_") && !IsReversal())
                 {
                     // validate when we giving check (Payable)
                     if (string.IsNullOrEmpty(GetPDCType()) && dt1.GetDocBaseType() != "ARR")
@@ -4913,7 +4913,7 @@ namespace VAdvantage.Model
             //	If on Bank Statement, don't void it - reverse it
             if (GetC_BankStatementLine_ID() > 0)
                 return ReverseCorrectIt();
-            
+
             //	Not Processed
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
                 || DOCSTATUS_Invalid.Equals(GetDocStatus())
@@ -5031,17 +5031,16 @@ namespace VAdvantage.Model
 
             //	Auto Reconcile if not on Bank Statement
             Boolean reconciled = false; //	GetC_BankStatementLine_ID() == 0;
-          
-            // if Payment aginst PDC is voided remove reference of payment from chequedetials and set Payment Generated to false on Header
-                if ( Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0 )
-                {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment='N' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
-                    if (count > 0)
-                    {
-                        DB.ExecuteScalar("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL WHERE VA027_PostDatedCheck_ID=  " + GetVA027_PostDatedCheck_ID(), null, Get_Trx());
-                    }
 
+            // if Payment aginst PDC is voided remove reference of payment from chequedetials and set Payment Generated to false on Header
+            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0)
+            {
+                int count = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment ='N', VA027_PaymentGenerated ='N', C_Payment_ID = NULL, VA027_PaymentStatus= 0 WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
+                if (count > 0)
+                {
+                    DB.ExecuteQuery("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL, VA027_PaymentStatus= 0 WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID() + "AND C_Payment_ID= "+GetC_Payment_ID(), null, Get_Trx());
                 }
+            }
             //	Create Reversal
             MPayment reversal = new MPayment(GetCtx(), 0, Get_Trx());
             CopyValues(this, reversal);
@@ -5119,8 +5118,20 @@ namespace VAdvantage.Model
                 reversal.SetTempDocumentNo("");
             }
 
-            reversal.Save(Get_Trx());
-           
+            if (!reversal.Save(Get_Trx()))
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null)
+                {
+                    _processMsg = pp.GetName();
+                    if (String.IsNullOrEmpty(_processMsg))
+                    {
+                        _processMsg = pp.GetValue();
+                    }
+                }
+                return false;
+            }
+
             int invoice_ID = 0;
             if (Env.IsModuleInstalled("VA009_"))
             {
@@ -5209,9 +5220,9 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_None);
             SetProcessed(true);
             //Remove PostdatedCheck Reference
-            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID()>0)
+            if (Env.IsModuleInstalled("VA027_") && GetVA027_PostDatedCheck_ID() > 0)
             {
-               SetVA027_PostDatedCheck_ID(0);
+                SetVA027_PostDatedCheck_ID(0);
             }
 
             // new change when allocation exist for already made payments then it will create allocation 
