@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VAdvantage.Common;
 using VAdvantage.DataBase;
 using VAdvantage.Model;
 using VAdvantage.Utility;
-using VAModelAD.Classes;
+
 using VAModelAD.Model;
 
 namespace VAProduct.Model

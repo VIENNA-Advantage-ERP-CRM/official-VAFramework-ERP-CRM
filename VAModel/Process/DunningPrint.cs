@@ -29,7 +29,7 @@ using System.IO;
 
 using VAdvantage.ProcessEngine;
 using VAdvantage.Login;
-using VAdvantge.Report;
+using VAdvantage.Report;
 
 
 namespace VAdvantage.Process

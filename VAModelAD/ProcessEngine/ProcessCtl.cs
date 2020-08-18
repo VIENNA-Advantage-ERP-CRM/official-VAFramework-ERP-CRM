@@ -848,7 +848,7 @@ namespace VAdvantage.ProcessEngine
                             _pi.SetIsSupportPaging(isSupportPaging);
                             _pi.SetDynamicAction(dynamicAction);
 
-                            re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, assemblyName, cName);
+                            re = VAdvantage.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, assemblyName, cName);
                         }
                     }
                     catch (Exception e)
@@ -866,7 +866,7 @@ namespace VAdvantage.ProcessEngine
                 {
                     _pi.SetIsReportFormat(true);
                     _pi.SetPrintAllPages(false);
-                    re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
+                    re = VAdvantage.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
                     Unlock();
 
                     // "#REPORT_PAGE_SIZE"
@@ -879,14 +879,14 @@ namespace VAdvantage.ProcessEngine
 
                 else if (IsBIReport)
                 {
-                    re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
+                    re = VAdvantage.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
                 }
 
                 else if (IsJasperReport)
                 {
                     _pi.SetIsJasperReport(true);
 
-                    re = VAdvantge.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
+                    re = VAdvantage.Report.ReportEngine.GetReportEngine(_ctx, pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
                 }
                 else if (!IsCrystalReport)
                 {

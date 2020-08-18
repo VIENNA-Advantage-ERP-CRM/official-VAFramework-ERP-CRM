@@ -83,7 +83,7 @@ namespace VAdvantage.Process
             if (column.IsVirtualColumn())
                 return "@IsVirtualColumn@";
             int noColumns = 0;
-            string sql = CommonFunctions.SyncColumn(table, column, out noColumns);
+            string sql = Common.Common.SyncColumn(table, column, out noColumns);
 
             //DatabaseMetaData md = new DatabaseMetaData();
             //String catalog = "";

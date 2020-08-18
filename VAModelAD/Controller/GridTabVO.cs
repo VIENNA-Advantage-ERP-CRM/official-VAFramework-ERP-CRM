@@ -346,14 +346,14 @@ namespace VAdvantage.Controller
                     //	Document Translation
                     vo.TableName = Utility.Util.GetValueOfString(dr["TableName"]);
                     if (!Env.IsBaseTranslation(vo.TableName)	//	C_UOM, ...
-                        && !VAModelAD.Classes.Common.IsMultiLingualDocument(vo.ctx))
+                        && !Common.Common.IsMultiLingualDocument(vo.ctx))
                         showTrl = false;
                     if (!showTrl)
                     {
                         VLogger.Get().Config("TrlTab Not displayed - AD_Tab_ID="
                             + vo.AD_Tab_ID + "=" + vo.Name + ", Table=" + vo.TableName
                             + ", BaseTrl=" + Env.IsBaseTranslation(vo.TableName)
-                            + ", MultiLingual=" + VAModelAD.Classes.Common.IsMultiLingualDocument(vo.ctx));
+                            + ", MultiLingual=" + Common.Common.IsMultiLingualDocument(vo.ctx));
                         return false;
                     }
                 }

@@ -205,7 +205,7 @@ namespace VAdvantage.Utility
         }
 
 
-        internal int GetConstraintTypeDB(string type)
+        public int GetConstraintTypeDB(string type)
         {
             type = type.ToUpper();
             if (type == "CASCADE")

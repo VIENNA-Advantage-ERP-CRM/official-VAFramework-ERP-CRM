@@ -407,14 +407,14 @@ namespace VAdvantage.Print
             //	translate base entry if single language - trigger copies to trl tables
 
             //Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !GlobalVariable.IsBaseLanguage();
-            Boolean trl = !VAModelAD.Classes.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
+            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
                     + "c.AD_Reference_ID,c.IsKey,c.SeqNo "				//	4..6
                     + "FROM AD_Column c, AD_Element_Trl e "
                     + "WHERE c.AD_Column_ID='" + AD_Column_ID + "'"
                     + " AND c.AD_Element_ID=e.AD_Element_ID"
-                    + " AND e.AD_Language='" + VAModelAD.Classes.Common.GetLanguageCode() + "'";
+                    + " AND e.AD_Language='" + Common.Common.GetLanguageCode() + "'";
             IDataReader dr = null;
             try
             {
@@ -499,14 +499,14 @@ namespace VAdvantage.Print
             //	translate base entry if single language - trigger copies to trl tables
 
             //Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !GlobalVariable.IsBaseLanguage();
-            Boolean trl = !VAModelAD.Classes.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
+            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
                     + "c.AD_Reference_ID,c.IsKey,c.SeqNo , f.MRSeqNo,  f.MRIsDisplayed,f.IsDisplayed "				//	4..6
                     + "FROM AD_Column c, AD_Element_Trl e ,AD_Field f"
                     + "WHERE c.AD_Column_ID=" + AD_Column_ID + "  AND f.AD_Field_ID=" + AD_Field_ID + ""
                     + " AND c.AD_Element_ID=e.AD_Element_ID"
-                    + " AND e.AD_Language='" + VAModelAD.Classes.Common.GetLanguageCode() + "'";
+                    + " AND e.AD_Language='" + Common.Common.GetLanguageCode() + "'";
             IDataReader dr = null;
             try
             {

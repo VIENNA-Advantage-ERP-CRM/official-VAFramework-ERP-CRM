@@ -82,6 +82,7 @@
     <Compile Include="DataBase\Trx.cs" />
     <Compile Include="DataBase\VConnection.cs" />
     <Compile Include="DataBase\ViennaDatabase.cs" />
+    <Compile Include="DataBase\ViewUtil.cs" />
     <Compile Include="DBPort\ConvertMap_MSSQL.cs" />
     <Compile Include="DBPort\ConvertMap_MySQL.cs" />
     <Compile Include="DBPort\ConvertMap_PostgreSQL.cs" />

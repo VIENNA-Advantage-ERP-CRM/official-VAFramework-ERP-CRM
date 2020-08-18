@@ -336,7 +336,7 @@ namespace VAdvantage.Model
             //Get lookup display column name for ID 
             if (_poInfo != null && _poInfo.getAD_Table_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
             {
-                VLookUpInfo lookup = VAModelAD.Classes.Common.GetColumnLookupInfo(GetCtx(),_poInfo.GetColumnInfo(index)); //create lookup info for column
+                VLookUpInfo lookup = Common.Common.GetColumnLookupInfo(GetCtx(),_poInfo.GetColumnInfo(index)); //create lookup info for column
                 DataSet ds = DB.ExecuteDataset(lookup.queryDirect.Replace("@key", DB.TO_STRING(value.ToString())), null); //Get Name from data
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)

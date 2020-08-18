@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using VAdvantage.Classes;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.Print;
 using VAdvantage.ProcessEngine;
+using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 
 namespace VAdvantage.Common
@@ -19,8 +21,18 @@ namespace VAdvantage.Common
         static public List<string> lstTableName = null;
         static public bool ISTENATRUNNINGFORERP = false;
         public static string NONBUSINESSDAY = "@DateIsInNonBusinessDay@";
+        public static string Password_Valid_Upto_Key = "PASSWORD_VALID_UPTO";
+        public static string Failed_Login_Count_Key = "FAILED_LOGIN_COUNT";
 
-       
+        public static int GetPassword_Valid_Upto
+        {
+            get { return 3; }
+        }
+        public static int GetFailed_Login_Count
+        {
+            get { return 5; }
+        }
+
         public static void GetAllTable()
         {
 
@@ -236,7 +248,7 @@ namespace VAdvantage.Common
                 {
                     fqClassName = ds.Tables[0].Rows[0]["ClassName"].ToString();
                     asmName = ds.Tables[0].Rows[0]["AssemblyName"].ToString();
-                    rpe = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, asmName, fqClassName);
+                    rpe = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, asmName, fqClassName);
                 }
                 else
                 {
@@ -286,12 +298,12 @@ namespace VAdvantage.Common
                 //If user Choose BI Report...................
                 if ("B".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
                 {
-                    rpe = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
+                    rpe = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
                 }
                 else if ("J".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
                 {
                     //isJasperReport = true;
-                    rpe = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
+                    rpe = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
                 }
                 else
                 {
@@ -747,7 +759,7 @@ namespace VAdvantage.Common
             //Get lookup display column name for ID 
             if (_poInfo != null && _poInfo.getAD_Table_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
             {
-                VLookUpInfo lookup = _poInfo.GetColumnLookupInfo(index); //create lookup info for column
+                VLookUpInfo lookup = Common.GetColumnLookupInfo(po.GetCtx(),_poInfo.GetColumnInfo(index)); //create lookup info for column
                 DataSet ds = DB.ExecuteDataset(lookup.queryDirect.Replace("@key", DB.TO_STRING(value.ToString())), null); //Get Name from data
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -852,6 +864,59 @@ namespace VAdvantage.Common
             return Utility.Util.GetValueOfInt(ExecuteQuery.ExecuteScalar(sqlQuery).ToString());
         }
 
+        public static VLookUpInfo GetColumnLookupInfo(Ctx ctx, POInfoColumn colInfo)
+        {
+            if (colInfo == null)
+                return null;
+            int WindowNo = 0;
+            //  List, Table, TableDir
+            VLookUpInfo lookup = null;
+            try
+            {
+                lookup = VLookUpFactory.GetLookUpInfo(ctx, WindowNo, colInfo.DisplayType, colInfo.AD_Column_ID, Env.GetLanguage(ctx),
+                   colInfo.ColumnName, colInfo.AD_Reference_Value_ID,
+                   colInfo.IsParent, colInfo.ValidationCode);
+            }
+            catch
+            {
+                lookup = null;          //  cannot create Lookup
+            }
+            return lookup;
+        }
+
+        public static Lookup GetColumnLookup(Ctx ctx, POInfoColumn colInfo)
+        {
+            //
+            int WindowNo = 0;
+            //  List, Table, TableDir
+            Lookup lookup = null;
+            try
+            {
+                lookup = VLookUpFactory.Get(ctx, WindowNo, colInfo.AD_Column_ID,
+                    colInfo.DisplayType,
+                    colInfo.ColumnName,
+                    colInfo.AD_Reference_Value_ID,
+                    colInfo.IsParent, colInfo.ValidationCode);
+            }
+            catch
+            {
+                lookup = null;          //  cannot create Lookup
+            }
+            return lookup;
+        }
+
+        public static bool IsMultiLingualDocument(Ctx ctx)
+        {
+            return VAModelAD.Model.MClient.Get((Ctx)ctx).IsMultiLingualDocument();//
+            //MClient.get(ctx).isMultiLingualDocument();
+        }
+
+        internal static string GetLanguageCode()
+        {
+            return "en_US";
+        }
+
+        
 
     }
 

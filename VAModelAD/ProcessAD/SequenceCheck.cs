@@ -20,7 +20,10 @@ using System.Data.SqlClient;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+using VAModelAD.Model;
+
+namespace VAdvantage.Process
 {
     public class SequenceCheck : ProcessEngine.SvrProcess
     {

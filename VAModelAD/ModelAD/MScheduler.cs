@@ -79,7 +79,7 @@ namespace VAdvantage.Model
 
                 //int port=System.Web.HttpContext.Current.Request.Url.Port;
                 //string machineIPPort =machineIP+ ":" + port.ToString();
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql);
+                DataSet ds = DataBase.DB.ExecuteDataset(sql);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
@@ -257,7 +257,7 @@ namespace VAdvantage.Model
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
                 ds = new DataSet();
-                ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param);
+                ds = DataBase.DB.ExecuteDataset(sql, param);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -294,7 +294,7 @@ namespace VAdvantage.Model
             {
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
-                DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql, param);
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -465,7 +465,7 @@ namespace VAdvantage.Model
                 {
                     fqClassName = ds.Tables[0].Rows[0]["ClassName"].ToString();
                     asmName = ds.Tables[0].Rows[0]["AssemblyName"].ToString();
-                    re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, asmName, fqClassName);
+                    re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, asmName, fqClassName);
                 }
                 else
                 {
@@ -491,7 +491,7 @@ namespace VAdvantage.Model
                     pi.IsArabicReportFromOutside = false;
                 }
                 pi.SetPrintAllPages(true);
-                re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
+                re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
             }
 
             else if (m_process.GetIsCrystalReport() == "Y")
@@ -501,7 +501,7 @@ namespace VAdvantage.Model
             }
             else if (m_process.GetIsCrystalReport() == "B")
             {
-                re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VA039", "VA039.Classes.BIReportEngine");
+                re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VA039", "VA039.Classes.BIReportEngine");
 
                 //try
                 //{
@@ -533,7 +533,7 @@ namespace VAdvantage.Model
             }
             else if (m_process.GetIsCrystalReport() == "J")
             {
-                re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VA039", "VA039.Classes.JasperReportEngine");
+                re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VA039", "VA039.Classes.JasperReportEngine");
                 //try
                 //{
                 //    log.Log(Level.INFO, "MWFActivity=>Jasper Report");
