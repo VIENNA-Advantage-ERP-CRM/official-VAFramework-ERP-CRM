@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -73,6 +74,7 @@
     <Compile Include="Classes\IniPreference.cs" />
     <Compile Include="Classes\KeyEdition.cs" />
     <Compile Include="Classes\Query.cs" />
+    <Compile Include="Classes\ServerEndPoint.cs" />
     <Compile Include="Classes\VLookupInfo.cs" />
     <Compile Include="Classes\VTreeNode.cs" />
     <Compile Include="Connected Services\CloudService\Reference.cs">
@@ -117,6 +119,7 @@
     <Compile Include="Login\Language.cs" />
     <Compile Include="Login\LanguageCall.cs" />
     <Compile Include="Login\LanguageProcess.cs" />
+    <Compile Include="Login\LDAP.cs" />
     <Compile Include="ModelAD\GenericPO.cs" />
     <Compile Include="ModelAD\PO.cs" />
     <Compile Include="ModelAD\POInfo.cs" />

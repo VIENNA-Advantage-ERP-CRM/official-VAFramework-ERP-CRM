@@ -752,7 +752,6 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\CalloutColumnController.cs" />
     <Compile Include="Areas\VIS\Controllers\CardViewController.cs" />
     <Compile Include="Areas\VIS\Controllers\Chat\ChatController.cs" />
-    <Compile Include="Areas\VIS\Controllers\CommonController.cs" />
     <Compile Include="Areas\VIS\Controllers\DocActionController.cs" />
     <Compile Include="Areas\VIS\Controllers\EmailController.cs" />
     <Compile Include="Areas\VIS\Controllers\FormController.cs" />
@@ -770,6 +769,7 @@
     <Compile Include="Areas\VIS\Controllers\LocatorController.cs" />
     <Compile Include="Areas\VIS\Controllers\LoginController.cs" />
     <Compile Include="Areas\VIS\Controllers\MarkModuleController.cs" />
+    <Compile Include="Areas\VIS\Controllers\PAttributesController.cs" />
     <Compile Include="Areas\VIS\Controllers\ProductContainerController.cs" />
     <Compile Include="Areas\VIS\Controllers\RecordAccessController.cs" />
     <Compile Include="Areas\VIS\Controllers\ResourceController.cs" />
@@ -786,13 +786,8 @@
     <Compile Include="Areas\VIS\Controllers\WFActivityController.cs" />
     <Compile Include="Areas\VIS\DataContracts\FormData.cs" />
     <Compile Include="Areas\VIS\DataContracts\ProcessData.cs" />
-    <Compile Include="Areas\VIS\DataContracts\SqlParams.cs" />
     <Compile Include="Areas\VIS\DataContracts\ThemeData.cs" />
     <Compile Include="Areas\VIS\DataContracts\WindowData.cs" />
-    <Compile Include="Areas\VIS\DBase\DB.cs" />
-    <Compile Include="Areas\VIS\Filters\AjaxAuthorizeAttribute.cs" />
-    <Compile Include="Areas\VIS\Filters\AjaxSessionFilterAttribute.cs" />
-    <Compile Include="Areas\VIS\Filters\AjaxValidateAntiForgeryTokenAttribute.cs" />
     <Compile Include="Areas\VIS\Helpers\ContextHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\FormHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\HomeHelper.cs" />
@@ -830,7 +825,6 @@
     <Compile Include="Areas\VIS\Models\InfoWindowModel.cs" />
     <Compile Include="Areas\VIS\Models\LocationModel.cs" />
     <Compile Include="Areas\VIS\Models\LocatorModel.cs" />
-    <Compile Include="Areas\VIS\Models\PAttributesModel.cs" />
     <Compile Include="Areas\VIS\Models\ProductContainerModel.cs" />
     <Compile Include="Areas\VIS\Models\RecordAccessModel.cs" />
     <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
@@ -938,9 +932,25 @@
       <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
       <Name>CoreLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
+      <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
+      <Name>ModelLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
       <Project>{de905ae2-56bf-45d5-b083-76050830e58b}</Project>
       <Name>VAModelAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAPrintUtility\VAPrintLib.csproj">
+      <Project>{64b1d750-7031-41a4-80d1-21bd0a88c184}</Project>
+      <Name>VAPrintLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAWorkflow\VAWorkflow.csproj">
+      <Project>{b00fc0d9-1bd7-4d3d-9bff-92b55415d972}</Project>
+      <Name>VAWorkflow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VISModel\VISModel.csproj">
+      <Project>{64a1254e-73bf-4c0c-a4e2-95a558f2ba3c}</Project>
+      <Name>VISModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\XModel\XModel.csproj">
       <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>

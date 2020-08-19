@@ -947,11 +947,7 @@ namespace VIS.Models
         public Decimal Height { get; set; }
     }
 
-    public class MoveKeyVal
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-    }
+  
 
     public class TreeContainer
     {

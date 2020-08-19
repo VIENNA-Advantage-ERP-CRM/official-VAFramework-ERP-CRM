@@ -150,7 +150,7 @@ namespace VIS.Controllers
         /// <param name="_ctx"> application context </param>
         internal void SetLoginContext(Ctx _ctx)
         {
-            VAdvantage.Login.LoginProcess process = new VAdvantage.Login.LoginProcess(_ctx);
+            LoginProcess process = new VAdvantage.Login.LoginProcess(_ctx);
 
             if (VAdvantage.Model.MUser.IsSalesRep(_ctx.GetAD_User_ID()))
                 _ctx.SetContext("#SalesRep_ID", _ctx.GetAD_User_ID());

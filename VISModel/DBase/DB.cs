@@ -16,9 +16,6 @@ namespace VIS.DBase
     public class DB
     {
 
-        private static string connectionString = System.Configuration.ConfigurationManager.AppSettings["oracleConnectionString"];
-
-
         /// <summary>
         /// GetOracle Params by converting Data Contract sql Param
         /// </summary>

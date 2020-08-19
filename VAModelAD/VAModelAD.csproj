@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BundleCollection\ModuleBundles.cs" />
+    <Compile Include="Classes\AEnv.cs" />
     <Compile Include="Classes\Evaluator.cs" />
     <Compile Include="Classes\Obscure.cs" />
     <Compile Include="Classes\Query.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="ModelAD\MModuleTable.cs" />
     <Compile Include="ModelAD\MModuleWindow.cs" />
     <Compile Include="ModelAD\MNote.cs" />
+    <Compile Include="ModelAD\MPreference.cs" />
     <Compile Include="ModelAD\MPrintColor.cs" />
     <Compile Include="ModelAD\MPrintPaper.cs" />
     <Compile Include="ModelAD\MPrivateAccess.cs" />

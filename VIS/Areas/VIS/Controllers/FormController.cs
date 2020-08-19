@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
@@ -285,6 +286,25 @@ namespace VIS.Controllers
             return Json(model.GetValidCombination(accountSchemaElements, Elements, aseList, value, sb), JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region Generate XClasses
+
+        public JsonResult GenerateXClasses(string directory, bool chkStatus, string tableId, string classType)
+        {
+            if (Session["Ctx"] != null)
+            {
+                var ctx = Session["ctx"] as Ctx;
+                StringBuilder sbTextCopy = new StringBuilder();
+                string fileName = string.Empty;
+
+                var msg = VAdvantage.Tool.GenerateModel.StartProcess("ViennaAdvantage.Model", directory, chkStatus, tableId, classType, out sbTextCopy, out fileName);
+                string contant = sbTextCopy.ToString();
+                return Json(new { contant, fileName, msg }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { result = "Error" }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
     }

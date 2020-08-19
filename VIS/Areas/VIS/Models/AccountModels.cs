@@ -173,7 +173,7 @@ namespace VIS.Models
         public static string IsAllowedToLogin(string url)
         {
             string retUrl = "";
-            ModelLibrary.CloudService.ServiceSoapClient cloud = null;
+            BaseLibrary.CloudService.ServiceSoapClient cloud = null;
 
             try
             {

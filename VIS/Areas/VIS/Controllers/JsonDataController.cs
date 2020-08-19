@@ -1040,7 +1040,7 @@ namespace VIS.Controllers
         {
             Ctx ctx = Session["ctx"] as Ctx;
             dynamic od = JsonConvert.DeserializeObject(RowData);
-            CommonModel cm = new CommonModel();
+            FormModel cm = new FormModel(ctx);
             var retRes = cm.GetVerDetails(ctx, od);
             return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
         }
@@ -1051,7 +1051,7 @@ namespace VIS.Controllers
         /// <returns></returns>
         public JsonResult GetThemes()
         {
-            CommonModel cm = new CommonModel();
+            FormModel cm = new FormModel(Session["ctx"] as Ctx);
             var retRes = cm.GetThemes();
             return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
         }

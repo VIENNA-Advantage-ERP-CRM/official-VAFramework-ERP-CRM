@@ -165,9 +165,21 @@
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{f38800cb-fb57-4705-bfc0-123724a5da41}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
       <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
       <Name>ModelLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
+      <Project>{de905ae2-56bf-45d5-b083-76050830e58b}</Project>
+      <Name>VAModelAD</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViennaBase\ViennaBase.csproj">
       <Project>{349c7a2b-fad9-428a-bcd1-7f7262a0419d}</Project>

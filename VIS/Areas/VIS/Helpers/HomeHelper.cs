@@ -1224,7 +1224,7 @@ namespace VIS.Helpers
             }
 
             string retUrl = "";
-            ModelLibrary.CloudService.ServiceSoapClient cloud = null;
+            BaseLibrary.CloudService.ServiceSoapClient cloud = null;
 
             try
             {
