@@ -1827,8 +1827,7 @@ namespace VAdvantage.Model
         public string GetDocumentURI(int AD_Attachment_ID)
         {
             DataSet attRefDs = DB.ExecuteDataset(@"
-SELECT 
---ar.AD_AttachmentLine_ID, ar.AD_AttachmentReference_ID, 
+SELECT  
 ar.AD_AttachmentRef AS DocumentURI
 FROM AD_Attachment att 
 INNER JOIN AD_AttachmentLine al ON att.AD_Attachment_ID = al.AD_Attachment_ID
