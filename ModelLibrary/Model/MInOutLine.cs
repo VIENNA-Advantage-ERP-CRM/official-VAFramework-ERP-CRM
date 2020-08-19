@@ -1022,7 +1022,7 @@ namespace VAdvantage.Model
             // JID_0899: If user do not select Product or Charge on Ship/Receipt Line, it will displayed the message "Please select the Product or charge
             if (GetC_Charge_ID() == 0 && GetM_Product_ID() == 0)
             {
-                log.SaveError("VIS_NOProductOrCharg","");
+                log.SaveError("VIS_NOProductOrCharge","");
                 return false;
             }
             //	Get Line No
