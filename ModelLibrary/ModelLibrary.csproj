@@ -92,6 +92,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Messaging" />
@@ -372,6 +373,7 @@
     <Compile Include="ModelAD\MAssignTarget.cs" />
     <Compile Include="ModelAD\MAttachment.cs" />
     <Compile Include="ModelAD\MAttachmentEntry.cs" />
+    <Compile Include="ModelAD\MAttachmentLine.cs" />
     <Compile Include="ModelAD\MAttachmentNote.cs" />
     <Compile Include="ModelAD\MAttachmentReference.cs" />
     <Compile Include="ModelAD\MCardView.cs" />
@@ -401,6 +403,7 @@
     <Compile Include="ModelAD\MModuleTable.cs" />
     <Compile Include="ModelAD\MTabPanel.cs" />
     <Compile Include="ModelAD\X_AD_AlertRuleCondition.cs" />
+    <Compile Include="ModelAD\X_AD_AttachmentLine.cs" />
     <Compile Include="ModelAD\X_AD_AttachmentReference.cs" />
     <Compile Include="ModelAD\X_AD_CardView.cs" />
     <Compile Include="ModelAD\X_AD_CardView_Column.cs" />
