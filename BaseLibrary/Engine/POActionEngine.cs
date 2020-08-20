@@ -35,7 +35,7 @@ namespace BaseLibrary.Engine
         private static POActionEngine _engine = null;
 
         private static POAction _action = null;
-        private const string CLASS = "VAdvantage.Model.POValidator";
+        private const string CLASS = "VAModelAD.Model.POValidator";
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(POActionEngine).FullName);
 
@@ -47,7 +47,7 @@ namespace BaseLibrary.Engine
                 //Loaq lib 
                 _action = (POAction)Activator.CreateInstance("VAModelAD",CLASS);
             }
-            catch
+            catch(Exception ex)
             {
                 s_log.Severe("PO Action Class not found or initlized");
             }

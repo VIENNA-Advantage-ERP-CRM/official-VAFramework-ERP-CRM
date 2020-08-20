@@ -11,7 +11,7 @@ using VAdvantage.Utility;
 
 using VAModelAD.Model;
 
-namespace VAProduct.Model
+namespace VAModelAD.Model
 {
     public class POValidator : POAction
     {
