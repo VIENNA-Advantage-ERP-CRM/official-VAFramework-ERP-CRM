@@ -256,7 +256,7 @@ public static void AddRestricts(int table_id, string table_name)
                         if (no > 0)
                         {
                             retList.Add(casItem.Value + " " + prnts.Value + " (" + AD_Table_ID + "/" + Record_ID + ") #" + no);
-                            log.Config(casItem.Value] + " " + prnts.Value + " (" + AD_Table_ID + "/" + Record_ID + ") #" + no);
+                            log.Config(casItem.Value + " " + prnts.Value + " (" + AD_Table_ID + "/" + Record_ID + ") #" + no);
                         }
                         else if (no < 0)
                         {
