@@ -34,7 +34,7 @@ namespace VIS.Helpers
 
         private List<String> _createSqlColumn = new List<String>();
         private List<String> _createSqlValue = new List<String>();
-        List<VAdvantage.Process.PO_LOB> _lobInfo = null;
+        List<VAdvantage.Model.PO_LOB> _lobInfo = null;
         string key;
 
         //format record info
@@ -571,7 +571,7 @@ namespace VIS.Helpers
                             //	LOB
                             else if (field.DisplayType == DisplayType.TextLong)
                             {
-                                VAdvantage.Process.PO_LOB lob = new VAdvantage.Process.PO_LOB(tableName, columnName,
+                                VAdvantage.Model.PO_LOB lob = new VAdvantage.Model.PO_LOB(tableName, columnName,
                                         null, field.DisplayType, newVal);
                                 LobAdd(lob);
                                 type = "CLOB";
@@ -580,7 +580,7 @@ namespace VIS.Helpers
                             else if (field.DisplayType == DisplayType.Binary
                                     || field.DisplayType == DisplayType.Image)
                             {
-                                VAdvantage.Process.PO_LOB lob = new VAdvantage.Process.PO_LOB(tableName, columnName,
+                                VAdvantage.Model.PO_LOB lob = new VAdvantage.Model.PO_LOB(tableName, columnName,
                                         null, field.DisplayType, newVal);
                                 LobAdd(lob);
                                 type = "BLOB";
@@ -1711,11 +1711,11 @@ namespace VIS.Helpers
             _createSqlValue = new List<String>();
         }	//	createUpdateSqlReset
 
-        private void LobAdd(VAdvantage.Process.PO_LOB lob)
+        private void LobAdd(VAdvantage.Model.PO_LOB lob)
         {
             //		log.fine("LOB=" + lob);
             if (_lobInfo == null)
-                _lobInfo = new List<VAdvantage.Process.PO_LOB>();
+                _lobInfo = new List<VAdvantage.Model.PO_LOB>();
             _lobInfo.Add(lob);
         }	//
 
@@ -1725,7 +1725,7 @@ namespace VIS.Helpers
                 return;
             for (int i = 0; i < _lobInfo.Count; i++)
             {
-                VAdvantage.Process.PO_LOB lob = (VAdvantage.Process.PO_LOB)_lobInfo[i];
+                VAdvantage.Model.PO_LOB lob = (VAdvantage.Model.PO_LOB)_lobInfo[i];
                 lob.Save(whereClause, null);		//	no trx
             }	//	for all LOBs
             LobReset();

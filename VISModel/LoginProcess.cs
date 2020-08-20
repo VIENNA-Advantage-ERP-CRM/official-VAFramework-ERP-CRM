@@ -41,7 +41,7 @@ namespace VAdvantage.Login
         private KeyNamePair m_org = null;
         /** Web Store Login		*/
         //private X_W_Store m_store = null;
-        private object m_store = null;
+        private X_W_Store m_store = null;
 
 
 

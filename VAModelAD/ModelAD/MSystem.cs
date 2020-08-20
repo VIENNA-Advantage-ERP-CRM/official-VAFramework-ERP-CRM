@@ -7,12 +7,21 @@
  * Raghunandan      18-Jan-2010
   ******************************************************/
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using VAdvantage.Classes;
+using VAdvantage.Common;
+using VAdvantage.Process;
+using System.Windows.Forms;
+using VAdvantage.Model;
 using VAdvantage.DataBase;
+using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.Logging;
+using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
@@ -39,7 +48,7 @@ namespace VAdvantage.Model
                 IDataReader idr = null;
                 try
                 {
-                    idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                    idr = DataBase.DB.ExecuteReader(sql, null, null);
                     if (idr.Read())
                     {
                         _system = new MSystem(ctx, idr, null);
@@ -54,7 +63,7 @@ namespace VAdvantage.Model
                         idr = null;
                     }
                     //String info = "No System - " + DataBase.getDatabaseInfo() + " - " + ex.getLocalizedMessage();
-                    String info = "No System - " + CoreLibrary.DataBase.DB.GetConnection().ToString() + " - " + ex.Message;
+                    String info = "No System - " + DataBase.DB.GetConnection().ToString() + " - " + ex.Message;
                     //System.err.println(info);
                 }
                 cache.Add(101, _system);
@@ -132,12 +141,12 @@ namespace VAdvantage.Model
         /// <param name="userName">user name</param>
         /// <param name="password">password</param>
         /// <returns>true if ldap authenticated</returns>
-        //public bool IsLDAP(String userName, String password,out string output)
-        //{
-        //    output = "";
-        //    return LDAP.Validate(GetLDAPHost(), GetLDAPDomain(), userName, password, GetLDAPAdminUser(), GetLDAPAdminPwd(),out output);
-        //    //return false;
-        //}
+        public bool IsLDAP(String userName, String password, out string output)
+        {
+            output = "";
+            return LDAP.Validate(GetLDAPHost(), GetLDAPDomain(), userName, password, GetLDAPAdminUser(), GetLDAPAdminPwd(), out output);
+            //return false;
+        }
 
         /// <summary>
         /// Get DB Address
@@ -150,7 +159,7 @@ namespace VAdvantage.Model
             if (actual || s == null || s.Length == 0)
             {
                 //CConnection cc = CConnection.get();
-                IDbConnection cc = CoreLibrary.DataBase.DB.GetConnection();
+                IDbConnection cc = DataBase.DB.GetConnection();
                 //s = cc.getConnectionURL() + "#" + cc.getDbUid();
                 s = cc.ConnectionString;
                 s = s.ToLower();
@@ -168,7 +177,7 @@ namespace VAdvantage.Model
             String s = base.GetStatisticsInfo();
             if (s == null || recalc)
             {
-                String count = CoreLibrary.DataBase.DB.TO_CHAR("COUNT(*)", DisplayType.Number, Env.GetAD_Language(GetCtx()));
+                String count = DataBase.DB.TO_CHAR("COUNT(*)", DisplayType.Number, Env.GetAD_Language(GetCtx()));
                 String sql = "SELECT 'C'||(SELECT " + count + " FROM AD_Client)"
                     + " ||'U'||(SELECT " + count + " FROM AD_User)"
                     + " ||'B'||(SELECT " + count + " FROM C_BPartner)"
@@ -183,7 +192,7 @@ namespace VAdvantage.Model
                 IDataReader idr = null;
                 try
                 {
-                    idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                    idr = DataBase.DB.ExecuteReader(sql, null, null);
                     if (idr.Read())
                     {
                         s = Utility.Util.GetValueOfString(idr[0]);//.getString(1);
@@ -220,7 +229,7 @@ namespace VAdvantage.Model
                 StringBuilder sb = new StringBuilder();
                 try
                 {
-                    idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                    idr = DataBase.DB.ExecuteReader(sql, null, null);
                     while (idr.Read())
                     {
                         sb.Append(idr.GetString(0)).Append('|');
@@ -456,7 +465,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 if (idr.Read())
                 {
                     int internalUsers = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
@@ -600,7 +609,7 @@ namespace VAdvantage.Model
             log.Fine(sql.ToString());
 
             // Send to database
-            int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql.ToString(), null, null);
+            int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, null);
             return no == 1;
         }
 

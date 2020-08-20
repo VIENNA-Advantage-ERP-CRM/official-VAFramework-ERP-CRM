@@ -916,8 +916,6 @@ namespace VAdvantage.Common
             return "en_US";
         }
 
-        
-
     }
 
 }

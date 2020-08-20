@@ -165,17 +165,53 @@
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj">
+      <Project>{f38800cb-fb57-4705-bfc0-123724a5da41}</Project>
+      <Name>BaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
+      <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
+      <Name>CoreLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
       <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
       <Name>ModelLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAModelAD\VAModelAD.csproj">
+      <Project>{de905ae2-56bf-45d5-b083-76050830e58b}</Project>
+      <Name>VAModelAD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAPrintUtility\VAPrintLib.csproj">
+      <Project>{64b1d750-7031-41a4-80d1-21bd0a88c184}</Project>
+      <Name>VAPrintLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VASModel\VASModel.csproj">
+      <Project>{60b12ba6-6ec4-47c7-8a2c-9b61746de7c6}</Project>
+      <Name>VASModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAS\VAS.csproj">
+      <Project>{2346dd41-ed74-4d87-a2ad-b736e7b78c9c}</Project>
+      <Name>VAS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VAWorkflow\VAWorkflow.csproj">
+      <Project>{b00fc0d9-1bd7-4d3d-9bff-92b55415d972}</Project>
+      <Name>VAWorkflow</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViennaBase\ViennaBase.csproj">
       <Project>{349c7a2b-fad9-428a-bcd1-7f7262a0419d}</Project>
       <Name>ViennaBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VISModel\VISModel.csproj">
+      <Project>{64a1254e-73bf-4c0c-a4e2-95a558f2ba3c}</Project>
+      <Name>VISModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VIS\VIS.csproj">
       <Project>{c9421e8f-f38e-417a-96c5-90e1ba817465}</Project>
       <Name>VIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XModel\XModel.csproj">
+      <Project>{383d4e75-f51a-4546-8ee2-1bf2bf57f32a}</Project>
+      <Name>XModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

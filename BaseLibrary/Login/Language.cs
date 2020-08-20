@@ -242,9 +242,9 @@ namespace VAdvantage.Login
             return _loginLanguage;
         }
 
-        public static List<ValueNamePair> GetLanguages()
+        public static List<ValueNamePair> GetLanguages(DataTable dt)
         {
-           // FillLanguage();
+            FillLanguage(dt);
             return langList;
         }
 

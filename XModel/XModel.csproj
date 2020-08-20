@@ -137,6 +137,7 @@
     <Compile Include="ModelAD\X_AD_PInstance_Log.cs" />
     <Compile Include="ModelAD\X_AD_PInstance_Para.cs" />
     <Compile Include="ModelAD\X_AD_PInstance_Result.cs" />
+    <Compile Include="ModelAD\X_AD_Preference.cs" />
     <Compile Include="ModelAD\X_AD_PrintColor.cs" />
     <Compile Include="ModelAD\X_AD_PrintFont.cs" />
     <Compile Include="ModelAD\X_AD_PrintForm.cs" />
