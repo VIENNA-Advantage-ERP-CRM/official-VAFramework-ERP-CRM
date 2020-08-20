@@ -438,7 +438,7 @@ namespace VAdvantage.Model
             IDataReader dr = null;
             try
             {
-                dr = CoreLibrary.DataBase.DB.ExecuteReader(sql.ToString(), null, trxName);
+                dr = DataBase.DB.ExecuteReader(sql.ToString(), null, trxName);
                 dt = new DataTable();
                 dt.Load(dr);
                 dr.Close();

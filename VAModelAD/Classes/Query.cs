@@ -16,6 +16,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Logging;
 using VAdvantage.Login;
+using System.Reflection;
 
 namespace VAdvantage.Classes
 {
@@ -440,38 +441,16 @@ namespace VAdvantage.Classes
             return query;
         }
 
+
+        private static MethodInfo _fnRreportTree = null;
+        private static  void GetMethod()
+        {
+
+        }
+
         internal static string GetTreeWhereClause(Ctx _ctx,string columnName, int _PA_Hierarchy_ID, int value)
         {
-            string result1 = "";
-            //if (columnName.Equals("AD_Org_ID", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_Organization, Convert.ToInt32(value));
-            //}
-            //else if (columnName.Equals("C_BPartner_ID", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_BPartner, Convert.ToInt32(value));
-            //}
-            //else if (columnName.Equals("M_Product_ID", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_Product, Convert.ToInt32(value));
-            //}
-            //else if (columnName.Equals("C_Project_ID", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_Project, Convert.ToInt32(value));
-            //}
-            //else if (columnName.Equals("AD_OrgTrx_ID", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx, Convert.ToInt32(value));
-            //}
-            //else if (columnName.Equals("Account_ID", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_Account, Convert.ToInt32(value));
-            //}
-            //else if (columnName.Equals("C_Campaign_ID", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_Campaign, Convert.ToInt32(value));
-            // }
-            return result1;
+            return VAModelAD.Reflection.GetTypes.GetTreeWhereClause(_ctx, columnName, _PA_Hierarchy_ID, value);
         }
 
         /// <summary>
