@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BundleCollection\ModuleBundles.cs" />
+    <Compile Include="Classes\AEnv.cs" />
     <Compile Include="Classes\Evaluator.cs" />
     <Compile Include="Classes\LDAP.cs" />
     <Compile Include="Classes\Obscure.cs" />
