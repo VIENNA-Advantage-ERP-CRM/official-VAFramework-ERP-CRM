@@ -1020,8 +1020,8 @@ namespace VAdvantage.Model
                     if (ColID > 0)
                     {
                         MColumn column = new MColumn(GetCtx(), ColID, Get_Trx());
-                       // MasterVersions mv = new MasterVersions();
-                      //  string versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
+                        MasterVersions mv = new MasterVersions();
+                        string versionMsg = mv.CreateVersionInfo(column.GetAD_Column_ID(), column.GetAD_Table_ID(), Get_Trx());
                     }
                 }
             }

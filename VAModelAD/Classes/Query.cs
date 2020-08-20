@@ -470,7 +470,7 @@ namespace VAdvantage.Classes
             //else if (columnName.Equals("C_Campaign_ID", StringComparison.OrdinalIgnoreCase))
             //{
             //    result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, X_C_AcctSchema_Element.ELEMENTTYPE_Campaign, Convert.ToInt32(value));
-           // }
+            // }
             return result1;
         }
 

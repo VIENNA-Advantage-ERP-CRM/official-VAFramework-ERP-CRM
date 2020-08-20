@@ -45,7 +45,7 @@ namespace BaseLibrary.Engine
             {
                 //Libraray name
                 //Loaq lib 
-                _action = (POAction)Activator.GetObject(typeof(POAction), CLASS);
+                _action = (POAction)Activator.CreateInstance("VAModelAD",CLASS);
             }
             catch
             {

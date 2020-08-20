@@ -16,6 +16,33 @@ namespace VAProduct.Model
     public class POValidator : POAction
     {
 
+        private void RegisterPORecordList()
+        {
+            PORecord.AddParent(X_C_Order.Table_ID, X_C_Order.Table_Name);
+            PORecord.AddParent(X_CM_Container.Table_ID, X_CM_Container.Table_Name);
+
+            //parent child7
+            PORecord.AddParentChild(X_C_OrderLine.Table_ID, X_C_OrderLine.Table_Name);
+            PORecord.AddParentChild(X_CM_Container_Element.Table_ID, X_CM_Container_Element.Table_Name);
+
+            //cascade
+            PORecord.AddCascade(X_AD_Attachment.Table_ID, X_AD_Attachment.Table_Name);
+            PORecord.AddCascade(X_AD_Archive.Table_ID, X_AD_Archive.Table_Name);
+            PORecord.AddCascade(X_AD_Note.Table_ID, X_AD_Note.Table_Name);
+            PORecord.AddCascade(X_MailAttachment1.Table_ID, X_MailAttachment1.Table_Name);
+            PORecord.AddCascade(X_AppointmentsInfo.Table_ID, X_AppointmentsInfo.Table_Name);
+            PORecord.AddCascade(X_K_Index.Table_ID, X_K_Index.Table_Name);
+
+            //Restricts
+            PORecord.AddRestricts(X_CM_Chat.Table_ID, X_CM_Chat.Table_Name);
+            PORecord.AddRestricts(X_R_Request.Table_ID, X_R_Request.Table_Name);
+        }
+
+        public POValidator()
+        {
+            RegisterPORecordList();
+        }
+
         /// <summary>
         ///Insert id data into Tree
         /// </summary>
@@ -241,6 +268,11 @@ namespace VAProduct.Model
         {
             if (success)
                 DeleteTreeNode(po);
+
+            if(po.Get_Table_ID() == X_AD_Attachment.Table_ID)
+            {
+                MAttachment.DeleteFileData(po.Get_Table_ID().ToString() + "_" + po.Get_ID().ToString());
+            }
             return success;
         }
 
