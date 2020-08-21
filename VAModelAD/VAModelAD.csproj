@@ -323,6 +323,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reflection\GetTypes.cs" />
     <Compile Include="Report\ReportFormatEngine.cs" />
     <Compile Include="Utility\CleanUp.cs" />
     <Compile Include="Utility\EMail.cs" />
