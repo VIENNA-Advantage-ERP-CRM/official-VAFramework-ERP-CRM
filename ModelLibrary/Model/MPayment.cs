@@ -2632,7 +2632,7 @@ namespace VAdvantage.Model
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
-                IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
+                IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT, GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -3373,7 +3373,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateTrx());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -5026,7 +5026,7 @@ namespace VAdvantage.Model
             //	Std Period open?
             DateTime? dateAcct = GetDateAcct();
             if (!MPeriod.IsOpen(GetCtx(), dateAcct,
-                IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT))
+                IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT, GetAD_Org_ID()))
                 dateAcct = DateTime.Now;
 
             //	Auto Reconcile if not on Bank Statement

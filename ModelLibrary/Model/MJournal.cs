@@ -839,7 +839,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -1034,7 +1034,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                     SetDateAcct(GetDateDoc());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
