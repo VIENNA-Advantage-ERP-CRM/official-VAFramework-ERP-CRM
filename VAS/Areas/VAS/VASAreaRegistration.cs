@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 
-namespace VAS.Areas.VAS
+namespace VAS
 {
     public class VASAreaRegistration : AreaRegistration 
     {
@@ -21,13 +21,9 @@ namespace VAS.Areas.VAS
                 new { action = "Index", id = UrlParameter.Optional }
             );
 
-            StyleBundle style = new StyleBundle("~/Areas/VIS/Content/VISstyle");
-            //StyleBundle styleRTL = new StyleBundle("~/Areas/VIS/Content/VISstyleRTL");
+            StyleBundle style = new StyleBundle("~/Areas/VAS/Content/VASstyle");
 
-            ScriptBundle modScript = new ScriptBundle("~/Areas/VAS/Scripts/VISjs");
-
-
-
+            ScriptBundle modScript = new ScriptBundle("~/Areas/VAS/Scripts/VASjs");
 
             modScript.Include(
                 "~/Areas/VAS/Scripts/app/forms/vcreatefrom.js",
