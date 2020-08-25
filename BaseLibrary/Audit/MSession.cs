@@ -14,8 +14,8 @@ namespace VAdvantage.Model
     public class MSession : X_AD_Session
     {
         //Sessions			
-        private static CCache<int, MSession> s_sessions = new CCache<int, MSession>("AD_Session_ID", 30);	//	no
-        	/**	Logger	*/
+        private static CCache<int, MSession> s_sessions = new CCache<int, MSession>("AD_Session_ID", 30);   //	no
+                                                                                                            /**	Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MSession).FullName);
 
         //	get
@@ -24,7 +24,7 @@ namespace VAdvantage.Model
             ? new CCache<int, MSession>("AD_Session_ID", 1, 0)		//	one client session 
             : new CCache<int, MSession>("AD_Session_ID", 30, 0);    //	no time-out	
 
-        private static CCache<int, bool> roleChangeLog = new CCache<int, bool>("AD_Session_RoleLog",10,0);
+        private static CCache<int, bool> roleChangeLog = new CCache<int, bool>("AD_Session_RoleLog", 10, 0);
 
         /* Do-not use CCache class :: cacahe list get clear at time cache reset process*/
         //private static Dictionary<int, MSession> cache = new Dictionary<int, MSession>(10);
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             if (AD_Session_ID > 0)
                 session = cache[AD_Session_ID];
 
-            if (session == null && AD_Session_ID >0)
+            if (session == null && AD_Session_ID > 0)
             {
                 // check from DB
                 session = new MSession(ctx, AD_Session_ID, null);
@@ -81,7 +81,7 @@ namespace VAdvantage.Model
             if (session != null && session.IsProcessed())
             {
                 s_log.Log(Level.WARNING, "Session Processed=" + session);
-               
+
                 cache.Remove(AD_Session_ID);
                 session = null;
             }
@@ -99,12 +99,12 @@ namespace VAdvantage.Model
                 ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
                 cache.Add(AD_Session_ID, session);
             }
-           
+
             if (session == null)
             {
                 s_log.Fine("No Session");
             }
-           
+
             return session;
 
 
@@ -171,9 +171,9 @@ namespace VAdvantage.Model
                     s_log.Warning("No Session!");
             }
             return session;
-        }	//	get
+        }   //	get
 
-        
+
 
         /// <summary>
         /// 	 * 	Standard Constructor
@@ -268,7 +268,7 @@ namespace VAdvantage.Model
                 //InetAddress lh = InetAddress.getLocalHost();
                 SetAD_Role_ID(ctx.GetAD_Role_ID());
 
-               
+
 
 
             }
@@ -307,11 +307,11 @@ namespace VAdvantage.Model
             int AD_Role_ID = ctx.GetAD_Role_ID();
             bool isChangeLog = false;
             if (roleChangeLog.ContainsKey(AD_Role_ID))
-                isChangeLog =  roleChangeLog[AD_Role_ID];
+                isChangeLog = roleChangeLog[AD_Role_ID];
             else
             {
                 isChangeLog = Utility.Util.GetValueOfBool(
-                    DB.ExecuteScalar("SELECT IsChangeLog FROM AD_Role WHERE AD_Role_ID = " + AD_Role_ID));
+                    DB.ExecuteScalar("SELECT IsChangeLog FROM AD_Role WHERE AD_Role_ID = " + AD_Role_ID) == "Y");
                 roleChangeLog[AD_Role_ID] = isChangeLog;
             }
             return isChangeLog;
@@ -351,12 +351,12 @@ namespace VAdvantage.Model
                 return null;
 
             //	Role Logging
-           // MRole role = MRole.GetDefault(GetCtx(), false);
+            // MRole role = MRole.GetDefault(GetCtx(), false);
             //	Do we need to log
             if (_webStoreSession						//	log if WebStore
                 || MChangeLog.IsLogged(AD_Table_ID, type)		//	im/explicit log
-                || ( IsRoleChangeLog(GetCtx())))//	Role Logging
-            { ;}
+                || (IsRoleChangeLog(GetCtx())))//	Role Logging
+            {; }
             else
             {
                 return null;
@@ -533,7 +533,7 @@ namespace VAdvantage.Model
 
             return Get(ctx, false, "");
 
-           
+
         }
 
         /// <summary>

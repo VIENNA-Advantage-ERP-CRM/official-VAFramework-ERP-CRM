@@ -55,6 +55,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -113,6 +114,11 @@
     <Compile Include="Model\ValueNamePair.cs" />
     <Compile Include="Print\HashMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SqlExec\ExecuteQuery.cs" />
     <Compile Include="SqlExec\MySqlHelper.cs" />
     <Compile Include="SqlExec\OracleHelper.cs" />
@@ -128,6 +134,21 @@
     <Compile Include="Utility\TimeUtil.cs" />
     <Compile Include="Utility\Umlout.cs" />
     <Compile Include="Utility\Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tick1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\vienna.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

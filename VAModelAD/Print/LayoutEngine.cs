@@ -124,9 +124,10 @@ namespace VAdvantage.Print
         public static java.awt.Dimension IMAGE_SIZE = new java.awt.Dimension(10, 10);
 
         /** True Image				*/
-        public static Image IMAGE_TRUE = VAModelAD.Properties.Resources.tick1;
+        public static Image IMAGE_TRUE = CoreLibrary.Properties.Resources.tick1;
+
         /** False Image				*/
-        public static Image IMAGE_FALSE = VAModelAD.Properties.Resources.cross;
+        public static Image IMAGE_FALSE = CoreLibrary.Properties.Resources.cross;
 
         /*************************************************************************/
 
@@ -510,7 +511,7 @@ namespace VAdvantage.Print
                                 element = ImageElement.Get(item.Get_ID());
                             else
                             {
-                                element = ImageElement.Get(VAModelAD.Properties.Resources.vienna);
+                                element = ImageElement.Get(CoreLibrary.Properties.Resources.vienna);
                                 element.Layout(maxWidth, item.GetMaxHeight(), false, alignment);
                             }
                         }
@@ -530,12 +531,12 @@ namespace VAdvantage.Print
                                 /////////////////
                                 else
                                 {
-                                    element = ImageElement.Get(VAModelAD.Properties.Resources.vienna);
+                                    element = ImageElement.Get(CoreLibrary.Properties.Resources.vienna);
                                 }
                             }
                             else
                             {
-                                element = ImageElement.Get(VAModelAD.Properties.Resources.vienna);
+                                element = ImageElement.Get(CoreLibrary.Properties.Resources.vienna);
                             }
                             element.Layout(maxWidth, item.GetMaxHeight(), false, alignment);
 
@@ -1246,8 +1247,8 @@ namespace VAdvantage.Print
             //}
 
 
-            //PrintElement element = new ImageElement(VAdvantage.DataBase.DB.GetImageLogoSmall(true), "Vienna Small Log");	//	48x15
-            PrintElement element = new ImageElement(new Bitmap(""), "Vienna Small Log");	//	48x15
+            PrintElement element = new ImageElement(CoreLibrary.DataBase.DB.GetImageLogoSmall(true), "Vienna Small Log");	//	48x15
+            //PrintElement element = new ImageElement(new Bitmap(""), "Vienna Small Log");	//	48x15
             //PrintElement element = new ImageElement(img, "Vienna Small Log");	//	48x15
             //element = new ImageElement(org.Vienna.Vienna.getImageLogo());	//	100x30
             element.Layout(48, 15, false, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);

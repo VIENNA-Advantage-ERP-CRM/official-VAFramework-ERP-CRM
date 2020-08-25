@@ -25,9 +25,7 @@ namespace BaseLibrary.Engine
         dynamic GetAttachment(Ctx ctx, int aD_Table_ID, int id);
         dynamic CreateAttachment(Ctx ctx, int aD_Table_ID, int id, Trx trx);
     }
-
-
-
+     
     public class POActionEngine : POAction
     {
 
@@ -45,7 +43,7 @@ namespace BaseLibrary.Engine
             {
                 //Libraray name
                 //Loaq lib 
-                _action = (POAction)Activator.CreateInstance("VAModelAD",CLASS);
+                _action = (POAction)Activator.CreateInstance("VAModelAD",CLASS).Unwrap();
             }
             catch(Exception ex)
             {

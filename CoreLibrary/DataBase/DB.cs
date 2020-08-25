@@ -19,6 +19,7 @@ using MySql.Data.MySqlClient;
 using VAdvantage.Logging;
 using Npgsql;
 using VAdvantage.Classes;
+using System.Drawing;
 
 namespace CoreLibrary.DataBase
 {
@@ -1215,7 +1216,7 @@ namespace CoreLibrary.DataBase
         static public String COPYRIGHT = "\u00A9 1999-2009 Vienna \u00AE";
 
         //static private Image s_image16;
-       // static private Image s_image48x15;
+        // static private Image s_image48x15;
         //static private Image s_imageLogo;
 
         /** 16*16 Product Image.
@@ -1234,17 +1235,17 @@ namespace CoreLibrary.DataBase
         // static private String s_fileHR = "Images\\vienna.png";
         /** Removing/modifying the Vienna logo is a violation of the license	*/
         // static private String s_fileHRJPG = "Images\\vienna.jpg";
+        static private Image s_image48x15;
+        public static Image GetImageLogoSmall(bool hr)
+        {
+            if (s_image48x15 == null)
+            {
+                s_image48x15 = CoreLibrary.Properties.Resources.vienna;
+            }
 
-        //public static Image GetImageLogoSmall(bool hr)
-        //{
-        //    if (s_image48x15 == null)
-        //    {
-        //        s_image48x15 = ModelLibrary.Properties.Resources.vienna;
-        //    }
+            return s_image48x15;
 
-        //    return s_image48x15;
-
-        //}
+        }
 
 
 

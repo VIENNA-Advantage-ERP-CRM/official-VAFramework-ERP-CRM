@@ -60,14 +60,14 @@ namespace VAdvantage.ProcessEngine
             //	Run locally
             if (!started)
             {
-                //MWorkflow WF = new MWorkflow(_ctx, AD_Workflow_ID, null);
-                //MWFProcess wfProcess = null;
-                //if (_pi.IsBatch())
-                //    wfProcess = WF.Start(_pi);		//	may return null
-                //else
-                //    wfProcess = WF.StartWait(_pi);	//	may return null
+                MWorkflow WF = new MWorkflow(_ctx, AD_Workflow_ID, null);
+                MWFProcess wfProcess = null;
+                if (_pi.IsBatch())
+                    wfProcess = WF.Start(_pi);		//	may return null
+                else
+                    wfProcess = WF.StartWait(_pi);	//	may return null
 
-                //started = wfProcess != null;
+                started = wfProcess != null;
             }
 
             return started;
