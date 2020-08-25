@@ -82,6 +82,7 @@
     <Compile Include="Classes\AEnv.cs" />
     <Compile Include="Classes\Evaluator.cs" />
     <Compile Include="Classes\LDAP.cs" />
+    <Compile Include="Classes\ModelFactory.cs" />
     <Compile Include="Classes\Obscure.cs" />
     <Compile Include="Classes\Query.cs" />
     <Compile Include="Classes\SessionEventHandler.cs" />

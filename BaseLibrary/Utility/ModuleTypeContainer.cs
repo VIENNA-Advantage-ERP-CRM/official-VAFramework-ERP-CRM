@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/********************************************************
+ * Module Name    : Vienna Framework
+ * Purpose        : Load Module Class/Type
+ * Author         : Harwinder Singh
+ * Date           : 03-Nov-2009
+ ******************************************************/
+using System;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
-using VAdvantage.Utility;
 
 namespace VAdvantage.Utility
 {
@@ -48,7 +49,6 @@ namespace VAdvantage.Utility
 
             //End ViennaAdvanatage
 
-
             //step 2 Module 
             if (type == null && !ignoreModuleAsemblies)
             {
@@ -75,20 +75,23 @@ namespace VAdvantage.Utility
             //step 3
             if (type == null)
             {
-                type = Type.GetType(fqClassame);
+                type= Env.GetTypeFromPackage(fqClassame);
             }
             else
             {
-
-                //customozation
+                //customization
             }
-
             return type;
-
         }
         #endregion
     }
 
+    /********************************************************
+ * Module Name    : Vienna Frameowrk
+ * Purpose        : Load and cache class type 
+ * Chronological Development
+ * Harwinder     19-Aug-2020
+ ******************************************************/
     public class ClassTypeContainer
     {
 
@@ -101,18 +104,13 @@ namespace VAdvantage.Utility
         static VAdvantage.Classes.CCache<String, Type> _typeAssembles = new Classes.CCache<string, Type>("CISClassTypeAssembliesCache", 0);
 
 
-        #region Get TypeAt RunTime
         /// <summary>
-        /// Get class type object from assemblies 
-        /// <para>look in ViennaAdvantage</para>
-        /// <para> look in Modules (if has matching prefix)</para>
-        /// <para>look in base Assembly</para>
-        /// </summary>
-        /// <param name="asmName">Name of assembly</param>
-        /// <param name="fullyQlfiedclassame">fully qalified Class name (eg ViennaAdvantage.Aforms.TestForm)</param>
-        /// <param name="name">name of type( often has module prefix)</param>
-        /// <returns>class type else null </returns>
-        /// 
+        ///  Get TypeAt RunTime
+        /// <summary>
+        /// <param name="fqClassame">fully qualified class name</param>
+        /// <param name="asmName">Assembly name</param>
+        /// <param name="useCache">use cache default is true</param>
+        /// <returns>class type</returns>
         public static Type GetClassType(string fqClassame, string asmName, bool useCache = true)
         {
 
@@ -144,6 +142,6 @@ namespace VAdvantage.Utility
             }
             return type;
         }
-        #endregion
+       
     }
 }

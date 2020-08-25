@@ -246,7 +246,14 @@ namespace VAdvantage.DataBase
      
         
 
-        public const string PRODUCT_NAME = "ViennaAdvantageSvc";  
+        public const string PRODUCT_NAME = "ViennaAdvantageSvc";
+
+        public static string[] PACKAGES = new string[]
+        {
+            "VAWorkflow","ModelLibrary","VAModelAD","XModel"
+        };
+
+
         public const string ASSEMBLY_NAME = "ModelLibrary";
         //public const string ASSEMBLY_NAME = "VAdvantage.exe";
          

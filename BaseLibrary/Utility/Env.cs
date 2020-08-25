@@ -74,8 +74,6 @@ namespace VAdvantage.Utility
         #endregion
 
         #endregion
-
-
         /// <summary>
         /// Get Client Context
         /// </summary>
@@ -94,8 +92,6 @@ namespace VAdvantage.Utility
         {
             _sCtx = ctx;
         }
-
-
 
         ///Parse Context replaces global or Window context @tag@ with actual value.
         /// </summary>
@@ -295,10 +291,6 @@ namespace VAdvantage.Utility
             return false;
         }
 
-        //	getFrame
-
-
-
         /**
 	    *  Get Base Language code. (e.g. en-US)
 	    *  @return Base Language
@@ -419,7 +411,6 @@ namespace VAdvantage.Utility
             return GetLanguage(ctx);
         }
 
-
         //public static int GetAD_Language_ID()
         //{
         //    string sLang = GetLoginLanguage(Env.GetCtx()).GetAD_Language();
@@ -491,7 +482,6 @@ namespace VAdvantage.Utility
 
             return Language.GetBaseLanguage();
         }   //  verifyLanguage
-
 
         public static Language VerifyLanguage(Ctx ctx, Language language)
         {
@@ -632,17 +622,11 @@ namespace VAdvantage.Utility
             return sb.ToString();
         }
 
-        
-
-       
-
-
-
-       
         /// <summary>
         /// Reset Cache
         /// </summary>
         /// <param name="finalCall">everything otherwise login data remains</param>
+
         public static void Reset(bool finalCall)
         {
 
@@ -684,8 +668,6 @@ namespace VAdvantage.Utility
             //    }
             }
         }
-
-
         public static void LogOut()
         {
             for (int i = 2; i < _sWindows.Count; i++)
@@ -716,13 +698,7 @@ namespace VAdvantage.Utility
             Reset(true);
         }
 
-
-       
-
-
         ///////////////////Manfacturing//////////////////////////////
-        
-
         /**
          *	Parse Context replaces global or Window context @tag@ with actual value.
          *	The tag may have a | with a fixed value e.g. @C_BPartner_ID|0@
@@ -826,7 +802,6 @@ namespace VAdvantage.Utility
             return DB.GetSQLValue(null, sql);
         }
 
-
         //Module
         /// <summary>
         /// Check given name has module prefix
@@ -904,7 +879,6 @@ namespace VAdvantage.Utility
             #endregion
         }
 
-
         public static string GetVISInstalledVersion(string name)
         {
            if(_cacheVISModules.ContainsKey(name))
@@ -914,8 +888,6 @@ namespace VAdvantage.Utility
             }
            return "";
         }
-
-
 
         public static bool GetModulePrefix(string name, out string retPrefix,out string nspace)
         {
@@ -1075,7 +1047,6 @@ namespace VAdvantage.Utility
             return "";
         }
 
-
         /// <summary>
         /// Load All Modules and maintain Cache
         /// </summary>
@@ -1178,8 +1149,31 @@ namespace VAdvantage.Utility
         {
             return ctx.GetApplicationUrl();
         }
-  
 
+        /// <summary>
+        /// Get Type from packages
+        /// </summary>
+        /// <param name="fqClassame">Fully qualified classname</param>
+        /// <returns>Return Type of class</returns>
+        public static Type GetTypeFromPackage(string fqClassame)
+        {
+            Type type = null;
+            foreach (string asm in GlobalVariable.PACKAGES)
+            {
+                try
+                {
+                    var asmbly = System.Reflection.Assembly.Load(asm);
+                    type = asmbly.GetType(fqClassame);
+                    if (type != null)
+                        return type;
+                }
+                catch
+                {
+                    VLogger.Get().Warning("Error loading type " + fqClassame);
+                }
+            }
+            return type;
+        }
 
     public class QueryParams
     {
@@ -1206,8 +1200,5 @@ namespace VAdvantage.Utility
             //this.parameters.AddRange(localparam.ToList());
         }
     }
-
-
     }
-
 }
