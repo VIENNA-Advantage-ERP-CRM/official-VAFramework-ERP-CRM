@@ -2615,7 +2615,10 @@
                 var columnName = Object.keys(_curGC.getColumnNames()).filter(function (key) { return _curGC.getColumnNames()[key] === fieldname })[0];
                 if (columnName != undefined && columnName != null) {
                     if (VIS.DisplayType.IsLookup(_curtab.getField(columnName).getDisplayType()) || VIS.DisplayType.Location == _curtab.getField(columnName).getDisplayType()) {
-                        if (rowsSingleView[columnName.toLower()] != null && rowsSingleView[columnName.toLower()] != undefined) {
+                        if (rowsSource.length > 0 && rowsSource[0][columnName.toLower()] != null && rowsSource[0][columnName.toLower()] != undefined) {
+                            fieldValue = _curtab.getField(columnName.toLower()).lookup.getDisplay(rowsSource[0][columnName.toLower()]);
+                        }
+                        else if (rowsSingleView[columnName.toLower()] != null && rowsSingleView[columnName.toLower()] != undefined) {
                             fieldValue = _curtab.getField(columnName.toLower()).lookup.getDisplay(rowsSingleView[columnName.toLower()]);
                         }
                     }
@@ -2639,6 +2642,10 @@
                             fieldValue = _curtab.getField(columnName).value;
                         }
                         else {
+                            if (rowsSource && rowsSource.length > 0) {
+                                fieldValue = rowsSource[0][columnName.toLower()];``
+                            }
+                            else
                             fieldValue = rowsSingleView[columnName.toLower()];
                         }
                     }
@@ -2862,8 +2869,8 @@
             ctx = null;
             ch = null;
             bpColumnName = "";
-            rowsSource = null;
-            rowsSingleView = null;
+            //rowsSource = null;
+            //rowsSingleView = null;
             currentTable_ID = 0;
             //selectedValues.clear();
             selectedValues = null;
