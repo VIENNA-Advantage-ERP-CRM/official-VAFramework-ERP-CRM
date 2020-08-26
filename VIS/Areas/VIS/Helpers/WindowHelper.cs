@@ -1249,7 +1249,7 @@ namespace VIS.Helpers
             }
             AD_Window_ID = table.GetAD_Window_ID();
             // Change to get Window ID based on the current window as there can be multiple windows 
-            // created on one table, so in case of versioning fetched window ID with Name
+            // created on one table, so in case of versioning fetched window ID with Name and Tab name
             if (isMaintainVer)
             {
                 StringBuilder sbwName = new StringBuilder(Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Window WHERE AD_Window_ID = " + CurrWindow_ID)));
