@@ -994,7 +994,7 @@ namespace VIS.Helpers
                     trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
                     ctx.SetContext("VerifyVersionRecord", "Y");
                     int parentWinID = inn.AD_WIndow_ID;
-                    PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, out parentWinID);
+                    PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, parentWinID, inn.AD_Table_ID, true, out parentWinID);
                     //	No Persistent Object
 
                     if (poMas == null)
@@ -1047,7 +1047,7 @@ namespace VIS.Helpers
             }
 
             int Ver_Window_ID = 0;
-            PO po = GetPO(ctx, InsAD_Table_ID, InsRecord_ID, whereClause, trx, out Ver_Window_ID);
+            PO po = GetPO(ctx, InsAD_Table_ID, InsRecord_ID, whereClause, trx, inn.AD_WIndow_ID, inn.AD_Table_ID, inn.MaintainVersions, out Ver_Window_ID);
             //	No Persistent Object
             if (po == null)
             {
@@ -1120,7 +1120,7 @@ namespace VIS.Helpers
             if (inn.MaintainVersions)
             {
                 var masDet = po.GetMasterDetails();
-                po = GetPO(ctx, AD_Table_ID, masDet.Record_ID, whereClause, trx, out Ver_Window_ID);
+                po = GetPO(ctx, AD_Table_ID, masDet.Record_ID, whereClause, trx, inn.AD_WIndow_ID, inn.AD_Table_ID, true, out Ver_Window_ID);
                 //	No Persistent Object
                 if (po == null)
                 {
@@ -1235,7 +1235,7 @@ namespace VIS.Helpers
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, _trx)) > 0;
         }
 
-        private PO GetPO(Ctx ctx, int AD_Table_ID, int Record_ID, string whereClause, Trx trx, out int AD_Window_ID)
+        private PO GetPO(Ctx ctx, int AD_Table_ID, int Record_ID, string whereClause, Trx trx, int CurrWindow_ID, int CurrTable_ID, bool isMaintainVer, out int AD_Window_ID)
         {
             MTable table = MTable.Get(ctx, AD_Table_ID);
             PO po = null;
@@ -1248,6 +1248,14 @@ namespace VIS.Helpers
                 po = table.GetPO(ctx, whereClause, trx);
             }
             AD_Window_ID = table.GetAD_Window_ID();
+            if (isMaintainVer)
+            {
+                StringBuilder sbwName = new StringBuilder(Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Window WHERE AD_Window_ID = " + CurrWindow_ID)));
+                sbwName.Append(" Version_" + Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Tab WHERE AD_Window_ID = " + CurrWindow_ID + " AND AD_Table_ID = " + CurrTable_ID + " ORDER BY TabLevel")));
+                int VerWin_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE Name='" + sbwName.ToString() + "'", null, trx));
+                if (VerWin_ID > 0)
+                    AD_Window_ID = VerWin_ID;
+            }
             return po;
         }
 
