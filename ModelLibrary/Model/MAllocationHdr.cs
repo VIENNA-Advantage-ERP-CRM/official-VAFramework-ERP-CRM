@@ -251,7 +251,8 @@ namespace VAdvantage.Model
             }
             if (IsPosted())
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
+                // Check Period Open
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
                 {
                     log.Warning("Period Closed");
                     return false;
@@ -344,7 +345,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -935,7 +936,7 @@ namespace VAdvantage.Model
                 throw new Exception("Allocation already reversed (not active)");
 
             //	Can we delete posting
-            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
                 throw new Exception("@PeriodClosed@");
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.

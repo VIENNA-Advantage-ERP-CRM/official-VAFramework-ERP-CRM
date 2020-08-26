@@ -1709,7 +1709,7 @@ namespace VAdvantage.Model
             SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -3906,7 +3906,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetMovementDate());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -5129,7 +5129,7 @@ namespace VAdvantage.Model
             string reversedDocno = null;
             string ss = ToString();
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;

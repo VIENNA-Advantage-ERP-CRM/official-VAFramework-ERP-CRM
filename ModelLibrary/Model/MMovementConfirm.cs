@@ -468,7 +468,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetUpdated(), MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT))
+            if (!MPeriod.IsOpen(GetCtx(), GetUpdated(), MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
