@@ -11,6 +11,7 @@ using System.Data;
 using VAdvantage.Classes;
 
 using System.Runtime.CompilerServices;
+using CoreLibrary.DataBase;
 
 namespace VAdvantage.Login
 {
@@ -228,7 +229,7 @@ namespace VAdvantage.Login
         public static Language GetLanguage(String langInfo)
         {
             String lang = langInfo;
-           // FillLanguage();
+            FillLanguage(GetSystemLanguage());
 
             //	Search existing Languages
             for (int i = 0; i < _languages.Count; i++)
@@ -272,7 +273,7 @@ namespace VAdvantage.Login
         /// <returns>Base Language</returns>
         public static Language GetBaseLanguage()
         {
-            //FillLanguage();
+            FillLanguage(GetSystemLanguage());
             return _languages[0];
         }   //  getBase
 
@@ -803,5 +804,15 @@ namespace VAdvantage.Login
             //return sb.ToString();
             return "";
         }   //  toString
+
+        public static DataTable GetSystemLanguage()
+        {
+            DataSet ds = DB.ExecuteDataset("SELECT AD_Language,Name,Name AS DisplayName FROM AD_Language WHERE IsSystemLanguage = 'Y' AND IsActive='Y' Order BY  Name asc");
+            if (ds != null)
+                return ds.Tables[0];
+            return null;
+        }
+
+
     }
 }

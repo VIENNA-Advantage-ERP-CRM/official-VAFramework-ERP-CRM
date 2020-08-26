@@ -319,11 +319,6 @@
     <Compile Include="ProcessEngine\ProcessParameter.cs" />
     <Compile Include="ProcessEngine\SvrProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Reflection\GetTypes.cs" />
     <Compile Include="Report\ReportFormatEngine.cs" />
     <Compile Include="Utility\CleanUp.cs" />
@@ -352,20 +347,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\vienna.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cross.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tick1.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -815,6 +815,16 @@ namespace VAdvantage.WF
             return errors.ToString();
         }
 
+        public bool StartWF(ProcessInfo _pi)
+        {
+            MWFProcess wfProcess = null;
+            if (_pi.IsBatch())
+                wfProcess = Start(_pi);      //	may return null
+            else
+                wfProcess = StartWait(_pi);  //	may return null
+            return wfProcess != null;
+        }
+
 
     }
 }
