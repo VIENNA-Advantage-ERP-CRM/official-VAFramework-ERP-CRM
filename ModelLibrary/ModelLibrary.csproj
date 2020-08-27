@@ -120,6 +120,7 @@
     <Compile Include="Acct\FactLine.cs" />
     <Compile Include="Classes\AdvanceDocumentType.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
+    <Compile Include="Classes\MyModelValidator.cs" />
     <Compile Include="CM\CacheClearAll.cs" />
     <Compile Include="CM\CacheClearServer.cs" />
     <Compile Include="CM\CacheHandler.cs" />

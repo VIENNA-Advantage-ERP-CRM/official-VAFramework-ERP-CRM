@@ -82,7 +82,7 @@ namespace VAdvantage.Classes
         /** Model Change Type New		*/
         public const int CHANGETYPE_NEW = 1;
 
-        /** Model Change Type New		*/
+        /** Mo      del Change Type New		*/
         public const int TYPE_NEW = 1;
 
         /** Model Change Type Change	*/
@@ -123,6 +123,7 @@ namespace VAdvantage.Classes
         private Dictionary<String, List<ModelValidator>> _modelChangeListeners = new Dictionary<String, List<ModelValidator>>();
         /**	Document Validation Listeners			*/
         private Dictionary<String, List<ModelValidator>> _docValidateListeners = new Dictionary<String, List<ModelValidator>>();
+        //log class
         private static VLogger s_log = VLogger.GetVLogger(typeof(ModelValidationEngine).FullName);
 
         /// <summary>
@@ -241,7 +242,6 @@ namespace VAdvantage.Classes
             validator.Initialize(this, client);
         }	//	initialize
 
-
         /// <summary>
         /// Get Singleton
         /// </summary>
@@ -267,7 +267,6 @@ namespace VAdvantage.Classes
             }
             return null;
         }   //	loginComplete
-
 
         /// <summary>
         /// Update Info Window Columns.
@@ -428,7 +427,6 @@ namespace VAdvantage.Classes
                 _modelChangeListeners.Remove(propertyName);
         }   //RemoveModelValidator
 
-
         public void AddDocValidate(String tableName, ModelValidator listener)
         {
             if (tableName == null || listener == null)
@@ -466,4 +464,6 @@ namespace VAdvantage.Classes
 
     }
 }
+
+
 
