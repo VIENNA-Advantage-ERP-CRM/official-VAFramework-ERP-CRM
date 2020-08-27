@@ -30,7 +30,8 @@ namespace VAdvantage.Process
         private int _C_Period_ID = 0;
         //Action					
         private String _PeriodAction = null;
-
+        //Organization					
+        private string _AD_Org_ID = null;
 
         /// <summary>
         ///  Prepare - e.g., get Parameters.
@@ -44,6 +45,10 @@ namespace VAdvantage.Process
                 if (para[i].GetParameter() == null)
                 {
 
+                }
+                else if (name.Equals("AD_Org_ID"))
+                {
+                    _AD_Org_ID = Util.GetValueOfString(para[i].GetParameter());
                 }
                 else if (name.Equals("PeriodAction"))
                 {
@@ -88,8 +93,12 @@ namespace VAdvantage.Process
             sql.Append(" WHERE C_Period_ID=").Append(period.GetC_Period_ID())
                 .Append(" AND PeriodStatus<>'P'")
                 .Append(" AND PeriodStatus<>'").Append(_PeriodAction).Append("'");
-
-
+            
+            // if organization is selected then update period control of selected organizations
+            if (_AD_Org_ID != null && _AD_Org_ID.Length > 0)
+            {
+                sql.Append(" AND AD_Org_ID IN (" + _AD_Org_ID + ")");
+            }
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
 

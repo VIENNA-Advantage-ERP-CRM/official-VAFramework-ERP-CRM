@@ -1721,6 +1721,7 @@
     <Compile Include="Process\GenerateGroupSubGroup.cs" />
     <Compile Include="Process\GenerateOrder.cs" />
     <Compile Include="Process\GenerateQuotation.cs" />
+    <Compile Include="Process\GenPeriodControl.cs" />
     <Compile Include="Process\ImportAccount.cs" />
     <Compile Include="Process\ImportBankStatement.cs" />
     <Compile Include="Process\ImportBPartner.cs" />

@@ -71,7 +71,7 @@ namespace VAdvantage.Model
         public static bool IsNonBusinessDay(Ctx ctx, DateTime? dt, int AD_Org_ID = 0)
         {
             bool nbDay = false;
-            int C_Period_ID = MPeriod.GetC_Period_ID(ctx, dt, AD_Org_ID);
+            int C_Period_ID = MPeriod.GetC_Period_ID(ctx, dt);
             string sql = "SELECT C_CALENDAR_ID FROM C_YEAR WHERE C_YEAR_ID=(SELECT C_YEAR_ID FROM C_PERIOD  WHERE C_PERIOD_ID=" + C_Period_ID + ")";
             int C_Calendar_ID = Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
 

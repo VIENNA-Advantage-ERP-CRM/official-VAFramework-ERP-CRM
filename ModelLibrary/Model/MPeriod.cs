@@ -165,94 +165,6 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Find standard Period of DateAcct based on Organization Calendar
-        /// </summary>
-        /// <param name="ctx">context</param>
-        /// <param name="dateAcct">date</param>
-        /// <param name="AD_Org_ID">organization</param>
-        /// <returns>active Period or null</returns>
-        public static MPeriod Get(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
-        {
-            if (dateAcct == null)
-                return null;
-            //	Search in Cache first
-            IEnumerator<MPeriod> it = cache.Values.GetEnumerator();
-            it.Reset();
-            while (it.MoveNext())
-            {
-                MPeriod period = it.Current;
-                if (period.GetAD_Client_ID() == ctx.GetAD_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
-                    return period;
-            }
-
-            // Get Calender ID
-            StringBuilder qry = new StringBuilder("");
-            int Calender_ID = 0;
-            int AD_Client_ID = ctx.GetAD_Client_ID();
-
-            if (AD_Org_ID > 0)
-            {
-                MOrgInfo orgInfo = MOrgInfo.Get(ctx, AD_Org_ID, null);
-                if (orgInfo.Get_ColumnIndex("C_Calendar_ID") >= 0)
-                {
-                    Calender_ID = orgInfo.GetC_Calendar_ID();
-                }
-            }
-
-            if (Calender_ID == 0)
-            {
-                qry.Append("SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=" + AD_Client_ID);
-                Calender_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
-            }
-
-            if (Calender_ID == 0)
-            {
-                return null;
-            }
-
-            //	Get it from DB   
-            MPeriod retValue = null;
-            String sql = "SELECT * "
-            + "FROM C_Period "
-            + "WHERE C_Year_ID IN "
-                + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND C_Calendar_ID= @calendarID)"
-            + " AND @dateAcc BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
-            + " AND IsActive='Y' AND PeriodType='S'";
-            try
-            {
-
-                //DateTime? dt = ((DateTime?)dateAcct).Date;
-                DateTime? dt = ((DateTime?)dateAcct).Value.Date;
-
-                SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@calendarID", Calender_ID);
-                param[1] = new SqlParameter("@dateAcc", TimeUtil.GetDay((DateTime?)dateAcct));
-
-                DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
-                if (ds.Tables.Count > 0)
-                {
-                    foreach (DataRow dr in ds.Tables[0].Rows)
-                    {
-                        MPeriod period = new MPeriod(ctx, dr, null);
-                        int key = period.GetC_Period_ID();
-                        cache.Add(key, period);
-                        if (period.IsStandardPeriod())
-                            retValue = period;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                _log.Log(Level.SEVERE, "dateAcct=" + dateAcct, e);
-            }
-            if (retValue == null)
-            {
-                _log.Warning("No Standard Period for " + dateAcct + " (AD_Client_ID=" + AD_Client_ID + ")");
-            }
-            return retValue;
-        }
-
-        /// <summary>
         /// Find valid standard Period of DateAcct based on Client Calendar
         /// </summary>
         /// <param name="ctx">context</param>
@@ -261,21 +173,6 @@ namespace VAdvantage.Model
         public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct)
         {
             MPeriod period = Get(ctx, dateAcct);
-            if (period == null)
-                return 0;
-            return period.GetC_Period_ID();
-        }
-
-        /// <summary>
-        /// Find valid standard Period of DateAcct based on Organization Calendar
-        /// </summary>
-        /// <param name="ctx">context</param>
-        /// <param name="dateAcct">date</param>
-        /// <param name="AD_Org_ID">organization</param>
-        /// <returns>C_Period_ID or 0</returns>
-        public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
-        {
-            MPeriod period = Get(ctx, dateAcct, AD_Org_ID);
             if (period == null)
                 return 0;
             return period.GetC_Period_ID();
@@ -329,12 +226,54 @@ namespace VAdvantage.Model
         /// <returns>period controls</returns>
         public MPeriodControl[] GetPeriodControls(bool requery)
         {
+            //if (_controls != null && !requery)
+            //    return _controls;
+            ////
+            //List<MPeriodControl> list = new List<MPeriodControl>();
+            //String sql = "SELECT * FROM C_PeriodControl "
+            //    + "WHERE C_Period_ID=" + GetC_Period_ID();
+            //try
+            //{
+            //    DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
+            //    if (ds.Tables.Count > 0)
+            //    {
+            //        foreach (DataRow dr in ds.Tables[0].Rows)
+            //        {
+            //            list.Add(new MPeriodControl(GetCtx(), dr, null));
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    log.Log(Level.SEVERE, sql, e);
+            //}
+            ////
+            //_controls = new MPeriodControl[list.Count];
+            //_controls = list.ToArray();
+            //return _controls;
+
+            return GetPeriodControls(requery, 0);
+        }
+
+        /// <summary>
+        /// Get Period Control
+        /// </summary>
+        /// <param name="requery">requery</param>
+        /// <returns>period controls</returns>
+        public MPeriodControl[] GetPeriodControls(bool requery, int AD_Org_ID)
+        {
             if (_controls != null && !requery)
                 return _controls;
             //
             List<MPeriodControl> list = new List<MPeriodControl>();
             String sql = "SELECT * FROM C_PeriodControl "
                 + "WHERE C_Period_ID=" + GetC_Period_ID();
+
+            if (AD_Org_ID > 0)
+            {
+                sql += " AND AD_Org_ID IN (0, " + AD_Org_ID + ") ORDER BY AD_Org_ID DESC";
+            }
+
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -362,6 +301,26 @@ namespace VAdvantage.Model
         /// <param name="docBaseType">Document Base Type</param>
         /// <returns>period control or null</returns>
         public MPeriodControl GetPeriodControl(String docBaseType)
+        {
+            //if (docBaseType == null)
+            //    return null;
+            //GetPeriodControls(false);
+            //for (int i = 0; i < _controls.Length; i++)
+            //{
+            //    //	log.fine("getPeriodControl - " + 1 + " - " + _controls[i]);
+            //    if (docBaseType.Equals(_controls[i].GetDocBaseType()))
+            //        return _controls[i];
+            //}
+            //return null;
+            return GetPeriodControl(docBaseType, 0);
+        }
+
+        /// <summary>
+        /// Get Period Control
+        /// </summary>
+        /// <param name="docBaseType">Document Base Type</param>
+        /// <returns>period control or null</returns>
+        public MPeriodControl GetPeriodControl(String docBaseType, int AD_Org_ID)
         {
             if (docBaseType == null)
                 return null;
@@ -621,7 +580,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MPeriod period = MPeriod.Get(ctx, dateAcct, AD_Org_ID);
+            MPeriod period = MPeriod.Get(ctx, dateAcct);
             if (period == null)
             {
                 _log.Warning("No Period for " + dateAcct + " (" + docBaseType + ")");
