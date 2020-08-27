@@ -84,6 +84,8 @@
     <Compile Include="Controllers\Lookup\LookUp.cs" />
     <Compile Include="Controllers\Lookup\MLookupCache.cs" />
     <Compile Include="DataBase\DB.cs" />
+    <Compile Include="DBase\DB.cs" />
+    <Compile Include="DBase\SqlParams.cs" />
     <Compile Include="ModelAD\IModelFactory.cs" />
     <Compile Include="Engine\ModelValidationEngine.cs" />
     <Compile Include="Engine\POActionEngine.cs" />

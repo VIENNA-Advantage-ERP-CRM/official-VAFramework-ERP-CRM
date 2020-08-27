@@ -70,8 +70,6 @@
   <ItemGroup>
     <Compile Include="AttachmentHelper.cs" />
     <Compile Include="ContactsInfo.cs" />
-    <Compile Include="DBase\DB.cs" />
-    <Compile Include="DBase\SqlParams.cs" />
     <Compile Include="Filters\AjaxAuthorizeAttribute.cs" />
     <Compile Include="Filters\AjaxSessionFilterAttribute.cs" />
     <Compile Include="Filters\AjaxValidateAntiForgeryTokenAttribute.cs" />
