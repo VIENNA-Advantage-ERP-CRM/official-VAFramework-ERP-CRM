@@ -157,8 +157,8 @@ namespace VIS.Models
             List<Decimal> CashAmtList = new List<Decimal>(rowsCash.Count);
             Decimal cashAppliedAmt = Env.ZERO;
             MCash cashobj = null;
-            
-			List<Dictionary<string, string>> negInvList = new List<Dictionary<string, string>>();
+
+            List<Dictionary<string, string>> negInvList = new List<Dictionary<string, string>>();
             Decimal negInvtotAmt = 0;
             if (rowsInvoice.Count != 0)
             {
@@ -463,7 +463,7 @@ namespace VIS.Models
 
                     //invoice to invoice allocation when no cashlines
                     if (noCashlines == 0 && cashList.Count == 0)
-					{
+                    {
                         #region when match invoice to invoice
                         C_CashLine_ID = 0;
                         //	Allocation Header
@@ -482,17 +482,19 @@ namespace VIS.Models
                                 msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
                             }
                             return msg;
-						}
-                        if (AppliedAmt > 0)
+                        }
+                        if (AppliedAmt > 0) // remaining applied amount of currenct record
                         {
                             Decimal value = 0;
                             MAllocationLine aLine = null;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
+                                // when applied amount ZERO, then break
                                 if (AppliedAmt == Env.ZERO)
                                 {
                                     break;
                                 }
+
                                 Decimal postAppliedAmt = Util.GetValueOfDecimal(negInvList[c][applied]);
                                 if (postAppliedAmt != 0)
                                 {
@@ -502,13 +504,13 @@ namespace VIS.Models
                                 {
                                     continue;
                                 }
-                                if (value >= 0)
+                                if (value >= 0) //  when the value is greater than ZETO, then create Allocation line woth post Applied Amount
                                 {
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
                                     int C_InvoicePaySchedule_Id = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
-                                    invoice = new MInvoice(ctx, C_Invoice_ID, trx);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
                                     //int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -530,6 +532,7 @@ namespace VIS.Models
                                     rowsInvoice[i].Remove(applied);
                                     rowsInvoice[i].Add(applied, value.ToString());
                                     AppliedAmt -= Math.Abs(postAppliedAmt);
+                                    // update invoice refernce and date trx and save allocation line
                                     msg = InvAlloc(C_InvoicePaySchedule_Id, mpay2, aLine, DateTrx, trx);
                                     if (msg != string.Empty)
                                     {
@@ -540,8 +543,8 @@ namespace VIS.Models
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(negInvList[c]["cinvoiceid"]);
                                     C_InvoicePaySchedule_Id = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
-                                    invoice = new MInvoice(ctx, C_Invoice_ID, trx);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
                                     //C_Invoice_ID = Util.GetValueOfInt(negInvList[c]["cinvoiceid"]);
@@ -565,13 +568,13 @@ namespace VIS.Models
                                         return msg;
                                     }
                                 }
-                                else if (value < 0)
+                                else if (value < 0) // we create allocation line with remaning invoice applied amount
                                 {
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
                                     int C_InvoicePaySchedule_Id = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
-                                    invoice = new MInvoice(ctx, C_Invoice_ID, trx);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
                                     //int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -602,8 +605,8 @@ namespace VIS.Models
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(negInvList[c]["cinvoiceid"]);
                                     C_InvoicePaySchedule_Id = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
-                                    invoice = new MInvoice(ctx, C_Invoice_ID, trx);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
                                     //C_Invoice_ID = Util.GetValueOfInt(negInvList[c]["cinvoiceid"]);
@@ -639,7 +642,9 @@ namespace VIS.Models
                                 }
                             }
                         }
-						//	Allocation Line
+
+
+                        //	Allocation Line
                         //MAllocationLine aLine = new MAllocationLine(alloc, AppliedAmt,
                         //        DiscountAmt, WriteOffAmt, OverUnderAmt);
                         //    aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
@@ -687,7 +692,7 @@ namespace VIS.Models
                             //Set AD_Org_ID and AD_Client_ID when we split the schedule
                             mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                             mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                        
+
                             if (invoice.GetC_Currency_ID() != C_Currency_ID)
                             {
                                 var conertedAmount = MConversionRate.Convert(ctx, AppliedAmt, C_Currency_ID, invoice.GetC_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
@@ -695,7 +700,7 @@ namespace VIS.Models
                             }
                             else
                                 mpay2.SetDueAmt(Math.Abs(AppliedAmt));
-                        
+
                             if (!mpay2.Save(trx))
                             {
                                 _log.SaveError("Error: ", "Due amount not set on invoice schedule");
@@ -736,7 +741,7 @@ namespace VIS.Models
                             MAllocationLine aLine = null;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
-                                if (AppliedAmt == Env.ZERO) 
+                                if (AppliedAmt == Env.ZERO)
                                 {
                                     break;
                                 }
@@ -754,8 +759,8 @@ namespace VIS.Models
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
                                     int C_InvoicePaySchedule_Id = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
-                                    invoice = new MInvoice(ctx, C_Invoice_ID, trx);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
                                     //int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -786,8 +791,8 @@ namespace VIS.Models
 
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(negInvList[c]["cinvoiceid"]);
-                                    C_InvoicePaySchedule_Id = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //C_InvoicePaySchedule_Id = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
                                     invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
@@ -817,8 +822,8 @@ namespace VIS.Models
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
                                     int C_InvoicePaySchedule_Id = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
-                                    invoice = new MInvoice(ctx, C_Invoice_ID, trx);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
                                     //int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -849,8 +854,8 @@ namespace VIS.Models
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(negInvList[c]["cinvoiceid"]);
                                     C_InvoicePaySchedule_Id = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
-                                    mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
-                                    invoice = new MInvoice(ctx, C_Invoice_ID, trx);
+                                    //mpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_Id, trx);
+                                    //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                     invoiceLines++;
                                     //  Invoice variables
                                     //C_Invoice_ID = Util.GetValueOfInt(negInvList[c]["cinvoiceid"]);
@@ -884,7 +889,7 @@ namespace VIS.Models
                                     break;
                                 }
                             }
-                        }                            
+                        }
                         //	Allocation Line
                         //MAllocationLine aLine = new MAllocationLine(alloc, AppliedAmt,
                         //    DiscountAmt, WriteOffAmt, OverUnderAmt);
@@ -2185,7 +2190,7 @@ namespace VIS.Models
                             MAllocationLine aLine = null;
                             for (int c = 0; c < negPayList.Count; c++)
                             {
-                                if (PaymentAmt == Env.ZERO) 
+                                if (PaymentAmt == Env.ZERO)
                                 {
                                     break;
                                 }
@@ -2657,7 +2662,7 @@ namespace VIS.Models
                     pData.DATEACCT = Util.GetValueOfDateTime(dr.Tables[0].Rows[i]["DATEACCT"]);
                     pData.AD_Org_ID = Convert.ToInt32(dr.Tables[0].Rows[i]["AD_Org_ID"]);
                     pData.OrgName = Convert.ToString(dr.Tables[0].Rows[i]["Name"]);
-					pData.DocBaseType = dr.Tables[0].Rows[i]["docbasetype"].ToString();
+                    pData.DocBaseType = dr.Tables[0].Rows[i]["docbasetype"].ToString();
                     payData.Add(pData);
                 }
             }
@@ -3591,7 +3596,7 @@ namespace VIS.Models
                     isCustomer = ds.Tables[0].Rows[i]["ISCUSTOMER"].ToString() == "Y" ? true : false;
                     isVendor = ds.Tables[0].Rows[i]["ISVENDOR"].ToString() == "Y" ? true : false;
                     GLData gData = new GLData();
-					gData.SelectRow = "false";						
+                    gData.SelectRow = "false";
                     gData.GLRecords = ds.Tables[0].Rows.Count;
                     gData.DATEDOC = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DATEDOC"]);
                     gData.DATEACCT = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DATEACCT"]);
@@ -4531,7 +4536,7 @@ namespace VIS.Models
 
                 #region GL to Invoice -- create allocation line if invoice row selected
                 for (int i = 0; i < rowsInvoice.Count; i++)
-                {                    
+                {
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]));
                     amtToAllocate = Decimal.Subtract(Math.Abs(Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"])), Math.Abs(Util.GetValueOfDecimal(rowsInvoice[i]["paidAmt"])));
                     remainingAmt = amtToAllocate;
@@ -4659,7 +4664,7 @@ namespace VIS.Models
                         }
                     }
                 }
-				#endregion
+                #endregion
 
                 if (rowsCash.Count == 0 && rowsPayment.Count == 0 && rowsInvoice.Count == 0)
                 {
