@@ -20560,12 +20560,15 @@
             mTab.getField("VSS_PAYMENTTYPE").setReadOnly(false);
         }
 
-        if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "P") {
+        if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "P" ||
+            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "E") {/*Receipt Return and Payment*/
             if (Util.getValueOfDecimal(mTab.getValue("amount")) > 0) {
                 mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
             }
         }
-        else if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "R") {
+        else if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "R" ||
+            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A") 
+        { /*Payment Return and Receipt*/
             if (Util.getValueOfDecimal(mTab.getValue("amount")) < 0) {
                 mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
             }
@@ -20593,6 +20596,20 @@
                 if (Util.getValueOfDecimal(mTab.getValue("amount")) < 0) {
                     mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
                 }
+            }
+        }
+        else if (Util.getValueOfString(mTab.getValue("CashType")) == "B") {// Cash Type = Business Partner
+            // Get Payment Type
+            var paymenttype = Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE"));
+            // Payment or Receipt Return
+            if ((paymenttype == "P" || paymenttype == "E") && Util.getValueOfDecimal(mTab.getValue("amount")) > 0) {
+                mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
+                mTab.setValue("ConvertedAmount", (0 - Util.getValueOfDecimal(mTab.getValue("ConvertedAmount"))));
+            }
+            // Receipt or Payment Return
+            else if ((paymenttype == "R" || paymenttype == "A") && Util.getValueOfDecimal(mTab.getValue("amount")) < 0) {
+                mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
+                mTab.setValue("ConvertedAmount", (0 - Util.getValueOfDecimal(mTab.getValue("ConvertedAmount"))));
             }
         }
         this.setCalloutActive(false);
