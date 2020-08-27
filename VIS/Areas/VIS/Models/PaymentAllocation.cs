@@ -989,13 +989,10 @@ namespace VIS.Models
                             {
                                 //new allocation
                                 C_CashLine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
-                                //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                 noCashlines++;
-                                //  Invoice variables
-                                //int C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
                                 int Ref_CashLine_ID = Util.GetValueOfInt(negCashList[c]["ccashlineid"]);
 
-                                //for positive Appliedamount Invoice
+                                //allocation for positive Appliedamount for Payment
                                 aLine = new MAllocationLine(alloc, Math.Abs(postAppliedAmt), Env.ZERO, Env.ZERO, Env.ZERO);
                                 aLine.SetDocInfo(C_BPartner_ID, 0, 0);
                                 aLine.SetPaymentInfo(0, C_CashLine_ID);
@@ -1010,18 +1007,13 @@ namespace VIS.Models
                                 rowsCash[i].Remove(payment);
                                 rowsCash[i].Add(payment, value.ToString());
                                 PaymentAmt = PaymentAmt - Math.Abs(postAppliedAmt);
-                                //msg = InvAlloc(C_InvoicePaySchedule_Id, aLine, DateTrx, trx);
-                                //Decimal Rem = value[i];
 
-                                //new allocation
+                                //allocation for same amount matched with +ve appliedAmt
                                 C_CashLine_ID = Util.GetValueOfInt(negCashList[c]["ccashlineid"]);
-
-                                //invoice = new MInvoice(ctx, C_Invoice_ID, trx);
                                 noCashlines++;
-                                //  Invoice variables
                                 Ref_CashLine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
 
-                                //for negative Amount Invoice
+                                //for negative Amount Payment matched with +ve amount
                                 aLine = new MAllocationLine(alloc, postAppliedAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                                 aLine.SetDocInfo(C_BPartner_ID, 0, 0);
                                 aLine.SetPaymentInfo(0, C_CashLine_ID);//set the cashline and Payment to Zero
@@ -1037,7 +1029,7 @@ namespace VIS.Models
                                 C_CashLine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
                                 int Ref_CashLine_ID = Util.GetValueOfInt(negCashList[c]["ccashlineid"]);
                                 noCashlines++;
-                                //for positive Appliedamount Invoice
+                                //allocation for positive Appliedamount Payment 
                                 aLine = new MAllocationLine(alloc, PaymentAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                                 aLine.SetDocInfo(C_BPartner_ID, 0, 0);
                                 aLine.SetPaymentInfo(0, C_CashLine_ID);//set Cashlines
@@ -1271,16 +1263,16 @@ namespace VIS.Models
         /// <summary>
         /// to create view allocation against Payment
         /// </summary>
-        /// <param name="paymentData">Selected payment data</param>
-        /// <param name="cashData"> Selected cash line data</param>
-        /// <param name="invoiceData">Selected invoice data</param>
+        /// <param name="rowsPayment">Selected payment data</param>
+        /// <param name="rowsCash"> Selected cash line data</param>
+        /// <param name="rowsInvoice">Selected invoice data</param>
         /// <param name="currency">Currency ID</param>
         /// <param name="isCash"> bool Value </param>
         /// <param name="_C_BPartner_ID"> Business Partner ID </param>
         /// <param name="_windowNo"> Window Number</param>
         /// <param name="payment"> Payment ID </param>
         /// <param name="DateTrx"> Transaction Date </param>
-        /// <param name="appliedamt"> Applied Amount </param>
+        /// <param name="applied"> Applied Amount </param>
         /// <param name="discount">Discount Amount</param>
         /// <param name="writeOff">Writeoff Amount</param>
         /// <param name="open">Open Amount</param>
@@ -3037,6 +3029,9 @@ namespace VIS.Models
         /// <param name="fromDate">From Date</param>
         /// <param name="toDate">To Date</param>
         /// <param name="conversionDate">ConversionType Date</param>
+        /// <param name="AD_Org_ID">Organization ID</param>
+        /// <param name="docBaseType">DocBaseType</param>
+        /// <param name="srchText">Search Document No</param>
         /// <returns></returns>
         public List<VIS_InvoiceData> GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID, string docBaseType, DateTime? fromDate, DateTime? toDate, string conversionDate, string srchText)
         {
@@ -3074,6 +3069,8 @@ namespace VIS.Models
                                 // + " INNER JOIN C_DOCTYPE DC ON (i.C_DOCTYPE_ID =DC.C_DOCTYPE_ID)"
                                 + " WHERE i.IsPaid='N' AND i.Processed='Y'"
                                 + " AND i.C_BPartner_ID=" + _C_BPartner_ID;                                            //  #5
+
+            //------Filter data on the basis of new parameters
             if (AD_Org_ID != 0)
             {
                 sqlInvoice += " AND i.AD_Org_ID=" + AD_Org_ID;
@@ -3215,9 +3212,10 @@ namespace VIS.Models
         }
 
         /// <summary>
-        /// to get DataTypes
+        /// to get DocBaseType of Invoice for Invoice Grid Filter.
+        /// to bind these values to dropdown of Invoice grid.
         /// </summary>
-        /// <returns>List of DobBase Types</returns>
+        /// <returns>List of DocBase Types</returns>
         /// Payment Grid
         public List<VIS_DocbaseType> GetpayDocbaseType()
         {
@@ -3238,7 +3236,8 @@ namespace VIS.Models
         }
 
         /// <summary>
-        /// to get DataTypes
+        /// to get DocBaseType for Invoice grid Filter.
+        /// for append the values to dropdown
         /// </summary>
         /// <returns>List of DobBase Types</returns>
         /// Invoice Grid
@@ -3260,9 +3259,9 @@ namespace VIS.Models
             return DocbaseType;
         }
         /// <summary>
-        /// to get DataTypes
+        /// to get DocTypes for Invoice grid filter
         /// </summary>
-        /// <returns>List of Data Types</returns>
+        /// <returns>List of Doc Types</returns>
         public List<VIS_DocType> GetDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
@@ -3280,7 +3279,11 @@ namespace VIS.Models
             }
             return DocType;
         }
-        //DocType for Payment grid
+
+        /// <summary>
+        /// To get DocumentType for Payment grid
+        /// </summary>
+        /// <returns>List of Docment Type</returns>
         public List<VIS_DocType> GetpayDocType()
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
@@ -3299,7 +3302,10 @@ namespace VIS.Models
             return DocType;
         }
 
-        //Get PaymentType DropDown for cash Journal.
+        /// <summary>
+        /// to get PaymentType in the Cash Journal Line.
+        /// </summary>
+        /// <returns>List of Payment Types</returns>
         public List<VIS_PayType> GetPaymentType()
         {
             List<VIS_PayType> payType = new List<VIS_PayType>();

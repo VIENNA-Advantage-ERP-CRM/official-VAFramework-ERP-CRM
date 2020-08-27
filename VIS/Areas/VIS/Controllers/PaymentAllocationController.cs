@@ -141,6 +141,12 @@ namespace VIS.Controllers
         /// <param name="chk">For MultiCurrency Check</param>
         /// <param name="page">Page Number</param>
         /// <param name="size">Page Size</param>
+        /// <param name="toDate">to Date</param>
+        /// <param name="fromDate">From Date</param>
+        /// <param name="srchText">Search Document No</param>
+        /// <param name="AD_Org_ID">Organization ID</param>
+        /// <param name="docBaseType">DocBaseType</param>
+        /// <param name="c_docType_ID">DocType ID</param>
         /// <returns>No of unallocated payments</returns>
         public JsonResult GetPayments(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size,int c_docType_ID,string docBaseType, DateTime? fromDate, DateTime? toDate,string srchText)
         {
@@ -158,6 +164,11 @@ namespace VIS.Controllers
         /// <param name="chk">For MultiCurrency Check</param>
         /// <param name="page">Page Number</param>
         /// <param name="size">Page Size</param>
+        /// <param name="AD_Org_ID">Organisation ID</param>
+        /// <param name="srchText">Search for Document No</param>
+        /// <param name="fromDate">From Date</param>
+        /// <param name="paymentType_ID">Payment Type ID</param>
+        /// <param name="toDate">To Date</param>
         /// <returns>No of unallocated Cash Lines</returns>
         public JsonResult GetCashJounral(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, DateTime? fromDate, DateTime? toDate,string paymentType_ID,string srchText)
         {
@@ -182,6 +193,9 @@ namespace VIS.Controllers
         /// <param name="fromDate">From Date</param>
         /// <param name="toDate">To Date</param>
         /// <param name="conversionDate">ConversionType Date</param>
+        /// <param name="srchText">Search the Document No</param>
+        /// <param name="docBaseType">DocBase Type</param>
+        /// <param name="AD_Org_ID">Organization ID</param>
         /// <returns></returns>
         public JsonResult GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID,string docBaseType, DateTime? fromDate, DateTime? toDate, string conversionDate,string srchText)
         {
@@ -191,7 +205,7 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// to get DataTypes
+        /// to get DocBaseType for Payment grid for filteration.
         /// </summary>
         /// <returns>List of DocBase Types</returns>
         /// payment grid
@@ -203,7 +217,7 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// to get DataTypes
+        /// to get DocBaseType for Invoice grid for filteration.
         /// </summary>
         /// <returns>List of DocBase Types</returns>
         public JsonResult GetDocbaseType()
@@ -214,9 +228,9 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// to get DataTypes
+        /// to get DoctType for Invoice grid for filteration.
         /// </summary>
-        /// <returns>List of Data Types</returns>
+        /// <returns>List of DoctTypes</returns>
         public JsonResult GetDocType()
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -225,9 +239,10 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// to get DataTypes
+        /// to get Payment DocType for Payment grid for filteration.
+        /// append the DocType value to dropdown.
         /// </summary>
-        /// <returns>List of Data Types</returns>
+        /// <returns>List of DocTypes</returns>
         public JsonResult GetpayDocType()
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -235,6 +250,11 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(payments.GetpayDocType()));
         }
 
+        /// <summary>
+        /// to get Payment type from Payment window for Cash Journal Line grid to bind dropdown 
+        /// for the Cash Journal Line grid filteration.
+        /// </summary>
+        /// <returns>Payment Type</returns>
         public JsonResult GetPaymentType()
         {
             Ctx ct = Session["ctx"] as Ctx;
@@ -255,7 +275,7 @@ namespace VIS.Controllers
         }
 
         ///  <summary>
-        /// Get all Organization which are accessable by login user
+        /// Get all Organization which are accessable by login user and set it default login user
         /// </summary>        
         /// <returns>AD_Org_ID and Organization Name</returns> //Added by koteswar on 10/07/2020 
         public JsonResult GetOrg()
@@ -303,6 +323,11 @@ namespace VIS.Controllers
         /// <param name="C_BPartner_ID"> Business Partner</param>
         /// <param name="AD_Org_ID">Org ID</param>
         /// <param name="C_CurrencyType_ID">Currency ConversionType ID</param>
+        /// <param name="applied"> Applied Amount </param>
+        /// <param name="discount">Discount Amount</param>
+        /// <param name="writeOff">Writeoff Amount</param>
+        /// <param name="open">Open Amount</param>
+        /// <param name="payment">Name of the Applied Amount for Payment grid</param>
         /// <returns>Will Return Msg Either Allocation is Saved or Not Saved</returns>
         [HttpPost]
         public string saveGLJData(string paymentData, string invoiceData, string cashData, string glData, string DateTrx, string _windowNo, int C_Currency_ID, int C_BPartner_ID, string AD_Org_ID, int C_CurrencyType_ID, string DateAcct, string applied, string discount, string open, string payment, string writeOff)
