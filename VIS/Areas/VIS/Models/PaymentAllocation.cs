@@ -646,6 +646,7 @@ namespace VIS.Models
                         //    aLine.SetPaymentInfo(0, C_CashLine_ID);
                         //    if (Env.IsModuleInstalled("VA009_"))
                         //    {
+
                         //        aLine.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
                         //        //if (isInterBPartner)
                         //        //{
