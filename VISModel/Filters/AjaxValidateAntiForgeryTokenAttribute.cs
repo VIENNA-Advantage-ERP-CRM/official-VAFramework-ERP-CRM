@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 
-namespace VIS.Filters
+namespace VISModel.Filters
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class AjaxValidateAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter

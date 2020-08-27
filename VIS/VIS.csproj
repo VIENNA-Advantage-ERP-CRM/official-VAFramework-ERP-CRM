@@ -788,6 +788,9 @@
     <Compile Include="Areas\VIS\DataContracts\ProcessData.cs" />
     <Compile Include="Areas\VIS\DataContracts\ThemeData.cs" />
     <Compile Include="Areas\VIS\DataContracts\WindowData.cs" />
+    <Compile Include="Areas\VIS\Filters\AjaxAuthorizeAttribute.cs" />
+    <Compile Include="Areas\VIS\Filters\AjaxSessionFilterAttribute.cs" />
+    <Compile Include="Areas\VIS\Filters\AjaxValidateAntiForgeryTokenAttribute.cs" />
     <Compile Include="Areas\VIS\Helpers\ContextHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\FormHelper.cs" />
     <Compile Include="Areas\VIS\Helpers\HomeHelper.cs" />

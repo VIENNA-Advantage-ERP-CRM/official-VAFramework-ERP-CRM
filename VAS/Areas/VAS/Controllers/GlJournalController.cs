@@ -8,7 +8,7 @@ using System.IO;
 using System.Text;
 using System.Web.Mvc;
 using VAdvantage.Utility;
-using VIS.Filters;
+using VISModel.Filters;
 using VIS.Models;
 
 namespace VIS.Controllers

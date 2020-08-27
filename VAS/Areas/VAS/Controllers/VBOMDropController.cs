@@ -12,7 +12,7 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using VAdvantage.Utility;
-using VIS.Filters;
+using VISModel.Filters;
 using VIS.Models;
 
 namespace VIS.Controllers
