@@ -477,50 +477,61 @@
             //    calculate();
             //});
             //-----Controls events and load Invoice Grid--Neha
-            $txtDocNo.on("change", function (e) {
-                //Commetd code because now we want to search data on search button not on every control's event
-                //////loadInvoice();
-            });
+            //$txtDocNo.on("change", function (e) {
+            //    //Commetd code because now we want to search data on search button not on every control's event
+            //    //////loadInvoice();
+            //});
+
+            //filter the records based on Doctype in Invocie grid
             $cmbDocType.on("change", function (e) {
 				loadInvoice();
-                //Commetd code because now we want to search data on search button not on every control's event
-                //////loadInvoice();
             });
+
+            //filter the records based on Doctype in Payment grid
             $payDocType.on("change", function (e) {
                 loadUnallocatedPayments();
             });
+
+            //filter the records based on DocBaseType in Payment grid
             $payDocbaseType.on("change", function (e) {
                 loadUnallocatedPayments();
             });
+
+            //filter the records based on DocBaseType in Invoice grid
             $invDocbaseType.on("change", function (e) {
                 loadInvoice();
             });
+
+            //filter the records based on paymentType in Cash Journal Line grid
             $cashPayType.on("change", function (e) {
                 loadUnallocatedCashLines();
             });
+
+            // filteration based on from and toDates for Invoice Grid
             $fromDate.on("change", function (e) {
-                //Commetd code because now we want to search data on search button not on every control's event
                 loadInvoice();
             });
             $toDate.on("change", function (e) {
-                //Commetd code because now we want to search data on search button not on every control's event
                 loadInvoice();
             });
-            // from and toDates for Payment Grid
+
+            // filteration based on from and toDates for Payment Grid
             $pfromDate.on("change", function (e) {
                 loadUnallocatedPayments();
             });
             $ptoDate.on("change", function (e) {
                 loadUnallocatedPayments();
             });
-            // from and toDates for cash journal Grid
+
+            //filteration based on from and toDates for cash journal Grid
             $cfromDate.on("change", function (e) {
                 loadUnallocatedCashLines();
             });
             $ctoDate.on("change", function (e) {
                 loadUnallocatedCashLines();
             });
-            // from and toDates for GL journal Grid
+
+            // filteration based on from and toDates for GL journal Grid
             $gfromDate.on("change", function (e) {
                 loadGLVoucher();
             });
@@ -528,7 +539,7 @@
                 loadGLVoucher();
             });
 
-            //search events for each grid
+            //click event for search Invoice records which is based on Document No
             $srchInvoice.on("keypress", function (e) {
                 if (e.keyCode == 13) {
                     gridPgnoInvoice = 1;
@@ -541,6 +552,8 @@
                 loadInvoice();
                 $srchInvoice.val('');
             });
+
+            //click event for search Payment records which is based on Document No
             $srchPayment.on("keypress", function (e) {
                 if (e.keyCode == 13) {
                     gridPgnoPayment = 1;
@@ -553,6 +566,8 @@
                 loadUnallocatedPayments();
                 $srchPayment.val('');
             });
+
+            //click event for search Cash Journal line records which is based on Document No
             $srchCashJournal.on("keypress", function (e) {
                 if (e.keyCode == 13) {
                     gridPgnoCashJounal = 1;
@@ -565,6 +580,8 @@
                 loadUnallocatedCashLines();
                 $srchCashJournal.val('');
             });
+
+            //click event for search GL Journal line records which is based on Document No
             $srchGL.on("keypress", function (e) {
                 if (e.keyCode == 13) {
                     gridPgnoGL = 1;
@@ -572,6 +589,7 @@
                     $srchGL.val('');
                 }
             });
+
             $srchbtnGL.on("click", function (e) {
                 gridPgnoGL = 1;
                 loadGLVoucher();
@@ -592,6 +610,8 @@
                 if ($invSelectAll.prop("checked") == false)
                     selectedInvoices = [];
             });
+
+            //change event for checkbox to select/unselet all for Payment grid
             $paymentSelctAll.on("change", function (e) {
                 var chk = $('#grid_' + $gridPayment.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
@@ -604,6 +624,8 @@
                 if ($paymentSelctAll.prop("checked") == false)
                     selectedPayments = [];
             });
+
+            //change event forf checkbox to select/unselect all for Cash Journal line
             $cashSelctAll.on("change", function (e) {
                 var chk = $('#grid_' + $gridCashline.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
@@ -616,7 +638,8 @@
                 if ($cashSelctAll.prop("checked") == false)
                     selectedCashlines = [];
             });
-            //added for gl-allocation
+
+            //change event for checkbox to select/unselect all for gl-allocation grid
             $glSelectAll.on("change", function (e) {
                 var chk = $('#grid_' + $glLineGrid.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
@@ -630,7 +653,7 @@
                     SelectedGL = [];
             });
             //end 
-
+            //set/reset the background-color change event
             $cmbOrg.on("change", function (e) {
                 if (parseInt($cmbOrg.val()) > 0)
                     $cmbOrg.css("background-color", SetMandatory(false));
@@ -638,6 +661,7 @@
                     $cmbOrg.css("background-color", SetMandatory(true));
 
             });
+            //Currency Conversion Date change event
             $conversionDate.on("change", function (e) {
                 conversionDate = $conversionDate.val();
                 //Commetd code because now we want to search data on search button not on every control's event
@@ -1090,7 +1114,7 @@
                 return 'White';
         };
 
-        //load PaymentType Dropdown
+        //load PaymentType Dropdown for filter the records in Cash Journal Line.
         function loadPaymentType() {
             $.ajax({
                 type: "POST",
@@ -1118,7 +1142,7 @@
             });
         };
 
-        //load payDocbaseType
+        //load payDocbaseType to filter the records in the invoice grid
         function loadinvDocbaseType() {
             $.ajax({
                 type: "POST",
@@ -1145,7 +1169,7 @@
                 }
             });
         };
-        //load payDocbaseType
+        //load payDocbaseType to filter the records in the Payment grid
         function loadpayDocbaseType() {
             $.ajax({
                 type: "POST",
@@ -1172,7 +1196,7 @@
                 }
             });
         };
-        //load payDocType
+        //load payDocType for payment grid to filter the records.
         function loadpayDocType() {
             $.ajax({
                 type: "POST",
@@ -2242,6 +2266,7 @@
             $divGl.find('#grid_openformatglgrid_' + $self.windowNo + '_records').on('scroll', cartGLScroll);
         };
 
+        //binding GL Grid 
         function bindGLGrid(data, chk) {
             var columns = [];
             columns.push({ field: "SelectRow", caption: 'check', size: '50px', editable: { type: 'checkbox' } });
@@ -3764,6 +3789,7 @@
             }
         };
 
+        // whenever click event will fire in GL Line grid this function will execute
         function glCellClicked(event) {
             if (readOnlyGL) {
                 event.preventDefault();
@@ -4242,6 +4268,7 @@
                     }
                 }
             }
+
             //Cash Lines
             else if (cash) {
 
@@ -4257,7 +4284,7 @@
                     //  selected - set payment amount
                     if (colCashCheck) {
 
-                        // prepared same array for grid when we select any payment from payment grid and push that object into selected payment array.
+                        // prepared same array for grid when we select any cash line from cash line grid and push that object into selected cash line array.
                         var record = $gridCashline.records[row];
                         //debugger;
                         var rcdRow = {
@@ -4556,6 +4583,7 @@
                 }
                 else    //  de-selected
                 {
+                    //de-select from SelectedGL list.
                     for (var x = 0; x < SelectedGL.length; x++) {
                         if (SelectedGL[x].GL_JOURNALLINE_ID == $glLineGrid.records[row].GL_JOURNALLINE_ID) {
                             SelectedGL.splice(x, 1);
@@ -4598,57 +4626,57 @@
 
         };
 
-        function autoWriteOff() {
+        //function autoWriteOff() {
 
-            invoiceTotal = 0;
-            paymentTotal = 0;
-            // if cash record is selected means our cash grid is not readonly
-            //if ($vchkAllocation.is(':checked')) {
-            if (!readOnlyCash) {
-                var cashChanges = $gridCashline.getChanges();
-                for (var i = 0; i < cashChanges.length; i++) {
-                    if (cashChanges[i].SelectRow == true) {
-                        paymentTotal += parseFloat(cashChanges[i].AppliedAmt);
-                    }
-                }
-            }
-            else {
-                var paymentChanges = $gridPayment.getChanges();
-                for (var i = 0; i < paymentChanges.length; i++) {
-                    if (paymentChanges[i].SelectRow == true) {
-                        paymentTotal += parseFloat(paymentChanges[i].AppliedAmt);
-                    }
-                }
-            }
-            var invoiceChanges = $gridInvoice.getChanges();
-            var lastRow = null;
-            var columns = $gridInvoice.columns;
-            for (var i = invoiceChanges.length - 1; i >= 0; i--) {
-                if (invoiceChanges[i].SelectRow == true) {
-                    invoiceTotal += parseFloat(invoiceChanges[i].AppliedAmt);
-                    if (lastRow == null) {
-                        lastRow = $gridInvoice.get(invoiceChanges[i].recid);
-                        //Amount
-                        if (lastRow[columns[_openInv].field] <= 0) {
-                            lastRow = null;
-                        }
-                    }
+        //    invoiceTotal = 0;
+        //    paymentTotal = 0;
+        //    // if cash record is selected means our cash grid is not readonly
+        //    //if ($vchkAllocation.is(':checked')) {
+        //    if (!readOnlyCash) {
+        //        var cashChanges = $gridCashline.getChanges();
+        //        for (var i = 0; i < cashChanges.length; i++) {
+        //            if (cashChanges[i].SelectRow == true) {
+        //                paymentTotal += parseFloat(cashChanges[i].AppliedAmt);
+        //            }
+        //        }
+        //    }
+        //    else {
+        //        var paymentChanges = $gridPayment.getChanges();
+        //        for (var i = 0; i < paymentChanges.length; i++) {
+        //            if (paymentChanges[i].SelectRow == true) {
+        //                paymentTotal += parseFloat(paymentChanges[i].AppliedAmt);
+        //            }
+        //        }
+        //    }
+        //    var invoiceChanges = $gridInvoice.getChanges();
+        //    var lastRow = null;
+        //    var columns = $gridInvoice.columns;
+        //    for (var i = invoiceChanges.length - 1; i >= 0; i--) {
+        //        if (invoiceChanges[i].SelectRow == true) {
+        //            invoiceTotal += parseFloat(invoiceChanges[i].AppliedAmt);
+        //            if (lastRow == null) {
+        //                lastRow = $gridInvoice.get(invoiceChanges[i].recid);
+        //                //Amount
+        //                if (lastRow[columns[_openInv].field] <= 0) {
+        //                    lastRow = null;
+        //                }
+        //            }
 
-                }
-            }
+        //        }
+        //    }
 
-            if (invoiceTotal > paymentTotal) {
-                var difference = invoiceTotal - paymentTotal;
-                if ((invoiceTotal * .05) >= difference) {
-                    if (lastRow != null) {
-                        lastRow.changes.Writeoff = difference;
-                        lastRow.changes.AppliedAmt = lastRow.changes.AppliedAmt - difference;
-                        $gridInvoice.refreshCell(lastRow.recid, "Writeoff");
-                        $gridInvoice.refreshCell(lastRow.recid, "AppliedAmt");
-                    }
-                }
-            }
-        };
+        //    if (invoiceTotal > paymentTotal) {
+        //        var difference = invoiceTotal - paymentTotal;
+        //        if ((invoiceTotal * .05) >= difference) {
+        //            if (lastRow != null) {
+        //                lastRow.changes.Writeoff = difference;
+        //                lastRow.changes.AppliedAmt = lastRow.changes.AppliedAmt - difference;
+        //                $gridInvoice.refreshCell(lastRow.recid, "Writeoff");
+        //                $gridInvoice.refreshCell(lastRow.recid, "AppliedAmt");
+        //            }
+        //        }
+        //    }
+        //};
 
         function bpValueChanged() {
             vetoableChange($vSearchBPartner.getName(), $vSearchBPartner.value);
@@ -4741,6 +4769,7 @@
             console.log("Max Date:- " + maxDate);
         };
 
+        //load unallocated GL Journal Lines
         //added for gl-allocation
         function loadGLVoucher() {
             if (_C_BPartner_ID > 0) {

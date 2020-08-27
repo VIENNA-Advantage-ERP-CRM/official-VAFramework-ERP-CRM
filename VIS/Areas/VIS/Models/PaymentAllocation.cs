@@ -37,7 +37,7 @@ namespace VIS.Models
         /// <param name="_windowNo"> Window Number</param>
         /// <param name="payment"> Payment ID </param>
         /// <param name="DateTrx"> Transaction Date </param>
-        /// <param name="appliedamt"> Applied Amount </param>
+        /// <param name="applied"> Applied Amount </param>
         /// <param name="discount">Discount Amount</param>
         /// <param name="writeOff">Writeoff Amount</param>
         /// <param name="open">Open Amount</param>
@@ -195,14 +195,9 @@ namespace VIS.Models
                     //  Payment variables
                     C_CashLine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
                     cashList.Add(C_CashLine_ID);
-                    //
                     //Decimal PaymentAmt = Util.GetValueOfDecimal(((BindableObject)rowsCash[i]).GetValue(_payment));  //  Applied Payment
-
-
                     Decimal PaymentAmt = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]);  //  Applied Payment
-
                     CashAmtList.Add(PaymentAmt);
-                    //
                     cashAppliedAmt = Decimal.Add(cashAppliedAmt, PaymentAmt);
                     //
                     // log.Fine("C_CashLine_ID=" + C_CashLine_ID
@@ -504,7 +499,7 @@ namespace VIS.Models
                                 {
                                     continue;
                                 }
-                                if (value >= 0) //  when the value is greater than ZETO, then create Allocation line woth post Applied Amount
+                                if (value >= 0) //  when the value is greater than ZERO, then create Allocation line with post Applied Amount
                                 {
                                     //new allocation
                                     C_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -741,6 +736,7 @@ namespace VIS.Models
                             MAllocationLine aLine = null;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
+                                // when applied amount ZERO, then break
                                 if (AppliedAmt == Env.ZERO)
                                 {
                                     break;
