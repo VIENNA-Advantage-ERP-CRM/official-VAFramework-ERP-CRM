@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Optimization;
 
-namespace VAdvantage
+namespace VAModelAD
 {
     public class ModuleBundles
     {

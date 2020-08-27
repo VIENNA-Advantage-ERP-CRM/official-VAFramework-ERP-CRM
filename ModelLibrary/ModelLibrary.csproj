@@ -118,6 +118,7 @@
     <Compile Include="Acct\Doc_Requisition.cs" />
     <Compile Include="Acct\Fact.cs" />
     <Compile Include="Acct\FactLine.cs" />
+    <Compile Include="BundleCollection\ModuleBundles.cs" />
     <Compile Include="Classes\AdvanceDocumentType.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\MyModelValidator.cs" />
