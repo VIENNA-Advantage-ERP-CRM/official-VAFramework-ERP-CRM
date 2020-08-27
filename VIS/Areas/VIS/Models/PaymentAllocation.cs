@@ -672,6 +672,7 @@ namespace VIS.Models
                         //    }
                         #endregion
                     }
+
                     //when we match invoice to invoice and invoice to cash for same schedule 
                     else if (AppliedAmt != 0 && cashList.Count != 0)
                     {
