@@ -164,13 +164,13 @@ namespace VAdvantage.Classes
                 s_log.Severe("Error loading System ModelValidator" + e.ToString());
             }
 
-            DataSet ds = DB.ExecuteDataset("SELECT ModelValidationClass, AD_Client_ID FROM" +
+            DataSet ds = DB.ExecuteDataset("SELECT ModelValidationClasses, AD_Client_ID FROM" +
                " AD_Client WHERE IsActive='Y' ");
             // Go through all Clients and start Validators
             
             foreach ( DataRow dr in ds.Tables[0].Rows)
             {
-                String classNames = dr["ModelValidationClass"].ToString();
+                String classNames = dr["ModelValidationClasses"].ToString();
                 if (classNames == null || classNames.Length == 0)
                     continue;
                 LoadValidatorClasses(Util.GetValueOfInt(dr["AD_Client_ID"]), classNames);
