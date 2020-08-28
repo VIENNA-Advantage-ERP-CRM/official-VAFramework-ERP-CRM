@@ -13,11 +13,16 @@ namespace VAModelAD.Model
 {
     public class MLocation  //Comparator<PO>
     {
+        /* Get Method Type */
         static MethodInfo _Get = null;
+        /* Get BPLocation */
         static MethodInfo _GetBPLocation = null;
-       
+        /* Class String */ 
         private const string LOC_CLASS = "ModelLibrary";
 
+        /// <summary>
+        /// Load Location Type
+        /// </summary>
         public static void LoadLocationType()
         {
             Assembly asm = Assembly.Load(LOC_CLASS);
@@ -48,6 +53,13 @@ namespace VAModelAD.Model
             return null;
         }
 
+        /// <summary>
+        /// Get Business Partner Location
+        /// </summary>
+        /// <param name="context">context</param>
+        /// <param name="c_BPartner_Location_ID"> bp location id </param>
+        /// <param name="trx">transaction object</param>
+        /// <returns>BP Location</returns>
         internal static dynamic GetBPLocation(Context context, int c_BPartner_Location_ID, Trx trx)
         {
             if (_GetBPLocation == null)
