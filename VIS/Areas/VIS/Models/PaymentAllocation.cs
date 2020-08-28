@@ -4791,6 +4791,7 @@ namespace VIS.Models
                             if (balanceAmt == 0)
                             {
                                 rowsGL[j]["IsPaid"] = true.ToString();
+
                                 //MInvoicePaySchedule invpay = new MInvoicePaySchedule(ctx, C_InvoicePaySchedule_ID, trx);
                                 //MInvoice inv = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                                 //MJournalLine jl = new MJournalLine(ctx, Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]), trx);
