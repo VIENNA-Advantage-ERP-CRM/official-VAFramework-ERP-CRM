@@ -15,13 +15,12 @@ namespace VAModelAD.Model
     {
         static MethodInfo _Get = null;
         static MethodInfo _GetBPLocation = null;
-        private Context context;
-        private int c_Location_ID;
-        private object p;
+       
+        private const string LOC_CLASS = "ModelLibrary";
 
         public static void LoadLocationType()
         {
-            Assembly asm = Assembly.Load("VAModel");
+            Assembly asm = Assembly.Load(LOC_CLASS);
             Type _type = Type.GetType("VAdvantage.Model.MLocation");
             if (_type != null)
             {
