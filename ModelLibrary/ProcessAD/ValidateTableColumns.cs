@@ -92,7 +92,7 @@ namespace VAdvantage.Process
 
                 // Check on table whether it has single or multiple keys
                 bool hasSingleKey = true;
-                if(!table.IsSingleKey())
+                if (!table.IsSingleKey())
                     hasSingleKey = false;
 
                 if (table == null || table.Get_ID() == 0)
@@ -100,7 +100,7 @@ namespace VAdvantage.Process
 
                 // create HTML for tables
                 sbHTML.Append("<div class='vis-val-tc-parCtr'> "
-                                + "<div class='vis-val-tc-hdr'><label>"+ Msg.Translate(GetCtx(), "AD_Table_ID") + ": </label>" + table.GetTableName() + "</div>"
+                                + "<div class='vis-val-tc-hdr'><label>" + Msg.Translate(GetCtx(), "AD_Table_ID") + ": </label>" + table.GetTableName() + "</div>"
                                 + "<div class='vis-val-tc-colCtr'>"
                                     + "<div class='vis-val-tc-colHdrs'>" + Msg.GetMsg(GetCtx(), "VIS_ADCols") + "</div>"
                                     + "<div class='vis-val-tc-colHdrs'>" + Msg.GetMsg(GetCtx(), "VIS_DBCols") + "</div>"
@@ -131,10 +131,10 @@ namespace VAdvantage.Process
                 // check whether process is running from menu or from table and column Window
                 // if process is executing from window then apply style
                 string mainMenuWrap = "";
-                if(!fromMenu)
+                if (!fromMenu)
                     mainMenuWrap = "style='max-height: 450px;'";
 
-                sbHTML.Append("<div class='vis-val-tc-mainwrap' "+ mainMenuWrap + "> ");
+                sbHTML.Append("<div class='vis-val-tc-mainwrap' " + mainMenuWrap + "> ");
 
                 if (columnsAD.Length > 0)
                 {
@@ -167,9 +167,15 @@ namespace VAdvantage.Process
                         }
 
                         sbHTML.Append("<div class='vis-val-tc-colWid'>"
-                                       + "<div class='vis-val-tc-col-l' style='" + style + "'> " + keyCol + " " + col.GetColumnName() + " (" + drRef[0]["Name"] + " (" + col.GetFieldLength() + ") " + " ) " + "</div>");
+                                       + "<div class='vis-val-tc-col-l' style='" + style + "'> " + keyCol + " " + col.GetColumnName() + " (" + drRef[0]["Name"] + " (" + col.GetFieldLength() + ")" + ") " + "</div>");
                         if (dr != null && dr.Length > 0)
-                            sbHTML.Append("<div class='vis-val-tc-col-r' style='" + style + "'>" + Util.GetValueOfString(dr[0]["Column_Name"]) + " (" + Util.GetValueOfString(dr[0]["DATATYPE"]) + " (" + Util.GetValueOfInt(dr[0]["LENGTH"]) + ") " + " ) " + "</div>");
+                        {
+                            // change done for PostgreSQL
+                            if (DB.IsPostgreSQL())
+                                sbHTML.Append("<div class='vis-val-tc-col-r' style='" + style + "'>" + Util.GetValueOfString(dr[0]["Column_Name"]) + " (" + Util.GetValueOfString(dr[0]["Data_Type"]) + ") " + "</div>");
+                            else
+                                sbHTML.Append("<div class='vis-val-tc-col-r' style='" + style + "'>" + Util.GetValueOfString(dr[0]["Column_Name"]) + " (" + Util.GetValueOfString(dr[0]["DataType"]) + " (" + Util.GetValueOfInt(dr[0]["LENGTH"]) + ") " + ") " + "</div>");
+                        }
                         else
                         {
                             if (col.IsVirtualColumn())
@@ -201,7 +207,13 @@ namespace VAdvantage.Process
                                 dr = dt.Tables[0].Rows[d];
 
                             if (dr != null)
-                                sbHTML.Append("<div class='vis-val-tc-col-red-r'>" + Util.GetValueOfString(dr["Column_Name"]) + " (" + Util.GetValueOfString(dr["DATATYPE"]) + " (" + Util.GetValueOfInt(dr["LENGTH"]) + ") " + " ) " + "</div>");
+                            {
+                                // change done for PostgreSQL
+                                if (DB.IsPostgreSQL())
+                                    sbHTML.Append("<div class='vis-val-tc-col-red-r'>" + Util.GetValueOfString(dr["Column_Name"]) + " (" + Util.GetValueOfString(dr["Data_Type"]) + ")" + "</div>");
+                                else
+                                    sbHTML.Append("<div class='vis-val-tc-col-red-r'>" + Util.GetValueOfString(dr["Column_Name"]) + " (" + Util.GetValueOfString(dr["DATATYPE"]) + " (" + Util.GetValueOfInt(dr["LENGTH"]) + ") " + ") " + "</div>");
+                            }
                             else
                                 sbHTML.Append("<div class='vis-val-tc-col-red-r'>" + Msg.GetMsg(GetCtx(), "VIS_ADNotFound") + "</div>");
 
