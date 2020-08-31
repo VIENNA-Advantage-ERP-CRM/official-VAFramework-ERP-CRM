@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="VAdvantage" elementFormDefault="qualified" targetNamespace="VAdvantage" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/CloudService12/MService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/CloudServiceProject" />
+  <xs:import schemaLocation="http://localhost/CloudService12/MService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost/CloudService12/MService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:element name="GetModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sql" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startIndex" type="xs:int" />
+        <xs:element minOccurs="0" name="pageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="modType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="key" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetModulesResult" nillable="true" type="q1:ArrayOfMarketModuleInfo" />
+        <xs:element minOccurs="0" name="error" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleFromMarket">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="mcIn" nillable="true" type="q2:ModuleContainer" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleFromMarketResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetModuleFromMarketResult" nillable="true" type="q3:ModuleContainer" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleDataResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetModuleDataResult" nillable="true" type="q4:ModuleFolderInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SubscribeModule">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="Product_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="noOfUsers" type="xs:int" />
+        <xs:element minOccurs="0" name="ipAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IsPaymentDone" type="xs:boolean" />
+        <xs:element minOccurs="0" name="Amount" type="xs:double" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SubscribeModuleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SubscribeModuleResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateSubscription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="M_Product_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="key" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isFree" type="xs:boolean" />
+        <xs:element minOccurs="0" name="versionNo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateSubscriptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UpdateSubscriptionResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetVCustomerModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetVCustomerModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetVCustomerModulesResult" nillable="true" type="q5:ArrayOfGetCustomerModule" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleDescription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_Module_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleDescriptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetModuleDescriptionResult" nillable="true" type="q6:ArrayOfGetModuleDescInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetModuleReview">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="Remarks" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="rating" type="xs:int" />
+        <xs:element minOccurs="0" name="ratingday" type="xs:int" />
+        <xs:element minOccurs="0" name="ratingmonth" type="xs:int" />
+        <xs:element minOccurs="0" name="ratingyear" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetModuleReviewResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SetModuleReviewResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleReviews">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ad_moduleinfo_id" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleReviewsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetModuleReviewsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleCategory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleCategoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetModuleCategoryResult" nillable="true" type="q7:ArrayOfGetModuleCatInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllPlannedModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllPlannedModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetAllPlannedModulesResult" nillable="true" type="q8:ArrayOfGetPlanedInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllPaidModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllPaidModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetAllPaidModulesResult" nillable="true" type="q9:ArrayOfGetPaidInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllFreeModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllFreeModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetAllFreeModulesResult" nillable="true" type="q10:ArrayOfGetFreeInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllFeaturedModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllFeaturedModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetAllFeaturedModulesResult" nillable="true" type="q11:ArrayOfGetFeaturedInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllTopModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllTopModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetAllTopModulesResult" nillable="true" type="q12:ArrayOfGetTopModuleInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCatagoryModule">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleCatagory_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCatagoryModuleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetCatagoryModuleResult" nillable="true" type="q13:ArrayOfGetCatModuleInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SearchModule">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="search" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="from" type="xs:int" />
+        <xs:element minOccurs="0" name="To" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_ModuleCategory_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="sort" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SearchModuleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="SearchModuleResult" nillable="true" type="q14:ArrayOfGetSerachInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleSubscriptions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="UserKey" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_Moduleinfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleSubscriptionsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetModuleSubscriptionsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleImages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ad_moduleinfo_id" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleImagesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetModuleImagesResult" nillable="true" type="q15:ArrayOfbase64Binary" />
+        <xs:element xmlns:q16="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="xmldata" nillable="true" type="q16:ArrayOfanyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleReviewsCount">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Ad_Moduleinfo_id" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleReviewsCountResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetModuleReviewsCountResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDonationPayment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="PaymentAmount" type="xs:double" />
+        <xs:element minOccurs="0" name="CardType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NameOnCard" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CardNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ipAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetDonationPaymentResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SetDonationPaymentResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetPlannedModuleDonation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="Payment" type="xs:double" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetPlannedModuleDonationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SetPlannedModuleDonationResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModulePayOption">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_Module_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="Userkey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModulePayOptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetModulePayOptionResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsEmailalreadyExist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="emailid" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsEmailalreadyExistResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsEmailalreadyExistResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsUserAlreadyExist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsUserAlreadyExistResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsUserAlreadyExistResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsCustomerModule">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="ad_moduleInfo_id" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsCustomerModuleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsCustomerModuleResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReleasedModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Search" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="from" type="xs:int" />
+        <xs:element minOccurs="0" name="To" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_ModuleCategory_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="sort" nillable="true" type="xs:string" />
+        <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="released" type="q17:char" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReleasedModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetReleasedModulesResult" nillable="true" type="q18:ArrayOfGetReleasedFeatured" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPlannedModules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Search" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="from" type="xs:int" />
+        <xs:element minOccurs="0" name="To" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_ModuleCategory_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="sort" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPlannedModulesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetPlannedModulesResult" nillable="true" type="q19:ArrayOfGetReleasedNotFeatured" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetModulePayment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="PaymentAmount" type="xs:double" />
+        <xs:element minOccurs="0" name="CardType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NameOnCard" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="CardNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ipAddress" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="M_Product_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="nofUsers" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetModulePaymentResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SetModulePaymentResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleCountCategory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ad_modulecategory_id" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleCountCategoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetModuleCountCategoryResult" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PlannedSearchModule">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Search" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="from" type="xs:int" />
+        <xs:element minOccurs="0" name="To" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_ModuleCategory_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="sort" nillable="true" type="xs:string" />
+        <xs:element xmlns:q20="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="Planned" type="q20:char" />
+        <xs:element minOccurs="0" name="PageSize" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PlannedSearchModuleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="PlannedSearchModuleResult" nillable="true" type="q21:ArrayOfGetSerachInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMarketModuleInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="tokenKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMarketModuleInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetMarketModuleInfoResult" nillable="true" type="q22:MarketModuleInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateModuleSubscription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="AD_User_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="versionNo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateModuleSubscriptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UpdateModuleSubscriptionResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="tokenKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetModuleTypeResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadFileChunk">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cacheKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="currentChunk" type="xs:int" />
+        <xs:element minOccurs="0" name="totalChunk" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DownloadFileChunkResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DownloadFileChunkResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMarketModuleInfoHTML">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_ModuleInfo_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="tokenKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="showUnReleased" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMarketModuleInfoHTMLResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetMarketModuleInfoHTMLResult" nillable="true" type="q23:MarketModuleInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleVersionHostory">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AD_Module_ID" type="xs:int" />
+        <xs:element minOccurs="0" name="PageNo" type="xs:int" />
+        <xs:element minOccurs="0" name="accessKey" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetModuleVersionHostoryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/CloudServiceProject" minOccurs="0" name="GetModuleVersionHostoryResult" nillable="true" type="q24:ArrayOfModuleVersionInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
