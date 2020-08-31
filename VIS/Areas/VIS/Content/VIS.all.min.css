@@ -2288,7 +2288,7 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
 
 
 .vis-processpara-table {
-    width: auto;
+    width: 100%;
 }
 
     .vis-processpara-table label sup {
@@ -2296,7 +2296,7 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
     }
 
 .vis-processpara-table-td3 {
-    padding: 5px 0 5px 5px;
+    /*padding: 5px 0 5px 5px;*/
 }
 
     .vis-processpara-table-td3 label.vis-ec-col-lblchkbox {
@@ -2312,18 +2312,16 @@ html[dir="rtl"] .vis-apanel-bar-fixpart a {
     font-weight: normal;
 }
 
-
-
 .vis-process-result-table {
     max-height: calc(100vh - 280px);
     float: left;
     width: 100%;
     overflow: auto;
     margin-bottom: 10px;
-    border: 1px solid #333;
-    margin-top: 10px;
+    border: 1px solid rgba(var(--v-c-on-secondary), .3);
+    /* margin-top: 10px; */
+    padding: 5px 10px;
 }
-
 
 
 
@@ -3503,7 +3501,7 @@ findImg {
 .vis-allocation-inputLabels {
     width: 100%;
     float: left;
-    margin: 10px 0;
+    margin: 10px 0 5px 0;
 }
 
 .vis-allocation-currencycmb, .vis-allocation-docTypecmb, .vis-allocation-docNo, .vis-allocation-fromDate, .vis-allocation-toDate {
@@ -5131,7 +5129,7 @@ html[dir="rtl"] .VIS-AMTD-ModalformBtns a {
 }
 
 tr.vis-processpara-table-SplitUI {
-    padding: 10px 10px 0px 10px;
+    padding: 0px 10px;
 }
 
     tr.vis-processpara-table-SplitUI label {
@@ -5142,14 +5140,14 @@ tr.vis-processpara-table-SplitUI {
 
 .vis-process-background {
     Display: none;
-    float: left;
+    /*float: left;*/
 }
 
 .vis-process-background-label {
     Display: none;
     /*color: white;*/
-    line-height: 12px;
-    margin-left: 5px;
+    /*line-height: 12px;
+    margin-left: 5px;*/
 }
 
 .vis-confirm-popup-check {
@@ -5346,7 +5344,7 @@ li.vis-selected-list {
     flex-basis: 280px;
     /* height: 100%; */
     flex-direction: column;
-    background: rgba(var(--v-c-secondary), .8);
+    background: rgba(var(--v-c-secondary), 1);
     color: rgba(var(--v-c-on-secondary), 1);
     border-right: 1px solid rgba(var(--v-c-on-secondary), .1);
 }
@@ -5394,7 +5392,7 @@ li.vis-selected-list {
 .vis-process-parm-top {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 15px 10px 0;
     /*border-bottom: 1px solid #fff;*/
 }
 
@@ -5419,21 +5417,21 @@ li.vis-selected-list {
     margin-bottom: 0;
 }
 
-.vis-processbtnwrap {
+.vis-leftsidebarouterwrap .vis-processbtnwrap {
     padding: 0 10px;
 }
 
 .vis-pro-para-root .vis-processbtnwrap {
-    padding: 0;
+    /*padding: 0;*/
 }
 
 .vis-process-left-sidebar .VIS_Pref_btn-2.vis-process-ok-btn {
     background-color: rgba(var(--v-c-on-secondary), 1);
-    margin-bottom: 0px;
-    margin-top: 7px;
+    /*margin-bottom: 0px;*/
+    margin-top: 0;
     width: 100%;
-    border-radius: 0;
-    text-align: center;
+    /*border-radius: 0;*/
+    /*text-align: center;*/
 }
 /*.vis-process-description-Span p {
     text-overflow: ellipsis;
@@ -5463,41 +5461,42 @@ li.vis-selected-list {
     overflow-y: auto;
     /*height:-webkit-fill-available;*/
     max-height: calc(100% - 58px);
+    padding-top: 1px;
 }
 
 .vis-processpara-table-SplitUI select, .vis-processpara-table-SplitUI button, .vis-processpara-table-SplitUI input:not([type="checkbox"]) {
-    height: 30px;
+    /*height: 30px;
     border-radius: 0;
-    outline: none;
+    outline: none;*/
 }
 
     .vis-processpara-table-SplitUI select:focus, .vis-processpara-table-SplitUI input:not([type="checkbox"]):focus {
-        border: 1px solid rgba(var(--v-c-primary), 1);
+        /*border: 1px solid rgba(var(--v-c-primary), 1);*/
     }
 
 .vis-processpara-table-SplitUI button {
-    border: 1px solid rgba(var(--v-c-on-secondary), .2);
+    /*border: 1px solid rgba(var(--v-c-on-secondary), .2);
     float: right;
     width: 30px;
     padding: 0;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;*/
 }
 
 
 td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
-    display: flex;
-    padding: 0;
+    /*display: flex;
+    padding: 0;*/
 }
 
 .vis-processpara-table-SplitUI select, .vis-processpara-table-SplitUI input:not([type="checkbox"]) {
-    flex: 1;
+    /*flex: 1;*/
 }
 
 .vis-processpara-table-SplitUI select {
-    width: 200px;
-    background-color: #fff;
+    /*width: 200px;
+    background-color: #fff;*/
 }
 
 .vis-pt-0 {
@@ -5933,7 +5932,8 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     outline: none;
 }
 
-    .vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]), .vis-app-aform-root select {
+    .vis-app-aform-root input:not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+    .vis-app-aform-root select {
         min-height: 30px;
         padding: 5px 10px;
     }
@@ -6175,11 +6175,13 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     padding: 5px 10px;
 }
 
-.vis-leftsidebarouterwrap .vis-input-wrap label,
-.VIS-archive-table-padding .vis-input-wrap label,
-.vis-emailsavewrap .vis-input-wrap label {
-    left: 10px;
-}
+    .vis-leftsidebarouterwrap .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+    .vis-emailsavewrap .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+    .vis-valpreferencedatawrp .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+    .vis-formouterwrpdiv .vis-input-wrap input:not(:focus):placeholder-shown ~ label,
+    .vis-formouterwrpdiv .vis-input-wrap textarea:not(:focus):placeholder-shown ~ label {
+        left: 10px;
+    }
 
 .vis-leftsidebarouterwrap .vis-input-wrap label {
     color: rgba(var(--v-c-on-secondary), .8);
@@ -6251,6 +6253,29 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
         display: flex;
         align-items: center;
     }
+
+.vis-process-toolbar .vis-icon-menuclose .vis-cross {
+    padding: 0 10px;
+}
+
+.vis-acctviewerbottdiv {
+    display: flex;
+    float: left;
+    align-items: center;
+    width: 100%;
+}
+
+    .vis-acctviewerbottdiv > label {
+        margin-left: 10px;
+        margin-right: 10px;
+        color: #19a0ed;
+        flex: 1;
+        text-align: right;
+    }
+
+.vis-formouterwrpdiv input {
+    padding: 5px 10px;
+}
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {
     position: absolute;
@@ -6825,7 +6850,7 @@ div.VIS_Pref_slide-show.pp {
     font-size: 14px;
     border: 0px;
     float: right;
-    border-radius: 2px;
+    border-radius: .25rem;
     font-weight: 200;
     /*font-family: helvetica;*/
     cursor: pointer;
@@ -7280,6 +7305,7 @@ input:required:valid {
     color: #fff;
     padding: 8px 15px;
     cursor: pointer;
+    font-weight: normal;
 }
 
 /*#file-input {
@@ -10873,71 +10899,6 @@ ul.vis-userLinks-ListMenu li a i {
         border: 1px solid rgba(var(--v-c-on-secondary), .2);
     }
 
-.vis-payment-table {
-    width: 100%;
-    margin-bottom: 0px;
-    margin-top: 2px;
-}
-
-
-.vis-payment-td1 {
-    width: 40%;
-}
-
-.vis-payment-td2 {
-    width: 60%;
-}
-
-.vis-payment-spanPayment {
-    width: 39%;
-    margin: 5px 0px 0px 1%;
-    float: left;
-}
-
-
-.vis-payment-spanPayment-RTL {
-    width: 39%;
-    margin: 5px 0px 0px 1%;
-    float: Right;
-}
-
-.vis-payment-cmbPayment {
-    width: 58%;
-    margin-left: 1%;
-    margin-right: 1%;
-    /*margin-bottom:15px;*/
-}
-
-
-.vis-payment-span {
-    margin: 5px 0px 5px 1%;
-}
-
-
-.vis-payment-inputs {
-    margin: 10px 1% 5px 2%;
-    width: 97%;
-}
-
-.vis-payment-inputs-buttons {
-    margin: 15px 0px 0px 0px;
-    width: 100%;
-}
-
-.vis-payment-cmb {
-    margin: 10px 1% 5px 2%;
-    width: 97%;
-}
-
-.vis-payment-date {
-    height: 30px;
-}
-
-.vis-payment-AmountField {
-    float: right;
-    margin-right: 2px;
-}
-
 .vis-pu-outerwrap {
     width: 100%;
     height: 100%;
@@ -13565,215 +13526,6 @@ html[dir="rtl"] .vis-Email-leftWrap {
 }
 /*----------------------------end by designer--------------------------------*/
 
-.vis-pSelectInfo {
-    width: 320px;
-    float: left;
-    /*padding: 12px;*/
-    background: rgba(var(--v-c-secondary), 1);
-    position: relative;
-    height: 100%;
-}
-
-.vis-pPrintInfo {
-    padding: 0 5px;
-    position: relative;
-    /* margin: 5px; */
-    margin-right: 0px;
-    height: calc(100% - 50px);
-    width: 100%;
-}
-
-.vis-paymentselect-field, .vis-paymentPrint-field {
-    float: left;
-    /*margin-bottom: 5px;*/
-    padding: 0 7px;
-}
-
-.vis-paymentselect-field {
-    width: 100%;
-}
-
-.vis-paymentPrint-field {
-    width: 50%;
-}
-
-.vis-pPrintProcess .vis-paymentPrint-field {
-    float: right;
-    width: auto;
-}
-
-.vis-paymentPrintChk-field {
-    float: right;
-    display: flex;
-}
-
-    .vis-paymentPrintChk-field checkbox, .vis-paymentPrintChk-field label {
-        float: left;
-    }
-
-.vis-mainContainer {
-    /*position:absolute;*/
-    width: 100%;
-    height: 100%;
-}
-
-.vis-pSelectIionGrid {
-    height: calc(100% - 60px);
-    width: calc(100% - 320px);
-    float: left;
-    padding: 0 12px;
-    margin-bottom: 10px;
-}
-
-.vis-fieldreadonly {
-    color: rgba(var(--v-c-on-secondary),.7) !important;
-    background: rgba(var(--v-c-on-secondary),.04) !important;
-    cursor: not-allowed;
-}
-
-.vis-paymentselect-field select,
-.vis-paymentselect-field input:not([type="submit"]):not([type="checkbox"]),
-.vis-paymentPrint-field select,
-.vis-paymentPrint-field input:not([type="submit"]) {
-    /*width: 100%;
-    float: left;*/
-    /* color: rgba(var(--v-c-on-secondary), 1); */
-    /*height: 30px;*/
-    /*flex: 1;*/
-    /*background-color: var(--white);*/
-    /* outline: none; */
-}
-
-.vis-paymentselect-field input[type="checkbox"] {
-    margin: 2px 5px 0 0;
-}
-
-.vis-paymentselect-field input[type="date"] {
-    -webkit-appearance: none;
-}
-
-.vis-paymentPrint-field input[name='vis-name'], .vis-paymentPrint-field select[name='vis-name'] {
-    margin-right: 15px;
-}
-
-.vis-paymentselect-field label, .vis-paymentPrint-field label, .vis-paymentPrintChk-field label {
-    font-weight: normal;
-    color: rgba(var(--v-c-on-secondary), 1);
-    margin-bottom: 0;
-}
-
-.vis-pPrintProcess {
-    float: right;
-    width: 100%;
-    padding: 0 5px;
-}
-
-.vis-pSelectProcess {
-    float: right;
-    margin-right: 9px;
-}
-
-.vis-pBOMInfo {
-    /*width: 24%;
-    float: left;
-    padding: 15px;
-    background: #f8f8f8;
-    position:relative;
-    height:85%;
-    margin: 10px;
-    margin-right: 0px;
-    margin-left:5px;*/
-}
-
-.vis-BOMLines {
-    /*height:80%;
-    width: 65%;
-    float: right;
-    margin: 10px;
-    margin-bottom: 0px;
-    margin-left: 0px;*/
-}
-
-.vis-bomlinesdata {
-    margin: 5px;
-    float: left;
-    width: 80%;
-}
-
-.vis-lookupTextboxes {
-    width: 77% !important;
-    border-radius: none;
-}
-
-.vis-BOMLines label {
-    font-weight: normal;
-}
-
-.vis-frm-btn {
-    background: rgba(var(--v-c-primary), 1) !important;
-    color: rgba(var(--v-c-on-primary), 1) !important;
-    border: none !important;
-    padding: 10px 12px !important;
-    float: left;
-    margin-left: 10px;
-    min-width: 70px;
-    text-align: center !important;
-}
-
-.vis-pSelectInner {
-    display: flex;
-    flex-direction: column;
-    height: calc(100% - 60px);
-    margin-bottom: 10px;
-    overflow: auto;
-    padding: 12px 5px;
-}
-
-    .vis-pSelectInner ~ .vis-paymentselect-field {
-        padding-left: 12px;
-        padding-right: 0;
-        width: auto;
-    }
-
-.vis-leftsidebarouterwrap .vis-paymentselect-field:first-child {
-    margin-top: 6px;
-}
-
-.vis-paymentPrint-field .vis-input-wrap input + label {
-    left: 10px;
-}
-
-@media (max-width: 1024px) {
-    .vis-paymentPrint-field {
-        /*width:48.5%;*/
-    }
-
-    .vis-lookupTextboxes {
-        width: 71% !important;
-    }
-
-    .vis-lookupButtons {
-        width: 20px;
-        height: 20px;
-    }
-}
-
-@media (max-width:999px) {
-    .vis-pSelectInfo {
-        width: 35%;
-    }
-
-    .vis-pSelectIionGrid {
-        width: 65%;
-    }
-}
-
-@media (max-width: 767px) {
-    .vis-paymentPrint-field {
-        width: 100%;
-    }
-}
-
 .vis-reportrootdiv {
     height: 100%;
     width: 100%;
@@ -14762,7 +14514,7 @@ input.vis-group-search-icon {
 .vis-group-assinRole-data, .vis-group-assinRole-check {
     width: 100%;
     float: left;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
     position: relative;
 }
 
@@ -14814,7 +14566,7 @@ input.vis-group-search-icon {
     display: inline;
     float: left;
     width: 100%;
-    margin-top: -20px;
+    margin-top: -15px;
 }
 
 /* For Aspx Page */
@@ -14997,6 +14749,7 @@ input.vis-group-search-icon {
     border-radius: 50%;
     width: 57px;
     height: 57px;
+    overflow: hidden;
 }
 
 .vis-group-user-wrap input[type="checkbox"],
@@ -15019,6 +14772,11 @@ input.vis-group-search-icon {
 
 .vis-group-user-wrap input[type="radio"] {
     margin-right: 12px;
+}
+
+.vis-group-assignContainer {
+    margin-top: 15px;
+    float: left;
 }
 /*******************************************/
 
@@ -15049,43 +14807,47 @@ input.vis-group-search-icon {
     }
 }
 
-.VIS_main-wrap, .VIS_form-wrap, .VIS_form-row {
+.VIS_main-wrap,
+.VIS_form-wrap,
+.VIS_form-row,
+.VIS_form-data-row {
     float: left;
     width: 100%;
 }
 
-.VIS_form-col {
+.VIS_form-col,
+.VIS_form-data-col {
     float: left;
     width: 50%;
-    padding: 10px 10px 0 10px;
+    /*padding: 10px 10px 0 10px;*/
 }
 
     .VIS_form-col label {
-        float: left;
-        width: 100%;
-        font-weight: normal;
+        /* float: left; */
+        /* width: 100%; */
+        /* font-weight: normal; */
     }
 
     .VIS_form-col select {
-        float: left;
-        width: 100%;
-        height: 31px;
-        border: 1px solid #ccc;
+        /* float: left; */
+        /* width: 100%; */
+        /* height: 31px; */
+        /* border: 1px solid #ccc; */
     }
 
 .VIS_form-col-checkbox {
-    float: left;
+    /*float: left;
     width: 50%;
-    padding: 10px;
+    padding: 10px;*/
 }
 
     .VIS_form-col-checkbox input[type="checkbox"] {
-        float: left;
-        margin-right: 10px;
+        /* float: left; */
+        /* margin-right: 10px; */
     }
 
     .VIS_form-col-checkbox label {
-        font-weight: normal;
+        /* font-weight: normal; */
     }
 
 .VIS_outer-table-wrap {
@@ -15099,15 +14861,16 @@ input.vis-group-search-icon {
 .VIS_buttons-wrap {
     float: left;
     width: 100%;
-    padding: 10px;
+    padding: 10px 0 0;
 }
 
     .VIS_buttons-wrap span {
         background: rgba(var(--v-c-primary), 1);
         color: rgba(var(--v-c-on-primary), 1);
-        border-radius: 0;
-        margin-left: 15px;
+        /* border-radius: 0; */
+        margin-left: 5px;
         float: left;
+        font-size: .875rem;
     }
 
         .VIS_buttons-wrap span:hover {
@@ -15115,41 +14878,41 @@ input.vis-group-search-icon {
         }
 
 .VIS_buttons-ContainerTree {
-    background: #616364;
+    /*background: #616364;
     color: #fff;
     border-radius: 0;
     margin-left: 2px;
-    float: left;
+    float: left;*/
 }
 
 .VIS_tree-container ul.nav-list {
-    padding-left: 20px;
-    flex-flow: column;
+    /*padding-left: 20px;
+    flex-flow: column;*/
 }
 
 .current {
-    background: #afaeae;
+    background: rgba(var(--v-c-secondary), 1);
 }
 
 .VIS-pallet-icon {
-    float: left;
+    /*float: left;
     width: 31px;
     height: 31px;
     background: url('../Images/pallet-icon.png');
     background-color: #616364;
     background-repeat: no-repeat;
     cursor: pointer;
-    background-position: center;
+    background-position: center;*/
 }
 
 .VIS_Tree-Container {
-    height: 397px;
+    height: 384px;
     float: left;
     width: 100%;
 }
 
 .VIS_form-col select.VIS-container-move-combo-width {
-    width: calc(100% - 35px);
+    /*width: calc(100% - 35px);*/
 }
 
 label.tree-toggler.nav-header:hover {
@@ -15157,66 +14920,60 @@ label.tree-toggler.nav-header:hover {
 }
 
 .VIS_form-data-row {
-    float: left;
-    width: 100%;
+    /*float: left;
+    width: 100%;*/
 }
 
 .VIS_form-data-col {
-    float: left;
-    width: 50%;
-    margin-bottom: 2px;
-    padding: 0 10px;
+    /*float: left;
+    width: 50%;*/
+    /*margin-bottom: 2px;
+    padding: 0 10px;*/
 }
 
     .VIS_form-data-col label {
-        font-weight: normal;
-        margin-bottom: 0px;
+        /* font-weight: normal; */
+        /* margin-bottom: 0px; */
     }
 
     .VIS_form-data-col input {
-        float: left;
-        width: 100%;
-        border-radius: 0;
-        height: 27px;
-    }
-
-    .VIS_form-data-col:nth-child(odd) {
-        padding-left: 0;
-    }
-
-    .VIS_form-data-col:nth-child(even) {
-        padding-right: 0;
+        /* float: left; */
+        /* width: 100%; */
+        /* border-radius: 0; */
+        /* height: 27px; */
+        padding: 5px 10px;
     }
 
 .VIS_form-search-wrap {
-    float: left;
+    /*float: left;
     width: 100%;
     margin-bottom: 3px;
-    margin-top: -1px;
+    margin-top: -1px;*/
 }
 
     .VIS_form-search-wrap input {
-        border-radius: 0;
-        height: 31px;
-        float: left;
-        width: calc(100% - 112px);
-        margin-right: 5px;
+        /*border-radius: 0;
+    height: 31px;
+    float: left;
+    width: calc(100% - 112px);
+    margin-right: 5px;*/
+        padding: 5px 10px;
     }
 
     .VIS_form-search-wrap button {
-        float: left;
-        width: 31px;
-        height: 31px;
-        background: #616364;
-        border: none;
-        margin-left: 4px;
-        color: #fff;
-        display: flex;
-        align-items: center;
+        /*float: left;
+    width: 31px;
+    height: 31px;
+    background: #616364;
+    border: none;
+    margin-left: 4px;
+    color: #fff;
+    display: flex;
+    align-items: center;*/
     }
 
         .VIS_form-search-wrap button i {
-            font-size: 20px;
+            /*font-size: 20px;*/
         }
 
 .VIS_pop-btn-wrap {
@@ -15233,6 +14990,34 @@ label.tree-toggler.nav-header:hover {
     float: left;
     width: 100%;
     display: none;
+}
+
+.VIS_form-row .VIS_form-col:not(:first-child),
+.VIS_form-data-col:not(:first-child) {
+    padding-left: 7px;
+}
+
+.VIS_form-row .VIS_form-col:not(:last-child),
+.VIS_form-data-col:not(:last-child) {
+    padding-right: 7px;
+}
+
+.VIS_form-data-col input:not(:focus):placeholder-shown ~ label,
+.VIS_form-col input:not(:focus):placeholder-shown ~ label {
+    left: 10px;
+}
+
+#AddNewContainer, .VIS_main-wrap {
+    padding-top: 5px;
+}
+
+.VIS_tree-container .nav-list label {
+    padding: 5px;
+    border-radius: .25rem;
+}
+
+.VIS_tree-container .nav-list .nav-list {
+    padding-left: 15px;
 }
 
 .vis-gl-main-wrap, .vis-gl-form-wrap, .vis-gl-form-row {
@@ -17805,7 +17590,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
 }
 
 
-.vis-ev-col input:not([type=button]):not([type="checkbox"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
+.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]), .vis-ev-col select, .vis-ev-col textarea, .vis-control-wrap > button {
     border: 1px solid rgba(var(--v-c-on-secondary), .2);
     /*border: 1px solid var(--input-border);*/
     border-radius: .25rem;
@@ -17814,7 +17599,7 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.vis-ev-col input:not([type=button]):not([type="checkbox"]),
+.vis-ev-col input:not([type=button]):not([type="checkbox"]):not([type="radio"]),
 .vis-ev-col textarea {
     padding: 5px 10px 5px 30px;
 }
@@ -17864,7 +17649,8 @@ li.vis-ad-w-p-ap-tp-o-li-selected {
     margin-bottom: 15px;
 }
 
-    .vis-input-wrap input:not([type="checkbox"]), .vis-input-wrap select, .vis-control-wrap > button {
+    .vis-input-wrap input:not([type="checkbox"]):not([type="radio"]),
+    .vis-input-wrap select, .vis-control-wrap > button {
         height: 35px;
         -webkit-appearance: none;
         appearance: none;
@@ -19154,3 +18940,595 @@ ul.vis-thed-hdr-r li.vis-app-hdr-r-user a {
         padding-bottom: 10px;
     }
 }
+
+/*rtl css Start here*/
+html[dir="rtl"] * {
+    text-align: right;
+}
+
+html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2,
+html[dir="rtl"] .pull-right,
+html[dir="rtl"] .vis-pull-right {
+    float: left !important;
+}
+
+html[dir="rtl"] .vis-pull-left,
+html[dir="rtl"] .pull-left {
+    float: right !important;
+}
+
+html[dir="rtl"] #favLinks > [class^="col"],
+html[dir="rtl"] .vis-info-l-s-wrap,
+html[dir="rtl"] .VIS_Pref_menu,
+html[dir="rtl"] .VIS-Lavel-float,
+html[dir="rtl"] .VIS_Pref_col-33,
+html[dir="rtl"] .VIS_Pref_dd,
+html[dir="rtl"] .VIS_Pref_sett-1,
+html[dir="rtl"] .vis-theme-drp-wrp,
+html[dir="rtl"] div.VIS_Pref_slide-show.pp,
+html[dir="rtl"] .VIS_Pref_notification-check,
+html[dir="rtl"] .VIS_Pref_pp,
+html[dir="rtl"] .vis-archive-left-sidebar,
+html[dir="rtl"] .vis-pSelectInfo,
+html[dir="rtl"] .vis-archive-l-s-content,
+html[dir="rtl"] .vis-leftpanel-wrapper,
+html[dir="rtl"] .vis-group-content-tittle,
+html[dir="rtl"] .vis-group-user-profile,
+html[dir="rtl"] .vis-group-user-img,
+html[dir="rtl"] .VIS-AMTD-formData select,
+html[dir="rtl"] .VIS-AMTD-formData input,
+html[dir="rtl"] .VIS-AMTD-formData,
+html[dir="rtl"] .VIS-AMTD-formDynmicInput,
+html[dir="rtl"] .VIS-TM-left-tree,
+html[dir="rtl"] .VIS-TM-middle,
+html[dir="rtl"] .VIS-TM-right-slide,
+html[dir="rtl"] .vis-form-data-sub,
+html[dir="rtl"] .vis-attach-file-wrapla,
+html[dir="rtl"] .vis-attachhistory-right-row2,
+html[dir="rtl"] .vis-attachhistory-right-row3,
+html[dir="rtl"] .vis-attachhistory-right-row2 i,
+html[dir="rtl"] .vis-attachhistory-right-row i,
+html[dir="rtl"] .vis-rad-actionBtn,
+html[dir="rtl"] .vis-rad-recordData,
+html[dir="rtl"] .vis-paymentselect-field,
+html[dir="rtl"] .vis-paymentPrint-field,
+html[dir="rtl"] .vis-sms-leftDiv,
+html[dir="rtl"] .vis-Email-leftFooter {
+    float: right;
+}
+
+html[dir="rtl"] .vis-pull-right,
+html[dir="rtl"] .VIS_Pref_btn-2,
+html[dir="rtl"] li.active:after,
+html[dir="rtl"] .VIS_Pref_li:hover:after,
+html[dir="rtl"] .VIS_Pref_pass,
+html[dir="rtl"] .VIS_Pref_Savebtn,
+html[dir="rtl"] .vis-its-ryt-panel .vis-initial-btn,
+html[dir="rtl"] .vis-pSelectProcess,
+html[dir="rtl"] .vis-paymentPrintChk-field,
+html[dir="rtl"] .vis-group-head-right,
+html[dir="rtl"] .vis-group-top-right,
+html[dir="rtl"] .vis-attach-BottomRight,
+html[dir="rtl"] .vis-attachhistory-comment-dateTime,
+html[dir="rtl"] .vis-attachhistory-email-dropdown,
+html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset,
+html[dir="rtl"] .vis-ctrfrm-btnwrp div,
+html[dir="rtl"] .btns,
+html[dir="rtl"] .vis-email-btns,
+html[dir="rtl"] .vis-email-sendbtn,
+html[dir="rtl"] .vis-email-saveAttachbtn {
+    float: left;
+}
+
+html[dir="rtl"] #fllupsScreen h2 span,
+html[dir="rtl"] #favLinks h2 span
+html[dir="rtl"] .vis-css-treeview label i,
+html[dir="rtl"] .vis-css-treeview ul li a span,
+html[dir="rtl"] .vis-attach-file-location > label,
+html[dir="rtl"] .vis-archive-l-s-content + .vis-frm-bot-btn-wrp,
+html[dir="rtl"] .vis-ad-w-p-tb-search,
+html[dir="rtl"] .VIS-AMTD-formData,
+html[dir="rtl"] .VIS-AMTD-formDynmicInput,
+html[dir="rtl"] .vis-tm-sortable li i,
+html[dir="rtl"] .scrolldrag li .vis-tm-upperdivchkandimg i,
+html[dir="rtl"] .vis-ev-col-fieldgroup :last-child,
+html[dir="rtl"] .vis-css-treeview label i,
+html[dir="rtl"] .vis-css-treeview ul li a span,
+html[dir="rtl"] .vis-attachhistory-right-row2 i,
+html[dir="rtl"] .vis-advancedSearchInput,
+html[dir="rtl"] .vis-advancedSearchContentArea,
+html[dir="rtl"] .vis-tree-search,
+html[dir="rtl"] .vis-pref-ctrl-lblwrp,
+html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:first-child {
+    padding-right: 0;
+    padding-left: 10px;
+}
+
+    html[dir="rtl"] .vis-attach-file-text,
+    html[dir="rtl"] .vis-ad-process-header,
+    html[dir="rtl"] .vis-report-tittle,
+    html[dir="rtl"] .vis-info-datasec,
+    html[dir="rtl"] .VIS-AMTD-formData select,
+    html[dir="rtl"] .VIS-AMTD-formData input,
+    html[dir="rtl"] .vis-advancedSearch-RecentRecords,
+    html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:not(:first-child) {
+        padding-left: 0;
+        padding-right: 10px;
+    }
+
+html[dir="rtl"] .vis-app-f-taskbar li a,
+html[dir="rtl"] .vis-filter-dialog label,
+html[dir="rtl"] .vis-ad-w-p-tb-lc li span,
+html[dir="rtl"] .vis-ad-w-p-tb-rc-a-list li span,
+html[dir="rtl"] .vis-feedTitleBar,
+html[dir="rtl"] .vis-ulrole li {
+    padding-left: 0;
+    padding-right: 5px;
+}
+
+html[dir="rtl"] .vis-app-hdr-r-user a,
+html[dir="rtl"] .vis-app-hdr,
+html[dir="rtl"] .vis-attachhistory-attach-download,
+html[dir="rtl"] .vis-advancedSearchHorigontal > label {
+    padding-right: 0;
+    padding-left: 5px;
+}
+
+html[dir="rtl"] .vis-attachhistory-email-dropdown {
+    padding-left: 0;
+    padding-right: 15px;
+}
+
+html[dir="rtl"] .vis-rad-recordData,
+html[dir="rtl"] .vis-attachhistory-right-row > ul > li {
+    padding-right: 0;
+    padding-left: 15px;
+}
+
+html[dir="rtl"] .vis-feedIcons.vis-icon-feed,
+html[dir="rtl"] .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input,
+html[dir="rtl"] .VIS-Lavel-float,
+html[dir="rtl"] .VIS_Pref_btn-margin,
+html[dir="rtl"] .vis-group-content-tittle i,
+html[dir="rtl"] .vis-tm-childnodeinidailog,
+html[dir="rtl"] .vis-rad-actionBtn {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+html[dir="rtl"] .vis-process-background-label,
+html[dir="rtl"] .vis-apanel-rb-ul span,
+html[dir="rtl"] .vis-group-head-right:after,
+html[dir="rtl"] .VIS-Tm-btnicon:last-child,
+html[dir="rtl"] .vis-allocation-rightContainer p + input[type="checkbox"],
+html[dir="rtl"] .vis-CardView button,
+html[dir="rtl"] .vis-Email-leftFooter > label {
+    margin-left: 0;
+    margin-right: 5px;
+}
+/*html[dir="rtl"] .vis-advancedSearch-calender-Icon,*/
+html[dir="rtl"] .vis-info-ls-btnswrap button,
+html[dir="rtl"] .VIS_Pref_err_btnRight span,
+html[dir="rtl"] .vis-viewMoreComments,
+html[dir="rtl"] .vis-group-user-ico,
+html[dir="rtl"] .VIS-TM-data-head input[type="checkbox"],
+html[dir="rtl"] .vis-advancedSearchHorigontal,
+html[dir="rtl"] .vis-btnOk {
+    margin-right: 0;
+    margin-left: 10px;
+}
+
+html[dir="rtl"] .vis-info-btnswrap .VIS_Pref_btn-2,
+html[dir="rtl"] .vis-frm-bttsec .VIS_Pref_btn-2.vis-frm-button,
+html[dir="rtl"] .VIS-TM-data-head .VIS-TM-data,
+html[dir="rtl"] .vis-attach-btns > a,
+html[dir="rtl"] .vis-unlinkallNodes,
+html[dir="rtl"] .vis-attach-ico,
+html[dir="rtl"] .VIS_Pref_btn-2.vis-frm-button,
+html[dir="rtl"] .vis-ctrfrm-btnwrp input,
+html[dir="rtl"] .btns > input[type=button],
+html[dir="rtl"] .VIS-Tm-unlinkforbottmo,
+html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
+html[dir="rtl"] span.vis-ad-w-p-tb-rc-action {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+html[dir="rtl"] #userFavs h2 {
+    margin-right: 10px;
+}
+
+html[dir="rtl"] #vis_mainMenu .vis-menuTitle p,
+html[dir="rtl"] .vis-ad-w-p-tabs-t,
+html[dir="rtl"] .vis-chatdetailwrap {
+    padding-right: 10px;
+}
+
+html[dir="rtl"] .vis-attachhistory-right-row3 *,
+html[dir="rtl"] .vis-ad-w-p-a-m-lst span,
+html[dir="rtl"] .vis-attachhistory-view-comments,
+html[dir="rtl"] .vis-pref-ctrl-lblwrp h5,
+html[dir="rtl"] .vis-pref-ctrl-lblwrp label {
+    text-align: left;
+}
+
+html[dir="rtl"] #favLinks .row.userLinks_activeTab {
+    border-left: 1px solid rgba(var(--v-c-primary), 1);
+    border-right: none;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child {
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/*css for window*/
+html[dir="rtl"] .vis-ad-w-p-tb {
+    padding-right: 0;
+    padding-left: 8px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body, html[dir="rtl"] .vis-ad-w-p-ap-tp-o-b-head {
+    border-top-left-radius: 0;
+    border-top-right-radius: .60rem
+}
+
+html[dir="rtl"] .vis-ad-w-p-ap-tp-o-body {
+    box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.10);
+}
+
+html[dir="rtl"] .vis-ad-w-p-actionpanel-r li.vis-ad-w-p-ap-tp-o-li-selected:before {
+    border-left: none;
+    border-right: 5px solid rgba(var(--v-c-primary),1);
+    right: 0;
+}
+
+html[dir="rtl"] .vis-ad-w-p-ap-tp-o-icorbar li {
+    border-right: 3px solid transparent;
+    border-left: none;
+    padding: 7px 9px 7px 0;
+}
+
+html[dir="rtl"] .vis-ad-w-p-actionpanel-r li.vis-ad-w-p-ap-tp-o-li-selected {
+    border-right: 3px solid rgba(var(--v-c-primary),1);
+}
+
+html[dir="rtl"] .vis-ev-col-msign,
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign,
+html[dir="rtl"] .vis-file-close-ico,
+html[dir="rtl"] .vis-ad-w-p-a-main,
+html[dir="rtl"] .VIS_Pref_close-btn,
+html[dir="rtl"] .vis-leftpanel-wrapper:after,
+html[dir="rtl"] .address-close-icon {
+    right: auto;
+}
+
+html[dir="rtl"] .vis-ev-col-msign {
+    left: 10px;
+}
+
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory ~ .vis-ev-col-msign {
+    left: 30px;
+}
+
+html[dir="rtl"] .vis-file-close-ico {
+    left: -8px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-a-main {
+    left: 2px;
+}
+
+html[dir="rtl"] .VIS_Pref_close-btn {
+    left: -10px;
+}
+
+html[dir="rtl"] .vis-leftpanel-wrapper:after,
+html[dir="rtl"] .address-close-icon {
+    left: -6px;
+}
+
+html[dir="rtl"] .vis-input-wrap input:focus ~ label,
+html[dir="rtl"] .vis-input-wrap input:not(:placeholder-shown) ~ label,
+html[dir="rtl"] .vis-input-wrap textarea:not(:placeholder-shown) ~ label,
+html[dir="rtl"] .vis-input-wrap select:focus ~ label,
+html[dir="rtl"] .vis-input-wrap textarea:focus ~ label,
+html[dir="rtl"] .vis-input-wrap select ~ label {
+    right: 5px;
+    left: auto;
+}
+
+html[dir="rtl"] .vis-input-wrap label {
+    right: 30px;
+    left: auto;
+}
+
+html[dir="rtl"] .vis-ev-col input:not([type=button]):not([type="checkbox"]),
+html[dir="rtl"] .vis-ev-col textarea,
+html[dir="rtl"] .vis-control-wrap > button {
+    padding: 5px 30px 5px 10px;
+}
+
+html[dir="rtl"] label.vis-ec-col-lblchkbox {
+    right: 0;
+}
+
+html[dir="rtl"] .vis-ev-ctrlinfowrap {
+    right: 10px;
+    left: auto;
+}
+
+html[dir="rtl"] select {
+    background-position-x: 10px,14px;
+    padding-right: 10px;
+    padding-left: 25px;
+}
+
+html[dir="rtl"] .vis-input-wrap select.vis-ev-col-mandatory {
+    /*background-position: calc(10% - 25px), calc(10% - 20px);*/
+}
+
+html[dir="rtl"] .vis-statusbar-combo {
+    background-position: 4px, 8px
+}
+
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append > .btn,
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append > .input-group-text,
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend:first-child > .btn:not(:first-child),
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child),
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend:not(:first-child) > .btn,
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend:not(:first-child) > .input-group-text,
+html[dir="rtl"] .location .input-group-text {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+html[dir="rtl"] .vis-input-wrap *[data-hasBtn],
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:last-child > .btn:not(:last-child):not(.dropdown-toggle),
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:last-child > .input-group-text:not(:last-child),
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:not(:last-child) > .btn,
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .btn,
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .input-group-text,
+html[dir="rtl"] .location input.form-control:not(:last-child) {
+    border-top-right-radius: .25rem !important;
+    border-bottom-right-radius: .25rem !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap * {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: .25rem !important;
+    border-bottom-left-radius: .25rem !important;
+}
+
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:not(:last-child) > .input-group-text {
+    border-radius: 0 !important;
+}
+
+html[dir="rtl"] .vis-input-wrap *[data-hasBtn]:focus {
+    border-left: 1px solid rgba(var(--v-c-secondary),1);
+    border-right: 1px solid rgba(var(--v-c-primary));
+}
+
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap *:focus {
+    border-right: 1px solid rgba(var(--v-c-secondary),1);
+    border-left: 1px solid rgba(var(--v-c-primary));
+}
+
+html[dir="rtl"] .input-group:focus-within .input-group-append .input-group-text {
+    border: 1px solid rgba(var(--v-c-primary),1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+
+html[dir="rtl"] .input-group:focus-within .input-group-prepend .input-group-text {
+    border: 1px solid rgba(var(--v-c-primary),1);
+    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+
+html[dir="rtl"] .input-group:focus-within .input-group-append:not(:last-child) .input-group-text {
+    border-left: 1px solid rgba(var(--v-c-on-secondary),.1);
+    border-right: 1px solid rgba(var(--v-c-on-secondary),.1);
+}
+
+html[dir="rtl"] .input-group-append,
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+    margin-right: -1px;
+    margin-left: 0;
+}
+
+html[dir="rtl"] .input-group-prepend {
+    margin-right: 0;
+    margin-left: -1px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2) {
+    margin-left: -1px;
+    margin-right: 10px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tabs-oflow a,
+html[dir="rtl"] .vis-statusbar-ul div,
+html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2),
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child,
+html[dir="rtl"] .input-group-text .fa-arrow-left {
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .vis-control-wrap > button {
+    text-align: center;
+}
+
+html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i {
+    transform: rotate(90deg);
+}
+
+html[dir="rtl"] .vis-ad-w-p-t-c-tc i,
+html[dir="rtl"] .vis-tree-search .input-group-text a,
+html[dir="rtl"] .vis-ad-w-p-tb-s-btn {
+    transform: scaleX(-1);
+}
+
+html[dir="rtl"] .vis-ad-w-p-a-m-lst span {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    box-shadow: 3px 0px 3px 0px rgba(var(--v-c-on-common), 0.15);
+}
+
+html[dir="rtl"] .vis-ad-w-p-header-h {
+    right: 0;
+    left: auto;
+    transform: rotate(180deg);
+}
+
+html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable input, html[dir="rtl"] .vis-gc-vtable.w2ui-grid .w2ui-editable select {
+    position: relative;
+    margin-top: 10px;
+}
+
+html[dir="rtl"] .VIS-AMTD-formData:nth-child(4),
+html[dir="rtl"] .VIS-AMTD-formDynmicInput .VIS-AMTD-formData {
+    padding-left: 0;
+}
+
+html[dir="rtl"] .VIS-AMTD-formBtns a,
+html[dir="rtl"] .vis-advancedSearchHorigontal:last-child {
+    /*float: right;*/
+    margin-left: 0px;
+}
+
+html[dir="rtl"] input:required:invalid,
+html[dir="rtl"] input:focus:invalid,
+html[dir="rtl"] input:required:valid {
+    background-position: left center;
+}
+
+html[dir="rtl"] a.VIS_Pref_tooltip span {
+    margin-left: 0;
+    margin-right: -20px;
+}
+
+html[dir="rtl"] .VIS_Pref_callout {
+    left: auto;
+    right: 10px;
+}
+
+html[dir="rtl"] .VIS_Pref_content-right,
+html[dir="rtl"] .VIS_Pref_content-right-2,
+html[dir="rtl"] .VIS_Pref_content-right-3,
+html[dir="rtl"] .VIS_Pref_content-right-4,
+html[dir="rtl"] .VIS_Pref_content-right-5 {
+    padding-right: 20px;
+}
+
+html[dir="rtl"] .VIS_Pref_content-right,
+html[dir="rtl"] .VIS_Pref_content-right-5 {
+    padding-left: 10px;
+}
+
+html[dir="rtl"] .vis-cs-op-lbl {
+    margin-right: 12px;
+    margin-left: 0;
+}
+
+html[dir="rtl"] .vis-pSelectInner ~ .vis-paymentselect-field {
+    padding-right: 12px;
+    padding-left: 0;
+}
+
+html[dir="rtl"] input[type="checkbox"].VIS-tm-checkbox,
+html[dir="rtl"] input[type="checkbox"].vis-tm-chkbox {
+    margin: 0 0 0 10px !important;
+}
+
+html[dir="rtl"] .VIS-TM-path {
+    margin-left: 0;
+    margin-right: -15px;
+}
+
+html[dir="rtl"] .VIS-TM-tree-search .VIS-Tm-btnicon,
+html[dir="rtl"] .vis-advancedSearch-RecentRecords {
+    border-left: none;
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .25);
+}
+
+html[dir="rtl"] .VIS-TM-left-tree,
+html[dir="rtl"] .vis-leftpanel-wrapper {
+    border-right: none;
+}
+
+html[dir="rtl"] .VIS-TM-left-tree {
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .25);
+}
+
+html[dir="rtl"] .vis-leftpanel-wrapper {
+    border-left: 5px solid rgba(var(--v-c-on-secondary), .3);
+}
+
+html[dir="rtl"] .vis-app-aform-root input[type=checkbox],
+html[dir="rtl"] .ui-dialog input[type=checkbox] {
+    margin: 4px 0 0 4px;
+}
+
+html[dir="rtl"] .vis-processpara-table-td3 {
+    padding: 5px 5px 5px 0px;
+}
+
+html[dir="rtl"] .vis-tree-search input.form-control:not(:last-child) {
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+html[dir="rtl"] .vis-tree-search .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+}
+
+html[dir="rtl"] .right-inner-addon a {
+    right: auto;
+    left: 1px;
+}
+
+html[dir="rtl"] .VIS-Tm-unlinkforbottmo:after, .VIS-Tm-glyphiconglyphicon-link:after {
+    bottom: 6px;
+    right: -2px;
+}
+
+html[dir="rtl"] .VIS-TM-treeList ul li .VIS-Tm-glyphiconglyphicon-link:after {
+    bottom: 1px;
+    right: -3px;
+}
+
+html[dir="rtl"] .vis-tm-b-s-ryt input[type="checkbox"] {
+    margin: 1px 0 0 5px !important;
+}
+
+html[dir="rtl"] .vis-process-left-sidebar {
+    border-left: 1px solid rgba(var(--v-c-on-secondary), .1);
+    border-right: none;
+}
+
+html[dir="rtl"] .vis-Email-rytWrap {
+    /* float: right; */
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .2);
+    padding-right: 20px;
+    /* margin-right: 20px; */
+    padding-left: 0px;
+    margin-left: 0px;
+    border-left: 0px;
+}
+/*rtl css End here*/
+
+
+

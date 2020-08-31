@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VAS</RootNamespace>
     <AssemblyName>VAS</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -49,13 +49,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -95,7 +93,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -221,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\VAS\Content\PaymentRule.css" />
+    <Content Include="Areas\VAS\Content\VAS.all.min.css" />
     <Content Include="Areas\VAS\Content\VPaySelect.css" />
     <Content Include="Areas\VAS\Scripts\app\forms\acctviewer.js" />
     <Content Include="Areas\VAS\Scripts\app\forms\acctviewermenu.js" />
@@ -240,6 +238,7 @@
     <Content Include="Areas\VAS\Scripts\app\forms\vpayselect.js" />
     <Content Include="Areas\VAS\Scripts\app\forms\vtrxmaterial.js" />
     <Content Include="Areas\VAS\Scripts\model\callouts.js" />
+    <Content Include="Areas\VAS\Scripts\VAS.all.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
