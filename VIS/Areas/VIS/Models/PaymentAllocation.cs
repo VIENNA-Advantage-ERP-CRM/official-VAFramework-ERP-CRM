@@ -304,19 +304,10 @@ namespace VIS.Models
                             //	Allocation Header
                             if (alloc.Get_ID() == 0 && !alloc.Save())
                             {
-                                _log.SaveError("Error: ", "Allocation not created");
-                                trx.Rollback();
-                                trx.Close();
-                                ValueNamePair pp = VLogger.RetrieveError();
-                                if (pp != null)
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                                }
-                                else
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                                }
-
+                                //Get Error Message.
+                                msg = AllocationHdrFaildToSave(trx);
+                                //Set Isprocess false
+                                Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
 
@@ -352,18 +343,7 @@ namespace VIS.Models
                                                    Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set at Invoice Schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                    }
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
                                     return msg;
                                 }
 
@@ -386,18 +366,7 @@ namespace VIS.Models
 
                                 if (!mpay2.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set at Invoice Schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotSave");
-                                    }
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
                                     return msg;
                                 }
                             }
@@ -482,18 +451,10 @@ namespace VIS.Models
                         //	Allocation Header
                         if (alloc.Get_ID() == 0 && !alloc.Save())
                         {
-                            _log.SaveError("Error: ", "Allocation not created");
-                            trx.Rollback();
-                            trx.Close();
-                            ValueNamePair pp = VLogger.RetrieveError();
-                            if (pp != null)
-                            {
-                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                            }
-                            else
-                            {
-                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                            }
+                            //Get Error Message.
+                            msg = AllocationHdrFaildToSave(trx);
+                            //Set Isprocess false
+                            Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                             return msg;
                         }
                         // invoice to invoice allocation if applied amount is positive 
@@ -546,18 +507,7 @@ namespace VIS.Models
                                                        Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -580,18 +530,7 @@ namespace VIS.Models
                                         mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -656,18 +595,7 @@ namespace VIS.Models
                                                        Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -690,18 +618,7 @@ namespace VIS.Models
                                         mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -771,18 +688,10 @@ namespace VIS.Models
                         //Validate Allocation Header is save or not
                         if (alloc.Get_ID() == 0 && !alloc.Save())
                         {
-                            _log.SaveError("Error: ", "Allocation not created");
-                            trx.Rollback();
-                            trx.Close();
-                            ValueNamePair pp = VLogger.RetrieveError();
-                            if (pp != null)
-                            {
-                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                            }
-                            else
-                            {
-                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                            }
+                            //Get Error Message.
+                            msg = AllocationHdrFaildToSave(trx);
+                            //Set Isprocess false
+                            Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                             return msg;
                         }
 
@@ -836,18 +745,7 @@ namespace VIS.Models
                                                        Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -870,18 +768,7 @@ namespace VIS.Models
                                         mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -945,18 +832,7 @@ namespace VIS.Models
                                                        Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -979,18 +855,7 @@ namespace VIS.Models
                                         mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -1069,18 +934,10 @@ namespace VIS.Models
                     //	Allocation Header
                     if (alloc.Get_ID() == 0 && !alloc.Save())
                     {
-                        _log.SaveError("Error: ", "Allocation not created");
-                        trx.Rollback();
-                        trx.Close();
-                        ValueNamePair pp = VLogger.RetrieveError();
-                        if (pp != null)
-                        {
-                            msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                        }
-                        else
-                        {
-                            msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                        }
+                        //Get Error Message.
+                        msg = AllocationHdrFaildToSave(trx);
+                        //Set Isprocess false
+                        Isprocess(paymentData, rowsCash, rowsInvoice, trx);
                         return msg;
                     }
 
@@ -1315,7 +1172,61 @@ namespace VIS.Models
             return Msg.GetMsg(ctx, "AllocationCreatedWith") + msg;
         }
 
-        //set Payment Schedule for Invoices
+        /// <summary>
+        /// Return Error Meassage if AllocationHdr is not Save
+        /// </summary>
+        /// <param name="trx">Current Transaction</param>
+        /// <returns>string value</returns>
+        public string AllocationHdrFaildToSave(Trx trx) 
+        {
+            string msg = string.Empty;
+            _log.SaveError("Error: ", "Allocation not created");
+            trx.Rollback();
+            trx.Close();
+            ValueNamePair pp = VLogger.RetrieveError();
+            if (pp != null)
+            {
+                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
+            }
+            else
+            {
+                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
+            }
+            return msg;
+        }
+
+        /// <summary>
+        /// Validation for InvoicePaySchedule 
+        /// </summary>
+        /// <param name="trx"></param>
+        /// <returns>return Error Message if schedule is not saved</returns>
+        public string ValidateSaveInvoicePaySchedule(Trx trx) 
+        {
+            string msg = string.Empty;
+            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
+            trx.Rollback();
+            trx.Close();
+            ValueNamePair pp = VLogger.RetrieveError();
+            if (pp != null)
+            {
+                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
+            }
+            else
+            {
+                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
+            }
+            return msg;
+        }
+
+        /// <summary>
+        /// set Payment Schedule for Invoices
+        /// </summary>
+        /// <param name="invoicePaySchedule_ID"></param>
+        /// <param name="mpay2"></param>
+        /// <param name="aLine"></param>
+        /// <param name="DateTrx"></param>
+        /// <param name="trx"></param>
+        /// <returns></returns>
         public string InvAlloc(int invoicePaySchedule_ID, MInvoicePaySchedule mpay2, MAllocationLine aLine, DateTime DateTrx, Trx trx)
         {
             //change for Schedule Management
@@ -1354,7 +1265,13 @@ namespace VIS.Models
             return msg;
         }
 
-        //set Isprocessing for grid's
+        /// <summary>
+        /// set IsprocessingFalse for grid's
+        /// </summary>
+        /// <param name="rowsPayment"></param>
+        /// <param name="rowsCash"></param>
+        /// <param name="rowsInvoice"></param>
+        /// <param name="trx"></param>
         public void Isprocess(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsInvoice, Trx trx)
         {
             SetIsprocessingFalse(rowsPayment, "cpaymentid", false, false, trx); //Payment
@@ -1649,18 +1566,7 @@ namespace VIS.Models
                                                        Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -1683,18 +1589,7 @@ namespace VIS.Models
                                         mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
-                                        _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                        trx.Rollback();
-                                        trx.Close();
-                                        ValueNamePair pp = VLogger.RetrieveError();
-                                        if (pp != null)
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                        }
-                                        else
-                                        {
-                                            msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                        }
+                                        msg = ValidateSaveInvoicePaySchedule(trx);
                                         Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                         return msg;
                                     }
@@ -1705,18 +1600,9 @@ namespace VIS.Models
                                 _log.SaveError("First Allocation Save Start", "First Allocation Save Start");
                                 if (alloc.Get_ID() == 0 && !alloc.Save())
                                 {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                                    }
+                                    //return Error Meassage
+                                    msg = AllocationHdrFaildToSave(trx);
+                                    //set Isprocess false
                                     Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
@@ -1821,18 +1707,9 @@ namespace VIS.Models
                             //	Allocation Header
                             if (alloc.Get_ID() == 0 && !alloc.Save())
                             {
-                                _log.SaveError("Error: ", "Allocation not created");
-                                trx.Rollback();
-                                trx.Close();
-                                ValueNamePair pp = VLogger.RetrieveError();
-                                if (pp != null)
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                                }
-                                else
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                                }
+                                //Get Error Message.
+                                msg = AllocationHdrFaildToSave(trx);
+                                //Set Isprocess false
                                 Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
@@ -1887,18 +1764,7 @@ namespace VIS.Models
                                                            Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -1921,18 +1787,7 @@ namespace VIS.Models
                                             mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -1998,18 +1853,7 @@ namespace VIS.Models
                                                            Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -2032,18 +1876,7 @@ namespace VIS.Models
                                             mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -2117,18 +1950,9 @@ namespace VIS.Models
                             //	Allocation Header
                             if (alloc.Get_ID() == 0 && !alloc.Save())
                             {
-                                _log.SaveError("Error: ", "Allocation not created");
-                                trx.Rollback();
-                                trx.Close();
-                                ValueNamePair pp = VLogger.RetrieveError();
-                                if (pp != null)
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                                }
-                                else
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                                }
+                                //Get Error Message.
+                                msg = AllocationHdrFaildToSave(trx);
+                                //Set Isprocess false
                                 Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
@@ -2183,18 +2007,7 @@ namespace VIS.Models
                                                            Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -2217,18 +2030,7 @@ namespace VIS.Models
                                             mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -2294,18 +2096,7 @@ namespace VIS.Models
                                                            Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -2328,18 +2119,7 @@ namespace VIS.Models
                                             mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
-                                            _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                            trx.Rollback();
-                                            trx.Close();
-                                            ValueNamePair pp = VLogger.RetrieveError();
-                                            if (pp != null)
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                            }
-                                            else
-                                            {
-                                                msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                            }
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
                                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                             return msg;
                                         }
@@ -2468,18 +2248,9 @@ namespace VIS.Models
                         //	Allocation Header
                         if (alloc.Get_ID() == 0 && !alloc.Save())
                         {
-                            _log.SaveError("Error: ", "Allocation not created");
-                            trx.Rollback();
-                            trx.Close();
-                            ValueNamePair pp = VLogger.RetrieveError();
-                            if (pp != null)
-                            {
-                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                            }
-                            else
-                            {
-                                msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                            }
+                            //Get Error Message.
+                            msg = AllocationHdrFaildToSave(trx);
+                            //Set Isprocess false
                             Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                             return msg;
                         }
@@ -2589,18 +2360,9 @@ namespace VIS.Models
                     CompleteOrReverse(ctx, alloc.Get_ID(), 150, DocActionVariables.ACTION_COMPLETE, trx);
                     if (!alloc.Save())
                     {
-                        _log.SaveError("Error: ", "Allocation not completed");
-                        trx.Rollback();
-                        trx.Close();
-                        ValueNamePair pp = VLogger.RetrieveError();
-                        if (pp != null)
-                        {
-                            msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                        }
-                        else
-                        {
-                            msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                        }
+                        //Get Error Message.
+                        msg = AllocationHdrFaildToSave(trx);
+                        //Set Isprocess false
                         Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                         return msg;
                     }
@@ -4439,6 +4201,8 @@ namespace VIS.Models
                                     {
                                         msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                     }
+                                    //Set Isprocessing False
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
                                 else
@@ -4470,6 +4234,8 @@ namespace VIS.Models
                                     {
                                         msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                     }
+                                    //Set Isprocessing False
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
                                 else
@@ -4501,6 +4267,8 @@ namespace VIS.Models
                                     {
                                         msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                     }
+                                    //Set Isprocessing False
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
                                 else
@@ -4534,6 +4302,8 @@ namespace VIS.Models
                                     {
                                         msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                     }
+                                    //Set Isprocessing False
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
                                 else
@@ -4595,6 +4365,8 @@ namespace VIS.Models
                             {
                                 msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                             }
+                            //Set Isprocessing False
+                            Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                             return msg;
                         }
                         else
@@ -4727,18 +4499,8 @@ namespace VIS.Models
                                                    Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                    }
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
+                                    //set Isprocessing false
                                     Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
@@ -4761,18 +4523,8 @@ namespace VIS.Models
                                     mpay2.SetDueAmt(Math.Abs(netAmt));
                                 if (!mpay2.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                    }
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
+                                    //set Isprocessing false
                                     Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
@@ -4795,6 +4547,7 @@ namespace VIS.Models
                             msg = InvAlloc(C_InvoicePaySchedule_ID, mpay2, aLine, DateTrx, trx);
                             if (msg != string.Empty)
                             {
+                                //set Isprocessing false
                                 Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
@@ -4875,18 +4628,8 @@ namespace VIS.Models
                                                    Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                    }
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
+                                    //set Isprocessing false
                                     Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
@@ -4909,18 +4652,8 @@ namespace VIS.Models
                                     mpay2.SetDueAmt(Math.Abs(netAmt));
                                 if (!mpay2.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                    }
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
+                                    //set Isprocessing false
                                     Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
@@ -4943,6 +4676,7 @@ namespace VIS.Models
                             msg = InvAlloc(C_InvoicePaySchedule_ID, mpay2, aLine, DateTrx, trx);
                             if (msg != string.Empty)
                             {
+                                //set Isprocessing false
                                 Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
@@ -4994,18 +4728,8 @@ namespace VIS.Models
                                                    Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                    }
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
+                                    //set Isprocessing false
                                     Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
@@ -5028,18 +4752,9 @@ namespace VIS.Models
                                     mpay2.SetDueAmt(Math.Abs(netAmt));
                                 if (!mpay2.Save(trx))
                                 {
-                                    _log.SaveError("Error: ", "Due amount not set on invoice schedule");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_ScheduleNotUpdate");
-                                    }
+                                    //return error Message
+                                    msg = ValidateSaveInvoicePaySchedule(trx);
+                                    //set Isprocessing false
                                     Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                     return msg;
                                 }
@@ -5059,6 +4774,7 @@ namespace VIS.Models
                             msg = InvAlloc(Neg_C_InvoicePaySchedule_Id, mpay2, aLine, DateTrx, trx);
                             if (msg != string.Empty)
                             {
+                                //set Isprocessing false
                                 Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
@@ -5078,6 +4794,7 @@ namespace VIS.Models
                             }
                             if (remainingAmt == 0)
                             {
+                                //set the isPaid as true and Exit from the loop
                                 rowsInvoice[i]["IsPaid"] = true.ToString();
                                 break;
                             }
@@ -5251,6 +4968,7 @@ namespace VIS.Models
                         {
                             msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
                         }
+                        Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                         return msg;
                     }
                 }
@@ -5298,6 +5016,7 @@ namespace VIS.Models
                                 {
                                     msg = Msg.GetMsg(ctx, "PaymentNotCreated");
                                 }
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
 
@@ -5337,6 +5056,7 @@ namespace VIS.Models
                             {
                                 msg = Msg.GetMsg(ctx, "PaymentNotCreated");
                             }
+                            Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                             return msg;
                         }
                     }
@@ -5386,6 +5106,8 @@ namespace VIS.Models
                             {
                                 msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate");
                             }
+                            //set isprocessing false
+                            Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                             return msg;
                         }
                     }
@@ -5425,6 +5147,8 @@ namespace VIS.Models
                                 {
                                     msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated");
                                 }
+                                //set isprocss false
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
                         }
@@ -5460,6 +5184,7 @@ namespace VIS.Models
                                 {
                                     msg = Msg.GetMsg(ctx, "VIS_ScheduleNotAllocated");
                                 }
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                                 return msg;
                             }
                         }
@@ -5469,17 +5194,10 @@ namespace VIS.Models
             }
             else
             {
-                trx.Rollback();
-                trx.Close();
-                ValueNamePair pp = VLogger.RetrieveError();
-                if (pp != null)
-                {
-                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved") + ":- " + pp.GetName();
-                }
-                else
-                {
-                    msg = Msg.GetMsg(ctx, "VIS_AllocationHdrNotSaved");
-                }
+                //Get Error Message.
+                msg = AllocationHdrFaildToSave(trx);
+                //set Isprocess false
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, trx);
                 return msg;
             }
             trx.Commit();
