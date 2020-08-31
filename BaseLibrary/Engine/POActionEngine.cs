@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/********************************************************
+ * Module/Class Name    : POActionEngine, POAction
+ * Purpose              : PO action Engine,create and call POActions  
+ * Chronological Development
+ * Harwinder Singh 
+ ******************************************************/
+
+ using System;
 using VAdvantage.DataBase;
 using VAdvantage.Logging;
 using VAdvantage.Model;
@@ -11,6 +14,9 @@ using VAdvantage.Utility;
 namespace BaseLibrary.Engine
 {
 
+    /// <summary>
+    /// PO action interface
+    /// </summary>
     public interface POAction
     {
         bool BeforeSave(PO po);
@@ -26,28 +32,35 @@ namespace BaseLibrary.Engine
         dynamic CreateAttachment(Ctx ctx, int aD_Table_ID, int id, Trx trx);
     }
      
+    /// <summary>
+    /// POAction Class Engine
+    /// </summary>
     public class POActionEngine : POAction
     {
 
         /** Engine Singleton				*/
         private static POActionEngine _engine = null;
 
+        /* PO action Object*/
         private static POAction _action = null;
+        /* Class Path */
         private const string CLASS = "VAModelAD.Model.POValidator";
-
+        /* log object */
         private static VLogger s_log = VLogger.GetVLogger(typeof(POActionEngine).FullName);
 
+        /// <summary>
+        /// std const
+        /// </summary>
         private POActionEngine()
         {
             try
             {
-                //Libraray name
-                //Loaq lib 
+                //Invoke POAtion Class Object
                 _action = (POAction)Activator.CreateInstance("VAModelAD",CLASS).Unwrap();
             }
             catch(Exception ex)
             {
-                s_log.Severe("PO Action Class not found or initlized");
+                s_log.Severe("PO Action Class not found or initlized" +ex.Message);
             }
         }
         /// <summary>
@@ -63,6 +76,11 @@ namespace BaseLibrary.Engine
             return _engine;
         }   //	get
 
+        /// <summary>
+        /// Before save action of Model class
+        /// </summary>
+        /// <param name="po">persistant object</param>
+        /// <returns>true if all fine</returns>
         public bool BeforeSave(PO po)
         {
             if (_action != null)
@@ -70,6 +88,13 @@ namespace BaseLibrary.Engine
             return false;
         }
 
+        /// <summary>
+        /// After save action of model class
+        /// </summary>
+        /// <param name="newRecord">true if new record</param>
+        /// <param name="success">true if before save passed</param>
+        /// <param name="po">persistant object</param>
+        /// <returns>true if passed</returns>
         public bool AfterSave(bool newRecord, bool success, PO po)
         {
             if (_action != null)
@@ -77,6 +102,11 @@ namespace BaseLibrary.Engine
             return false;
         }
 
+        /// <summary>
+        /// Before delete action of model class
+        /// </summary>
+        /// <param name="po">persistant object</param>
+        /// <returns>true if passed</returns>
         public bool BeforeDelete(PO po)
         {
             if (_action != null)
@@ -84,6 +114,12 @@ namespace BaseLibrary.Engine
             return false; ;
         }
 
+        /// <summary>
+        /// After delete action of model
+        /// </summary>
+        /// <param name="po">persistant object</param>
+        /// <param name="success">true if passed</param>
+        /// <returns>true if passed</returns>
         public bool AfterDelete(PO po, bool success)
         {
             if (_action != null)
@@ -91,6 +127,12 @@ namespace BaseLibrary.Engine
             return false; ;
         }
 
+        /// <summary>
+        /// Is Auto Translation
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="tableName">table name</param>
+        /// <returns>true if set</returns>
         public bool IsAutoUpdateTrl(Ctx ctx,String tableName)
         {
             if (_action != null)
@@ -98,6 +140,12 @@ namespace BaseLibrary.Engine
             return false;
         }
 
+        /// <summary>
+        /// Get Document Number sequence
+        /// </summary>
+        /// <param name="id">doc </param>
+        /// <param name="po"></param>
+        /// <returns></returns>
         public string GetDocumentNo(int id,  PO po)
         {
             if (_action != null)
@@ -106,6 +154,13 @@ namespace BaseLibrary.Engine
 
         }
 
+        /// <summary>
+        /// Get next record id 
+        /// </summary>
+        /// <param name="AD_Client_ID">client id</param>
+        /// <param name="TableName">table name</param>
+        /// <param name="trx">transaction</param>
+        /// <returns>record id</returns>
         public int GetNextID(int AD_Client_ID, string TableName, Trx trx)
         {
             if (_action != null)
@@ -113,6 +168,11 @@ namespace BaseLibrary.Engine
             return 0;
         }
 
+        /// <summary>
+        /// Get Document Number
+        /// </summary>
+        /// <param name="po">persistant object</param>
+        /// <returns>document number</returns>
         public string GetDocumentNo(PO po)
         {
             if (_action != null)
@@ -120,6 +180,12 @@ namespace BaseLibrary.Engine
             return null;
         }
 
+        /// <summary>
+        /// Get Record lookup (data)
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="colInfo">colInfo</param>
+        /// <returns></returns>
         public Lookup GetLookup(Ctx ctx, POInfoColumn colInfo)
         {
             if (_action != null)
@@ -127,6 +193,13 @@ namespace BaseLibrary.Engine
             return null;
         }
 
+        /// <summary>
+        /// Get Attachments if any
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="id">record id</param>
+        /// <returns>dynamic MAttachment object</returns>
         public dynamic GetAttachment(Ctx ctx, int AD_Table_ID, int id)
         {
             if (_action != null)
@@ -134,6 +207,14 @@ namespace BaseLibrary.Engine
             return null;
         }
 
+        /// <summary>
+        /// Create Attachment 
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="id">record id</param>
+        /// <param name="trx">transaction object</param>
+        /// <returns>dynamic MAttachment object</returns>
         public dynamic CreateAttachment(Ctx ctx, int AD_Table_ID, int id, Trx trx)
         {
             if (_action != null)
@@ -141,4 +222,5 @@ namespace BaseLibrary.Engine
             return null; 
         }
     }
+
 }

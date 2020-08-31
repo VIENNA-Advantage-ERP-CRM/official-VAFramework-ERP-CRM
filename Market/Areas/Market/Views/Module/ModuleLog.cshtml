@@ -1,0 +1,152 @@
+﻿@section heads{
+
+
+    <script src="~/Areas/ViennaBase/Scripts/jquery-2.1.0.min.js"></script>
+
+
+}
+
+<style>
+    html, body
+    {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        background: #eeeeee;
+    }
+
+    .app-detail
+    {
+        padding: 20px 20px 0px 20px;
+        overflow: hidden;
+        background-color: white;
+    }
+
+    .about-app
+    {
+        float: left;
+    }
+
+        .about-app > div
+        {
+            float: left;
+        }
+
+        .about-app > img
+        {
+            float: left;
+            margin-right: 20px;
+            max-height: 142px;
+            max-width: 142px;
+        }
+
+    .app-detail-inner p
+    {
+        margin: 0 0 5px;
+    }
+
+    .app-detail-inner .title
+    {
+        font-size: 27px;
+        margin-top: 0px !important;
+        font-family: HelveticaStd;
+    }
+
+    .app-description
+    {
+        background-color: #eeeeee;
+        padding: 40px 20px 20px;
+        height: 70%;
+    }
+
+    .app-rating
+    {
+        float: right;
+        margin-top: 0px;
+    }
+
+    .screenshot
+    {
+        margin-bottom: 30px;
+    }
+
+    .contnet-title
+    {
+        font-size: 25px !important;
+        margin: 0 0 15px !important;
+        width: 100%;
+        color: #121212 !important;
+        overflow: hidden;
+    }
+
+    .screenshot-outer
+    {
+        overflow: hidden;
+        height: 78%;
+        overflow-y: scroll !important;
+        background: white;
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    .install-detail > a
+    {
+        background-color: #62be39;
+        color: #fff !important;
+        display: inline-block;
+        margin-right: 20px;
+        padding: 7px 7px;
+        text-align: center;
+        text-decoration: none;
+        /*width: 70px;*/
+        font-size: 13px;
+    }
+
+    .market-error-message
+    {
+        text-align: center;
+        font-size: 16px;
+        color: red;
+    }
+</style>
+
+
+
+<div class="app-detail">
+    <div class="about-app vis-pull-left">
+        <img src="@Url.Content("~/")Areas/Market/Images/app_image.png">
+        <div class="app-detail-inner">
+            <p style="color: gray">Thanks for Downloading</p>
+            <p class="title">@ViewBag.Name</p>
+        </div>
+    </div>
+    <div class="app-rating">
+
+        <p class="install-detail">
+
+            @Html.ActionLink("Re-Login", "Index", "Home", new { area = "VIS" }, null)
+            <a class="vis-market-sendmail" style="display: none">SendMail</a>
+        </p>
+
+    </div>
+</div>
+<div class="app-description">
+    <p class="contnet-title">Log</p>
+    <div class="screenshot-outer">
+        @Html.Raw(ViewBag.Log);
+    </div>
+</div>
+
+
+<script>
+
+    $('.vis-market-sendmail').on("click", function () {
+
+        alert("pending");
+    });
+
+
+</script>
+
+

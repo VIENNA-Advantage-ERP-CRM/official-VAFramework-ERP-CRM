@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using VAdvantage.Model;
 using VAdvantage.Logging;
 using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Classes;
 using System.Data;
 
-namespace VAdvantage.Classes
+namespace VAdvantage.Model
 {
     /// <summary>
     /// Model Validator
@@ -17,7 +16,7 @@ namespace VAdvantage.Classes
     {
         /// <summary>
         /// Initialize Validation
-        /// </summary>mmmmp+xzfg
+        /// </summary>
         /// <param name="engine">validation engine</param>
         /// //client ID <0 for global Validator
         /// 
@@ -112,52 +111,35 @@ namespace VAdvantage.Classes
     /// </summary>
     public class ModelValidationEngine
     {
-
         /** Engine Singleton				*/
         private static ModelValidationEngine _engine = null;
-
+        /* Model validator lists */
         private List<ModelValidator> _validators = new List<ModelValidator>();
+        /* global validator*/
         private List<ModelValidator> _globalValidators = new List<ModelValidator>();
-
         /**	Model Change Listeners			*/
         private Dictionary<String, List<ModelValidator>> _modelChangeListeners = new Dictionary<String, List<ModelValidator>>();
         /**	Document Validation Listeners			*/
         private Dictionary<String, List<ModelValidator>> _docValidateListeners = new Dictionary<String, List<ModelValidator>>();
-        //log class
+        //log class object
         private static VLogger s_log = VLogger.GetVLogger(typeof(ModelValidationEngine).FullName);
 
         /// <summary>
-        /// 
+        /// Add model validation classes
         /// </summary>
-        public void AddClasses()
+        private void AddClasses()
         {
-            //Context ctx = Utility.Env.GetContext();
-            //VAdvantage.Model.MClient[] clients = VAdvantage.Model.MClient.GetAll(ctx);
-
-            ////	Go through all Clients and start Validators 
-            //for (int i = 0; i < clients.Count(); i++)
-            //{
-            //    String classNames = clients[i].GetModelValidationClasses();
-            //    if (classNames == null || classNames.Length == 0)
-            //        continue;
-
-
-            //    string[] sep = {";: "};
-            //    string[] st = classNames.Split(sep);
-            //}
-
-            
 
             try {
-                DataSet dsSys = DB.ExecuteDataset("SELECT ModelValidationClass, AD_Client_ID FROM" +
-                " AD_ModlelValidator WHERE IsActive='Y' AND AD_Client_ID =0 Order By SeqNo ");
-                foreach (DataRow dr in dsSys.Tables[0].Rows)
-                {
-                    String className = dr["ModelValidationClass"].ToString();
-                    if (className == null || className.Length == 0)
-                        continue;
-                    LoadValidatorClass(-1, className);
-                }
+                //DataSet dsSys = DB.ExecuteDataset("SELECT ModelValidationClass, AD_Client_ID FROM" +
+                //" AD_ModlelValidator WHERE IsActive='Y' AND AD_Client_ID =0 Order By SeqNo ");
+                //foreach (DataRow dr in dsSys.Tables[0].Rows)
+                //{
+                //    String className = dr["ModelValidationClass"].ToString();
+                //    if (className == null || className.Length == 0)
+                //        continue;
+                //    LoadValidatorClass(-1, className);
+                //}
             } catch (Exception e)
             {
                 //logging to db will try to init ModelValidationEngine again!
@@ -177,6 +159,9 @@ namespace VAdvantage.Classes
             }
         }
 
+        /// <summary>
+        /// std constructor
+        /// </summary>
         private ModelValidationEngine()
         {
             AddClasses();
@@ -234,6 +219,11 @@ namespace VAdvantage.Classes
             }
         }
 
+        /// <summary>
+        /// Initalize Model validaton class
+        /// </summary>
+        /// <param name="validator">model validator object</param>
+        /// <param name="client">client id</param>
         private void Initialize(ModelValidator validator, int client)
         {
             if (client < 0)//global
@@ -243,7 +233,7 @@ namespace VAdvantage.Classes
         }	//	initialize
 
         /// <summary>
-        /// Get Singleton
+        /// Get Singleton object
         /// </summary>
         /// <returns></returns>
         public static ModelValidationEngine Get()
@@ -253,6 +243,14 @@ namespace VAdvantage.Classes
             return _engine;
         }	//	get
 
+        /// <summary>
+        /// Called when Login is complete 
+        /// </summary>
+        /// <param name="AD_Client_ID">client id</param>
+        /// <param name="AD_Org_ID">organization Id</param>
+        /// <param name="AD_Role_ID">role id</param>
+        /// <param name="AD_User_ID">user id</param>
+        /// <returns>error message if any</returns>
         public String LoginComplete(int AD_Client_ID, int AD_Org_ID, int AD_Role_ID, int AD_User_ID)
         {
             for (int i = 0; i < _validators.Count; i++)
@@ -392,6 +390,11 @@ namespace VAdvantage.Classes
             return null;
         }
 
+        /// <summary>
+        /// Add Model change Listner
+        /// </summary>
+        /// <param name="tableName">table name</param>
+        /// <param name="listener">listner</param>
         public void AddModelChange(String tableName, ModelValidator listener)
         {
             if (tableName == null || listener == null)
@@ -410,6 +413,11 @@ namespace VAdvantage.Classes
             _modelChangeListeners[propertyName].Add(listener);
         }   //	AddModelValidator
 
+        /// <summary>
+        /// Remove model change listner
+        /// </summary>
+        /// <param name="tableName">table name</param>
+        /// <param name="listener">listner</param>
         public void RemoveModelChange(String tableName, ModelValidator listener)
         {
             if (tableName == null || listener == null)
@@ -427,6 +435,11 @@ namespace VAdvantage.Classes
                 _modelChangeListeners.Remove(propertyName);
         }   //RemoveModelValidator
 
+        /// <summary>
+        /// Add Document validation listner
+        /// </summary>
+        /// <param name="tableName">table name</param>
+        /// <param name="listener">listner</param>
         public void AddDocValidate(String tableName, ModelValidator listener)
         {
             if (tableName == null || listener == null)
@@ -445,6 +458,11 @@ namespace VAdvantage.Classes
             _docValidateListeners[propertyName].Add(listener);
         }   //	AddModelValidator
 
+        /// <summary>
+        /// Remove document validation listner
+        /// </summary>
+        /// <param name="tableName">tablename</param>
+        /// <param name="listener">listner</param>
         public void RemoveDocValidate(String tableName, ModelValidator listener)
         {
             if (tableName == null || listener == null)
