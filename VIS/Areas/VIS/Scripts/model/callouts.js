@@ -738,6 +738,7 @@
                     //VA009_PO_PaymentMethod_ID added new column for enhancement.. Google Sheet ID-- SI_0036
                     var _PO_PaymentMethod_ID = 0;
                     var _PO_PAYMENTBASETYPE = "T";
+                    if (C_Order_Blanket < 0) {
                     var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", C_BPartner_ID);
                     if (bpdtl != null) {
                         isvendor = Util.getValueOfString(bpdtl["IsVendor"]);
@@ -770,7 +771,7 @@
 
                         }
                     }
-
+                }
 
                     if (_PaymentMethod_ID == 0) {
                         var C_Order_Blanket = Util.getValueOfInt(mTab.getValue("C_Order_Blanket"))
