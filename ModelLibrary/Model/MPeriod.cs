@@ -108,6 +108,73 @@ namespace VAdvantage.Model
         /// <returns>active Period or null</returns>
         public static MPeriod Get(Ctx ctx, DateTime? dateAcct)
         {
+            //if (dateAcct == null)
+            //    return null;
+            ////	Search in Cache first
+            //IEnumerator<MPeriod> it = cache.Values.GetEnumerator();
+            //it.Reset();
+            //while (it.MoveNext())
+            //{
+            //    MPeriod period = it.Current;
+            //    if (period.GetAD_Client_ID() == ctx.GetAD_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
+            //        return period;
+            //}
+
+            ////	Get it from DB
+            //MPeriod retValue = null;
+            //int AD_Client_ID = ctx.GetAD_Client_ID();
+            //String sql = "SELECT * "
+            //    + "FROM C_Period "
+            //    + "WHERE C_Year_ID IN "
+            //        + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND C_Calendar_ID= "
+            //            + "(SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=@clientid))"
+            //    + " AND @dateAcc BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
+            //    + " AND IsActive='Y' AND PeriodType='S'";
+            //try
+            //{
+
+            //    //DateTime? dt = ((DateTime?)dateAcct).Date;
+            //    DateTime? dt = ((DateTime?)dateAcct).Value.Date;
+
+            //    SqlParameter[] param = new SqlParameter[2];
+            //    param[0] = new SqlParameter("@clientid", AD_Client_ID);
+            //    param[1] = new SqlParameter("@dateAcc", TimeUtil.GetDay((DateTime?)dateAcct));
+
+            //    DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
+            //    if (ds.Tables.Count > 0)
+            //    {
+            //        foreach (DataRow dr in ds.Tables[0].Rows)
+            //        {
+            //            MPeriod period = new MPeriod(ctx, dr, null);
+            //            int key = period.GetC_Period_ID();
+            //            cache.Add(key, period);
+            //            if (period.IsStandardPeriod())
+            //                retValue = period;
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    _log.Log(Level.SEVERE, "dateAcct=" + dateAcct, e);
+            //}
+            //if (retValue == null)
+            //{
+            //    _log.Warning("No Standard Period for " + dateAcct + " (AD_Client_ID=" + AD_Client_ID + ")");
+            //}
+            //return retValue;
+
+            return Get(ctx, dateAcct, 0);
+        }
+
+        /// <summary>
+        /// Find standard Period of DateAcct based on Organization Calendar
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="dateAcct">date</param>
+        /// <param name="AD_Org_ID">organization</param>
+        /// <returns>active Period or null</returns>
+        public static MPeriod Get(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
+        {
             if (dateAcct == null)
                 return null;
             //	Search in Cache first
@@ -120,16 +187,39 @@ namespace VAdvantage.Model
                     return period;
             }
 
-            //	Get it from DB
-            MPeriod retValue = null;
+            // Get Calender ID
+            StringBuilder qry = new StringBuilder("");
+            int Calender_ID = 0;
             int AD_Client_ID = ctx.GetAD_Client_ID();
+
+            if (AD_Org_ID > 0)
+            {
+                MOrgInfo orgInfo = MOrgInfo.Get(ctx, AD_Org_ID, null);
+                if (orgInfo.Get_ColumnIndex("C_Calendar_ID") >= 0)
+                {
+                    Calender_ID = orgInfo.GetC_Calendar_ID();
+                }
+            }
+
+            if (Calender_ID == 0)
+            {
+                qry.Append("SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=" + AD_Client_ID);
+                Calender_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
+            }
+
+            if (Calender_ID == 0)
+            {
+                return null;
+            }
+
+            //	Get it from DB   
+            MPeriod retValue = null;
             String sql = "SELECT * "
-                + "FROM C_Period "
-                + "WHERE C_Year_ID IN "
-                    + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND C_Calendar_ID= "
-                        + "(SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=@clientid))"
-                + " AND @dateAcc BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
-                + " AND IsActive='Y' AND PeriodType='S'";
+            + "FROM C_Period "
+            + "WHERE C_Year_ID IN "
+                + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND C_Calendar_ID= @calendarID)"
+            + " AND @dateAcc BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
+            + " AND IsActive='Y' AND PeriodType='S'";
             try
             {
 
@@ -137,7 +227,7 @@ namespace VAdvantage.Model
                 DateTime? dt = ((DateTime?)dateAcct).Value.Date;
 
                 SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@clientid", AD_Client_ID);
+                param[0] = new SqlParameter("@calendarID", Calender_ID);
                 param[1] = new SqlParameter("@dateAcc", TimeUtil.GetDay((DateTime?)dateAcct));
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
@@ -172,7 +262,24 @@ namespace VAdvantage.Model
         /// <returns>C_Period_ID or 0</returns>
         public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct)
         {
-            MPeriod period = Get(ctx, dateAcct);
+            //MPeriod period = Get(ctx, dateAcct);
+            //if (period == null)
+            //    return 0;
+            //return period.GetC_Period_ID();
+
+            return GetC_Period_ID(ctx, dateAcct, 0);
+        }
+
+        /// <summary>
+        /// Find valid standard Period of DateAcct based on Organization Calendar
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="dateAcct">date</param>
+        /// <param name="AD_Org_ID">organization</param>
+        /// <returns>C_Period_ID or 0</returns>
+        public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
+        {
+            MPeriod period = Get(ctx, dateAcct, AD_Org_ID);
             if (period == null)
                 return 0;
             return period.GetC_Period_ID();
@@ -324,7 +431,7 @@ namespace VAdvantage.Model
         {
             if (docBaseType == null)
                 return null;
-            GetPeriodControls(false);
+            GetPeriodControls(false, AD_Org_ID);
             for (int i = 0; i < _controls.Length; i++)
             {
                 //	log.fine("getPeriodControl - " + 1 + " - " + _controls[i]);
@@ -529,28 +636,30 @@ namespace VAdvantage.Model
         /// <returns>true if open</returns>
         public static bool IsOpen(Ctx ctx, DateTime? dateAcct, String docBaseType)
         {
-            if (dateAcct == null)
-            {
-                _log.Warning("No DateAcct");
-                return false;
-            }
-            if (docBaseType == null)
-            {
-                _log.Warning("No DocBaseType");
-                return false;
-            }
-            MPeriod period = MPeriod.Get(ctx, dateAcct);
-            if (period == null)
-            {
-                _log.Warning("No Period for " + dateAcct + " (" + docBaseType + ")");
-                return false;
-            }
-            bool open = (period.IsOpen(docBaseType, dateAcct) == null);
-            if (!open)
-            {
-                _log.Warning(period.GetName() + ": Not open for " + docBaseType + " (" + dateAcct + ")");
-            }
-            return open;
+            //if (dateAcct == null)
+            //{
+            //    _log.Warning("No DateAcct");
+            //    return false;
+            //}
+            //if (docBaseType == null)
+            //{
+            //    _log.Warning("No DocBaseType");
+            //    return false;
+            //}
+            //MPeriod period = MPeriod.Get(ctx, dateAcct);
+            //if (period == null)
+            //{
+            //    _log.Warning("No Period for " + dateAcct + " (" + docBaseType + ")");
+            //    return false;
+            //}
+            //bool open = (period.IsOpen(docBaseType, dateAcct) == null);
+            //if (!open)
+            //{
+            //    _log.Warning(period.GetName() + ": Not open for " + docBaseType + " (" + dateAcct + ")");
+            //}
+            //return open;
+
+            return IsOpen(ctx, dateAcct, docBaseType, 0);
         }
 
         /// <summary>
@@ -580,13 +689,13 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MPeriod period = MPeriod.Get(ctx, dateAcct);
+            MPeriod period = MPeriod.Get(ctx, dateAcct, AD_Org_ID);
             if (period == null)
             {
                 _log.Warning("No Period for " + dateAcct + " (" + docBaseType + ")");
                 return false;
             }
-            bool open = (period.IsOpen(docBaseType, dateAcct) == null);
+            bool open = (period.IsOpen(docBaseType, dateAcct, AD_Org_ID) == null);
             if (!open)
             {
                 _log.Warning(period.GetName() + ": Not open for " + docBaseType + " (" + dateAcct + ")");
@@ -923,13 +1032,74 @@ namespace VAdvantage.Model
         /// <writer>raghu</writer>
         public String IsOpen(String DocBaseType, DateTime? dateAcct)
         {
+            //if (!IsActive())
+            //{
+            //    _log.Warning("Period not active: " + GetName());
+            //    return "@C_Period_ID@ <> @IsActive@";
+            //}
+
+            //MAcctSchema as1 = MClient.Get(GetCtx(), GetAD_Client_ID()).GetAcctSchema();
+            //if (as1 != null && as1.IsAutoPeriodControl())
+            //{
+            //    if (!as1.IsAutoPeriodControlOpen(dateAcct))
+            //        return "@PeriodClosed@ - @AutoPeriodControl@";
+            //    //	We are OK
+            //    DateTime today = DateTime.Now.Date;
+            //    if (IsInPeriod(today) && as1.GetC_Period_ID() != GetC_Period_ID())
+            //    {
+            //        as1.SetC_Period_ID(GetC_Period_ID());
+            //        as1.Save();
+            //    }
+            //    return null;
+            //}
+
+            ////	Standard Period Control
+            //if (DocBaseType == null)
+            //{
+            //    log.Warning(GetName() + " - No DocBaseType");
+            //    return "@NotFound@ @DocBaseType@";
+            //}
+            //MPeriodControl pc = GetPeriodControl(DocBaseType);
+            //if (pc == null)
+            //{
+            //    log.Warning(GetName() + " - Period Control not found for " + DocBaseType);
+            //    return "@NotFound@ @C_PeriodControl_ID@: " + DocBaseType;
+            //}
+            //log.Fine(GetName() + ": " + DocBaseType);
+            //if (pc.IsOpen())
+            //    return null;
+            //return "@PeriodClosed@ - @C_PeriodControl_ID@ ("
+            //+ DocBaseType + ", " + dateAcct + ")";
+
+            return IsOpen(DocBaseType, dateAcct, 0);
+        }
+
+        /// <summary>
+        /// Is Period Open for Doc Base Type in selected Organization
+        /// </summary>
+        /// <param name="DocBaseType">document base type</param>
+        /// <param name="dateAcct">accounting date</param>
+        /// <returns>error message or null</returns>
+        /// <date>07-March-2011</date>
+        /// <writer>raghu</writer>
+        public String IsOpen(String DocBaseType, DateTime? dateAcct, int AD_Org_ID)
+        {
             if (!IsActive())
             {
                 _log.Warning("Period not active: " + GetName());
                 return "@C_Period_ID@ <> @IsActive@";
             }
 
-            MAcctSchema as1 = MClient.Get(GetCtx(), GetAD_Client_ID()).GetAcctSchema();
+            MAcctSchema as1 = null;
+
+            if (AD_Org_ID > 0)
+            {
+                as1 = MOrg.Get(GetCtx(), AD_Org_ID).GetAcctSchema();
+            }
+            else
+            {
+                as1 = MClient.Get(GetCtx(), GetAD_Client_ID()).GetAcctSchema();
+            }
             if (as1 != null && as1.IsAutoPeriodControl())
             {
                 if (!as1.IsAutoPeriodControlOpen(dateAcct))
@@ -950,7 +1120,7 @@ namespace VAdvantage.Model
                 log.Warning(GetName() + " - No DocBaseType");
                 return "@NotFound@ @DocBaseType@";
             }
-            MPeriodControl pc = GetPeriodControl(DocBaseType);
+            MPeriodControl pc = GetPeriodControl(DocBaseType, AD_Org_ID);
             if (pc == null)
             {
                 log.Warning(GetName() + " - Period Control not found for " + DocBaseType);
