@@ -303,11 +303,11 @@ namespace VIS.Controllers
         /// <param name="page">Page Number</param>
         /// <param name="size">Page Size</param>
         /// <returns>No of unallocated GL Lines</returns>
-        public JsonResult GetGLData(int AD_Org_ID,int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate,string srchText)
+        public JsonResult GetGLData(int AD_Org_ID,int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate,string srchText,bool chk)
         {
             Ctx ct = Session["ctx"] as Ctx;
             PaymentAllocation payments = new PaymentAllocation(ct);
-            return Json(JsonConvert.SerializeObject(payments.GetGLData(AD_Org_ID,_C_Currency_ID, _C_BPartner_ID, page, size, fromDate, toDate, srchText)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(payments.GetGLData(AD_Org_ID,_C_Currency_ID, _C_BPartner_ID, page, size, fromDate, toDate, srchText, chk)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

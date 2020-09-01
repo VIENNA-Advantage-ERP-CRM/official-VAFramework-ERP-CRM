@@ -3785,7 +3785,7 @@ namespace VIS.Models
         /// <paramref name="toDate"/>To Date
         /// <paramref name="_C_BPartner_ID"/>Business partner
         /// <returns>No of unallocated GL Lines</returns>
-        public List<GLData> GetGLData(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate, string srchText)
+        public List<GLData> GetGLData(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate, string srchText, bool chk)
         {
             List<GLData> glData = new List<GLData>();
             StringBuilder sql = new StringBuilder();
@@ -3805,6 +3805,10 @@ namespace VIS.Models
             if (AD_Org_ID != 0)
             {
                 sql.Append(" AND J.AD_Org_ID=" + AD_Org_ID);
+            }
+            if (!chk)
+            {
+                sql.Append(" AND JL.C_Currency_ID=" + _C_Currency_ID);
             }
             if (srchText != string.Empty)
             {
