@@ -39,8 +39,8 @@ namespace MarketSvc
         internal static string GetDNSName()
         {
 
-            string svcpath = "http://cloudservice.softwareonthecloud.com/";
-            //string svcpath = "http://sbcloudservice.softwareonthecloud.com/";
+            //string svcpath = "http://cloudservice.softwareonthecloud.com/";
+            string svcpath = "http://sbcloudservice.softwareonthecloud.com/";
             //string svcpath = "http://localhost:4644/";
             //string svcpath =   "http://cloudservicedemo.softwareonthecloud.com/"; 
             //string svcpath = "http://cloudservice.softwareonthecloud.com/";
@@ -54,7 +54,7 @@ namespace MarketSvc
             //string svcpath = "http://138.201.234.235/"; 
             //string svcpath = "http://sbhtml.softwareonthecloud.com/";
 
-           // string svcpath = "http://202.164.37.9:93/CloudService55/";
+            // string svcpath = "http://202.164.37.9:93/CloudService55/";
 
             return svcpath;
         }
@@ -67,8 +67,8 @@ namespace MarketSvc
         internal static string GetDNSNameForTokenKey()
         {
 
-            string svcpath = "http://cloudservice.softwareonthecloud.com/";
-            //string svcpath = "http://sbcloudservice.softwareonthecloud.com/";
+            //string svcpath = "http://cloudservice.softwareonthecloud.com/";
+            string svcpath = "http://sbcloudservice.softwareonthecloud.com/";
             //string svcpath = "http://localhost:4644/";
             // string svcpath = "http://192.168.0.162/CloudService12/";
             //string svcpath = "http://cloudservicedemo.softwareonthecloud.com/";
@@ -79,7 +79,7 @@ namespace MarketSvc
             //string svcpath = "http://cloudservicedemo.softwareonthecloud.com/";
             //string svcpath = "http://81.169.133.121:786/"; 
             //string svcpath = "http://138.201.234.235/"; 
-           // string svcpath = "http://sbhtml.softwareonthecloud.com/";
+            // string svcpath = "http://sbhtml.softwareonthecloud.com/";
             //string svcpath = "http://202.164.37.9:93/CloudService55/";
             return svcpath;
         }

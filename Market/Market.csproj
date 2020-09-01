@@ -220,10 +220,6 @@
       <Project>{6bfa6520-94b0-4b30-9d25-6477c6998ccd}</Project>
       <Name>HtmlWebHelper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MarketSvc\MarketSvc.csproj">
-      <Project>{127827d0-f08c-4eac-84a3-87b4d2b61879}</Project>
-      <Name>MarketSvc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj">
       <Project>{f8f980fc-83ef-4495-812e-5def569b9242}</Project>
       <Name>ModelLibrary</Name>

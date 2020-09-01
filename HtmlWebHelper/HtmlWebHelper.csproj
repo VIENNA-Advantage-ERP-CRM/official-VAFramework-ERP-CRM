@@ -58,10 +58,6 @@
       <Project>{5065b1ec-3a50-45df-b73f-6c81b9c0a52b}</Project>
       <Name>CoreLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MarketSvc\MarketSvc.csproj">
-      <Project>{127827d0-f08c-4eac-84a3-87b4d2b61879}</Project>
-      <Name>MarketSvc</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
