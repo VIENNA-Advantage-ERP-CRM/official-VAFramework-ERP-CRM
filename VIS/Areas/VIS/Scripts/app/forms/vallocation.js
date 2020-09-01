@@ -321,6 +321,7 @@
         function eventHandling() {
             //Organization 
             $OrgFilter.on("change", function (e) {
+                //clear the girds based on which grid is active (true).
                 if ($gridInvoice) {
                     clrInvoice(e);
                 }
@@ -361,6 +362,7 @@
             });
             $vchkMultiCurrency.on("change", function (e) {
                 vetoableChange("Date", $vchkMultiCurrency.is(':checked'));
+                //clear the grids which is true
                 if ($gridInvoice) {
                     clrInvoice(e);
                 }
@@ -884,6 +886,7 @@
         //    });
         //};
 
+        //to clear the Invoice Grid
         function clrInvoice(e) {
             var chk = $('#grid_' + $gridInvoice.name + '_records td[col="0"]').find('input[type="checkbox"]');
             for (var i = 0; i < chk.length; i++) {
@@ -901,7 +904,7 @@
             $toDate.val(0);
             loadInvoice();
         }
-
+        //to clear the GLLine Grid
         function clrGLLine(e) {
             var chk = $('#grid_' + $glLineGrid.name + '_records td[col="0"]').find('input[type="checkbox"]');
             for (var i = 0; i < chk.length; i++) {
@@ -917,6 +920,7 @@
             $gtoDate.val(0);
             loadGLVoucher();
         }
+        //to clear the Cash Grid
         function clrCashLine(e) {
             var chk = $('#grid_' + $gridCashline.name + '_records td[col="0"]').find('input[type="checkbox"]');
             for (var i = 0; i < chk.length; i++) {
@@ -933,6 +937,7 @@
             $ctoDate.val(0);
             loadUnallocatedCashLines();
         }
+        //to clear the Payment Grid
         function clrPayment(e) {
             var chk = $('#grid_' + $gridPayment.name + '_records td[col="0"]').find('input[type="checkbox"]');
             for (var i = 0; i < chk.length; i++) {

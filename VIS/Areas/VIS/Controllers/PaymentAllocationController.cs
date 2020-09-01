@@ -302,6 +302,11 @@ namespace VIS.Controllers
         /// <param name="_C_BPartner_ID">Business Partner</param>
         /// <param name="page">Page Number</param>
         /// <param name="size">Page Size</param>
+        /// <paramref name="AD_Org_ID"/>Organization ID
+        /// <paramref name="chk"/>MultiCurrency 
+        /// <paramref name="fromDate"/>From Date
+        /// <paramref name="srchText"/>Search Document No
+        /// <paramref name="toDate"/>To Date
         /// <returns>No of unallocated GL Lines</returns>
         public JsonResult GetGLData(int AD_Org_ID,int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate,string srchText,bool chk)
         {
