@@ -293,23 +293,88 @@ namespace VAdvantage.Model
         /// <returns>active first Period</returns>
         public static MPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct)
         {
+            //MPeriod retValue = null;
+            //int AD_Client_ID = ctx.GetAD_Client_ID();
+            //String sql = "SELECT * "
+            //    + "FROM C_Period "
+            //    + "WHERE C_Year_ID IN "
+            //        + "(SELECT p.C_Year_ID "
+            //        + "FROM AD_ClientInfo c"
+            //        + " INNER JOIN C_Year y ON (c.C_Calendar_ID=y.C_Calendar_ID)"
+            //        + " INNER JOIN C_Period p ON (y.C_Year_ID=p.C_Year_ID) "
+            //        + "WHERE c.AD_Client_ID=@clientid"
+            //        + "	AND @date BETWEEN StartDate AND EndDate)"
+            //    + " AND IsActive='Y' AND PeriodType='S' "
+            //    + "ORDER BY StartDate";
+            //try
+            //{
+            //    SqlParameter[] param = new SqlParameter[2];
+            //    param[0] = new SqlParameter("@clientid", AD_Client_ID);
+            //    param[1] = new SqlParameter("@date", dateAcct);
+
+            //    DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
+            //    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            //    {
+            //        DataRow dr = ds.Tables[0].Rows[0];  //	first only
+            //        retValue = new MPeriod(ctx, dr, null);
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    _log.Log(Level.SEVERE, sql, e);
+            //}
+            //return retValue;
+
+            return GetFirstInYear(ctx, dateAcct, 0);
+        }
+
+        /// <summary>
+        /// Find first Year Period of DateAcct based on Organization Calendar
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="dateAcct">date</param>
+        /// <param name="AD_Org_ID">Organization</param>
+        /// <returns>active first Period</returns>
+        public static MPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct, int AD_Org_ID)
+        {
             MPeriod retValue = null;
+
+            // Get Calender ID
+            string qry;
             int AD_Client_ID = ctx.GetAD_Client_ID();
+            int Calender_ID = 0;
+
+            if (AD_Org_ID > 0)
+            {
+                MOrgInfo orgInfo = MOrgInfo.Get(ctx, AD_Org_ID, null);
+                if (orgInfo.Get_ColumnIndex("C_Calendar_ID") >= 0)
+                {
+                    Calender_ID = orgInfo.GetC_Calendar_ID();
+                }
+            }
+
+            if (Calender_ID == 0)
+            {
+                qry = "SELECT C_Calendar_ID FROM AD_ClientInfo WHERE  IsActive = 'Y' AND AD_Client_ID=" + AD_Client_ID;
+                Calender_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry.ToString()));
+            }
+
+            if (Calender_ID == 0)
+            {
+                return null;
+            }
+
             String sql = "SELECT * "
                 + "FROM C_Period "
                 + "WHERE C_Year_ID IN "
-                    + "(SELECT p.C_Year_ID "
-                    + "FROM AD_ClientInfo c"
-                    + " INNER JOIN C_Year y ON (c.C_Calendar_ID=y.C_Calendar_ID)"
-                    + " INNER JOIN C_Period p ON (y.C_Year_ID=p.C_Year_ID) "
-                    + "WHERE c.AD_Client_ID=@clientid"
+                     + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND C_Calendar_ID= @calendarID)"
                     + "	AND @date BETWEEN StartDate AND EndDate)"
                 + " AND IsActive='Y' AND PeriodType='S' "
                 + "ORDER BY StartDate";
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@clientid", AD_Client_ID);
+                param[0] = new SqlParameter("@calendarID", Calender_ID);
                 param[1] = new SqlParameter("@date", dateAcct);
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
