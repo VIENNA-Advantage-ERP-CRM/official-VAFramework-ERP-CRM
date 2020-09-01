@@ -738,36 +738,40 @@
                     //VA009_PO_PaymentMethod_ID added new column for enhancement.. Google Sheet ID-- SI_0036
                     var _PO_PaymentMethod_ID = 0;
                     var _PO_PAYMENTBASETYPE = "T";
-                    var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", C_BPartner_ID);
-                    if (bpdtl != null) {
-                        isvendor = Util.getValueOfString(bpdtl["IsVendor"]);
-                        isCustomer = Util.getValueOfString(bpdtl["IsCustomer"]);
-                        if (!isSOTrx) { //In case of Purchase Order
-                            if (isvendor == "Y") {
-                                _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PO_PaymentMethod_ID"]);
-                                PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPEPO"]);
-                            }
-                            else {
-                                _PaymentMethod_ID = 0;
-                                PaymentBasetype = null;
-                            }
-                        }
-                        else {
-                            if (isvendor == "Y") {
-                                _PaymentMethod_ID = 0;
-                                PaymentBasetype = null;
-                                if (isCustomer == "Y") {
-                                    _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PaymentMethod_ID"]);
-                                    PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPE"]);
-                                }
-                            }
-                            else {
-                                if (isCustomer == "Y") {
-                                    _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PaymentMethod_ID"]);
-                                    PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPE"]);
-                                }
-                            }
+                    if (C_Order_Blanket < 0) {
 
+
+                        var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", C_BPartner_ID);
+                        if (bpdtl != null) {
+                            isvendor = Util.getValueOfString(bpdtl["IsVendor"]);
+                            isCustomer = Util.getValueOfString(bpdtl["IsCustomer"]);
+                            if (!isSOTrx) { //In case of Purchase Order
+                                if (isvendor == "Y") {
+                                    _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PO_PaymentMethod_ID"]);
+                                    PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPEPO"]);
+                                }
+                                else {
+                                    _PaymentMethod_ID = 0;
+                                    PaymentBasetype = null;
+                                }
+                            }
+                            else {
+                                if (isvendor == "Y") {
+                                    _PaymentMethod_ID = 0;
+                                    PaymentBasetype = null;
+                                    if (isCustomer == "Y") {
+                                        _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PaymentMethod_ID"]);
+                                        PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPE"]);
+                                    }
+                                }
+                                else {
+                                    if (isCustomer == "Y") {
+                                        _PaymentMethod_ID = Util.getValueOfInt(bpdtl["VA009_PaymentMethod_ID"]);
+                                        PaymentBasetype = Util.getValueOfString(bpdtl["VA009_PAYMENTBASETYPE"]);
+                                    }
+                                }
+
+                            }
                         }
                     }
 
