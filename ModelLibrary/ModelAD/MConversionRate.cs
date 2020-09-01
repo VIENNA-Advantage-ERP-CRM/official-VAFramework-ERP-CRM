@@ -666,7 +666,7 @@ namespace VAdvantage.Model
                               " AND C_Currency_To_ID = " + GetC_Currency_ID() + " AND c_conversiontype_id = " + GetC_ConversionType_ID() +
                               " AND ( ValidFrom BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) +
                               " OR ValidTo BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) + " ) " +
-                              " AND AD_Client_ID = " + GetAD_Client_ID();
+                              " AND AD_Client_ID = " + GetAD_Client_ID() + " AND AD_Org_ID =" + GetAD_Org_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) <= 0)
                 {
                     MConversionRate conRate = new MConversionRate(GetCtx(), 0, null);
