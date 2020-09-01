@@ -58,6 +58,7 @@ namespace VIS.Models
             int C_Order_ID = 0;
             int C_CashLine_ID = 0;
             string msg = string.Empty;
+            List<Dictionary<string, string>> rowsGL = new List<Dictionary<string, string>>(0);
             //Check weather dateTrx is null than set DateTrx as SystemDate
             if (DateTrx == null)
                 DateTrx = DateTime.Now;
@@ -87,13 +88,13 @@ namespace VIS.Models
             Trx trx = Trx.GetTrx(Trx.CreateTrxName("AL"));
             // trx.TrxIsolationLevel = IsolationLevel.RepeatableRead;
 
-            msg = ValidateRecords(paymentData, "cpaymentid", false, false, true, trx); //Payment
-            if (msg != string.Empty)
-            {
-                trx.Rollback();
-                trx.Close();
-                return msg;
-            }
+            //msg = ValidateRecords(paymentData, "cpaymentid", false, false, true, trx); //Payment
+            //if (msg != string.Empty)
+            //{
+            //    trx.Rollback();
+            //    trx.Close();
+            //    return msg;
+            //}
 
             msg = ValidateRecords(rowsCash, "ccashlineid", true, false, false, trx); //CashLine
             if (msg != string.Empty)
@@ -307,7 +308,7 @@ namespace VIS.Models
                                 //Get Error Message.
                                 msg = AllocationHdrFaildToSave(trx);
                                 //Set Isprocess false
-                                Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
                             }
 
@@ -345,7 +346,7 @@ namespace VIS.Models
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
                                     //Set Isprocessing false
-                                    Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
 
@@ -370,7 +371,7 @@ namespace VIS.Models
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
                                     //Set isprocessing false
-                                    Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
                             }
@@ -458,14 +459,14 @@ namespace VIS.Models
                             //Get Error Message.
                             msg = AllocationHdrFaildToSave(trx);
                             //Set Isprocess false
-                            Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                            Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                             return msg;
                         }
                         // invoice to invoice allocation if applied amount is positive 
                         if (AppliedAmt > 0)
                         {
-                            Decimal value = 0;
-                            MAllocationLine aLine = null;
+                            Decimal value;
+                            MAllocationLine aLine;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
@@ -474,7 +475,7 @@ namespace VIS.Models
                                 Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff.ToLower()]);
                                 MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
 
-                                Decimal amount = Env.ZERO;
+                                Decimal amount;
                                 mpay2 = null;
                                 if (AppliedAmt == Env.ZERO)
                                 {
@@ -512,7 +513,7 @@ namespace VIS.Models
                                     if (!mpay.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
                                 }
@@ -536,7 +537,7 @@ namespace VIS.Models
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
                                         //set Isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
 
@@ -561,14 +562,25 @@ namespace VIS.Models
                                 aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                 aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
 
+                                //get InvoiceSchedule_ID and Initalize to positiveAmtInvSchdle_ID
+                                int positiveAmtInvSchdle_ID;
+                                if (mpay2 != null)
+                                {
+                                    positiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                }
+                                else
+                                {
+                                    positiveAmtInvSchdle_ID = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
+                                }
                                 //set the trx Date and InvoicePayschedule_ID
                                 msg = InvAlloc(C_InvoicePaySchedule_ID, mpay2, aLine, DateTrx, trx);
                                 if (msg != string.Empty)
                                 {
                                     //Set Isprocessing false
-                                    Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
+                                int aLine_ID = aLine.GetC_AllocationLine_ID();
 
                                 // when 
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]), trx);
@@ -627,7 +639,7 @@ namespace VIS.Models
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
                                         //set isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
 
@@ -643,16 +655,50 @@ namespace VIS.Models
                                 aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                 aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                 aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
+                                aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
+
+                                //get the C_InvoicePaySchedule_ID and Initialize to negtiveAmtInvSchdle_ID
+                                int negtiveAmtInvSchdle_ID;
+                                if (mpay2 != null)
+                                {
+                                    negtiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                }
+                                else
+                                {
+                                    negtiveAmtInvSchdle_ID = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
+                                }
 
                                 //set the trx Date and InvoicePayschedule_ID
                                 msg = InvAlloc(Neg_C_InvoicePaySchedule_Id, mpay2, aLine, DateTrx, trx);
                                 if (msg != string.Empty)
                                 {
                                     //set isprocessing false
-                                    Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
 
+
+                                //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
+                                aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
+                                if (!aLine.Save())
+                                {
+                                    _log.SaveError("Error: ", "Allocation line Ref_InvoicePaySchedule_ID not updated!");
+                                    trx.Rollback();
+                                    trx.Close();
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    if (pp != null)
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated") + ":- " + pp.GetName();
+                                    }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated");
+                                    }
+                                    //set Isprocessing false
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
+                                    return msg;
+                                }
                                 //value greater or equal to negative amount then allocating for invoice to invoice
                                 if (value >= 0)
                                 {
@@ -700,7 +746,7 @@ namespace VIS.Models
                             //Get Error Message.
                             msg = AllocationHdrFaildToSave(trx);
                             //Set Isprocess false
-                            Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                            Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                             return msg;
                         }
 
@@ -756,7 +802,7 @@ namespace VIS.Models
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
                                         //set isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
                                 }
@@ -780,7 +826,7 @@ namespace VIS.Models
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
                                         //set isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
                                 }
@@ -804,15 +850,25 @@ namespace VIS.Models
                                 aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                 aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
 
+                                //get InvoiceSchedule_ID and Initalize to positiveAmtInvSchdle_ID
+                                int positiveAmtInvSchdle_ID;
+                                if (mpay2 != null)
+                                {
+                                    positiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                }
+                                else
+                                {
+                                    positiveAmtInvSchdle_ID = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
+                                }
                                 //set the trx Date and InvoicePayschedule_ID
                                 msg = InvAlloc(C_InvoicePaySchedule_ID, mpay2, aLine, DateTrx, trx);
                                 if (msg != string.Empty)
                                 {
                                     //Set isprocessing false
-                                    Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
-
+                                int aLine_ID = aLine.GetC_AllocationLine_ID();//get the ID and initialize to aLine_ID
                                 // when 
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]), trx);
                                 mpay2 = null;
@@ -846,7 +902,7 @@ namespace VIS.Models
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
                                         //Set Isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
                                 }
@@ -870,7 +926,7 @@ namespace VIS.Models
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
                                         //Set Isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
 
@@ -887,16 +943,49 @@ namespace VIS.Models
                                 aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                 aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                 aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
+                                aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
+
+                                //get the C_InvoicePaySchedule_ID and Initialize to negtiveAmtInvSchdle_ID
+                                int negtiveAmtInvSchdle_ID;
+                                if (mpay2 != null)
+                                {
+                                    negtiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                }
+                                else
+                                {
+                                    negtiveAmtInvSchdle_ID = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
+                                }
 
                                 //set the trx Date and InvoicePayschedule_ID
                                 msg = InvAlloc(Neg_C_InvoicePaySchedule_Id, mpay2, aLine, DateTrx, trx);
                                 if (msg != string.Empty)
                                 {
                                     //Set Isprocessing false
-                                    Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
 
+                                //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
+                                aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
+                                if (!aLine.Save())
+                                {
+                                    _log.SaveError("Error: ", "Allocation line Ref_InvoicePaySchedule_ID not updated!");
+                                    trx.Rollback();
+                                    trx.Close();
+                                    ValueNamePair pp = VLogger.RetrieveError();
+                                    if (pp != null)
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated") + ":- " + pp.GetName();
+                                    }
+                                    else
+                                    {
+                                        msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated");
+                                    }
+                                    //set Isprocessing false
+                                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
+                                    return msg;
+                                }
                                 //value greater or equal to negative amount then allocating for invoice to invoice
                                 if (value >= 0)
                                 {
@@ -952,7 +1041,7 @@ namespace VIS.Models
                         //Get Error Message.
                         msg = AllocationHdrFaildToSave(trx);
                         //Set Isprocess false
-                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                         return msg;
                     }
 
@@ -999,7 +1088,7 @@ namespace VIS.Models
                             if (msg != string.Empty)
                             {
                                 //Set Isprocess false
-                                Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
                             }
 
@@ -1017,7 +1106,7 @@ namespace VIS.Models
                             if (msg != string.Empty)
                             {
                                 //Set Isprocess false
-                                Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                                Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
                             }
                             
@@ -1068,7 +1157,7 @@ namespace VIS.Models
                         msg = Msg.GetMsg(ctx, "VIS_AllocNotCompleted");
                     }
                     //Set Isprocess false
-                    Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                    Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                     return msg;
                 }
                 msg = alloc.GetDocumentNo();
@@ -1177,7 +1266,7 @@ namespace VIS.Models
                             msg = Msg.GetMsg(ctx, "VIS_CashLineNotUpdate");
                         }
                         //Set Isprocess false
-                        Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                         return msg;
                     }
                     //log.Config("Payment #" + i + (pay.IsAllocated() ? " not" : " is")
@@ -1188,7 +1277,7 @@ namespace VIS.Models
             cashList.Clear();
             CashAmtList.Clear();
             //Set Isprocess false
-            Isprocess(paymentData, rowsCash, rowsInvoice, null, trx);
+            Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
             //SetIsprocessingFalse(paymentData, "cpaymentid", false, false, trx); //Payment
             //SetIsprocessingFalse(rowsCash, "ccashlineid", true, false, trx); //CashLine
             //SetIsprocessingFalse(rowsInvoice, "c_invoicepayschedule_id", false, true, trx); //InvoicePaySchedule
@@ -1334,6 +1423,7 @@ namespace VIS.Models
             int C_BPartner_ID = _C_BPartner_ID;
             int C_Order_ID = 0;
             string msg = string.Empty;
+            List<Dictionary<string, string>> rowsGL = new List<Dictionary<string, string>>(0);
             Trx trx = Trx.GetTrx(Trx.CreateTrxName("AL"));
 
             msg = ValidateRecords(rowsPayment, "cpaymentid", false, false, true, trx); //Payment
@@ -1344,13 +1434,13 @@ namespace VIS.Models
                 return msg;
             }
 
-            msg = ValidateRecords(rowsCash, "ccashlineid", true, false, false, trx); //CashLine
-            if (msg != string.Empty)
-            {
-                trx.Rollback();
-                trx.Close();
-                return msg;
-            }
+            //msg = ValidateRecords(rowsCash, "ccashlineid", true, false, false, trx); //CashLine
+            //if (msg != string.Empty)
+            //{
+            //    trx.Rollback();
+            //    trx.Close();
+            //    return msg;
+            //}
 
             msg = ValidateRecords(rowsInvoice, "c_invoicepayschedule_id", false, true, false, trx); //InvoicePaySchedule
             if (msg != string.Empty)
@@ -1592,7 +1682,7 @@ namespace VIS.Models
                                     if (!mpay.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
-                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
                                 }
@@ -1615,7 +1705,7 @@ namespace VIS.Models
                                     if (!mpay2.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
-                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
 
@@ -1628,7 +1718,7 @@ namespace VIS.Models
                                     //return Error Meassage
                                     msg = AllocationHdrFaildToSave(trx);
                                     //set Isprocess false
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
                                 _log.SaveError("First Allocation Saved", "First Allocation Saved");
@@ -1692,7 +1782,7 @@ namespace VIS.Models
                                         msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                     }
                                     //set Isprocessing false
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
 
@@ -1736,7 +1826,7 @@ namespace VIS.Models
                                 //Get Error Message.
                                 msg = AllocationHdrFaildToSave(trx);
                                 //Set Isprocess false
-                                Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
                             }
 
@@ -1791,7 +1881,7 @@ namespace VIS.Models
                                         if (!mpay.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
                                     }
@@ -1814,7 +1904,7 @@ namespace VIS.Models
                                         if (!mpay2.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
 
@@ -1838,15 +1928,24 @@ namespace VIS.Models
                                     aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
                                     aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                     aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
-
+                                    //aLine.SetRef_Invoiceschedule_ID(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]));
+                                    int positiveAmtInvSchdle_ID = 0;
+                                    if (mpay2 != null)
+                                    {
+                                        positiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                    }
+                                    else 
+                                    {
+                                        positiveAmtInvSchdle_ID = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
+                                    }
                                     //set the trx Date and InvoicePayschedule_ID
                                     msg = InvAlloc(C_InvoicePaySchedule_ID, mpay2, aLine, DateTrx, trx);
                                     if (msg != string.Empty)
                                     {
-                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
-
+                                    int aLine_ID = aLine.GetC_AllocationLine_ID();
                                     // when 
                                     mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]), trx);
                                     mpay2 = null;
@@ -1880,7 +1979,7 @@ namespace VIS.Models
                                         if (!mpay.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
                                     }
@@ -1905,7 +2004,7 @@ namespace VIS.Models
                                             //Get Error Message
                                             msg = ValidateSaveInvoicePaySchedule(trx);
                                             //Set Isprocessing false
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
 
@@ -1926,12 +2025,46 @@ namespace VIS.Models
                                     aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                     aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                     aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
+                                    aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
+
+                                    //get the InvoicePaySchedule_ID and initilaze to negtiveAmtInvSchdle_ID
+                                    int negtiveAmtInvSchdle_ID = 0;
+                                    if (mpay2 != null)
+                                    {
+                                        negtiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                    }
+                                    else
+                                    {
+                                        negtiveAmtInvSchdle_ID = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
+                                    }
 
                                     //set the trx Date and InvoicePayschedule_ID
                                     msg = InvAlloc(Neg_C_InvoicePaySchedule_Id, mpay2, aLine, DateTrx, trx);
                                     if (msg != string.Empty)
                                     {
-                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
+                                        return msg;
+                                    }
+
+                                    //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
+                                    aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                    aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
+                                    if (!aLine.Save())
+                                    {
+                                        _log.SaveError("Error: ", "Allocation line Ref_InvoicePaySchedule_ID not updated!");
+                                        trx.Rollback();
+                                        trx.Close();
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        if (pp != null)
+                                        {
+                                            msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated") + ":- " + pp.GetName();
+                                        }
+                                        else
+                                        {
+                                            msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated");
+                                        }
+                                        //set Isprocessing false
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
 
@@ -1981,7 +2114,7 @@ namespace VIS.Models
                                 //Get Error Message.
                                 msg = AllocationHdrFaildToSave(trx);
                                 //Set Isprocess false
-                                Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
                             }
 
@@ -2038,7 +2171,7 @@ namespace VIS.Models
                                             //Get Error Message
                                             msg = ValidateSaveInvoicePaySchedule(trx);
                                             //Set Isprocessing false
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
                                     }
@@ -2063,7 +2196,7 @@ namespace VIS.Models
                                             //Get Error message
                                             msg = ValidateSaveInvoicePaySchedule(trx);
                                             //Set Isprocesssing false
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
 
@@ -2088,14 +2221,27 @@ namespace VIS.Models
                                     aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                     aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
 
+                                    //get InvoiceSchedule_ID and Initalize to positiveAmtInvSchdle_ID
+                                    int positiveAmtInvSchdle_ID = 0;
+                                    if (mpay2 != null)
+                                    {
+                                        positiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                    }
+                                    else
+                                    {
+                                        positiveAmtInvSchdle_ID = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
+                                    }
+
                                     //set the trx Date and InvoicePayschedule_ID
                                     msg = InvAlloc(C_InvoicePaySchedule_ID, mpay2, aLine, DateTrx, trx);
                                     if (msg != string.Empty)
                                     {
                                         //Set Isprocessing false
-                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
+                                    //get allocationLine_ID and Inilizing to aLine_ID
+                                    int aLine_ID = aLine.GetC_AllocationLine_ID();
 
                                     // when 
                                     mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]), trx);
@@ -2132,7 +2278,7 @@ namespace VIS.Models
                                             //Get Error message
                                             msg = ValidateSaveInvoicePaySchedule(trx);
                                             //Set Isprocessing false
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
                                     }
@@ -2156,7 +2302,7 @@ namespace VIS.Models
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
                                             //Set Isprocessing false
-                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                             return msg;
                                         }
 
@@ -2173,13 +2319,47 @@ namespace VIS.Models
                                     aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                     aLine.SetDocInfo(C_BPartner_ID, C_Order_ID, C_Invoice_ID);
                                     aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
+                                    aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
+
+                                    //get the InvoicePaySchedule_ID and initilaze to negtiveAmtInvSchdle_ID
+                                    int negtiveAmtInvSchdle_ID = 0;
+                                    if (mpay2 != null)
+                                    {
+                                        negtiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                                    }
+                                    else
+                                    {
+                                        negtiveAmtInvSchdle_ID = Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]);
+                                    }
 
                                     //set the trx Date and InvoicePayschedule_ID
                                     msg = InvAlloc(Neg_C_InvoicePaySchedule_Id, mpay2, aLine, DateTrx, trx);
                                     if (msg != string.Empty)
                                     {
                                         //set isprocessing false
-                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
+                                        return msg;
+                                    }
+
+                                    //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
+                                    aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                    aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
+                                    if (!aLine.Save())
+                                    {
+                                        _log.SaveError("Error: ", "Allocation line Ref_InvoicePaySchedule_ID not updated!");
+                                        trx.Rollback();
+                                        trx.Close();
+                                        ValueNamePair pp = VLogger.RetrieveError();
+                                        if (pp != null)
+                                        {
+                                            msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated") + ":- " + pp.GetName();
+                                        }
+                                        else
+                                        {
+                                            msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated");
+                                        }
+                                        //set Isprocessing false
+                                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
 
@@ -2288,7 +2468,7 @@ namespace VIS.Models
                             //Get Error Message.
                             msg = AllocationHdrFaildToSave(trx);
                             //Set Isprocess false
-                            Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                            Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                             return msg;
                         }
 
@@ -2335,7 +2515,7 @@ namespace VIS.Models
                                 msg = InvAlloc(0, null, aLine, DateTrx, trx);
                                 if (msg != string.Empty)
                                 {
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
                                 
@@ -2354,7 +2534,7 @@ namespace VIS.Models
                                 msg = InvAlloc(0, null, aLine, DateTrx, trx);
                                 if (msg != string.Empty)
                                 {
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                     return msg;
                                 }
                                 if (value <= 0)
@@ -2400,7 +2580,7 @@ namespace VIS.Models
                         //Get Error Message.
                         msg = AllocationHdrFaildToSave(trx);
                         //Set Isprocess false
-                        Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                        Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                         return msg;
                     }
                     else
@@ -2455,7 +2635,7 @@ namespace VIS.Models
                                 {
                                     msg = Msg.GetMsg(ctx, "PaymentNotCreated");
                                 }
-                                Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
                             }
                         }
@@ -2506,7 +2686,7 @@ namespace VIS.Models
                 paymentList.Clear();
                 amountList.Clear();
                 //set isprocessing false
-                Isprocess(rowsPayment, rowsCash, rowsInvoice, null, trx);
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                 //SetIsprocessingFalse(rowsPayment, "cpaymentid", false, false, trx); //Payment
                 //SetIsprocessingFalse(rowsCash, "ccashlineid", true, false, trx); //CashLine
                 //SetIsprocessingFalse(rowsInvoice, "c_invoicepayschedule_id", false, true, trx); //InvoicePaySchedule
@@ -4765,6 +4945,17 @@ namespace VIS.Models
                             aLine.SetDocInfo(C_BPartner_ID, 0, C_Invoice_ID);
                             aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
 
+                            //get InvoiceSchedule_ID and Initalize to positiveAmtInvSchdle_ID
+                            int positiveAmtInvSchdle_ID = 0;
+                            if (mpay2 != null)
+                            {
+                                positiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                            }
+                            else
+                            {
+                                positiveAmtInvSchdle_ID = Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]);
+                            }
+
                             //set the trx Date and InvoicePayschedule_ID
                             msg = InvAlloc(C_InvoicePaySchedule_ID, mpay2, aLine, DateTrx, trx);
                             if (msg != string.Empty)
@@ -4781,6 +4972,8 @@ namespace VIS.Models
                                 rowsInvoice[i]["paidAmt"] = (Util.GetValueOfDecimal(rowsInvoice[i]["paidAmt"]) + netAmt).ToString();
                                 //dueamt = Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt));
                             }
+                            //Get AllocationLine_ID and Inintilaze to aLine_ID
+                            int aLine_ID = aLine.GetC_AllocationLine_ID();
 
                             // when 
                             mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negList[j]["c_invoicepayschedule_id"]), trx);
@@ -4862,11 +5055,43 @@ namespace VIS.Models
                             aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), NDiscountAmt, NWriteOffAmt, Decimal.Negate(NOverUnderAmt));
                             aLine.SetDocInfo(C_BPartner_ID, 0, C_Invoice_ID);
                             aLine.SetRef_C_Invoice_ID(Ref_Invoice_ID);
-
+                            aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
+                            //get the C_InvoicePaySchedule_ID and Initialize to negtiveAmtInvSchdle_ID
+                            int negtiveAmtInvSchdle_ID = 0;
+                            if (mpay2 != null)
+                            {
+                                negtiveAmtInvSchdle_ID = mpay2.GetC_InvoicePaySchedule_ID();
+                            }
+                            else
+                            {
+                                negtiveAmtInvSchdle_ID = Util.GetValueOfInt(negList[j]["c_invoicepayschedule_id"]);
+                            }
                             //set the trx Date and InvoicePayschedule_ID
                             msg = InvAlloc(Neg_C_InvoicePaySchedule_Id, mpay2, aLine, DateTrx, trx);
                             if (msg != string.Empty)
                             {
+                                //set Isprocessing false
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
+                                return msg;
+                            }
+
+                            //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
+                            aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                            aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
+                            if (!aLine.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation line Ref_InvoicePaySchedule_ID not updated!");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null)
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated") + ":- " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_InvPaySchedle_IDNotUpdated");
+                                }
                                 //set Isprocessing false
                                 Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
