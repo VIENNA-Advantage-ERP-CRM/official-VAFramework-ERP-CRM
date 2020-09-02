@@ -588,6 +588,7 @@ namespace VAdvantage.Model
                     if (baseTypes.Contains(docBaseType))
                         continue;
                     MPeriodControl pc = new MPeriodControl(this, docBaseType);
+                    pc.SetAD_Org_ID(GetAD_Org_ID());
                     if (pc.Save())
                         count++;
                     baseTypes.Add(docBaseType);

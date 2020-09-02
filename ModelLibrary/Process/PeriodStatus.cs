@@ -32,6 +32,8 @@ namespace VAdvantage.Process
         private String _PeriodAction = null;
         //Organization					
         private string _AD_Org_ID = null;
+        // Document BaseType
+        private string _docBaseType = null;
 
         /// <summary>
         ///  Prepare - e.g., get Parameters.
@@ -49,6 +51,10 @@ namespace VAdvantage.Process
                 else if (name.Equals("AD_Org_ID"))
                 {
                     _AD_Org_ID = Util.GetValueOfString(para[i].GetParameter());
+                }
+                else if (name.Equals("DocBaseType"))
+                {
+                    _docBaseType = Util.GetValueOfString(para[i].GetParameter());
                 }
                 else if (name.Equals("PeriodAction"))
                 {
@@ -93,11 +99,17 @@ namespace VAdvantage.Process
             sql.Append(" WHERE C_Period_ID=").Append(period.GetC_Period_ID())
                 .Append(" AND PeriodStatus<>'P'")
                 .Append(" AND PeriodStatus<>'").Append(_PeriodAction).Append("'");
-            
+
             // if organization is selected then update period control of selected organizations
-            if (_AD_Org_ID != null && _AD_Org_ID.Length > 0)
+            if (!String.IsNullOrEmpty(_AD_Org_ID))
             {
                 sql.Append(" AND AD_Org_ID IN (" + _AD_Org_ID + ")");
+            }
+
+            // if Document BaseType is selected then update period control for selected Document BaseType
+            if (!String.IsNullOrEmpty(_docBaseType))
+            {
+                sql.Append(" AND DocBaseType IN (" + _docBaseType + ")");
             }
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
