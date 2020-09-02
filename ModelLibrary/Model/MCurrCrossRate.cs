@@ -50,19 +50,19 @@ namespace VAdvantage.Model
             //	Common - From is the same
             if (GetC_Currency_ID() == GetC_Currency_From_ID())
             {
-                log.SaveError("","Common Currency and From Currency can't be same");
+                log.SaveError("VIS_ComFromCurr","");
                 return false;
             }
             //	Common - To is the same
             if (GetC_Currency_ID() == GetC_Currency_To_ID())
             {
-                log.SaveError("","Common Currency and To Currency can't be same");
+                log.SaveError("VIS_ComToCurr","");
                 return false;
             }
             //	From - To is the same
             if (GetC_Currency_From_ID() == GetC_Currency_To_ID())
             {
-                log.SaveError("","From Currency and To Currency can't be same");
+                log.SaveError("VIS_FromToCurr","");
                 return false;
             }
             return true;

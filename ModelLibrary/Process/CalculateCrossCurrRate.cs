@@ -14,13 +14,6 @@ namespace VAdvantage.Process
     {
         StringBuilder retmsg = new StringBuilder();
         StringBuilder query = new StringBuilder();
-        string name = string.Empty;
-        int Client_ID = 0;
-        int Org_ID = 0;
-        int CurrType = 0;
-        int CommonCurr = 0;
-        int FromCurr = 0;
-        int ToCurr = 0;
         int FromCurr1 = 0;
         DateTime ValidFrom1 = new DateTime();
         DateTime ValidFrom2 = new DateTime();
@@ -31,6 +24,9 @@ namespace VAdvantage.Process
         Decimal MulRate1, MulRate2 = 0;
         DateTime newValidFrom = new DateTime();
         DateTime newValidTo = new DateTime();
+        MConversionRate conobj;
+        MCurrCrossRate Currobj;
+        DataSet dsobj;
 
         protected override string DoIt()
         {
@@ -41,46 +37,44 @@ namespace VAdvantage.Process
                 sysDate = "current_timestamp";
             }
             // Getting records from cross rate setting
-            query.Append("SELECT * FROM C_CurrCrossRate WHERE IsActive='Y'");
-            DataSet dsobj = DB.ExecuteDataset(query.ToString());
+            query.Append("SELECT C_CurrCrossRate_ID,AD_Org_ID,Name,C_ConversionType_ID,C_Currency_ID,C_Currency_From_ID,C_Currency_To_ID FROM C_CurrCrossRate WHERE IsActive='Y'");
+            dsobj = DB.ExecuteDataset(query.ToString());
             query.Clear();
+            
             if (dsobj != null && dsobj.Tables.Count > 0 && dsobj.Tables[0].Rows.Count > 0)
             {
-                for (int i = 0; i < dsobj.Tables[0].Rows.Count; i++)
+                //for (int i = 0; i < dsobj.Tables[0].Rows.Count; i++)
+                foreach(DataRow dr in dsobj.Tables[0].Rows)
                 {
-                    Org_ID = Util.GetValueOfInt(dsobj.Tables[0].Rows[i]["AD_Org_ID"]);
-                    name= Util.GetValueOfString(dsobj.Tables[0].Rows[i]["Name"]);
-                    CurrType = Util.GetValueOfInt(dsobj.Tables[0].Rows[i]["C_ConversionType_ID"]);
-                    CommonCurr = Util.GetValueOfInt(dsobj.Tables[0].Rows[i]["C_Currency_ID"]);
-                    FromCurr = Util.GetValueOfInt(dsobj.Tables[0].Rows[i]["C_Currency_From_ID"]);
-                    ToCurr = Util.GetValueOfInt(dsobj.Tables[0].Rows[i]["C_Currency_To_ID"]);
+                    Currobj = new MCurrCrossRate(GetCtx(), dr, Get_Trx());
                     // Getting records from currency rate based on conditions
-                    query.Append("SELECT AD_Client_ID,AD_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE " +  sysDate + " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND AD_Org_ID=" + Org_ID + " AND C_ConversionType_ID=" + CurrType + " AND C_Currency_To_ID=" + CommonCurr + " AND C_Currency_ID IN ('" + FromCurr + "','" + ToCurr + "')");
-                    DataSet ds = DB.ExecuteDataset(query.ToString());
+                    query.Append("SELECT AD_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE " +  sysDate +
+                        " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND AD_Org_ID=" + Currobj.GetAD_Org_ID() + " AND C_ConversionType_ID=" + Currobj.GetC_ConversionType_ID() + 
+                        " AND C_Currency_To_ID=" + Currobj.GetC_Currency_ID() + " AND C_Currency_ID IN ('" + Currobj.GetC_Currency_From_ID() + "','" + Currobj.GetC_Currency_To_ID() + "')");
+                    dsobj = DB.ExecuteDataset(query.ToString());
                     query.Clear();
-                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count == 2)
+                    if (dsobj != null && dsobj.Tables.Count > 0 && dsobj.Tables[0].Rows.Count == 2)
                     {
-                        Client_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Client_ID"]);
-                        for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
+                        for (int j = 0; j < dsobj.Tables[0].Rows.Count; j++)
                         {
                             //Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["AD_Org_ID"]);
-                            FromCurr1 = Util.GetValueOfInt(ds.Tables[0].Rows[j]["C_Currency_ID"]);
+                            FromCurr1 = Util.GetValueOfInt(dsobj.Tables[0].Rows[j]["C_Currency_ID"]);
                             // Getting multiply rate from both records
-                            if (FromCurr == FromCurr1)
+                            if (Currobj.GetC_Currency_From_ID() == FromCurr1)
                             {
-                                ValidFrom1 = Convert.ToDateTime(ds.Tables[0].Rows[j]["ValidFrom"]);
-                                ValidTo1 = Convert.ToDateTime(ds.Tables[0].Rows[j]["ValidTo"]);
-                                MulRate1 = Util.GetValueOfDecimal(ds.Tables[0].Rows[j]["MultiplyRate"]);
+                                ValidFrom1 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidFrom"]);
+                                ValidTo1 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidTo"]);
+                                MulRate1 = Util.GetValueOfDecimal(dsobj.Tables[0].Rows[j]["MultiplyRate"]);
                             }
-                            else if (ToCurr == FromCurr1)
+                            else if (Currobj.GetC_Currency_To_ID() == FromCurr1)
                             {
-                                ValidFrom2 = Convert.ToDateTime(ds.Tables[0].Rows[j]["ValidFrom"]);
-                                ValidTo2 = Convert.ToDateTime(ds.Tables[0].Rows[j]["ValidTo"]);
-                                MulRate2 = Util.GetValueOfDecimal(ds.Tables[0].Rows[j]["MultiplyRate"]);
+                                ValidFrom2 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidFrom"]);
+                                ValidTo2 = Convert.ToDateTime(dsobj.Tables[0].Rows[j]["ValidTo"]);
+                                MulRate2 = Util.GetValueOfDecimal(dsobj.Tables[0].Rows[j]["MultiplyRate"]);
                             }
                             else
                             {
-                                retmsg.Append("Error: " + " Currency not matched \n");
+                                retmsg.Append("Error: " + Msg.GetMsg(GetCtx(), "VIS_CurrNotMatch"));
                             }
                         }
                         // Calculating new multiply rate & divide rate
@@ -88,42 +82,36 @@ namespace VAdvantage.Process
                         {
                             newMulRate = MulRate1 / MulRate2;
                             newDivideRate = 1 / newMulRate;
-
                         }
                         else
                         {
-                            retmsg.Append("Error: " + " Multiply rate must be greater than 0");
+                            retmsg.Append("Error: " + Msg.GetMsg(GetCtx(), "ProductUOMConversionRateError"));
                         }
 
                         // Geting Valid from and valid to dates
-                        if (ValidFrom1 == ValidFrom2 && ValidTo1 == ValidTo2)
-                        {
-                            newValidFrom = ValidFrom1;
-                            newValidTo = ValidTo1;
-                        }
-                        else if ((ValidFrom1 < ValidFrom2 && ValidTo1 == ValidTo2) || (ValidFrom1 < ValidFrom2 && ValidTo1 < ValidTo2))
+                        if (ValidFrom1 <= ValidFrom2 && ValidTo1 <= ValidTo2)
                         {
                             newValidFrom = ValidFrom2;
                             newValidTo = ValidTo1;
                         }
-                        else if ((ValidFrom1 > ValidFrom2 && ValidTo1 == ValidTo2) || (ValidFrom1 > ValidFrom2 && ValidTo1 > ValidTo2))
+                        else if (ValidFrom1 >= ValidFrom2 && ValidTo1 >= ValidTo2)
                         {
                             newValidFrom = ValidFrom1;
                             newValidTo = ValidTo2;
                         }
-                        else if (ValidFrom1 == ValidFrom2 && ValidTo1 < ValidTo2)
+                        else if (ValidFrom1 <= ValidFrom2 && ValidTo1 >= ValidTo2)
+                        {
+                            newValidFrom = ValidFrom2;
+                            newValidTo = ValidTo2;
+                        }
+                        else if (ValidFrom1 >= ValidFrom2 && ValidTo1 <= ValidTo2)
                         {
                             newValidFrom = ValidFrom1;
                             newValidTo = ValidTo1;
                         }
-                        else if (ValidFrom1 == ValidFrom2 && ValidTo1 > ValidTo2)
-                        {
-                            newValidFrom = ValidFrom1;
-                            newValidTo = ValidTo2;
-                        }
                         else
                         {
-                            retmsg.Append("\n Error: " + Msg.GetMsg("Not Valid Dates", ""));
+                            retmsg.Append(Msg.GetMsg(GetCtx(), "VIS_InvalidDate"));
                         }
                         query.Clear();
                         //int ID = DB.GetNextID(0, "C_Conversion_Rate", null);
@@ -135,12 +123,12 @@ namespace VAdvantage.Process
                         //    Msg.GetMsg("Record Inserted","");
                         //}
                         // Inserting new conversion in the currency rate
-                        MConversionRate conobj = new MConversionRate(GetCtx(), 0, Get_Trx());
-                        conobj.SetAD_Client_ID(Client_ID);
-                        conobj.SetAD_Org_ID(Org_ID);
-                        conobj.SetC_Currency_ID(FromCurr);
-                        conobj.SetC_Currency_To_ID(ToCurr);
-                        conobj.SetC_ConversionType_ID(CurrType);
+                        conobj = new MConversionRate(GetCtx(), 0, Get_Trx());
+                        conobj.SetAD_Client_ID(Currobj.GetAD_Client_ID());
+                        conobj.SetAD_Org_ID(Currobj.GetAD_Org_ID());
+                        conobj.SetC_Currency_ID(Currobj.GetC_Currency_From_ID());
+                        conobj.SetC_Currency_To_ID(Currobj.GetC_Currency_To_ID());
+                        conobj.SetC_ConversionType_ID(Currobj.GetC_ConversionType_ID());
                         conobj.SetValidFrom(newValidFrom);
                         conobj.SetValidTo(newValidTo);
                         conobj.SetMultiplyRate(newMulRate);
@@ -150,21 +138,21 @@ namespace VAdvantage.Process
                             ValueNamePair pp = VLogger.RetrieveError();
                             if (pp != null)
                             {
-                                retmsg.Append("Cross rate not calculated " + ":- " + pp.GetName() + name + ", ");
+                                retmsg.Append(Msg.GetMsg(GetCtx(), "VIS_CrossRateNotCal") + ":- " + pp.GetName() + Currobj.GetName() + ", ");
                             }
                             else
                             {
-                                retmsg.Append(Msg.GetMsg("Cross rate not calculated", ""));
+                                retmsg.Append(Msg.GetMsg(GetCtx(), "VIS_CrossRateNotCal"));
                             }
                         }
                         else
                         {
-                            retmsg.Append("Cross rate calculated for" + ":- " + name + ", ");
+                            retmsg.Append(Msg.GetMsg(GetCtx(), "VIS_CrossRateCal") + ":- " + Currobj.GetName() + ", ");
                         }
                     }
                     else
                     {
-                        retmsg.Append(" Cross rate not calculated for :" + name + ", ");
+                        retmsg.Append(Msg.GetMsg(GetCtx(), "VIS_CrossRateNotCal") + ":- " + Currobj.GetName() + ", ");
                     }
                 }
             }
