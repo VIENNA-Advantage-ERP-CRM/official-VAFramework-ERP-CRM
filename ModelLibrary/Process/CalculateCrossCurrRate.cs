@@ -28,6 +28,10 @@ namespace VAdvantage.Process
         MCurrCrossRate Currobj;
         DataSet dsobj;
 
+        /// <summary>
+        /// Process to get Cross Currency Rate
+        /// </summary>
+        /// <returns>message</returns>
         protected override string DoIt()
         {
             //string sysDate = System.DateTime.Now.Date;
