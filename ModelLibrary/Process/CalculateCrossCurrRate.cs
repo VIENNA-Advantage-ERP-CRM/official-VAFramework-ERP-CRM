@@ -37,7 +37,7 @@ namespace VAdvantage.Process
                 sysDate = "current_timestamp";
             }
             // Getting records from cross rate setting
-            query.Append("SELECT C_CurrCrossRate_ID,AD_Org_ID,Name,C_ConversionType_ID,C_Currency_ID,C_Currency_From_ID,C_Currency_To_ID FROM C_CurrCrossRate WHERE IsActive='Y'");
+            query.Append("SELECT * FROM C_CurrCrossRate WHERE IsActive='Y'");
             dsobj = DB.ExecuteDataset(query.ToString());
             query.Clear();
             
