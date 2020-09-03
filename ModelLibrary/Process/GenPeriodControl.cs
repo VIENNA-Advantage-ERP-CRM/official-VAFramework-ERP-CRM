@@ -13,6 +13,7 @@ using VAdvantage.SqlExec;
 using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.ProcessEngine;
+using VAdvantage.Logging;
 
 namespace VAdvantage.Process
 {
@@ -62,6 +63,7 @@ namespace VAdvantage.Process
             MDocType[] types = MDocType.GetOfClient(GetCtx());
             int count = 0;
             List<String> baseTypes = new List<String>();
+            ValueNamePair vp = null;
 
             // Split multiselected organizations to get array
             if (!String.IsNullOrEmpty(orgs))
@@ -69,25 +71,39 @@ namespace VAdvantage.Process
                 _AD_Org_ID = orgs.Split(',');
             }
 
-            // loop on multiple selected organizations
-            for (int j = 0; j < _AD_Org_ID.Length; j++)
-            {
-                for (int i = 0; i < types.Length; i++)
-                {
-                    MDocType type = types[i];
-                    String docBaseType = type.GetDocBaseType();
-                    if (baseTypes.Contains(docBaseType))
-                        continue;
 
+            for (int i = 0; i < types.Length; i++)
+            {
+                MDocType type = types[i];
+                String docBaseType = type.GetDocBaseType();
+                if (baseTypes.Contains(docBaseType))
+                    continue;
+
+                // loop on multiple selected organizations
+                for (int j = 0; j < _AD_Org_ID.Length; j++)
+                {
                     MPeriodControl pc = new MPeriodControl(period, docBaseType);
                     pc.SetAD_Org_ID(Util.GetValueOfInt(_AD_Org_ID[j]));
                     if (pc.Save())
                     {
                         count++;
                     }
-                    baseTypes.Add(docBaseType);
+                    else
+                    {
+                        vp = VLogger.RetrieveError();
+                        if (vp != null)
+                        {
+                            log.Severe(Msg.GetMsg(GetCtx(), "PeriodCtlNotSaved") + ", " + vp.GetName());
+                        }
+                        else
+                        {
+                            log.Severe(Msg.GetMsg(GetCtx(), "PeriodCtlNotSaved"));
+                        }
+                    }
                 }
+                baseTypes.Add(docBaseType);
             }
+
             log.Fine("PeriodControl #" + count);
 
             return Msg.GetMsg(GetCtx(), "PeriodControlGenerated");
