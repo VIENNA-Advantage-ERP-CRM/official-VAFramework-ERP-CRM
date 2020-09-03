@@ -92,7 +92,7 @@ namespace VIS.Controllers
                         wVo = new GridWindow(vo);
                         retJSON = JsonConvert.SerializeObject(wVo, Formatting.None);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         retError = ex.Message;
                     }
@@ -116,7 +116,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID)
+        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -133,7 +133,7 @@ namespace VIS.Controllers
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
-                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID);
+                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, obscureFields);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
@@ -153,7 +153,7 @@ namespace VIS.Controllers
         }
 
 
-        public JsonResult GetWindowRecord(string sql, List<string> fields)
+        public JsonResult GetWindowRecord(string sql, List<string> fields, List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -166,7 +166,7 @@ namespace VIS.Controllers
                     Ctx ctx = Session["ctx"] as Ctx;
                     sql = Server.HtmlDecode(sql);
                     sql = SecureEngineBridge.DecryptByClientKey(sql, ctx.GetSecureKey());
-                    data = w.GetWindowRecord(sql, fields, ctx);
+                    data = w.GetWindowRecord(sql, fields, ctx, obscureFields);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
@@ -180,7 +180,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetWindowRecordsForTreeNode(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID)
+        public JsonResult GetWindowRecordsForTreeNode(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID, List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -195,7 +195,7 @@ namespace VIS.Controllers
                     sqlIn.sql = SecureEngineBridge.DecryptByClientKey(sqlIn.sql, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
-                    data = w.GetWindowRecordsForTreeNode(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, treeID, treeNodeID);
+                    data = w.GetWindowRecordsForTreeNode(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, treeID, treeNodeID, obscureFields);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
@@ -943,7 +943,7 @@ namespace VIS.Controllers
             Ctx ctx = Session["ctx"] as Ctx;
             return Json(JsonConvert.SerializeObject(ProcessHelper.GetReportFileTypes(ctx, AD_Process_ID)), JsonRequestBehavior.AllowGet);
         }
-        
+
         /// <summary>
         /// Method to get parent tab records ID.
         /// </summary>
@@ -966,7 +966,7 @@ namespace VIS.Controllers
             string sql = null;
             if (keyCol == "")
             {
-                sql = "SELECT " + pColumnName + ","+ pColumnName + " as Name, count(" + pColumnName + ") FROM " + pTableName;
+                sql = "SELECT " + pColumnName + "," + pColumnName + " as Name, count(" + pColumnName + ") FROM " + pTableName;
                 sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
                 if (!string.IsNullOrEmpty(validationCode))
                     sql += " AND " + validationCode;
@@ -996,7 +996,7 @@ namespace VIS.Controllers
                 else
                 {
                     sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
-                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + pColumnName 
+                        + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + pColumnName
                         + " ";// WHERE " + pTableName + ".IsActive='Y'";
                     sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))
@@ -1011,7 +1011,7 @@ namespace VIS.Controllers
 
             Dictionary<string, object> result = new Dictionary<string, object>();
             List<FilterDataContract> keyva = new List<FilterDataContract>();
-            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql,1,10);
+            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql, 1, 10);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1040,7 +1040,7 @@ namespace VIS.Controllers
         {
             Ctx ctx = Session["ctx"] as Ctx;
             dynamic od = JsonConvert.DeserializeObject(RowData);
-            FormModel cm = new FormModel(ctx);
+            FormModel cm = new FormModel(Session["ctx"] as Ctx);
             var retRes = cm.GetVerDetails(ctx, od);
             return Json(JsonConvert.SerializeObject(retRes), JsonRequestBehavior.AllowGet);
         }
@@ -1075,7 +1075,7 @@ namespace VIS.Controllers
             {
                 string sessionID = ctx.GetAD_Session_ID().ToString();
                 JavaScriptSerializer ser = new JavaScriptSerializer();
-                
+
                 IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));
                 if (newDic != null && newDic.Count() > 0)
                 {

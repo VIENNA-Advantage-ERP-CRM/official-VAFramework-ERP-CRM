@@ -105,6 +105,7 @@
     <Compile Include="Controller\HeaderPanelItemsVO.cs" />
     <Compile Include="CrystalReport\CrystalParams.cs" />
     <Compile Include="CrystalReport\CrystalReportEngine.cs" />
+    <Compile Include="DataBase\DBFunctionCollections.cs" />
     <Compile Include="Install\LanguageMaintenance.cs" />
     <Compile Include="Install\Translation.cs" />
     <Compile Include="Install\TranslationHandler.cs" />

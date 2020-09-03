@@ -1013,7 +1013,7 @@ SetVersion (0.0);
         {
             Set_Value("IsMaintainVersions", IsMaintainVersions);
         }
-        
+
         /** Get Maintain Versions.
         @return Maintain Versions */
         public Boolean IsMaintainVersions()
@@ -1048,6 +1048,26 @@ SetVersion (0.0);
             }
             return false;
         }
+
+        /** ObscureType AD_Reference_ID=291 */
+        public static int OBSCURETYPE_AD_Reference_ID = 291;/** Obscure Digits but last 4 = 904 */
+        public static String OBSCURETYPE_ObscureDigitsButLast4 = "904";/** Obscure Digits but first/last 4 = 944 */
+        public static String OBSCURETYPE_ObscureDigitsButFirstLast4 = "944";/** Obscure AlphaNumeric but last 4 = A04 */
+        public static String OBSCURETYPE_ObscureAlphaNumericButLast4 = "A04";/** Obscure AlphaNumeric but first/last 4 = A44 */
+        public static String OBSCURETYPE_ObscureAlphaNumericButFirstLast4 = "A44";/** Is test a valid value.
+@param test testvalue
+@returns true if valid **/
+        public bool IsObscureTypeValid(String test) { return test == null || test.Equals("904") || test.Equals("944") || test.Equals("A04") || test.Equals("A44"); }/** Set Obscure.
+@param ObscureType Type of obscuring the data (limiting the display) */
+        public void SetObscureType(String ObscureType)
+        {
+            if (!IsObscureTypeValid(ObscureType))
+                throw new ArgumentException("ObscureType Invalid value - " + ObscureType + " - Reference_ID=291 - 904 - 944 - A04 - A44"); if (ObscureType != null && ObscureType.Length > 3) { log.Warning("Length > 3 - truncated"); ObscureType = ObscureType.Substring(0, 3); }
+            Set_Value("ObscureType", ObscureType);
+        }/** Get Obscure.
+@return Type of obscuring the data (limiting the display) */
+        public String GetObscureType() { return (String)Get_Value("ObscureType"); }
+
     }
 
 }

@@ -16,6 +16,7 @@ using VAdvantage.DataBase;
 using VAdvantage.Utility;
 using VAdvantage.Login;
 using VAdvantage.Logging;
+using VAModelAD.DataBase;
 
 namespace VAdvantage.Print
 {
@@ -509,8 +510,17 @@ namespace VAdvantage.Print
                         }
                         else if (index == -1)
                         {
-                            //	=> Table.Column,
-                            sb.Append(tableName).Append(".").Append(ColumnName).Append(",");
+                            MColumn col = new MColumn(ctx, AD_Column_ID, null);
+                            string obscureType = col.GetObscureType();
+                            if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetAD_Table_ID(),AD_Column_ID,false))
+                            {
+                                sb.Append(DBFunctionCollections.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
+                            }
+                            else
+                            {
+                                //	=> Table.Column,
+                                sb.Append(tableName).Append(".").Append(ColumnName).Append(",");
+                            }
                             sqlSELECT.Append(sb);
                             if (!IsGroupFunction)
                                 sqlGROUP.Append(sb).Append(",");
@@ -868,7 +878,7 @@ namespace VAdvantage.Print
                     if (format.IsGridReport)
                     {
                         int pageSize = Util.GetValueOfInt(ctx.GetContext("#REPORT_PAGE_SIZE")); //500;
-                        int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + pd.GetSQL() + " )", null, null));
+                        int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + pd.GetSQL() + " ) as SQLQuery", null, null));
                         format.TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
                         ds = VAdvantage.DataBase.DB.GetDatabase().ExecuteDatasetPaging(pd.GetSQL(), format.PageNo, pageSize, 0);
 

@@ -450,8 +450,8 @@
     };
 
     VIS.GridController.prototype.initFilterPanel = function (winNo) {
-        this.aFilterPanel = new VIS.FilterPanel(winNo,this);
-        
+        this.aFilterPanel = new VIS.FilterPanel(winNo, this);
+
     };
 
     VIS.GridController.prototype.initFilterUI = function () {
@@ -743,25 +743,25 @@
 
         var selfThis = this;
 
-    //	Query Included Tab
-    if (!this.getIsSingleRow()) {
-        window.setTimeout(function () {
-            //if (selfThis.vIncludedGC != null) {
+        //	Query Included Tab
+        if (!this.getIsSingleRow()) {
+            window.setTimeout(function () {
+                //if (selfThis.vIncludedGC != null) {
                 selfThis.notifyDependents();
                 //vIncludedGC.getMTab().query(0, 0, false);
-            //}
-        }, 50);
-    }
-    else {
-        //if (selfThis.vIncludedGC != null) {
-        selfThis.notifyDependents();
+                //}
+            }, 50);
+        }
+        else {
+            //if (selfThis.vIncludedGC != null) {
+            selfThis.notifyDependents();
             //vIncludedGC.getMTab().query(0, 0, false);
+            //}
+        }
+        //if (this.currentRowIndex === event.index) {
+        //    return;
         //}
-    }
-    //if (this.currentRowIndex === event.index) {
-    //    return;
-    //}
-    //this.currentRowIndex = event.index;
+        //this.currentRowIndex = event.index;
 
         //this.gTab.navigate(this.currentRowIndex, true);
         //this.dynamicDisplay(-1);
@@ -860,6 +860,11 @@
 
 
                                 ve.setReadOnly(!rw);
+
+
+                                if (ve.showObscureButton) {
+                                    ve.showObscureButton(rw);
+                                }
                                 //	log.log(Level.FINEST, "RW=" + rw + " " + mField);
                                 ve.setMandatory(mField.getIsMandatory(true));
                                 //mField.validateValue();
@@ -1063,7 +1068,7 @@
 
         }
         this.activateTree();
-        
+
     };
 
     VIS.GridController.prototype.multiRowResize = function () {
@@ -1150,7 +1155,7 @@
             this.gTab.setTreeNodeID(nodeID);
 
             this.gTab.gridTable.setCurrentPage(1);
-           // this.gTab.setQuery(null);
+            // this.gTab.setQuery(null);
             this.navigate(0);
 
             this.query(0, 0, false, nodeID, this.treeID, this.gTab.getAD_Table_ID());   //  autoSize
@@ -1214,21 +1219,21 @@
 
     VIS.GridController.prototype.applyFilters = function (qry) {
 
-       //var finalwhere = qry.getWhereClause();
+        //var finalwhere = qry.getWhereClause();
         var whrs = [];
         if (this.searchCode && this.searchCode != '') {
             whrs.push(this.searchCode);
             //qry.addRestriction(this.seachCode);
         }
         var qryWhere = qry.getWhereClause();
-        if (qryWhere!="")
+        if (qryWhere != "")
             whrs.push(qry.getWhereClause());
 
         if (this.aFilterPanel) {
             var where = this.aFilterPanel.getFilterClause();
             if (where != '')
                 whrs.push(where);
-                //qry.addRestriction(where);
+            //qry.addRestriction(where);
         }
         qry.clear();
         if (whrs.length > 0)
@@ -1240,7 +1245,7 @@
         this.query(0, 0, null);
     };
 
-  
+
 
     VIS.GridController.prototype.queryCompleted = function (result) {
         this.vTable.clear();
@@ -1289,9 +1294,9 @@
         //}
     };
 
-VIS.GridController.prototype.checkInsertNewRow = function () {
-    if (this.aPanel == null || this.aContentPane)
-        return false;
+    VIS.GridController.prototype.checkInsertNewRow = function () {
+        if (this.aPanel == null || this.aContentPane)
+            return false;
 
         var parentValid = true;
         var lc = this.gTab.getLinkColumnName();
@@ -1435,11 +1440,11 @@ VIS.GridController.prototype.checkInsertNewRow = function () {
         return this.navigate(this.gTab.getCurrentRow() + rowChange);
     };
 
-VIS.GridController.prototype.dataRefresh = function () {
-    var record = this.gTab.dataRefresh();
-    this.dynamicDisplay(-1);
-    window.setTimeout(function (t) { t.notifyDependents(); t = null }, 500, this);
-};
+    VIS.GridController.prototype.dataRefresh = function () {
+        var record = this.gTab.dataRefresh();
+        this.dynamicDisplay(-1);
+        window.setTimeout(function (t) { t.notifyDependents(); t = null }, 500, this);
+    };
 
     VIS.GridController.prototype.dataRefreshAll = function () {
 
@@ -1471,12 +1476,12 @@ VIS.GridController.prototype.dataRefresh = function () {
         //So to achieve this, a flag is set on every new click.
         this.isDefaultFocusSet = false;
 
-    this.gTab.dataNew(copy);
-    this.dynamicDisplay(-1);
-    this.notifyDependents();
-    if (this.onRowInserted) {
-        this.onRowInserted();
-    }
+        this.gTab.dataNew(copy);
+        this.dynamicDisplay(-1);
+        this.notifyDependents();
+        if (this.onRowInserted) {
+            this.onRowInserted();
+        }
 
         this.isDefaultFocusSet = true;
     };
@@ -1506,13 +1511,13 @@ VIS.GridController.prototype.dataRefresh = function () {
     VIS.GridController.prototype.dataDeleteAsync = function () {
         this.aPanel.setBusy(true);
         var that = this;
-        that.gTab.getTableModel().dataDeleteAsync(that.vTable.getSelection(true),that.gTab.currentRow).then(function (info) {
+        that.gTab.getTableModel().dataDeleteAsync(that.vTable.getSelection(true), that.gTab.currentRow).then(function (info) {
             that.gTab.setCurrentRow(that.gTab.currentRow, true);
             that.refreshTabPanelData(that.gTab.getRecord_ID());
-             that.dynamicDisplay(-1);
+            that.dynamicDisplay(-1);
             that.aPanel.setBusy(false);
         });
-        
+
         //return retValue;
     };
 
@@ -1546,11 +1551,11 @@ VIS.GridController.prototype.dataRefresh = function () {
             summary, imageIndicator);
     };  //  rowChanged
 
-VIS.GridController.prototype.dataIgnore = function () {
-    this.gTab.dataIgnore();
-    this.dynamicDisplay(-1);
-    this.notifyDependents();
-    this.vTable.refreshUndo();
+    VIS.GridController.prototype.dataIgnore = function () {
+        this.gTab.dataIgnore();
+        this.dynamicDisplay(-1);
+        this.notifyDependents();
+        this.vTable.refreshUndo();
     };
 
     /**
@@ -1573,20 +1578,20 @@ VIS.GridController.prototype.dataIgnore = function () {
      * listen data state changed 
      * @param {any} e
      */
-VIS.GridController.prototype.dataStatusChanged = function (e) {
+    VIS.GridController.prototype.dataStatusChanged = function (e) {
 
-    if (this.displayAsIncludedGC) {
-        this.enableDisableToolbarItems(true);
-        return;
-    }
-    if (this.aContentPane) //Sub tab view lister
-        this.aContentPane.dataStatusChanged(e);
-    else 
-        this.aPanel.dataStatusChanged(e);
+        if (this.displayAsIncludedGC) {
+            this.enableDisableToolbarItems(true);
+            return;
+        }
+        if (this.aContentPane) //Sub tab view lister
+            this.aContentPane.dataStatusChanged(e);
+        else
+            this.aPanel.dataStatusChanged(e);
 
-    var col = e.getChangedColumn();
-    if (!e.getIsChanged() || col < 0)
-        return;
+        var col = e.getChangedColumn();
+        if (!e.getIsChanged() || col < 0)
+            return;
 
         //  Process Callout
         var mField = this.gTab.getField(col);
@@ -1613,7 +1618,7 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
                     var val = lookup.getValidation();
                     if (val.indexOf(columnName) != -1)	//	dep is dependent
                     {
-                       // var mField = this.gTab.getField(columnName);
+                        // var mField = this.gTab.getField(columnName);
 
                         this.gTab.getTableModel().setDisableNotification(true);
                         this.gTab.setValue(dep, null);
@@ -1683,13 +1688,13 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
                 p1.css({ "float": 'right' });
             else p1.css({ "float": '' });
 
-        p1.show();
-        p1 = null;
-        this.vTable.resize();
-        this.vTable.refreshRow();
-    }
-    
-};
+            p1.show();
+            p1 = null;
+            this.vTable.resize();
+            this.vTable.refreshRow();
+        }
+
+    };
 
     VIS.GridController.prototype.switchCardRow = function () {
         if (!this.isCardRow) {
@@ -1711,13 +1716,13 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
                 p1.css({ "float": 'right' });
             else p1.css({ "float": '' });
 
-        p1.show();
-        this.vCardView.refreshUI(this.getVCardPanel().width());
-        p1 = null;
-        //this.vTable.resize();
-    }
-    
-};
+            p1.show();
+            this.vCardView.refreshUI(this.getVCardPanel().width());
+            p1 = null;
+            //this.vTable.resize();
+        }
+
+    };
 
     VIS.GridController.prototype.switchMapRow = function () {
         if (!this.isMapRow) {
@@ -1739,24 +1744,24 @@ VIS.GridController.prototype.dataStatusChanged = function (e) {
                 p1.css({ "float": 'right' });
             else p1.css({ "float": '' });
 
-        p1.show();
-        this.vMapView.refreshUI(this.getVMapPanel().width());
-        p1 = null;
-        //this.vTable.resize();
-    }
-  
-};
+            p1.show();
+            this.vMapView.refreshUI(this.getVMapPanel().width());
+            p1 = null;
+            //this.vTable.resize();
+        }
+
+    };
 
 
     VIS.GridController.prototype.notifyDependents = function () {
-        
+
         if (this.vIncludedGC) {
             this.switchIncludedGC();
         }
 
     };
 
-//show hide Included grid
+    //show hide Included grid
     /**
      * 
      * */

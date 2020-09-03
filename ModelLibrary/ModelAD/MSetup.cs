@@ -2570,7 +2570,7 @@ namespace VAdvantage.Model
             /**
              *  Create Calendar
              */
-            if (lstTableName.Contains("C_Calendar")) // Update by Paramjeet Singh
+            if (Common.Common.lstTableName.Contains("C_Calendar")) // Update by Paramjeet Singh
             {
                 m_calendar = new MCalendar(m_client);
 
@@ -2598,7 +2598,7 @@ namespace VAdvantage.Model
             name = m_clientName + " " + Msg.Translate(m_lang, "Account_ID");
             int C_ElementValue_ID = 0;
             int C_Element_ID = 0;
-            if (lstTableName.Contains("C_Element")) // Update by Paramjeet Singh
+            if (Common.Common.lstTableName.Contains("C_Element")) // Update by Paramjeet Singh
             {
                 //********************Commented by Paramjeet Singh on date 19-oct-2015***********************//
 
@@ -2655,7 +2655,7 @@ namespace VAdvantage.Model
             /**
              *  Create AccountingSchema
              */
-            if (lstTableName.Contains("C_AcctSchema"))// Update by Paramjeet Singh
+            if (Common.Common.lstTableName.Contains("C_AcctSchema"))// Update by Paramjeet Singh
             {
                 m_as = new MAcctSchema(m_client, currency);
                 if (!m_as.Save())
@@ -2680,17 +2680,17 @@ namespace VAdvantage.Model
                 sql2 = "SELECT Value, Name FROM AD_Ref_List WHERE AD_Reference_ID=181";
             else
                 sql2 = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                    + "WHERE l.AD_Reference_ID=181 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID";
+                    + "WHERE l.AD_Reference_ID=181 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID  AND t.AD_Language='" + m_lang + "'";
             //
             int Element_OO = 0, Element_AC = 0, Element_PR = 0, Element_BP = 0, Element_PJ = 0,
                 Element_MC = 0, Element_SR = 0;
 
             try
             {
-                if (lstTableName.Contains("C_AcctSchema_Element"))// Update by Paramjeet Singh
+                if (Common.Common.lstTableName.Contains("C_AcctSchema_Element"))// Update by Paramjeet Singh
                 {
                     int AD_Client_ID = m_client.GetAD_Client_ID();
-                    DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql2, null, m_trx);
+                    DataSet ds = DataBase.DB.ExecuteDataset(sql2, null, m_trx);
 
                     for (int count = 0; count <= ds.Tables[0].Rows.Count - 1; count++)
                     {
@@ -2757,7 +2757,7 @@ namespace VAdvantage.Model
                         if (IsMandatory != null)
                         {
                             //tableName = "C_AcctSchema_Element";
-                            //if (lstTableName.Contains(tableName))// Update by Paramjeet Singh
+                            //if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
                             //{
                             sqlCmd = new StringBuilder("INSERT INTO C_AcctSchema_Element(");
                             sqlCmd.Append(m_stdColumns).Append(",C_AcctSchema_Element_ID,C_AcctSchema_ID,")
@@ -2767,7 +2767,7 @@ namespace VAdvantage.Model
                                 .Append(IsMandatory).Append("','").Append(IsBalanced).Append("')");
                             try
                             {
-                                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                                no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                             }
                             catch
                             {
@@ -2781,7 +2781,7 @@ namespace VAdvantage.Model
                             {
                                 sqlCmd = new StringBuilder("UPDATE C_AcctSchema_Element SET Org_ID=");
                                 sqlCmd.Append(GetAD_Org_ID()).Append(" WHERE C_AcctSchema_Element_ID=").Append(C_AcctSchema_Element_ID);
-                                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                                no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                                 if (no != 1)
                                     log.Log(Level.SEVERE, "Default Org in AcctSchamaElement NOT updated");
                             }
@@ -2790,7 +2790,7 @@ namespace VAdvantage.Model
                                 sqlCmd = new StringBuilder("UPDATE C_AcctSchema_Element SET C_ElementValue_ID=");
                                 sqlCmd.Append(C_ElementValue_ID).Append(", C_Element_ID=").Append(C_Element_ID);
                                 sqlCmd.Append(" WHERE C_AcctSchema_Element_ID=").Append(C_AcctSchema_Element_ID);
-                                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                                no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                                 if (no != 1)
                                     log.Log(Level.SEVERE, "Default Account in AcctSchamaElement NOT updated");
                             }
@@ -2819,7 +2819,7 @@ namespace VAdvantage.Model
             //  Create GL Accounts
             m_accountsOK = true;
             tableName = "C_AcctSchema_GL";
-            if (lstTableName.Contains(tableName))// Update by Paramjeet Singh
+            if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
             {
                 //********************Commented by Paramjeet Singh on date 19-oct-2015***********************//
 
@@ -2864,7 +2864,7 @@ namespace VAdvantage.Model
                 //    .Append(GetAcct("CommitmentOffset_Acct"))
                 //    .Append(")");
                 //if (m_accountsOK)
-                //    no = BaseLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                //    no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                 //else
                 //    no = -1;
                 //if (no != 1)
@@ -2882,7 +2882,7 @@ namespace VAdvantage.Model
             }
             //	Create Std Accounts
             tableName = "C_AcctSchema_GL";
-            if (lstTableName.Contains(tableName))// Update by Paramjeet Singh
+            if (Common.Common.lstTableName.Contains(tableName))// Update by Paramjeet Singh
             {
                 //********************Commented by Paramjeet Singh on date 19-oct-2015***********************//
 
@@ -3006,7 +3006,7 @@ namespace VAdvantage.Model
                 ////sqlCmd.Append(GetAcct("ASSET_DISP_REVENUE_ACCT")).Append(")");
 
                 //if (m_accountsOK)
-                //    no = BaseLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                //    no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                 //else
                 //    no = -1;
                 //if (no != 1)
@@ -3023,7 +3023,7 @@ namespace VAdvantage.Model
             }
             //  GL Categories
             tableName = "GL_Category";
-            if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
+            if (Common.Common.lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 CreateGLCategory("Standard", MGLCategory.CATEGORYTYPE_Manual, true);
                 int GL_None = CreateGLCategory("None", MGLCategory.CATEGORYTYPE_Document, false);
@@ -3195,7 +3195,7 @@ namespace VAdvantage.Model
                 sqlCmd.Append("C_AcctSchema1_ID=").Append(m_as.GetC_AcctSchema_ID())
                     .Append(", C_Calendar_ID=").Append(m_calendar.GetC_Calendar_ID())
                     .Append(" WHERE AD_Client_ID=").Append(m_client.GetAD_Client_ID());
-                no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
+                no = DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                 if (no != 1)
                 {
                     String err = "ClientInfo not updated";

@@ -17,7 +17,7 @@ using VAdvantage.Classes;
 
 namespace VAdvantage.Controller
 {
-    
+  
     public class GridFieldVO : FieldVObj, Evaluatee
     {
         /*callout text*/
@@ -722,7 +722,7 @@ namespace VAdvantage.Controller
             }
             if (DisplayType.IsLookup(displayType))
             {
-                if (IsDisplayedf || IsDisplayedMR)
+                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby") || ColumnName.ToLower().Equals("updatedby"))
                 {
                     try
                     {

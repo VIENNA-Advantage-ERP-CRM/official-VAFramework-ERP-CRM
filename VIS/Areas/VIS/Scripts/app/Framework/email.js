@@ -415,47 +415,47 @@
             try {
                 $txtArea.kendoEditor({
                     tools: [
-        "bold",
-        "italic",
-        "underline",
-        "strikethrough",
-        "justifyLeft",
-        "justifyCenter",
-        "justifyRight",
-        "justifyFull",
-        "insertUnorderedList",
-        "insertOrderedList",
-        "indent",
-        "outdent",
-        "createLink",
-        "unlink",
-        "insertImage",
-        "insertFile",
-        "subscript",
-        "superscript",
-        "createTable",
-        "addRowAbove",
-        "addRowBelow",
-        "addColumnLeft",
-        "addColumnRight",
-        "deleteRow",
-        "deleteColumn",
-        "viewHtml",
-        "formatting",
-        "cleanFormatting",
-        "fontName",
-        {
-            name: "fontSize",
-            items: [].concat(
-               [{ text: "8px", value: "8px" }],
-              [{ text: "12px", value: "12px" }],
-              [{ text: "16px", value: "16px" }],
-              [{ text: "20px", value: "20px" }],
-                [{ text: "24px", value: "24px" }]
-            )
-        },
-        "foreColor",
-        "backColor"
+                        "bold",
+                        "italic",
+                        "underline",
+                        "strikethrough",
+                        "justifyLeft",
+                        "justifyCenter",
+                        "justifyRight",
+                        "justifyFull",
+                        "insertUnorderedList",
+                        "insertOrderedList",
+                        "indent",
+                        "outdent",
+                        "createLink",
+                        "unlink",
+                        "insertImage",
+                        "insertFile",
+                        "subscript",
+                        "superscript",
+                        "createTable",
+                        "addRowAbove",
+                        "addRowBelow",
+                        "addColumnLeft",
+                        "addColumnRight",
+                        "deleteRow",
+                        "deleteColumn",
+                        "viewHtml",
+                        "formatting",
+                        "cleanFormatting",
+                        "fontName",
+                        {
+                            name: "fontSize",
+                            items: [].concat(
+                                [{ text: "8px", value: "8px" }],
+                                [{ text: "12px", value: "12px" }],
+                                [{ text: "16px", value: "16px" }],
+                                [{ text: "20px", value: "20px" }],
+                                [{ text: "24px", value: "24px" }]
+                            )
+                        },
+                        "foreColor",
+                        "backColor"
                     ],
                     keyup: getTextChange,
                     encoded: false
@@ -554,7 +554,7 @@
                     var ID = rowsSingleView[_curtab.getKeyColumnName().toLower()];
 
                     $bccChkList.append('<li class="vis-list-li-bcc" data-email="' + rowsSingleView["email"] + '"><input id="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1" type="checkbox" value="' + rowsSingleView["email"]
-                           + '" checked /><label class="vis-chcklist-label" for="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1">' + rowsSingleView["email"] + '(' + ID + ')</label></li>');
+                        + '" checked /><label class="vis-chcklist-label" for="' + self.windowNo + '_' + rowsSingleView["email"] + '_CheckBoxList1">' + rowsSingleView["email"] + '(' + ID + ')</label></li>');
                 }
             }
         };
@@ -734,7 +734,7 @@
                             }
 
                             htm += '<li  class="vis-list-li-bcc"><input data-currentrec="N" data-recid="' + prID[i] + '" id="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1" type="checkbox"  value="' + ds[j]["Email"]
-                                 + '" checked/><label class="vis-chcklist-label"  for="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1">' + ds[j]["Email"] + '(' + prID[i] + ')</label></li>';
+                                + '" checked/><label class="vis-chcklist-label"  for="' + self.windowNo + '_' + ds[j]["Email"] + '_CheckBoxList1">' + ds[j]["Email"] + '(' + prID[i] + ')</label></li>';
                             // }
                         }
                     }
@@ -1929,7 +1929,7 @@
 
                 mail.push(mailInfo);
             }
-                //for dynamic mails
+            //for dynamic mails
             else {
                 selectedValues = [];
                 var selectedRecs = [];
@@ -1951,7 +1951,7 @@
                         }
                     }
 
-                    for (var z = 0; z < selectedValues.length ; z++) {
+                    for (var z = 0; z < selectedValues.length; z++) {
 
                         if (_curGC.singleRow == true && rowsSource.length == 0) {
                             var mailRes = createDynmicmails(rowsSingleView, 0);
@@ -1980,7 +1980,7 @@
                         }
                     }
                 }
-                else if(hsaValidinputmails){
+                else if (hsaValidinputmails) {
                     if (_curGC.singleRow == true && rowsSource.length == 0) {
                         var mailRes = createDynmicmails(rowsSingleView, 0);
                         if (mailRes == null || mailRes == undefined) {
@@ -2472,7 +2472,7 @@
             }
         };
 
-        function createDynmicmails(source, i,email) {
+        function createDynmicmails(source, i, email) {
             var hasMail = false;
 
             var mailInfo = {};
@@ -2493,8 +2493,7 @@
                 }
             }
 
-            if (email)
-            {
+            if (email) {
                 if (!validateEmail(email)) {
                     window.setTimeout(function () {
                         VIS.ADialog.info("NotValidEmail", true, ":" + email);
@@ -2504,7 +2503,7 @@
                 mailInfo.Bcc.push(email);
                 hasMail = true;
             }
-           else if ($bccChkList != null && $bccChkList != undefined) {
+            else if ($bccChkList != null && $bccChkList != undefined) {
                 if (Object.keys(source).indexOf("email") > -1 && selectedValues.indexOf(source['email']) > -1) {
                     //var lis = $bccChkList.children('li');
                     //if (lis.length > 0) {
@@ -2578,9 +2577,9 @@
                         }
                     }
                     else if (VIS.DisplayType.IsDate(_curtab.getField(columnName).getDisplayType())) {
-                        var displayType= _curtab.getField(columnName).getDisplayType()
+                        var displayType = _curtab.getField(columnName).getDisplayType()
                         fieldValue = _curtab.getField(columnName).value;
-                       
+
                         if (VIS.DisplayType.Date == displayType) {
                             fieldValue = new Date(fieldValue).toLocaleDateString();
                         }
@@ -2615,7 +2614,10 @@
                 var columnName = Object.keys(_curGC.getColumnNames()).filter(function (key) { return _curGC.getColumnNames()[key] === fieldname })[0];
                 if (columnName != undefined && columnName != null) {
                     if (VIS.DisplayType.IsLookup(_curtab.getField(columnName).getDisplayType()) || VIS.DisplayType.Location == _curtab.getField(columnName).getDisplayType()) {
-                        if (rowsSingleView[columnName.toLower()] != null && rowsSingleView[columnName.toLower()] != undefined) {
+                        if (rowsSource.length > 0 && rowsSource[0][columnName.toLower()] != null && rowsSource[0][columnName.toLower()] != undefined) {
+                            fieldValue = _curtab.getField(columnName.toLower()).lookup.getDisplay(rowsSource[0][columnName.toLower()]);
+                        }
+                        else if (rowsSingleView[columnName.toLower()] != null && rowsSingleView[columnName.toLower()] != undefined) {
                             fieldValue = _curtab.getField(columnName.toLower()).lookup.getDisplay(rowsSingleView[columnName.toLower()]);
                         }
                     }
@@ -2639,7 +2641,11 @@
                             fieldValue = _curtab.getField(columnName).value;
                         }
                         else {
-                            fieldValue = rowsSingleView[columnName.toLower()];
+                            if (rowsSource && rowsSource.length > 0) {
+                                fieldValue = rowsSource[0][columnName.toLower()]; ``
+                            }
+                            else
+                                fieldValue = rowsSingleView[columnName.toLower()];
                         }
                     }
                 }
@@ -2862,8 +2868,8 @@
             ctx = null;
             ch = null;
             bpColumnName = "";
-            rowsSource = null;
-            rowsSingleView = null;
+            //rowsSource = null;
+            //rowsSingleView = null;
             currentTable_ID = 0;
             //selectedValues.clear();
             selectedValues = null;
