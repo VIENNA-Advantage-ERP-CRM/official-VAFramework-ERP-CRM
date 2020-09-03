@@ -262,6 +262,21 @@ namespace VAdvantage.Model
             return AfterSave(newRecord, success);
         }
 
-
+        /// <summary>
+        /// Get Primary Accounting Schema
+        /// </summary>
+        /// <returns>Acct Schema or null</returns>
+        internal MAcctSchema GetAcctSchema()
+        {
+            if (info == null)
+                info = MOrgInfo.Get(GetCtx(), GetAD_Client_ID(), Get_TrxName());
+            if (info != null)
+            {
+                int C_AcctSchema_ID = info.GetC_AcctSchema_ID();
+                if (C_AcctSchema_ID != 0)
+                    return MAcctSchema.Get(GetCtx(), C_AcctSchema_ID);
+            }
+            return null;
+        }
     }
 }
