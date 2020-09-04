@@ -109,7 +109,7 @@ namespace VAdvantage.Process
             // if Document BaseType is selected then update period control for selected Document BaseType
             if (!String.IsNullOrEmpty(_docBaseType))
             {
-                sql.Append(" AND DocBaseType IN (" + _docBaseType + ")");
+                sql.Append(" AND DocBaseType IN (SELECT DocBaseType FROM C_DocBaseType WHERE C_DocBaseType_ID IN (" + _docBaseType + "))");
             }
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
