@@ -409,12 +409,6 @@ namespace VAdvantage.Model
                 }
             }
 
-            //if(newRecord)
-            //{
-            //    string sql;
-            //    sql = "SELECT COUNT(*) FROM M_Warehouse WHERE "
-            //}
-
             return true;
         }
 
