@@ -694,6 +694,19 @@
             //Currency Conversion Date change event
             $conversionDate.on("change", function (e) {
                 conversionDate = $conversionDate.val();
+                //clear the grids which is true
+                if ($gridInvoice) {
+                    clrInvoice(e);
+                }
+                if ($glLineGrid) {
+                    clrGLLine(e);
+                }
+                if ($gridPayment) {
+                    clrPayment(e);
+                }
+                if ($gridCashline) {
+                    clrCashLine(e);
+                }
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
             });
@@ -2480,6 +2493,25 @@
             columns.push({ field: "Isocode", caption: VIS.translatedTexts.TrxCurrency, size: '85px', hidden: false });
             //}
             columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: false });
+            if (chk) {
+                //render column into float with culture format
+                columns.push({
+                    field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                        var val = record["Payment"];
+                        return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
+                    }
+                });
+            }
+            else {
+                columns.push({ field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: true });
+            }
+            //render column into float with culture format
+            columns.push({
+                field: "ConvertedAmount", caption: VIS.translatedTexts.ConvertedAmount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
+                    var val = record["ConvertedAmount"];
+                    return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
+                }
+            });
             //render column into float with culture format
             columns.push({
                 field: "OpenAmt", caption: VIS.translatedTexts.OpenAmount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
@@ -2488,13 +2520,6 @@
                 }
             });
             columns.push({ field: "Multiplierap", caption: VIS.translatedTexts.multiplierap, size: '150px', hidden: true });
-            //render column into float with culture format
-            columns.push({
-                field: "ConvertedAmount", caption: VIS.translatedTexts.ConvertedAmount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
-                    var val = record["ConvertedAmount"];
-                    return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                }
-            });
             //render column into float with culture format
             columns.push({
                 field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
@@ -2510,18 +2535,6 @@
                 }
             });
             columns.push({ field: "CpaymentID", caption: VIS.translatedTexts.c_payment_id, size: '150px', hidden: true });
-            if (chk) {
-                //render column into float with culture format
-                columns.push({
-                    field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: false, render: function (record, index, col_index) {
-                        var val = record["Payment"];
-                        return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                    }
-                });
-            }
-            else {
-                columns.push({ field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: true });
-            }
             columns.push({ field: "C_ConversionType_ID", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: true });
 
             var rows = [];
@@ -2908,6 +2921,18 @@
             columns.push({ field: "DocBaseType", caption: VIS.translatedTexts.DocBaseType, size: '150px', hidden: false });
             columns.push({ field: "Isocode", caption: VIS.Msg.getMsg("TrxCurrency"), size: '85px', hidden: false });
             columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '85px', hidden: false });
+            if (chk) {
+                //render column into float with culture format
+                columns.push({
+                    field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: false, render: function (record, index, col_index) {
+                        var val = record["Currency"];
+                        return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
+                    }
+                });
+            }
+            else {
+                columns.push({ field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: true });
+            }
             //render column into float with culture format
             columns.push({
                 field: "Converted", caption: VIS.Msg.getMsg("ConvertedAmount"), size: '100px', hidden: false, attr: 'align=right', render: function (record, index, col_index) {
@@ -2942,18 +2967,6 @@
             //else {
             //    columns.push({ field: "Isocode", caption: VIS.Msg.getMsg("TrxCurrency"), size: '85px', hidden: true });
             //}
-            if (chk) {
-                //render column into float with culture format
-                columns.push({
-                    field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: false, render: function (record, index, col_index) {
-                        var val = record["Currency"];
-                        return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                    }
-                });
-            }
-            else {
-                columns.push({ field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: true });
-            }
             columns.push({ field: "Multiplierap", caption: VIS.translatedTexts.multiplierap, hidden: true });
             //render column into float with culture format
             columns.push({
@@ -5346,6 +5359,14 @@
                         var paymentData = [];
                         var cashData = [];
                         var invoiceData = [];
+
+                        var chk = $vchkMultiCurrency.is(':checked');// isMultiCurrency
+                        if (chk) {
+                            var conversionDate = Globalize.format(new Date($conversionDate.val()), "yyyy-MM-dd");// Conversion Date
+                        }
+                        else {
+                            var conversionDate = Globalize.format(new Date(), "yyyy-MM-dd");
+                        }
                         for (var i = 0; i < rowsPayment.length; i++) {
                             var row = $gridPayment.get(rowsPayment[i].recid);
                             C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
@@ -5419,7 +5440,7 @@
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
                                 isCash: true, _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
+                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
                             }),
                             success: function (result) {
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
@@ -5472,6 +5493,14 @@
                         var paymentData = [];
                         var cashData = [];
                         var invoiceData = [];
+                        
+                        var chk = $vchkMultiCurrency.is(':checked');
+                        if (chk) {
+                            var conversionDate = Globalize.format(new Date($conversionDate.val()), "yyyy-MM-dd");
+                        }
+                        else {
+                            var conversionDate = Globalize.format(new Date(), "yyyy-MM-dd");
+                        }
                         for (var i = 0; i < rowsPayment.length; i++) {
                             var row = $gridPayment.get(rowsPayment[i].recid);
                             var keys = Object.keys($gridPayment.get(0));
@@ -5552,7 +5581,7 @@
                             data: ({
                                 paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
                                 isCash: cashcheck, _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
-                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false
+                                , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
                             }),
                             success: function (result) {
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
@@ -5603,6 +5632,13 @@
                         var cashData = [];
                         var glData = [];
                         var invoiceData = [];
+                        var chk = $vchkMultiCurrency.is(':checked');// isMultiCurrency
+                        if (chk) {
+                            var conversionDate = Globalize.format(new Date($conversionDate.val()), "yyyy-MM-dd");// Conversion Date
+                        }
+                        else {
+                            var conversionDate = Globalize.format(new Date(), "yyyy-MM-dd");
+                        }
 
                         //Payment Data
                         if (rowsPayment.length > 0) {
@@ -5695,7 +5731,7 @@
                                 }
                             }
                         }
-                        saveGLData(JSON.stringify(paymentData), JSON.stringify(invoiceData), JSON.stringify(cashData), JSON.stringify(glData), $date.val(), C_CurrencyType_ID, applied, discount, open, payment, writeOff);
+                        saveGLData(JSON.stringify(paymentData), JSON.stringify(invoiceData), JSON.stringify(cashData), JSON.stringify(glData), $date.val(), C_CurrencyType_ID, applied, discount, open, payment, writeOff, conversionDate, chk);
                     }
                 },
                 error: function (result) {
@@ -5705,11 +5741,15 @@
             });
         };
 
-        function saveGLData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, C_CurrencyType_ID, applied, discount, open, payment, writeOff) {
+        function saveGLData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, C_CurrencyType_ID, applied, discount, open, payment, writeOff, conversionDate, chk) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VIS/PaymentAllocation/saveGLJData",
                 type: 'POST',
-                data: { paymentData: rowsPayment, invoiceData: rowsInvoice, cashData: rowsCash, glData: rowsGLVoucher, DateTrx: DateTrx, _windowNo: self.windowNo, C_Currency_ID: _C_Currency_ID, C_BPartner_ID: _C_BPartner_ID, AD_Org_ID: $cmbOrg.val(), C_CurrencyType_ID: C_CurrencyType_ID, DateAcct: $dateAcct.val(), applied: applied, discount: discount, open: open, payment: payment, writeOff: writeOff },
+                data: {
+                    paymentData: rowsPayment, invoiceData: rowsInvoice, cashData: rowsCash, glData: rowsGLVoucher, DateTrx: DateTrx, _windowNo: self.windowNo,
+                    C_Currency_ID: _C_Currency_ID, C_BPartner_ID: _C_BPartner_ID, AD_Org_ID: $cmbOrg.val(), C_CurrencyType_ID: C_CurrencyType_ID,
+                    DateAcct: $dateAcct.val(), applied: applied, discount: discount, open: open, payment: payment, writeOff: writeOff, conversionDate: conversionDate, chk: chk
+                },
                 async: false,
                 success: function (result) {
                     //var e;

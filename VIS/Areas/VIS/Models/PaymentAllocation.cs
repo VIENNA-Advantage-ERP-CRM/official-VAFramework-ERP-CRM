@@ -46,7 +46,7 @@ namespace VIS.Models
         /// <param name="isInterBPartner">Inter Business Partner(Yes/No)</param>
         /// <returns>string either error or empty string</returns>
         public string SaveCashData(List<Dictionary<string, string>> paymentData, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsInvoice, string currency,
-            bool isCash, int _C_BPartner_ID, int _windowNo, string payment, DateTime DateTrx, string applied, string discount, string writeOff, string open, DateTime DateAcct, int _CurrencyType_ID, bool isInterBPartner)
+            bool isCash, int _C_BPartner_ID, int _windowNo, string payment, DateTime DateTrx, string applied, string discount, string writeOff, string open, DateTime DateAcct, int _CurrencyType_ID, bool isInterBPartner, DateTime conversionDate, bool chkMultiCurrency)
         {
             //if (_noInvoices + _noCashLines == 0)
             //    return "";
@@ -107,6 +107,8 @@ namespace VIS.Models
             msg = ValidateRecords(rowsInvoice, "c_invoicepayschedule_id", false, true, false, trx); //InvoicePaySchedule
             if (msg != string.Empty)
             {
+                //set isProcessing false
+                Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                 trx.Rollback();
                 trx.Close();
                 return msg;
@@ -222,6 +224,11 @@ namespace VIS.Models
             alloc.SetDateAcct(DateAcct);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
             alloc.SetC_ConversionType_ID(_CurrencyType_ID); // to set Conversion Type on allocation header because posting and conversion are calculating on the basis of Conversion Type
             alloc.SetDateTrx(DateTrx);
+            //when select a MultiCurrency then the ConversionDate will set into AllocationHdr
+            if (chkMultiCurrency)
+            {
+                alloc.SetConversionDate(conversionDate);
+            }
 
             //	For all invoices
             int invoiceLines = 0;
@@ -334,14 +341,17 @@ namespace VIS.Models
                             if (!isScheduleAllocated)
                             {
                                 isScheduleAllocated = true;
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                if (AppliedAmt != amount) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(DiscountAmt, WriteOffAmt)), C_Currency_ID, invoice.GetC_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                    mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(DiscountAmt, WriteOffAmt)), C_Currency_ID, invoice.GetC_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
+                                                       Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 }
-                                else
-                                    mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
-                                                   Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
@@ -359,14 +369,16 @@ namespace VIS.Models
                                 //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                 mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                 mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                if (AppliedAmt != amount) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                    mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay2.SetDueAmt(Math.Abs(amount));
                                 }
-                                else
-                                    mpay2.SetDueAmt(Math.Abs(amount));
-
                                 if (!mpay2.Save(trx))
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
@@ -471,8 +483,8 @@ namespace VIS.Models
                             {
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
                                 invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
-                                Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount.ToLower()]);
-                                Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff.ToLower()]);
+                                Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount]);
+                                Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff]);
                                 MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
 
                                 Decimal amount;
@@ -481,7 +493,7 @@ namespace VIS.Models
                                 {
                                     break;
                                 }
-                                Decimal postAppliedAmt = Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]);
+                                Decimal postAppliedAmt = Util.GetValueOfDecimal(negInvList[c][applied]);
                                 if (postAppliedAmt != 0)
                                 {
                                     value = AppliedAmt - Math.Abs(postAppliedAmt);
@@ -502,14 +514,17 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
+                                                           Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                     }
-                                    else
-                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
-                                                       Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
@@ -525,14 +540,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay2.SetDueAmt(Math.Abs(amount));
                                     }
-                                    else
-                                        mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
@@ -591,7 +608,7 @@ namespace VIS.Models
                                 {
                                     //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                                     NOverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(negInvList[c][open]),
-                                    Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
+                                    Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
                                     neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
                                     is_NegScheduleAllocated = false;
                                 }
@@ -603,14 +620,17 @@ namespace VIS.Models
                                 if (!is_NegScheduleAllocated)
                                 {
                                     is_NegScheduleAllocated = true;
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt!=amount)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
+                                                           Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                     }
-                                    else
-                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
-                                                       Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
@@ -627,14 +647,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay2.SetDueAmt(Math.Abs(amount));
                                     }
-                                    else
-                                        mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
@@ -702,19 +724,19 @@ namespace VIS.Models
                                 //value greater or equal to negative amount then allocating for invoice to invoice
                                 if (value >= 0)
                                 {
-                                    negInvList[c].Remove(applied.ToLower());
-                                    negInvList[c].Add(applied.ToLower(), (0).ToString());
-                                    rowsInvoice[i].Remove(applied.ToLower());
-                                    rowsInvoice[i].Add(applied.ToLower(), value.ToString());
+                                    negInvList[c].Remove(applied);
+                                    negInvList[c].Add(applied, (0).ToString());
+                                    rowsInvoice[i].Remove(applied);
+                                    rowsInvoice[i].Add(applied, value.ToString());
                                     AppliedAmt -= Math.Abs(postAppliedAmt);
                                 }
                                 //value greater than negative amount then allocating for invoice to invoice
                                 else
                                 {
-                                    rowsInvoice[i].Remove(applied.ToLower());
-                                    rowsInvoice[i].Add(applied.ToLower(), (0).ToString());
-                                    negInvList[c].Remove(applied.ToLower());
-                                    negInvList[c].Add(applied.ToLower(), value.ToString());
+                                    rowsInvoice[i].Remove(applied);
+                                    rowsInvoice[i].Add(applied, (0).ToString());
+                                    negInvList[c].Remove(applied);
+                                    negInvList[c].Add(applied, value.ToString());
                                     AppliedAmt = Env.ZERO;
                                 }
                                 WriteOffAmt = Env.ZERO;
@@ -759,8 +781,8 @@ namespace VIS.Models
                             {
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]), trx);
                                 invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
-                                Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount.ToLower()]);
-                                Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff.ToLower()]);
+                                Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount]);
+                                Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff]);
                                 MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
 
                                 Decimal amount = Env.ZERO;
@@ -769,7 +791,7 @@ namespace VIS.Models
                                 {
                                     break;
                                 }
-                                Decimal postAppliedAmt = Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]);
+                                Decimal postAppliedAmt = Util.GetValueOfDecimal(negInvList[c][applied]);
                                 if (postAppliedAmt != 0)
                                 {
                                     value = AppliedAmt - Math.Abs(postAppliedAmt);
@@ -790,20 +812,23 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
-                                    }
-                                    else
-                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
-                                                       Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
-                                    if (!mpay.Save(trx))
-                                    {
-                                        msg = ValidateSaveInvoicePaySchedule(trx);
-                                        //set isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
-                                        return msg;
+                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
+                                                           Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
+                                        if (!mpay.Save(trx))
+                                        {
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
+                                            //set isprocessing false
+                                            Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
+                                            return msg;
+                                        }
                                     }
                                 }
                                 // Create New schedule with split 
@@ -814,14 +839,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay2.SetDueAmt(Math.Abs(amount));
                                     }
-                                    else
-                                        mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
@@ -878,7 +905,7 @@ namespace VIS.Models
                                 {
                                     //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                                     NOverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(negInvList[c][open]),
-                                    Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
+                                    Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
                                     neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
                                     is_NegScheduleAllocated = false;
                                 }
@@ -890,20 +917,23 @@ namespace VIS.Models
                                 if (!is_NegScheduleAllocated)
                                 {
                                     is_NegScheduleAllocated = true;
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
-                                    }
-                                    else
-                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
-                                                       Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
-                                    if (!mpay.Save(trx))
-                                    {
-                                        msg = ValidateSaveInvoicePaySchedule(trx);
-                                        //Set Isprocessing false
-                                        Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
-                                        return msg;
+                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
+                                                           Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
+                                        if (!mpay.Save(trx))
+                                        {
+                                            msg = ValidateSaveInvoicePaySchedule(trx);
+                                            //Set Isprocessing false
+                                            Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
+                                            return msg;
+                                        }
                                     }
                                 }
                                 // Create New schedule with split 
@@ -914,14 +944,16 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                    if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay2.SetDueAmt(Math.Abs(amount));
                                     }
-                                    else
-                                        mpay2.SetDueAmt(Math.Abs(amount));
                                     if (!mpay2.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
@@ -929,7 +961,6 @@ namespace VIS.Models
                                         Isprocess(paymentData, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
-
                                 }
 
                                 //new allocation for -ve amount
@@ -989,19 +1020,19 @@ namespace VIS.Models
                                 //value greater or equal to negative amount then allocating for invoice to invoice
                                 if (value >= 0)
                                 {
-                                    negInvList[c].Remove(applied.ToLower());
-                                    negInvList[c].Add(applied.ToLower(), (0).ToString());
-                                    rowsInvoice[i].Remove(applied.ToLower());
-                                    rowsInvoice[i].Add(applied.ToLower(), value.ToString());
+                                    negInvList[c].Remove(applied);
+                                    negInvList[c].Add(applied, (0).ToString());
+                                    rowsInvoice[i].Remove(applied);
+                                    rowsInvoice[i].Add(applied, value.ToString());
                                     AppliedAmt -= Math.Abs(postAppliedAmt);
                                 }
                                 //value greater than negative amount then allocating for invoice to invoice
                                 else
                                 {
-                                    rowsInvoice[i].Remove(applied.ToLower());
-                                    rowsInvoice[i].Add(applied.ToLower(), (0).ToString());
-                                    negInvList[c].Remove(applied.ToLower());
-                                    negInvList[c].Add(applied.ToLower(), value.ToString());
+                                    rowsInvoice[i].Remove(applied);
+                                    rowsInvoice[i].Add(applied, (0).ToString());
+                                    negInvList[c].Remove(applied);
+                                    negInvList[c].Add(applied, value.ToString());
                                     AppliedAmt = Env.ZERO;
                                 }
                                 //overunder amount for the first time only,for next iteration set to Zero.
@@ -1414,7 +1445,7 @@ namespace VIS.Models
         /// <param name="isInterBPartner">Inter Business Partner(Yes/No)</param>
         /// <returns>string either error or empty string</returns>
         public string SavePaymentData(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsInvoice, string currency,
-            bool isCash, int _C_BPartner_ID, int _windowNo, string payment, DateTime DateTrx, string applied, string discount, string writeOff, string open, DateTime DateAcct, int _CurrencyType_ID, bool isInterBPartner)
+            bool isCash, int _C_BPartner_ID, int _windowNo, string payment, DateTime DateTrx, string applied, string discount, string writeOff, string open, DateTime DateAcct, int _CurrencyType_ID, bool isInterBPartner, DateTime conversionDate, bool chkMultiCurrency)
         {
 
             //  fixed fields
@@ -1445,6 +1476,8 @@ namespace VIS.Models
             msg = ValidateRecords(rowsInvoice, "c_invoicepayschedule_id", false, true, false, trx); //InvoicePaySchedule
             if (msg != string.Empty)
             {
+                //set isProcessing false
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                 trx.Rollback();
                 trx.Close();
                 return msg;
@@ -1473,6 +1506,8 @@ namespace VIS.Models
             }
             else
             {
+                //set isProcessing false
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                 trx.Rollback();
                 trx.Close();
                 return Msg.GetMsg(ctx, "Org0NotAllowed");
@@ -1547,6 +1582,11 @@ namespace VIS.Models
                 alloc.SetDateAcct(DateAcct);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
                 alloc.SetC_ConversionType_ID(_CurrencyType_ID); // to set Conversion Type on allocation header because posting and conversion are calculating on the basis of Conversion Type
                 alloc.SetDateTrx(DateTrx);
+                //when select a MultiCurrency then the ConversionDate will set into AllocationHdr
+                if (chkMultiCurrency) 
+                {
+                    alloc.SetConversionDate(conversionDate);
+                }
 
                 int C_InvoicePaySchedule_ID = 0;
                 int Neg_C_InvoicePaySchedule_Id = 0;
@@ -1671,17 +1711,21 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
+                                                           Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                     }
-                                    else
-                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
-                                                       Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                     if (!mpay.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
+                                        //set isProcessing false
                                         Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                         return msg;
                                     }
@@ -1694,14 +1738,17 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    if (AppliedAmt != amount) 
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        {
+                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                        }
+                                        else
+                                            mpay2.SetDueAmt(Math.Abs(amount));
                                     }
-                                    else
-                                        mpay2.SetDueAmt(Math.Abs(amount));
+
                                     if (!mpay2.Save(trx))
                                     {
                                         msg = ValidateSaveInvoicePaySchedule(trx);
@@ -1870,14 +1917,17 @@ namespace VIS.Models
                                     if (!isScheduleAllocated)
                                     {
                                         isScheduleAllocated = true;
-                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount) 
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                                mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
+                                                               Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                         }
-                                        else
-                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
-                                                           Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
@@ -1893,14 +1943,16 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount) 
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                                mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay2.SetDueAmt(Math.Abs(amount));
                                         }
-                                        else
-                                            mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
@@ -1968,14 +2020,17 @@ namespace VIS.Models
                                     if (!is_NegScheduleAllocated)
                                     {
                                         is_NegScheduleAllocated = true;
-                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount) 
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                                mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
+                                                               Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                         }
-                                        else
-                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
-                                                           Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
@@ -1991,14 +2046,16 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                                mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay2.SetDueAmt(Math.Abs(amount));
                                         }
-                                        else
-                                            mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
                                             //Get Error Message
@@ -2158,14 +2215,17 @@ namespace VIS.Models
                                     if (!isScheduleAllocated)
                                     {
                                         isScheduleAllocated = true;
-                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount) 
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                                mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
+                                                               Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                         }
-                                        else
-                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)),
-                                                           Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
                                             //Get Error Message
@@ -2183,14 +2243,16 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                        if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount) 
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), Neg_invoice.GetDateAcct(), Neg_invoice.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                                mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay2.SetDueAmt(Math.Abs(amount));
                                         }
-                                        else
-                                            mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
                                             //Get Error message
@@ -2265,14 +2327,17 @@ namespace VIS.Models
                                     if (!is_NegScheduleAllocated)
                                     {
                                         is_NegScheduleAllocated = true;
-                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount) 
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Decimal.Negate(amount), NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                                mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
+                                                               Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                         }
-                                        else
-                                            mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)),
-                                                           Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                         if (!mpay.Save(trx))
                                         {
                                             //Get Error message
@@ -2290,14 +2355,16 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                        if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                        if (AppliedAmt != amount) 
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
-                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
+                                            {
+                                                var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, Neg_invoice.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), Neg_invoice.GetAD_Client_ID(), Neg_invoice.GetAD_Org_ID());
+                                                mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                            }
+                                            else
+                                                mpay2.SetDueAmt(Math.Abs(amount));
                                         }
-                                        else
-                                            mpay2.SetDueAmt(Math.Abs(amount));
                                         if (!mpay2.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
@@ -3132,8 +3199,8 @@ namespace VIS.Models
                                 CASE
                                   WHEN NVL(cl.VSS_PaymentType,0)!='0' THEN (SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID=(SELECT AD_Reference_Value_ID FROM AD_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='C_CashLine')) AND IsActive='Y' AND value=cl.VSS_PaymentType) END AS Payment,
                                   ROUND(cn.amount, " + objCurrency.GetStdPrecision() + ") AS AMOUNT, "
-                             + " ROUND(currencyConvert(cn.Amount ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT ,cn.C_ConversionType_ID  ,cn.AD_Client_ID ,cn.AD_Org_ID ) , " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1cn.amount as OPENAMT,"
-                             + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID) ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT,cn.C_ConversionType_ID ,cn.AD_Client_ID ,cn.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
+                             + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT ,cn.C_ConversionType_ID  ,cn.AD_Client_ID ,cn.AD_Org_ID ) , " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1cn.amount as OPENAMT,"
+                             + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT,cn.C_ConversionType_ID ,cn.AD_Client_ID ,cn.AD_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
                                                                                                                                                                                                                                                                //+ " currencyConvert(cn.Amount ,cn.C_Currency_ID ," + _C_Currency_ID + ",cn.Created ,114 ,cn.AD_Client_ID ,cn.AD_Org_ID ) as OPENAMT,"
                              + " cn.MultiplierAP AS MULTIPLIERAP,0 as APPLIEDAMT,TO_CHAR(cn.DATEACCT ,'YYYY-MM-DD') as DATEACCT , o.AD_Org_ID  , o.Name  from c_cashline_new cn"
                              + " INNER JOIN C_Cashline cl ON cl.C_Cashline_ID=cn.C_Cashline_ID"
@@ -3311,7 +3378,7 @@ namespace VIS.Models
                                       WHEN (GetConversionType(i.AD_Client_ID) != 0 ) THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = GetConversionType(i.AD_Client_ID))
                                       ELSE (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID =(GetConversionType(0)) ) END AS CONVERSIONNAME   ,ROUND((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)  *i.MultiplierAP), " + objCurrency.GetStdPrecision() + ") AS CURRENCY    ,"
                                 + "ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)  *i.MultiplierAP,i.C_Currency_ID ," + _C_Currency_ID + ", " + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID ,i.AD_Client_ID ,i.AD_Org_ID ), " + objCurrency.GetStdPrecision() + ") AS CONVERTED  ,"
-                                + " ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID)                                         *i.MultiplierAP , " + objCurrency.GetStdPrecision() + ") AS AMOUNT,"
+                                + " ROUND(currencyConvert(invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID),i.C_Currency_ID," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + ",i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID) * i.MultiplierAP , " + objCurrency.GetStdPrecision() + ") AS AMOUNT,"
                                 + "  ROUND((currencyConvert(invoiceDiscount(i.C_Invoice_ID ," + date + ",C_InvoicePaySchedule_ID),i.C_Currency_ID ," + _C_Currency_ID + "," + (conversionDate != "" ? GlobalVariable.TO_DATE(Convert.ToDateTime(conversionDate), true) : " i.DATEACCT ") + " ,i.C_ConversionType_ID ,i.AD_Client_ID ,i.AD_Org_ID )*i.Multiplier*i.MultiplierAP) , " + objCurrency.GetStdPrecision() + ") AS DISCOUNT ,"
                                 + "  i.MultiplierAP ,i.docbasetype  ,0 as WRITEOFF ,0 as APPLIEDAMT ,TO_CHAR(i.DATEACCT ,'YYYY-MM-DD') as DATEACCT, i.C_InvoicePaySchedule_ID,(select TO_CHAR(Ip.Duedate,'YYYY-MM-DD') from C_InvoicePaySchedule ip where C_InvoicePaySchedule_ID=i.C_InvoicePaySchedule_ID) Scheduledate "
                                 //  + ", dc.name AS DocTypeName "
@@ -3433,8 +3500,10 @@ namespace VIS.Models
                     pData.CinvoiceID = dr.Tables[0].Rows[i]["CINVOICEID"].ToString();
                     pData.Isocode = dr.Tables[0].Rows[i]["ISO_CODE"].ToString();
                     pData.Currency = dr.Tables[0].Rows[i]["CURRENCY"].ToString();
-                    pData.Converted = dr.Tables[0].Rows[i]["CONVERTED"].ToString();
-                    pData.Amount = dr.Tables[0].Rows[i]["Amount"].ToString();
+                    //pData.Converted = dr.Tables[0].Rows[i]["CONVERTED"].ToString();
+                    pData.Converted = string.IsNullOrEmpty(dr.Tables[0].Rows[i]["CONVERTED"].ToString()) ? "0" : dr.Tables[0].Rows[i]["CONVERTED"].ToString();//if the value is null then set it as zero to avoid null value.
+                    //pData.Amount = dr.Tables[0].Rows[i]["Amount"].ToString();
+                    pData.Amount = string.IsNullOrEmpty(dr.Tables[0].Rows[i]["Amount"].ToString()) ? "0" : dr.Tables[0].Rows[i]["Amount"].ToString();//if the value is null then set it as zero to avoid null value.
                     //commented because as per ashish and surya user will enter writeoff and discount if he/she want to give
                     //pData.Discount = dr.Tables[0].Rows[i]["DISCOUNT"].ToString();
                     //pData.Writeoff = dr.Tables[0].Rows[i]["WRITEOFF"].ToString();
@@ -4045,7 +4114,7 @@ namespace VIS.Models
         /// <param name="payment">Payment Amount or Applied Amount</param>
         /// <param name="writeOff">WrittenOff Amount</param>
         /// <returns>Will Return Msg Either Allocation is Saved or Not Saved</returns>
-        public string SaveGLData(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsInvoice, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsGL, DateTime DateTrx, int _windowNo, int C_Currency_ID, int C_BPartner_ID, int AD_Org_ID, int C_CurrencyType_ID, DateTime DateAcct, string applied, string discount, string open, string payment, string writeOff)
+        public string SaveGLData(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsInvoice, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsGL, DateTime DateTrx, int _windowNo, int C_Currency_ID, int C_BPartner_ID, int AD_Org_ID, int C_CurrencyType_ID, DateTime DateAcct, string applied, string discount, string open, string payment, string writeOff, DateTime conversionDate, bool chkMultiCurrency)
         {
             decimal paid = 0; decimal actualAmt = 0;
             decimal amtToAllocate = 0, remainingAmt = 0, netAmt = 0;
@@ -4056,7 +4125,7 @@ namespace VIS.Models
 
             Trx trx = Trx.GetTrx(Trx.CreateTrxName("GL"));
 
-            msg = ValidateRecords(rowsPayment, "cpaymentid", false, false, true, trx); //Payment
+            msg = ValidateRecords(rowsPayment, "CpaymentID", false, false, true, trx); //Payment
             if (msg != string.Empty)
             {
                 trx.Rollback();
@@ -4067,6 +4136,8 @@ namespace VIS.Models
             msg = ValidateRecords(rowsCash, "ccashlineid", true, false, false, trx); //CashLine
             if (msg != string.Empty)
             {
+                //set isProcessing false
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                 trx.Rollback();
                 trx.Close();
                 return msg;
@@ -4075,6 +4146,8 @@ namespace VIS.Models
             msg = ValidateRecords(rowsInvoice, "c_invoicepayschedule_id", false, true, false, trx); //InvoicePaySchedule
             if (msg != string.Empty)
             {
+                //set isProcessing false
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                 trx.Rollback();
                 trx.Close();
                 return msg;
@@ -4083,6 +4156,8 @@ namespace VIS.Models
             msg = ValidateRecords(rowsGL, "GL_JournalLine_ID", false, false, false, trx); //GL_JOURNALLINE
             if (msg != string.Empty)
             {
+                //set isProcessing false
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                 trx.Rollback();
                 trx.Close();
                 return msg;
@@ -4153,6 +4228,11 @@ namespace VIS.Models
             alloc.Set_Value("C_ConversionType_ID", C_CurrencyType_ID); // to set Conversion Type on allocation header because posting and conversion are calculating on the basis of Conversion Type
             alloc.SetDateTrx(DateTrx);
             alloc.Set_Value("C_BPartner_ID", C_BPartner_ID);
+            //when select a MultiCurrency then the ConversionDate will set into AllocationHdr
+            if (chkMultiCurrency)
+            {
+                alloc.SetConversionDate(conversionDate);
+            }
 
             //	For all invoices
             //int invoiceLines = 0;
@@ -4665,9 +4745,9 @@ namespace VIS.Models
                     }
                 }
 
-                decimal overUnderAmt = 0, DiscountAmt = 0;
-                decimal WriteOffAmt = 0;
-                string docbasetype = string.Empty;
+                decimal overUnderAmt, DiscountAmt;
+                decimal WriteOffAmt;
+                string docbasetype;
 
                 //create allocation line if invoice to invoice row selected
                 for (int i = 0; i < rowsInvoice.Count; i++)
@@ -4676,7 +4756,7 @@ namespace VIS.Models
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]));
                     amtToAllocate = Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]);
                     remainingAmt = amtToAllocate;
-                    int C_Invoice_ID = 0;
+                    int C_Invoice_ID;
                     isScheduleAllocated = false;
                     DiscountAmt = Util.GetValueOfDecimal(rowsInvoice[i]["Discount"]);
                     WriteOffAmt = Util.GetValueOfDecimal(rowsInvoice[i]["Writeoff"]);
@@ -4766,14 +4846,17 @@ namespace VIS.Models
                             if (!isScheduleAllocated)
                             {
                                 isScheduleAllocated = true;
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                if (Math.Abs(remainingAmt) != Math.Abs(netAmt) && remainingAmt != Env.ZERO) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                    mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)),
+                                                       Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 }
-                                else
-                                    mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)),
-                                                   Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
@@ -4790,14 +4873,16 @@ namespace VIS.Models
                                 //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                 mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                 mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                if (Math.Abs(remainingAmt) != Math.Abs(netAmt) && remainingAmt != Env.ZERO) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                    mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay2.SetDueAmt(Math.Abs(netAmt));
                                 }
-                                else
-                                    mpay2.SetDueAmt(Math.Abs(netAmt));
                                 if (!mpay2.Save(trx))
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
@@ -4895,14 +4980,17 @@ namespace VIS.Models
                             if (!isScheduleAllocated)
                             {
                                 isScheduleAllocated = true;
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                if (Math.Abs(remainingAmt) != Math.Abs(netAmt) && remainingAmt != Env.ZERO) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), neg_InvoiceObj.GetDateAcct(), neg_InvoiceObj.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                    mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), neg_InvoiceObj.GetDateAcct(), neg_InvoiceObj.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)),
+                                                       Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 }
-                                else
-                                    mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)),
-                                                   Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
@@ -4919,14 +5007,16 @@ namespace VIS.Models
                                 //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                 mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                 mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                if (Math.Abs(remainingAmt) != Math.Abs(netAmt) && remainingAmt != Env.ZERO) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), neg_InvoiceObj.GetDateAcct(), neg_InvoiceObj.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
-                                    mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (invoice.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, overUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), neg_InvoiceObj.GetDateAcct(), neg_InvoiceObj.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay2.SetDueAmt(Math.Abs(netAmt));
                                 }
-                                else
-                                    mpay2.SetDueAmt(Math.Abs(netAmt));
                                 if (!mpay2.Save(trx))
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
@@ -5008,14 +5098,17 @@ namespace VIS.Models
                             if (!is_NegScheduleAllocated)
                             {
                                 is_NegScheduleAllocated = true;
-                                if (neg_InvoiceObj.GetC_Currency_ID() != C_Currency_ID)
+                                if (Math.Abs(remainingAmt) != Math.Abs(netAmt) && remainingAmt != Env.ZERO) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, neg_InvoiceObj.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), neg_InvoiceObj.GetAD_Client_ID(), neg_InvoiceObj.GetAD_Org_ID());
-                                    mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (neg_InvoiceObj.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, neg_InvoiceObj.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), neg_InvoiceObj.GetAD_Client_ID(), neg_InvoiceObj.GetAD_Org_ID());
+                                        mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(NOverUnderAmt)),
+                                                       Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                 }
-                                else
-                                    mpay.SetDueAmt(Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(NOverUnderAmt)),
-                                                   Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))));
                                 if (!mpay.Save(trx))
                                 {
                                     msg = ValidateSaveInvoicePaySchedule(trx);
@@ -5032,14 +5125,16 @@ namespace VIS.Models
                                 //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                 mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                 mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-
-                                if (neg_InvoiceObj.GetC_Currency_ID() != C_Currency_ID)
+                                if (Math.Abs(remainingAmt) != Math.Abs(netAmt) && remainingAmt != Env.ZERO) 
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, neg_InvoiceObj.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), neg_InvoiceObj.GetAD_Client_ID(), neg_InvoiceObj.GetAD_Org_ID());
-                                    mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    if (neg_InvoiceObj.GetC_Currency_ID() != C_Currency_ID)
+                                    {
+                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(netAmt, NOverUnderAmt), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), C_Currency_ID, neg_InvoiceObj.GetC_Currency_ID(), invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), neg_InvoiceObj.GetAD_Client_ID(), neg_InvoiceObj.GetAD_Org_ID());
+                                        mpay2.SetDueAmt(Math.Abs(conertedAmount));
+                                    }
+                                    else
+                                        mpay2.SetDueAmt(Math.Abs(netAmt));
                                 }
-                                else
-                                    mpay2.SetDueAmt(Math.Abs(netAmt));
                                 if (!mpay2.Save(trx))
                                 {
                                     //return error Message

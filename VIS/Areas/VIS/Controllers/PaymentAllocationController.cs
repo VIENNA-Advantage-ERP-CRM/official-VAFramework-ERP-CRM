@@ -40,7 +40,7 @@ namespace VIS.Controllers
         /// <returns></returns>
         [HttpPost]
         public string SaveCashData(string paymentData, string cashData, string invoiceData, string currency, bool isCash, int _C_BPartner_ID, int _windowNo, string payment, string DateTrx,
-            string appliedamt, string discount, string writeOff, string open, string DateAcct, int _CurrencyType_ID, bool isInterBPartner)
+            string appliedamt, string discount, string writeOff, string open, string DateAcct, int _CurrencyType_ID, bool isInterBPartner, string conversionDate, bool chk)
         {
 
             List<Dictionary<string, string>> pData = null;
@@ -64,7 +64,7 @@ namespace VIS.Controllers
 
 
             PaymentAllocation payments = new PaymentAllocation(ct);
-            msg = payments.SaveCashData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID, isInterBPartner);
+            msg = payments.SaveCashData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID, isInterBPartner, Convert.ToDateTime(conversionDate), chk);
 
             return msg;
         }
@@ -91,7 +91,7 @@ namespace VIS.Controllers
         /// <returns></returns>
         [HttpPost]
         public string SavePaymentData(string paymentData, string cashData, string invoiceData, string currency, bool isCash, int _C_BPartner_ID, int _windowNo, string payment, string DateTrx,
-        string appliedamt, string discount, string writeOff, string open, string DateAcct, int _CurrencyType_ID, bool isInterBPartner)
+        string appliedamt, string discount, string writeOff, string open, string DateAcct, int _CurrencyType_ID, bool isInterBPartner, string conversionDate, bool chk)
         {
             List<Dictionary<string, string>> pData = null;
             List<Dictionary<string, string>> cData = null;
@@ -114,7 +114,7 @@ namespace VIS.Controllers
 
 
             PaymentAllocation payments = new PaymentAllocation(ct);
-            msg = payments.SavePaymentData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID, isInterBPartner);
+            msg = payments.SavePaymentData(pData, cData, iData, currency, isCash, _C_BPartner_ID, _windowNo, payment, date, appliedamt, discount, writeOff, open, Convert.ToDateTime(DateAcct), _CurrencyType_ID, isInterBPartner, Convert.ToDateTime(conversionDate), chk);
 
             return msg;
         }
@@ -335,7 +335,7 @@ namespace VIS.Controllers
         /// <param name="payment">Name of the Applied Amount for Payment grid</param>
         /// <returns>Will Return Msg Either Allocation is Saved or Not Saved</returns>
         [HttpPost]
-        public string saveGLJData(string paymentData, string invoiceData, string cashData, string glData, string DateTrx, string _windowNo, int C_Currency_ID, int C_BPartner_ID, string AD_Org_ID, int C_CurrencyType_ID, string DateAcct, string applied, string discount, string open, string payment, string writeOff)
+        public string saveGLJData(string paymentData, string invoiceData, string cashData, string glData, string DateTrx, string _windowNo, int C_Currency_ID, int C_BPartner_ID, string AD_Org_ID, int C_CurrencyType_ID, string DateAcct, string applied, string discount, string open, string payment, string writeOff, string conversionDate, bool chk)
         {
             List<Dictionary<string, string>> pData = null;
             List<Dictionary<string, string>> cData = null;
@@ -364,7 +364,7 @@ namespace VIS.Controllers
             }
 
             PaymentAllocation payments = new PaymentAllocation(ct);
-            msg = payments.SaveGLData(pData, iData, cData, gData, date, Util.GetValueOfInt(_windowNo), Util.GetValueOfInt(C_Currency_ID), Util.GetValueOfInt(C_BPartner_ID), Util.GetValueOfInt(AD_Org_ID), Util.GetValueOfInt(C_CurrencyType_ID), dateAcct,applied, discount, open, payment, writeOff);
+            msg = payments.SaveGLData(pData, iData, cData, gData, date, Util.GetValueOfInt(_windowNo), Util.GetValueOfInt(C_Currency_ID), Util.GetValueOfInt(C_BPartner_ID), Util.GetValueOfInt(AD_Org_ID), Util.GetValueOfInt(C_CurrencyType_ID), dateAcct,applied, discount, open, payment, writeOff, Convert.ToDateTime(conversionDate), Util.GetValueOfBool(chk));
             return msg;
         }
 
