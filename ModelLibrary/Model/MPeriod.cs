@@ -439,7 +439,7 @@ namespace VAdvantage.Model
             //
             List<MPeriodControl> list = new List<MPeriodControl>();
             String sql = "SELECT * FROM C_PeriodControl "
-                + "WHERE C_Period_ID=" + GetC_Period_ID();
+                + "WHERE IsActive = 'Y' AND C_Period_ID=" + GetC_Period_ID();
 
             if (AD_Org_ID > 0)
             {
