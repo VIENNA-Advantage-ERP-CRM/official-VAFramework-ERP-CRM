@@ -178,14 +178,14 @@ namespace VAdvantage.Model
             if (dateAcct == null)
                 return null;
             //	Search in Cache first
-            IEnumerator<MPeriod> it = cache.Values.GetEnumerator();
-            it.Reset();
-            while (it.MoveNext())
-            {
-                MPeriod period = it.Current;
-                if (period.GetAD_Client_ID() == ctx.GetAD_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
-                    return period;
-            }
+            //IEnumerator<MPeriod> it = cache.Values.GetEnumerator();
+            //it.Reset();
+            //while (it.MoveNext())
+            //{
+            //    MPeriod period = it.Current;
+            //    if (period.GetAD_Client_ID() == ctx.GetAD_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
+            //        return period;
+            //}
 
             // Get Calender ID
             StringBuilder qry = new StringBuilder("");
@@ -237,7 +237,7 @@ namespace VAdvantage.Model
                     {
                         MPeriod period = new MPeriod(ctx, dr, null);
                         int key = period.GetC_Period_ID();
-                        cache.Add(key, period);
+                        //cache.Add(key, period);
                         if (period.IsStandardPeriod())
                             retValue = period;
                     }
