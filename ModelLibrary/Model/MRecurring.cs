@@ -138,7 +138,7 @@ namespace VAdvantage.Model
                         {
                             from.SetProcessMsg(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice"));
                         }
-                        throw new Exception(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice") + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
+                        throw new Exception(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice") + (pp != null ? pp.GetName() : ""));
                     }
                     msg += invoice.GetDocumentNo();
                 }
