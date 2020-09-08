@@ -2963,8 +2963,8 @@ namespace VIS.Models
                     pData.CpaymentID = dr.Tables[0].Rows[i]["CPAYMENTID"].ToString();
                     pData.Isocode = dr.Tables[0].Rows[i]["ISOCODE"].ToString();
                     pData.Payment = dr.Tables[0].Rows[i]["PAYMENT"].ToString();
-                    pData.ConvertedAmount = dr.Tables[0].Rows[i]["CONVERTEDAMOUNT"].ToString();
-                    pData.OpenAmt = dr.Tables[0].Rows[i]["OPENAMT"].ToString();
+                    pData.ConvertedAmount = string.IsNullOrEmpty(dr.Tables[0].Rows[i]["CONVERTEDAMOUNT"].ToString()) ? "0" : dr.Tables[0].Rows[i]["CONVERTEDAMOUNT"].ToString();
+                    pData.OpenAmt = string.IsNullOrEmpty(dr.Tables[0].Rows[i]["OPENAMT"].ToString()) ? "0" : dr.Tables[0].Rows[i]["OPENAMT"].ToString();
                     pData.Multiplierap = dr.Tables[0].Rows[i]["MULTIPLIERAP"].ToString();
                     pData.AppliedAmt = dr.Tables[0].Rows[i]["APPLIEDAMT"].ToString();
                     pData.C_ConversionType_ID = Util.GetValueOfInt(dr.Tables[0].Rows[i]["C_CONVERSIONTYPE_ID"]);
@@ -3309,8 +3309,8 @@ namespace VIS.Models
                     pData.VSS_paymenttype = dr.Tables[0].Rows[i]["VSS_paymenttype"].ToString();
                     pData.Isocode = dr.Tables[0].Rows[i]["ISO_CODE"].ToString();
                     pData.Amount = dr.Tables[0].Rows[i]["Amount"].ToString();
-                    pData.ConvertedAmount = dr.Tables[0].Rows[i]["CONVERTEDAMOUNT"].ToString();
-                    pData.OpenAmt = dr.Tables[0].Rows[i]["OPENAMT"].ToString();
+                    pData.ConvertedAmount = string.IsNullOrEmpty(dr.Tables[0].Rows[i]["CONVERTEDAMOUNT"].ToString()) ? "0" : dr.Tables[0].Rows[i]["CONVERTEDAMOUNT"].ToString();
+                    pData.OpenAmt = string.IsNullOrEmpty(dr.Tables[0].Rows[i]["OPENAMT"].ToString()) ? "0" : dr.Tables[0].Rows[i]["OPENAMT"].ToString();
                     pData.Multiplierap = dr.Tables[0].Rows[i]["MULTIPLIERAP"].ToString();
                     pData.CcashlineiID = dr.Tables[0].Rows[i]["CCASHLINEID"].ToString();
                     pData.AppliedAmt = dr.Tables[0].Rows[i]["APPLIEDAMT"].ToString();

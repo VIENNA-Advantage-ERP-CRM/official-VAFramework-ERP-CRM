@@ -2496,7 +2496,7 @@
             if (chk) {
                 //render column into float with culture format
                 columns.push({
-                    field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', hidden: false, render: function (record, index, col_index) {
+                    field: "Payment", caption: VIS.translatedTexts.Amount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
                         var val = record["Payment"];
                         return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
                     }
@@ -2705,12 +2705,18 @@
             columns.push({ field: "Payment", caption: "Payment Type", size: '120px', hidden: false });
             columns.push({ field: "Isocode", caption: VIS.Msg.getMsg("TrxCurrency"), size: '105px', hidden: false });
             columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '105px', hidden: false });
-            columns.push({
-                field: "Amount", caption: VIS.translatedTexts.Amount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
-                    var val = record["Amount"];
-                    return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                }
-            });
+            if (chk) {
+                //render column into float with culture format
+                columns.push({
+                    field: "Amount", caption: VIS.translatedTexts.Amount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
+                        var val = record["Amount"];
+                        return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
+                    }
+                });
+            }
+            else {
+                columns.push({ field: "Amount", caption: VIS.translatedTexts.Amount, size: '150px', hidden: true });
+            }
             //render column into float with culture format
             columns.push({
                 field: "ConvertedAmount", caption: VIS.Msg.getMsg("ConvertedAmount"), size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
@@ -2924,7 +2930,7 @@
             if (chk) {
                 //render column into float with culture format
                 columns.push({
-                    field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', hidden: false, render: function (record, index, col_index) {
+                    field: "Currency", caption: VIS.translatedTexts.Amount, size: '100px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
                         var val = record["Currency"];
                         return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
                     }
