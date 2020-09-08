@@ -797,6 +797,7 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\MOrderLineController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentTermController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MPeriodController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListVersionController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MProductCategoryController.cs" />
@@ -913,6 +914,7 @@
     <Compile Include="Areas\VIS\Models\Callouts\MOrderModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPaymentTermModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MPeriodModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPriceListModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPriceListVersionModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MProductCategoryModel.cs" />
@@ -1024,6 +1026,7 @@
     <Folder Include="Areas\VIS\Views\Group\" />
     <Folder Include="Areas\VIS\Views\MarkModule\" />
     <Folder Include="Areas\VIS\Views\ModulePrefix\" />
+    <Folder Include="Areas\VIS\Views\MPeriod\" />
     <Folder Include="Areas\VIS\Views\OrgStructure\" />
     <Folder Include="Areas\VIS\Views\Payment\" />
     <Folder Include="Areas\VIS\Views\RecordAccess\" />
