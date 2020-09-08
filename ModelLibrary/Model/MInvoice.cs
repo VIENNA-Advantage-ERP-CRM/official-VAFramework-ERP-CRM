@@ -131,6 +131,12 @@ namespace VAdvantage.Model
             {
                 to.AddDescription("{->" + from.GetDocumentNo() + ")");
             }
+            else
+            {
+                //set the description and invoice reference from original to counter
+                to.AddDescription(Msg.GetMsg(from.GetCtx(), "CounterDocument")+from.GetDocumentNo());
+                to.Set_Value("InvoiceReference", from.GetDocumentNo());
+            }
             //
             to.SetDocStatus(DOCSTATUS_Drafted);		//	Draft
             to.SetDocAction(DOCACTION_Complete);
@@ -142,7 +148,7 @@ namespace VAdvantage.Model
             to.SetDateAcct(dateDoc);
             to.SetDatePrinted(null);
             to.SetIsPrinted(false);
-            //
+            //    
             to.SetIsApproved(false);
             to.SetC_Payment_ID(0);
             to.SetC_CashLine_ID(0);
@@ -1337,6 +1343,13 @@ namespace VAdvantage.Model
                 }
             }
 
+            //APInvoice Case: invoice Reference can't be same for same year            
+            if (!IsSOTrx() && !IsReturnTrx() && checkFinancialYear() > 0)
+            {
+                log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_InvoiceReferenceExist"));
+                return false;
+            }
+
             //	Price List
             if (GetM_PriceList_ID() == 0)
             {
@@ -1577,11 +1590,11 @@ namespace VAdvantage.Model
             {
                 if (Is_ValueChanged("AD_Org_ID"))
                 {
-                    String sql = "UPDATE C_InvoiceLine ol"
-                        + " SET AD_Org_ID ="
-                            + "(SELECT AD_Org_ID"
-                            + " FROM C_Invoice o WHERE ol.C_Invoice_ID=o.C_Invoice_ID) "
-                        + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                   String sql = "UPDATE C_InvoiceLine ol"
+                       + " SET AD_Org_ID ="
+                           + "(SELECT AD_Org_ID"
+                           + " FROM C_Invoice o WHERE ol.C_Invoice_ID=o.C_Invoice_ID) "
+                       + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
                     int no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
                     log.Fine("Lines -> #" + no);
                 }
@@ -1640,6 +1653,42 @@ namespace VAdvantage.Model
             return success;
         }
 
+        /// <summary>
+        /// check duplicate record against invoice reference and 
+        /// should not check the uniqueness of invoice reference in case of reverse document
+        /// </summary>
+        /// <returns>count of Invoice and 0</returns>
+        public int checkFinancialYear()
+        {
+            if (!String.IsNullOrEmpty(GetDescription()) && !GetDescription().Contains("{->"))
+            {
+                DateTime? startDate = null;
+                DateTime? endDate = null, dt;
+                dt = (DateTime)GetDateAcct();
+                int calendar_ID = 0;
+                DataSet ds = new DataSet();
+
+                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM AD_ClientInfo WHERE ad_client_id = " + GetAD_Client_ID(), null, null));
+
+                ds = DB.ExecuteDataset($"SELECT startdate , enddate FROM c_period WHERE c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON " +
+                    $"c_year.c_year_id = C_period.c_year_id WHERE  c_year.c_calendar_id ={calendar_ID} and sysdate BETWEEN C_period.startdate AND C_period.enddate) " +
+                    $"AND periodno IN (1, 12)", null, null);
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    startDate = Convert.ToDateTime(ds.Tables[0].Rows[0]["startdate"]);
+                    endDate = Convert.ToDateTime(ds.Tables[0].Rows[1]["enddate"]);
+                }
+                string sql = "SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE DocStatus NOT IN('RE','VO') AND IsExpenseInvoice='N' AND IsSoTrx='N'" +
+                  " AND C_BPartner_ID = " + GetC_BPartner_ID() + " AND InvoiceReference = '" + Get_Value("InvoiceReference") + "'" +
+                  " AND AD_Org_ID= " + GetAD_Org_ID() + " AND AD_Client_ID= " + GetAD_Client_ID() + " AND C_DocType_ID= " + GetC_DocType_ID() +
+                  " AND DateAcct BETWEEN " + GlobalVariable.TO_DATE(startDate, true) + " AND " + GlobalVariable.TO_DATE(endDate, true);
+
+                return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+            }
+            else
+               return 0;
+        }
         /**
          * 	Set Price List (and Currency) when valid
          * 	@param M_PriceList_ID price list
@@ -4776,7 +4825,7 @@ namespace VAdvantage.Model
 
             //	Deep Copy
             MInvoice counter = CopyFrom(this, GetDateInvoiced(),
-                C_DocTypeTarget_ID, true, Get_TrxName(), true);
+                C_DocTypeTarget_ID, true, Get_TrxName(), true);           
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
             //
@@ -4901,12 +4950,12 @@ namespace VAdvantage.Model
                 }
             }
             //if PDC available against Invoice donot void/reverse the Invoice
-            if (Env.IsModuleInstalled("VA027_")) 
+            if (Env.IsModuleInstalled("VA027_"))
             {
                 int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VA027_postdatedcheck_id) FROM va027_Postdatedcheck WHERE DocStatus NOT IN('RE', 'VO') AND c_invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx()));
                 if (count > 0)
                 {
-                    _processMsg= Msg.GetMsg(GetCtx(), "LinkedDocStatus");
+                    _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
                     return false;
                 }
                 else
