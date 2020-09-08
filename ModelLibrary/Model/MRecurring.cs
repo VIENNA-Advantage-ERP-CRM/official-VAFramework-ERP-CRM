@@ -132,13 +132,13 @@ namespace VAdvantage.Model
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
-                            from.SetProcessMsg(" " + pp.GetName());
+                            from.SetProcessMsg(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice") + pp.GetName());
                         }
                         else
                         {
-                            from.SetProcessMsg("Could not create Invoice.");
+                            from.SetProcessMsg(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice"));
                         }
-                        throw new Exception("Could not create Invoice. " + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
+                        throw new Exception(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice") + (pp != null && pp.GetName() != null ? pp.GetName() : ""));
                     }
                     msg += invoice.GetDocumentNo();
                 }

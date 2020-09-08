@@ -1346,7 +1346,7 @@ namespace VAdvantage.Model
             //APInvoice Case: invoice Reference can't be same for same year            
             if (!IsSOTrx() && !IsReturnTrx() && checkFinancialYear() > 0)
             {
-                log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_InvoiceReferenceExist"));
+                log.SaveError("", Msg.GetMsg(GetCtx(),"InvoiceReferenceExist"));
                 return false;
             }
 
