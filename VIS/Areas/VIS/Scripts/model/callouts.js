@@ -14974,6 +14974,8 @@
         this.setCalloutActive(true);
 
         var AD_Client_ID = ctx.getContextAsInt(windowNo, "AD_Client_ID", false);
+        var AD_Org_ID = Util.getValueOfInt(mTab.getValue("AD_Org_ID"));
+
         var DateAcct = new Date();
         if (colName == "DateAcct") {
             //DateAcct = Util.getValueOfDateTime(value);
@@ -14997,75 +14999,89 @@
 
         //  When DateAcct is changed, set C_Period_ID
         else if (colName == "DateAcct") {
-            var sql = "SELECT C_Period_ID "
-                + "FROM C_Period "
-                + "WHERE C_Year_ID IN "
-                + "	(SELECT C_Year_ID FROM C_Year WHERE C_Calendar_ID ="
-                + "  (SELECT C_Calendar_ID FROM AD_ClientInfo WHERE AD_Client_ID=@param1))"
-                + " AND @param2 BETWEEN StartDate AND EndDate"
-                + " AND PeriodType='S'";
-            var param = [];
-            //SqlParameter[] param = new SqlParameter[2];
-            var idr = null;
-            try {
-                //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-                //pstmt.setInt(1, AD_Client_ID);
-                //pstmt.setTimestamp(2, DateAcct);
-                param[0] = new VIS.DB.SqlParam("@param1", AD_Client_ID);
-                param[1] = new VIS.DB.SqlParam("@param2", DateAcct);
-                param[1].setIsDate(true);
-                idr = VIS.DB.executeReader(sql, param, null);
-                if (idr.read()) {
-                    C_Period_ID = Util.getValueOfInt(idr.get(0));// rs.getInt(1);
-                }
-                idr.close();
-            }
-            catch (err) {
-                if (idr != null) {
-                    idr.close();
-                }
-                this.log.log(Level.SEVERE, sql, e);
-                this.setCalloutActive(false);
-                return err.message;
-            }
+            //var sql = "SELECT C_Period_ID "
+            //    + "FROM C_Period "
+            //    + "WHERE C_Year_ID IN "
+            //    + "	(SELECT C_Year_ID FROM C_Year WHERE C_Calendar_ID ="
+            //    + "  (SELECT C_Calendar_ID FROM AD_ClientInfo WHERE AD_Client_ID=@param1))"
+            //    + " AND @param2 BETWEEN StartDate AND EndDate"
+            //    + " AND PeriodType='S'";
+            //var param = [];            
+            //var idr = null;
+            //try {                
+            //    param[0] = new VIS.DB.SqlParam("@param1", AD_Client_ID);
+            //    param[1] = new VIS.DB.SqlParam("@param2", DateAcct);
+            //    param[1].setIsDate(true);
+            //    idr = VIS.DB.executeReader(sql, param, null);
+            //    if (idr.read()) {
+            //        C_Period_ID = Util.getValueOfInt(idr.get(0));// rs.getInt(1);
+            //    }
+            //    idr.close();
+            //}
+            //catch (err) {
+            //    if (idr != null) {
+            //        idr.close();
+            //    }
+            //    this.log.log(Level.SEVERE, sql, e);
+            //    this.setCalloutActive(false);
+            //    return err.message;
+            //}
+
+            var paramStr = AD_Client_ID + "," + DateAcct + "," + AD_Org_ID;
+            C_Period_ID = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPeriod/GetPeriod", paramStr));
+
             if (C_Period_ID != 0) {
-                mTab.setValue("C_Period_ID", Util.getValueOfInt(C_Period_ID));
+                mTab.setValue("C_Period_ID", C_Period_ID);
             }
         }
         //  When C_Period_ID is changed, check if in DateAcct range and set to end date if not
         else {
-            var sql = "SELECT PeriodType, StartDate, EndDate "
-                + "FROM C_Period WHERE C_Period_ID=@param";
+            //var sql = "SELECT PeriodType, StartDate, EndDate "
+            //    + "FROM C_Period WHERE C_Period_ID=@param";
 
-            var param = [];
-            //SqlParameter[] param = new SqlParameter[1];
-            var idr = null;
-            try {
-                //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-                //pstmt.setInt(1, C_Period_ID);
-                param[0] = new VIS.DB.SqlParam("@param", C_Period_ID);
-                idr = VIS.DB.executeReader(sql, param, null);
-                if (idr.read()) {
-                    var PeriodType = idr.get("periodtype");// rs.getString(1);
-                    var StartDate = idr.get("startdate");// rs.getTimestamp(2);
-                    var EndDate = idr.get("enddate");// rs.getTimestamp(3);
-                    if (PeriodType == "S") //  Standard Periods
-                    {
-                        //  out of range - set to last day
-                        if (DateAcct == null
-                            || DateAcct < StartDate || DateAcct > EndDate)
-                            mTab.setValue("DateAcct", EndDate);
-                    }
+            //var param = [];
+            ////SqlParameter[] param = new SqlParameter[1];
+            //var idr = null;
+            //try {
+            //    //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
+            //    //pstmt.setInt(1, C_Period_ID);
+            //    param[0] = new VIS.DB.SqlParam("@param", C_Period_ID);
+            //    idr = VIS.DB.executeReader(sql, param, null);
+            //    if (idr.read()) {
+            //        var PeriodType = idr.get("periodtype");// rs.getString(1);
+            //        var StartDate = idr.get("startdate");// rs.getTimestamp(2);
+            //        var EndDate = idr.get("enddate");// rs.getTimestamp(3);
+            //        if (PeriodType == "S") //  Standard Periods
+            //        {
+            //            //  out of range - set to last day
+            //            if (DateAcct == null
+            //                || DateAcct < StartDate || DateAcct > EndDate)
+            //                mTab.setValue("DateAcct", EndDate);
+            //        }
+            //    }
+            //    idr.close();
+            //}
+            //catch (err) {
+            //    if (idr != null) {
+            //        idr.close();
+            //    }
+            //    this.log.log(Level.SEVERE, sql, e);
+            //    this.setCalloutActive(false);
+            //    return e.message;
+            //}
+
+            var dr = VIS.dataContext.getJSONRecord("MPeriod/GetPeriodDetail", C_Period_ID.toString());
+            if (dr != null) {
+                var PeriodType = dr["PeriodType"];
+                var StartDate = dr["StartDate"];
+                var EndDate = dr["EndDate"];
+                if (PeriodType == "S") //  Standard Periods
+                {
+                    //  out of range - set to last day
+                    if (DateAcct == null
+                        || DateAcct < StartDate || DateAcct > EndDate)
+                        mTab.setValue("DateAcct", EndDate);
                 }
-                idr.close();
-            }
-            catch (err) {
-                if (idr != null) {
-                    idr.close();
-                }
-                this.log.log(Level.SEVERE, sql, e);
-                this.setCalloutActive(false);
-                return e.message;
             }
         }
         this.setCalloutActive(false);

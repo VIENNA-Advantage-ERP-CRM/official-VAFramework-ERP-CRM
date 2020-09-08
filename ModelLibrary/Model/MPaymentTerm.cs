@@ -473,7 +473,7 @@ namespace VAdvantage.Model
                             // Get Next Business Day if Next Business Days check box is set to true
                             if (payterm.IsNextBusinessDay())
                             {
-                                payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()));
+                                payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetAD_Org_ID());
                             }
                             else
                             {
@@ -487,7 +487,7 @@ namespace VAdvantage.Model
                             // check next business days in case of Discount Date                                
                             if (payterm.IsNextBusinessDay())
                             {
-                                payDueDate = GetNextBusinessDate(schedule.GetDiscountDate());
+                                payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetAD_Org_ID());
                             }
                             else
                             {
@@ -955,7 +955,7 @@ namespace VAdvantage.Model
                         // Get Next Business Day if Next Business Days check box is set to true
                         if (payterm.IsNextBusinessDay())
                         {
-                            payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()));
+                            payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetAD_Org_ID());
                         }
                         else
                         {
@@ -966,7 +966,7 @@ namespace VAdvantage.Model
                         // check next business days in case of Discount Date
                         if (payterm.IsNextBusinessDay())
                         {
-                            payDueDate = GetNextBusinessDate(schedule.GetDiscountDate());
+                            payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetAD_Org_ID());
                         }
                         else
                         {
@@ -1137,7 +1137,18 @@ namespace VAdvantage.Model
         public DateTime? GetNextBusinessDate(DateTime? DueDate)
         {
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, GetAD_Org_ID()) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
+            //return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, GetAD_Org_ID()) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
+            return GetNextBusinessDate(DueDate, 0);
+        }
+
+        /// <summary>
+        /// Get Next Business Day based on Organization in case the Date is Non Business Days
+        /// </summary>
+        /// <param name="DueDate">Due Date</param>
+        /// <returns>DateTime, Next Business Day</returns>
+        public DateTime? GetNextBusinessDate(DateTime? DueDate, int AD_Org_ID)
+        {
+            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, AD_Org_ID) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
         }
 
         /// <summary>
@@ -1166,7 +1177,7 @@ namespace VAdvantage.Model
                 DateTime? payDueDate = null;
                 if (payterm.IsNextBusinessDay())
                 {
-                    payDueDate = GetNextBusinessDate(dueDate);
+                    payDueDate = GetNextBusinessDate(dueDate, invoice.GetAD_Org_ID());
                 }
                 else
                 {
@@ -1181,7 +1192,7 @@ namespace VAdvantage.Model
                 // check next business days in case of Discount Date                
                 if (payterm.IsNextBusinessDay())
                 {
-                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays())));
+                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays())), invoice.GetAD_Org_ID());
                 }
                 else
                 {
@@ -1194,7 +1205,7 @@ namespace VAdvantage.Model
 
                 if (payterm.IsNextBusinessDay())
                 {
-                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2())));
+                    payDueDate = GetNextBusinessDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2())), invoice.GetAD_Org_ID());
                 }
                 else
                 {
