@@ -35,7 +35,8 @@ namespace ViennaAdvantage.Process
         private int _M_PriceList_ID = 0;
         //Document No					
         private String _InvoiceDocumentNo = null;
-
+        //Document Type
+        private int _C_DocType_ID = 0;
         //Checkbox for Generating charges proportional to line quantities on Invoice line. By Sukhwnder on 14 Dec, 2017
         private bool _GenerateCharges = false;
 
@@ -64,6 +65,10 @@ namespace ViennaAdvantage.Process
                 else if (name.Equals("GenerateCharges"))
                 {
                     _GenerateCharges = "Y".Equals(para[i].GetParameter());
+                }
+                else if (name.Equals("C_DocType_ID"))
+                {
+                    _C_DocType_ID = para[i].GetParameterAsInt(); ;
                 }
                 else
                 {
@@ -239,9 +244,15 @@ namespace ViennaAdvantage.Process
             {
                 invoice.SetM_PriceList_ID(_M_PriceList_ID);
             }
+            //Set   InvoiceDocumentNo to InvoiceReference
             if (_InvoiceDocumentNo != null && _InvoiceDocumentNo.Length > 0)
             {
-                invoice.SetDocumentNo(_InvoiceDocumentNo);
+                invoice.Set_Value("InvoiceReference",_InvoiceDocumentNo);
+            }
+            //Set TargetDoctype 
+            if (_C_DocType_ID !=0 && !ship.IsReturnTrx()) 
+            {
+                invoice.Set_Value("C_DocTypeTarget_ID", _C_DocType_ID);
             }
 
             // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
