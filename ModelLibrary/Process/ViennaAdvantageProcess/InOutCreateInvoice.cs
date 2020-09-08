@@ -197,46 +197,53 @@ namespace ViennaAdvantage.Process
                 }
             }
             //end
-
-            if (ship.IsReturnTrx())
+            //Set TargetDoctype 
+            if (_C_DocType_ID > 0)
             {
-                if (!ship.IsSOTrx())
+                invoice.Set_Value("C_DocTypeTarget_ID", _C_DocType_ID);
+            }
+            else
+            {
+                if (ship.IsReturnTrx())
                 {
-                    // Purchase Return
-                    // set target document from documnet type window -- based on documnet type available on material receipt / return to vendor
+                    if (!ship.IsSOTrx())
+                    {
+                        // Purchase Return
+                        // set target document from documnet type window -- based on documnet type available on material receipt / return to vendor
 
-                    // JID_0779: Create AP Credit memo if we run the Generate TO process from Returm to Vendor window.
+                        // JID_0779: Create AP Credit memo if we run the Generate TO process from Returm to Vendor window.
 
-                    //if (invoice.GetC_DocTypeTarget_ID() == 0)
-                    //{
-                    int C_DocTypeTarget_ID = DB.GetSQLValue(null, "SELECT C_DocTypeInvoice_ID FROM C_DocType WHERE C_DocType_ID=@param1", ship.GetC_DocType_ID());
-                    if (C_DocTypeTarget_ID > 0)
-                    {
-                        invoice.SetC_DocTypeTarget_ID(C_DocTypeTarget_ID);
-                    }
-                    else
-                    {
-                        invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
-                    }
-                    //}
-                    invoice.SetIsReturnTrx(ship.IsReturnTrx());
-                    invoice.SetIsSOTrx(ship.IsSOTrx());
-                }
-                else
-                {
-                    // Sales Return
-                    if (ship.GetC_Order_ID() >= 0)
-                    {
-                        int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocType_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
-                        MDocType dt = MDocType.Get(GetCtx(), C_DocType_ID);
-                        if (dt.GetC_DocTypeInvoice_ID() != 0)
-                            invoice.SetC_DocTypeTarget_ID(dt.GetC_DocTypeInvoice_ID(), true);
+                        //if (invoice.GetC_DocTypeTarget_ID() == 0)
+                        //{
+                        int C_DocTypeTarget_ID = DB.GetSQLValue(null, "SELECT C_DocTypeInvoice_ID FROM C_DocType WHERE C_DocType_ID=@param1", ship.GetC_DocType_ID());
+                        if (C_DocTypeTarget_ID > 0)
+                        {
+                            invoice.SetC_DocTypeTarget_ID(C_DocTypeTarget_ID);
+                        }
                         else
+                        {
                             invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        }
+                        //}
+                        invoice.SetIsReturnTrx(ship.IsReturnTrx());
+                        invoice.SetIsSOTrx(ship.IsSOTrx());
                     }
                     else
                     {
-                        invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        // Sales Return
+                        if (ship.GetC_Order_ID() >= 0)
+                        {
+                            int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocType_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                            MDocType dt = MDocType.Get(GetCtx(), C_DocType_ID);
+                            if (dt.GetC_DocTypeInvoice_ID() != 0)
+                                invoice.SetC_DocTypeTarget_ID(dt.GetC_DocTypeInvoice_ID(), true);
+                            else
+                                invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        }
+                        else
+                        {
+                            invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        }
                     }
                 }
             }
@@ -244,15 +251,10 @@ namespace ViennaAdvantage.Process
             {
                 invoice.SetM_PriceList_ID(_M_PriceList_ID);
             }
-            //Set   InvoiceDocumentNo to InvoiceReference
+            //Set InvoiceDocumentNo to InvoiceReference
             if (_InvoiceDocumentNo != null && _InvoiceDocumentNo.Length > 0)
             {
                 invoice.Set_Value("InvoiceReference",_InvoiceDocumentNo);
-            }
-            //Set TargetDoctype 
-            if (_C_DocType_ID !=0 && !ship.IsReturnTrx()) 
-            {
-                invoice.Set_Value("C_DocTypeTarget_ID", _C_DocType_ID);
             }
 
             // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
