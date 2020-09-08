@@ -32,13 +32,13 @@ namespace VIS.Models
             string sql = "";
             if (isBaseLanguage)
             {
-                sql = "SELECT Name, AD_InfoWindow_ID FROM AD_InfoWindow WHERE IsActive='Y'";
+                sql = "SELECT Name, AD_InfoWindow_ID FROM AD_InfoWindow WHERE IsActive='Y' ORDER BY Name ASC";
             }
             else
             {
                 sql = @" SELECT WT.Name, W.AD_InfoWindow_ID FROM AD_InfoWindow W
-                            INNER JOIN AD_InfoWindow_Trl WT ON (W.AD_InfoWindow_ID=WT.AD_InfoWindow_ID AND WT.ad_language='"+ctx.GetAD_Language()+@"')
-                            WHERE W.IsActive='Y'";
+                            INNER JOIN AD_InfoWindow_Trl WT ON (W.AD_InfoWindow_ID=WT.AD_InfoWindow_ID AND WT.ad_language='"+ctx.GetAD_Language()+ @"')
+                            WHERE W.IsActive='Y' ORDER BY WT.Name ASC";
             }
            
             DataSet ds = VAdvantage.DataBase.DB.ExecuteDataset(sql);
