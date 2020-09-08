@@ -1148,7 +1148,7 @@ namespace VAdvantage.Model
         /// <returns>DateTime, Next Business Day</returns>
         public DateTime? GetNextBusinessDate(DateTime? DueDate, int AD_Org_ID)
         {
-            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, AD_Org_ID) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1)) : DueDate;
+            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, AD_Org_ID) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1), AD_Org_ID) : DueDate;
         }
 
         /// <summary>
