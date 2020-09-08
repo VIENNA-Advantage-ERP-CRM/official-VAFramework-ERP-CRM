@@ -8,7 +8,7 @@ using VAdvantage.Model;
 using VAdvantage.Utility;
 using VIS.Models;
 
-namespace VIS.Areas.VIS.Controllers.CallOut
+namespace VIS.Controllers
 {
     public class MPeriodController : Controller
     {
