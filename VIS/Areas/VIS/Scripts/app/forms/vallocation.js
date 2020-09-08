@@ -279,7 +279,7 @@
             createRow5();
             rowContiner.append($row2).append($row3).append($row4).append($row5).append($row6);
             //---Set Business Partner Mandatory---Neha
-            $vSearchBPartner.getControl().next().css("background-color", SetMandatory(true));
+            //$vSearchBPartner.getControl().next().addClass('vis-ev-col-mandatory');
             //---Resize the Parameter div and Display and hide Payment and Cash div----Neha-----
             $row1.resizable({
                 handles: 'e',
@@ -351,10 +351,10 @@
                     clrCashLine(e);
                 }
                 if ($cmbCurrency.val() > 0) {
-                    $cmbCurrency.css("background-color", SetMandatory(false));
+                    $cmbCurrency.removeClass('vis-ev-col-mandatory');
                 }
                 else {
-                    $cmbCurrency.css("background-color", SetMandatory(true));
+                    $cmbCurrency.addClass('vis-ev-col-mandatory');
                 }
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
@@ -686,9 +686,9 @@
             //set/reset the background-color change event
             $cmbOrg.on("change", function (e) {
                 if (parseInt($cmbOrg.val()) > 0)
-                    $cmbOrg.css("background-color", SetMandatory(false));
+                    $cmbOrg.removeClass('vis-ev-col-mandatory');
                 else
-                    $cmbOrg.css("background-color", SetMandatory(true));
+                    $cmbOrg.addClass('vis-ev-col-mandatory');
 
             });
             //Currency Conversion Date change event
@@ -737,10 +737,10 @@
             $allocationFrom.on("change", function (e) {
 
                 if ($allocationFrom.val() == 0) {
-                    $allocationFrom.css("background-color", SetMandatory(true));
+                    $allocationFrom.addClass('vis-ev-col-mandatory');
                 }
                 else
-                    $allocationFrom.css("background-color", SetMandatory(false));
+                    $allocationFrom.removeClass('vis-ev-col-mandatory');
                 //if allocation from is change then we have to clear the selection of invoices
                 clearInvoiceArrays(e);
 
@@ -765,17 +765,17 @@
                     $allocationTo.find("option[value=G]").show();
                 }
                 $allocationTo.val(0);
-                $allocationTo.css("background-color", SetMandatory(true));
+                $allocationTo.addClass('vis-ev-col-mandatory');
                 loadGrids($allocationFrom.val());
                 displayGrids($allocationFrom.val(), $allocationTo.val())
             });
 
             $allocationTo.on("change", function (e) {
                 if ($allocationTo.val() == 0) {
-                    $allocationTo.css("background-color", SetMandatory(true));
+                    $allocationTo.addClass('vis-ev-col-mandatory');
                 }
                 else
-                    $allocationTo.css("background-color", SetMandatory(false));
+                    $allocationTo.removeClass('vis-ev-col-mandatory');
                 //if allocation from is change then we have to clear the selection of invoices
                 clearInvoiceArrays(e);
 
@@ -1153,7 +1153,7 @@
                 }
                 if (flag == 0) {
                     $cmbCurrency.val(0);
-                    $cmbCurrency.css("background-color", SetMandatory(true));
+                    $cmbCurrency.addClass('vis-ev-col-mandatory');
                 }
             }
 
@@ -1419,9 +1419,9 @@
             //to do design
             var $divOrg = $('<div class="vis-allocation-leftControls">');
 
-            $divOrg.append('<div class="vis-allocation-leftControls"> <span class="vis-allocation-inputLabels" title="View organization" >' + VIS.translatedTexts.AD_Org_ID + '</span> <select class="vis-allocation-currencycmb" id=VIS_Org_' + $self.windowNo + '></select>');
+            $divOrg.append('<div class="input-group vis-input-wrap"><div class="vis-control-wrap"><select class="vis-allocation-currencycmb" id=VIS_Org_' + $self.windowNo + '></select><label title="View organization" >' + VIS.translatedTexts.AD_Org_ID + '</label>');
             var $divBp = $('<div class="vis-allocation-leftControls">');
-            $divBp.append($vSearchBPartner.getControl().addClass("vis-allocation-bpartner")).append($vSearchBPartner.getBtn(0).css('width', '30px').css('height', '30px').css('padding', '0px').css('border-color', '#BBBBBB'));
+                       
             var $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
             var $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             var $Leftformfieldbtnwrap = $('<div class="input-group-append">');
@@ -1594,60 +1594,60 @@
         };
 
         function createRow2() {
-            $row2.append('<div class="d-flex doc-allocation"><p>' + VIS.translatedTexts.C_Payment_ID + '</p>  <input type="checkbox" id="paymentselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="pclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span><p class="srch-allocation"><input class="srchPay" placeholder="Search...." type="text" id="paySrch' + $self.windowNo + '" /><a class="srchPay-anchor" id="_SrchpBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></p><p id="docType_' + $self.windowNo + '"></p><p class="payBaseType" id="docbaseType_' + $self.windowNo + '"></p><p class="fDate-allocation"></p><p class="tDate-allocation"></p><p class="vis-allocate-paymentSum">' + VIS.Msg.getMsg("SelectedPayments") + '0-Sum 0.00</p></div>').append('<div class="vis-allocation-payment-grid"></div>');//.append('<p class="vis-allocate-paymentSum">0-Sum 0.00</p>');
+            $row2.append('<div class="d-flex doc-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_Payment_ID + '</p>  <input type="checkbox" id="paymentselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="pclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-paymentSum">' + VIS.Msg.getMsg("SelectedPayments") + '0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchPay" placeholder="Search...." data-hasbtn=" " type="text" id="paySrch' + $self.windowNo + '" /><label>Search</label></div><div class="input-group-append"><a class="srchPay-anchor input-group-text" id="_SrchpBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType_' + $self.windowNo + '"></div><div class="payBaseType input-group vis-input-wrap" id="docbaseType_' + $self.windowNo + '"></div><div class="fDate-allocation input-group vis-input-wrap"></div><div class="tDate-allocation input-group vis-input-wrap"></div></div></div>').append('<div class="vis-allocation-payment-grid"></div>');//.append('<p class="vis-allocate-paymentSum">0-Sum 0.00</p>');
             $divPayment = $row2.find('.vis-allocation-payment-grid');
             $lblPaymentSum = $row2.find('.vis-allocate-paymentSum');
             $paymentSelctAll = $row2.find('#paymentselectall');
             $srchPayment = $row2.find("#paySrch" + $self.windowNo + '');
             $srchbtnPayment = $row2.find("#_SrchpBtn_" + $self.windowNo + '');
-            $row2.find("#docType_" + $self.windowNo + '').append($payDocType);
-            $row2.find("#docbaseType_" + $self.windowNo + '').append($payDocbaseType);
-            $row2.find(".fDate-allocation").append($pfromDate);
-            $row2.find(".tDate-allocation").append($ptoDate);
+            $row2.find("#docType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocType).append('<label>Doc Type</label>'));
+            $row2.find("#docbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocbaseType).append('<label>Doc Base Type</label>'));
+            $row2.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($pfromDate).append('<label>From Date</label>'));
+            $row2.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($ptoDate).append('<label>To Date</label>'));
             //get control of clear button
             $payclrbtn = $row2.find('#pclrbutton_' + $self.windowNo);
         };
 
         function createRow3() {
-            $row3.append('<div class="d-flex cash-allocation"><p>' + VIS.translatedTexts.C_CashLine_ID + '</p> <input type="checkbox" id="cashselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="cclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span><p class="srch-allocation"><input class="srchCash" placeholder="Search...." type="text" id="cashSrch' + $self.windowNo + '" /><a class="srchCash-anchor" id="_SrchcBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></p><p class="payType" id="_paymentType' + $self.windowNo + '"></p><p class="fDate-allocation"></p><p class="tDate-allocation"></p><p class="vis-allocate-cashSum">' + VIS.Msg.getMsg("SelectedCashlines") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
+            $row3.append('<div class="d-flex cash-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_CashLine_ID + '</p> <input type="checkbox" id="cashselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="cclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-cashSum">' + VIS.Msg.getMsg("SelectedCashlines") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchCash" placeholder="Search...." data-hasbtn=" " type="text" id="cashSrch' + $self.windowNo + '" /><label>Search</label></div><div class="input-group-append"><a class="srchCash-anchor input-group-text" id="_SrchcBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap payType" id="_paymentType' + $self.windowNo + '"></div><div class="input-group vis-input-wrap fDate-allocation"></div><div class="input-group vis-input-wrap tDate-allocation"></div></div></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
             $divCashline = $row3.find('.vis-allocation-cashLine-grid');
             $lblCashSum = $row3.find('.vis-allocate-cashSum');
             $cashSelctAll = $row3.find('#cashselectall');
             $srchCashJournal = $row3.find("#cashSrch" + $self.windowNo + '');
             $srchbtnCashJournal = $row3.find("#_SrchcBtn_" + $self.windowNo + '');
-            $row3.find("#_paymentType" + $self.windowNo + '').append($cashPayType);
-            $row3.find(".fDate-allocation").append($cfromDate);
-            $row3.find(".tDate-allocation").append($ctoDate);
+            $row3.find("#_paymentType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cashPayType).append('<label>Pay Type</label>'));
+            $row3.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($cfromDate).append('<label>From Date</label>'));
+            $row3.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($ctoDate).append('<label>To date</label>'));
             //get control of clear button
             $cashclrbtn = $row3.find('#cclrbutton_' + $self.windowNo);
         };
 
         function createRow4() {
             //
-            $row4.append('<div class="d-flex in-allocation"><span>' + VIS.translatedTexts.C_Invoice_ID + '</span> <input type="checkbox" id="invoiceselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="clrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span><p class="srch-allocation"><input class="srchInv" placeholder="Search...." type="text" id="invSrch' + $self.windowNo + '" /><a class="srchInv-anchor" id="_SrchBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></p><p id="docType' + $self.windowNo + '"></p><p class="invBaseType" id="invbaseType_' + $self.windowNo + '"></p><p class="fDate-allocation"></p><p class="tDate-allocation"></p><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
+            $row4.append('<div class="d-flex in-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.C_Invoice_ID + '</span> <input type="checkbox" id="invoiceselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="clrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchInv" placeholder="Search...." data-hasbtn=" " type="text" id="invSrch' + $self.windowNo + '" /><label>Search</label></div><div class="input-group-append"><a class="srchInv-anchor input-group-text" id="_SrchBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType' + $self.windowNo + '"></div><div class="invBaseType input-group vis-input-wrap" id="invbaseType_' + $self.windowNo + '"></div><div class="fDate-allocation input-group vis-input-wrap"></div><div class="tDate-allocation input-group vis-input-wrap"></div></div></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
             $divInvoice = $row4.find('.vis-allocation-invoice-grid');
             $lblInvoiceSum = $row4.find('.vis-allocate-invoiceSum');
             $invSelectAll = $row4.find('#invoiceselectall');
             $srchInvoice = $row4.find("#invSrch" + $self.windowNo + '');
             $srchbtnInvoice = $row4.find("#_SrchBtn_" + $self.windowNo + '');
-            $row4.find("#docType" + $self.windowNo + '').append($cmbDocType);
-            $row4.find("#invbaseType_" + $self.windowNo + '').append($invDocbaseType);
-            $row4.find(".fDate-allocation").append($fromDate);
-            $row4.find(".tDate-allocation").append($toDate);
+            $row4.find("#docType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cmbDocType).append('<label>Doc Type</label>'));
+            $row4.find("#invbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($invDocbaseType).append('<label>In Base Type</label>'));
+            $row4.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($fromDate).append('<label>From date</label>'));
+            $row4.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($toDate).append('<label>To Date</label>'));
             //get control of clear button
             $clrbtn = $row4.find('#clrbutton_' + $self.windowNo);
         };
 
         //added grid design for gl-allocation
         function createRow5() {
-            $row5.append('<div class="d-flex  gl-allocation"><span>' + VIS.translatedTexts.GL_Journal_ID + '</span> <input type="checkbox" id="glselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="gclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span><p class="srch-allocation"><input class="srchGL" placeholder="Search...." type="text" id="glSrch' + $self.windowNo + '" /><a class="srchGL-anchor" id="_SrchglBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></p><p class="fDate-allocation"></p><p class="tDate-allocation"></p><p class="vis-allocate-glSum">' + VIS.Msg.getMsg("SelectedGL") + ' 0-Sum 0.00</p></div>').append('<div  class="vis-allocation-gl-grid"></div>');
+            $row5.append('<div class="d-flex  gl-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.GL_Journal_ID + '</span> <input type="checkbox" id="glselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="gclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-glSum">' + VIS.Msg.getMsg("SelectedGL") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchGL" placeholder="Search...." data-hasbtn=" " type="text" id="glSrch' + $self.windowNo + '" /><label>Search</label></div><div class="input-group-append"><a class="srchGL-anchor input-group-text" id="_SrchglBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap fDate-allocation"></div><div class="input-group vis-input-wrap tDate-allocation"></div></div></div>').append('<div  class="vis-allocation-gl-grid"></div>');
             $divGl = $row5.find('.vis-allocation-gl-grid');
             $lblglSum = $row5.find('.vis-allocate-glSum');
             $glSelectAll = $row5.find('#glselectall');
             $srchGL = $row5.find("#glSrch" + $self.windowNo + '');
             $srchbtnGL = $row5.find("#_SrchglBtn_" + $self.windowNo + '');
-            $row5.find(".fDate-allocation").append($gfromDate);
-            $row5.find(".tDate-allocation").append($gtoDate);
+            $row5.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($gfromDate).append('<label>From Date</label>'));
+            $row5.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($gtoDate).append('<label>To Date</label>'));
             //get control of clear button
             $glclrbtn = $row5.find('#gclrbutton_' + $self.windowNo);
         };
@@ -1663,7 +1663,8 @@
                     var result = JSON.parse(data);
                     if (result) {
                         $OrgFilter.empty();
-                        //$OrgFilter.css("background-color", SetMandatory(true));
+                        //$OrgFilter.addClass('vis-ev-col-mandatory');
+                        //$OrgFilter.addClass('vis-ev-col-mandatory');
                         if (VIS.Env.getCtx().getAD_Org_ID() != 0) {
                             $OrgFilter.append("<option value=" + VIS.Env.getCtx().getAD_Org_ID() + ">" + VIS.Env.getCtx().ctx["#AD_Org_Name"] + "</option>");
                         }
@@ -1680,7 +1681,8 @@
                     }
                     if (VIS.context.getContextAsInt("#AD_Org_ID") > 0) {
                         $OrgFilter.val(VIS.context.getContextAsInt("#AD_Org_ID"));
-                        $OrgFilter.css("background-color", SetMandatory(false));
+                        //$OrgFilter.removeClass('vis-ev-col-mandatory');
+                        $OrgFilter.removeClass('vis-ev-col-mandatory');
                     }
                     else
                         $OrgFilter.prop('selectedIndex', 0);
@@ -1704,7 +1706,7 @@
                     var result = JSON.parse(data);
                     if (result) {
                         $cmbOrg.empty();
-                        $cmbOrg.css("background-color", SetMandatory(true));
+                        $cmbOrg.addClass('vis-ev-col-mandatory');
                         $cmbOrg.append("<option value=0></option>");
                         for (var i = 0; i < result.length; i++) {
                             OrgName = VIS.Utility.Util.getValueOfString(result[i].Name);
@@ -1717,7 +1719,7 @@
                     }
                     if (VIS.context.getContextAsInt("#AD_Org_ID") > 0) {
                         $cmbOrg.val(VIS.context.getContextAsInt("#AD_Org_ID"));
-                        $cmbOrg.css("background-color", SetMandatory(false));
+                        $cmbOrg.removeClass('vis-ev-col-mandatory');
                     }
                     else
                         $cmbOrg.prop('selectedIndex', 0);
@@ -1732,7 +1734,7 @@
         Create busyIndicator
         */
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='vis-apanel-busy' style='height:96%; width:98%;'></div>");
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             $bsyDiv[0].style.visibility = "hidden";
             $root.append($bsyDiv);
         };
@@ -1747,7 +1749,7 @@
                 return;
             }
             // If BP is selected then  set mandatory false---Neha
-            $vSearchBPartner.getControl().css("background-color", SetMandatory(false));
+            $vSearchBPartner.getControl().removeClass('vis-ev-col-mandatory');
             $bsyDiv[0].style.visibility = "visible";
             // initialize Pageno as 1 when we change BP
             pageNoInvoice = 1, gridPgnoInvoice = 1, invoiceRecord = 0;
@@ -5026,7 +5028,7 @@
                 _C_BPartner_ID = value;
                 if (_C_BPartner_ID > 0) {
                     // If BP is selected then  set mandatory false---Neha
-                    $vSearchBPartner.getControl().css("background-color", SetMandatory(false));
+                    $vSearchBPartner.getControl().removeClass('vis-ev-col-mandatory');
                 }
                 //////loadBPartner();
             }
