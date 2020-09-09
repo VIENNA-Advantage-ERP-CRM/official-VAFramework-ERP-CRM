@@ -266,6 +266,10 @@ namespace VIS.Models
                         Decimal.Add(AppliedAmt, Decimal.Add(DiscountAmt, WriteOffAmt)));
                     Decimal NOverUnderAmt = Env.ZERO;
 
+                    bool isZeroOverUnderAmt = false;          //the value is true if overUnderAmt is not equal to Zero (for -ve Amount Invoices).
+                    bool isZeroNOverUnderAmt = false;     //the value is true if overUnderAmt is not equal to Zero (for -ve Amount Invoices).
+                    if (OverUnderAmt != Env.ZERO)
+                        isZeroOverUnderAmt = true;
                     //log.Config("Invoice #" + i + " - AppliedAmt=" + AppliedAmt);// + " -> " + AppliedAbs);
 
                     //CashLines settelment************
@@ -341,7 +345,7 @@ namespace VIS.Models
                             if (!isScheduleAllocated)
                             {
                                 isScheduleAllocated = true;
-                                if (AppliedAmt != amount) 
+                                if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                 {
                                     if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                     {
@@ -369,7 +373,7 @@ namespace VIS.Models
                                 //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                 mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                 mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                if (AppliedAmt != amount) 
+                                if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                 {
                                     if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                     {
@@ -514,7 +518,7 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                     {
                                         if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -540,7 +544,7 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                     {
                                         if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -611,16 +615,20 @@ namespace VIS.Models
                                     Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
                                     neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
                                     is_NegScheduleAllocated = false;
+                                    if (NOverUnderAmt != Env.ZERO)
+                                        isZeroNOverUnderAmt = true;
                                 }
                                 else
                                 {
                                     NOverUnderAmt = Env.ZERO;
+                                    is_NegScheduleAllocated = true;
+                                    isZeroNOverUnderAmt = false;
                                 }
 
                                 if (!is_NegScheduleAllocated)
                                 {
                                     is_NegScheduleAllocated = true;
-                                    if (AppliedAmt!=amount)
+                                    if (AppliedAmt!=amount || isZeroNOverUnderAmt)
                                     {
                                         if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -647,7 +655,7 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || isZeroNOverUnderAmt) 
                                     {
                                         if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -812,7 +820,7 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                     {
                                         if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -839,7 +847,7 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                     {
                                         if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -908,16 +916,20 @@ namespace VIS.Models
                                     Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
                                     neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
                                     is_NegScheduleAllocated = false;
+                                    if (NOverUnderAmt != Env.ZERO)
+                                        isZeroNOverUnderAmt = true;
                                 }
                                 else
                                 {
                                     NOverUnderAmt = Env.ZERO;
+                                    is_NegScheduleAllocated = true;
+                                    isZeroNOverUnderAmt = false;
                                 }
 
                                 if (!is_NegScheduleAllocated)
                                 {
                                     is_NegScheduleAllocated = true;
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || isZeroNOverUnderAmt) 
                                     {
                                         if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -944,7 +956,7 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || isZeroNOverUnderAmt) 
                                     {
                                         if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -1648,6 +1660,10 @@ namespace VIS.Models
                         //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                         Decimal OverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(rowsInvoice[i][open]),
                         Decimal.Add(AppliedAmt, Decimal.Add(DiscountAmt, WriteOffAmt)));
+                        bool isZeroOverUnderAmt = false;          //the value is true if overUnderAmt is not equal to Zero (for -ve Amount Invoices).
+                        bool isZeroNOverUnderAmt = false;     //the value is true if overUnderAmt is not equal to Zero (for -ve Amount Invoices).
+                        if (OverUnderAmt != Env.ZERO)
+                            isZeroOverUnderAmt = true;
 
                         ////Payment Settelment**********
                         ////  loop through all payments until invoice applied
@@ -1711,7 +1727,7 @@ namespace VIS.Models
                                 if (!isScheduleAllocated)
                                 {
                                     isScheduleAllocated = true;
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || !isZeroOverUnderAmt) 
                                     {
                                         if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -1738,7 +1754,7 @@ namespace VIS.Models
                                     //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                     mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                     mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                    if (AppliedAmt != amount) 
+                                    if (AppliedAmt != amount || !isZeroOverUnderAmt)
                                     {
                                         if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                         {
@@ -1917,7 +1933,7 @@ namespace VIS.Models
                                     if (!isScheduleAllocated)
                                     {
                                         isScheduleAllocated = true;
-                                        if (AppliedAmt != amount) 
+                                        if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                         {
                                             if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -1943,7 +1959,7 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                        if (AppliedAmt != amount) 
+                                        if (AppliedAmt != amount || isZeroOverUnderAmt)
                                         {
                                             if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -2010,17 +2026,20 @@ namespace VIS.Models
                                         Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
                                         neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
                                         is_NegScheduleAllocated = false;
+                                        if (NOverUnderAmt != Env.ZERO)
+                                            isZeroNOverUnderAmt = true;
                                     }
                                     else
                                     {
                                         NOverUnderAmt = Env.ZERO;
                                         is_NegScheduleAllocated = true;
+                                        isZeroNOverUnderAmt = false;
                                     }
 
                                     if (!is_NegScheduleAllocated)
                                     {
                                         is_NegScheduleAllocated = true;
-                                        if (AppliedAmt != amount) 
+                                        if (AppliedAmt != amount || isZeroNOverUnderAmt) 
                                         {
                                             if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -2046,7 +2065,7 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                        if (AppliedAmt != amount)
+                                        if (AppliedAmt != amount || isZeroNOverUnderAmt)
                                         {
                                             if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -2215,7 +2234,7 @@ namespace VIS.Models
                                     if (!isScheduleAllocated)
                                     {
                                         isScheduleAllocated = true;
-                                        if (AppliedAmt != amount) 
+                                        if (AppliedAmt != amount || isZeroOverUnderAmt) 
                                         {
                                             if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -2243,7 +2262,7 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                        if (AppliedAmt != amount) 
+                                        if (AppliedAmt != amount || isZeroOverUnderAmt)
                                         {
                                             if (invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -2253,6 +2272,7 @@ namespace VIS.Models
                                             else
                                                 mpay2.SetDueAmt(Math.Abs(amount));
                                         }
+
                                         if (!mpay2.Save(trx))
                                         {
                                             //Get Error message
@@ -2317,17 +2337,20 @@ namespace VIS.Models
                                         Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
                                         neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
                                         is_NegScheduleAllocated = false;
+                                        if (NOverUnderAmt != Env.ZERO)
+                                            isZeroNOverUnderAmt = true;
                                     }
                                     else
                                     {
                                         NOverUnderAmt = Env.ZERO;
                                         is_NegScheduleAllocated = true;
+                                        isZeroNOverUnderAmt = false;
                                     }
 
                                     if (!is_NegScheduleAllocated)
                                     {
                                         is_NegScheduleAllocated = true;
-                                        if (AppliedAmt != amount) 
+                                        if (AppliedAmt != amount || isZeroNOverUnderAmt) 
                                         {
                                             if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -2355,7 +2378,7 @@ namespace VIS.Models
                                         //Set AD_Org_ID and AD_Client_ID when we split the schedule
                                         mpay2.SetAD_Client_ID(mpay.GetAD_Client_ID());
                                         mpay2.SetAD_Org_ID(mpay.GetAD_Org_ID());
-                                        if (AppliedAmt != amount) 
+                                        if (AppliedAmt != amount || isZeroNOverUnderAmt)
                                         {
                                             if (Neg_invoice.GetC_Currency_ID() != C_Currency_ID)
                                             {
@@ -2365,6 +2388,7 @@ namespace VIS.Models
                                             else
                                                 mpay2.SetDueAmt(Math.Abs(amount));
                                         }
+
                                         if (!mpay2.Save(trx))
                                         {
                                             msg = ValidateSaveInvoicePaySchedule(trx);
