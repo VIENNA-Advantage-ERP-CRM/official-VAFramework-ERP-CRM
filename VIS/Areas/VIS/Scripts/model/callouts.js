@@ -14998,7 +14998,7 @@
         }
 
         //  When DateAcct is changed, set C_Period_ID
-        else if (colName == "DateAcct") {
+        else if (colName == "DateAcct" || colName == "AD_Org_ID") {
             //var sql = "SELECT C_Period_ID "
             //    + "FROM C_Period "
             //    + "WHERE C_Year_ID IN "
