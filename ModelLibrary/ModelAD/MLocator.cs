@@ -285,6 +285,16 @@ namespace VAdvantage.Model
 
                 } // storage
 
+                if (newRecord)
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) from M_Locator WHERE Value= '" + GetValue() + "'"));
+                    if (count > 0)
+                    {
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
+                        return false;
+                    }
+                }
+
                 if (newRecord
                         || Is_ValueChanged("X")
                         || Is_ValueChanged("Y")

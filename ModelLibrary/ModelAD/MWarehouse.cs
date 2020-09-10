@@ -404,6 +404,22 @@ namespace VAdvantage.Model
                     SetSeparator("*");
                 }
             }
+            if (newRecord)
+            {
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) from M_Warehouse WHERE Value= '" + GetValue() + "'"));
+                if (count > 0)
+                {
+                    log.SaveError( "",Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
+                    return false;
+                }
+                int nameCount = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) from M_Warehouse WHERE Name = '" + GetName() + "'"));
+                if(nameCount > 0)
+                {
+                    log.SaveError("",Msg.GetMsg(GetCtx(), "WarehouseAlreasyExists"));
+                    return false;
+                }
+               
+            }
 
             return true;
         }
