@@ -234,55 +234,57 @@ namespace VAdvantage.DBPort
 	{
 		return inn;
 	}
-	
-	/**
-	 * Convert simple SQL Statement. Based on ConvertMap
-	 * 
-	 * @param sqlStatement
-	 * @return converted Statement
-	 */
-	private String ApplyConvertMap(String sqlStatement) {
-		// Error Checks
-		if (sqlStatement.ToUpper().IndexOf("EXCEPTION WHEN") != -1) {
-			String error = "Exception clause needs to be converted: "
-					+ sqlStatement;
-			log.Info(error);
-			m_conversionError = error;
-			return sqlStatement;
-		}
 
-		// Carlos Ruiz - globalqss
-		// Standard Statement -- change the keys in ConvertMap
-		
-		String retValue = sqlStatement;
+        /**
+         * Convert simple SQL Statement. Based on ConvertMap
+         * 
+         * @param sqlStatement
+         * @return converted Statement
+         */
+        private String ApplyConvertMap(String sqlStatement)
+        {
+            // Error Checks
+            if (sqlStatement.ToUpper().IndexOf("EXCEPTION WHEN") != -1)
+            {
+                String error = "Exception clause needs to be converted: "
+                        + sqlStatement;
+                log.Info(error);
+                m_conversionError = error;
+                return sqlStatement;
+            }
 
-		
-		// for each iteration in the conversion map
-	IDictionary convertMap = GetConvertMap();
-		if (convertMap != null) {
-			var iter = convertMap.Keys.GetEnumerator();
-			while (iter.MoveNext()) {
-	
-			    // replace the key on convertmap (i.e.: number by numeric)   
-				String regex = (String) iter.Current;
-				String replacement = (String) convertMap[regex];
-				try {
+            // Carlos Ruiz - globalqss
+            // Standard Statement -- change the keys in ConvertMap
 
-                    //Regex e = new Regex(regex, REGEX_FLAGS | RegexOptions.Compiled);
-					//p = Pattern.compile(regex, REGEX_FLAGS);
-                    retValue = Regex.Replace(retValue,regex, replacement,REGEX_FLAGS);
-					//m = p.matcher(retValue);
-					//retValue = m.replaceAll(replacement);
-	
-				} catch (Exception e) {
-					String error = "Error expression: " + regex + " - " + e;
-					log.Info(error);
-					m_conversionError = error;
-				}
-			}
-		}
-		return retValue;
-	} // convertSimpleStatement
+            String retValue = sqlStatement;
+
+
+            // for each iteration in the conversion map
+            IDictionary convertMap = GetConvertMap();
+            if (convertMap != null)
+            {
+                var iter = convertMap.Keys.GetEnumerator();
+                while (iter.MoveNext())
+                {
+
+                    // replace the key on convertmap (i.e.: number by numeric)   
+                    String regex = (String)iter.Current;
+                    String replacement = (String)convertMap[regex];
+                    try
+                    {
+                        string updatedRegex = "(?<=^([^\']|[\'][^\']*[\'])*)" + regex;
+                        retValue = Regex.Replace(retValue, updatedRegex, replacement, REGEX_FLAGS);
+                    }
+                    catch (Exception e)
+                    {
+                        String error = "Error expression: " + regex + " - " + e;
+                        log.Info(error);
+                        m_conversionError = error;
+                    }
+                }
+            }
+            return retValue;
+        } // convertSimpleStatement
 	
         /// <summary>
     /// do convert map base conversion

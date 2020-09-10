@@ -190,9 +190,6 @@ namespace VAdvantage.DataBase
                 }
             }
 
-            // Replace SYSDATE with CURRENT_TIMESTAMP
-            oraStatement = Regex.Replace(oraStatement, "SYSDATE", "CURRENT_DATE", RegexOptions.IgnoreCase);
-
             StringBuilder sb = new StringBuilder(oraStatement.ToString());
 
             while (sb.ToString().IndexOf("NUMBER(10,0)") > -1)
