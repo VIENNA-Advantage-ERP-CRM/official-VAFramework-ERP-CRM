@@ -125,6 +125,21 @@ namespace VAdvantage.Model
                     MInvoice invoice = MInvoice.CopyFrom(from, dateDoc,
                         from.GetC_DocType_ID(), false, Get_TrxName(), false);
                     run.SetC_Invoice_ID(invoice.GetC_Invoice_ID());
+                    //Set Invoice Refrence and Description from Orignal to Recurring
+                    invoice.Set_Value("InvoiceReference", from.GetDocumentNo() + "_" + (GetRunsMax() - GetRunsRemaining() + 1));
+                    invoice.AddDescription(Msg.GetMsg(from.GetCtx(), "RecurringDocument")+from.GetDocumentNo());
+                    if (!invoice.Save(Get_TrxName())) {
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        if (pp != null)
+                        {
+                            from.SetProcessMsg(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice") + pp.GetName());
+                        }
+                        else
+                        {
+                            from.SetProcessMsg(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice"));
+                        }
+                        throw new Exception(Msg.GetMsg(from.GetCtx(), "CouldNotCreateInvoice") + (pp != null ? pp.GetName() : ""));
+                    }
                     msg += invoice.GetDocumentNo();
                 }
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Project))
