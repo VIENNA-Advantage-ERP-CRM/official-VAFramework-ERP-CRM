@@ -286,25 +286,14 @@ namespace VAdvantage.Model
                 } // storage
 
                 // JID:1888 Checks for the duplicate Searchkey
-                if (newRecord)
-                {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Locator WHERE Value= '" + GetValue() + "'"));
-                    if (count > 0)
-                    {
-                        log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
-                        return false;
-                    }
-                }
-                else
-                {
+               
                     int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Locator WHERE Value= '" + GetValue() + "' AND M_Locator_ID !="+GetM_Locator_ID()));
                     if (count > 0)
                     {
                         log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
                         return false;
                     }
-                }
-
+                
                 if (newRecord
                         || Is_ValueChanged("X")
                         || Is_ValueChanged("Y")
