@@ -223,6 +223,10 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         protected override Boolean AfterSave(Boolean newRecord, Boolean success)
         {
+            if(!success)
+            {
+                return success;
+            }
             PO wrhus = null;
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();

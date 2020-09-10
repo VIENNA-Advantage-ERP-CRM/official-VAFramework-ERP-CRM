@@ -92,6 +92,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Messaging" />
@@ -797,6 +798,7 @@
     <Compile Include="Model\MCStage.cs" />
     <Compile Include="Model\MCStageElement.cs" />
     <Compile Include="Model\MCtxArea.cs" />
+    <Compile Include="Model\MCurrCrossRate.cs" />
     <Compile Include="Model\MCurrencySource.cs" />
     <Compile Include="Model\MDiscountSchema.cs" />
     <Compile Include="Model\MDiscountSchemaBreak.cs" />
@@ -1136,6 +1138,7 @@
     <Compile Include="Model\X_C_ConversionType.cs" />
     <Compile Include="Model\X_C_Conversion_Rate.cs" />
     <Compile Include="Model\X_C_Country.cs" />
+    <Compile Include="Model\X_C_CurrCrossRate.cs" />
     <Compile Include="Model\X_C_Currency.cs" />
     <Compile Include="Model\X_C_CurrencySource.cs" />
     <Compile Include="Model\X_C_Currency_Acct.cs" />
@@ -1678,6 +1681,7 @@
     <Compile Include="Process\BPartnerOrgUnLink.cs" />
     <Compile Include="Process\BPartnerValidate.cs" />
     <Compile Include="Process\BPGroupAcctCopy.cs" />
+    <Compile Include="Process\CalculateCrossCurrRate.cs" />
     <Compile Include="Process\CalculateForeignCost.cs" />
     <Compile Include="Process\CommissionAPInvoice.cs" />
     <Compile Include="Process\CommissionCalc.cs" />
@@ -1723,6 +1727,7 @@
     <Compile Include="Process\GenerateGroupSubGroup.cs" />
     <Compile Include="Process\GenerateOrder.cs" />
     <Compile Include="Process\GenerateQuotation.cs" />
+    <Compile Include="Process\GenPeriodControl.cs" />
     <Compile Include="Process\ImportAccount.cs" />
     <Compile Include="Process\ImportBankStatement.cs" />
     <Compile Include="Process\ImportBPartner.cs" />
