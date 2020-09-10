@@ -404,21 +404,25 @@ namespace VAdvantage.Model
                     SetSeparator("*");
                 }
             }
+            // JID_1888 Checks for the duplicate search key
             if (newRecord)
             {
-                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) from M_Warehouse WHERE Value= '" + GetValue() + "'"));
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '" + GetValue() + "'"));
                 if (count > 0)
                 {
-                    log.SaveError( "",Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
                     return false;
                 }
-                int nameCount = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) from M_Warehouse WHERE Name = '" + GetName() + "'"));
-                if(nameCount > 0)
+            }
+            else
+            {
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '" + GetValue() + "' AND M_Warehouse_ID !="+GetM_Warehouse_ID()));
+                if (count > 0)
                 {
-                    log.SaveError("",Msg.GetMsg(GetCtx(), "WarehouseAlreasyExists"));
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
                     return false;
                 }
-               
+
             }
 
             return true;
