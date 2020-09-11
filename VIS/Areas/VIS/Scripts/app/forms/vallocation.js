@@ -136,6 +136,9 @@
         var colPayCheck = false;
         var colCashCheck = false;
 
+        //for set isBusyIndicatorHidden() as true
+        var setallgridsLoaded = false;
+
         var $vtxtDifference = null;
         var $vbtnAllocate = null;
         //added new search button for search in left panel
@@ -228,7 +231,12 @@
             "C_InvoicePaySchedule_ID",
             "DateAcct",
             "GL_JOURNALLINE_ID",
-            "GL_Journal_ID"
+            "GL_Journal_ID",
+            "DocType",
+            "Doc_Base_Type",
+            "FromDate",
+            "ToDate",
+            "Payment_Type"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -322,40 +330,59 @@
             //Organization 
             $OrgFilter.on("change", function (e) {
                 //clear the girds based on which grid is active (true).
-                if ($gridInvoice) {
-                    clrInvoice(e);
+                if ($allocationFrom.val() == 0 && $allocationTo.val() == 0) {
+                    blankAllGrids();
                 }
-                if ($glLineGrid) {
-                    clrGLLine(e);
-                }
-                if ($gridPayment) {
-                    clrPayment(e);
-                }
-                if ($gridCashline) {
-                    clrCashLine(e);
+                else {
+                    if ($gridInvoice) {
+                        clrInvoice(e);
+                    }
+                    if ($glLineGrid) {
+                        clrGLLine(e);
+                    }
+                    if ($gridPayment) {
+                        clrPayment(e);
+                    }
+                    if ($gridCashline) {
+                        clrCashLine(e);
+                    }
                 }
             });
             $vSearchBPartner.fireValueChanged = bpValueChanged;
             $cmbCurrency.on("change", function (e) {
                 vetoableChange("C_Currency_ID", $cmbCurrency.val());
-                if ($gridInvoice) {
-                    clrInvoice(e);
-                }
-                if ($glLineGrid) {
-                    clrGLLine(e);
-                }
-                if ($gridPayment) {
-                    clrPayment(e);
-                }
-                if ($gridCashline) {
-                    clrCashLine(e);
-                }
-                if ($cmbCurrency.val() > 0) {
-                    $cmbCurrency.removeClass('vis-ev-col-mandatory');
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            if ($gridInvoice) {
+                                clrInvoice(e);
+                            }
+                            if ($glLineGrid) {
+                                clrGLLine(e);
+                            }
+                            if ($gridPayment) {
+                                clrPayment(e);
+                            }
+                            if ($gridCashline) {
+                                clrCashLine(e);
+                            }
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            blankAllGrids();
+                        }
+                    }
                 }
                 else {
-                    $cmbCurrency.addClass('vis-ev-col-mandatory');
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    blankAllGrids();
                 }
+                //if ($cmbCurrency.val() > 0) {
+                //    $cmbCurrency.removeClass('vis-ev-col-mandatory');
+                //}
+                //else {
+                //    $cmbCurrency.addClass('vis-ev-col-mandatory');
+                //}
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
                 //loadCurrencyPrecision(parseInt($cmbCurrency.val()));
@@ -363,17 +390,22 @@
             $vchkMultiCurrency.on("change", function (e) {
                 vetoableChange("Date", $vchkMultiCurrency.is(':checked'));
                 //clear the grids which is true
-                if ($gridInvoice) {
-                    clrInvoice(e);
+                if ($allocationFrom.val() == 0 && $allocationTo.val() == 0) {
+                    blankAllGrids();
                 }
-                if ($glLineGrid) {
-                    clrGLLine(e);
-                }
-                if ($gridPayment) {
-                    clrPayment(e);
-                }
-                if ($gridCashline) {
-                    clrCashLine(e);
+                else {
+                    if ($gridInvoice) {
+                        clrInvoice(e);
+                    }
+                    if ($glLineGrid) {
+                        clrGLLine(e);
+                    }
+                    if ($gridPayment) {
+                        clrPayment(e);
+                    }
+                    if ($gridCashline) {
+                        clrCashLine(e);
+                    }
                 }
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
@@ -395,20 +427,22 @@
 
             $vbtnSearch.on("click", function (e) {
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
-                    loadDocType();
-                    loadPaymentType();
-                    loadpayDocType();
-                    loadpayDocbaseType();
-                    loadinvDocbaseType();
-                    $fromDate.val(0);
-                    $toDate.val(0);
-                    $pfromDate.val(0);
-                    $ptoDate.val(0);
-                    $cfromDate.val(0);
-                    $ctoDate.val(0);
-                    $gfromDate.val(0);
-                    $gtoDate.val(0);
-                    searchbyParameters();
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        loadDocType();
+                        loadPaymentType();
+                        loadpayDocType();
+                        loadpayDocbaseType();
+                        loadinvDocbaseType();
+                        $fromDate.val('');
+                        $toDate.val('');
+                        $pfromDate.val('');
+                        $ptoDate.val('');
+                        $cfromDate.val('');
+                        $ctoDate.val('');
+                        $gfromDate.val('');
+                        $gtoDate.val('');
+                        searchbyParameters();
+                    }
                 }
                 else {
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
@@ -514,115 +548,433 @@
 
             //filter the records based on Doctype in Invocie grid
             $cmbDocType.on("change", function (e) {
-                loadInvoice();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadInvoice();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $cmbDocType.val(0);
+                        }
+                    }
+                    else {
+                        $cmbDocType.val(0);
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $cmbDocType.val(0);
+                }
             });
 
             //filter the records based on Doctype in Payment grid
             $payDocType.on("change", function (e) {
-                loadUnallocatedPayments();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadUnallocatedPayments();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $payDocType.val(0);
+                        }
+                    }
+                    else {
+                        $payDocType.val(0);
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $payDocType.val(0);
+                }
             });
 
             //filter the records based on DocBaseType in Payment grid
             $payDocbaseType.on("change", function (e) {
-                loadUnallocatedPayments();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadUnallocatedPayments();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $payDocbaseType.val(0);
+                        }
+                    }
+                    else {
+                        $payDocbaseType.val(0);
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $payDocbaseType.val(0);
+                }
             });
 
             //filter the records based on DocBaseType in Invoice grid
             $invDocbaseType.on("change", function (e) {
-                loadInvoice();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadInvoice();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $invDocbaseType.val(0);
+                        }
+                    }
+                    else {
+                        $invDocbaseType.val(0);
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $invDocbaseType.val(0);
+                }
             });
 
             //filter the records based on paymentType in Cash Journal Line grid
             $cashPayType.on("change", function (e) {
-                loadUnallocatedCashLines();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadUnallocatedCashLines();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $cashPayType.val(0);
+                        }
+                    }
+                    else {
+                        $cashPayType.val(0);
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $cashPayType.val(0);
+                }
             });
 
             // filteration based on from and toDates for Invoice Grid
             $fromDate.on("change", function (e) {
-                loadInvoice();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadInvoice();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $fromDate.val('');
+                        }
+                    }
+                    else {
+                        $fromDate.val('');
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $fromDate.val('');
+                }
             });
             $toDate.on("change", function (e) {
-                loadInvoice();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadInvoice();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $toDate.val('');
+                        }
+                    }
+                    else {
+                        $toDate.val('');
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $toDate.val('');
+                }
             });
 
             // filteration based on from and toDates for Payment Grid
             $pfromDate.on("change", function (e) {
-                loadUnallocatedPayments();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadUnallocatedPayments();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $pfromDate.val('');
+                        }
+                    }
+                    else {
+                        $pfromDate.val('');
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $pfromDate.val('');
+                }
             });
             $ptoDate.on("change", function (e) {
-                loadUnallocatedPayments();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadUnallocatedPayments();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $ptoDate.val('');
+                        }
+                    }
+                    else {
+                        $ptoDate.val('');
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $ptoDate.val('');
+                }
             });
 
             //filteration based on from and toDates for cash journal Grid
             $cfromDate.on("change", function (e) {
-                loadUnallocatedCashLines();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadUnallocatedCashLines();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $cfromDate.val('');
+                        }
+                    }
+                    else {
+                        $cfromDate.val('');
+                    }
+
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $cfromDate.val('');
+                }
             });
             $ctoDate.on("change", function (e) {
-                loadUnallocatedCashLines();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadUnallocatedCashLines();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $ctoDate.val('');
+                        }
+                    }
+                    else {
+                        $ctoDate.val('');
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $ctoDate.val('');
+                }
             });
 
             // filteration based on from and toDates for GL journal Grid
             $gfromDate.on("change", function (e) {
-                loadGLVoucher();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadGLVoucher();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $gfromDate.val('');
+                        }
+                    }
+                    else {
+                        $gfromDate.val('');
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $gfromDate.val('');
+                }
             });
             $gtoDate.on("change", function (e) {
-                loadGLVoucher();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            loadGLVoucher();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            $gtoDate.val('');
+                        }
+                    }
+                    else {
+                        $gtoDate.val('');
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $gtoDate.val('');
+                }
             });
 
             //click event for search Invoice records which is based on Document No
             $srchInvoice.on("keypress", function (e) {
                 if (e.keyCode == 13) {
-                    gridPgnoInvoice = 1;
-                    loadInvoice();
+                    if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                        if (checkisSelectedAllocationFromAndTo()) {
+                            if (allgridsLoaded()) {
+                                gridPgnoInvoice = 1;
+                                loadInvoice();
+                            }
+                            else {
+                                VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            }
+                        }
+                    }
+                    else {
+                        VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    }
                     $srchInvoice.val('');
                 }
             });
             $srchbtnInvoice.on("click", function (e) {
-                gridPgnoInvoice = 1;
-                loadInvoice();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            gridPgnoInvoice = 1;
+                            loadInvoice();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
                 $srchInvoice.val('');
             });
 
             //click event for search Payment records which is based on Document No
             $srchPayment.on("keypress", function (e) {
                 if (e.keyCode == 13) {
-                    gridPgnoPayment = 1;
-                    loadUnallocatedPayments();
+                    if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                        if (checkisSelectedAllocationFromAndTo()) {
+                            if (allgridsLoaded()) {
+                                gridPgnoPayment = 1;
+                                loadUnallocatedPayments();
+                            }
+                            else {
+                                VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            }
+                        }
+                    }
+                    else {
+                        VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    }
                     $srchPayment.val('');
                 }
             });
             $srchbtnPayment.on("click", function (e) {
-                gridPgnoPayment = 1;
-                loadUnallocatedPayments();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            gridPgnoPayment = 1;
+                            loadUnallocatedPayments();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
                 $srchPayment.val('');
             });
 
             //click event for search Cash Journal line records which is based on Document No
             $srchCashJournal.on("keypress", function (e) {
                 if (e.keyCode == 13) {
-                    gridPgnoCashJounal = 1;
-                    loadUnallocatedCashLines();
+                    if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                        if (checkisSelectedAllocationFromAndTo()) {
+                            if (allgridsLoaded()) {
+                                gridPgnoCashJounal = 1;
+                                loadUnallocatedCashLines();
+                            }
+                            else {
+                                VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            }
+                        }
+                    }
+                    else {
+                        VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    }
                     $srchCashJournal.val('');
                 }
             });
             $srchbtnCashJournal.on("click", function (e) {
-                gridPgnoCashJounal = 1;
-                loadUnallocatedCashLines();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            gridPgnoCashJounal = 1;
+                            loadUnallocatedCashLines();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
                 $srchCashJournal.val('');
             });
 
             //click event for search GL Journal line records which is based on Document No
             $srchGL.on("keypress", function (e) {
                 if (e.keyCode == 13) {
-                    gridPgnoGL = 1;
-                    loadGLVoucher();
+                    if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                        if (checkisSelectedAllocationFromAndTo()) {
+                            if (allgridsLoaded()) {
+                                gridPgnoGL = 1;
+                                loadGLVoucher();
+                            }
+                            else {
+                                VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            }
+                        }
+                    }
+                    else {
+                        VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    }
                     $srchGL.val('');
                 }
             });
 
             $srchbtnGL.on("click", function (e) {
-                gridPgnoGL = 1;
-                loadGLVoucher();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            gridPgnoGL = 1;
+                            loadGLVoucher();
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
                 $srchGL.val('');
             });
             //-----For Select All buttons on grid by Manjot assigned by Mukesh sir and Savita
@@ -669,6 +1021,39 @@
                     selectedCashlines = [];
             });
 
+            //check all grids are loaded or not
+            // return true or false based on condition
+            function allgridsLoaded() {
+                if (isPaymentGridLoaded == true && isCashGridLoaded == true && isInvoiceGridLoaded == true && isGLGridLoaded == true) {
+                    return true;
+                }
+                return false;
+            }
+
+            //validation for allocationFrom and allocationTo Dropdowns are selected or not.
+            // return true or false based on condition
+            function checkisSelectedAllocationFromAndTo() {
+                if ($allocationTo.val() == 0 && $allocationFrom.val() == 0) {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("allocationFrom_And_allocationTo"), "");
+                    $allocationFrom.addClass('vis-ev-col-mandatory');
+                    $allocationTo.addClass('vis-ev-col-mandatory');
+                    return false;
+                }
+                else if ($allocationFrom.val() == 0) {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("selectAllocationFrom"), "");
+                    $allocationTo.val(0);
+                    $allocationFrom.addClass('vis-ev-col-mandatory');
+                    $allocationTo.addClass('vis-ev-col-mandatory');
+                    return false;
+                }
+                else if ($allocationTo.val() == 0) {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("selectAllocationTo"), "");
+                    $allocationTo.addClass('vis-ev-col-mandatory');
+                    return false;
+                }
+                return true;
+            }
+
             //change event for checkbox to select/unselect all for gl-allocation grid
             $glSelectAll.on("change", function (e) {
                 var chk = $('#grid_' + $glLineGrid.name + '_records td[col="0"]').find('input[type="checkbox"]');
@@ -694,18 +1079,32 @@
             //Currency Conversion Date change event
             $conversionDate.on("change", function (e) {
                 conversionDate = $conversionDate.val();
-                //clear the grids which is true
-                if ($gridInvoice) {
-                    clrInvoice(e);
+                //clear and refresh the grids which is true for selected BusinessPartner and Currency based on ConversionDate
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            if ($gridInvoice) {
+                                clrInvoice(e);
+                            }
+                            if ($glLineGrid) {
+                                clrGLLine(e);
+                            }
+                            if ($gridPayment) {
+                                clrPayment(e);
+                            }
+                            if ($gridCashline) {
+                                clrCashLine(e);
+                            }
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            blankAllGrids();
+                        }
+                    }
                 }
-                if ($glLineGrid) {
-                    clrGLLine(e);
-                }
-                if ($gridPayment) {
-                    clrPayment(e);
-                }
-                if ($gridCashline) {
-                    clrCashLine(e);
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    blankAllGrids();
                 }
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
@@ -716,26 +1115,101 @@
                 _isInterBPartner = $vchkBPAllocation.is(':checked');
                 loadBPartner();
             });
-            //clear selected invoices invoices 
+            //clear selected invoices records from Invoice grid 
             $clrbtn.on("click", function (e) {
-                clrInvoice(e);
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            if ($gridInvoice) {
+                                clrInvoice(e);
+                            }
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
             });
 
-            //clear selected journal invoices 
+            //clear selected journal records from GL journal grid
             $glclrbtn.on("click", function (e) {
-                clrGLLine(e);
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            if ($glLineGrid) {
+                                clrGLLine(e);
+                            }
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
             });
-            //clear selected cash journals 
+            //clear selected cash journals records from Cash Journal grid
             $cashclrbtn.on("click", function (e) {
-                clrCashLine(e);
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            if ($gridCashline) {
+                                clrCashLine(e);
+                            }
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
             });
-            //clear selected payment  
+            //clear selected payment records from Payment grid  
             $payclrbtn.on("click", function (e) {
-                clrPayment(e);
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if (checkisSelectedAllocationFromAndTo()) {
+                        if (allgridsLoaded()) {
+                            if ($gridPayment) {
+                                clrPayment(e);
+                            }
+                        }
+                        else {
+                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                        }
+                    }
+                }
+                else {
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                }
             });
+
+            //refresh all filters from right Panel
+            function clearRightPanelFilters() {
+                $cashPayType.val(0);
+                $invDocbaseType.val(0);
+                $payDocbaseType.val(0);
+                $payDocType.val(0);
+                $cmbDocType.val(0);
+                $fromDate.val('');
+                $toDate.val('');
+                $pfromDate.val('');
+                $ptoDate.val('');
+                $cfromDate.val('');
+                $ctoDate.val('');
+                $gfromDate.val('');
+                $gtoDate.val('');
+            }
+
             //allocation From combo event
             $allocationFrom.on("change", function (e) {
-
+                //whenever change the allocationTo then the rightpanel filters will be cleared!
+                clearRightPanelFilters();
                 if ($allocationFrom.val() == 0) {
                     $allocationFrom.addClass('vis-ev-col-mandatory');
                 }
@@ -771,23 +1245,22 @@
             });
 
             $allocationTo.on("change", function (e) {
-                if ($allocationTo.val() == 0) {
+                //whenever change the allocationTo then the rightpanel filters will be cleared!
+                clearRightPanelFilters();
+                //both allocationTo and From must be a value then only display the grids.
+                if ($allocationTo.val() != 0 && $allocationFrom.val() != 0) {
+                    $allocationTo.removeClass('vis-ev-col-mandatory');
+                    //if allocation from is change then we have to clear the selection of invoices
+                    clearInvoiceArrays(e);
+
+                    var allocfrm = $allocationFrom.val();
+                    var allocto = $allocationTo.val();
+                    loadGrids($allocationTo.val());
+                    displayGrids(allocfrm, allocto);
+                }
+                else {
                     $allocationTo.addClass('vis-ev-col-mandatory');
                 }
-                else
-                    $allocationTo.removeClass('vis-ev-col-mandatory');
-                //if allocation from is change then we have to clear the selection of invoices
-                clearInvoiceArrays(e);
-
-                var allocfrm = $allocationFrom.val();
-                var allocto = $allocationTo.val();
-                if (allocfrm == "0") {
-                    VIS.ADialog.info("", true, VIS.Msg.getMsg("selectAllocationFrom"), "");
-                    $allocationTo.val(0);
-                    $allocationFrom.addClass('vis-ev-col-mandatory');
-                }
-                loadGrids($allocationTo.val());
-                displayGrids(allocfrm, allocto)
             });
         };
 
@@ -1090,7 +1563,7 @@
                 }
                 //////loadGLVoucher();
             }
-            
+
             if (allocTo == "P") {
                 readOnlyPayment = false;
                 $row2.css('display', 'block'); // Payment Grid
@@ -1426,7 +1899,7 @@
 
             $divOrg.append('<div class="input-group vis-input-wrap"><div class="vis-control-wrap"><select class="vis-allocation-currencycmb" id=VIS_Org_' + $self.windowNo + '></select><label title="View organization" >' + VIS.translatedTexts.AD_Org_ID + '</label>');
             var $divBp = $('<div class="vis-allocation-leftControls">');
-                       
+
             var $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
             var $Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
             var $Leftformfieldbtnwrap = $('<div class="input-group-append">');
@@ -1599,60 +2072,60 @@
         };
 
         function createRow2() {
-            $row2.append('<div class="d-flex doc-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_Payment_ID + '</p>  <input type="checkbox" id="paymentselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="pclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-paymentSum">' + VIS.Msg.getMsg("SelectedPayments") + '0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchPay" placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="paySrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("Document_No") +'</label></div><div class="input-group-append"><a class="srchPay-anchor input-group-text" id="_SrchpBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType_' + $self.windowNo + '"></div><div class="payBaseType input-group vis-input-wrap" id="docbaseType_' + $self.windowNo + '"></div><div class="fDate-allocation input-group vis-input-wrap"></div><div class="tDate-allocation input-group vis-input-wrap"></div></div></div>').append('<div class="vis-allocation-payment-grid"></div>');//.append('<p class="vis-allocate-paymentSum">0-Sum 0.00</p>');
+            $row2.append('<div class="d-flex doc-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_Payment_ID + '</p>  <input type="checkbox" id="paymentselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="pclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-paymentSum">' + VIS.Msg.getMsg("SelectedPayments") + '0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="paySrch' + $self.windowNo + '" /><label>' + VIS.translatedTexts.DocumentNo + '</label></div><div class="vis-input-group-append"><a class="input-group-text" id="_SrchpBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType_' + $self.windowNo + '"></div><div class="payBaseType input-group vis-input-wrap" id="docbaseType_' + $self.windowNo + '"></div><div class="vis-fdate-allocation input-group vis-input-wrap"></div><div class="vis-tdate-allocation input-group vis-input-wrap"></div></div></div>').append('<div class="vis-allocation-payment-grid"></div>');//.append('<p class="vis-allocate-paymentSum">0-Sum 0.00</p>');
             $divPayment = $row2.find('.vis-allocation-payment-grid');
             $lblPaymentSum = $row2.find('.vis-allocate-paymentSum');
             $paymentSelctAll = $row2.find('#paymentselectall');
             $srchPayment = $row2.find("#paySrch" + $self.windowNo + '');
             $srchbtnPayment = $row2.find("#_SrchpBtn_" + $self.windowNo + '');
-            $row2.find("#docType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocType).append('<label>' + VIS.Msg.getMsg("DocType") + '</label>'));
-            $row2.find("#docbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocbaseType).append('<label>' + VIS.Msg.getMsg("Doc_BaseType") + '</label>'));
-            $row2.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($pfromDate).append('<label>' + VIS.Msg.getMsg("FromDate") + '</label>'));
-            $row2.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($ptoDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
+            $row2.find("#docType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocType).append('<label>' + VIS.translatedTexts.DocType + '</label>'));
+            $row2.find("#docbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocbaseType).append('<label>' + VIS.translatedTexts.DocBaseType + '</label>'));
+            $row2.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($pfromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
+            $row2.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($ptoDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
             //get control of clear button
             $payclrbtn = $row2.find('#pclrbutton_' + $self.windowNo);
         };
 
         function createRow3() {
-            $row3.append('<div class="d-flex cash-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_CashLine_ID + '</p> <input type="checkbox" id="cashselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="cclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-cashSum">' + VIS.Msg.getMsg("SelectedCashlines") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchCash" placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="cashSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("Document_No") +'</label></div><div class="input-group-append"><a class="srchCash-anchor input-group-text" id="_SrchcBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap payType" id="_paymentType' + $self.windowNo + '"></div><div class="input-group vis-input-wrap fDate-allocation"></div><div class="input-group vis-input-wrap tDate-allocation"></div></div></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
+            $row3.append('<div class="d-flex cash-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_CashLine_ID + '</p> <input type="checkbox" id="cashselectall" /><p style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </p> <span id="cclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-cashSum">' + VIS.Msg.getMsg("SelectedCashlines") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="cashSrch' + $self.windowNo + '" /><label>' + VIS.translatedTexts.DocumentNo + '</label></div><div class="vis-input-group-append"><a class="input-group-text" id="_SrchcBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap payType" id="_paymentType' + $self.windowNo + '"></div><div class="vis-input-group vis-input-wrap vis-fdate-allocation"></div><div class="input-group vis-input-wrap vis-tdate-allocation"></div></div></div>').append('<div  class="vis-allocation-cashLine-grid"></div>');//.append('<p class="vis-allocate-cashSum">0-Sum 0.00</p>');
             $divCashline = $row3.find('.vis-allocation-cashLine-grid');
             $lblCashSum = $row3.find('.vis-allocate-cashSum');
             $cashSelctAll = $row3.find('#cashselectall');
             $srchCashJournal = $row3.find("#cashSrch" + $self.windowNo + '');
             $srchbtnCashJournal = $row3.find("#_SrchcBtn_" + $self.windowNo + '');
-            $row3.find("#_paymentType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cashPayType).append('<label>' + VIS.Msg.getMsg("Payment_Type") + '</label>'));
-            $row3.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($cfromDate).append('<label>' + VIS.Msg.getMsg("FromDate") + '</label>'));
-            $row3.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($ctoDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
+            $row3.find("#_paymentType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cashPayType).append('<label>' + VIS.translatedTexts.Payment_Type + '</label>'));
+            $row3.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($cfromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
+            $row3.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($ctoDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
             //get control of clear button
             $cashclrbtn = $row3.find('#cclrbutton_' + $self.windowNo);
         };
 
         function createRow4() {
             //
-            $row4.append('<div class="d-flex in-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.C_Invoice_ID + '</span> <input type="checkbox" id="invoiceselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="clrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchInv" placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="invSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("Document_No") +'</label></div><div class="input-group-append"><a class="srchInv-anchor input-group-text" id="_SrchBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType' + $self.windowNo + '"></div><div class="invBaseType input-group vis-input-wrap" id="invbaseType_' + $self.windowNo + '"></div><div class="fDate-allocation input-group vis-input-wrap"></div><div class="tDate-allocation input-group vis-input-wrap"></div></div></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
+            $row4.append('<div class="d-flex in-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.C_Invoice_ID + '</span> <input type="checkbox" id="invoiceselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="clrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-invoiceSum">' + VIS.Msg.getMsg("SelectedInvoices") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="invSrch' + $self.windowNo + '" /><label>' + VIS.translatedTexts.DocumentNo + '</label></div><div class="vis-input-group-append"><a class="input-group-text" id="_SrchBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType' + $self.windowNo + '"></div><div class="invBaseType input-group vis-input-wrap" id="invbaseType_' + $self.windowNo + '"></div><div class="vis-fdate-allocation input-group vis-input-wrap"></div><div class="vis-tdate-allocation input-group vis-input-wrap"></div></div></div>').append('<div  class="vis-allocation-invoice-grid"></div>');//.append('<p class="vis-allocate-invoiceSum">0-Sum 0.00</p>');
             $divInvoice = $row4.find('.vis-allocation-invoice-grid');
             $lblInvoiceSum = $row4.find('.vis-allocate-invoiceSum');
             $invSelectAll = $row4.find('#invoiceselectall');
             $srchInvoice = $row4.find("#invSrch" + $self.windowNo + '');
             $srchbtnInvoice = $row4.find("#_SrchBtn_" + $self.windowNo + '');
-            $row4.find("#docType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cmbDocType).append('<label>' + VIS.Msg.getMsg("DocType") + '</label>'));
-            $row4.find("#invbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($invDocbaseType).append('<label>' + VIS.Msg.getMsg("Doc_BaseType") + '</label>'));
-            $row4.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($fromDate).append('<label>' + VIS.Msg.getMsg("FromDate") + '</label>'));
-            $row4.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($toDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
+            $row4.find("#docType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cmbDocType).append('<label>' + VIS.translatedTexts.DocType + '</label>'));
+            $row4.find("#invbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($invDocbaseType).append('<label>' + VIS.translatedTexts.DocBaseType + '</label>'));
+            $row4.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($fromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
+            $row4.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($toDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
             //get control of clear button
             $clrbtn = $row4.find('#clrbutton_' + $self.windowNo);
         };
 
         //added grid design for gl-allocation
         function createRow5() {
-            $row5.append('<div class="d-flex  gl-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.GL_Journal_ID + '</span> <input type="checkbox" id="glselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="gclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-glSum">' + VIS.Msg.getMsg("SelectedGL") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="srch-allocation input-group vis-input-wrap"><div class="vis-control-wrap"><input class="srchGL" placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="glSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("Document_No") +'</label></div><div class="input-group-append"><a class="srchGL-anchor input-group-text" id="_SrchglBtn_' + $self.windowNo + '"><span class="srch glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap fDate-allocation"></div><div class="input-group vis-input-wrap tDate-allocation"></div></div></div>').append('<div  class="vis-allocation-gl-grid"></div>');
+            $row5.append('<div class="d-flex  gl-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.GL_Journal_ID + '</span> <input type="checkbox" id="glselectall" /><span style="margin: 0 10px;"> ' + VIS.Msg.getMsg("Reset") + ' </span> <span id="gclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"></span></div><p class="vis-allocate-glSum">' + VIS.Msg.getMsg("SelectedGL") + ' 0-Sum 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="glSrch' + $self.windowNo + '" /><label>' + VIS.translatedTexts.DocumentNo + '</label></div><div class="vis-input-group-append"><a class="input-group-text" id="_SrchglBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap vis-fdate-allocation"></div><div class="input-group vis-input-wrap vis-tdate-allocation"></div></div></div>').append('<div  class="vis-allocation-gl-grid"></div>');
             $divGl = $row5.find('.vis-allocation-gl-grid');
             $lblglSum = $row5.find('.vis-allocate-glSum');
             $glSelectAll = $row5.find('#glselectall');
             $srchGL = $row5.find("#glSrch" + $self.windowNo + '');
             $srchbtnGL = $row5.find("#_SrchglBtn_" + $self.windowNo + '');
-            $row5.find(".fDate-allocation").append($('<div class="vis-control-wrap">').append($gfromDate).append('<label>' + VIS.Msg.getMsg("FromDate") + '</label>'));
-            $row5.find(".tDate-allocation").append($('<div class="vis-control-wrap">').append($gtoDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
+            $row5.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($gfromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
+            $row5.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($gtoDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
             //get control of clear button
             $glclrbtn = $row5.find('#gclrbutton_' + $self.windowNo);
         };
@@ -1761,7 +2234,15 @@
             pageNoCashJournal = 1, gridPgnoCashJounal = 1, CashRecord = 0;
             pageNoPayment = 1, gridPgnoPayment = 1, paymentRecord = 0;
             pageNoGL = 1, gridPgnoGL = 1, glRecord = 0;
-            isPaymentGridLoaded = false, isCashGridLoaded = false, isInvoiceGridLoaded = false, isGLGridLoaded = false;
+            //when we save data at facing with busy indicator is visible so, to avoid that set all the grids loaded as true
+            if (setallgridsLoaded == true) {
+                isPaymentGridLoaded == true, isCashGridLoaded == true, isInvoiceGridLoaded == true, isGLGridLoaded == true;
+                setallgridsLoaded = false;
+            }
+            else {
+                isPaymentGridLoaded = false, isCashGridLoaded = false, isInvoiceGridLoaded = false, isGLGridLoaded = false;
+            }
+
             C_ConversionType_ID = 0;
             var getDate = null;
             date = $date.val();
@@ -1793,12 +2274,19 @@
             loadUnallocatedCashLines();
 
             loadInvoice();//Neha
+
             // refresh label on load
             refreshLabel();
             $allocationFrom.val("P");
+            $allocationTo.val("P");
             $allocationFrom.trigger("change");
             $allocationTo.trigger("change");
-            displayGrids($allocationFrom.val(), $allocationTo.val());
+            if ($allocationFrom.val() == 0 && $allocationFrom.val() == 0) {
+                blankAllGrids();
+            }
+            else {
+                displayGrids($allocationFrom.val(), $allocationTo.val());
+            }
             //$bsyDiv[0].style.visibility = "hidden";
         };
 
@@ -1818,7 +2306,7 @@
             //---If ToDate is less than From Date--Display error message-----
             if (toDate != "") {
                 if (fromDate > toDate) {
-                    $toDate.val('');
+                    $ptoDate.val('');
                     return VIS.ADialog.info("Message", true, VIS.Msg.getMsg("VIS_FromDateGreater"), "");
                 }
             }
@@ -1899,7 +2387,7 @@
             //---If ToDate is less than From Date--Display error message-----
             if (toDate != "") {
                 if (fromDate > toDate) {
-                    $toDate.val('');
+                    $ctoDate.val('');
                     return VIS.ADialog.info("Message", true, VIS.Msg.getMsg("VIS_FromDateGreater"), "");
                 }
             }
@@ -4856,7 +5344,7 @@
                 //---If ToDate is less than From Date--Display error message-----
                 if (toDate != "") {
                     if (fromDate > toDate) {
-                        $toDate.val('');
+                        $gtoDate.val('');
                         return VIS.ADialog.info("Message", true, VIS.Msg.getMsg("VIS_FromDateGreater"), "");
                     }
                 }
@@ -5459,6 +5947,7 @@
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
                                 selectedInvoices = [];
                                 VIS.ADialog.info("", true, result, "");
+                                setallgridsLoaded = true;
                                 loadBPartner();
                                 $bsyDiv[0].style.visibility = "hidden";
                             },
@@ -5506,7 +5995,7 @@
                         var paymentData = [];
                         var cashData = [];
                         var invoiceData = [];
-                        
+
                         var chk = $vchkMultiCurrency.is(':checked');
                         if (chk) {
                             var conversionDate = Globalize.format(new Date($conversionDate.val()), "yyyy-MM-dd");
@@ -5600,6 +6089,7 @@
                                 // Clear Selected invoices array when we de-select the select all checkbox. work done for to hold all the selected invoices
                                 selectedInvoices = [];
                                 selectedPayments = [];
+                                setallgridsLoaded = true;
                                 loadBPartner();
                                 VIS.ADialog.info("", true, result, "");
                                 $bsyDiv[0].style.visibility = "hidden";
@@ -5771,6 +6261,7 @@
                     selectedPayments = [];
                     selectedCashlines = [];
                     SelectedGL = [];
+                    setallgridsLoaded = true;
                     loadBPartner();
                     //loadGLDataGrid(e);
                     if ($gridCashline)
@@ -5835,21 +6326,8 @@
             loadInvoice();
 
             loadGLVoucher();
-            if ($allocationTo.val() == 0) {
-
-                if ($allocationFrom.val() == 0) {
-                    VIS.ADialog.info("", true, VIS.Msg.getMsg("selectAllocationFrom"), "");
-                    $allocationTo.val(0);
-                    $allocationFrom.addClass('vis-ev-col-mandatory');
-                    $allocationTo.addClass('vis-ev-col-mandatory');
-                    return;
-                }
-                VIS.ADialog.info("", true, VIS.Msg.getMsg("selectAllocationTo"), "");
-                $allocationTo.addClass('vis-ev-col-mandatory');
-            }
-            else if ($allocationTo.val() != 0 && $allocationFrom.val() != 0) {
-                displayGrids($allocationFrom.val(), $allocationTo.val());
-            }
+            //show the selected grids
+            displayGrids($allocationFrom.val(), $allocationTo.val());
         };
 
         /**Load all grids as blank */
