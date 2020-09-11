@@ -34,12 +34,6 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override string DoIt()
         {
-            //string sysDate = System.DateTime.Now.Date;
-             string sysDate = "trunc(sysdate)";
-            if (DB.IsPostgreSQL())
-            {
-                sysDate = "current_timestamp";
-            }
             // Getting records from cross rate setting
             query.Append("SELECT * FROM C_CurrCrossRate WHERE IsActive='Y'");
             dsobj = DB.ExecuteDataset(query.ToString());
@@ -52,7 +46,7 @@ namespace VAdvantage.Process
                 {
                     Currobj = new MCurrCrossRate(GetCtx(), dr, Get_Trx());
                     // Getting records from currency rate based on conditions
-                    query.Append("SELECT AD_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE " +  sysDate +
+                    query.Append("SELECT AD_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE SYSDATE" +
                         " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND AD_Org_ID=" + Currobj.GetAD_Org_ID() + " AND C_ConversionType_ID=" + Currobj.GetC_ConversionType_ID() + 
                         " AND C_Currency_To_ID=" + Currobj.GetC_Currency_ID() + " AND C_Currency_ID IN ('" + Currobj.GetC_Currency_From_ID() + "','" + Currobj.GetC_Currency_To_ID() + "')");
                     dsobj = DB.ExecuteDataset(query.ToString());
