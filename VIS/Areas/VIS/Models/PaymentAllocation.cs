@@ -1428,9 +1428,9 @@ namespace VIS.Models
         /// Compareing with GrandTotal or GrandTotalAfterWithHolding Amount 
         /// and Sum of DueAmt from InvoiceSchedule
         /// </summary>
-        /// <param name="invoice"></param>
-        /// <param name="trx"></param>
-        /// <returns></returns>
+        /// <param name="invoice">MClass of Invoice which is holding Invocie Record Details.</param>
+        /// <param name="trx">Currenct Transection</param>
+        /// <returns>DueAmount</returns>
         public Decimal GetDifference(MInvoice invoice,Trx trx) 
         {
             string sql = "SELECT (CASE "
@@ -1444,10 +1444,10 @@ namespace VIS.Models
         /// <summary>
         /// set IsprocessingFalse for grid's
         /// </summary>
-        /// <param name="rowsPayment"></param>
-        /// <param name="rowsCash"></param>
-        /// <param name="rowsInvoice"></param>
-        /// <param name="trx"></param>
+        /// <param name="rowsPayment">list of Payment Records</param>
+        /// <param name="rowsCash">list of Cash Journal Records</param>
+        /// <param name="rowsInvoice">list of Invoice Records</param>
+        /// <param name="trx">current transaction</param>
         public void Isprocess(List<Dictionary<string, string>> rowsPayment, List<Dictionary<string, string>> rowsCash, List<Dictionary<string, string>> rowsInvoice, List<Dictionary<string, string>> rowsGL, Trx trx)
         {
             SetIsprocessingFalse(rowsPayment, "cpaymentid", false, false, true, trx); //Payment
@@ -1748,6 +1748,7 @@ namespace VIS.Models
                                         var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(amount, OverUnderAmt), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), C_Currency_ID, invoice.GetC_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
+                                            //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
                                             diffAmt = GetDifference(invoice, trx);
                                             if (diffAmt != Env.ZERO)
                                             {
@@ -1785,12 +1786,13 @@ namespace VIS.Models
                                         var conertedAmount = MConversionRate.Convert(ctx, amount, C_Currency_ID, invoice.GetC_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
+                                            //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
                                             diffAmt = GetDifference(invoice, trx);
-                                            mpay.SetDueAmt(Math.Abs(diffAmt));
+                                            mpay2.SetDueAmt(Math.Abs(diffAmt));
                                         }
                                         else
                                         {
-                                            mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                            mpay2.SetDueAmt(Math.Abs(conertedAmount));
                                         }
                                     }
                                     else
@@ -2342,12 +2344,12 @@ namespace VIS.Models
                                             {
                                                 //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
                                                 diffAmt = GetDifference(invoice, trx);
-                                                mpay.SetDueAmt(Math.Abs(diffAmt));
+                                                mpay2.SetDueAmt(Math.Abs(diffAmt));
                                                 
                                             }
                                             else
                                             {
-                                                mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                                mpay2.SetDueAmt(Math.Abs(conertedAmount));
                                             }
                                         }
                                         else
@@ -2473,11 +2475,11 @@ namespace VIS.Models
                                             {
                                                 //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
                                                 diffAmt = GetDifference(Neg_invoice, trx);
-                                                mpay.SetDueAmt(Math.Abs(diffAmt));
+                                                mpay2.SetDueAmt(Math.Abs(diffAmt));
                                             }
                                             else
                                             {
-                                                mpay.SetDueAmt(Math.Abs(conertedAmount));
+                                                mpay2.SetDueAmt(Math.Abs(conertedAmount));
                                             }
                                         }
                                         else
