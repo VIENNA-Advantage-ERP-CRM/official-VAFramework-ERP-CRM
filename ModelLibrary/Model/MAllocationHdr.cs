@@ -1069,12 +1069,13 @@ namespace VAdvantage.Model
             MCash cash = null; MJournal journal = null;
             int currencyTo_ID = 0, C_ConversionType_ID = 0, AD_Client_ID = 0, AD_Org_ID = 0;
             DateTime? DateAcct = null;
+            DateTime? conversionDate = Get_ColumnIndex("ConversionDate") >= 0 && GetConversionDate() != null ? GetConversionDate() : GetDateAcct();
             if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
             {
                 // when we allocate invoice with invoice 
                 if (payment == null && cashline == null && journalline == null) // Invoice to Invoice
                 {
-                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), conversionDate, GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
                 }
                 else
                 {
@@ -1084,7 +1085,7 @@ namespace VAdvantage.Model
 
                         if (journalline != null && invoice != null) // journal to invoice
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
                             AD_Client_ID = invoice.GetAD_Client_ID();
@@ -1092,7 +1093,7 @@ namespace VAdvantage.Model
                         }
                         else if (journalline != null && payment != null) //Journal to payment
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = payment.GetC_Currency_ID();
                             AD_Client_ID = payment.GetAD_Client_ID();
@@ -1101,7 +1102,7 @@ namespace VAdvantage.Model
                         else if (journalline != null && cashline != null) // journal to cash
                         {
                             //cash = new MCash(cashline.GetCtx(), cashline.GetC_Cash_ID(), cashline.Get_Trx());
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = cash.GetC_Currency_ID();
                             AD_Client_ID = cash.GetAD_Client_ID();
@@ -1115,7 +1116,7 @@ namespace VAdvantage.Model
                     {
                         if (cashline != null && invoice != null) // Cash to invoice
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
                             AD_Client_ID = invoice.GetAD_Client_ID();
@@ -1129,7 +1130,7 @@ namespace VAdvantage.Model
                     {
                         if (payment != null && invoice != null) // payment to invoice
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
                             AD_Client_ID = invoice.GetAD_Client_ID();
@@ -1137,7 +1138,7 @@ namespace VAdvantage.Model
                         }
                         else if (payment != null && payment != null) //payment to payment
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = payment.GetC_Currency_ID();
                             AD_Client_ID = payment.GetAD_Client_ID();
