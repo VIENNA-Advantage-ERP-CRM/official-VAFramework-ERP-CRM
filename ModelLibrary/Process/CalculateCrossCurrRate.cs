@@ -46,7 +46,7 @@ namespace VAdvantage.Process
                 {
                     Currobj = new MCurrCrossRate(GetCtx(), dr, Get_Trx());
                     // Getting records from currency rate based on conditions
-                    query.Append("SELECT AD_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE SYSDATE" +
+                    query.Append("SELECT AD_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + 
                         " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND AD_Org_ID=" + Currobj.GetAD_Org_ID() + " AND C_ConversionType_ID=" + Currobj.GetC_ConversionType_ID() + 
                         " AND C_Currency_To_ID=" + Currobj.GetC_Currency_ID() + " AND C_Currency_ID IN ('" + Currobj.GetC_Currency_From_ID() + "','" + Currobj.GetC_Currency_To_ID() + "')");
                     dsobj = DB.ExecuteDataset(query.ToString());
