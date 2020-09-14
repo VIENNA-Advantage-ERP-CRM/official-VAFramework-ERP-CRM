@@ -390,22 +390,27 @@
             $vchkMultiCurrency.on("change", function (e) {
                 vetoableChange("Date", $vchkMultiCurrency.is(':checked'));
                 //clear the grids which is true
-                if ($allocationFrom.val() == 0 && $allocationTo.val() == 0) {
-                    blankAllGrids();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
+                        if (allgridsLoaded()) {
+                            if ($gridInvoice) {
+                                clrInvoice(e);
+                            }
+                            if ($glLineGrid) {
+                                clrGLLine(e);
+                            }
+                            if ($gridPayment) {
+                                clrPayment(e);
+                            }
+                            if ($gridCashline) {
+                                clrCashLine(e);
+                            }
+                        }
+                    }
                 }
                 else {
-                    if ($gridInvoice) {
-                        clrInvoice(e);
-                    }
-                    if ($glLineGrid) {
-                        clrGLLine(e);
-                    }
-                    if ($gridPayment) {
-                        clrPayment(e);
-                    }
-                    if ($gridCashline) {
-                        clrCashLine(e);
-                    }
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    blankAllGrids();
                 }
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
@@ -2277,6 +2282,7 @@
 
             // refresh label on load
             refreshLabel();
+            //after allocation Show the Payment grid for avoid the validation added set allocationTo value as P.
             $allocationFrom.val("P");
             $allocationTo.val("P");
             $allocationFrom.trigger("change");

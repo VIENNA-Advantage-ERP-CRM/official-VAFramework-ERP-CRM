@@ -258,6 +258,25 @@ namespace VAdvantage.Model
                 }
             }
 
+            //	Update Cash Journal
+            if (C_CashLine_ID != 0)
+            {
+                cashLine = new MCashLine(GetCtx(), C_CashLine_ID, Get_TrxName());
+                if (GetC_BPartner_ID() != cashLine.GetC_BPartner_ID())
+                {
+                    log.Warning("C_BPartner_ID different - Invoice=" + GetC_BPartner_ID() + " - CashJournal=" + cashLine.GetC_BPartner_ID());
+                }
+                if (reverse)
+                {
+                    cashLine.SetIsAllocated(false);
+                    cashLine.Save();
+                }
+                else
+                {
+                    cashLine.Save();
+                }
+            }
+
             //	Payment - Invoice
             if (C_Payment_ID != 0 && invoice != null)
             {
@@ -299,11 +318,11 @@ namespace VAdvantage.Model
                     log.Fine("C_CashLine_ID=" + C_CashLine_ID
                         + " Unlinked from C_Invoice_ID=" + C_Invoice_ID);
                     // Set isallocated false on cashline while allocation gets deallocated assigned by Mukesh sir on 27/12/2017
-                    MCashLine cashline = new MCashLine(GetCtx(), GetC_CashLine_ID(), Get_TrxName());
-                    cashline.SetIsAllocated(false);
-                    cashline.Save();
+                    //MCashLine cashline = new MCashLine(GetCtx(), GetC_CashLine_ID(), Get_TrxName());
+                    //cashline.SetIsAllocated(false);
+                    //cashline.Save();
                 }
-                else
+                else if(invoice.IsPaid())
                 {
                     invoice.SetC_CashLine_ID(C_CashLine_ID);
                     log.Fine("C_CashLine_ID=" + C_CashLine_ID
