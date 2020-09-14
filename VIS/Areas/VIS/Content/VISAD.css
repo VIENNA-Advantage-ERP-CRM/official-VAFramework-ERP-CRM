@@ -4965,9 +4965,10 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     align-items: center;
     background: rgba(var(--v-c-on-secondary), 1);
 }
-
-
-
+.vis-orgaccess-description {
+    float: left;
+    margin-left: 30px;
+}
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {
     position: absolute;

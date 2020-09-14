@@ -49,7 +49,9 @@ html[dir="rtl"] .vis-rad-recordData,
 html[dir="rtl"] .vis-paymentselect-field,
 html[dir="rtl"] .vis-paymentPrint-field,
 html[dir="rtl"] .vis-sms-leftDiv,
-html[dir="rtl"] .vis-Email-leftFooter {
+html[dir="rtl"] .vis-Email-leftFooter,
+html[dir="rtl"] .vis-orgaccess-description,
+html[dir="rtl"] .vis-group-assinRole-check .vis-group-user-profile input[type="Checkbox"] {
     float: right;
 }
 
@@ -94,7 +96,8 @@ html[dir="rtl"] .vis-advancedSearchInput,
 html[dir="rtl"] .vis-advancedSearchContentArea,
 html[dir="rtl"] .vis-tree-search,
 html[dir="rtl"] .vis-pref-ctrl-lblwrp,
-html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:first-child {
+html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:first-child,
+html[dir="rtl"] .vis-group-content-headDown {
     padding-right: 0;
     padding-left: 10px;
 }
@@ -105,7 +108,8 @@ html[dir="rtl"] .vis-info-datasec,
 html[dir="rtl"] .VIS-AMTD-formData select,
 html[dir="rtl"] .VIS-AMTD-formData input,
 html[dir="rtl"] .vis-advancedSearch-RecentRecords,
-html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:not(:first-child){
+html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:not(:first-child),
+html[dir="rtl"] .vis-group-role-pad .vis-group-user-profile label{
     padding-left: 0;
     padding-right: 10px;
 }
@@ -158,10 +162,11 @@ html[dir="rtl"] .vis-Email-leftFooter > label {
 html[dir="rtl"] .vis-info-ls-btnswrap button,
 html[dir="rtl"] .VIS_Pref_err_btnRight span,
 html[dir="rtl"] .vis-viewMoreComments,
-html[dir="rtl"] .vis-group-user-ico,
+/*html[dir="rtl"] .vis-group-user-ico,*/
 html[dir="rtl"] .VIS-TM-data-head input[type="checkbox"],
 html[dir="rtl"] .vis-advancedSearchHorigontal,
-html[dir="rtl"] .vis-btnOk {
+html[dir="rtl"] .vis-btnOk,
+html[dir="rtl"] .vis-group-user-wrap input[type="radio"] {
     margin-right: 0;
     margin-left: 10px;
 }
@@ -176,11 +181,13 @@ html[dir="rtl"] .vis-ctrfrm-btnwrp input,
 html[dir="rtl"] .btns > input[type=button],
 html[dir="rtl"] .VIS-Tm-unlinkforbottmo,
 html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
-html[dir="rtl"] span.vis-ad-w-p-tb-rc-action {
+html[dir="rtl"] span.vis-ad-w-p-tb-rc-action,
+html[dir="rtl"] .vis-groupbtn {
     margin-left: 0;
     margin-right: 10px;
 }
-html[dir="rtl"] #userFavs h2 {
+html[dir="rtl"] #userFavs h2,
+html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane button {
     margin-right: 10px;
 }
 
@@ -287,7 +294,9 @@ html[dir="rtl"] .vis-control-wrap > button {
 html[dir="rtl"] label.vis-ec-col-lblchkbox{
     right: 0;
 }
-html[dir="rtl"] .vis-ev-ctrlinfowrap {
+html[dir="rtl"] .vis-ev-ctrlinfowrap,
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap input + label,
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap input + label {
     right: 10px;
     left: auto;
 }
@@ -328,14 +337,18 @@ html[dir="rtl"] .location input.form-control:not(:last-child) {
     border-bottom-left-radius: 0 !important;
 }
 
-html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap * {
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap *,
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap .input-group-append:last-child > .input-group-text,
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap .input-group-append:last-child > .input-group-text {
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     border-top-left-radius: .25rem !important;
     border-bottom-left-radius: .25rem !important;
 }
 
-html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group> .input-group-append:not(:last-child) > .input-group-text {
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group> .input-group-append:not(:last-child) > .input-group-text,
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap .input-group-append:last-child > .input-group-text:not(:last-child),
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap .input-group-append:last-child > .input-group-text:not(:last-child){
     border-radius: 0 !important;
 }
 
@@ -365,7 +378,9 @@ html[dir="rtl"] .input-group:focus-within .input-group-append:not(:last-child) .
 }
 
 html[dir="rtl"] .input-group-append,
-html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child,
+html[dir="rtl"] .vis-formouterwrpdiv .input-group-append .input-group-text + .input-group-text,
+html[dir="rtl"] .vis-leftsidebarouterwrap .input-group-append .input-group-text + .input-group-text {
     margin-right: -1px;
     margin-left: 0;
 }
@@ -420,7 +435,9 @@ html[dir="rtl"] .VIS-AMTD-formDynmicInput .VIS-AMTD-formData {
     padding-left: 0;
 }
 html[dir="rtl"] .VIS-AMTD-formBtns a,
-html[dir="rtl"] .vis-advancedSearchHorigontal:last-child {
+html[dir="rtl"] .vis-advancedSearchHorigontal:last-child,
+html[dir="rtl"] .VIS-TM-path,
+html[dir="rtl"] .vis-orgaccess-description {
     /*float: right;*/
     margin-left: 0px;
 }
@@ -461,7 +478,6 @@ html[dir="rtl"] input[type="checkbox"].vis-tm-chkbox {
     margin: 0 0 0 10px !important;
 }
 html[dir="rtl"] .VIS-TM-path {
-    margin-left: 0;
     margin-right: -15px;
 }
 html[dir="rtl"] .VIS-TM-tree-search .VIS-Tm-btnicon,
@@ -527,6 +543,48 @@ html[dir="rtl"] .vis-Email-rytWrap {
     padding-left: 0px;
     margin-left: 0px;
     border-left: 0px;
+}
+
+html[dir="rtl"] .mr-3 {
+    margin-right: 0 !important;
+    margin-left: 1rem !important;
+}
+
+html[dir="rtl"] .k-treeview .k-minus,
+html[dir="rtl"] .k-treeview .k-minus-disabled,
+html[dir="rtl"] .k-treeview .k-plus,
+html[dir="rtl"] .k-treeview .k-plus-disabled {
+    margin-left: 0;
+    margin-right: -16px;
+    transform: rotate(90deg);
+}
+
+html[dir="rtl"] .k-treeview .k-item {
+    padding-left: 0;
+    padding-right: 16px;
+}
+
+html[dir="rtl"] .k-treeview .k-in p {
+    padding-left: 0;
+    padding-right: 6px;
+}
+html[dir="rtl"] .vis-info-botdatafield:first-child {
+    padding-left: 15px;
+}
+html[dir="rtl"] .vis-paymentPrint-field input[name='vis-name'],
+html[dir="rtl"] .vis-paymentPrint-field select[name='vis-name'] {
+    margin-right: 0;
+    margin-left: 15px;
+}
+html[dir="rtl"] .vis-group-user-text {
+    padding-left: 10px;
+    padding-right: 15px;
+}
+html[dir="rtl"] .vis-group-colwrap:nth-child(3) .vis-group-user-right li:first-child {
+    margin-left: 10px;
+}
+html[dir="rtl"] .vis-orgaccess-description {
+    margin-right: 30px;
 }
 /*rtl css End here*/
 
