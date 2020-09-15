@@ -1063,6 +1063,31 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            //Check Workforce Management module is installed
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA058_'  AND IsActive = 'Y'")) > 0)
+            {
+                // Nationality Unique Number should be unique..Showing error if saving duplicate record
+                if (!newRecord)
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPARTNER_ID) FROM C_BPARTNER WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND VA058_NatUnqNum='"+Get_Value("VA058_NatUnqNum") +"' AND C_BPartner_ID!=" + GetC_BPartner_ID()));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_NationalNoExists", "");
+                        return false;
+                    }
+                }
+                else
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPARTNER_ID) FROM C_BPARTNER WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND VA058_NatUnqNum='" + Get_Value("VA058_NatUnqNum")+"'"));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_NationalNoExists", "");
+                        return false;
+                    }
+                }
+
+            }
+
             if (newRecord || Is_ValueChanged("C_BP_Group_ID"))
             {
                 MBPGroup grp = GetBPGroup();
