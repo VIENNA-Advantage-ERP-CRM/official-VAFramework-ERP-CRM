@@ -17,6 +17,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 using VAdvantage.Common;
 using VAdvantage.Logging;
+using VAdvantage.Process;
 
 namespace VAdvantage.Model
 {
@@ -269,11 +270,12 @@ namespace VAdvantage.Model
                 if (reverse)
                 {
                     cashLine.SetIsAllocated(false);
-                    cashLine.Save();
-                }
-                else
-                {
-                    cashLine.Save();
+                    if (!cashLine.Save(Get_Trx())) 
+                    {
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        log.Log(Level.SEVERE, "Error found for updating cashLine  for  this Line ID = " + cashLine.GetC_CashLine_ID() +
+                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                    }
                 }
             }
 
@@ -322,7 +324,7 @@ namespace VAdvantage.Model
                     //cashline.SetIsAllocated(false);
                     //cashline.Save();
                 }
-                else if(invoice.IsPaid())
+                else
                 {
                     invoice.SetC_CashLine_ID(C_CashLine_ID);
                     log.Fine("C_CashLine_ID=" + C_CashLine_ID

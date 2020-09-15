@@ -412,6 +412,9 @@
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
                     blankAllGrids();
                 }
+                if (!$vchkMultiCurrency.is(':checked')) {
+                    $conversionDate.val('');
+                }
                 //Commetd code because now we want to search data on search button not on every control's event
                 //////loadBPartner();
             });
@@ -1086,7 +1089,7 @@
                 conversionDate = $conversionDate.val();
                 //clear and refresh the grids which is true for selected BusinessPartner and Currency based on ConversionDate
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
-                    if (checkisSelectedAllocationFromAndTo()) {
+                    if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
                         if (allgridsLoaded()) {
                             if ($gridInvoice) {
                                 clrInvoice(e);
@@ -1100,10 +1103,6 @@
                             if ($gridCashline) {
                                 clrCashLine(e);
                             }
-                        }
-                        else {
-                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
-                            blankAllGrids();
                         }
                     }
                 }
@@ -1209,6 +1208,11 @@
                 $ctoDate.val('');
                 $gfromDate.val('');
                 $gtoDate.val('');
+                selectedCashlines = [];
+                selectedInvoices = [];
+                selectedPayments = [];
+                SelectedGL = [];
+                refreshLabel();
             }
 
             //allocation From combo event
@@ -1250,8 +1254,7 @@
             });
 
             $allocationTo.on("change", function (e) {
-                //whenever change the allocationTo then the rightpanel filters will be cleared!
-                clearRightPanelFilters();
+                
                 //both allocationTo and From must be a value then only display the grids.
                 if ($allocationTo.val() != 0 && $allocationFrom.val() != 0) {
                     $allocationTo.removeClass('vis-ev-col-mandatory');
@@ -1264,8 +1267,11 @@
                     displayGrids(allocfrm, allocto);
                 }
                 else {
+                    blankAllGrids();
                     $allocationTo.addClass('vis-ev-col-mandatory');
                 }
+                //whenever change the allocationTo then the rightpanel filters will be cleared!
+                clearRightPanelFilters();
             });
         };
 
@@ -2284,8 +2290,8 @@
             refreshLabel();
             //after allocation Show the Payment grid for avoid the validation added set allocationTo value as P.
             $allocationFrom.val("P");
-            $allocationTo.val("P");
             $allocationFrom.trigger("change");
+            $allocationTo.val("P");
             $allocationTo.trigger("change");
             if ($allocationFrom.val() == 0 && $allocationFrom.val() == 0) {
                 blankAllGrids();
