@@ -85,6 +85,10 @@
     align-items: center;*/
 }
 
+.vis-control-wrap-int-amount {
+    text-align:right;
+}
+
 .vis-input-wrap input {
     display: block;
     background-clip: padding-box;

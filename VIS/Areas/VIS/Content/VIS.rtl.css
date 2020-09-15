@@ -528,6 +528,11 @@ html[dir="rtl"] .vis-Email-rytWrap {
     margin-left: 0px;
     border-left: 0px;
 }
+
+html[dir="rtl"] .vis-control-wrap-int-amount {
+text-align:left;
+}
+
 /*rtl css End here*/
 
 

@@ -84,14 +84,41 @@ namespace VAdvantage.WF
             }
             //
             Object valueObj = po.Get_ValueOfColumn(GetAD_Column_ID());
+           
             if (valueObj == null)
                 valueObj = "";
             String value1 = GetValue();
             if (value1 == null)
                 value1 = "";
+
+            
+
             String value2 = GetValue2();
             if (value2 == null)
                 value2 = "";
+
+            // If column is of bool type and user insert y or n in condition, then convert them to true or false to match with value got from PO.
+            if (MColumn.Get(GetCtx(), GetAD_Column_ID()).GetAD_Reference_ID().Equals(DisplayType.YesNo))
+            {
+                if (value1.ToLower().Equals("y"))
+                {
+                    value1 = "true";
+                }
+                else if (value1.ToLower().Equals("n"))
+                {
+                    value1 = "false";
+                }
+
+                if (value2.ToLower().Equals("y"))
+                {
+                    value2 = "true";
+                }
+                else if (value2.ToLower().Equals("n"))
+                {
+                    value2 = "false";
+                }
+
+            }
 
             String resultStr = "PO:{" + valueObj + "} " + GetOperation() + " Condition:{" + value1 + "}";
             if (GetOperation().Equals(OPERATION_Sql))

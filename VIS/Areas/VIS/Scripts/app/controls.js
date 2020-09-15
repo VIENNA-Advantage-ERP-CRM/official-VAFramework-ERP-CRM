@@ -3431,6 +3431,7 @@
 
         //Init Control
         var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
+       
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3450,7 +3451,7 @@
 
         // Assign Value
         this.dotFormatter = VIS.Env.isDecimalPoint();
-
+       
         // For testing purpose
         //this.dotFormatter = true;
 
@@ -3653,6 +3654,7 @@
             var _value = this.format.GetFormatAmount(newValue, "init", this.dotFormatter);
 
             this.ctrl.val(_value);
+            this.ctrl.addClass("vis-control-wrap-int-amount");
         }
     };
 
@@ -3703,6 +3705,7 @@
         var length = fieldLength;
         //Init Control
         var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length });
+       
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3716,7 +3719,7 @@
             this.setReadOnly(false);
         }
         var self = this; //self pointer
-
+        //$ctrl.addClass("vis-control-wrap-int-amount");
 
         //On key down event
         $ctrl.on("keydown", function (event) {
@@ -3811,6 +3814,7 @@
             //newValue = Number(this.format.GetFormatedValue(newValue));
             // newValue = Globalize.format(newValue, "n0");
             this.ctrl.val(newValue);
+            this.ctrl.addClass("vis-control-wrap-int-amount");
             //this.setBackground("white");
         }
     };

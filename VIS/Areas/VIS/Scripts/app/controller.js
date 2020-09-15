@@ -3837,6 +3837,7 @@
         // VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, function (buffer) {
         if (this.treeNode_ID > 0) {
             //For On demand tree  add these parameter
+            // Fetch window records based on selected node of tree.
             dataIn.treeID = this.treeID, dataIn.treeNode_ID = this.treeNode_ID;
             VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
 

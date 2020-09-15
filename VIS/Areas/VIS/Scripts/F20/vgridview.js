@@ -376,11 +376,13 @@
                         return;
 
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
-                    return parseFloat(val).toLocaleString(undefined, {
+                    val = parseFloat(val).toLocaleString(undefined, {
                         'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
                         'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
                     });
+                    return '<div class="vis-control-wrap-int-amount">' + val + '</div>';
                 };
+                //oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
                 oColumn.sortable = true;
@@ -392,11 +394,15 @@
                         return;
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
                     // return  Globalize.format(Number(oColumns[colIndex].customFormat.GetFormatedValue(val)));
-                    return parseFloat(val).toLocaleString(undefined, {
+                    val = parseFloat(val).toLocaleString(undefined, {
                         'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
                         'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
                     });
+
+                    return '<div class="vis-control-wrap-int-amount">' + val + '</div>';
                 };
+                // oColumn.style = 'text-align: right';
+                // oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
             //	YesNo
             else if (displayType == VIS.DisplayType.YesNo) {
