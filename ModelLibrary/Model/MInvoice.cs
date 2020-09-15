@@ -1343,8 +1343,8 @@ namespace VAdvantage.Model
                 }
             }
 
-            //APInvoice Case: invoice Reference can't be same for same year            
-            if (!IsSOTrx() && !IsReturnTrx() && checkFinancialYear() > 0)
+            //APInvoice Case: invoice Reference can't be same for same financial year and Business Partner          
+            if (Is_ValueChanged("InvoiceReference") && !IsSOTrx() && !IsReturnTrx() && checkFinancialYear() > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(),"InvoiceReferenceExist"));
                 return false;
@@ -1660,7 +1660,7 @@ namespace VAdvantage.Model
         /// <returns>count of Invoice and 0</returns>
         public int checkFinancialYear()
         {
-            if (!String.IsNullOrEmpty(GetDescription()) && !GetDescription().Contains("{->"))
+            if (!(!String.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("{->")))
             {
                 DateTime? startDate = null;
                 DateTime? endDate = null, dt;
