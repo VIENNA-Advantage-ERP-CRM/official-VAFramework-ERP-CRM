@@ -380,7 +380,7 @@
                         'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
                         'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
                     });
-                    return '<div class="vis-control-wrap-int-amount">' + val + '</div>';
+                    return '<div data-type="int">' + val + '</div>';
                 };
                 //oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
@@ -399,7 +399,7 @@
                         'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
                     });
 
-                    return '<div class="vis-control-wrap-int-amount">' + val + '</div>';
+                    return '<div data-type="int">' + val + '</div>';
                 };
                 // oColumn.style = 'text-align: right';
                 // oColumn.caption = 'class="vis-control-wrap-int-amount"';
