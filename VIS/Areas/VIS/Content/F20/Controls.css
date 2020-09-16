@@ -85,8 +85,8 @@
     align-items: center;*/
 }
 
-.vis-control-wrap-int-amount {
-    text-align:right;
+.vis-control-wrap input[data-type='int'] {
+    text-align: right;
 }
 
 .vis-input-wrap input {

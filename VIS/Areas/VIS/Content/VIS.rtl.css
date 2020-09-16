@@ -529,8 +529,8 @@ html[dir="rtl"] .vis-Email-rytWrap {
     border-left: 0px;
 }
 
-html[dir="rtl"] .vis-control-wrap-int-amount {
-text-align:left;
+html[dir="rtl"] .vis-control-wrap input[data-type='int'] {
+    text-align: left;
 }
 
 /*rtl css End here*/

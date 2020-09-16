@@ -728,7 +728,7 @@
             this.ctrl.removeClass();
             if (e.length > 0)
                 this.ctrl.addClass(e);
-            this.activeClass = e;
+            this.activeClass = e;                    
             //this.ctrl.css('background-color', color);
             //console.log(this.ctrl.css('background-color'));
         }
@@ -3430,7 +3430,7 @@
         var length = fieldLength;
 
         //Init Control
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length,'data-type':'int' });
        
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
@@ -3654,7 +3654,6 @@
             var _value = this.format.GetFormatAmount(newValue, "init", this.dotFormatter);
 
             this.ctrl.val(_value);
-            this.ctrl.addClass("vis-control-wrap-int-amount");
         }
     };
 
@@ -3704,7 +3703,7 @@
         var displayType = VIS.DisplayType.Integer;
         var length = fieldLength;
         //Init Control
-        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length, 'data-type': 'int' });
        
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
@@ -3814,7 +3813,6 @@
             //newValue = Number(this.format.GetFormatedValue(newValue));
             // newValue = Globalize.format(newValue, "n0");
             this.ctrl.val(newValue);
-            this.ctrl.addClass("vis-control-wrap-int-amount");
             //this.setBackground("white");
         }
     };
