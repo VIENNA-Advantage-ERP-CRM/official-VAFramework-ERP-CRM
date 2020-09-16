@@ -4093,14 +4093,14 @@ namespace VIS.Models
             StringBuilder sql = new StringBuilder();
             MCurrency objCurrency = MCurrency.Get(ctx, _C_Currency_ID);
             sql.Append(@" SELECT EV.AccountType, JL.C_BPARTNER_ID,  CB.ISCUSTOMER,  CB.ISVENDOR, J.DATEDOC, J.DATEACCT, J.DOCUMENTNO,  NVL(JL.AMTSOURCEDR, 0),  NVL(JL.AMTSOURCECR,0),c.ISO_Code AS ISO_CODE,
-                J.C_CONVERSIONTYPE_ID, CT.name as CONVERSIONNAME, o.AD_Org_ID, o.Name,
-                NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ," + _C_Currency_ID + @",J.DATEACCT ,J.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), " + objCurrency.GetStdPrecision() + @"),0) as AMTACCTDR, 
-                NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.C_Currency_ID ," + _C_Currency_ID + @",j.DATEACCT ,j.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), " + objCurrency.GetStdPrecision() + @"),0) AS AMTACCTCR, 
+                JL.C_CONVERSIONTYPE_ID, CT.name as CONVERSIONNAME, o.AD_Org_ID, o.Name,
+                NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ," + _C_Currency_ID + @",J.DATEACCT ,Jl.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), " + objCurrency.GetStdPrecision() + @"),0) as AMTACCTDR, 
+                NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.C_Currency_ID ," + _C_Currency_ID + @",j.DATEACCT ,jl.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), " + objCurrency.GetStdPrecision() + @"),0) AS AMTACCTCR, 
                 j.GL_Journal_ID, jl.GL_JOURNALLINE_ID FROM GL_Journal j 
                 INNER JOIN AD_Org o ON o.AD_Org_ID = j.AD_Org_ID 
                 INNER JOIN C_Currency c ON c.C_Currency_ID = j.C_Currency_ID
                 INNER JOIN GL_JOURNALLINE JL ON JL.GL_JOURNAL_ID=J.GL_JOURNAL_ID 
-                INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= j.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
+                INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= jl.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
                 ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE j.docstatus IN ('CO','CL') AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L')");
 
             //filter based on Organization

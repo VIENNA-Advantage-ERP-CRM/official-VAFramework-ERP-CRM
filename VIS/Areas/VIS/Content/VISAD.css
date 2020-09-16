@@ -2385,7 +2385,7 @@ findImg {
 }
 /*added new gl grid*/
 .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
-    height: 92%;
+    height: 50%;
     width: 100%;
 }
 /*Added new classes*/
