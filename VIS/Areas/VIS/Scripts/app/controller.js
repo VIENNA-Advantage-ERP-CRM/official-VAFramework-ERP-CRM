@@ -4435,7 +4435,8 @@
                         IsUnique: field.getIsUnique(),
                         IsObscure: field.getObscureType() ? true : false
                     });
-                    if (field.getIsUnique() && !field.getIsVirtualColumn()) {
+                    if (field.getIsUnique() && !field.getIsVirtualColumn()
+                        &&  field.getIsDisplayed()) {
                         this.gFieldUnique.push(field.getColumnName());
                     }
                 }

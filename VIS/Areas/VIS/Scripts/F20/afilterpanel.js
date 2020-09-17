@@ -14,9 +14,9 @@
             '     </div>                                                                       ' +
             '     <div class="vis-fp-custcolumns" id="accordion_' + winNo + '"">                ' +
             '         <div class="card">                                                       ' +
-            '             <div class="card-header">                                            ' +
+            '             <div class="card-header" style="cursor:pointer" data-toggle="collapse" href="#collapseOne_' + winNo + '">                                            ' +
             '                 <span>' + VIS.Msg.getMsg("CustomCondition") + '</span>                                  ' +
-            '                 <a class="card-link" data-toggle="collapse" href="#collapseOne_' + winNo + '"> ' +
+            '                 <a class="card-link" > ' +
             '                     <i class="vis vis-arrow-up"></i>                             ' +
             '                 </a>                                                             ' +
             '             </div>                                                               ' +

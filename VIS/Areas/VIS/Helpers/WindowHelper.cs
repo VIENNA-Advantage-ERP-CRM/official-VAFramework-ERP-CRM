@@ -851,7 +851,6 @@ namespace VIS.Helpers
             bool hasDocValWF = false;
 
 
-            //CHECK FOR  VALUE COLUMN AND UNIQUENESS QUICK FIX , WILL EHNACE WHEN UNIUE CONSTRAINT FUNCTONALITY EXTENDED
 
             if (UnqFields != null && UnqFields.Count > 0)
             {
