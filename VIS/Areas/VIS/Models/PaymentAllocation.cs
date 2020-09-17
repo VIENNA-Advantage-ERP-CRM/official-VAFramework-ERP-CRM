@@ -2866,7 +2866,6 @@ namespace VIS.Models
                                     negPayList[c].Add(payment.ToLower(), (0).ToString());
                                     rowsPayment[i].Remove(payment.ToLower());
                                     rowsPayment[i].Add(payment.ToLower(), value.ToString());
-                                    PaymentAmt -= Math.Abs(postAppliedAmt);
                                 }
                                 //exit from the loop when value get zero
                                 if (value == 0)
