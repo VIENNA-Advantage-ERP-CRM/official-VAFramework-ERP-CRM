@@ -461,7 +461,7 @@ namespace ViennaAdvantage.Process
             }
             else if (url.ToLower().Contains("api.bnm.gov.my"))
             {
-                string newUrl = @"https://api.bnm.gov.my/public/exchange-rate?session=0900";
+                string newUrl = @"https://api.bnm.gov.my/public/exchange-rate?session=1200";
 
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 
