@@ -738,12 +738,6 @@ namespace VAdvantage.Model
         /// <returns>true if open</returns>
         public static bool IsOpen(Ctx ctx, DateTime? dateAcct, String docBaseType, int AD_Org_ID)
         {
-            if (AD_Org_ID == 0)
-            {
-                _log.Warning("No Organization");
-                return IsOpen(ctx, dateAcct, docBaseType);
-            }
-
             if (dateAcct == null)
             {
                 _log.Warning("No DateAcct");
