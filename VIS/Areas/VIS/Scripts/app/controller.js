@@ -3837,46 +3837,47 @@
         // VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, function (buffer) {
         if (this.treeNode_ID > 0) {
             //For On demand tree  add these parameter
+            // Fetch window records based on selected node of tree.
             dataIn.treeID = this.treeID, dataIn.treeNode_ID = this.treeNode_ID;
-            //VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
+            VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
 
-            //    try {
+                try {
 
-            //        if (buffer != null) {
-            //            var count = 0;
+                    if (buffer != null) {
+                        var count = 0;
 
-            //            if (buffer.getTables().length != 0) {
+                        if (buffer.getTables().length != 0) {
 
-            //                var rows = buffer.getTable(0).getRows();
+                            var rows = buffer.getTable(0).getRows();
 
-            //                var columns = buffer.getTable(0).getColumnsName();
-            //                for (var row = 0; row < rows.length; row++) {
-            //                    var cells = rows[row].getJSCells();
-            //                    for (var cell = 0; cell < columns.length; cell++) {
+                            var columns = buffer.getTable(0).getColumnsName();
+                            for (var row = 0; row < rows.length; row++) {
+                                var cells = rows[row].getJSCells();
+                                for (var cell = 0; cell < columns.length; cell++) {
 
-            //                        cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
-            //                    }
-            //                    //cells.recid = row;
-            //                    that.bufferList[row] = cells;
-            //                    count++;
-            //                    //break;
-            //                }
+                                    cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
+                                }
+                                //cells.recid = row;
+                                that.bufferList[row] = cells;
+                                count++;
+                                //break;
+                            }
 
-            //                //console.log(this.bufferList);
-            //            }
-            //            buffer.dispose();
-            //            buffer = null;
-            //        }
-            //    }
-            //    catch (e) {
-            //        //alert(e);
-            //        this.log.Log(Level.SEVERE, that.SQL, e);
-            //    }
-            //    that.fireQueryCompleted(true); // inform gridcontroller
-            //    that = null;
-            //});
+                            //console.log(this.bufferList);
+                        }
+                        buffer.dispose();
+                        buffer = null;
+                    }
+                }
+                catch (e) {
+                    //alert(e);
+                    this.log.Log(Level.SEVERE, that.SQL, e);
+                }
+                that.fireQueryCompleted(true); // inform gridcontroller
+                that = null;
+            });
         }
-        // else {
+         else {
 
         VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, obscureFields, function (buffer, lookupDirect) {
 
@@ -3915,7 +3916,7 @@
             that.fireQueryCompleted(true); // inform gridcontroller
             that = null;
         });
-        //}
+        }
     };
 
     GridTable.prototype.readDataOfColumn = function (colName, colValue) {

@@ -728,7 +728,7 @@
             this.ctrl.removeClass();
             if (e.length > 0)
                 this.ctrl.addClass(e);
-            this.activeClass = e;
+            this.activeClass = e;                    
             //this.ctrl.css('background-color', color);
             //console.log(this.ctrl.css('background-color'));
         }
@@ -3430,7 +3430,8 @@
         var length = fieldLength;
 
         //Init Control
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length,'data-type':'int' });
+       
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3450,7 +3451,7 @@
 
         // Assign Value
         this.dotFormatter = VIS.Env.isDecimalPoint();
-
+       
         // For testing purpose
         //this.dotFormatter = true;
 
@@ -3702,7 +3703,8 @@
         var displayType = VIS.DisplayType.Integer;
         var length = fieldLength;
         //Init Control
-        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length, 'data-type': 'int' });
+       
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3716,7 +3718,7 @@
             this.setReadOnly(false);
         }
         var self = this; //self pointer
-
+        //$ctrl.addClass("vis-control-wrap-int-amount");
 
         //On key down event
         $ctrl.on("keydown", function (event) {
