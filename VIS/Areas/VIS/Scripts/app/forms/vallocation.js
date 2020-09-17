@@ -1219,8 +1219,6 @@
 
             //allocation From combo event
             $allocationFrom.on("change", function (e) {
-                //whenever change the allocationTo then the rightpanel filters will be cleared!
-                clearRightPanelFilters();
                 if ($allocationFrom.val() == 0) {
                     $allocationFrom.addClass('vis-ev-col-mandatory');
                 }
@@ -1252,7 +1250,9 @@
                 $allocationTo.val(0);
                 $allocationTo.addClass('vis-ev-col-mandatory');
                 loadGrids($allocationFrom.val());
-                displayGrids($allocationFrom.val(), $allocationTo.val())
+                displayGrids($allocationFrom.val(), $allocationTo.val());
+                //whenever change the allocationTo then the rightpanel filters will be cleared!
+                clearRightPanelFilters();
             });
 
             $allocationTo.on("change", function (e) {

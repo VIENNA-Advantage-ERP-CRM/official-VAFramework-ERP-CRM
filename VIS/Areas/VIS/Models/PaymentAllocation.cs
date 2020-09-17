@@ -2821,7 +2821,6 @@ namespace VIS.Models
 
                                 //new allocation
                                 C_Payment_ID = Util.GetValueOfInt(negPayList[c]["cpaymentid"]);
-
                                 noPayments++;
                                 //  Invoice variables
                                 Ref_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
@@ -3125,14 +3124,14 @@ namespace VIS.Models
                         {
                             if (z != 0)
                             { sql += ","; }
-                            sql += " UPPER('" + myStringArray[z].Trim(new Char[] { ' ' }) + "')";
+                            sql += " UPPER('" + myStringArray[z].Trim() + "')";
                         }
                         sql += ")";
                     }
                 }
                 else
                 {
-                    sql += " AND UPPER(p.DocumentNo) LIKE UPPER('%" + srchText + "%')";
+                    sql += " AND UPPER(p.DocumentNo) LIKE UPPER('%" + srchText.Trim() + "%')";
                 }
             }
             //added from and to dates to filter the records which is under these dates
@@ -3488,14 +3487,14 @@ namespace VIS.Models
                         {
                             if (z != 0)
                             { sqlCash += ","; }
-                            sqlCash += " UPPER('" + myStringArray[z].Trim(new Char[] { ' ' }) + "')";
+                            sqlCash += " UPPER('" + myStringArray[z].Trim() + "')";
                         }
                         sqlCash += ")";
                     }
                 }
                 else
                 {
-                    sqlCash += " AND UPPER(cn.receiptno) LIKE UPPER('%" + srchText + "%')";
+                    sqlCash += " AND UPPER(cn.receiptno) LIKE UPPER('%" + srchText.Trim() + "%')";
                 }
             }
             //to get CashLines against related business partner
@@ -3661,14 +3660,14 @@ namespace VIS.Models
                         {
                             if (z != 0)
                             { sqlInvoice += ","; }
-                            sqlInvoice += " UPPER('" + myStringArray[z].Trim(new Char[] { ' ' }) + "')";
+                            sqlInvoice += " UPPER('" + myStringArray[z].Trim() + "')";
                         }
                         sqlInvoice += ")";
                     }
                 }
                 else
                 {
-                    sqlInvoice += " AND UPPER(i.documentno) LIKE UPPER('%" + srchText + "%')";
+                    sqlInvoice += " AND UPPER(i.documentno) LIKE UPPER('%" + srchText.Trim() + "%')";
                 }
             }
             if (fromDate != null)
@@ -4125,14 +4124,14 @@ namespace VIS.Models
                         {
                             if (z != 0)
                             { sql.Append(","); }
-                            sql.Append(" UPPER('" + myStringArray[z].Trim(new Char[] { ' ' }) + "')");
+                            sql.Append(" UPPER('" + myStringArray[z].Trim() + "')");
                         }
                         sql.Append(")");
                     }
                 }
                 else
                 {
-                    sql.Append(" AND UPPER(J.DOCUMENTNO) LIKE UPPER('%" + srchText + "%')");
+                    sql.Append(" AND UPPER(J.DOCUMENTNO) LIKE UPPER('%" + srchText.Trim() + "%')");
                 }
             }
             if (_C_BPartner_ID > 0)
