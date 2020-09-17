@@ -1501,9 +1501,9 @@ namespace VIS.Models
             if (aLine.GetC_Payment_ID() > 0 && (aLine.GetWithholdingAmt() == 0 && aLine.GetBackupWithholdingAmount() == 0))
             {
                 // set withholding amount based on porpotionate
-                DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + Math.Abs(aLine.GetAmount()) + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + aLine.GetAmount() + @" * PayPercentage)/100 , 2) AS withholdingAmt
                                                   FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
-                                                  (SELECT ROUND((" + Math.Abs(aLine.GetAmount()) + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  (SELECT ROUND((" + aLine.GetAmount() + @" * PayPercentage)/100 , 2) AS withholdingAmt
                                                   FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
                                                 FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + aLine.GetC_Payment_ID(), null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
