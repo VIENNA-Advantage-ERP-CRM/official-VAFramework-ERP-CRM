@@ -43,7 +43,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                 idr = DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
@@ -220,6 +220,30 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
+            }
+            //Check Workforce Management module is installed
+            if (Env.IsModuleInstalled("VA058_"))
+            {
+                //Only one Primary Bank Account for a Employee..If going to save second record then show error 
+                if (!newRecord)
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BP_BANKACCOUNT_ID) FROM C_BP_BANKACCOUNT WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID() + " AND VA058_IsPrimary='Y' AND C_BP_BANKACCOUNT_ID!=" + GetC_BP_BankAccount_ID()));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_PrimaryAccExists", "");
+                        return false;
+                    }
+                }
+                else
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BP_BANKACCOUNT_ID) FROM C_BP_BANKACCOUNT WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID()));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_PrimaryAccExists", "");
+                        return false;
+                    }
+                }
+
             }
             return true;
         }

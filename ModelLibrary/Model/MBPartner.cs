@@ -1179,7 +1179,30 @@ namespace VAdvantage.Model
                     }
                 }
             }
+            //Check Workforce Management module is installed
+            if (Env.IsModuleInstalled("VA058_"))
+            {
+                // Nationality Unique Number should be unique..Showing error if saving duplicate record
+                if (!newRecord)
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPARTNER_ID) FROM C_BPARTNER WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND VA058_NatUnqNum='" + Get_Value("VA058_NatUnqNum") + "' AND C_BPartner_ID!=" + GetC_BPartner_ID()));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_NationalNoExists", "");
+                        return false;
+                    }
+                }
+                else
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPARTNER_ID) FROM C_BPARTNER WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND VA058_NatUnqNum='" + Get_Value("VA058_NatUnqNum") + "'"));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_NationalNoExists", "");
+                        return false;
+                    }
+                }
 
+            }
             return true;
         }
 
@@ -1439,7 +1462,7 @@ namespace VAdvantage.Model
             }
             else if (C_BPartner_Location_ID > 0)
             {
-                MBPartnerLocation loc = new MBPartnerLocation(GetCtx() , C_BPartner_Location_ID, Get_Trx());
+                MBPartnerLocation loc = new MBPartnerLocation(GetCtx(), C_BPartner_Location_ID, Get_Trx());
                 if (TrxType.Contains(loc.GetCreditValidation()))
                     return true;
             }
@@ -1465,14 +1488,14 @@ namespace VAdvantage.Model
                 //Credit Limit by Vivek on 30/09/2016
                 if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(GetSOCreditStatus()))
                 {
-                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = "
                         + GetTotalOpenBalance()
                         + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + GetSO_CreditLimit();
                     return false;
                 }
                 if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(GetSOCreditStatus()))
                 {
-                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = "
                         + GetTotalOpenBalance()
                         + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + GetSO_CreditLimit();
                     return false;
@@ -1486,14 +1509,14 @@ namespace VAdvantage.Model
                 creditStatus = bploc.GetSOCreditStatus();
                 if (X_C_BPartner.SOCREDITSTATUS_CreditStop.Equals(bploc.GetSOCreditStatus()))
                 {
-                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = "
                         + bploc.GetTotalOpenBalance()
                         + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + bploc.GetSO_CreditLimit();
                     return false;
                 }
                 if (X_C_BPartner.SOCREDITSTATUS_CreditHold.Equals(bploc.GetSOCreditStatus()))
                 {
-                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
+                    retMsg = Msg.GetMsg(GetCtx(), "BPartnerCreditHold") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = "
                         + bploc.GetTotalOpenBalance()
                         + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + bploc.GetSO_CreditLimit();
                     return false;
@@ -1504,8 +1527,8 @@ namespace VAdvantage.Model
             // check for payment if Total Open Balance + payment Amount exceeds Credit limit do not allow to complete transaction
             if ((creditStatus != X_C_BPartner.SOCREDITSTATUS_NoCreditCheck) && (crdLmt > 0) && (crdLmt < (totOpnBal + Amt)))
             {
-                retMsg = Msg.GetMsg(GetCtx(), "VIS_CreditLimitExceed") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = " 
-                        + totOpnBal + ", " + Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " = " + Amt 
+                retMsg = Msg.GetMsg(GetCtx(), "VIS_CreditLimitExceed") + " - " + Msg.Translate(GetCtx(), "TotalOpenBalance") + " = "
+                        + totOpnBal + ", " + Msg.GetMsg(GetCtx(), "BPartnerCreditStop") + " = " + Amt
                         + ", " + Msg.Translate(GetCtx(), "SO_CreditLimit") + " = " + crdLmt;
                 return false;
             }
