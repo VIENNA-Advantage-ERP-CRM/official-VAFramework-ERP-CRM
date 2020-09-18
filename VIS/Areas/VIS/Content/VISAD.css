@@ -2373,7 +2373,8 @@ findImg {
     float: left;
     width: 92%;
     position: absolute;
-    bottom: 20PX;
+    bottom: 20px;
+    padding-top: 15px;
 }
 
 .vis-allocate-root {
@@ -4762,7 +4763,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     flex: 1;
 }
 .vis-leftpanel-inn-wrap {
-    height: calc(100% - 59px);
+    height: calc(100% - 90px);
     padding: 15px 10px;
     overflow: auto;
 }
@@ -4963,7 +4964,10 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     padding: 5px 10px;
 }
 .vis-excelimportbtn {font-size: 1.2rem;}
-.VIS-AMTD-formBtns {
+.VIS-AMTD-formBtns,
+.vis-allocation-topFields-wrap,
+.vis-doc-AllocOuter-wrap > div,
+.vis-DiffernceWrapDiv {
     display: flex;
 }
 .vis-excelimportbtn a {
@@ -4973,10 +4977,6 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     background: rgba(var(--v-c-on-secondary), 1);
 }
 
-.vis-allocation-topFields-wrap,
-.vis-doc-AllocOuter-wrap > div {
-    display: flex;
-}
 .vis-allocation-topFields-wrap {
     flex: 1;
 }
@@ -4991,6 +4991,23 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 }
 .vis-allocation-topFields-wrap > div:last-child {
     padding-right: 0;
+}
+.vis-DiffernceWrapDiv {
+    padding: 0 10px;
+}
+.vis-DiffernceWrapDiv .vis-allocation-inputLabels {
+    margin: 0;
+}
+.vis-allocation-leftpanel-bottomDiv {
+    float: left;
+    width: 100%;
+    margin-top: 5px;
+}
+.vis-allocation-resultdiv .vis-allocation-leftControls:last-child .vis-input-wrap {
+    margin-bottom: 0;
+}
+.vis-DiffernceWrapDiv .vis-allocation-leftControls:last-child {
+    text-align: right;
 }
 
 /*busy indicator css for vis*/
