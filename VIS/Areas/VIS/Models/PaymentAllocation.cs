@@ -4111,8 +4111,8 @@ namespace VIS.Models
                 NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.C_Currency_ID ," + _C_Currency_ID + @",j.DATEACCT ,jl.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), " + objCurrency.GetStdPrecision() + @"),0) AS AMTACCTCR, 
                 j.GL_Journal_ID, jl.GL_JOURNALLINE_ID FROM GL_Journal j 
                 INNER JOIN AD_Org o ON o.AD_Org_ID = j.AD_Org_ID 
-                INNER JOIN C_Currency c ON c.C_Currency_ID = j.C_Currency_ID
                 INNER JOIN GL_JOURNALLINE JL ON JL.GL_JOURNAL_ID=J.GL_JOURNAL_ID 
+                INNER JOIN C_Currency c ON c.C_Currency_ID = jl.C_Currency_ID 
                 INNER JOIN C_CONVERSIONTYPE CT ON ct.C_CONVERSIONTYPE_ID= jl.C_CONVERSIONTYPE_ID INNER JOIN C_ELEMENTVALUE EV ON ev.c_elementvalue_ID=JL.ACCOUNT_ID INNER JOIN C_BPARTNER CB
                 ON cb.C_BPartner_ID = jl.C_BPartner_ID WHERE j.docstatus IN ('CO','CL') AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L')");
 
@@ -5930,6 +5930,9 @@ namespace VIS.Models
                     }
                 }
                 #endregion
+
+                //set Isprocess false
+                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
             }
             else
             {
