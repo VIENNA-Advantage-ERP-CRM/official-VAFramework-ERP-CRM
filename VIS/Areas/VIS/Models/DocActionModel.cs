@@ -170,7 +170,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
-                    options[index++] = DocumentEngine.ACTION_VOID;
+                    //options[index++] = DocumentEngine.ACTION_VOID;
                     options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                 }
             }
@@ -182,7 +182,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
-                    options[index++] = DocumentEngine.ACTION_VOID;
+                    //options[index++] = DocumentEngine.ACTION_VOID;
                     options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                 }
             }
@@ -194,7 +194,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
-                    options[index++] = DocumentEngine.ACTION_VOID;
+                    //options[index++] = DocumentEngine.ACTION_VOID;
                     options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                 }
             }
@@ -218,7 +218,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
-                    options[index++] = DocumentEngine.ACTION_VOID;
+                   // options[index++] = DocumentEngine.ACTION_VOID;
                     options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                 }
             }
@@ -251,7 +251,7 @@ namespace VIS.Models
                     }
                     if (!isPhysicalInventory)
                     {
-                        options[index++] = DocumentEngine.ACTION_VOID;
+                       // options[index++] = DocumentEngine.ACTION_VOID;
                         options[index++] = DocumentEngine.ACTION_REVERSE_CORRECT;
                     }
                 }
@@ -304,7 +304,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 else if (docStatus.Equals(DocActionVariables.STATUS_COMPLETED))
                 {
-                    options[index++] = DocActionVariables.ACTION_VOID;
+                    //options[index++] = DocActionVariables.ACTION_VOID;
                     options[index++] = DocActionVariables.ACTION_REACTIVATE;
                 }
             }
@@ -323,7 +323,7 @@ namespace VIS.Models
                 //	Complete                    ..  CO
                 else if (docStatus.Equals(DocActionVariables.STATUS_COMPLETED))
                 {
-                    options[index++] = DocActionVariables.ACTION_VOID;
+                    //options[index++] = DocActionVariables.ACTION_VOID;
                     options[index++] = DocActionVariables.ACTION_REVERSE_CORRECT;
                 }
 
