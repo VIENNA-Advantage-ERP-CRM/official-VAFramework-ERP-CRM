@@ -345,6 +345,12 @@ namespace VAdvantage.Model
                 }
             }
 
+            if (GetGL_JournalLine_ID() != 0 && reverse)
+            {
+                // set allocation as false on View Allocation reversal
+                DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='N' WHERE GL_JOURNALLINE_ID =" + GetGL_JournalLine_ID(), null, Get_TrxName());
+            }
+
             // Added by Bharat- Update Discrepancy amount on Invoice.
 
             if (C_Payment_ID == 0 && C_CashLine_ID == 0 && invoice != null)
