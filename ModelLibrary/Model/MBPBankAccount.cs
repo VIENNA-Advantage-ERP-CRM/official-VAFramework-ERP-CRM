@@ -184,30 +184,6 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            //Check Workforce Management module is installed
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA058_'  AND IsActive = 'Y'")) > 0)
-            {
-                //Only one Primary Bank Account for a Employee..If going to save second record then show error 
-                if (!newRecord)
-                {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BP_BANKACCOUNT_ID) FROM C_BP_BANKACCOUNT WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID() + " AND VA058_IsPrimary='Y' AND C_BP_BANKACCOUNT_ID!=" + GetC_BP_BankAccount_ID()));
-                    if (count > 0)
-                    {
-                        log.SaveError("VA058_PrimaryAccExists", "");
-                        return false;
-                    }
-                }
-                else
-                {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BP_BANKACCOUNT_ID) FROM C_BP_BANKACCOUNT WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID()));
-                    if (count > 0)
-                    {
-                        log.SaveError("VA058_PrimaryAccExists", "");
-                        return false;
-                    }
-                }
-
-            }
             //	maintain routing on bank level
             if (IsACH() && GetBank() != null)
                 SetRoutingNo(null);
@@ -244,6 +220,30 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
+            }
+            //Check Workforce Management module is installed
+            if (Env.IsModuleInstalled("VA058_"))
+            {
+                //Only one Primary Bank Account for a Employee..If going to save second record then show error 
+                if (!newRecord)
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BP_BANKACCOUNT_ID) FROM C_BP_BANKACCOUNT WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID() + " AND VA058_IsPrimary='Y' AND C_BP_BANKACCOUNT_ID!=" + GetC_BP_BankAccount_ID()));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_PrimaryAccExists", "");
+                        return false;
+                    }
+                }
+                else
+                {
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BP_BANKACCOUNT_ID) FROM C_BP_BANKACCOUNT WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID()));
+                    if (count > 0)
+                    {
+                        log.SaveError("VA058_PrimaryAccExists", "");
+                        return false;
+                    }
+                }
+
             }
             return true;
         }
