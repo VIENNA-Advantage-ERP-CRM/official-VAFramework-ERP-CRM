@@ -5740,7 +5740,7 @@
             $glSelectAll.prop('checked', false);
             //to expand the height of all grids
             $('.vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid').css('height', '80%');
-            $('.vis-allocation-leftControls').prop('style', ' margin-bottom: 5px');
+            //$('.vis-allocation-leftControls').prop('style', ' margin-bottom: 5px');
             $('#cashMaindiv').css('display', 'none');
             $('#glMaindiv').css('display', 'none');
             if ($vchkMultiCurrency.is(':checked'))
