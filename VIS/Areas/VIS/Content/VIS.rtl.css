@@ -10,7 +10,8 @@ html[dir="rtl"] .vis-pull-right {
 }
 
 html[dir="rtl"] .vis-pull-left,
-html[dir="rtl"] .pull-left {
+html[dir="rtl"] .pull-left,
+html[dir="rtl"] .vis-alert-img {
     float: right !important;
 }
 html[dir="rtl"] #favLinks > [class^="col"],
@@ -51,7 +52,9 @@ html[dir="rtl"] .vis-paymentPrint-field,
 html[dir="rtl"] .vis-sms-leftDiv,
 html[dir="rtl"] .vis-Email-leftFooter,
 html[dir="rtl"] .vis-orgaccess-description,
-html[dir="rtl"] .vis-group-assinRole-check .vis-group-user-profile input[type="Checkbox"] {
+html[dir="rtl"] .vis-group-assinRole-check .vis-group-user-profile input[type="Checkbox"],
+html[dir="rtl"] .vis-advancedSearchInput,
+html[dir="rtl"] .vis-advancedSearchHorigontal {
     float: right;
 }
 
@@ -74,7 +77,8 @@ html[dir="rtl"] .vis-ctrfrm-btnwrp div,
 html[dir="rtl"] .btns,
 html[dir="rtl"] .vis-email-btns,
 html[dir="rtl"] .vis-email-sendbtn,
-html[dir="rtl"] .vis-email-saveAttachbtn {
+html[dir="rtl"] .vis-email-saveAttachbtn,
+html[dir="rtl"] .vis-Dialog-buttons {
     float: left;
 }
 html[dir="rtl"] #fllupsScreen h2 span,
@@ -144,7 +148,8 @@ html[dir="rtl"] .VIS-Lavel-float,
 html[dir="rtl"] .VIS_Pref_btn-margin,
 html[dir="rtl"] .vis-group-content-tittle i,
 html[dir="rtl"] .vis-tm-childnodeinidailog,
-html[dir="rtl"] .vis-rad-actionBtn {
+html[dir="rtl"] .vis-rad-actionBtn,
+html[dir="rtl"] .vis-fp-inputspan input[type=checkbox] {
     margin-right: 0;
     margin-left: 5px;
 }
@@ -182,7 +187,8 @@ html[dir="rtl"] .btns > input[type=button],
 html[dir="rtl"] .VIS-Tm-unlinkforbottmo,
 html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
 html[dir="rtl"] span.vis-ad-w-p-tb-rc-action,
-html[dir="rtl"] .vis-groupbtn {
+html[dir="rtl"] .vis-groupbtn,
+html[dir="rtl"] .vis-Dialog-buttons input {
     margin-left: 0;
     margin-right: 10px;
 }
@@ -277,7 +283,9 @@ html[dir="rtl"] .vis-input-wrap input:not(:placeholder-shown) ~ label,
 html[dir="rtl"] .vis-input-wrap textarea:not(:placeholder-shown) ~ label,
 html[dir="rtl"] .vis-input-wrap select:focus ~ label,
 html[dir="rtl"] .vis-input-wrap textarea:focus ~ label,
-html[dir="rtl"] .vis-input-wrap select ~ label {
+html[dir="rtl"] .vis-input-wrap select ~ label,
+html[dir="rtl"] .vis-advancedSearchInput > label, 
+html[dir="rtl"] .vis-advancedSearchHorigontal > label {
     right: 5px;
     left: auto;
 }
@@ -295,8 +303,8 @@ html[dir="rtl"] label.vis-ec-col-lblchkbox{
     right: 0;
 }
 html[dir="rtl"] .vis-ev-ctrlinfowrap,
-html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap input + label,
-html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap input + label {
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap input:not(:focus):placeholder-shown + label,
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap input:not(:focus):placeholder-shown + label {
     right: 10px;
     left: auto;
 }
@@ -585,6 +593,20 @@ html[dir="rtl"] .vis-group-colwrap:nth-child(3) .vis-group-user-right li:first-c
 }
 html[dir="rtl"] .vis-orgaccess-description {
     margin-right: 30px;
+}
+html[dir="rtl"] .vis-ev-col-fg-more {
+    padding-right: 0 !important;
+    padding-left: 10px !important;
+}
+html[dir="rtl"] .vis-PopupInput-alert > label {
+    padding-left: 0 !important;
+    padding-right: 10px !important;
+}
+html[dir="rtl"] .vis-img-ctrl-icon {
+    right: auto;
+    left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: .25rem;
 }
 /*rtl css End here*/
 
