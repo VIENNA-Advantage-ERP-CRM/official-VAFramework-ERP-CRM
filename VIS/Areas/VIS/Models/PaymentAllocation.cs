@@ -1381,7 +1381,7 @@ namespace VIS.Models
                         amtPayment = Util.GetValueOfDecimal(result);
                     }
 
-                    if (amtPayment == 0)
+                    if (amtPayment == Env.ZERO)
                     {
                         cash.SetIsAllocated(true);
                     }
@@ -4699,17 +4699,17 @@ namespace VIS.Models
                         if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
                             continue;
 
-                        actualAmt = (Math.Abs(Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"])) - (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"])));
-                        if (remainingAmt >= actualAmt)
+                        actualAmt = Math.Abs(Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"])) - Math.Abs(Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]));
+                        if (Math.Abs(remainingAmt) >= actualAmt)
                         {
-                            remainingAmt = remainingAmt - actualAmt;
+                            remainingAmt -= actualAmt;
                             netAmt = actualAmt;
                             balanceAmt = 0;
                         }
                         else
                         {
                             netAmt = remainingAmt;
-                            balanceAmt = actualAmt - remainingAmt;
+                            balanceAmt = actualAmt - Math.Abs(remainingAmt);
                             remainingAmt = 0;
                         }
                         MAllocationLine aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
@@ -5869,7 +5869,7 @@ namespace VIS.Models
                         //                    INNER JOIN GL_JOURNALLINE jl ON jl.GL_JOURNALLINE_ID = al.GL_JOURNALLINE_ID INNER JOIN GL_JOURNAL j ON j.GL_JOURNAL_ID 
                         //                    = jl.GL_JOURNAL_ID WHERE al.GL_JOURNALLINE_ID = " + _GL_JournalLine_ID + @" AND AR.DOCSTATUS IN('CO', 'CL') ";
                         //decimal result = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlGetOpenGlAmt, null, trx));
-                        //if (result.Equals(0))
+                        if (Util.GetValueOfBool(rowsGL[i]["IsPaid"]) == true)
                         {
                             chk = DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='Y' WHERE GL_JOURNALLINE_ID =" + _GL_JournalLine_ID, null, trx);
                             if (chk < 0)
@@ -5877,15 +5877,7 @@ namespace VIS.Models
                                 trx.Rollback();
                                 trx.Close();
                                 _log.SaveError("Error: ", "Journal Line not allocated");
-                                ValueNamePair pp = VLogger.RetrieveError();
-                                if (pp != null)
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated") + ":- " + pp.GetName();
-                                }
-                                else
-                                {
-                                    msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated");
-                                }
+                                msg = Msg.GetMsg(ctx, "VIS_GLLineNotAllocated");
                                 //set isprocessing false
                                 Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
                                 return msg;
