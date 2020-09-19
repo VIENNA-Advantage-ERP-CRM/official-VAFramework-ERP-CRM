@@ -367,7 +367,7 @@
             $cmbCurrency.on("change", function (e) {
                 vetoableChange("C_Currency_ID", $cmbCurrency.val());
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
-                    if (checkisSelectedAllocationFromAndTo()) {
+                    if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
                         if (allgridsLoaded()) {
                             if ($gridInvoice) {
                                 clrInvoice(e);
@@ -3049,8 +3049,9 @@
                 field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
 
                     var val = record["AppliedAmt"];
+                    val = checkcommaordot(event, val, val);
                     return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                }
+                }, editable: { type: 'number' }
             });
             columns.push({
                 field: "Date1", caption: VIS.translatedTexts.Date, size: '80px', hidden: true, render: function (record, index, col_index) {
@@ -3259,8 +3260,9 @@
             columns.push({
                 field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '150px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
                     var val = record["AppliedAmt"];
+                    val = checkcommaordot(event, val, val);
                     return parseFloat(val).toLocaleString(navigator.language, { maximumFractionDigits: stdPrecision, minimumFractionDigits: stdPrecision });
-                }
+                }, editable: { type: 'number' }
             });
             columns.push({
                 field: "Created", caption: VIS.translatedTexts.Date, size: '80px', hidden: true, render: function (record, index, col_index) {
@@ -3481,8 +3483,9 @@
             columns.push({
                 field: "Discount", caption: VIS.translatedTexts.DiscountAmt, size: '100px', hidden: false, attr: 'align=right', render: function (record, index, col_index) {
                     var val = record["Discount"];
+                    val = checkcommaordot(event, val, val);
                     return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                }
+                }, editable: { type: 'number' }
             });
             columns.push({
                 field: "Date1", caption: VIS.translatedTexts.Date, size: '80px', hidden: true, render: function (record, index, col_index) {
@@ -3502,15 +3505,17 @@
             columns.push({
                 field: "Writeoff", caption: VIS.translatedTexts.WriteOffAmount, size: '100px', attr: 'align=right', hidden: false, render: function (record, index, col_index) {
                     var val = record["Writeoff"];
+                    val = checkcommaordot(event, val, val);
                     return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                }
+                }, editable: { type: 'number' }
             });
             //render column into float with culture format
             columns.push({
                 field: "AppliedAmt", caption: VIS.translatedTexts.AppliedAmount, size: '100px', hidden: false, attr: 'align=right', render: function (record, index, col_index) {
                     var val = record["AppliedAmt"];
+                    val = checkcommaordot(event, val, val);
                     return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
-                }
+                }, editable: { type: 'number' }
             });
             if (countVA009 > 0) {
                 columns.push({ field: "C_InvoicePaySchedule_ID", caption: VIS.translatedTexts.C_InvoicePaySchedule_ID, size: '100px', hidden: true });
@@ -3575,7 +3580,7 @@
                 onEditField: function (event) {
                     event.onComplete = function (event) {
                         id = event.recid;
-                        if (event.column == 14 || event.column == 13 || event.column == 10) {
+                        if (event.column == 15 || event.column == 16 || event.column == 17) {
                             $('#grid_openformatgridinvoice_' + $self.windowNo + '_edit_' + id + '_' + event.column).keydown(function (event) {
                                 var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
 
@@ -6178,14 +6183,14 @@
 
                         //Payment Data
                         if (rowsPayment.length > 0) {
-                            var keys = Object.keys($gridCashline.get(0));
+                            var keys = Object.keys($gridPayment.get(0));
                             payment = keys[keys.indexOf("AppliedAmt")];
                             for (var i = 0; i < rowsPayment.length; i++) {
                                 var row = $gridPayment.get(rowsPayment[i].recid);
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                     paymentData.push({
-                                        AppliedAmt: rowsPayment[i].AppliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, CpaymentID: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
+                                        AppliedAmt: rowsPayment[i].AppliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0, payment: payment
                                     });
                                 }

@@ -4371,7 +4371,7 @@ namespace VIS.Models
 
             Trx trx = Trx.GetTrx(Trx.CreateTrxName("GL"));
 
-            msg = ValidateRecords(rowsPayment, "CpaymentID", false, false, true, trx); //Payment
+            msg = ValidateRecords(rowsPayment, "cpaymentid", false, false, true, trx); //Payment
             if (msg != string.Empty)
             {
                 trx.Rollback();
@@ -4493,7 +4493,7 @@ namespace VIS.Models
                 for (int i = 0; i < rowsCash.Count; i++)
                 {
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]));
-                    amtToAllocate = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]);
+                    amtToAllocate = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]) - Math.Abs(Util.GetValueOfDecimal(negList[i]["paidAmt"]));
                     remainingAmt = amtToAllocate;
                     if (Util.GetValueOfBool(rowsCash[i]["IsPaid"]))
                         continue;
@@ -4506,7 +4506,7 @@ namespace VIS.Models
                             if (Util.GetValueOfBool(negList[j]["IsPaid"]))
                                 continue;
 
-                            actualAmt = (Math.Abs(Util.GetValueOfDecimal(negList[j]["AppliedAmt"])) - (Util.GetValueOfDecimal(negList[j]["paidAmt"])));
+                            actualAmt = Math.Abs(Util.GetValueOfDecimal(negList[j]["AppliedAmt"])) - Math.Abs(Util.GetValueOfDecimal(negList[j]["paidAmt"]));
                             if (remainingAmt >= actualAmt)
                             {
                                 remainingAmt -= actualAmt;
@@ -4519,167 +4519,65 @@ namespace VIS.Models
                                 balanceAmt = actualAmt - remainingAmt;
                                 remainingAmt = 0;
                             }
+                            aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                            aLine.SetRef_CashLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
+                            aLine.SetDateTrx(DateTrx);
+                            aLine.SetC_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
+                            if (!aLine.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null)
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
+                                }
+                                //set Isprocessing false
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
+                                return msg;
+                            }
+                            //for -ve Value of Cash journal
+                            aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                            aLine.SetC_CashLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
+                            aLine.SetDateTrx(DateTrx);
+                            aLine.SetRef_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
+                            if (!aLine.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null)
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
+                                }
+                                else
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
+                                }
+                                //set Isprocessing false
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
+                                return msg;
+                            }
+                            paid = Util.GetValueOfDecimal(negList[j]["paidAmt"]) + Decimal.Negate(netAmt);
+                            negList[j]["paidAmt"] = paid.ToString();
+                            rowsCash[i]["paidAmt"] = (Util.GetValueOfDecimal(rowsCash[i]["paidAmt"]) + netAmt).ToString();
+
                             if (balanceAmt == 0)
                             {
-                                aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetRef_CashLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetC_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
-                                if (!aLine.Save())
-                                {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //set Isprocessing false
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
-                                }
-                                else
-                                {
-                                    paid = (Util.GetValueOfDecimal(negList[j]["paidAmt"]) + netAmt);
-                                    negList[j]["paidAmt"] = paid.ToString();
-                                    rowsCash[i]["AppliedAmt"] = (Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]) - netAmt).ToString();
-                                    if (balanceAmt == 0)
-                                    {
-                                        negList[j]["IsPaid"] = true.ToString();
-                                    }
-                                    //if (remainingAmt == 0)
-                                    //{
-                                    //    rowsCash[i]["IsPaid"] = true.ToString();
-                                    //    break;
-                                    //}
-
-                                }
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), 0, 0, 0);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetC_CashLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetRef_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
-                                if (!aLine.Save())
-                                {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //set Isprocessing false
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
-                                }
-                                else
-                                {
-                                    //paid = (Util.GetValueOfDecimal(negList[j]["paidAmt"]) + netAmt);
-                                    //negList[j]["paidAmt"] = paid.ToString();
-
-                                    if (balanceAmt == 0)
-                                    {
-                                        negList[j]["IsPaid"] = true.ToString();
-                                    }
-                                    //if (remainingAmt == 0)
-                                    //{
-                                    //    rowsCash[i]["IsPaid"] = true.ToString();
-                                    //    break;
-                                    //}
-
-                                }
+                                negList[j]["IsPaid"] = true.ToString();
                             }
-                            else if (remainingAmt == 0)
+                            if (remainingAmt == 0) 
                             {
-                                aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetRef_CashLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetC_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
-                                if (!aLine.Save())
-                                {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //set Isprocessing false
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
-                                }
-                                else
-                                {
-                                    paid = (Util.GetValueOfDecimal(negList[j]["paidAmt"]) + netAmt);
-                                    negList[j]["paidAmt"] = paid.ToString();
-                                    rowsCash[i]["AppliedAmt"] = (Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]) - netAmt).ToString();
-                                    //if (balanceAmt == 0)
-                                    //{
-                                    //    negList[j]["IsPaid"] = true.ToString();
-                                    //}
-                                    if (remainingAmt == 0)
-                                    {
-                                        rowsCash[i]["IsPaid"] = true.ToString();
-                                        break;
-                                    }
-
-                                }
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), 0, 0, 0);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetC_CashLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetRef_CashLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
-                                if (!aLine.Save())
-                                {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //set Isprocessing false
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
-                                }
-                                else
-                                {
-                                    //paid = (Util.GetValueOfDecimal(negList[j]["paidAmt"]) + netAmt);
-                                    //negList[j]["paidAmt"] = paid.ToString();
-
-                                    //if (balanceAmt == 0)
-                                    //{
-                                    //    negList[j]["IsPaid"] = true.ToString();
-                                    //}
-                                    if (remainingAmt == 0)
-                                    {
-                                        rowsCash[i]["IsPaid"] = true.ToString();
-                                        break;
-                                    }
-
-                                }
+                                rowsCash[i]["IsPaid"] = true.ToString();
+                                break;
                             }
                         }
                     }
@@ -4688,8 +4586,8 @@ namespace VIS.Models
                 for (int i = 0; i < rowsCash.Count; i++)
                 {
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]));
-                    amtToAllocate = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]);
-                    remainingAmt = amtToAllocate;
+                    amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"])) - Math.Abs(Util.GetValueOfDecimal(rowsCash[i]["paidAmt"]));
+                    remainingAmt = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]) > 0 ? amtToAllocate : Decimal.Negate(amtToAllocate);
                     if (Util.GetValueOfBool(rowsCash[i]["IsPaid"]))
                         continue;
 
@@ -4698,8 +4596,15 @@ namespace VIS.Models
                         if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
                             continue;
 
-                        actualAmt = Math.Abs(Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"])) - Math.Abs(Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]));
-                        if (Math.Abs(remainingAmt) >= actualAmt)
+                        actualAmt = Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"]) - Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]);
+                        // check match payment with DebitAmt && receipt with CreditAmt
+                        // not receipt with DebitAmt
+                        if (remainingAmt >= 0 && actualAmt <= 0)
+                            continue;
+                        if (remainingAmt <= 0 && actualAmt >= 0)
+                            continue;
+
+                        if (Math.Abs(remainingAmt) >= Math.Abs(actualAmt))
                         {
                             remainingAmt -= actualAmt;
                             netAmt = actualAmt;
@@ -4708,10 +4613,10 @@ namespace VIS.Models
                         else
                         {
                             netAmt = remainingAmt;
-                            balanceAmt = actualAmt - Math.Abs(remainingAmt);
+                            balanceAmt = actualAmt - remainingAmt;
                             remainingAmt = 0;
                         }
-                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, 0, 0, 0);
+                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                         aLine.SetDocInfo(C_BPartner_ID, 0, 0);
                         aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
                         aLine.SetDateTrx(DateTrx);
@@ -4736,7 +4641,7 @@ namespace VIS.Models
                         }
                         else
                         {
-                            paid = (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt);
+                            paid = Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt;
                             rowsGL[j]["paidAmt"] = paid.ToString();
 
                             if (balanceAmt == 0)
@@ -4752,12 +4657,12 @@ namespace VIS.Models
                         }
                     }
                 }
-
+                MPayment objPayment = null;
                 //create allocation line if payment to payment row selected
                 for (int i = 0; i < rowsPayment.Count; i++)
                 {
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]));
-                    amtToAllocate = Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]);
+                    amtToAllocate = Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]) - Math.Abs(Util.GetValueOfDecimal(rowsPayment[i]["paidAmt"]));
                     remainingAmt = amtToAllocate;
                     if (Util.GetValueOfBool(rowsPayment[i]["IsPaid"]))
                         continue;
@@ -4770,8 +4675,10 @@ namespace VIS.Models
                             if (Util.GetValueOfBool(negList[j]["IsPaid"]))
                                 continue;
 
-                            actualAmt = (Math.Abs(Util.GetValueOfDecimal(negList[j]["AppliedAmt"])) - (Util.GetValueOfDecimal(negList[j]["paidAmt"])));
-                            if (remainingAmt >= actualAmt)
+                            objPayment = new MPayment(ctx, Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), trx);
+
+                            actualAmt = Math.Abs(Util.GetValueOfDecimal(negList[j]["AppliedAmt"])) - Math.Abs(Util.GetValueOfDecimal(negList[j]["paidAmt"]));
+                            if (Math.Abs(remainingAmt) >= actualAmt)
                             {
                                 remainingAmt -= actualAmt;
                                 netAmt = actualAmt;
@@ -4783,141 +4690,94 @@ namespace VIS.Models
                                 balanceAmt = actualAmt - remainingAmt;
                                 remainingAmt = 0;
                             }
-                            if (balanceAmt == 0)
+                            aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                            aLine.SetRef_Payment_ID(Util.GetValueOfInt(negList[j]["cpaymentid"]));
+                            aLine.SetDateTrx(DateTrx);
+                            aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
+                            // set withholding amount based on porpotionate
+                            if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
                             {
-                                aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetRef_Payment_ID(Util.GetValueOfInt(negList[j]["CpaymentID"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]));
-                                if (!aLine.Save())
+                                DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), null, trx);
+                                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                 {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //Set Isprocessing False
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
-                                }
-                                else
-                                {
-                                    paid = (Util.GetValueOfDecimal(negList[j]["paidAmt"]) + netAmt);
-                                    negList[j]["paidAmt"] = paid.ToString();
-                                    rowsPayment[i]["AppliedAmt"] = (Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]) - netAmt).ToString();
-                                    if (balanceAmt == 0)
-                                    {
-                                        negList[j]["IsPaid"] = true.ToString();
-                                    }
-                                }
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetC_Payment_ID(Util.GetValueOfInt(negList[j]["CpaymentID"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetRef_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]));
-                                if (!aLine.Save())
-                                {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //Set Isprocessing False
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
-                                }
-                                else
-                                {
-                                    if (balanceAmt == 0)
-                                    {
-                                        negList[j]["IsPaid"] = true.ToString();
-                                    }
+                                    aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
+                                    aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["BackupwithholdingAmt"]));
                                 }
                             }
-                            else if (remainingAmt == 0)
+                            if (!aLine.Save())
                             {
-                                aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetRef_Payment_ID(Util.GetValueOfInt(negList[j]["CpaymentID"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]));
-                                if (!aLine.Save())
+                                _log.SaveError("Error: ", "Allocation not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null)
                                 {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //Set Isprocessing False
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
-                                    paid = (Util.GetValueOfDecimal(negList[j]["paidAmt"]) + netAmt);
-                                    negList[j]["paidAmt"] = paid.ToString();
-                                    rowsPayment[i]["AppliedAmt"] = (Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]) - netAmt).ToString();
-                                    if (remainingAmt == 0)
-                                    {
-                                        rowsPayment[i]["IsPaid"] = true.ToString();
-                                        break;
-                                    }
-
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                 }
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
-                                aLine.SetDocInfo(C_BPartner_ID, 0, 0);
-                                aLine.SetC_Payment_ID(Util.GetValueOfInt(negList[j]["CpaymentID"]));
-                                aLine.SetDateTrx(DateTrx);
-                                aLine.SetRef_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]));
-                                if (!aLine.Save())
+                                //Set Isprocessing False
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
+                                return msg;
+                            }
+
+                            objPayment = new MPayment(ctx, Util.GetValueOfInt(negList[j]["cpaymentid"]), trx);
+
+                            aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine.SetDocInfo(C_BPartner_ID, 0, 0);
+                            aLine.SetC_Payment_ID(Util.GetValueOfInt(negList[j]["cpaymentid"]));
+                            aLine.SetDateTrx(DateTrx);
+                            aLine.SetRef_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
+                            // set withholding amount based on porpotionate
+                            if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                            {
+                                DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + Decimal.Negate(netAmt) + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  (SELECT ROUND((" + Decimal.Negate(netAmt) + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + Util.GetValueOfInt(negList[j]["cpaymentid"]), null, trx);
+                                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                 {
-                                    _log.SaveError("Error: ", "Allocation not created");
-                                    trx.Rollback();
-                                    trx.Close();
-                                    ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null)
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
-                                    }
-                                    else
-                                    {
-                                        msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
-                                    }
-                                    //Set Isprocessing False
-                                    Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
-                                    return msg;
+                                    aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
+                                    aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["BackupwithholdingAmt"]));
+                                }
+                            }
+                            if (!aLine.Save())
+                            {
+                                _log.SaveError("Error: ", "Allocation not created");
+                                trx.Rollback();
+                                trx.Close();
+                                ValueNamePair pp = VLogger.RetrieveError();
+                                if (pp != null)
+                                {
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated") + ":- " + pp.GetName();
                                 }
                                 else
                                 {
-                                    if (remainingAmt == 0)
-                                    {
-                                        rowsPayment[i]["IsPaid"] = true.ToString();
-                                        break;
-                                    }
-
+                                    msg = Msg.GetMsg(ctx, "VIS_AllocLineNotCreated");
                                 }
+                                //Set Isprocessing False
+                                Isprocess(rowsPayment, rowsCash, rowsInvoice, rowsGL, trx);
+                                return msg;
+                            }
+                            paid = Util.GetValueOfDecimal(negList[j]["paidAmt"]) + Decimal.Negate(netAmt);
+                            negList[j]["paidAmt"] = paid.ToString();
+                            rowsPayment[i]["paidAmt"] = Decimal.Add(Util.GetValueOfDecimal(rowsPayment[i]["paidAmt"]), netAmt).ToString();
+                            if (balanceAmt == 0)
+                            {
+                                negList[j]["IsPaid"] = true.ToString();
+                            }
+                            if (remainingAmt == 0)
+                            {
+                                rowsPayment[i]["IsPaid"] = true.ToString();
+                                break;
                             }
                         }
                     }
@@ -4926,20 +4786,29 @@ namespace VIS.Models
                 for (int i = 0; i < rowsPayment.Count; i++)
                 {
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]));
-                    amtToAllocate = Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]);
-                    remainingAmt = amtToAllocate;
+                    amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"])) - Math.Abs(Util.GetValueOfDecimal(rowsPayment[i]["paidAmt"]));
+                    remainingAmt = Util.GetValueOfDecimal(rowsPayment[i]["AppliedAmt"]) > Env.ZERO ? amtToAllocate : Decimal.Negate(amtToAllocate);
                     if (Util.GetValueOfBool(rowsPayment[i]["IsPaid"]))
                         continue;
+
+                    objPayment = new MPayment(ctx, Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), trx);
 
                     for (int j = 0; j < rowsGL.Count; j++)
                     {
                         if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
                             continue;
 
-                        actualAmt = (Math.Abs(Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"])) - (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"])));
-                        if (remainingAmt >= actualAmt)
+                        actualAmt = Util.GetValueOfDecimal(rowsGL[j]["AppliedAmt"]) - Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]);
+                        // check match payment with DebitAmt && receipt with CreditAmt
+                        // not receipt with DebitAmt
+                        if (remainingAmt >= 0 && actualAmt <= 0)
+                            continue;
+                        if (remainingAmt <= 0 && actualAmt >= 0)
+                            continue;
+
+                        if (Math.Abs(remainingAmt) >= Math.Abs(actualAmt))
                         {
-                            remainingAmt = remainingAmt - actualAmt;
+                            remainingAmt -= actualAmt;
                             netAmt = actualAmt;
                             balanceAmt = 0;
                         }
@@ -4953,7 +4822,23 @@ namespace VIS.Models
                         aLine.SetDocInfo(C_BPartner_ID, 0, 0);
                         aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
                         aLine.SetDateTrx(DateTrx);
-                        aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]));
+                        aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
+
+                        // set withholding amount based on porpotionate
+                        if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                        {
+                            DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
+                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), null, trx);
+                            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                            {
+                                aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
+                                aLine.SetBackupWithholdingAmount(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["BackupwithholdingAmt"]));
+                            }
+                        }
+
                         if (!aLine.Save())
                         {
                             _log.SaveError("Error: ", "Allocation not created");
@@ -4974,7 +4859,7 @@ namespace VIS.Models
                         }
                         else
                         {
-                            paid = (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt);
+                            paid = Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt;
                             rowsGL[j]["paidAmt"] = paid.ToString();
 
                             if (balanceAmt == 0)
@@ -5734,7 +5619,7 @@ namespace VIS.Models
                 {
                     for (int i = 0; i < rowsPayment.Count; i++)
                     {
-                        int C_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["CpaymentID"]);
+                        int C_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
                         MPayment pay = new MPayment(ctx, C_Payment_ID, trx);
                         if (pay.TestAllocation())
                         {
@@ -5859,7 +5744,6 @@ namespace VIS.Models
                     int chk = 0;
                     for (int i = 0; i < rowsGL.Count; i++)
                     {
-                        int _GL_JournalLine_ID = Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]);
                         //string sqlGetOpenGlAmt = @"SELECT (ABS(NVL(SUM(ROUND(CURRENCYCONVERT(AL.AMOUNT ,AR.C_CURRENCY_ID ," + C_Currency_ID + @",AR.DATEACCT ,AR.C_CONVERSIONTYPE_ID ,
                         //                    AR.AD_CLIENT_ID ,AR.AD_ORG_ID ), 2)),0)) - ABS(SUM(NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ,
                         //                    " + C_Currency_ID + @",J.DATEACCT ,J.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), 2),0))) - ABS(SUM(NVL(ROUND(currencyConvert
@@ -5870,7 +5754,7 @@ namespace VIS.Models
                         //decimal result = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlGetOpenGlAmt, null, trx));
                         if (Util.GetValueOfBool(rowsGL[i]["IsPaid"]) == true)
                         {
-                            chk = DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='Y' WHERE GL_JOURNALLINE_ID =" + _GL_JournalLine_ID, null, trx);
+                            chk = DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='Y' WHERE GL_JOURNALLINE_ID =" + Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]), null, trx);
                             if (chk < 0)
                             {
                                 trx.Rollback();
