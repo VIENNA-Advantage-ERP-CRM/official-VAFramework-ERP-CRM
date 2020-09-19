@@ -14,7 +14,7 @@
         var $row3 = $('<div class="vis-allocate-cashdiv" >');
         var $row4 = $('<div class="vis-allocate-invoicediv" >');
         //added GL Grid for GL Allocation
-        var $row5 = $('<div class="vis-allocate-gldiv" style = "height:49%" >'); 
+        var $row5 = $('<div class="vis-allocate-gldiv" style = "height:49%" >');
         var $row6 = $('<div >');
 
         var summation = "Σ";
@@ -337,6 +337,10 @@
             //added for gl-allocation
             $row5.css('display', 'none');
             //end
+
+            $vtxtDifference = $DiffernceWrapDiv.find('.vis-allocation-lbldifferenceAmt');
+            $vlblAllocCurrency = $DiffernceWrapDiv.find('.vis-allocation-lblCurrnecy');
+
             $root.find(".vis-allocation-resultdiv").css({ "width": "100%", "margin": "0", "bottom": "0", "position": "inherit" });
             $bsyDiv[0].style.visibility = "hidden";
         };
@@ -2082,7 +2086,7 @@
                 + '<input  class="vis-allocation-date" disabled id=VIS_cmbAcctDate_' + $self.windowNo + ' type="date">'
                 + '<label title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("DateAcct") + '</label>'
                 + '</div></div></div>');
-            
+
 
             $innerRow.append($resultDiv);
             $date = $innerRow.find('#VIS_cmbDate_' + $self.windowNo);
@@ -2095,8 +2099,6 @@
             $cmbOrg = $innerRow.find('#VIS_cmbOrg_' + $self.windowNo);
             $OrgFilter = $innerRow.find('#VIS_Org_' + $self.windowNo);
             $vchkBPAllocation = $innerRow.find('#VIS_chkbxBPAllocation_' + $self.windowNo);
-            $vtxtDifference = $resultDiv.find('.vis-allocation-lbldifferenceAmt');
-            $vlblAllocCurrency = $resultDiv.find('.vis-allocation-lblCurrnecy');
         };
 
         function createRow2() {
@@ -5639,7 +5641,7 @@
                     }
                 }
             }
-            $lblCashSum.text(_noCashLines + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation+ " " + parseFloat(totalCash).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }) + " ");//VIS.Msg.getMsg("SelectedCashlines") + 
+            $lblCashSum.text(_noCashLines + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + parseFloat(totalCash).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }) + " ");//VIS.Msg.getMsg("SelectedCashlines") + 
 
 
             //  Invoices******************
@@ -5743,7 +5745,7 @@
             $glSelectAll.prop('checked', false);
             //to expand the height of all grids
             $('.vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid').css('height', '80%');
-            $('.vis-allocation-leftControls').prop('style', ' margin-bottom: 5px');
+            //$('.vis-allocation-leftControls').prop('style', ' margin-bottom: 5px');
             $('#cashMaindiv').css('display', 'none');
             $('#glMaindiv').css('display', 'none');
             if ($vchkMultiCurrency.is(':checked'))

@@ -5008,6 +5008,10 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 }
 .vis-DiffernceWrapDiv .vis-allocation-leftControls:last-child {
     text-align: right;
+    flex: 2;
+}
+.vis-DiffernceWrapDiv .vis-allocation-leftControls:first-child {
+    flex: 1;
 }
 
 /*busy indicator css for vis*/
