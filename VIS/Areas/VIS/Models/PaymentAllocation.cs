@@ -4493,7 +4493,7 @@ namespace VIS.Models
                 for (int i = 0; i < rowsCash.Count; i++)
                 {
                     //amtToAllocate = Math.Abs(Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]));
-                    amtToAllocate = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]) - Math.Abs(Util.GetValueOfDecimal(negList[i]["paidAmt"]));
+                    amtToAllocate = Util.GetValueOfDecimal(rowsCash[i]["AppliedAmt"]) - Math.Abs(Util.GetValueOfDecimal(rowsCash[i]["paidAmt"]));
                     remainingAmt = amtToAllocate;
                     if (Util.GetValueOfBool(rowsCash[i]["IsPaid"]))
                         continue;
