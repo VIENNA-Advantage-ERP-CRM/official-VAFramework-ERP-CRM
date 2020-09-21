@@ -5317,7 +5317,7 @@
                 }
                 else {
                     if ($gridCashline.getChanges()[i].SelectRow == true) {
-                        var row = $gridCashline.records[$gridCashline.getChanges()[i].recid].Created;
+                        var row = $gridCashline.records[$gridCashline.getChanges()[i].recid].DATEACCT;
                         _allDates.push(new Date(row));
                         if ($gridPayment.getChanges().length == 0 && $gridInvoice.getChanges().length == 0 && $glLineGrid.getChanges().length == 0) {
                             var DATEACCT = $gridCashline.records[$gridCashline.getChanges()[i].recid].DATEACCT;
@@ -5520,7 +5520,7 @@
                 }
                 else {
                     if ($gridCashline.getChanges()[i].SelectRow == true) {
-                        var row = $gridCashline.records[$gridCashline.getChanges()[i].recid].Created;
+                        var row = $gridCashline.records[$gridCashline.getChanges()[i].recid].DATEACCT;
                         // check org matched or not 
                         if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridCashline.records[$gridCashline.getChanges()[i].recid].AD_Org_ID)) {
                             isOrgMatched = false;
