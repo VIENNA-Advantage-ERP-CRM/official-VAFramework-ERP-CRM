@@ -4551,6 +4551,8 @@ namespace VAdvantage.Model
             {
                 alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
             }
+            /** when trx date not matched with account date, then we have to set dateacct from payment record*/
+            alloc.SetDateAcct(GetDateAcct());
             if (!alloc.Save())
             {
                 log.Severe("P.Allocations not created");
@@ -4646,6 +4648,8 @@ namespace VAdvantage.Model
                 {
                     alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
                 }
+                /** when trx date not matched with account date, then we have to set dateacct from payment record*/
+                alloc.SetDateAcct(GetDateAcct());
                 if (!alloc.Save())
                 {
                     log.Log(Level.SEVERE, "Could not create Allocation Hdr");
@@ -4730,6 +4734,8 @@ namespace VAdvantage.Model
             {
                 alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
             }
+            /** when trx date not matched with account date, then we have to set dateacct from payment record*/
+            alloc.SetDateAcct(GetDateAcct());
             String sql = "SELECT psc.C_BPartner_ID, psl.C_Invoice_ID, psl.IsSOTrx, "	//	1..3
                 + " psl.PayAmt, psl.DiscountAmt, psl.DifferenceAmt, psl.OpenAmt ";
             if (Env.IsModuleInstalled("VA009_"))
@@ -5249,6 +5255,9 @@ namespace VAdvantage.Model
                 {
                     alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
                 }
+                /** when trx date not matched with account date, then we have to set dateacct from payment record*/
+                alloc.SetDateAcct(GetDateAcct());
+
                 if (!alloc.Save())
                 {
                     log.Warning("Automatic allocation - hdr not saved");
