@@ -365,6 +365,7 @@
     <Compile Include="ModelAD\MAcctSchemaDefault.cs" />
     <Compile Include="ModelAD\MAcctSchemaElement.cs" />
     <Compile Include="ModelAD\MAcctSchemaGL.cs" />
+    <Compile Include="ModelAD\MActionLog.cs" />
     <Compile Include="ModelAD\MAppointment.cs" />
     <Compile Include="ModelAD\MAppointmentsInfo.cs" />
     <Compile Include="ModelAD\MAssignCriteria.cs" />
@@ -402,6 +403,7 @@
     <Compile Include="ModelAD\MGroupWorkflow.cs" />
     <Compile Include="ModelAD\MModuleTable.cs" />
     <Compile Include="ModelAD\MTabPanel.cs" />
+    <Compile Include="ModelAD\X_AD_ActionLog.cs" />
     <Compile Include="ModelAD\X_AD_AlertRuleCondition.cs" />
     <Compile Include="ModelAD\X_AD_AttachmentLine.cs" />
     <Compile Include="ModelAD\X_AD_AttachmentReference.cs" />

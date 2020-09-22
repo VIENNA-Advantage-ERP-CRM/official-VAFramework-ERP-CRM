@@ -405,6 +405,42 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Log view/download action events
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Session_ID">sessioni id</param>
+        /// <param name="AD_Client_ID"client id></param>
+        /// <param name="AD_Org_ID">org id</param>
+        /// <param name="action">menu action (window.proces etc)</param>
+        /// <param name="actionType"type of action></param>
+        /// <param name="actionOrigin">origin of action</param>
+        /// <param name="desc">additional info</param>
+        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="Record_ID">record id</param>
+        /// <returns></returns>
+        public MActionLog ActionLog(Ctx ctx, int AD_Session_ID,
+    int AD_Client_ID, int AD_Org_ID,
+    String action, string actionType, String actionOrigin, string desc, int AD_Table_ID, int Record_ID = 0)
+        {
+            MActionLog alog = null;
+            try
+            {
+                alog = new MActionLog(GetCtx(), GetAD_Session_ID(),
+                    AD_Client_ID, AD_Org_ID, action, actionType, actionOrigin, desc, AD_Table_ID, Record_ID);
+                   
+                alog.Save();
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
+                    + ", AD_Table_ID=" + AD_Table_ID + ", actionOrigin=" + actionOrigin
+                   , e);
+            }
+            return alog;
+        }
+
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="AD_Client_ID"></param>
