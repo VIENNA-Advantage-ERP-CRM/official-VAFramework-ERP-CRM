@@ -4168,7 +4168,8 @@ namespace VIS.Models
 
             sql.Append(" ORDER BY J.DOCUMENTNO ASC");
 
-            DataSet ds = DB.ExecuteDataset(sql.ToString(), null, null);
+            //DataSet ds = DB.ExecuteDataset(sql.ToString(), null, null);
+            DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql.ToString(), page, size);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 decimal? openAmt = 0;

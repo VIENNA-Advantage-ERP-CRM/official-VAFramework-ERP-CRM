@@ -60,6 +60,9 @@
         var readOnlyGL = true;
         var glTotal = 0;
         var colGlCheck = false;
+        var prevAmt = 0;
+        var presAmt = 0;
+        var getGLChanges = [];
         //End
 
         var $gridPayment = null;
@@ -161,6 +164,11 @@
         var countVA009 = 0;
         var stdPrecision = 0;
 
+        //handling culture for amount fields
+        var culture = new VIS.CultureSeparator();
+        var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+        var dotFormatter = VIS.Env.isDecimalPoint();
+
         /* Variable for Paging*/
         var PAGESIZE = 50;
         var pageNoInvoice = 1, gridPgnoInvoice = 1, invoiceRecord = 0;
@@ -238,7 +246,8 @@
             "Doc_Base_Type",
             "FromDate",
             "ToDate",
-            "Payment_Type"
+            "Payment_Type",
+            "CreditOrDebit"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -1083,6 +1092,9 @@
 
             //change event for checkbox to select/unselect all for gl-allocation grid
             $glSelectAll.on("change", function (e) {
+                if ($glSelectAll.prop("checked") == false) {
+                    getGLChanges = [];
+                }
                 var chk = $('#grid_' + $glLineGrid.name + '_records td[col="0"]').find('input[type="checkbox"]');
                 for (var i = 0; i < chk.length; i++) {
                     $(chk[i]).prop('checked', $glSelectAll.prop("checked"));
@@ -1959,7 +1971,7 @@
                 + '<div class="vis-allocation-leftControls" id = VIS_cnvrDateDiv_' + $self.windowNo + ' >'
                 + '<div class="input-group vis-input-wrap">'
                 + '<div class="vis-control-wrap">'
-                + '<input  class="vis-allocation-date" style="display:block;" id=VIS_cmbConversionDate_' + $self.windowNo + ' type="date">'
+                + '<input  class="vis-allocation-date" style="display:block;" id=VIS_cmbConversionDate_' + $self.windowNo + ' type="date" max="9999-12-31">'
                 + '<label title="View allocation will be created on this date" type="date" >' + VIS.Msg.getMsg("ConversionDate") + '</label>'
                 + '</div></div></div>');
             $innerRow.append($multiCurr);
@@ -2111,7 +2123,7 @@
             $row2.find("#docType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocType).append('<label>' + VIS.translatedTexts.DocType + '</label>'));
             $row2.find("#docbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($payDocbaseType).append('<label>' + VIS.translatedTexts.DocBaseType + '</label>'));
             $row2.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($pfromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
-            $row2.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($ptoDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
+            $row2.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($ptoDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
             //get control of clear button
             $payclrbtn = $row2.find('#pclrbutton_' + $self.windowNo);
         };
@@ -2125,7 +2137,7 @@
             $srchbtnCashJournal = $row3.find("#_SrchcBtn_" + $self.windowNo + '');
             $row3.find("#_paymentType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cashPayType).append('<label>' + VIS.translatedTexts.Payment_Type + '</label>'));
             $row3.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($cfromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
-            $row3.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($ctoDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
+            $row3.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($ctoDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
             //get control of clear button
             $cashclrbtn = $row3.find('#cclrbutton_' + $self.windowNo);
         };
@@ -2141,7 +2153,7 @@
             $row4.find("#docType" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($cmbDocType).append('<label>' + VIS.translatedTexts.DocType + '</label>'));
             $row4.find("#invbaseType_" + $self.windowNo + '').append($('<div class="vis-control-wrap">').append($invDocbaseType).append('<label>' + VIS.translatedTexts.DocBaseType + '</label>'));
             $row4.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($fromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
-            $row4.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($toDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
+            $row4.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($toDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
             //get control of clear button
             $clrbtn = $row4.find('#clrbutton_' + $self.windowNo);
         };
@@ -2155,7 +2167,7 @@
             $srchGL = $row5.find("#glSrch" + $self.windowNo + '');
             $srchbtnGL = $row5.find("#_SrchglBtn_" + $self.windowNo + '');
             $row5.find(".vis-fdate-allocation").append($('<div class="vis-control-wrap">').append($gfromDate).append('<label>' + VIS.translatedTexts.FromDate + '</label>'));
-            $row5.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($gtoDate).append('<label>' + VIS.translatedTexts.ToDate + '</label>'));
+            $row5.find(".vis-tdate-allocation").append($('<div class="vis-control-wrap">').append($gtoDate).append('<label>' + VIS.Msg.getMsg("ToDate") + '</label>'));
             //get control of clear button
             $glclrbtn = $row5.find('#gclrbutton_' + $self.windowNo);
         };
@@ -3120,8 +3132,8 @@
                 onEditField: function (event) {
                     event.onComplete = function (event) {
                         id = event.recid;
-
-                        $('#grid_openformatgrid_' + $self.windowNo + '_edit_' + id + '_10').keydown(function (event) {
+                        //event.column is a AppliedAmt column sequence No
+                        $('#grid_openformatgrid_' + $self.windowNo + '_edit_' + id + '_12').keydown(function (event) {
                             var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
 
                             if (!isDotSeparator && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
@@ -3351,7 +3363,7 @@
                     event.onComplete = function (event) {
                         id = event.recid;
 
-                        $('#grid_openformatgridcash_' + $self.windowNo + '_edit_' + id + '_8').keydown(function (event) {
+                        $('#grid_openformatgridcash_' + $self.windowNo + '_edit_' + id + '_12').keydown(function (event) {
                             var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
 
                             if (!isDotSeparator && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
@@ -3583,6 +3595,9 @@
                     event.onComplete = function (event) {
                         id = event.recid;
                         if (event.column == 15 || event.column == 16 || event.column == 17) {
+                            $gridInvoice.records[event.index][$gridInvoice.columns[event.column].field] = checkcommaordot(event, $gridInvoice.records[event.index][$gridInvoice.columns[event.column].field]);
+                            var _value = format.GetFormatAmount($gridInvoice.records[event.index][$gridInvoice.columns[event.column].field], "init", dotFormatter);
+                            $gridInvoice.records[event.index][$gridInvoice.columns[event.column].field] = format.GetConvertedString(_value, dotFormatter);
                             $('#grid_openformatgridinvoice_' + $self.windowNo + '_edit_' + id + '_' + event.column).keydown(function (event) {
                                 var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
 
@@ -4398,6 +4413,12 @@
                 if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                     $glLineGrid.refreshCell(event.recid, "AppliedAmt");
                     getMaxDate();
+                    //when unselect the record it will remove that record in getGLChanges list.
+                    for (var x = 0; x < getGLChanges.length; x++) {
+                        if (getGLChanges[x].recid == event.recid) {
+                            getGLChanges.splice(x, 1);
+                        }
+                    }
                 }
                 else {
                     if (element[0].SelectRow == true) {
@@ -4459,6 +4480,38 @@
                                 var eData = { "type": "click", "phase": "before", "target": "grid", "recid": event.recid, "index": event.recid, "isStopped": false, "isCan//celled": false, "onComplete": null };
                                 $glLineGrid.trigger(eData);
                                 return false;
+                            }
+                        }
+
+                        //Restricting to Select both Credit and Debit Amount's in GL Journal gird
+                        getGLChanges.push(element[0]);
+                        if (getGLChanges.length == 1) {
+                            prevAmt = $glLineGrid.get(event.recid).OpenAmount;
+                        }
+                        else if (getGLChanges.length > 1) {
+                            presAmt = $glLineGrid.get(event.recid).OpenAmount;
+                            if (!(parseFloat(prevAmt) > 0 && parseFloat(presAmt) > 0) && !(parseFloat(prevAmt) < 0 && parseFloat(presAmt) < 0)) {
+                                if (!$glSelectAll.is(':checked')) {
+                                    VIS.ADialog.info("", true, VIS.translatedTexts.CreditOrDebit);
+                                }
+                                $glLineGrid.get(event.recid).changes = false;
+                                $glLineGrid.unselect(event.recid);
+                                $glLineGrid.columns[colIndex].editable = false;
+                                $glLineGrid.get(event.recid).changes.AppliedAmt = "0";
+                                $glLineGrid.refreshCell(event.recid, "AppliedAmt");
+                                var chk = $('#grid_' + $glLineGrid.name + '_records td[col="0"]').find('input[type="checkbox"]');
+                                $(chk[event.recid]).prop('checked', false);
+                                $glLineGrid.editChange.call($glLineGrid, chk[event.recid], event.recid, 0, event);
+                                var eData = { "type": "click", "phase": "before", "target": "grid", "recid": event.recid, "index": event.recid, "isStopped": false, "isCan//celled": false, "onComplete": null };
+                                $glLineGrid.trigger(eData);
+                                for (var x = 0; x < getGLChanges.length; x++) {
+                                    if (getGLChanges[x].recid == event.recid) {
+                                        getGLChanges.splice(x, 1);
+                                    }
+                                }
+                                if (!$glSelectAll.is(':checked')) {
+                                    return false;
+                                }
                             }
                         }
                     }
@@ -5731,13 +5784,13 @@
 
         // when we change or load business partner, refresh label
         function refreshLabel() {
-            var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
-            var totalPay = parseFloat(0);
-            $lblPaymentSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + format.GetFormatedValue(totalPay) + " ");//VIS.Msg.getMsg("SelectedPayments") +
-            $lblCashSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + format.GetFormatedValue(totalPay) + " "); //VIS.Msg.getMsg("SelectedCashlines") +
-            $lblInvoiceSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + format.GetFormatedValue(totalPay) + " ");//VIS.Msg.getMsg("SelectedInvoices") +
-            $lblglSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + format.GetFormatedValue(totalPay) + " ");//VIS.Msg.getMsg("SelectedGL") +
-            $vtxtDifference.text(format.GetFormatedValue(0));
+            //var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+            var totalPay = parseFloat(0).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
+            $lblPaymentSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + totalPay + " ");//VIS.Msg.getMsg("SelectedPayments") +
+            $lblCashSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + totalPay + " "); //VIS.Msg.getMsg("SelectedCashlines") +
+            $lblInvoiceSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + totalPay + " ");//VIS.Msg.getMsg("SelectedInvoices") +
+            $lblglSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + totalPay + " ");//VIS.Msg.getMsg("SelectedGL") +
+            $vtxtDifference.text(totalPay);
             //Set False to select all 
             $invSelectAll.prop('checked', false);
             $paymentSelctAll.prop('checked', false);
