@@ -164,11 +164,6 @@
         var countVA009 = 0;
         var stdPrecision = 0;
 
-        //handling culture for amount fields
-        var culture = new VIS.CultureSeparator();
-        var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
-        var dotFormatter = VIS.Env.isDecimalPoint();
-
         /* Variable for Paging*/
         var PAGESIZE = 50;
         var pageNoInvoice = 1, gridPgnoInvoice = 1, invoiceRecord = 0;
@@ -245,7 +240,6 @@
             "DocType",
             "Doc_Base_Type",
             "FromDate",
-            "ToDate",
             "Payment_Type",
             "CreditOrDebit"
         ];
@@ -3362,7 +3356,7 @@
                 onEditField: function (event) {
                     event.onComplete = function (event) {
                         id = event.recid;
-
+                        //event.column is a AppliedAmt column sequence No
                         $('#grid_openformatgridcash_' + $self.windowNo + '_edit_' + id + '_12').keydown(function (event) {
                             var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
 
@@ -3594,10 +3588,8 @@
                 onEditField: function (event) {
                     event.onComplete = function (event) {
                         id = event.recid;
-                        if (event.column == 15 || event.column == 16 || event.column == 17) {
-                            $gridInvoice.records[event.index][$gridInvoice.columns[event.column].field] = checkcommaordot(event, $gridInvoice.records[event.index][$gridInvoice.columns[event.column].field]);
-                            var _value = format.GetFormatAmount($gridInvoice.records[event.index][$gridInvoice.columns[event.column].field], "init", dotFormatter);
-                            $gridInvoice.records[event.index][$gridInvoice.columns[event.column].field] = format.GetConvertedString(_value, dotFormatter);
+                        //event.column 12 for DiscountAmt, 16 for WriteOffAmt and 17 for AppliedAmt column sequence.
+                        if (event.column == 12 || event.column == 16 || event.column == 17) {
                             $('#grid_openformatgridinvoice_' + $self.windowNo + '_edit_' + id + '_' + event.column).keydown(function (event) {
                                 var isDotSeparator = culture.isDecimalSeparatorDot(window.navigator.language);
 
@@ -5784,7 +5776,8 @@
 
         // when we change or load business partner, refresh label
         function refreshLabel() {
-            //var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+            //var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount); 
+            //set the amount as culture format.
             var totalPay = parseFloat(0).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
             $lblPaymentSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + totalPay + " ");//VIS.Msg.getMsg("SelectedPayments") +
             $lblCashSum.text(0 + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + totalPay + " "); //VIS.Msg.getMsg("SelectedCashlines") +
