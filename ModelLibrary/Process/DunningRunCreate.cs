@@ -474,7 +474,7 @@ namespace VAdvantage.Process
                     ValueNamePair vp = VLogger.RetrieveError();
                     if (vp != null)
                     {
-                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ vp.GetName());
                     }
                     else
                     {
@@ -498,7 +498,7 @@ namespace VAdvantage.Process
                 if (vp != null)
                 {
 
-                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ vp.GetName());
                 }
                 else
                 {
@@ -638,7 +638,7 @@ namespace VAdvantage.Process
                     if (vp != null)
                     {
                         string val = vp.GetName();
-                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), val);
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ val);
                     }
                     else
                     {
@@ -660,7 +660,7 @@ namespace VAdvantage.Process
                 if (vp != null)
                 {
 
-                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ vp.GetName());
                 }
                 else
                 {
@@ -695,11 +695,11 @@ namespace VAdvantage.Process
                         if (vp != null)
                         {
 
-                            log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                            log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ vp.GetName());
                         }
                         else
                         {
-                            log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), "");
+                            log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
                         }
                         return;
                     }
@@ -825,7 +825,7 @@ namespace VAdvantage.Process
                     if (vp != null)
                     {
                         string val = vp.GetName();
-                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), val);
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ val);
                     }
                     else
                     {
@@ -844,7 +844,7 @@ namespace VAdvantage.Process
                 if (vp != null)
                 {
 
-                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ vp.GetName());
                 }
                 else
                 {
@@ -970,7 +970,7 @@ namespace VAdvantage.Process
                     if (vp != null)
                     {
                         string val = vp.GetName();
-                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), val);
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+val);
 
                     }
                     else
@@ -991,7 +991,7 @@ namespace VAdvantage.Process
                 if (vp != null)
                 {
 
-                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+vp.GetName());
                 }
                 else
                 {
@@ -1114,7 +1114,7 @@ namespace VAdvantage.Process
                     if (vp != null)
                     {
                         string val = vp.GetName();
-                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"),val);
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+val);
                     }
                     else
                     {
@@ -1133,7 +1133,7 @@ namespace VAdvantage.Process
                 if (vp != null)
                 {
 
-                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"+vp.GetName()));
                 }
                 else
                 {
@@ -1175,7 +1175,7 @@ namespace VAdvantage.Process
                                     if (vp != null)
                                     {
 
-                                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine")+ vp.GetName());
                                     }
                                     else
                                     {
