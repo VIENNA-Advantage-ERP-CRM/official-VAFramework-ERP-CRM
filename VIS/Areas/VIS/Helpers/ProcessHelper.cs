@@ -536,6 +536,12 @@ namespace VIS.Helpers
             Query _query = null;
             int Record_ID = 0;
             object AD_tab_ID = 0;
+
+            MSession sess = MSession.Get(_ctx);
+            sess.ActionLog(_ctx, sess.GetAD_Session_ID(), _ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(),
+                MActionLog.ACTION_Report, MActionLog.ACTIONTYPE_View, MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["AD_Window_ID"])).GetName(), "Window Name:->" +MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["AD_Window_ID"])).GetName()
+                , Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]));
+
             // _ctx.SetContext("#TimeZoneName", "India Standard Time");
             if (queryInfo.Count > 0 || AD_PInstance_ID > 0)
             {
@@ -732,10 +738,15 @@ namespace VIS.Helpers
         /// <param name="recIDs"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType)
+        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType, int AD_Window_ID)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
+            MSession sess = MSession.Get(ctx);
+            sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
+                MActionLog.ACTION_Report, MActionLog.ACTIONTYPE_View, "", "Window Name:->" +MWindow.Get(ctx, AD_Window_ID).GetName()+ ", Record_ID" + Record_ID
+                , AD_Table_ID, Record_ID);
+
             try
             {
                 instance = new MPInstance(ctx, AD_Process_ID, Record_ID);
