@@ -352,22 +352,31 @@
             //Organization 
             $OrgFilter.on("change", function (e) {
                 //clear the girds based on which grid is active (true).
-                if ($allocationFrom.val() == 0 && $allocationTo.val() == 0) {
-                    blankAllGrids();
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
+                    if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
+                        if (allgridsLoaded()) {
+                            if ($gridInvoice) {
+                                clrInvoice(e);
+                            }
+                            if ($glLineGrid) {
+                                clrGLLine(e);
+                            }
+                            if ($gridPayment) {
+                                clrPayment(e);
+                            }
+                            if ($gridCashline) {
+                                clrCashLine(e);
+                            }
+                        }
+                        else {
+                            //VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            blankAllGrids();
+                        }
+                    }
                 }
                 else {
-                    if ($gridInvoice) {
-                        clrInvoice(e);
-                    }
-                    if ($glLineGrid) {
-                        clrGLLine(e);
-                    }
-                    if ($gridPayment) {
-                        clrPayment(e);
-                    }
-                    if ($gridCashline) {
-                        clrCashLine(e);
-                    }
+                    $vSearchBPartner.getControl().addClass('vis-ev-col-mandatory'); //highlight the field
+                    blankAllGrids();
                 }
             });
             $vSearchBPartner.fireValueChanged = bpValueChanged;
@@ -390,7 +399,7 @@
                             }
                         }
                         else {
-                            VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
+                            //VIS.ADialog.info("", true, VIS.Msg.getMsg("VIS_Search_Btn"), "");
                             blankAllGrids();
                         }
                     }
@@ -458,24 +467,15 @@
             $vbtnSearch.on("click", function (e) {
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
-                        loadDocType();
-                        loadPaymentType();
-                        loadpayDocType();
-                        loadpayDocbaseType();
-                        loadinvDocbaseType();
-                        $fromDate.val('');
-                        $toDate.val('');
-                        $pfromDate.val('');
-                        $ptoDate.val('');
-                        $cfromDate.val('');
-                        $ctoDate.val('');
-                        $gfromDate.val('');
-                        $gtoDate.val('');
+                        clearRightPanelFilters(); //clear right side  filters and selected records
                         searchbyParameters();
                     }
                 }
                 else {
                     VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $vSearchBPartner.getControl().addClass('vis-ev-col-mandatory'); //highlight the field
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    blankAllGrids(); // clear the records from selected grids
                 }
             });
 
@@ -527,6 +527,14 @@
                 }
             });
             $vbtnAllocate.on("click", function (e) {
+                if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) == 0) {
+                    //it returns Message if not selected Business Partner.
+                    VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectBusinessPartnerFirst"), "");
+                    $vSearchBPartner.getControl().addClass('vis-ev-col-mandatory'); //highlight the field
+                    clearRightPanelFilters(); //clear all selected filters from right Panel
+                    blankAllGrids(); //clear records from all grids
+                    return false;
+                }
                 if (getSelectedRecordsCount()) {
                     if ($date.val().trim() == "") {
                         VIS.ADialog.info("", true, VIS.Msg.getMsg("InvalidDateFormat"), "");
@@ -1218,28 +1226,6 @@
                 }
             });
 
-            //refresh all filters from right Panel
-            function clearRightPanelFilters() {
-                $cashPayType.val(0);
-                $invDocbaseType.val(0);
-                $payDocbaseType.val(0);
-                $payDocType.val(0);
-                $cmbDocType.val(0);
-                $fromDate.val('');
-                $toDate.val('');
-                $pfromDate.val('');
-                $ptoDate.val('');
-                $cfromDate.val('');
-                $ctoDate.val('');
-                $gfromDate.val('');
-                $gtoDate.val('');
-                selectedCashlines = [];
-                selectedInvoices = [];
-                selectedPayments = [];
-                SelectedGL = [];
-                refreshLabel();
-            }
-
             //allocation From combo event
             $allocationFrom.on("change", function (e) {
                 if ($allocationFrom.val() == 0) {
@@ -1299,6 +1285,28 @@
                 clearRightPanelFilters();
             });
         };
+
+        //refresh all filters from right Panel
+        function clearRightPanelFilters() {
+            $cashPayType.val(0);
+            $invDocbaseType.val(0);
+            $payDocbaseType.val(0);
+            $payDocType.val(0);
+            $cmbDocType.val(0);
+            $fromDate.val('');
+            $toDate.val('');
+            $pfromDate.val('');
+            $ptoDate.val('');
+            $cfromDate.val('');
+            $ctoDate.val('');
+            $gfromDate.val('');
+            $gtoDate.val('');
+            selectedCashlines = [];
+            selectedInvoices = [];
+            selectedPayments = [];
+            SelectedGL = [];
+            refreshLabel();
+        }
 
         ////to load GL Grid and define events of Gl Grid
         //function loadGLGrid() {
@@ -4901,8 +4909,14 @@
                             if (!($gridPayment.getChanges()[i].SelectRow == undefined || $gridPayment.getChanges()[i].SelectRow == false))
                                 isAllUncheckedPayment = true;
                         }
+                        //added for GL grid to validate ConversionType
+                        var isAllUncheckedGL = false;
+                        for (var i = 0; i < $glLineGrid.getChanges().length; i++) {
+                            if (!($glLineGrid.getChanges()[i].SelectRow == undefined || $glLineGrid.getChanges()[i].SelectRow == false))
+                                isAllUncheckedGL = true;
+                        }
 
-                        if (!isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
+                        if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
                             C_ConversionType_ID = 0;
 
                         $gridPayment.columns[_payment].editable = false;
@@ -5008,7 +5022,14 @@
                                 isAllUncheckedPayment = true;
                         }
 
-                        if (!isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
+                        //added for GL grid to validate ConversionType
+                        var isAllUncheckedGL = false;
+                        for (var i = 0; i < $glLineGrid.getChanges().length; i++) {
+                            if (!($glLineGrid.getChanges()[i].SelectRow == undefined || $glLineGrid.getChanges()[i].SelectRow == false))
+                                isAllUncheckedGL = true;
+                        }
+
+                        if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
                             C_ConversionType_ID = 0;
 
                         $gridCashline.columns[_paymentCash].editable = false;
@@ -5127,7 +5148,14 @@
                             isAllUncheckedPayment = true;
                     }
 
-                    if (!isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
+                    //added for GL grid to validate ConversionType
+                    var isAllUncheckedGL = false;
+                    for (var i = 0; i < $glLineGrid.getChanges().length; i++) {
+                        if (!($glLineGrid.getChanges()[i].SelectRow == undefined || $glLineGrid.getChanges()[i].SelectRow == false))
+                            isAllUncheckedGL = true;
+                    }
+
+                    if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment)
                         C_ConversionType_ID = 0;
 
                     $gridInvoice.columns[_applied].editable = false;
@@ -5237,12 +5265,31 @@
                             $glLineGrid.refreshCell(row, "AppliedAmt");
                         }
                     }
+                    //added for Cash Journal, Payment and Invoice grid(s) changes to validate ConversionType
+                    var isAllUncheckedInvoice = false;
+                    for (var i = 0; i < $gridInvoice.getChanges().length; i++) {
+                        if (!($gridInvoice.getChanges()[i].SelectRow == undefined || $gridInvoice.getChanges()[i].SelectRow == false))
+                            isAllUncheckedInvoice = true;
+                    }
+
+                    var isAllUncheckedCash = false;
+                    for (var i = 0; i < $gridCashline.getChanges().length; i++) {
+                        if (!($gridCashline.getChanges()[i].SelectRow == undefined || $gridCashline.getChanges()[i].SelectRow == false))
+                            isAllUncheckedCash = true;
+                    }
+
+                    var isAllUncheckedPayment = false;
+                    for (var i = 0; i < $gridPayment.getChanges().length; i++) {
+                        if (!($gridPayment.getChanges()[i].SelectRow == undefined || $gridPayment.getChanges()[i].SelectRow == false))
+                            isAllUncheckedPayment = true;
+                    }
+
                     var isAllUncheckedGL = false;
                     for (var i = 0; i < $glLineGrid.getChanges().length; i++) {
                         if (!($glLineGrid.getChanges()[i].SelectRow == undefined || $glLineGrid.getChanges()[i].SelectRow == false))
                             isAllUncheckedGL = true;
                     }
-                    if (!isAllUncheckedGL) {
+                    if (!isAllUncheckedGL && !isAllUncheckedInvoice && !isAllUncheckedCash && !isAllUncheckedPayment) {
                         C_ConversionType_ID = 0;
                     }
                 }
@@ -5606,6 +5653,8 @@
             //  BPartner
             if (name == "C_BPartner_ID") {
                 if (_C_BPartner_ID != value) {
+                    //clear right side  filters and selected records
+                    clearRightPanelFilters(); 
                     //added to load all blank grids
                     blankAllGrids();
                 }
@@ -5909,14 +5958,14 @@
                 glData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, DateAcct);
             }
             else if ($allocationFrom.val() == "C" || $allocationTo.val() == "C") {
-                saveCashData(rowsPayment, rowsCash, rowsInvoice, DateTrx, DateAcct);
+                saveCashData(rowsCash, rowsInvoice, DateTrx, DateAcct);
             }
             else {
-                savePaymentData(rowsPayment, rowsCash, rowsInvoice, DateTrx, DateAcct);
+                savePaymentData(rowsPayment, rowsInvoice, DateTrx, DateAcct);
             }
         };
 
-        function saveCashData(rowsPayment, rowsCash, rowsInvoice, DateTrx, DateAcct) {
+        function saveCashData(rowsCash, rowsInvoice, DateTrx, DateAcct) {
 
             if (_noInvoices + _noCashLines == 0)
                 return "";
@@ -5943,7 +5992,7 @@
                         var open = "";
                         var C_CurrencyType_ID = 0;
 
-                        var paymentData = [];
+                        //var paymentData = [];
                         var cashData = [];
                         var invoiceData = [];
 
@@ -5954,14 +6003,14 @@
                         else {
                             var conversionDate = Globalize.format(new Date(), "yyyy-MM-dd");
                         }
-                        for (var i = 0; i < rowsPayment.length; i++) {
-                            var row = $gridPayment.get(rowsPayment[i].recid);
-                            C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
-                            paymentData.push({
-                                AppliedAmt: rowsPayment[i].AppliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, CpaymentID: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
-                                Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val())
-                            });
-                        }
+                        //for (var i = 0; i < rowsPayment.length; i++) {
+                        //    var row = $gridPayment.get(rowsPayment[i].recid);
+                        //    C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
+                        //    paymentData.push({
+                        //        AppliedAmt: rowsPayment[i].AppliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, CpaymentID: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
+                        //        Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val())
+                        //    });
+                        //}
                         if (rowsCash.length > 0) {
                             var keys = Object.keys($gridCashline.get(0));
                             // is uesd to pick applied amount
@@ -5970,10 +6019,12 @@
                             for (var i = 0; i < rowsCash.length; i++) {
                                 var row = $gridCashline.get(rowsCash[i].recid);
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
-                                cashData.push({
-                                    AppliedAmt: rowsCash[i].AppliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
-                                    Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val())
-                                });
+                                if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
+                                    cashData.push({
+                                        AppliedAmt: rowsCash[i].AppliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
+                                        Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val())
+                                    });
+                                }
                             }
                         }
 
@@ -5998,24 +6049,26 @@
                                 if (writeoffs == undefined) {
                                     writeoffs = row.Writeoff;
                                 }
-                                if (countVA009 <= 0) {
-                                    invoiceData.push({
-                                        AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
-                                        cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
-                                        Date: row.Date1, Docbasetype: row.DocBaseType,
-                                        documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount, Org: parseInt($cmbOrg.val())
-                                    });
-                                }
-                                else {
-                                    invoiceData.push({
-                                        AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
-                                        cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
-                                        //Date: row.Date1, Docbasetype: row.DocBaseType,
-                                        // send invoice schedule date if va009 module is updated
-                                        Date: row.InvoiceScheduleDate, Docbasetype: row.DocBaseType,
-                                        documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount,
-                                        c_invoicepayschedule_id: row.C_InvoicePaySchedule_ID, Org: parseInt($cmbOrg.val())
-                                    });
+                                if (appliedamts != 0 && appliedamts != undefined) {
+                                    if (countVA009 <= 0) {
+                                        invoiceData.push({
+                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
+                                            cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
+                                            Date: row.Date1, Docbasetype: row.DocBaseType,
+                                            documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount, Org: parseInt($cmbOrg.val())
+                                        });
+                                    }
+                                    else {
+                                        invoiceData.push({
+                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
+                                            cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
+                                            //Date: row.Date1, Docbasetype: row.DocBaseType,
+                                            // send invoice schedule date if va009 module is updated
+                                            Date: row.InvoiceScheduleDate, Docbasetype: row.DocBaseType,
+                                            documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount,
+                                            c_invoicepayschedule_id: row.C_InvoicePaySchedule_ID, Org: parseInt($cmbOrg.val())
+                                        });
+                                    }
                                 }
                             }
                         }
@@ -6025,7 +6078,7 @@
                             url: VIS.Application.contextUrl + "PaymentAllocation/SaveCashData",
                             type: 'POST',
                             data: ({
-                                paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
+                                cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
                                 isCash: true, _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
                                 , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
                             }),
@@ -6052,7 +6105,7 @@
             });
         };
 
-        function savePaymentData(rowsPayment, rowsCash, rowsInvoice, DateTrx, DateAcct) {
+        function savePaymentData(rowsPayment, rowsInvoice, DateTrx, DateAcct) {
 
             if (_noInvoices + _payment == 0)
                 return "";
@@ -6079,7 +6132,7 @@
                         var C_CurrencyType_ID = 0;
 
                         var paymentData = [];
-                        var cashData = [];
+                        //var cashData = [];
                         var invoiceData = [];
 
                         var chk = $vchkMultiCurrency.is(':checked');
@@ -6095,22 +6148,24 @@
                             payment = keys[keys.indexOf("AppliedAmt")];
                             C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                             payment = keys[10];
-                            paymentData.push({
-                                appliedamt: rowsPayment[i].AppliedAmt, date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
-                                multiplierap: row.Multiplierap, openamt: row.OpenAmt, payment: row.Payment, Org: parseInt($cmbOrg.val())
-                            });
-                        }
-                        if (rowsCash.length > 0) {
-                            var keys = Object.keys($gridCashline.get(0));
-                            for (var i = 0; i < rowsCash.length; i++) {
-                                var row = $gridCashline.get(rowsCash[i].recid);
-
-                                cashData.push({
-                                    appliedamt: rowsCash[i].AppliedAmt, date: row.Created, amount: row.Amount, ccashlineid: row.CcashlineiID, converted: row.ConvertedAmount, isocode: row.Isocode,
-                                    multiplierap: row.Multiplierap, openamt: row.OpenAmt, receiptno: row.ReceiptNo, Org: parseInt($cmbOrg.val())
+                            if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
+                                paymentData.push({
+                                    appliedamt: rowsPayment[i].AppliedAmt, date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
+                                    multiplierap: row.Multiplierap, openamt: row.OpenAmt, payment: row.Payment, Org: parseInt($cmbOrg.val())
                                 });
                             }
                         }
+                        //if (rowsCash.length > 0) {
+                        //    var keys = Object.keys($gridCashline.get(0));
+                        //    for (var i = 0; i < rowsCash.length; i++) {
+                        //        var row = $gridCashline.get(rowsCash[i].recid);
+
+                        //        cashData.push({
+                        //            appliedamt: rowsCash[i].AppliedAmt, date: row.Created, amount: row.Amount, ccashlineid: row.CcashlineiID, converted: row.ConvertedAmount, isocode: row.Isocode,
+                        //            multiplierap: row.Multiplierap, openamt: row.OpenAmt, receiptno: row.ReceiptNo, Org: parseInt($cmbOrg.val())
+                        //        });
+                        //    }
+                        //}
 
                         if (rowsInvoice.length > 0) {
                             var keys = Object.keys($gridInvoice.get(0));
@@ -6135,25 +6190,26 @@
                                 if (writeoffs == undefined) {
                                     writeoffs = row.Writeoff;
                                 }
-
-                                if (countVA009 <= 0) {
-                                    invoiceData.push({
-                                        appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
-                                        cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
-                                        date: row.Date1, docbasetype: row.DocBaseType,
-                                        documentno: row.Documentno, isocode: row.Isocode, multiplierap: row.Multiplierap, amount: row.Amount, Org: parseInt($cmbOrg.val())
-                                    });
-                                }
-                                else {
-                                    invoiceData.push({
-                                        appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
-                                        cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
-                                        //date: row.Date1, docbasetype: row.DocBaseType,
-                                        // send invoice schedule date if va009 module is updated
-                                        date: row.InvoiceScheduleDate, docbasetype: row.DocBaseType,
-                                        DocumentNo: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount,
-                                        c_invoicepayschedule_id: row.C_InvoicePaySchedule_ID, Org: parseInt($cmbOrg.val())
-                                    });
+                                if (appliedamts != 0 && appliedamts != undefined) {
+                                    if (countVA009 <= 0) {
+                                        invoiceData.push({
+                                            appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
+                                            cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
+                                            date: row.Date1, docbasetype: row.DocBaseType,
+                                            documentno: row.Documentno, isocode: row.Isocode, multiplierap: row.Multiplierap, amount: row.Amount, Org: parseInt($cmbOrg.val())
+                                        });
+                                    }
+                                    else {
+                                        invoiceData.push({
+                                            appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
+                                            cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
+                                            //date: row.Date1, docbasetype: row.DocBaseType,
+                                            // send invoice schedule date if va009 module is updated
+                                            date: row.InvoiceScheduleDate, docbasetype: row.DocBaseType,
+                                            DocumentNo: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount,
+                                            c_invoicepayschedule_id: row.C_InvoicePaySchedule_ID, Org: parseInt($cmbOrg.val())
+                                        });
+                                    }
                                 }
                             }
                         }
@@ -6167,8 +6223,8 @@
                             url: VIS.Application.contextUrl + "PaymentAllocation/SavePaymentData",
                             type: 'POST',
                             data: ({
-                                paymentData: JSON.stringify(paymentData), cashData: JSON.stringify(cashData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
-                                isCash: cashcheck, _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
+                                paymentData: JSON.stringify(paymentData), invoiceData: JSON.stringify(invoiceData), currency: $cmbCurrency.val(),
+                                _C_BPartner_ID: _C_BPartner_ID, _windowNo: self.windowNo, payment: payment, DateTrx: $date.val(), appliedamt: applied
                                 , discount: discount, writeOff: writeOff, open: open, DateAcct: DateAcct, _CurrencyType_ID: C_CurrencyType_ID, isInterBPartner: false, conversionDate: conversionDate, chk: chk
                             }),
                             success: function (result) {

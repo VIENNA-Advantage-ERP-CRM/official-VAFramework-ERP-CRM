@@ -1122,6 +1122,13 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
         public MJournal ReverseCorrectIt(int GL_JournalBatch_ID)
         {
             log.Info(ToString());
+            //If any journal line is allocated then the Journal will not Reverted
+            string sql = "SELECT Count(IsAllocated) AS IsAllocated FROM GL_JournalLine WHERE GL_Journal_ID = " + GetGL_Journal_ID() + " AND IsAllocated = 'Y'";
+            if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+            {
+                _processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
+                return null;
+            }
             //	Journal
             MJournal reverse = new MJournal(this);
             reverse.SetGL_JournalBatch_ID(GL_JournalBatch_ID);
