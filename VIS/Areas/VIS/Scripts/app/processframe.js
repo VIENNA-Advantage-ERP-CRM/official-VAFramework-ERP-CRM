@@ -555,6 +555,10 @@
         return true;
     };
 
+    AProcess.prototype.setActionOrigin = function (origin) {
+        this.ActionOrigin = origin;
+    }
+
     AProcess.prototype.setTitle = function (title) {
         if (this.parent)
             this.parent.setTitle(VIS.Utility.Util.cleanMnemonic(title));
@@ -754,6 +758,8 @@
 
 
         function createControls(panel, repObj) {
+            pctl.pi.setActionOrigin(self.ActionOrigin);
+            pctl.pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
             var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
 
             canExport = VIS.MRole.getDefault().getIsCanExport(AD_Table_ID);

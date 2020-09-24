@@ -317,6 +317,13 @@
             pi.setFileType(fileType);
             pi.set_AD_PrintFormat_ID(ad_PrintFormat_ID);
             pi.setAD_Window_ID(AD_Window_ID);
+            if (AD_Window_ID > 0) {
+                pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_WINDOW);
+            }
+            else {
+                pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_FORM);
+            }
+            pi.setOriginName(VIS.context.getWindowContext(windowNo, "WindowName"));
 
             var data = {
                 processInfo: pi.toJson(),
@@ -1455,7 +1462,10 @@
         };
 
         function process(csv, callback, filetype) {
-
+            var actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_FORM;
+            if (windowID > 0) {
+                actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_WINDOW;
+            }
             if (!recIds || recIds.length == 0) {
                 $.ajax({
                     url: VIS.Application.contextUrl + "JsonData/GeneratePrint/",
@@ -1467,7 +1477,8 @@
                         Record_ID: record_ID,
                         WindowNo: WindowNo,
                         filetype: filetype,
-                        AD_Window_ID: windowID
+                        actionOrigin: actionOrigin,
+                        originName: VIS.context.getWindowContext(WindowNo, "WindowName")
 
                     },
                     success: function (data) {
@@ -1555,7 +1566,8 @@
                         RecIDs: recIds,
                         WindowNo: WindowNo,
                         filetype: filetype,
-                        AD_Window_ID: windowID
+                        actionOrigin: actionOrigin,
+                        originName: VIS.context.getWindowContext(WindowNo, "WindowName")
 
                     },
                     success: function (data) {

@@ -536,10 +536,29 @@ namespace VIS.Helpers
             Query _query = null;
             int Record_ID = 0;
             object AD_tab_ID = 0;
-
+            string reportTypeForLog = MActionLog.ACTIONTYPE_View;
+            string descriptonForLog = "Report Viewed.";
+            int processID = Util.GetValueOfInt(nProcessInfo["Process_ID"]);
+            if (fileType.Equals(ProcessCtl.ReportType_PDF))
+            {
+                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                descriptonForLog = "PDF Report Downloaded.";
+            }
+            else if (fileType.Equals(ProcessCtl.ReportType_CSV))
+            {
+                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                descriptonForLog = "CSV Report Downloaded.";
+            }
+            if (processID > 0)
+            {
+                descriptonForLog += ", Process Name:->" + MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName();
+            }
             MSession sess = MSession.Get(_ctx);
+
+            
+
             sess.ActionLog(_ctx, sess.GetAD_Session_ID(), _ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(),
-                MActionLog.ACTION_Report, MActionLog.ACTIONTYPE_View, MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["AD_Window_ID"])).GetName(), "Window Name:->" +MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["AD_Window_ID"])).GetName()
+                Util.GetValueOfString(nProcessInfo["ActionOrigin"]), reportTypeForLog,  Util.GetValueOfString(nProcessInfo["OriginName"]), descriptonForLog
                 , Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]));
 
             // _ctx.SetContext("#TimeZoneName", "India Standard Time");
@@ -738,13 +757,16 @@ namespace VIS.Helpers
         /// <param name="recIDs"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType, int AD_Window_ID)
+        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType,string actionOrigin, string originName)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
             MSession sess = MSession.Get(ctx);
+            string reportTypeForLog = MActionLog.ACTIONTYPE_View;
+            if (fileType.Equals(ProcessCtl.ReportType_PDF) || fileType.Equals(ProcessCtl.ReportType_CSV))
+                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
             sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
-                MActionLog.ACTION_Report, MActionLog.ACTIONTYPE_View, "", "Window Name:->" +MWindow.Get(ctx, AD_Window_ID).GetName()+ ", Record_ID" + Record_ID
+                actionOrigin, reportTypeForLog, originName, "Process Name="+MProcess.Get(ctx,AD_Process_ID).GetName()+ ",Record_ID=" + Record_ID
                 , AD_Table_ID, Record_ID);
 
             try
