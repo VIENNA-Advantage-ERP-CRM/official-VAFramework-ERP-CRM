@@ -1126,7 +1126,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             string sql = "SELECT Count(IsAllocated) AS IsAllocated FROM GL_JournalLine WHERE GL_Journal_ID = " + GetGL_Journal_ID() + " AND IsAllocated = 'Y'";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
-                _processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
+                m_processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
                 return null;
             }
             //	Journal
