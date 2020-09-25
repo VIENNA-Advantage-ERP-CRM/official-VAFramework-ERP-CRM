@@ -5502,8 +5502,9 @@
         var _vo = this.vo;
         if ((_vo.IsKey && _vo.ColumnName.endsWith("_ID"))
             || _vo.ColumnName.startsWith("Created") || _vo.ColumnName.startsWith("Updated")
-            || _vo.ColumnName.equals("Value")
-            || _vo.ColumnName.equals("DocumentNo")
+            /**by harwinder - show mandatory sign against the document no also (tick mark)*/
+/*            || _vo.ColumnName.equals("Value")
+            || _vo.ColumnName.equals("DocumentNo")*/
             || _vo.ColumnName.equals("M_AttributeSetInstance_ID"))	//	0 is valid
             return false;
 
