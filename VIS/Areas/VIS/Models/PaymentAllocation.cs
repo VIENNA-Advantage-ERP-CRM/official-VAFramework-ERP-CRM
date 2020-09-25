@@ -4110,7 +4110,7 @@ namespace VIS.Models
             StringBuilder sql = new StringBuilder();
             MCurrency objCurrency = MCurrency.Get(ctx, _C_Currency_ID);
             sql.Append(@" SELECT EV.AccountType, JL.C_BPARTNER_ID,  CB.ISCUSTOMER,  CB.ISVENDOR, J.DATEDOC, J.DATEACCT, J.DOCUMENTNO,  NVL(JL.AMTSOURCEDR, 0),  NVL(JL.AMTSOURCECR,0),c.ISO_Code AS ISO_CODE,
-                JL.C_CONVERSIONTYPE_ID, CT.name as CONVERSIONNAME, o.AD_Org_ID, o.Name,
+                JL.C_CONVERSIONTYPE_ID, CT.name as CONVERSIONNAME, o.AD_Org_ID, o.Name, EV.Name AS Account,
                 NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.C_CURRENCY_ID ," + _C_Currency_ID + @",J.DATEACCT ,Jl.C_CONVERSIONTYPE_ID ,J.AD_CLIENT_ID ,J.AD_ORG_ID ), " + objCurrency.GetStdPrecision() + @"),0) as AMTACCTDR, 
                 NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.C_Currency_ID ," + _C_Currency_ID + @",j.DATEACCT ,jl.C_ConversionType_ID ,j.AD_Client_ID ,j.AD_Org_ID ), " + objCurrency.GetStdPrecision() + @"),0) AS AMTACCTCR, 
                 j.GL_Journal_ID, jl.GL_JOURNALLINE_ID FROM GL_Journal j 
@@ -4192,6 +4192,8 @@ namespace VIS.Models
                     gData.DATEDOC = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DATEDOC"]);
                     gData.DATEACCT = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["DATEACCT"]);
                     gData.DOCUMENTNO = ds.Tables[0].Rows[i]["DOCUMENTNO"].ToString();
+                    //added new Column Account 
+                    gData.Account = ds.Tables[0].Rows[i]["Account"].ToString();
                     gData.C_BPartner_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPARTNER_ID"]);
                     gData.isCustomer = isCustomer;
                     gData.isVendor = isVendor;
@@ -6113,6 +6115,7 @@ namespace VIS.Models
             public string Isocode { get; internal set; }
             public int AD_Org_ID { get; set; }
             public string OrgName { get; set; }
+            public string Account { get; set; }
         }
 
         //public class PaymentDetails

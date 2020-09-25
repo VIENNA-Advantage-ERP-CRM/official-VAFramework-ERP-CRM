@@ -241,7 +241,8 @@
             "Doc_Base_Type",
             "FromDate",
             "Payment_Type",
-            "CreditOrDebit"
+            "CreditOrDebit",
+            "Account"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -1435,8 +1436,8 @@
             $invSelectAll.prop('checked', false);
             loadDocType();
             loadinvDocbaseType();
-            $fromDate.val(0);
-            $toDate.val(0);
+            $fromDate.val('');
+            $toDate.val('');
             loadInvoice();
         }
         //to clear the GLLine Grid
@@ -1451,8 +1452,8 @@
             }
             SelectedGL = [];
             $glSelectAll.prop('checked', false);
-            $gfromDate.val(0);
-            $gtoDate.val(0);
+            $gfromDate.val('');
+            $gtoDate.val('');
             loadGLVoucher();
         }
         //to clear the Cash Grid
@@ -1468,8 +1469,8 @@
             selectedCashlines = [];
             $cashSelctAll.prop('checked', false);
             loadPaymentType();
-            $cfromDate.val(0);
-            $ctoDate.val(0);
+            $cfromDate.val('');
+            $ctoDate.val('');
             loadUnallocatedCashLines();
         }
         //to clear the Payment Grid
@@ -1486,8 +1487,8 @@
             $paymentSelctAll.prop('checked', false);
             loadpayDocType();
             loadpayDocbaseType();
-            $pfromDate.val(0);
-            $ptoDate.val(0);
+            $pfromDate.val('');
+            $ptoDate.val('');
             loadUnallocatedPayments();
         }
 
@@ -2874,6 +2875,8 @@
                 }, size: '105px', hidden: false, sortable: false
             });
             columns.push({ field: "DOCUMENTNO", caption: VIS.translatedTexts.DocumentNo, size: '120px', hidden: false, sortable: false });
+            //added new Column Account - on 24/09/2020
+            columns.push({ field: "Account", caption: VIS.translatedTexts.Account, size: '150px', hidden: false, sortable: false });
             columns.push({ field: "Isocode", caption: VIS.translatedTexts.TrxCurrency, size: '105px', hidden: false });
             columns.push({ field: "ConversionName", caption: VIS.translatedTexts.C_ConversionType_ID, size: '105px', hidden: false, sortable: false });
             columns.push({
@@ -4570,12 +4573,28 @@
                 }
             }
             if (event.column == colIndex) {
-                //logic to not set greater appliedAmount then open amount
-                if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
-
+                if ($vchkMultiCurrency.is(':checked')) {
+                    if (VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) == 0) {
+                        VIS.ADialog.warn("NotFoundCurrencyRate");
+                        event.preventDefault();
+                        return;
+                    }
+                    //logic to not set greater appliedAmount then open amount
+                    else if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
+                    
+                    }
+                    else {
+                        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
+                    }
                 }
                 else {
-                    $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
+                    //logic to not set greater appliedAmount then open amount
+                    if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
+
+                    }
+                    else {
+                        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
+                    }
                 }
                 tableChanged(event.index, event.column, false, false);
             }
@@ -4666,12 +4685,30 @@
                 }
             }
             if (event.column == colIndex) {
-                //logic to not set greater appliedAmount then open amount
-                if (parseFloat($gridCashline.get(event.index).OpenAmt) > parseFloat($gridCashline.get(event.index).AppliedAmt)) {
+                if ($vchkMultiCurrency.is(':checked')) {
+                    if (VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).OpenAmt) == 0) {
+                        VIS.ADialog.warn("NotFoundCurrencyRate");
+                        event.preventDefault();
+                        return;
+                    }
+                    else {
+                        //logic to not set greater appliedAmount then open amount
+                        if (parseFloat($gridCashline.get(event.index).OpenAmt) > parseFloat($gridCashline.get(event.index).AppliedAmt)) {
 
+                        }
+                        else {
+                            $gridCashline.set(0, { "AppliedAmt": $gridCashline.get(event.index).OpenAmt });
+                        }
+                    }
                 }
                 else {
-                    $gridCashline.set(0, { "AppliedAmt": $gridCashline.get(event.index).paidamount });
+                    //logic to not set greater appliedAmount then open amount
+                    if (parseFloat($gridCashline.get(event.index).OpenAmt) > parseFloat($gridCashline.get(event.index).AppliedAmt)) {
+
+                    }
+                    else {
+                        $gridCashline.set(0, { "AppliedAmt": $gridCashline.get(event.index).OpenAmt });
+                    }
                 }
                 tableChanged(event.index, event.column, true, true);
             }
@@ -4788,7 +4825,19 @@
 
             //if we click on select column checkbox in grid
             if (selectColIndex == event.column || event.column == null) {
-                $gridInvoice.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount);
+                if ($vchkMultiCurrency.is(':checked')) {
+                    if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) == 0) {
+                        VIS.ADialog.warn("NotFoundCurrencyRate");
+                        event.preventDefault();
+                        return;
+                    }
+                    else {
+                        $gridInvoice.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount);
+                    }
+                }
+                else {
+                    $gridInvoice.records[event.recid]["AppliedAmt"] = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount);
+                }
             }
 
             if (event.column == $gridInvoice.getColumn('Discount', true)
@@ -5195,7 +5244,7 @@
             if (col == 0) {
                 var columns = $glLineGrid.columns;
                 colGlCheck = getBoolValue($glLineGrid.getChanges(), row);
-                var payemntCol = columns[9].field;
+                var payemntCol = columns[10].field;
                 //  selected - set payment amount
                 var changes;
                 if (!$glLineGrid.get(row)) { }
@@ -5217,6 +5266,8 @@
                         GLRecords: changes.GLRecords,
                         Date1: record.Date1,
                         DOCUMENTNO: record.DOCUMENTNO,
+                        //added account column
+                        Account: record.Account, 
                         DATEDOC: record.DATEDOC,
                         Isocode: record.Isocode,
                         GL_JOURNALLINE_ID: record.GL_JOURNALLINE_ID,
@@ -5236,8 +5287,8 @@
                         OrgName: record.OrgName
                     };
                     SelectedGL.push(rcdRow);
-                    var amount = parseFloat($glLineGrid.get(row)[columns[8].field]);
-                    AllocationDate = new Date($glLineGrid.get(row)[columns[10].field]);
+                    var amount = parseFloat($glLineGrid.get(row)[columns[9].field]);
+                    AllocationDate = new Date($glLineGrid.get(row)[columns[11].field]);
                     if (payemntCol == "AppliedAmt") {
                         if (changes != null && changes != undefined) {
                             changes.AppliedAmt = amount;
@@ -5709,7 +5760,8 @@
                         var timeUtil = new VIS.TimeUtil();
                         allocDate = timeUtil.max(allocDate, ts);
                         var keys = Object.keys(currnetRow);
-                        var bd = parseFloat(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]]);
+                        var bd = parseFloat(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
+                        bd = parseFloat(bd);
                         totalPay = totalPay + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noPayments++;
                     }
@@ -5729,7 +5781,8 @@
                         allocDate = timeUtil.max(allocDate, ts);
                         //************************************** Changed
                         var keys = Object.keys(currnetRow);
-                        var bd = parseFloat(rowsCash[i][keys[keys.indexOf("AppliedAmt")]]);
+                        var bd = parseFloat(rowsCash[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
+                        bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noCashLines++;
                     }
@@ -5762,7 +5815,8 @@
                         var keys = Object.keys(currnetRow);
                         var bd;
                         if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] != "") {
-                            bd = parseFloat(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]]);
+                            bd = parseFloat(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
+                            bd = parseFloat(bd);
                         }
                         else {
                             bd = 0;
@@ -5788,7 +5842,8 @@
                         var keys = Object.keys(currnetRow);
                         var bd;
                         if (rowsGL[i][keys[keys.indexOf("AppliedAmt")]] != "") {
-                            bd = parseFloat(rowsGL[i][keys[keys.indexOf("AppliedAmt")]]);
+                            bd = parseFloat(rowsGL[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
+                            bd = parseFloat(bd);
                         }
                         else {
                             bd = 0;
