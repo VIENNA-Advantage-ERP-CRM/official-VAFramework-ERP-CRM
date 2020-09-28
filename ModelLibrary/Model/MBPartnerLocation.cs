@@ -214,41 +214,6 @@ namespace VAdvantage.Model
                 }
             }
             SetName(_uniqueName);
-            //Check Workforce Management module is installed--Added by Neha Thakur
-            if (Env.IsModuleInstalled("VA058_"))
-            {
-                int _count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_Location_ID) FROM C_BPartner_Location WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID() + " AND C_BPartner_Location_ID!=" + GetC_BPartner_Location_ID()));
-                if (_count == 0)
-                {
-                    Set_Value("AddressType", "P");
-                }
-                else
-                {
-                    //Only one Primary Address for a Employee..If going to save second record then it will show error 
-                    if (!newRecord && Util.GetValueOfString(Get_Value("AddressType")) == "P")
-                    {
-                        int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_Location_ID) FROM C_BPartner_Location WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND C_BPartner_ID=" + GetC_BPartner_ID() + " AND AddressType='P' AND C_BPartner_Location_ID!=" + GetC_BPartner_Location_ID()));
-                        if (count > 0)
-                        {
-                            log.SaveError("VA058_PrimaryAddExists", "");
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (Util.GetValueOfString(Get_Value("AddressType")) == "P")
-                        {
-                            int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPartner_Location_ID) FROM C_BPartner_Location WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AddressType='P' AND C_BPartner_ID=" + GetC_BPartner_ID()));
-                            if (count > 0)
-                            {
-                                log.SaveError("VA058_PrimaryAddExists", "");
-                                return false;
-                            }
-                        }
-                    }
-                }
-
-            }
             return true;
         }
 
