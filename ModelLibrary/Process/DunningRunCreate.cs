@@ -717,31 +717,27 @@ namespace VAdvantage.Process
             int C_CashLine_ID = 0;
             Decimal Amount = 0;
             Decimal openAmt = 0;
-
-            sql.Append("SELECT C_CashLine_ID ,C_Currency_ID, C_BPartner_ID, " +
+            String PaymentType = "";
+            sql.Append("SELECT C_CashLine_ID ,cl.C_Currency_ID, cl.C_BPartner_ID, alloccashavailable(C_CashLine_ID) AS openAmt, cl.Vss_PaymentType, " +
                 "CASE " +
-                "WHEN(Vss_PaymentType = 'R' OR Vss_PaymentType = 'A') AND Amount > 0 THEN Amount * -1 " + // Amount should be - ve for paymentType : Cash Receipt and Payment Return
-                "WHEN(Vss_PaymentType = 'P' OR Vss_PaymentType = 'E') AND Amount < 0 THEN Amount * -1 " +  //Amount should be +ve for PaymentType : Cash Payment and Receipt Return
+                "WHEN(cl.Vss_PaymentType = 'R' OR cl.Vss_PaymentType = 'A') AND cl.Amount > 0 THEN cl.Amount * -1 " + // Amount should be - ve for paymentType : Cash Receipt and Payment Return
+                "WHEN(cl.Vss_PaymentType = 'P' OR cl.Vss_PaymentType = 'E') AND cl.Amount < 0 THEN cl.Amount * -1 " +  //Amount should be +ve for PaymentType : Cash Payment and Receipt Return
                 "ELSE " +
-                "Amount " +
-                "END AS Amount," +
-                "CASE " +
-                "WHEN Vss_PaymentType = 'R' OR  Vss_PaymentType = 'A'  THEN  alloccashavailable(C_CashLine_ID) * -1 " +
-                "WHEN Vss_PaymentType = 'P' OR Vss_PaymentType = 'E' THEN alloccashavailable(C_CashLine_ID) * -1 " +
-                "ELSE " +
-                "alloccashavailable(C_CashLine_ID) " +
-                "END AS openAmt " +
-                "FROM c_CashLine cl WHERE cashtype ='B' AND IsAllocated='N'  " +
-                "AND Ad_Client_ID =" + _run.GetAD_Client_ID() + " AND Ad_Org_ID=  " + _run.GetAD_Org_ID() +
+                "cl.Amount END AS Amount " +              
+                "FROM c_CashLine cl" +
+                " INNER JOIN C_Cash c on cl.C_Cash_ID = c.C_Cash_ID"+
+                " WHERE cl.cashtype ='B' AND cl.IsAllocated='N'  " +
+                "AND c.DocStatus In ('CO','Cl') " +
+                "AND cl.Ad_Client_ID =" + _run.GetAD_Client_ID() + " AND cl.Ad_Org_ID=  " + _run.GetAD_Org_ID() +
                  //	Only BP and BPGroup with Dunning defined
-                 "AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
+                 " AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
                  " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
                  "INNER JOIN C_BP_Group bpg  ON (bp.C_BP_Group_ID =bpg.C_BP_Group_ID) WHERE cl.C_BPartner_ID=bp.C_BPartner_ID ))");
 
 
             if (_C_BPartner_ID != 0)
             {
-                sql.Append(" AND C_BPartner_ID=" + _C_BPartner_ID);
+                sql.Append(" AND cl.C_BPartner_ID=" + _C_BPartner_ID);
             }
             else if (_C_BP_Group_ID != 0)
             {
@@ -751,7 +747,7 @@ namespace VAdvantage.Process
             //only single currency
             if (!_IsAllCurrencies)
             {
-                sql.Append(" AND C_Currency_ID=" + _C_Currency_ID);
+                sql.Append(" AND cl.C_Currency_ID=" + _C_Currency_ID);
             }
 
             if (!_level.GetDaysAfterDue().Equals(new Decimal(-9999)))
@@ -771,10 +767,11 @@ namespace VAdvantage.Process
                 sql.Clear();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    C_CashLine_ID = 0; C_Currency_ID = 0; Amount = 0; openAmt = 0; C_BPartner_ID = 0;
+                    C_CashLine_ID = 0; C_Currency_ID = 0; Amount = 0; openAmt = 0; C_BPartner_ID = 0; PaymentType = "";
                     C_CashLine_ID = Utility.Util.GetValueOfInt(dr["C_CashLine_ID"]);
                     C_Currency_ID = Utility.Util.GetValueOfInt(dr["C_Currency_ID"]);
                     C_BPartner_ID = Utility.Util.GetValueOfInt(dr["C_BPartner_ID"]);
+                    PaymentType = Utility.Util.GetValueOfString(dr["Vss_PaymentType"]);
                     Amount = Utility.Util.GetValueOfDecimal(dr["Amount"]);
                     openAmt = Utility.Util.GetValueOfDecimal(dr["openAmt"]);
 
@@ -782,6 +779,22 @@ namespace VAdvantage.Process
                     if (Env.ZERO.CompareTo(openAmt) == 0)
                     {
                         continue;
+                    }
+                    //openAmt should be -ve in case of Cash Receipt and Payment Return 
+                    if(PaymentType.Equals("R") || PaymentType.Equals("A"))
+                    {
+                        if (openAmt > 0)
+                        {
+                            openAmt = Decimal.Negate(openAmt);
+                        }
+                    }
+                    //openAAmt should be +ve in case of Cash Payment and Receipt Return
+                    else if (PaymentType.Equals("P") || PaymentType.Equals("E"))
+                    {
+                        if (openAmt < 0)
+                        {
+                            openAmt = Decimal.Negate(openAmt);
+                        }
                     }
                     //crate records at line tab of Dunning Run window
                     if (CreatCashLine(C_CashLine_ID, Amount, openAmt, C_Currency_ID, C_BPartner_ID))
@@ -867,26 +880,23 @@ namespace VAdvantage.Process
             Decimal Amount = 0;
             Decimal openAmt = 0;
 
-            sql.Append("SELECT GL_JournalLine_ID ,GL.C_Currency_ID, GL.C_BPartner_ID, " +
+            sql.Append("SELECT GL_JournalLine_ID ,GL.C_Currency_ID, GL.C_BPartner_ID, AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) AS openAmt, " +
                "CASE " +
                "WHEN Gl.AmtSourceDr > 0 Then Gl.AmtSourceDr " +
                "WHEN Gl.AmtSourceCr > 0 Then Gl.AmtSourceCr * -1 " +
-               "END AS Amount, " +
-               "CASE " +
-               "WHEN Gl.AmtSourceDr > 0 AND AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) < 0 " +  //Debit Case : Amount should be +ve
-               "THEN AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) * -1 " +
-               "WHEN Gl.AmtSourceCr > 0 AND AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) > 0 " +  //Credit Case : Amount should be -ve
-               "THEN AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) * -1 " +
-               "ELSE AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) END AS openAmt " +
+               "END AS Amount " +               
                 "FROM Gl_JournalLine GL " +
+                "INNER JOIN GL_Journal J ON GL.GL_Journal_ID =J.GL_Journal_ID " +
                 "INNER JOIN C_ElementValue EV ON Gl.Account_ID = EV.C_ElementValue_ID " +
                 "WHERE EV.IsAllocationRelated ='Y' AND GL.IsAllocated='N'  " +
+                "AND J.DocStatus In ('CO','Cl') " +
+                "AND GL.Ad_Client_ID ="+ _run.GetAD_Client_ID()+" AND GL.Ad_Org_ID=  "+_run.GetAD_Org_ID() +
                 //	Only BP and BPGroup with Dunning defined
-                "AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
+                " AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
                 " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
                 "INNER JOIN C_BP_Group bpg  ON (bp.C_BP_Group_ID =bpg.C_BP_Group_ID) WHERE Gl.C_BPartner_ID=bp.C_BPartner_ID ))");
 
-
+  
             if (_C_BPartner_ID != 0)
             {
                 sql.Append(" AND GL.C_BPartner_ID=" + _C_BPartner_ID);
