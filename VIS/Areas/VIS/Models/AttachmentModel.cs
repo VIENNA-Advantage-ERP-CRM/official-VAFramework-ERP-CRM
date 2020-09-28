@@ -91,12 +91,8 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
 
         public string DownloadAttachment(Ctx _ctx, string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID,string actionOrigin, string originName, int AD_Table_ID, int recordID)
         {
-            MSession sess = MSession.Get(_ctx);
-
-
-            sess.ActionLog(_ctx, sess.GetAD_Session_ID(), _ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(),
-                actionOrigin, MActionLog.ACTIONTYPE_Download, originName, "Attachment Downloaded:->" + fileName
-                ,AD_Table_ID,recordID);
+            
+            VAdvantage.Common.Common.SaveActionLog(_ctx, actionOrigin, originName, AD_Table_ID, recordID, 0, "", "", "Attachment Downloaded:->" + fileName, MActionLog.ACTIONTYPE_Download);
 
             MAttachment att = new MAttachment(_ctx, AD_Attachment_ID, null);
 

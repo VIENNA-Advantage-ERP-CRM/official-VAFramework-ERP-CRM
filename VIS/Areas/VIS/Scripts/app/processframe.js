@@ -437,7 +437,8 @@
             pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
             pi.setIsBackground($chkIsBG.is(':checked'));
             pi.setIsReport(self.isReport);
-
+            pi.setActionOrigin(self.ActionOrigin);
+            pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
             var ctl = new VIS.ProcessCtl(self, pi, null);
             pi.setFileType($cmbType.val());
 
@@ -946,6 +947,8 @@
 
             function getExeProcessParameter(fileType) {
                 pctl.pi.setFileType(fileType);
+                pctl.pi.setActionOrigin(self.ActionOrigin);
+                pctl.pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
                 var data = { processInfo: pctl.pi.toJson(), parameterList: pctl.paraList }
                 return data;
             };
@@ -959,7 +962,9 @@
                     Record_ID: pctl.pi.getRecord_ID(),
                     pageNumber: pageNo,
                     page_Size: PageSize,
-                    saveAll: false
+                    saveAll: false,
+                    ActionOrigin: pctl.pi.getActionOrigin(),
+                    OriginName: pctl.pi.getOriginName()
                 }
                 return data;
             };
@@ -986,7 +991,10 @@
                     Record_ID: Record_ID,
                     pageNumber: pageNumber,
                     page_Size: page_Size,
-                    printAllPages: printAllPages
+                    printAllPages: printAllPages,
+                    ActionOrigin: pctl.pi.getActionOrigin(),
+                    OriginName: pctl.pi.getOriginName()
+
                 }
 
                 return data;

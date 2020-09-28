@@ -302,7 +302,7 @@
         var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
         var IsSummary = true;
         var pi = null;
-        var windowID = 0;
+        var windowID = curTab.getAD_Window_ID();
 
         this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, ad_PInstance_ID, pageNO, fileType, ad_PrintFormat_ID,AD_Window_ID) {
 

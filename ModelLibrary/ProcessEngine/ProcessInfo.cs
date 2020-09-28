@@ -117,6 +117,7 @@ namespace VAdvantage.ProcessEngine
         private bool useCrysalReportViewer = false;
         private bool isReport = false;
         private string ActionOrigin = "W";
+        private string OriginName = "";
 
         private Dictionary<string, string> ctxLocal = new Dictionary<string, string>();
 
@@ -161,6 +162,7 @@ namespace VAdvantage.ProcessEngine
             lst.Add("UseCrystalReportViewer", useCrysalReportViewer);
             lst.Add("IsReport", isReport);
             lst.Add("ActionOrigin", ActionOrigin);
+            lst.Add("OriginName", OriginName);
             return lst;
         }
 
@@ -202,6 +204,7 @@ namespace VAdvantage.ProcessEngine
             info._ad_window_ID = Util.GetValueOfInt(lst["AD_Window_ID"]);
             info._windowNo = Util.GetValueOfInt(lst["WindowNo"]);
             info.ActionOrigin = Util.GetValueOfString(lst["ActionOrigin"]);
+            info.OriginName = Util.GetValueOfString(lst["OriginName"]);
             return info;
         }
 
@@ -422,6 +425,16 @@ namespace VAdvantage.ProcessEngine
             return ActionOrigin;
         }
 
+
+        public void SetOriginName(string OriginName)
+        {
+            this.OriginName = OriginName;
+        }
+
+        public String GetOriginName()
+        {
+            return OriginName;
+        }
 
         /// <summary>
         /// get system will use crystal report viewer

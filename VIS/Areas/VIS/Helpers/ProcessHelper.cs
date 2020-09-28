@@ -78,7 +78,7 @@ namespace VIS.Helpers
                     outt.AskUser = dr["AskUserBGProcess"].Equals("Y");
                     outt.IsCrystal = dr["iSCrystalReport"].Equals("Y");
                     var paraCount = Util.GetValueOfInt(dr["para"]);
-                    outt.ImageUrl =Util.GetValueOfString( dr["ImageUrl"]);
+                    outt.ImageUrl = Util.GetValueOfString(dr["ImageUrl"]);
                     if (outt.ImageUrl != "" && outt.ImageUrl.Contains("/"))
                     {
                         outt.ImageUrl = outt.ImageUrl.Substring(outt.ImageUrl.LastIndexOf("/") + 1);
@@ -211,6 +211,7 @@ namespace VIS.Helpers
         internal static ProcessReportInfo ExecuteProcess(Ctx ctx, Dictionary<string, string> processInfo, ProcessPara[] pList)
         {
             ProcessInfo pi = new ProcessInfo().FromList(processInfo);
+         VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(),pi.GetOriginName(), pi.GetTable_ID(),pi.GetRecord_ID(),pi.GetAD_Process_ID(),pi.GetTitle(),pi.GetFileType(),"","");
             pi.SetAD_User_ID(ctx.GetAD_User_ID());
             pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
             if (pi.GetAD_PInstance_ID() == 0)
@@ -422,9 +423,11 @@ namespace VIS.Helpers
 
             System.Threading.Thread.CurrentThread.CurrentCulture = original;
             System.Threading.Thread.CurrentThread.CurrentUICulture = original;
-           VAdvantage.Classes.CleanUp.Get().Start();
+            VAdvantage.Classes.CleanUp.Get().Start();
             return rep;
         }
+
+       
         // vinay bhatt window id
 
         /// <summary>
@@ -536,30 +539,35 @@ namespace VIS.Helpers
             Query _query = null;
             int Record_ID = 0;
             object AD_tab_ID = 0;
-            string reportTypeForLog = MActionLog.ACTIONTYPE_View;
-            string descriptonForLog = "Report Viewed.";
-            int processID = Util.GetValueOfInt(nProcessInfo["Process_ID"]);
-            if (fileType.Equals(ProcessCtl.ReportType_PDF))
-            {
-                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
-                descriptonForLog = "PDF Report Downloaded.";
-            }
-            else if (fileType.Equals(ProcessCtl.ReportType_CSV))
-            {
-                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
-                descriptonForLog = "CSV Report Downloaded.";
-            }
-            if (processID > 0)
-            {
-                descriptonForLog += ", Process Name:->" + MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName();
-            }
-            MSession sess = MSession.Get(_ctx);
+            //string reportTypeForLog = MActionLog.ACTIONTYPE_View;
+            //string descriptonForLog = "Report Viewed.";
+            //int processID = Util.GetValueOfInt(nProcessInfo["Process_ID"]);
+            //if (fileType.Equals(ProcessCtl.ReportType_PDF))
+            //{
+            //    reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+            //    descriptonForLog = "PDF Report Downloaded.";
+            //}
+            //else if (fileType.Equals(ProcessCtl.ReportType_CSV))
+            //{
+            //    reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+            //    descriptonForLog = "CSV Report Downloaded.";
+            //}
+            //if (processID > 0)
+            //{
+            //    descriptonForLog += ", Process Name:->" + MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName();
+            //}
+            //MSession sess = MSession.Get(_ctx);
 
-            
 
-            sess.ActionLog(_ctx, sess.GetAD_Session_ID(), _ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(),
-                Util.GetValueOfString(nProcessInfo["ActionOrigin"]), reportTypeForLog,  Util.GetValueOfString(nProcessInfo["OriginName"]), descriptonForLog
-                , Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]));
+
+            //sess.ActionLog(_ctx, sess.GetAD_Session_ID(), _ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(),
+            //    Util.GetValueOfString(nProcessInfo["ActionOrigin"]), reportTypeForLog, Util.GetValueOfString(nProcessInfo["OriginName"]), descriptonForLog
+            //    , Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]));
+
+            VAdvantage.Common.Common.SaveActionLog(_ctx, Util.GetValueOfString(nProcessInfo["ActionOrigin"]), Util.GetValueOfString(nProcessInfo["OriginName"]),
+                Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]), Util.GetValueOfInt(nProcessInfo["Process_ID"]),
+                MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(),fileType,"","");
+
 
             // _ctx.SetContext("#TimeZoneName", "India Standard Time");
             if (queryInfo.Count > 0 || AD_PInstance_ID > 0)
@@ -757,17 +765,18 @@ namespace VIS.Helpers
         /// <param name="recIDs"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType,string actionOrigin, string originName)
+        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType, string actionOrigin, string originName)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
-            MSession sess = MSession.Get(ctx);
-            string reportTypeForLog = MActionLog.ACTIONTYPE_View;
-            if (fileType.Equals(ProcessCtl.ReportType_PDF) || fileType.Equals(ProcessCtl.ReportType_CSV))
-                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
-            sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
-                actionOrigin, reportTypeForLog, originName, "Process Name="+MProcess.Get(ctx,AD_Process_ID).GetName()+ ",Record_ID=" + Record_ID
-                , AD_Table_ID, Record_ID);
+            //MSession sess = MSession.Get(ctx);
+            //string reportTypeForLog = MActionLog.ACTIONTYPE_View;
+            //if (fileType.Equals(ProcessCtl.ReportType_PDF) || fileType.Equals(ProcessCtl.ReportType_CSV))
+            //    reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+            //sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
+            //    actionOrigin, reportTypeForLog, originName, "Process Name=" + MProcess.Get(ctx, AD_Process_ID).GetName() + ",Record_ID=" + Record_ID
+            //    , AD_Table_ID, Record_ID);
+            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, AD_Table_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType,"","");
 
             try
             {

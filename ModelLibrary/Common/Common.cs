@@ -518,6 +518,57 @@ namespace VAdvantage.Common
             return "";
         }
 
+
+        public static void SaveActionLog(Ctx ctx, string ActionOrigin, string OriginName, int AD_Table_ID, int Record_ID,
+           int Process_ID, string ProcessName, string fileType, string description, string ActionType)
+        {
+            string canSave = Util.GetValueOfString(ctx.GetContext("#SAVE_ACTION_LOG"));
+
+            if (!canSave.Equals("Y"))
+                return;
+
+            int processID = Util.GetValueOfInt(Process_ID);
+            string reportTypeForLog = MActionLog.ACTIONTYPE_View;
+            string descriptonForLog = "Report Viewed";
+            if (!string.IsNullOrEmpty(description))
+            {
+                descriptonForLog = description;
+            }
+            if (!string.IsNullOrEmpty(ActionType))
+            {
+                reportTypeForLog = ActionType;
+            }
+            else if (fileType.Equals(ProcessCtl.ReportType_PDF))
+            {
+                reportTypeForLog = MActionLog.ACTIONTYPE_View;
+                descriptonForLog = "PDF Report Viewed";
+            }
+            else if (fileType.Equals(ProcessCtl.ReportType_CSV))
+            {
+                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                descriptonForLog = "CSV Report Downloaded";
+            }
+            else if (fileType.Equals(ProcessCtl.ReportType_RTF))
+            {
+                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                descriptonForLog = "RTF Report Downloaded";
+            }
+            else if (fileType.Equals(ProcessCtl.ReportType_HTML))
+            {
+                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                descriptonForLog = "Report Viewed";
+            }
+            if (processID > 0)
+            {
+                descriptonForLog += ", Process Name:->" + ProcessName;
+            }
+
+            MSession sess = MSession.Get(ctx);
+            sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
+               ActionOrigin, reportTypeForLog, OriginName, descriptonForLog, AD_Table_ID, Record_ID);
+        }
+
+
     }
 
 }
