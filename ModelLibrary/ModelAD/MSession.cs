@@ -420,20 +420,20 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public MActionLog ActionLog(Ctx ctx, int AD_Session_ID,
     int AD_Client_ID, int AD_Org_ID,
-    String action, string actionType, String actionOrigin, string desc, int AD_Table_ID, int Record_ID = 0)
+    String actionOrigin, string actionType, String OriginName, string desc, int AD_Table_ID, int Record_ID = 0)
         {
             MActionLog alog = null;
             try
             {
                 alog = new MActionLog(GetCtx(), GetAD_Session_ID(),
-                    AD_Client_ID, AD_Org_ID, action, actionType, actionOrigin, desc, AD_Table_ID, Record_ID);
+                    AD_Client_ID, AD_Org_ID, actionOrigin, actionType, OriginName, desc, AD_Table_ID, Record_ID);
                    
                 alog.Save();
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
-                    + ", AD_Table_ID=" + AD_Table_ID + ", actionOrigin=" + actionOrigin
+                    + ", AD_Table_ID=" + AD_Table_ID + ", actionOrigin=" + OriginName
                    , e);
             }
             return alog;

@@ -3763,6 +3763,7 @@
         }
         var self = this;
         var att = new VIS.attachmentForm(0, 0, this.curTab.getAD_Table_ID(), this.curTab.getRecord_ID(), '');
+        att.setIsWindowAction(true);
         att.show();
         att.onClose = function () {
             self.curTab.loadAttachments();

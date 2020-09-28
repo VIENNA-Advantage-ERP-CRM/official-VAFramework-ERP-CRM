@@ -722,7 +722,7 @@ namespace VIS.Controllers
             }
         }
 
-        public JsonResult GeneratePrint(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype)
+        public JsonResult GeneratePrint(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype,string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
@@ -733,7 +733,7 @@ namespace VIS.Controllers
                     ctx.SetContext("FetchingDocReport", "Y");
                     AD_Process_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, "", filetype));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, "", filetype,actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
@@ -754,7 +754,7 @@ namespace VIS.Controllers
         /// <param name="WindowNo"></param>
         /// <param name="filetype"></param>
         /// <returns></returns>
-        public JsonResult GenerateMultiPrint(int AD_Process_ID, string Name, int AD_Table_ID, string RecIDs, int WindowNo, string filetype)
+        public JsonResult GenerateMultiPrint(int AD_Process_ID, string Name, int AD_Table_ID, string RecIDs, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
@@ -766,7 +766,7 @@ namespace VIS.Controllers
                 {
                     AD_Process_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, AD_Process_ID, Name, AD_Table_ID, 0, WindowNo, RecIDs, filetype));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, AD_Process_ID, Name, AD_Table_ID, 0, WindowNo, RecIDs, filetype,actionOrigin,originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
