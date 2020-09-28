@@ -919,10 +919,22 @@
             }
         });
 
+        /* Event */
+        $ctrl.on("blur", function (e) {
+           // e.stopPropagation();
+            var newValue = $ctrl.val();
+           
+            if (self.obscureType && newValue!="" && self.oldValue == newValue) {
+                self.ctrl.val(VIS.Env.getObscureValue(self.obscureType, newValue));
+                self.setReadOnly(true);
+            }
+        });
+
         $btnSearch.on("click", function () {
             if (self.mField.getIsEditable(true)) {
                 self.setReadOnly(false, true, true);
                 $ctrl.val(self.mField.getValue());
+                $ctrl.focus();
             }
         });
 
@@ -941,7 +953,7 @@
 
 
     VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
-        if (!readOnly && this.obscureType && !forceWritable && !this.mField.getIsInserting()) {
+        if (!readOnly && this.obscureType && !forceWritable && (!this.mField.getIsInserting() || this.ctrl.val() != "")) {
             readOnly = true;
         }
 
@@ -957,15 +969,17 @@
      */
     VTextBox.prototype.setValue = function (newValue) {
         if (this.oldValue != newValue) {
-            this.oldValue = newValue;
+            
             //console.log(newValue);
 
-            if (this.obscureType && !this.mField.getIsInserting()) {
+            if (this.obscureType && (!this.mField.getIsInserting() || this.ctrl.val() !="")) {
                 this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
                 this.setReadOnly(true);
             }
             else
                 this.ctrl.val(newValue);
+
+            this.oldValue = newValue;
             //this.setBackground("white");
         }
     };
