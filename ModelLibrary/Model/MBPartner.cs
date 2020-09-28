@@ -1179,30 +1179,6 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            //Check Workforce Management module is installed
-            if (Env.IsModuleInstalled("VA058_"))
-            {
-                // Nationality Unique Number should be unique..Showing error if saving duplicate record
-                if (!newRecord)
-                {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPARTNER_ID) FROM C_BPARTNER WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND VA058_NatUnqNum='" + Get_Value("VA058_NatUnqNum") + "' AND C_BPartner_ID!=" + GetC_BPartner_ID()));
-                    if (count > 0)
-                    {
-                        log.SaveError("VA058_NationalNoExists", "");
-                        return false;
-                    }
-                }
-                else
-                {
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_BPARTNER_ID) FROM C_BPARTNER WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND VA058_NatUnqNum='" + Get_Value("VA058_NatUnqNum") + "'"));
-                    if (count > 0)
-                    {
-                        log.SaveError("VA058_NationalNoExists", "");
-                        return false;
-                    }
-                }
-
-            }
             return true;
         }
 
