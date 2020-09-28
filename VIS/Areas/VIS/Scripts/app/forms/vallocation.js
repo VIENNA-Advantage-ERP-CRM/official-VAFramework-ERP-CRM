@@ -164,6 +164,11 @@
         var countVA009 = 0;
         var stdPrecision = 0;
 
+        //Culture seperator object
+        var culture = new VIS.CultureSeparator();
+        var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+        var dotFormatter = VIS.Env.isDecimalPoint();
+
         /* Variable for Paging*/
         var PAGESIZE = 50;
         var pageNoInvoice = 1, gridPgnoInvoice = 1, invoiceRecord = 0;
@@ -1302,6 +1307,11 @@
             $ctoDate.val('');
             $gfromDate.val('');
             $gtoDate.val('');
+            //clear the search fields
+            $srchPayment.val('');
+            $srchInvoice.val('');
+            $srchGL.val('');
+            $srchCashJournal.val('');
             selectedCashlines = [];
             selectedInvoices = [];
             selectedPayments = [];
@@ -3699,9 +3709,9 @@
         function paymentDoubleClicked(event) {
             if ($gridPayment.columns[event.column].field == "AppliedAmt") {
                 var getChanges = $gridPayment.getChanges();
-                if (getChanges == undefined || getChanges.length == 0) {
-                    return;
-                }
+                //if (getChanges == undefined || getChanges.length == 0) {
+                //    return;
+                //}
 
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
@@ -3718,8 +3728,21 @@
                     if ($gridPayment.columns[event.column].field == "AppliedAmt") {
                         if (record.changes == undefined || record.changes.AppliedAmt == undefined || record.changes.SelectRow == undefined) {
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt, record.Payment);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
+                                //val = record.changes.AppliedAmt;
+                                record.changes.AppliedAmt = record.OpenAmt;
+                                if (!dotFormatter) {
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
+                                }
                             }
                             else {
                                 val = 0;
@@ -3727,57 +3750,83 @@
                         }
                         else {
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt, record.Payment);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
+                                //val = record.changes.AppliedAmt;
+                                record.changes.AppliedAmt = record.OpenAmt;
+                                if (!dotFormatter) {
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
+                                }
                             }
                             else {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.AppliedAmt);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.AppliedAmt);
+                                //val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = record.changes.AppliedAmt.toString();
+                                if (!dotFormatter) {
+                                    var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
+                                }
                             }
                         }
                     }
-                    if ($gridPayment.columns[event.column].field == "Writeoff") {
-                        if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
-                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
-                            }
-                            else {
-                                val = 0;
-                            }
-                        }
-                        else {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
-                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
-                            }
-                            else {
-                                record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
-                            }
-                        }
-                    }
-                    if ($gridPayment.columns[event.column].field == "Discount") {
-                        if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
-                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
-                                val = record.changes.Discount;
-                            }
-                            else {
-                                val = 0;
-                            }
-                        }
-                        else {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
-                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
-                                val = record.changes.Discount;
-                            }
-                            else {
-                                record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
-                                val = record.changes.Discount;
-                            }
-                        }
-                    }
+                    //if ($gridPayment.columns[event.column].field == "Writeoff") {
+                    //    if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                    //            record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                    //            val = record.changes.Writeoff;
+                    //        }
+                    //        else {
+                    //            val = 0;
+                    //        }
+                    //    }
+                    //    else {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                    //            record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                    //            val = record.changes.Writeoff;
+                    //        }
+                    //        else {
+                    //            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                    //            val = record.changes.Writeoff;
+                    //        }
+                    //    }
+                    //}
+                    //if ($gridPayment.columns[event.column].field == "Discount") {
+                    //    if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                    //            record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                    //            val = record.changes.Discount;
+                    //        }
+                    //        else {
+                    //            val = 0;
+                    //        }
+                    //    }
+                    //    else {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                    //            record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                    //            val = record.changes.Discount;
+                    //        }
+                    //        else {
+                    //            record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                    //            val = record.changes.Discount;
+                    //        }
+                    //    }
+                    //}
                     //else if ($gridPayment.columns[event.column].field == "Writeoff") {
                     //    if (record.changes == undefined || record.changes.Writeoff == undefined) {
                     //        val = 0;
@@ -3815,9 +3864,9 @@
         function cashDoubleClicked(event) {
             if ($gridCashline.columns[event.column].field == "AppliedAmt") {
                 var getChanges = $gridCashline.getChanges();
-                if (getChanges == undefined || getChanges.length == 0) {
-                    return;
-                }
+                //if (getChanges == undefined || getChanges.length == 0) {
+                //    return;
+                //}
 
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
@@ -3834,8 +3883,21 @@
                     if ($gridCashline.columns[event.column].field == "AppliedAmt") {
                         if (record.changes == undefined || record.changes.AppliedAmt == undefined || record.changes.SelectRow == undefined) {
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt, record.OpenAmt);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
+                                //val = record.changes.AppliedAmt;
+                                record.changes.AppliedAmt = record.OpenAmt;
+                                if (!dotFormatter) {
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
+                                }
                             }
                             else {
                                 val = 0;
@@ -3843,57 +3905,83 @@
                         }
                         else {
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt, record.OpenAmt);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
+                                //val = record.changes.AppliedAmt;
+                                record.changes.AppliedAmt = record.OpenAmt;
+                                if (!dotFormatter) {
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
+                                }
                             }
                             else {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.OpenAmt);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.OpenAmt);
+                                //val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = record.OpenAmt;
+                                if (!dotFormatter) {
+                                    var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
+                                }
                             }
                         }
                     }
-                    if ($gridCashline.columns[event.column].field == "Writeoff") {
-                        if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
-                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
-                            }
-                            else {
-                                val = 0;
-                            }
-                        }
-                        else {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
-                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
-                            }
-                            else {
-                                record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
-                            }
-                        }
-                    }
-                    if ($gridCashline.columns[event.column].field == "Discount") {
-                        if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
-                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
-                                val = record.changes.Discount;
-                            }
-                            else {
-                                val = 0;
-                            }
-                        }
-                        else {
-                            if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
-                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
-                                val = record.changes.Discount;
-                            }
-                            else {
-                                record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
-                                val = record.changes.Discount;
-                            }
-                        }
-                    }
+                    //if ($gridCashline.columns[event.column].field == "Writeoff") {
+                    //    if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                    //            record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                    //            val = record.changes.Writeoff;
+                    //        }
+                    //        else {
+                    //            val = 0;
+                    //        }
+                    //    }
+                    //    else {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
+                    //            record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                    //            val = record.changes.Writeoff;
+                    //        }
+                    //        else {
+                    //            record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                    //            val = record.changes.Writeoff;
+                    //        }
+                    //    }
+                    //}
+                    //if ($gridCashline.columns[event.column].field == "Discount") {
+                    //    if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                    //            record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                    //            val = record.changes.Discount;
+                    //        }
+                    //        else {
+                    //            val = 0;
+                    //        }
+                    //    }
+                    //    else {
+                    //        if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
+                    //            record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                    //            val = record.changes.Discount;
+                    //        }
+                    //        else {
+                    //            record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                    //            val = record.changes.Discount;
+                    //        }
+                    //    }
+                    //}
                     //else if ($gridCashline.columns[event.column].field == "Writeoff") {
                     //    if (record.changes == undefined || record.changes.Writeoff == undefined) {
                     //        val = 0;
@@ -3932,9 +4020,9 @@
                 $gridInvoice.columns[event.column].field == "Writeoff" ||
                 $gridInvoice.columns[event.column].field == "Discount") {
                 var getChanges = $gridInvoice.getChanges();
-                if (getChanges == undefined || getChanges.length == 0) {
-                    return;
-                }
+                //if (getChanges == undefined || getChanges.length == 0) {
+                //    return;
+                //}
 
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
@@ -3952,8 +4040,21 @@
                         if (record.changes == undefined || record.changes.AppliedAmt == undefined || record.changes.SelectRow == undefined) {
 
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
+                                //val = record.changes.AppliedAmt;
+                                record.changes.AppliedAmt = record.Amount;
+                                if (!dotFormatter) {
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
+                                }
                             }
                             else {
                                 val = 0;
@@ -3961,12 +4062,38 @@
                         }
                         else {
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.AppliedAmt == undefined)) {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
+                                //val = record.changes.AppliedAmt;
+                                record.changes.AppliedAmt = record.Amount;
+                                if (!dotFormatter) {
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
+                                }
                             }
                             else {
-                                record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.Amount);
-                                val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.Amount);
+                                //val = record.changes.AppliedAmt;
+                                //record.changes.AppliedAmt = record.Amount;
+                                if (!dotFormatter) {
+                                    var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
+                                    if (!appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                    }
+                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
+                                        val = appliedAmount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
+                                }
                             }
                         }
                     }
@@ -3974,8 +4101,21 @@
                         if (record.changes == undefined || record.changes.Writeoff == undefined || record.changes.SelectRow == undefined) {
 
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
-                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
+                                //record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                //val = record.changes.Writeoff;
+                                record.changes.Writeoff = record.Writeoff;
+                                if (!dotFormatter) {
+                                    var write_off = record.changes.Writeoff.toString();
+                                    if (!write_off.contains(",")) {
+                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter);
+                                    }
+                                    if (write_off.contains(".") || write_off.contains(",")) {
+                                        val = write_off;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
+                                }
                             }
                             else {
                                 val = 0;
@@ -3983,12 +4123,38 @@
                         }
                         else {
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Writeoff == undefined)) {
-                                record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
+                                //record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
+                                //val = record.changes.Writeoff;
+                                record.changes.Writeoff = record.Writeoff;
+                                if (!dotFormatter) {
+                                    var write_off = record.changes.Writeoff.toString();
+                                    if (!write_off.contains(",")) {
+                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter);
+                                    }
+                                    if (write_off.contains(".") || write_off.contains(",")) {
+                                        val = write_off;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
+                                }
                             }
                             else {
-                                record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
-                                val = record.changes.Writeoff;
+                                //record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
+                                //val = record.changes.Writeoff;
+                                //record.changes.Writeoff = record.Writeoff;
+                                if (!dotFormatter) {
+                                    var write_off = checkcommaordot(event, record.changes.Writeoff);
+                                    if (!write_off.contains(",")) {
+                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter);
+                                    }
+                                    if (write_off.contains(".") || write_off.contains(",")) {
+                                        val = write_off;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
+                                }
                             }
                         }
                     }
@@ -3996,8 +4162,21 @@
                         if (record.changes == undefined || record.changes.Discount == undefined || record.changes.SelectRow == undefined) {
 
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
-                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
-                                val = record.changes.Discount;
+                                //record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                //val = record.changes.Discount;
+                                record.changes.Discount = record.Discount;
+                                if (!dotFormatter) {
+                                    var Discount = record.changes.Discount.toString();
+                                    if (!Discount.contains(",")) {
+                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter);
+                                    }
+                                    if (Discount.contains(".") || Discount.contains(",")) {
+                                        val = Discount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.Discount == "" ? val : record.changes.Discount;
+                                }
                             }
                             else {
                                 val = 0;
@@ -4005,12 +4184,37 @@
                         }
                         else {
                             if ((record.changes != undefined) && (record.changes.SelectRow != undefined) && (record.changes.SelectRow == true && record.changes.Discount == undefined)) {
-                                record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
-                                val = record.changes.Discount;
+                                //record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
+                                //val = record.changes.Discount;
+                                record.changes.Discount = record.Discount;
+                                if (!dotFormatter) {
+                                    var Discount = record.changes.Discount.toString();
+                                    if (!Discount.contains(",")) {
+                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter);
+                                    }
+                                    if (Discount.contains(".") || Discount.contains(",")) {
+                                        val = Discount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.Discount == "" ? val : record.changes.Discount;
+                                }
                             }
                             else {
-                                record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
-                                val = record.changes.Discount;
+                                //record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
+                                //val = record.changes.Discount;
+                                if (!dotFormatter) {
+                                    var Discount = checkcommaordot(event, record.changes.Discount);
+                                    if (!Discount.contains(",")) {
+                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter);
+                                    }
+                                    if (Discount.contains(".") || Discount.contains(",")) {
+                                        val = Discount;
+                                    }
+                                }
+                                else {
+                                    val = record.changes.Discount == "" ? val : record.changes.Discount;
+                                }
                             }
                         }
                     }
@@ -4078,6 +4282,15 @@
             return amt;
         };
 
+        // Remove all seperator but only bring last seperator
+        function removeAllButLast1(amt, seprator) {
+            var parts = amt.split(seprator);
+            amt = parts.slice(0, -1).join('') + parts.slice(-1);
+            if (amt.indexOf((seprator == '.' ? ',' : '.')) == (amt.length - 1)) {
+                amt = amt.replace((seprator == '.' ? ',' : '.'), "");
+            }
+            return amt;
+        };
         //added for gl-allocation
         //function glDoubleClicked(event) {
         //    if (glLineGrid.columns[event.column].field == "AppliedAmt") {
@@ -4218,8 +4431,8 @@
                 if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                     //Set value to 0 when element is null
                     $gridPayment.records[event.recid]["AppliedAmt"] = 0;
-                    $gridPayment.records[event.recid]["Writeoff"] = 0;
-                    $gridPayment.records[event.recid]["Discount"] = 0;
+                    //$gridPayment.records[event.recid]["Writeoff"] = 0;
+                    //$gridPayment.records[event.recid]["Discount"] = 0;
                     $gridPayment.refreshCell(event.recid, "AppliedAmt");
                     getMaxDate();
                 }
@@ -4318,8 +4531,8 @@
                 if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                     //Set value to 0 when element is null
                     $gridCashline.records[event.recid]["AppliedAmt"] = 0;
-                    $gridCashline.records[event.recid]["Writeoff"] = 0;
-                    $gridCashline.records[event.recid]["Discount"] = 0;
+                    //$gridCashline.records[event.recid]["Writeoff"] = 0;
+                    //$gridCashline.records[event.recid]["Discount"] = 0;
                     $gridCashline.refreshCell(0, "AppliedAmt");
                 }
                 else {
@@ -4414,6 +4627,8 @@
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
                 if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                    //Set value to 0 when element is null
+                    $glLineGrid.records[event.recid]["AppliedAmt"] = 0;
                     $glLineGrid.refreshCell(event.recid, "AppliedAmt");
                     getMaxDate();
                     //when unselect the record it will remove that record in getGLChanges list.
@@ -4540,36 +4755,49 @@
                 return;
             }
             var colIndex = $gridPayment.getColumn('AppliedAmt', true);
+            var changedValue = 0;
 
             if ($gridPayment.columns[colIndex].editable == undefined) {
                 return;
             }
+
+            // when Applied amount cell changed 
+            changedValue = event.value_new != "" ? event.value_new : changedValue;
+            if (event.column == colIndex && !dotFormatter) {
+                if (!event.value_new.toString().contains(",")) {
+                    changedValue = format.GetFormatedValue(event.value_new, "init", dotFormatter).toString();
+                }
+                if (event.value_new.toString().contains(".") || event.value_new.toString().contains(",")) {
+                    changedValue = format.GetConvertedNumber(event.value_new, dotFormatter).toString();
+                }
+            }
+
             if ($gridPayment.getChanges(event.recid) != undefined && $gridPayment.getChanges(event.recid).length > 0 && $gridPayment.get(event.recid).changes) {
                 // if changes are there like  checkbox is cheked, then we have to set value in changes becoz textbox in grid show data from changes...
-                if (VIS.Utility.Util.getValueOfDecimal(event.value_new) > 0 && VIS.Utility.Util.getValueOfDecimal(event.value_new) > VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt)) {
+                if (VIS.Utility.Util.getValueOfDecimal(changedValue) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) > VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
                     event.preventDefault();
                     return;
                 }
-                else if (VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) < 0 && VIS.Utility.Util.getValueOfDecimal(event.value_new) < VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt)) {
+                else if (VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) < 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
                     event.preventDefault();
                     return;
                 }
                 //added for gl-allocation
-                else if (VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) > 0 && VIS.Utility.Util.getValueOfDecimal(event.value_new) < 0) {
+                else if (VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
                     $gridPayment.set(0, { "AppliedAmt": VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) });
                     VIS.ADialog.warn("AppliedAmtgrtr");
                     event.preventDefault();
                     return;
                 }
 
-                $gridPayment.get(event.recid).changes.AppliedAmt = event.value_new;
+                $gridPayment.get(event.recid).changes.AppliedAmt = event.value_new != "" ? event.value_new : changedValue;
                 $gridPayment.refreshCell(event.recid, "AppliedAmt");
             }
             else {
                 if (event.column > 0) {
-                    $gridPayment.set(event.recid, { AppliedAmt: event.value_new });
+                    $gridPayment.set(event.recid, { AppliedAmt: event.value_new != "" ? event.value_new : changedValue });
                 }
             }
             if (event.column == colIndex) {
@@ -4658,30 +4886,50 @@
                 return;
             }
             var colIndex = $gridCashline.getColumn('AppliedAmt', true);
+            var changedValue = 0;
 
             if ($gridCashline.columns[colIndex].editable == undefined) {
                 return;
             }
+
+            // when Applied amount cell changed 
+            changedValue = event.value_new != "" ? event.value_new : changedValue;
+            if (event.column == colIndex && !dotFormatter) {
+                if (!event.value_new.toString().contains(",")) {
+                    changedValue = format.GetFormatedValue(event.value_new, "init", dotFormatter).toString();
+                }
+                if (event.value_new.toString().contains(".") || event.value_new.toString().contains(",")) {
+                    changedValue = format.GetConvertedNumber(event.value_new, dotFormatter).toString();
+                }
+            }
+
             if ($gridCashline.getChanges(event.recid) != undefined && $gridCashline.getChanges(event.recid).length > 0 && $gridCashline.get(event.recid).changes) {
                 // if changes are there like  checkbox is cheked, then we have to set value in changes becoz textbox in grid show data from changes...
-                if (VIS.Utility.Util.getValueOfInt(event.value_new) > 0 && VIS.Utility.Util.getValueOfInt(event.value_new) > VIS.Utility.Util.getValueOfInt($gridCashline.get(event.recid).OpenAmt)) {
+                if (VIS.Utility.Util.getValueOfDecimal(changedValue) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) > VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
-                    $gridCashline.get(event.recid).changes.AppliedAmt = $gridCashline.get(event.recid).OpenAmt;
+                    //$gridCashline.get(event.recid).changes.AppliedAmt = $gridCashline.get(event.recid).OpenAmt;
                     event.preventDefault();
                     return;
                 }
-                else if (VIS.Utility.Util.getValueOfInt($gridCashline.get(event.recid).OpenAmt) < 0 && VIS.Utility.Util.getValueOfInt(event.value_new) < VIS.Utility.Util.getValueOfInt($gridCashline.get(event.recid).OpenAmt)) {
+                else if (VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).OpenAmt) < 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).OpenAmt)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
-                    $gridCashline.get(event.recid).changes.AppliedAmt = $gridCashline.get(event.recid).OpenAmt;
+                    //$gridCashline.get(event.recid).changes.AppliedAmt = $gridCashline.get(event.recid).OpenAmt;
                     event.preventDefault();
                     return;
                 }
-                $gridCashline.get(event.recid).changes.AppliedAmt = event.value_new;
+                //added for gl-allocation
+                else if (VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).OpenAmt) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
+                    //$gridCashline.set(0, { "AppliedAmt": VIS.Utility.Util.getValueOfDecimal($gridCashline.get(event.recid).OpenAmt) });
+                    VIS.ADialog.warn("AppliedAmtgrtr");
+                    event.preventDefault();
+                    return;
+                }
+                $gridCashline.get(event.recid).changes.AppliedAmt = event.value_new != "" ? event.value_new : changedValue;
                 $gridCashline.refreshCell(event.recid, "AppliedAmt");
             }
             else {
                 if (event.column > 0) {
-                    $gridCashline.set(event.recid, { AppliedAmt: event.value_new });
+                    $gridCashline.set(event.recid, { AppliedAmt: event.value_new != "" ? event.value_new : changedValue });
                 }
             }
             if (event.column == colIndex) {
@@ -4722,103 +4970,131 @@
             var dcolIndex = $gridInvoice.getColumn('Discount', true);
             var selectColIndex = $gridInvoice.getColumn('SelectRow', true);
             var discountchng = 0;
+            var appliedAmt = 0;
+            var writeOff = 0;
+            var changedValue = 0;
             if ($gridInvoice.columns[colIndex].editable == undefined && $gridInvoice.columns[wcolIndex].editable == undefined && $gridInvoice.columns[dcolIndex].editable == undefined) {
                 return;
             }
+
+            // when Applied amount cell changed 
+            changedValue = event.value_new != "" ? event.value_new : changedValue;
+            if ((event.column == colIndex || event.column == wcolIndex || event.column == dcolIndex) && !dotFormatter) {
+                if (!event.value_new.toString().contains(",")) {
+                    changedValue = format.GetFormatedValue(event.value_new, "init", dotFormatter).toString();
+                }
+                if (event.value_new.toString().contains(".") || event.value_new.toString().contains(",")) {
+                    changedValue = format.GetConvertedNumber(event.value_new, dotFormatter).toString();
+                }
+            }
+            //get the changes and converting amount into standard culture.
+            if (event.column == colIndex || event.column == wcolIndex || event.column == dcolIndex) {
+
+                if ($gridInvoice.get(event.recid).changes.AppliedAmt != undefined) {
+                    appliedAmt = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.AppliedAmt, dotFormatter).toString();
+                }
+                if ($gridInvoice.get(event.recid).changes.Discount != undefined) {
+                    discountchng = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.Discount, dotFormatter).toString();
+                }
+                if ($gridInvoice.get(event.recid).changes.Writeoff != undefined) {
+                    writeOff = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.Writeoff, dotFormatter).toString();
+                }
+            }
+
             if ($gridInvoice.getChanges(event.recid) != undefined && $gridInvoice.getChanges(event.recid).length > 0 && $gridInvoice.get(event.recid).changes) {
                 // if changes are there like  checkbox is cheked, then we have to set value in changes becoz textbox in grid show data from changes...
-                if (VIS.Utility.Util.getValueOfDecimal(event.value_new) > 0 && VIS.Utility.Util.getValueOfDecimal(event.value_new) > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                if (VIS.Utility.Util.getValueOfDecimal(changedValue) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
-                    $gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
-                    $gridInvoice.refreshCell(event.recid, "AppliedAmt");
+                    //$gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
+                    //$gridInvoice.refreshCell(event.recid, "AppliedAmt");
                     event.preventDefault();
                     return;
                 }
-                else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && VIS.Utility.Util.getValueOfDecimal(event.value_new) < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
+                else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                     VIS.ADialog.warn("AppliedAmtgrtr");
-                    $gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
-                    $gridInvoice.refreshCell(event.recid, "AppliedAmt");
+                    //$gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
+                    //$gridInvoice.refreshCell(event.recid, "AppliedAmt");
                     event.preventDefault();
                     return;
                 }
-                if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount) > 0) {
-                    discountchng = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount);
-                }
-                else
-                    discountchng = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Discount);
+                //if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount) > 0) {
+                //    discountchng = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount);
+                //}
+                //else
+                //    discountchng = VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Discount);
                 // check if applied amt is greater than open amount added by vivek on 06/01/2018                
                 if (colIndex == event.column) {
                     // check if discount+writeoff + applied is gretaer than open amount added by vivek on 06/01/2018
-                    if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                    if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && VIS.Utility.Util.getValueOfDecimal((VIS.Utility.Util.getValueOfDecimal(changedValue) +
+                        VIS.Utility.Util.getValueOfDecimal(writeOff) + VIS.Utility.Util.getValueOfDecimal(discountchng)).toFixed(stdPrecision))
                         < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
-                        $gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
-                        $gridInvoice.refreshCell(event.recid, "AppliedAmt");
+                        //$gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
+                        //$gridInvoice.refreshCell(event.recid, "AppliedAmt");
                         event.preventDefault();
                         return;
                     }
-                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal((VIS.Utility.Util.getValueOfDecimal(changedValue) +
+                        VIS.Utility.Util.getValueOfDecimal(writeOff) + VIS.Utility.Util.getValueOfDecimal(discountchng)).toFixed(stdPrecision))
                         > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
-                        $gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
-                        $gridInvoice.refreshCell(event.recid, "AppliedAmt");
+                        //$gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
+                        //$gridInvoice.refreshCell(event.recid, "AppliedAmt");
                         event.preventDefault();
                         return;
                     }
 
-                    $gridInvoice.get(event.recid).changes.AppliedAmt = event.value_new;
+                    $gridInvoice.get(event.recid).changes.AppliedAmt = event.value_new != "" ? event.value_new : changedValue;
                     $gridInvoice.refreshCell(event.recid, "AppliedAmt");
                 }
 
                 else if (wcolIndex == event.column) {
-                    if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                    if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && VIS.Utility.Util.getValueOfDecimal((VIS.Utility.Util.getValueOfDecimal(changedValue) +
+                        VIS.Utility.Util.getValueOfDecimal(appliedAmt) + VIS.Utility.Util.getValueOfDecimal(discountchng)).toFixed(stdPrecision))
                         < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
                     }
-                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Discount))
+                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal((VIS.Utility.Util.getValueOfDecimal(changedValue) +
+                        VIS.Utility.Util.getValueOfDecimal(appliedAmt) + VIS.Utility.Util.getValueOfDecimal(discountchng)).toFixed(stdPrecision))
                         > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
                     }
-                    $gridInvoice.get(event.recid).changes.Writeoff = event.value_new;
+                    $gridInvoice.get(event.recid).changes.Writeoff = event.value_new != "" ? event.value_new : changedValue;
                     $gridInvoice.refreshCell(event.recid, "Writeoff");
                 }
                 else if (dcolIndex == event.column) {
-                    if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff))
+                    if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) < 0 && VIS.Utility.Util.getValueOfDecimal((VIS.Utility.Util.getValueOfDecimal(changedValue) +
+                        VIS.Utility.Util.getValueOfDecimal(appliedAmt) + VIS.Utility.Util.getValueOfDecimal(writeOff)).toFixed(stdPrecision))
                         < VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
                     }
-                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && (VIS.Utility.Util.getValueOfDecimal(event.value_new) +
-                        VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.AppliedAmt) + VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).changes.Writeoff))
+                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal((VIS.Utility.Util.getValueOfDecimal(changedValue) +
+                        VIS.Utility.Util.getValueOfDecimal(appliedAmt) + VIS.Utility.Util.getValueOfDecimal(writeOff)).toFixed(stdPrecision))
                         > VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         event.preventDefault();
                         return;
                     }
-                    $gridInvoice.get(event.recid).changes.Discount = event.value_new;
+                    $gridInvoice.get(event.recid).changes.Discount = event.value_new != "" ? event.value_new : changedValue;
                     $gridInvoice.refreshCell(event.recid, "Discount");
                 }
             }
             else {
                 if (event.column > 0) {
                     if (colIndex == event.column) {
-                        $gridInvoice.set(event.recid, { AppliedAmt: event.value_new });
+                        $gridInvoice.set(event.recid, { AppliedAmt: event.value_new != "" ? event.value_new : changedValue });
                     }
                     else if (wcolIndex == event.column) {
-                        $gridInvoice.set(event.recid, { Writeoff: event.value_new });
+                        $gridInvoice.set(event.recid, { Writeoff: event.value_new != "" ? event.value_new : changedValue });
                     }
                     else if (dcolIndex == event.column) {
-                        $gridInvoice.set(event.recid, { Discount: event.value_new });
+                        $gridInvoice.set(event.recid, { Discount: event.value_new != "" ? event.value_new : changedValue });
                     }
                 }
             }
@@ -4904,17 +5180,19 @@
 
                         var amount = parseFloat($gridPayment.get(row)[columns[_openPay].field]);
 
+                        _value = removeAllButLast1(parseFloat(amount).toLocaleString(), dotFormatter ? "," : ".");
+
                         //Date1--//get column index from grid
                         var _date1 = getIndexFromArray(columns, "Date1");
                         AllocationDate = new Date($gridPayment.get(row)[columns[_date1].field]);
 
                         if (payemntCol == "AppliedAmt") {
                             if (changes != null && changes != undefined) {
-                                changes.AppliedAmt = amount;
+                                changes.AppliedAmt = _value;
                                 $gridPayment.refreshCell(row, "AppliedAmt");
                             }
                             else {
-                                $gridPayment.set(row, { "AppliedAmt": amount });
+                                $gridPayment.set(row, { "AppliedAmt": _value });
                             }
                         }
                     }
@@ -5018,13 +5296,15 @@
                         //OpenAmt--//get column index from grid
                         _open = getIndexFromArray(columns, "OpenAmt");
                         var amount = parseFloat($gridCashline.get(row)[columns[_open].field]);
+                        //remove the thousand separator from the value
+                        _value = removeAllButLast1(parseFloat(amount).toLocaleString(), dotFormatter ? "," : ".");
                         if (payemntCol == "AppliedAmt") {
                             if (changes != null && changes != undefined) {
-                                changes.AppliedAmt = amount;
+                                changes.AppliedAmt = _value;
                                 $gridCashline.refreshCell(row, "AppliedAmt");
                             }
                             else {
-                                $gridCashline.set(row, { "AppliedAmt": amount });
+                                $gridCashline.set(row, { "AppliedAmt": _value });
                             }
                         }
                         //************************************** Changed
@@ -5134,20 +5414,22 @@
                     //Discount  //get column index from grid
                     _discount = getIndexFromArray(columns, "Discount");
                     amount = amount - parseFloat($gridInvoice.get(row)[columns[_discount].field]);
+                    //remove the thousand separator form the value
+                    _value = removeAllButLast1(parseFloat(amount).toLocaleString(), dotFormatter ? "," : ".");
                     if (applied == "AppliedAmt") {
                         if (changes != null && changes != undefined) {
                             changes.Writeoff = 0;
-                            changes.AppliedAmt = amount;
+                            changes.AppliedAmt = _value;
                             //get column index from grid
                             _discount = getIndexFromArray(columns, "Discount");
-                            changes.Discount = parseFloat($gridInvoice.get(row)[columns[_discount].field]);
+                            changes.Discount = removeAllButLast1(parseFloat($gridInvoice.get(row)[columns[_discount].field]).toLocaleString(), dotFormatter ? "," : ".");
                             $gridInvoice.refreshCell(row, "Writeoff");
                             $gridInvoice.refreshCell(row, "AppliedAmt");
                             $gridInvoice.refreshCell(row, "Discount");
                         }
                         else {
                             $gridInvoice.set(row, { "Writeoff": 0 });
-                            $gridInvoice.set(row, { "AppliedAmt": amount });
+                            $gridInvoice.set(row, { "AppliedAmt": _value });
 
                         }
                     }
@@ -5698,6 +5980,10 @@
         */
         function vetoableChange(name, value) {
             if (value == null) {
+                //clear right side  filters and selected records
+                clearRightPanelFilters();
+                //added to load all blank grids
+                blankAllGrids();
                 return;
             }
 
@@ -5760,7 +6046,7 @@
                         var timeUtil = new VIS.TimeUtil();
                         allocDate = timeUtil.max(allocDate, ts);
                         var keys = Object.keys(currnetRow);
-                        var bd = parseFloat(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
+                        var bd = parseFloat(checkcommaordot(event, rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         bd = parseFloat(bd);
                         totalPay = totalPay + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noPayments++;
@@ -5781,7 +6067,7 @@
                         allocDate = timeUtil.max(allocDate, ts);
                         //************************************** Changed
                         var keys = Object.keys(currnetRow);
-                        var bd = parseFloat(rowsCash[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
+                        var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noCashLines++;
@@ -5815,7 +6101,7 @@
                         var keys = Object.keys(currnetRow);
                         var bd;
                         if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] != "") {
-                            bd = parseFloat(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]]).toFixed(stdPrecision);
+                            bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                             bd = parseFloat(bd);
                         }
                         else {
@@ -6076,7 +6362,7 @@
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
                                     cashData.push({
-                                        AppliedAmt: rowsCash[i].AppliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
+                                        AppliedAmt: checkcommaordot(event, rowsCash[i].AppliedAmt), Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val())
                                     });
                                 }
@@ -6107,7 +6393,7 @@
                                 if (appliedamts != 0 && appliedamts != undefined) {
                                     if (countVA009 <= 0) {
                                         invoiceData.push({
-                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
+                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             Date: row.Date1, Docbasetype: row.DocBaseType,
                                             documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount, Org: parseInt($cmbOrg.val())
@@ -6115,7 +6401,7 @@
                                     }
                                     else {
                                         invoiceData.push({
-                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
+                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             //Date: row.Date1, Docbasetype: row.DocBaseType,
                                             // send invoice schedule date if va009 module is updated
@@ -6205,7 +6491,7 @@
                             payment = keys[10];
                             if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                 paymentData.push({
-                                    appliedamt: rowsPayment[i].AppliedAmt, date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
+                                    appliedamt: checkcommaordot(event, rowsPayment[i].AppliedAmt), date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
                                     multiplierap: row.Multiplierap, openamt: row.OpenAmt, payment: row.Payment, Org: parseInt($cmbOrg.val())
                                 });
                             }
@@ -6248,7 +6534,7 @@
                                 if (appliedamts != 0 && appliedamts != undefined) {
                                     if (countVA009 <= 0) {
                                         invoiceData.push({
-                                            appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
+                                            appliedamt: checkcommaordot(event, appliedamts), discount: checkcommaordot(event, discounts), writeoff: checkcommaordot(event, writeoffs),
                                             cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
                                             date: row.Date1, docbasetype: row.DocBaseType,
                                             documentno: row.Documentno, isocode: row.Isocode, multiplierap: row.Multiplierap, amount: row.Amount, Org: parseInt($cmbOrg.val())
@@ -6256,7 +6542,7 @@
                                     }
                                     else {
                                         invoiceData.push({
-                                            appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
+                                            appliedamt: checkcommaordot(event, appliedamts), discount: checkcommaordot(event, discounts), writeoff: checkcommaordot(event, writeoffs),
                                             cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
                                             //date: row.Date1, docbasetype: row.DocBaseType,
                                             // send invoice schedule date if va009 module is updated
@@ -6349,7 +6635,7 @@
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                     paymentData.push({
-                                        AppliedAmt: rowsPayment[i].AppliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
+                                        AppliedAmt: checkcommaordot(event, rowsPayment[i].AppliedAmt), Date: row.Date1, Converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0, payment: payment
                                     });
                                 }
@@ -6365,7 +6651,7 @@
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
                                     cashData.push({
-                                        AppliedAmt: rowsCash[i].AppliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
+                                        AppliedAmt: checkcommaordot(event, rowsCash[i].AppliedAmt), Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0, payment: payment
                                     });
                                 }
@@ -6396,7 +6682,7 @@
                                 if (appliedamts != 0 && appliedamts != undefined) {
                                     if (countVA009 <= 0) {
                                         invoiceData.push({
-                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
+                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             Date: row.Date1, Docbasetype: row.DocBaseType, applied: applied, discount: discount, open: open, writeOff: writeOff,
                                             documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0
@@ -6404,7 +6690,7 @@
                                     }
                                     else {
                                         invoiceData.push({
-                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
+                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             //Date: row.Date1, Docbasetype: row.DocBaseType,
                                             // send invoice schedule date if va009 module is updated
