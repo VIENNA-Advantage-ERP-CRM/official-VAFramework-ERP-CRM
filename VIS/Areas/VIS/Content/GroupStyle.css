@@ -569,7 +569,7 @@ input.vis-group-search-icon {
     display: inline;
     float: left;
     width: 100%;
-    /*margin-top: -15px;*/
+    margin-top: -15px;
 }
 
 /* For Aspx Page */
@@ -764,11 +764,15 @@ input.vis-group-search-icon {
     margin-top: 15px;
     float: left;
 }
+.vis-creategroup-btnwrap {
+    width: auto !important;
+    float: right;
+}
+.vis-group-asignrole-btnwrap {
+    display: flex;
+    justify-content: space-between;
+}
 /*******************************************/
-
-
-
-
 @media (max-width: 1366px) {
     .vis-group-content-headDown > input[type=text] {
         /*width: 80%;*/

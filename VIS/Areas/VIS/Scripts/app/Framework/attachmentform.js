@@ -257,11 +257,12 @@
         //viContent.append(iFrame);
 
 
-        var bsyDiv = $("<div class='vis-apanel-busy'>");
-        bsyDiv.css("width", "100%");
-        bsyDiv.css("height", "100%");
-        bsyDiv.css('text-align', 'center');
-        bsyDiv.css("position", "absolute");
+        //var bsyDiv = $("<div class='vis-apanel-busy'>");
+        var bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+        //bsyDiv.css("width", "100%");
+        //bsyDiv.css("height", "100%");
+        //bsyDiv.css('text-align', 'center');
+        //bsyDiv.css("position", "absolute");
         divContainer.append(bsyDiv);
 
 

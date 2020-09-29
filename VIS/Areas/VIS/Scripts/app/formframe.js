@@ -18,7 +18,7 @@
         //InitComponenet
         function initComponent() {
             $root = $("<div class='vis-height-full vis-app-aform-root' >");
-            $busyDiv = $("<div class='vis-apanel-busy'>");
+            $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             $contentGrid = $("<div class='vis-height-full'>");
             $root.append($contentGrid).append($busyDiv);  
         };

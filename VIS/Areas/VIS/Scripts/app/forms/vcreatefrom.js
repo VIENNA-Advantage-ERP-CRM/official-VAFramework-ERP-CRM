@@ -35,7 +35,8 @@
 
         this.$root = $("<div style='position:relative'>");
         this.log = VIS.Logging.VLogger.getVLogger("VCreateFrom");
-        this.$busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        //this.$busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        this.$busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         this.topDiv = $("<div class='vis-locatormainwrap'>");
         this.middelDiv = $("<div class='vis-crtfrm-datawrp'>");

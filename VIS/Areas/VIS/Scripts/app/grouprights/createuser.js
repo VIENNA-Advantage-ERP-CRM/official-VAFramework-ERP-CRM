@@ -48,7 +48,7 @@
             var str = '  <div style="overflow:hidden" class="vis-group-assinRole-content"><div class="vis-group-assinRole-data" style=" margin-top: 5px; margin-bottom: 0; "><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
                 '<input  tabindex="1" class="vis-group-email" type="text" name="Name" data-placeholder="" placeholder=" "><label>' + VIS.Msg.getMsg('EMail') + '</label></div></div></div>' +
 
-            '<div style="width:auto;float:right;" class="vis-group-assinRole-data">' +
+            '<div class="vis-group-assinRole-data vis-creategroup-btnwrap">' +
               //'<a style="float:left" class="vis-group-btn vis-group-orgAcess vis-group-grayBtn">' + VIS.Msg.getMsg('VIS_OrgAccess') + '</a>' +
                                ' <a tabindex="2" class="vis-group-btn vis-group-pointer vis-group-create vis-group-grayBtn" style="float: left;">' + VIS.Msg.getMsg('Create') + '</a>' +
                '<a tabindex="3" class="vis-group-btn vis-group-pointer vis-group-invite vis-group-blueBtn" style="float: right;">' + VIS.Msg.getMsg('VIS_Invite') + '</a>' +

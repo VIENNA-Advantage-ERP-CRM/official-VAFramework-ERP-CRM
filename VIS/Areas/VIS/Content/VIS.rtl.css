@@ -5,7 +5,9 @@ html[dir="rtl"] * {
 }
 html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2,
 html[dir="rtl"] .pull-right,
-html[dir="rtl"] .vis-pull-right {
+html[dir="rtl"] .vis-pull-right,
+html[dir="rtl"] .vis-group-finish,
+html[dir="rtl"] .VIS_Pref_btn-2 {
     float: left !important;
 }
 
@@ -54,12 +56,12 @@ html[dir="rtl"] .vis-Email-leftFooter,
 html[dir="rtl"] .vis-orgaccess-description,
 html[dir="rtl"] .vis-group-assinRole-check .vis-group-user-profile input[type="Checkbox"],
 html[dir="rtl"] .vis-advancedSearchInput,
-html[dir="rtl"] .vis-advancedSearchHorigontal {
+html[dir="rtl"] .vis-advancedSearchHorigontal,
+html[dir="rtl"] .vis-cardviewmainsecondchild {
     float: right;
 }
 
 html[dir="rtl"] .vis-pull-right,
-html[dir="rtl"] .VIS_Pref_btn-2,
 html[dir="rtl"] li.active:after,
 html[dir="rtl"] .VIS_Pref_li:hover:after,
 html[dir="rtl"] .VIS_Pref_pass,
@@ -78,7 +80,8 @@ html[dir="rtl"] .btns,
 html[dir="rtl"] .vis-email-btns,
 html[dir="rtl"] .vis-email-sendbtn,
 html[dir="rtl"] .vis-email-saveAttachbtn,
-html[dir="rtl"] .vis-Dialog-buttons {
+html[dir="rtl"] .vis-Dialog-buttons,
+html[dir="rtl"] .vis-creategroup-btnwrap {
     float: left;
 }
 html[dir="rtl"] #fllupsScreen h2 span,
@@ -101,7 +104,9 @@ html[dir="rtl"] .vis-advancedSearchContentArea,
 html[dir="rtl"] .vis-tree-search,
 html[dir="rtl"] .vis-pref-ctrl-lblwrp,
 html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:first-child,
-html[dir="rtl"] .vis-group-content-headDown {
+html[dir="rtl"] .vis-group-content-headDown,
+html[dir="rtl"] .w2ui-overlay .w2ui-col-on-off table td label,
+html[dir="rtl"] .vis-cardviewmainsecondchild {
     padding-right: 0;
     padding-left: 10px;
 }
@@ -129,7 +134,8 @@ html[dir="rtl"] .vis-ulrole li {
 html[dir="rtl"] .vis-app-hdr-r-user a,
 html[dir="rtl"] .vis-app-hdr,
 html[dir="rtl"] .vis-attachhistory-attach-download,
-html[dir="rtl"] .vis-advancedSearchHorigontal > label {
+html[dir="rtl"] .vis-advancedSearchHorigontal > label,
+html[dir="rtl"] .vis-ad-w-p-nav-btns {
     padding-right: 0;
     padding-left: 5px;
 }
@@ -256,8 +262,12 @@ html[dir="rtl"] .vis-file-close-ico,
 html[dir="rtl"] .vis-ad-w-p-a-main,
 html[dir="rtl"] .VIS_Pref_close-btn,
 html[dir="rtl"] .vis-leftpanel-wrapper:after,
-html[dir="rtl"] .address-close-icon {
+html[dir="rtl"] .address-close-icon,
+html[dir="rtl"] .w2ui-grid .w2ui-toolbar-search .w2ui-search-down {
     right: auto;
+}
+html[dir="rtl"] .w2ui-grid .w2ui-toolbar-search .w2ui-search-down {
+    left: 5px;
 }
 html[dir="rtl"] .vis-ev-col-msign {
     left: 10px;
@@ -407,7 +417,10 @@ html[dir="rtl"] .vis-ad-w-p-tabs-oflow a,
 html[dir="rtl"] .vis-statusbar-ul div,
 html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2),
 html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child,
-html[dir="rtl"] .input-group-text .fa-arrow-left {
+html[dir="rtl"] .input-group-text .fa-arrow-left,
+html[dir="rtl"] .vis-cardviewbutton button.vis-btnright,
+html[dir="rtl"] .vis-cardviewbutton button.vis-btnleft,
+html[dir="rtl"] .vis-archive-sb-t-button {
     transform: rotate(180deg);
 }
 html[dir="rtl"] .vis-control-wrap > button {
@@ -470,7 +483,8 @@ html[dir="rtl"] .VIS_Pref_content-right-5{
     padding-right: 20px;
 }
 html[dir="rtl"] .VIS_Pref_content-right,
-html[dir="rtl"] .VIS_Pref_content-right-5 {
+html[dir="rtl"] .VIS_Pref_content-right-5,
+html[dir="rtl"] .vis-css-treeview ul li {
     padding-left: 10px;
 }
 html[dir="rtl"] .vis-cs-op-lbl {
@@ -608,6 +622,21 @@ html[dir="rtl"] .vis-img-ctrl-icon {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: .25rem;
 }
+html[dir="rtl"] .w2ui-grid .w2ui-toolbar-search .w2ui-search-all {
+    padding: 3px 10px 3px 18px;
+}
+html[dir="rtl"] .w2ui-overlay .w2ui-col-on-off table td:first-child {
+    padding: 4px 6px 4px 0;
+}
+
+html[dir="rtl"] .w2ui-overlay .w2ui-col-on-off table td:last-child {
+    padding: 4px 0 4px 6px;
+}
+html[dir="rtl"] .vis-acctviewer-tabswrap div:first-child {
+    margin-right: 0 !important;
+    margin-left: 15px;
+}
+
 /*rtl css End here*/
 
 

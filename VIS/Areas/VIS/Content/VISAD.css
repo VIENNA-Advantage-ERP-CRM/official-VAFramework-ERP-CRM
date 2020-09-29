@@ -2113,7 +2113,7 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
 }
 .vis-attachhistory-apanel-tabcontrol-ul > li.vis-attachhistory-apanel-tab-selected {
     color: rgba(var(--v-c-primary), 1);
-    font-size: 1.7rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 .vis-attachhistory-apanel-tabcontrol-ul > li {
@@ -4735,7 +4735,8 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     margin-top: 0;
     height: 40px;
 }
-.vis-info-ctrlwrap select, .vis-info-ctrlwrap input:not([type="button"]) {
+.vis-info-ctrlwrap select, .vis-info-ctrlwrap input:not([type="button"]),
+.vis-acctviewer-tabswrap {
     flex: 1;
 }
 .vis-info-ctrlwrap button, .vis-info-l-s-wrap button {
@@ -4925,23 +4926,31 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 .vis-markmodulemainwrap .vis-gc-vpanel-table-label-checkbox input[type="checkbox"] {
     margin-right: 7px;
 }
-.vis-valpreferencedatawrp {
+.vis-valpreferencedatawrp,
+.VIS-AMTD-formBtns,
+.vis-acctviewer-topwrap,
+.vis-acctviewer-tabswrap,
+.vis-valpreferencedatawrp .vis-input-wrap + label,
+.vis-acctviewerbottdiv,
+.vis-excelimportbtn a {
     display: flex;
+}
+.vis-valpreferencedatawrp .vis-input-wrap + labels,
+.vis-acctviewerbottdiv,
+.vis-excelimportbtn a,
+.vis-acctviewer-tabswrap{
+    align-items: center;
 }
 .vis-valpreferencedatawrp .vis-input-wrap + label {
     flex: 1;
     padding-left: 10px;
-    margin-bottom: 15px !important;
-    display: flex;
-    align-items: center;
+    margin-bottom: 15px !important;    
 }
 .vis-process-toolbar .vis-icon-menuclose .vis-cross {
     padding: 0 10px;
 }
 .vis-acctviewerbottdiv {
-    display: flex;
     float: left;
-    align-items: center;
     width: 100%;
 }
 .vis-acctviewerbottdiv > label{
@@ -4956,19 +4965,23 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     padding: 5px 10px;
 }
 .vis-excelimportbtn {font-size: 1.2rem;}
-.VIS-AMTD-formBtns {
-    display: flex;
-}
+
 .vis-excelimportbtn a {
     height: 35px;
-    display: flex;
-    align-items: center;
     background: rgba(var(--v-c-on-secondary), 1);
 }
 .vis-orgaccess-description {
     float: left;
     margin-left: 30px;
 }
+.vis-acctviewer-topwrap {
+    float: left;
+    width: 100%;
+}
+.vis-acctviewer-tabswrap {
+    height: 35px;
+}
+
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {
     position: absolute;
