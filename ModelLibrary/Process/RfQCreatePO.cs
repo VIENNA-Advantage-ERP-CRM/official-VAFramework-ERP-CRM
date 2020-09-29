@@ -181,6 +181,7 @@ namespace VAdvantage.Process
 
 
             //	Selected Winner on Line Level
+            string Orderno = "";
             int noOrders = 0;
             for (int i = 0; i < responses.Length; i++)
             {
@@ -268,12 +269,13 @@ namespace VAdvantage.Process
                 }	//	for all Response Lines
                 if (order != null)
                 {
+                    Orderno = order.GetDocumentNo();
                     response.SetC_Order_ID(order.GetC_Order_ID());
                     response.Save();
                 }
             }
-
-            return "#" + noOrders;
+            // Show the message in RfQ after click Create Purchase Order button
+            return "Purchase Order Created Successfully " + Orderno;
         }
         //Added by Neha Thakur
         /// <summary>
