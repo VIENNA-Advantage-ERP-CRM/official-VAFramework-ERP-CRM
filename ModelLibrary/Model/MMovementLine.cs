@@ -329,7 +329,7 @@ namespace VAdvantage.Model
                 whTo = MWarehouse.Get(GetCtx(), MLocator.Get(GetCtx(), GetM_LocatorTo_ID()).GetM_Warehouse_ID());
 
                 qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + GetM_Locator_ID() + " and m_product_id=" + GetM_Product_ID();
-                if (GetM_AttributeSetInstance_ID() > 0)
+                if (GetDTD001_AttributeNumber() == null || GetM_AttributeSetInstance_ID() > 0)
                 {
                     qry += " AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID();
                 }
