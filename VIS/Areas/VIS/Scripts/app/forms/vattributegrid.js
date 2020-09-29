@@ -466,12 +466,20 @@
                 });
 
             if (btnToggel != null)
+                var borderspace = 0;
                 btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
                     if (toggleside) {
                         btnRefresh.show();
                         lblA1.getControl().show();
                         lblA2.getControl().show();
-                        btnToggel.animate({ borderSpacing: 0 }, {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 180;
+                        }
+                        else {
+                            borderspace = 0;
+
+                        }
+                        btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
@@ -491,10 +499,17 @@
                         //});
                     }
                     else {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 0;
+                        }
+                        else {
+                            borderspace = 180;
+
+                        }
                         btnRefresh.hide();
                         lblA1.getControl().hide();
                         lblA2.getControl().hide();
-                        btnToggel.animate({ borderSpacing: 180 }, {
+                        btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
