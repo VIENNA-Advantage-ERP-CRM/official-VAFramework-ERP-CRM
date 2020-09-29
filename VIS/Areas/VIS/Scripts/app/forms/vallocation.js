@@ -3709,14 +3709,15 @@
         function paymentDoubleClicked(event) {
             if ($gridPayment.columns[event.column].field == "AppliedAmt") {
                 var getChanges = $gridPayment.getChanges();
-                //if (getChanges == undefined || getChanges.length == 0) {
-                //    return;
-                //}
+                if (getChanges == undefined || getChanges.length == 0) {
+                    $gridPayment.columns[event.column].editable = false;
+                    return;
+                }
 
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
-                if (element == null || element == undefined || element[0].SelectRow == undefined) {
+                if (element == null || element[0] == undefined || element[0].SelectRow == undefined) {
                     $gridPayment.columns[event.column].editable = false;
                     return;
                 }
@@ -3734,7 +3735,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -3756,7 +3757,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -3773,7 +3774,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -3864,14 +3865,15 @@
         function cashDoubleClicked(event) {
             if ($gridCashline.columns[event.column].field == "AppliedAmt") {
                 var getChanges = $gridCashline.getChanges();
-                //if (getChanges == undefined || getChanges.length == 0) {
-                //    return;
-                //}
+                if (getChanges == undefined || getChanges.length == 0) {
+                    $gridCashline.columns[event.column].editable = false;
+                    return;
+                }
 
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
-                if (element == null || element == undefined || element[0].SelectRow == undefined) {
+                if (element == null || element[0] == undefined || element[0].SelectRow == undefined) {
                     $gridCashline.columns[event.column].editable = false;
                     return;
                 }
@@ -3889,7 +3891,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -3911,7 +3913,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -3928,7 +3930,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -4020,14 +4022,15 @@
                 $gridInvoice.columns[event.column].field == "Writeoff" ||
                 $gridInvoice.columns[event.column].field == "Discount") {
                 var getChanges = $gridInvoice.getChanges();
-                //if (getChanges == undefined || getChanges.length == 0) {
-                //    return;
-                //}
+                if (getChanges == undefined || getChanges.length == 0) {
+                    $gridInvoice.columns[event.column].editable = false;
+                    return;
+                }
 
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
-                if (element == null || element == undefined || element[0].SelectRow == undefined) {
+                if (element == null || element[0] == undefined || element[0].SelectRow == undefined) {
                     $gridInvoice.columns[event.column].editable = false;
                     return;
                 }
@@ -4046,7 +4049,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -4068,7 +4071,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -4085,7 +4088,7 @@
                                 if (!dotFormatter) {
                                     var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
                                     if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter);
+                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
                                     }
                                     if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
                                         val = appliedAmount;
@@ -4107,7 +4110,7 @@
                                 if (!dotFormatter) {
                                     var write_off = record.changes.Writeoff.toString();
                                     if (!write_off.contains(",")) {
-                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter);
+                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter).toString();
                                     }
                                     if (write_off.contains(".") || write_off.contains(",")) {
                                         val = write_off;
@@ -4129,7 +4132,7 @@
                                 if (!dotFormatter) {
                                     var write_off = record.changes.Writeoff.toString();
                                     if (!write_off.contains(",")) {
-                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter);
+                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter).toString();
                                     }
                                     if (write_off.contains(".") || write_off.contains(",")) {
                                         val = write_off;
@@ -4146,7 +4149,7 @@
                                 if (!dotFormatter) {
                                     var write_off = checkcommaordot(event, record.changes.Writeoff);
                                     if (!write_off.contains(",")) {
-                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter);
+                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter).toString();
                                     }
                                     if (write_off.contains(".") || write_off.contains(",")) {
                                         val = write_off;
@@ -4168,7 +4171,7 @@
                                 if (!dotFormatter) {
                                     var Discount = record.changes.Discount.toString();
                                     if (!Discount.contains(",")) {
-                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter);
+                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter).toString();
                                     }
                                     if (Discount.contains(".") || Discount.contains(",")) {
                                         val = Discount;
@@ -4190,7 +4193,7 @@
                                 if (!dotFormatter) {
                                     var Discount = record.changes.Discount.toString();
                                     if (!Discount.contains(",")) {
-                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter);
+                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter).toString();
                                     }
                                     if (Discount.contains(".") || Discount.contains(",")) {
                                         val = Discount;
@@ -4206,7 +4209,7 @@
                                 if (!dotFormatter) {
                                     var Discount = checkcommaordot(event, record.changes.Discount);
                                     if (!Discount.contains(",")) {
-                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter);
+                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter).toString();
                                     }
                                     if (Discount.contains(".") || Discount.contains(",")) {
                                         val = Discount;
