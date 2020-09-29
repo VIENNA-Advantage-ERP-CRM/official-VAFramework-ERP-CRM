@@ -518,18 +518,32 @@ namespace VAdvantage.Common
             return "";
         }
 
-
+        /// <summary>
+        /// Function will check if Action need to save or not. 
+        /// If Yes, then save information in table.
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="ActionOrigin">Action Origin(Menu, Window, Form)</param>
+        /// <param name="OriginName">(Form name or window name)</param>
+        /// <param name="AD_Table_ID">AD_Table_ID of table from where action intiated</param>
+        /// <param name="Record_ID">Selected Record_ID</param>
+        /// <param name="Process_ID">AD_Process_ID with which report is linked</param>
+        /// <param name="ProcessName">Name of Process</param>
+        /// <param name="fileType">Requested file type(PDF, CSV, RTF)</param>
+        /// <param name="description">Desciption like filename or anything else</param>
+        /// <param name="ActionType">Action type.(Viewed Or Downloaded)</param>
         public static void SaveActionLog(Ctx ctx, string ActionOrigin, string OriginName, int AD_Table_ID, int Record_ID,
-           int Process_ID, string ProcessName, string fileType, string description, string ActionType)
+           int processID, string ProcessName, string fileType, string description, string ActionType)
         {
+            //Save Action Log key is fetched from System Config window
             string canSave = Util.GetValueOfString(ctx.GetContext("#SAVE_ACTION_LOG"));
 
             if (!canSave.Equals("Y"))
                 return;
 
-            int processID = Util.GetValueOfInt(Process_ID);
             string reportTypeForLog = MActionLog.ACTIONTYPE_View;
             string descriptonForLog = "Report Viewed";
+
             if (!string.IsNullOrEmpty(description))
             {
                 descriptonForLog = description;
@@ -538,6 +552,7 @@ namespace VAdvantage.Common
             {
                 reportTypeForLog = ActionType;
             }
+            // As PDF viewed in Browser, so PDF report Viewed message will be saved.
             else if (fileType.Equals(ProcessCtl.ReportType_PDF))
             {
                 reportTypeForLog = MActionLog.ACTIONTYPE_View;

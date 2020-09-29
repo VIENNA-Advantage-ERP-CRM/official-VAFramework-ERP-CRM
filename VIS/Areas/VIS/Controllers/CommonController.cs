@@ -2999,11 +2999,8 @@ namespace VIS.Controllers
         {
             MArchive ar = new MArchive(_ctx, archiveId, null);//  m_archives[m_index];
             MSession sess = MSession.Get(_ctx);
-
-
-            //sess.ActionLog(_ctx, sess.GetAD_Session_ID(), _ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(),
-            //    MActionLog.ACTION_Form, MActionLog.ACTIONTYPE_Download, "Archive Viewer", "Attachment Downloaded:->" + ar.GetName()
-            //    , ar.GetAD_Table_ID(), ar.GetRecord_ID());
+            
+            //Save Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetAD_Table_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);
 
             byte[] report = ar.GetBinaryData();

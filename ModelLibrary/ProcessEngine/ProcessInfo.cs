@@ -415,22 +415,38 @@ namespace VAdvantage.ProcessEngine
             useCrysalReportViewer = useCRV;
         }
 
+        /// <summary>
+        /// Set Action Origin (Menu, Window, Form)
+        /// </summary>
+        /// <param name="ActionOrigin"></param>
         public void SetActionOrigin(string ActionOrigin)
         {
             this.ActionOrigin = ActionOrigin;
         }
 
+
+        /// <summary>
+        /// get Action Origin
+        /// </summary>
+        /// <returns></returns>
         public String GetActionOrigin()
         {
             return ActionOrigin;
         }
 
-
+        /// <summary>
+        /// Set Action(report or other action viewed or downloaded) origin Name
+        /// </summary>
+        /// <param name="OriginName"></param>
         public void SetOriginName(string OriginName)
         {
             this.OriginName = OriginName;
         }
 
+        /// <summary>
+        /// Get Action Origin Name
+        /// </summary>
+        /// <returns></returns>
         public String GetOriginName()
         {
             return OriginName;

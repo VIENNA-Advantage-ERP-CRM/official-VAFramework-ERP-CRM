@@ -437,6 +437,7 @@
             pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
             pi.setIsBackground($chkIsBG.is(':checked'));
             pi.setIsReport(self.isReport);
+            //Set Action Origin and Origin name
             pi.setActionOrigin(self.ActionOrigin);
             pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
             var ctl = new VIS.ProcessCtl(self, pi, null);
@@ -556,6 +557,8 @@
         return true;
     };
 
+    //Set Action Origin
+    //Set Action Origin
     AProcess.prototype.setActionOrigin = function (origin) {
         this.ActionOrigin = origin;
     }
@@ -759,6 +762,7 @@
 
 
         function createControls(panel, repObj) {
+            //Set Action Origin and Origin name
             pctl.pi.setActionOrigin(self.ActionOrigin);
             pctl.pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
             var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
@@ -947,6 +951,7 @@
 
             function getExeProcessParameter(fileType) {
                 pctl.pi.setFileType(fileType);
+                //Set Action Origin and Origin name
                 pctl.pi.setActionOrigin(self.ActionOrigin);
                 pctl.pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
                 var data = { processInfo: pctl.pi.toJson(), parameterList: pctl.paraList }
@@ -963,6 +968,7 @@
                     pageNumber: pageNo,
                     page_Size: PageSize,
                     saveAll: false,
+                    //Set Action Origin and Origin name
                     ActionOrigin: pctl.pi.getActionOrigin(),
                     OriginName: pctl.pi.getOriginName()
                 }
@@ -992,6 +998,7 @@
                     pageNumber: pageNumber,
                     page_Size: page_Size,
                     printAllPages: printAllPages,
+                    //Set Action Origin and Origin name
                     ActionOrigin: pctl.pi.getActionOrigin(),
                     OriginName: pctl.pi.getOriginName()
 

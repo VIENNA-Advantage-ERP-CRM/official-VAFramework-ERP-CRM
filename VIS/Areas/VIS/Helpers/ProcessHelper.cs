@@ -211,6 +211,8 @@ namespace VIS.Helpers
         internal static ProcessReportInfo ExecuteProcess(Ctx ctx, Dictionary<string, string> processInfo, ProcessPara[] pList)
         {
             ProcessInfo pi = new ProcessInfo().FromList(processInfo);
+
+            //Saved Action Log
          VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(),pi.GetOriginName(), pi.GetTable_ID(),pi.GetRecord_ID(),pi.GetAD_Process_ID(),pi.GetTitle(),pi.GetFileType(),"","");
             pi.SetAD_User_ID(ctx.GetAD_User_ID());
             pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
@@ -539,31 +541,8 @@ namespace VIS.Helpers
             Query _query = null;
             int Record_ID = 0;
             object AD_tab_ID = 0;
-            //string reportTypeForLog = MActionLog.ACTIONTYPE_View;
-            //string descriptonForLog = "Report Viewed.";
-            //int processID = Util.GetValueOfInt(nProcessInfo["Process_ID"]);
-            //if (fileType.Equals(ProcessCtl.ReportType_PDF))
-            //{
-            //    reportTypeForLog = MActionLog.ACTIONTYPE_Download;
-            //    descriptonForLog = "PDF Report Downloaded.";
-            //}
-            //else if (fileType.Equals(ProcessCtl.ReportType_CSV))
-            //{
-            //    reportTypeForLog = MActionLog.ACTIONTYPE_Download;
-            //    descriptonForLog = "CSV Report Downloaded.";
-            //}
-            //if (processID > 0)
-            //{
-            //    descriptonForLog += ", Process Name:->" + MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName();
-            //}
-            //MSession sess = MSession.Get(_ctx);
-
-
-
-            //sess.ActionLog(_ctx, sess.GetAD_Session_ID(), _ctx.GetAD_Client_ID(), _ctx.GetAD_Org_ID(),
-            //    Util.GetValueOfString(nProcessInfo["ActionOrigin"]), reportTypeForLog, Util.GetValueOfString(nProcessInfo["OriginName"]), descriptonForLog
-            //    , Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]));
-
+            
+            //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, Util.GetValueOfString(nProcessInfo["ActionOrigin"]), Util.GetValueOfString(nProcessInfo["OriginName"]),
                 Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]), Util.GetValueOfInt(nProcessInfo["Process_ID"]),
                 MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(),fileType,"","");
@@ -769,13 +748,7 @@ namespace VIS.Helpers
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
-            //MSession sess = MSession.Get(ctx);
-            //string reportTypeForLog = MActionLog.ACTIONTYPE_View;
-            //if (fileType.Equals(ProcessCtl.ReportType_PDF) || fileType.Equals(ProcessCtl.ReportType_CSV))
-            //    reportTypeForLog = MActionLog.ACTIONTYPE_Download;
-            //sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
-            //    actionOrigin, reportTypeForLog, originName, "Process Name=" + MProcess.Get(ctx, AD_Process_ID).GetName() + ",Record_ID=" + Record_ID
-            //    , AD_Table_ID, Record_ID);
+            //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, AD_Table_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType,"","");
 
             try
