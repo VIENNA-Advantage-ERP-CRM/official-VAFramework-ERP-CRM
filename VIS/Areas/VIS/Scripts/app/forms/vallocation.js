@@ -165,7 +165,6 @@
         var stdPrecision = 0;
 
         //Culture seperator object
-        var culture = new VIS.CultureSeparator();
         var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
         var dotFormatter = VIS.Env.isDecimalPoint();
 
@@ -357,6 +356,12 @@
         function eventHandling() {
             //Organization 
             $OrgFilter.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will clear the grids
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 //clear the girds based on which grid is active (true).
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
@@ -388,6 +393,12 @@
             $vSearchBPartner.fireValueChanged = bpValueChanged;
             $cmbCurrency.on("change", function (e) {
                 vetoableChange("C_Currency_ID", $cmbCurrency.val());
+                //when select MultiCurrency without selecting conversionDate it will clear the grid's
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
                         if (allgridsLoaded()) {
@@ -426,6 +437,13 @@
             });
             $vchkMultiCurrency.on("change", function (e) {
                 vetoableChange("Date", $vchkMultiCurrency.is(':checked'));
+                //when select MultiCurrency without selecting conversionDate it will clear the grid's 
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    $conversionDate.val('');
+                    return;
+                }
                 //clear the grids which is true
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
@@ -471,6 +489,13 @@
             });
 
             $vbtnSearch.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         clearRightPanelFilters(); //clear right side  filters and selected records
@@ -592,6 +617,13 @@
 
             //filter the records based on Doctype in Invocie grid
             $cmbDocType.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -614,6 +646,13 @@
 
             //filter the records based on Doctype in Payment grid
             $payDocType.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -636,6 +675,13 @@
 
             //filter the records based on DocBaseType in Payment grid
             $payDocbaseType.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -658,6 +704,13 @@
 
             //filter the records based on DocBaseType in Invoice grid
             $invDocbaseType.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -680,6 +733,13 @@
 
             //filter the records based on paymentType in Cash Journal Line grid
             $cashPayType.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -702,6 +762,13 @@
 
             // filteration based on from and toDates for Invoice Grid
             $fromDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -722,6 +789,13 @@
                 }
             });
             $toDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -744,6 +818,13 @@
 
             // filteration based on from and toDates for Payment Grid
             $pfromDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -764,6 +845,13 @@
                 }
             });
             $ptoDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -786,6 +874,13 @@
 
             //filteration based on from and toDates for cash journal Grid
             $cfromDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -807,6 +902,13 @@
                 }
             });
             $ctoDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -829,6 +931,13 @@
 
             // filteration based on from and toDates for GL journal Grid
             $gfromDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -849,6 +958,13 @@
                 }
             });
             $gtoDate.on("change", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -872,6 +988,13 @@
             //click event for search Invoice records which is based on Document No
             $srchInvoice.on("keypress", function (e) {
                 if (e.keyCode == 13) {
+                    //when select MultiCurrency without selecting conversionDate it will return a Message
+                    if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                        VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                        blankAllGrids();
+                        clearRightPanelFilters(); //clear right side  filters and selected records
+                        return;
+                    }
                     if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                         if (checkisSelectedAllocationFromAndTo()) {
                             if (allgridsLoaded()) {
@@ -890,6 +1013,13 @@
                 }
             });
             $srchbtnInvoice.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -910,6 +1040,13 @@
             //click event for search Payment records which is based on Document No
             $srchPayment.on("keypress", function (e) {
                 if (e.keyCode == 13) {
+                    //when select MultiCurrency without selecting conversionDate it will return a Message
+                    if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                        VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                        blankAllGrids();
+                        clearRightPanelFilters(); //clear right side  filters and selected records
+                        return;
+                    }
                     if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                         if (checkisSelectedAllocationFromAndTo()) {
                             if (allgridsLoaded()) {
@@ -928,6 +1065,13 @@
                 }
             });
             $srchbtnPayment.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -948,6 +1092,13 @@
             //click event for search Cash Journal line records which is based on Document No
             $srchCashJournal.on("keypress", function (e) {
                 if (e.keyCode == 13) {
+                    //when select MultiCurrency without selecting conversionDate it will return a Message
+                    if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                        VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                        blankAllGrids();
+                        clearRightPanelFilters(); //clear right side  filters and selected records
+                        return;
+                    }
                     if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                         if (checkisSelectedAllocationFromAndTo()) {
                             if (allgridsLoaded()) {
@@ -966,6 +1117,13 @@
                 }
             });
             $srchbtnCashJournal.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -986,6 +1144,13 @@
             //click event for search GL Journal line records which is based on Document No
             $srchGL.on("keypress", function (e) {
                 if (e.keyCode == 13) {
+                    //when select MultiCurrency without selecting conversionDate it will return a Message
+                    if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                        VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                        blankAllGrids();
+                        clearRightPanelFilters(); //clear right side  filters and selected records
+                        return;
+                    }
                     if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                         if (checkisSelectedAllocationFromAndTo()) {
                             if (allgridsLoaded()) {
@@ -1005,6 +1170,13 @@
             });
 
             $srchbtnGL.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -1160,6 +1332,13 @@
             });
             //clear selected invoices records from Invoice grid 
             $clrbtn.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -1179,6 +1358,13 @@
 
             //clear selected journal records from GL journal grid
             $glclrbtn.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -1197,6 +1383,13 @@
             });
             //clear selected cash journals records from Cash Journal grid
             $cashclrbtn.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -1215,6 +1408,13 @@
             });
             //clear selected payment records from Payment grid  
             $payclrbtn.on("click", function (e) {
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    VIS.ADialog.warn("VIS_SlctcnvrsnDate");
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if (checkisSelectedAllocationFromAndTo()) {
                         if (allgridsLoaded()) {
@@ -2875,7 +3075,7 @@
         //binding GL Grid 
         function bindGLGrid(data, chk) {
             var columns = [];
-            columns.push({ field: "SelectRow", caption: 'check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: "SelectRow", caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false, sortable: false });
             columns.push({
@@ -3028,7 +3228,7 @@
         //render to culture format
         function bindPaymentGrid(data, chk) {
             var columns = [];
-            columns.push({ field: 'SelectRow', caption: 'check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: 'SelectRow', caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
             columns.push({
@@ -3245,7 +3445,7 @@
         //culture work
         function bindCashline(data, chk) {
             var columns = [];
-            columns.push({ field: 'SelectRow', caption: 'check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: 'SelectRow', caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false });
             columns.push({
@@ -3463,7 +3663,7 @@
         //Invoice grid bind
         function bindInvoiceGrid(data, chk) {
             var columns = [];
-            columns.push({ field: 'SelectRow', caption: 'check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: 'SelectRow', caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false });
             columns.push({
