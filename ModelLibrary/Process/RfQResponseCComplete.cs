@@ -68,7 +68,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             response.Save();
             //Deekshant changes in return Completed Sucessfully
-            return "Completed Successfully";
+            return Msg.GetMsg(GetCtx(),"CMS02_Completed","");
         }
     }
 }

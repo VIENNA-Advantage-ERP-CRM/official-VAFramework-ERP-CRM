@@ -181,7 +181,7 @@ namespace VAdvantage.Process
 
 
             //	Selected Winner on Line Level
-            string Orderno = "";
+            StringBuilder Orderno = new StringBuilder();
             int noOrders = 0;
             for (int i = 0; i < responses.Length; i++)
             {
@@ -269,13 +269,17 @@ namespace VAdvantage.Process
                 }	//	for all Response Lines
                 if (order != null)
                 {
-                    Orderno = order.GetDocumentNo();
+                    if (Orderno.Length > 0)
+                    {
+                        Orderno.Append(",");
+                    }
+                    Orderno.Append(order.GetDocumentNo());
                     response.SetC_Order_ID(order.GetC_Order_ID());
                     response.Save();
                 }
             }
             // Show the message in RfQ after click Create Purchase Order button
-            return "Purchase Order Created Successfully " + Orderno;
+            return Msg.GetMsg(GetCtx(),"CMS02_PurchaseOrder","")+" " + Orderno;
         }
         //Added by Neha Thakur
         /// <summary>
