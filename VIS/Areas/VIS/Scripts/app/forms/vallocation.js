@@ -1298,6 +1298,12 @@
             //Currency Conversion Date change event
             $conversionDate.on("change", function (e) {
                 conversionDate = $conversionDate.val();
+                //when select MultiCurrency without selecting conversionDate it will return a Message
+                if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
+                    blankAllGrids();
+                    clearRightPanelFilters(); //clear right side  filters and selected records
+                    return;
+                }
                 //clear and refresh the grids which is true for selected BusinessPartner and Currency based on ConversionDate
                 if (VIS.Utility.Util.getValueOfInt($vSearchBPartner.value) > 0) {
                     if ($allocationFrom.val() != 0 && $allocationTo.val() != 0) {
