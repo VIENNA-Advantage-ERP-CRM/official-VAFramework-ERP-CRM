@@ -246,7 +246,8 @@
             "FromDate",
             "Payment_Type",
             "CreditOrDebit",
-            "Account"
+            "Account",
+            "VIS_Check"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -3081,7 +3082,7 @@
         //binding GL Grid 
         function bindGLGrid(data, chk) {
             var columns = [];
-            columns.push({ field: "SelectRow", caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: "SelectRow", caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false, sortable: false });
             columns.push({
@@ -3234,7 +3235,7 @@
         //render to culture format
         function bindPaymentGrid(data, chk) {
             var columns = [];
-            columns.push({ field: 'SelectRow', caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: 'SelectRow', caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
             columns.push({
@@ -3451,7 +3452,7 @@
         //culture work
         function bindCashline(data, chk) {
             var columns = [];
-            columns.push({ field: 'SelectRow', caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: 'SelectRow', caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false });
             columns.push({
@@ -3669,7 +3670,7 @@
         //Invoice grid bind
         function bindInvoiceGrid(data, chk) {
             var columns = [];
-            columns.push({ field: 'SelectRow', caption: 'Check', size: '50px', editable: { type: 'checkbox' } });
+            columns.push({ field: 'SelectRow', caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
             columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
             columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false });
             columns.push({
@@ -4539,7 +4540,7 @@
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
-                if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                if (element == null || element[0] == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                     //Set value to 0 when element is null
                     $gridInvoice.records[event.recid]["AppliedAmt"] = 0;
                     $gridInvoice.records[event.recid]["Writeoff"] = 0;
@@ -4637,7 +4638,7 @@
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
-                if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                if (element == null || element[0] == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                     //Set value to 0 when element is null
                     $gridPayment.records[event.recid]["AppliedAmt"] = 0;
                     //$gridPayment.records[event.recid]["Writeoff"] = 0;
@@ -4737,7 +4738,7 @@
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
-                if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                if (element == null || element[0] == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                     //Set value to 0 when element is null
                     $gridCashline.records[event.recid]["AppliedAmt"] = 0;
                     //$gridCashline.records[event.recid]["Writeoff"] = 0;
@@ -4835,7 +4836,7 @@
                 var element = $.grep(getChanges, function (ele, index) {
                     return parseInt(ele.recid) == parseInt(event.recid);
                 });
-                if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+                if (element == null || element[0] == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                     //Set value to 0 when element is null
                     $glLineGrid.records[event.recid]["AppliedAmt"] = 0;
                     $glLineGrid.refreshCell(event.recid, "AppliedAmt");
@@ -5847,7 +5848,7 @@
             var element = $.grep(changes, function (ele, index) {
                 return parseInt(ele.recid) == row;
             });
-            if (element == null || element == undefined || element.length == 0 || element[0].SelectRow == undefined) {
+            if (element == null || element[0] == undefined || element.length == 0 || element[0].SelectRow == undefined) {
                 return false;
             }
             else {
@@ -6259,7 +6260,7 @@
 
                         if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                             rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = -1 * format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])
+                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]]));
                         }
                         else {
                             bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])
@@ -6288,7 +6289,7 @@
                         //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                             rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = -1 * format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]])
+                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]]));
                         }
                         else {
                             bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]])
@@ -6329,7 +6330,7 @@
                             //bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                             if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                                 rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                                bd = -1 * format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])
+                                bd = -1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]]));
                             }
                             else {
                                 bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])
