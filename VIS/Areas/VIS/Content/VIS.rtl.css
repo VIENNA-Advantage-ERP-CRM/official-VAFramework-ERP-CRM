@@ -61,7 +61,10 @@ html[dir="rtl"] .vis-advancedSearchHorigontal,
 html[dir="rtl"] .vis-cardviewmainsecondchild,
 html[dir="rtl"] .VIS_Pref_err-btn,
 html[dir="rtl"] .VIS_form-col,
-html[dir="rtl"] .VIS_form-data-col {
+html[dir="rtl"] .VIS_form-data-col,
+html[dir="rtl"] .vis-advancedSearchInput > input,
+html[dir="rtl"] .vis-advancedSearchInput > select,
+html[dir="rtl"] .vis-advancedSearchInput > button {
     float: right;
 }
 
