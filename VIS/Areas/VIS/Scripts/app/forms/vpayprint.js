@@ -61,7 +61,7 @@
         //Custom Design of Paymnet Selection Form
         //******************
         function customDesign() {
-            $divContainer = $("<div class='vis-mainContainer'>");
+            $divContainer = $("<div class='vis-mainContainer vis-formouterwrpdiv'>");
             var designPSelectInfo = " <div class='vis-pPrintInfo'>"  // div pSelectInfo starts here                            
                 + " <div class='vis-paymentselect-field' style='margin-top: 8px;'>"  // div PaySelection starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'

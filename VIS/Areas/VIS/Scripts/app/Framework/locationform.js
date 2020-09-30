@@ -68,8 +68,8 @@
                 $($root.find(".cat2 a")[0]).addClass("pull-left");
                 $($root.find(".cat3 a")[0]).removeClass("pull-right");
                 $($root.find(".cat3 a")[0]).addClass("pull-left");
-                $($root.find(".cat2 a")[0]).css("margin-left", "10px");
-                $($root.find(".cat3 a")[0]).css("margin-left", "10px");
+                //$($root.find(".cat2 a")[0]).css("margin-left", "10px");
+                //$($root.find(".cat3 a")[0]).css("margin-left", "10px");
             }
 
 

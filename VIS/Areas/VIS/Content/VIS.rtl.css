@@ -7,7 +7,8 @@ html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2,
 html[dir="rtl"] .pull-right,
 html[dir="rtl"] .vis-pull-right,
 html[dir="rtl"] .vis-group-finish,
-html[dir="rtl"] .VIS_Pref_btn-2 {
+html[dir="rtl"] .VIS_Pref_btn-2,
+html[dir="rtl"] .vis-leftpanel-inn-wrap ~ div {
     float: left !important;
 }
 
@@ -57,7 +58,10 @@ html[dir="rtl"] .vis-orgaccess-description,
 html[dir="rtl"] .vis-group-assinRole-check .vis-group-user-profile input[type="Checkbox"],
 html[dir="rtl"] .vis-advancedSearchInput,
 html[dir="rtl"] .vis-advancedSearchHorigontal,
-html[dir="rtl"] .vis-cardviewmainsecondchild {
+html[dir="rtl"] .vis-cardviewmainsecondchild,
+html[dir="rtl"] .VIS_Pref_err-btn,
+html[dir="rtl"] .VIS_form-col,
+html[dir="rtl"] .VIS_form-data-col {
     float: right;
 }
 
@@ -81,7 +85,8 @@ html[dir="rtl"] .vis-email-btns,
 html[dir="rtl"] .vis-email-sendbtn,
 html[dir="rtl"] .vis-email-saveAttachbtn,
 html[dir="rtl"] .vis-Dialog-buttons,
-html[dir="rtl"] .vis-creategroup-btnwrap {
+html[dir="rtl"] .vis-creategroup-btnwrap,
+html[dir="rtl"] .VIS_pop-btn-wrap {
     float: left;
 }
 html[dir="rtl"] #fllupsScreen h2 span,
@@ -139,7 +144,8 @@ html[dir="rtl"] .vis-ad-w-p-nav-btns {
     padding-right: 0;
     padding-left: 5px;
 }
-html[dir="rtl"] .vis-attachhistory-email-dropdown {
+html[dir="rtl"] .vis-attachhistory-email-dropdown,
+html[dir="rtl"] .VIS_tree-container .nav-list .nav-list {
     padding-left: 0;
     padding-right: 15px;
 }
@@ -147,6 +153,18 @@ html[dir="rtl"] .vis-rad-recordData,
 html[dir="rtl"] .vis-attachhistory-right-row > ul > li {
     padding-right: 0;
     padding-left: 15px;
+}
+html[dir="rtl"] .VIS_form-row .VIS_form-col:not(:first-child),
+html[dir="rtl"] .VIS_form-data-col:not(:first-child),
+html[dir="rtl"] .zip-input {
+    padding-left: 0;
+    padding-right: 7px;
+}
+html[dir="rtl"] .VIS_form-row .VIS_form-col:not(:last-child),
+html[dir="rtl"] .VIS_form-data-col:not(:last-child),
+html[dir="rtl"] .form-input {
+    padding-left: 7px;
+    padding-right: 0;
 }
 html[dir="rtl"] .vis-feedIcons.vis-icon-feed,
 html[dir="rtl"] .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input,
@@ -165,7 +183,9 @@ html[dir="rtl"] .vis-group-head-right:after,
 html[dir="rtl"] .VIS-Tm-btnicon:last-child,
 html[dir="rtl"] .vis-allocation-rightContainer p + input[type="checkbox"],
 html[dir="rtl"] .vis-CardView button,
-html[dir="rtl"] .vis-Email-leftFooter > label {
+html[dir="rtl"] .vis-Email-leftFooter > label,
+html[dir="rtl"] .vis-treewindow-span,
+html[dir="rtl"] .VIS_buttons-wrap span {
     margin-left: 0;
     margin-right: 5px;
 }
@@ -177,7 +197,8 @@ html[dir="rtl"] .vis-viewMoreComments,
 html[dir="rtl"] .VIS-TM-data-head input[type="checkbox"],
 html[dir="rtl"] .vis-advancedSearchHorigontal,
 html[dir="rtl"] .vis-btnOk,
-html[dir="rtl"] .vis-group-user-wrap input[type="radio"] {
+html[dir="rtl"] .vis-group-user-wrap input[type="radio"],
+html[dir="rtl"] .VIS-VImage-file-label {
     margin-right: 0;
     margin-left: 10px;
 }
@@ -199,7 +220,8 @@ html[dir="rtl"] .vis-Dialog-buttons input {
     margin-right: 10px;
 }
 html[dir="rtl"] #userFavs h2,
-html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane button {
+html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane button,
+html[dir="rtl"] .VIS-VImage-testBottom-btn a {
     margin-right: 10px;
 }
 
@@ -347,8 +369,8 @@ html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:last-
 html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:last-child > .input-group-text:not(:last-child),
 html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:not(:last-child) > .btn,
 html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .btn,
-html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .input-group-text,
-html[dir="rtl"] .location input.form-control:not(:last-child) {
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .input-group-text/*,
+html[dir="rtl"] .location input.form-control:not(:last-child)*/ {
     border-top-right-radius: .25rem !important;
     border-bottom-right-radius: .25rem !important;
     border-top-left-radius: 0 !important;
@@ -357,7 +379,7 @@ html[dir="rtl"] .location input.form-control:not(:last-child) {
 
 html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap *,
 html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap .input-group-append:last-child > .input-group-text,
-html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap .input-group-append:last-child > .input-group-text {
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap .input-group-append:last-child > .input-group-text:last-child {
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     border-top-left-radius: .25rem !important;
@@ -479,8 +501,9 @@ html[dir="rtl"] .VIS_Pref_content-right,
 html[dir="rtl"] .VIS_Pref_content-right-2,
 html[dir="rtl"] .VIS_Pref_content-right-3,
 html[dir="rtl"] .VIS_Pref_content-right-4,
-html[dir="rtl"] .VIS_Pref_content-right-5{
+html[dir="rtl"] .VIS_Pref_content-right-5 {
     padding-right: 20px;
+    padding-left: 0;
 }
 html[dir="rtl"] .VIS_Pref_content-right,
 html[dir="rtl"] .VIS_Pref_content-right-5,
@@ -523,7 +546,7 @@ html[dir="rtl"] .ui-dialog input[type=checkbox] {
     margin: 4px 0 0 4px;
 }
 html[dir="rtl"] .vis-processpara-table-td3 {
-    padding: 5px 5px 5px 0px;
+    /*padding: 5px 5px 5px 0px;*/
 }
 html[dir="rtl"] .vis-tree-search input.form-control:not(:last-child) {
     border-top-right-radius: 1.5rem;
@@ -635,6 +658,10 @@ html[dir="rtl"] .w2ui-overlay .w2ui-col-on-off table td:last-child {
 html[dir="rtl"] .vis-acctviewer-tabswrap div:first-child {
     margin-right: 0 !important;
     margin-left: 15px;
+}
+.vis-leftpanel-inn-wrap ~ div {
+    padding-left: 10px;
+    padding-right: 0 !important;
 }
 
 /*rtl css End here*/

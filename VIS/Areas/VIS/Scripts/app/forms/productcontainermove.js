@@ -99,7 +99,7 @@
         };
 
         function createMainView() {
-            $mainpageContent = $('<div class="VIS_main-wrap">');
+            $mainpageContent = $('<div class="VIS_main-wrap vis-formouterwrpdiv">');
 
             // Row 1
             $formWrap = $('<div class="VIS_form-wrap">');

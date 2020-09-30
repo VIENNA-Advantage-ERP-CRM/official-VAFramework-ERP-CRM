@@ -38,7 +38,7 @@
         //this.$busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
         this.$busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
-        this.topDiv = $("<div class='vis-locatormainwrap'>");
+        this.topDiv = $("<div class='vis-locatormainwrap vis-formouterwrpdiv'>");
         this.middelDiv = $("<div class='vis-crtfrm-datawrp'>");
         this.bottomDiv = $("<div class='vis-ctrfrm-btnwrp'>");
         this.divPaging = $('<div>');
