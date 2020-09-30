@@ -6255,7 +6255,16 @@
                         var timeUtil = new VIS.TimeUtil();
                         allocDate = timeUtil.max(allocDate, ts);
                         var keys = Object.keys(currnetRow);
-                        var bd = parseFloat(checkcommaordot(event, rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
+                        //var bd = parseFloat(checkcommaordot(event, rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
+
+                        if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
+                            rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
+                            bd = -1 * format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])
+                        }
+                        else {
+                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])
+                        }
+
                         bd = parseFloat(bd);
                         totalPay = totalPay + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noPayments++;
@@ -6276,7 +6285,14 @@
                         allocDate = timeUtil.max(allocDate, ts);
                         //************************************** Changed
                         var keys = Object.keys(currnetRow);
-                        var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
+                        //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
+                        if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
+                            rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
+                            bd = -1 * format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]])
+                        }
+                        else {
+                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]])
+                        }
                         bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noCashLines++;
@@ -6310,7 +6326,14 @@
                         var keys = Object.keys(currnetRow);
                         var bd;
                         if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] != "") {
-                            bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
+                            //bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
+                            if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
+                                rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
+                                bd = -1 * format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])
+                            }
+                            else {
+                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])
+                            }
                             bd = parseFloat(bd);
                         }
                         else {
