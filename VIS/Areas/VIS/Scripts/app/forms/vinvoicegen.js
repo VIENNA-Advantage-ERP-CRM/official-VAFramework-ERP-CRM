@@ -624,10 +624,17 @@
                 });
 
             if (this.btnToggel != null)
+                var borderspace = 0;
                 this.btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
                     if (toggleside) {
-                        // $self.btnRefresh.hide();
-                        $self.btnToggel.animate({ borderSpacing: 0 }, {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 180;
+                        }
+                        else {
+                            borderspace = 0;
+
+                        }
+                        $self.btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
@@ -645,8 +652,14 @@
                         });
                     }
                     else {
-                        // $self.btnRefresh.show();
-                        $self.btnToggel.animate({ borderSpacing: 180 }, {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 0;
+                        }
+                        else {
+                            borderspace = 180;
+
+                        }
+                        $self.btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
