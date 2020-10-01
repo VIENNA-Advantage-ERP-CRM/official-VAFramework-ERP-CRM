@@ -3941,12 +3941,10 @@
                                 record.changes.AppliedAmt = record.OpenAmt;
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount != "" ? appliedAmount : val;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
@@ -3963,12 +3961,10 @@
                                 record.changes.AppliedAmt = record.OpenAmt;
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount != "" ? appliedAmount : val;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
@@ -3979,13 +3975,11 @@
                                 //val = record.changes.AppliedAmt;
                                 //record.changes.AppliedAmt = record.changes.AppliedAmt.toString();
                                 if (!dotFormatter) {
-                                    var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount != "" ? appliedAmount : val;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
@@ -4062,6 +4056,16 @@
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         val = parseFloat(record.OpenAmt);
                     }
+                    else if (parseFloat(record.OpenAmt) > 0 && parseFloat(val) < 0) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.OpenAmt);
+                    }
+                    //when the OpenAmt is Equal to AppliedAmt
+                    if (record.OpenAmt != 0 && record.AppliedAmt != 0 && record.OpenAmt != "" && record.AppliedAmt != "" && record.changes != undefined && record.changes.SelectRow == true) {
+                        if (record.OpenAmt == record.AppliedAmt) {
+                            calculate();
+                        }
+                    }
 
                     return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
                 };
@@ -4097,12 +4101,10 @@
                                 record.changes.AppliedAmt = record.OpenAmt;
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount != "" ? appliedAmount : val;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
@@ -4119,12 +4121,10 @@
                                 record.changes.AppliedAmt = record.OpenAmt;
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount != "" ? appliedAmount : val;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
@@ -4135,13 +4135,11 @@
                                 //val = record.changes.AppliedAmt;
                                 //record.changes.AppliedAmt = record.OpenAmt;
                                 if (!dotFormatter) {
-                                    var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount != "" ? appliedAmount : val;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
@@ -4218,6 +4216,17 @@
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         val = parseFloat(record.OpenAmt);
                     }
+                    else if (parseFloat(record.OpenAmt) > 0 && parseFloat(val) < 0) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.OpenAmt);
+                    }
+                    //when the OpenAmt is Equal to AppliedAmt
+                    if (record.OpenAmt != 0 && record.AppliedAmt != 0 && record.OpenAmt != "" && record.AppliedAmt != "" && record.changes != undefined && record.changes.SelectRow == true) {
+                        if (record.OpenAmt == record.AppliedAmt) {
+                            calculate();
+                        }
+                    }
+
                     return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
                 }
                 //End
@@ -4255,12 +4264,10 @@
                                 record.changes.AppliedAmt = record.Amount;
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount == "" ? val : appliedAmount;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
@@ -4277,12 +4284,10 @@
                                 record.changes.AppliedAmt = record.Amount;
                                 if (!dotFormatter) {
                                     var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount == "" ? val : appliedAmount;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
@@ -4293,13 +4298,11 @@
                                 //val = record.changes.AppliedAmt;
                                 //record.changes.AppliedAmt = record.Amount;
                                 if (!dotFormatter) {
-                                    var appliedAmount = checkcommaordot(event, record.changes.AppliedAmt);
-                                    if (!appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetFormatedValue(appliedAmount, "init", dotFormatter).toString();
+                                    var appliedAmount = record.changes.AppliedAmt.toString();
+                                    if (appliedAmount.contains(",")) {
+                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                                     }
-                                    if (appliedAmount.contains(".") || appliedAmount.contains(",")) {
-                                        val = appliedAmount;
-                                    }
+                                    val = appliedAmount == "" ? val : appliedAmount;
                                 }
                                 else {
                                     val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
@@ -4316,12 +4319,10 @@
                                 record.changes.Writeoff = record.Writeoff;
                                 if (!dotFormatter) {
                                     var write_off = record.changes.Writeoff.toString();
-                                    if (!write_off.contains(",")) {
-                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter).toString();
+                                    if (write_off.contains(",")) {
+                                        write_off = format.GetConvertedNumber(write_off, dotFormatter).toString();
                                     }
-                                    if (write_off.contains(".") || write_off.contains(",")) {
-                                        val = write_off;
-                                    }
+                                    val = write_off == "" ? val : write_off;
                                 }
                                 else {
                                     val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
@@ -4338,12 +4339,10 @@
                                 record.changes.Writeoff = record.Writeoff;
                                 if (!dotFormatter) {
                                     var write_off = record.changes.Writeoff.toString();
-                                    if (!write_off.contains(",")) {
-                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter).toString();
+                                    if (write_off.contains(",")) {
+                                        write_off = format.GetConvertedNumber(write_off, dotFormatter).toString();
                                     }
-                                    if (write_off.contains(".") || write_off.contains(",")) {
-                                        val = write_off;
-                                    }
+                                    val = write_off == "" ? val : write_off;
                                 }
                                 else {
                                     val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
@@ -4354,13 +4353,11 @@
                                 //val = record.changes.Writeoff;
                                 //record.changes.Writeoff = record.Writeoff;
                                 if (!dotFormatter) {
-                                    var write_off = checkcommaordot(event, record.changes.Writeoff);
-                                    if (!write_off.contains(",")) {
-                                        write_off = format.GetFormatedValue(write_off, "init", dotFormatter).toString();
+                                    var write_off = record.changes.Writeoff.toString();
+                                    if (write_off.contains(",")) {
+                                        write_off = format.GetConvertedNumber(write_off, dotFormatter).toString();
                                     }
-                                    if (write_off.contains(".") || write_off.contains(",")) {
-                                        val = write_off;
-                                    }
+                                    val = write_off == "" ? val : write_off;
                                 }
                                 else {
                                     val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
@@ -4377,12 +4374,10 @@
                                 record.changes.Discount = record.Discount;
                                 if (!dotFormatter) {
                                     var Discount = record.changes.Discount.toString();
-                                    if (!Discount.contains(",")) {
-                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter).toString();
+                                    if (Discount.contains(",")) {
+                                        Discount = format.GetConvertedNumber(Discount, dotFormatter).toString();
                                     }
-                                    if (Discount.contains(".") || Discount.contains(",")) {
-                                        val = Discount;
-                                    }
+                                    val = Discount == "" ? val : Discount;
                                 }
                                 else {
                                     val = record.changes.Discount == "" ? val : record.changes.Discount;
@@ -4399,12 +4394,10 @@
                                 record.changes.Discount = record.Discount;
                                 if (!dotFormatter) {
                                     var Discount = record.changes.Discount.toString();
-                                    if (!Discount.contains(",")) {
-                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter).toString();
+                                    if (Discount.contains(",")) {
+                                        Discount = format.GetConvertedNumber(Discount, dotFormatter).toString();
                                     }
-                                    if (Discount.contains(".") || Discount.contains(",")) {
-                                        val = Discount;
-                                    }
+                                    val = Discount == "" ? val : Discount;
                                 }
                                 else {
                                     val = record.changes.Discount == "" ? val : record.changes.Discount;
@@ -4414,13 +4407,11 @@
                                 //record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
                                 //val = record.changes.Discount;
                                 if (!dotFormatter) {
-                                    var Discount = checkcommaordot(event, record.changes.Discount);
-                                    if (!Discount.contains(",")) {
-                                        Discount = format.GetFormatedValue(Discount, "init", dotFormatter).toString();
+                                    var Discount = record.changes.Discount.toString();
+                                    if (Discount.contains(",")) {
+                                        Discount = format.GetConvertedNumber(Discount, dotFormatter).toString();
                                     }
-                                    if (Discount.contains(".") || Discount.contains(",")) {
-                                        val = Discount;
-                                    }
+                                    val = Discount == "" ? val : Discount;
                                 }
                                 else {
                                     val = record.changes.Discount == "" ? val : record.changes.Discount;
@@ -4435,6 +4426,16 @@
                     else if (parseFloat(record.Amount) < 0 && parseFloat(val) < parseFloat(record.Amount)) {
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         val = parseFloat(record.Amount);
+                    }
+                    else if (parseFloat(record.Amount) < 0 && parseFloat(val) > 0) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        val = parseFloat(record.Amount);
+                    }
+                    //when the OpenAmt is Equal to AppliedAmt
+                    if (record.Amount != 0 && record.AppliedAmt != 0 && record.OpenAmt != "" && record.AppliedAmt != "" && record.changes != undefined && record.changes.SelectRow == true) {
+                        if (record.Amount == record.AppliedAmt) {
+                            calculate();
+                        }
                     }
 
                     return parseFloat(val).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision });
@@ -4974,11 +4975,11 @@
             // when Applied amount cell changed 
             changedValue = event.value_new != "" ? event.value_new : changedValue;
             if (event.column == colIndex && !dotFormatter) {
-                if (!event.value_new.toString().contains(",")) {
-                    changedValue = format.GetFormatedValue(event.value_new, "init", dotFormatter).toString();
+                if (!changedValue.toString().contains(",")) {
+                    changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
                 }
-                if (event.value_new.toString().contains(".") || event.value_new.toString().contains(",")) {
-                    changedValue = format.GetConvertedNumber(event.value_new, dotFormatter).toString();
+                else if (changedValue.toString().contains(",")) {
+                    changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
                 }
             }
 
@@ -4996,7 +4997,6 @@
                 }
                 //added for gl-allocation
                 else if (VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
-                    $gridPayment.set(0, { "AppliedAmt": VIS.Utility.Util.getValueOfDecimal($gridPayment.get(event.recid).OpenAmt) });
                     VIS.ADialog.warn("AppliedAmtgrtr");
                     event.preventDefault();
                     return;
@@ -5105,11 +5105,11 @@
             // when Applied amount cell changed 
             changedValue = event.value_new != "" ? event.value_new : changedValue;
             if (event.column == colIndex && !dotFormatter) {
-                if (!event.value_new.toString().contains(",")) {
-                    changedValue = format.GetFormatedValue(event.value_new, "init", dotFormatter).toString();
+                if (!changedValue.toString().contains(",")) {
+                    changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
                 }
-                if (event.value_new.toString().contains(".") || event.value_new.toString().contains(",")) {
-                    changedValue = format.GetConvertedNumber(event.value_new, dotFormatter).toString();
+                else if (changedValue.toString().contains(",")) {
+                    changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
                 }
             }
 
@@ -5190,24 +5190,33 @@
             // when Applied amount cell changed 
             changedValue = event.value_new != "" ? event.value_new : changedValue;
             if ((event.column == colIndex || event.column == wcolIndex || event.column == dcolIndex) && !dotFormatter) {
-                if (!event.value_new.toString().contains(",")) {
-                    changedValue = format.GetFormatedValue(event.value_new, "init", dotFormatter).toString();
+                if (!changedValue.toString().contains(",")) {
+                    changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
                 }
-                if (event.value_new.toString().contains(".") || event.value_new.toString().contains(",")) {
-                    changedValue = format.GetConvertedNumber(event.value_new, dotFormatter).toString();
+                else if (changedValue.toString().contains(",")) {
+                    changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
                 }
             }
             //get the changes and converting amount into standard culture.
             if (event.column == colIndex || event.column == wcolIndex || event.column == dcolIndex) {
 
-                if ($gridInvoice.get(event.recid).changes.AppliedAmt != undefined) {
+                if ($gridInvoice.get(event.recid).changes.AppliedAmt != undefined && event.column != colIndex) {
                     appliedAmt = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.AppliedAmt, dotFormatter).toString();
                 }
-                if ($gridInvoice.get(event.recid).changes.Discount != undefined) {
+                else {
+                    appliedAmt = changedValue;
+                }
+                if ($gridInvoice.get(event.recid).changes.Discount != undefined && event.column != dcolIndex) {
                     discountchng = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.Discount, dotFormatter).toString();
                 }
-                if ($gridInvoice.get(event.recid).changes.Writeoff != undefined) {
+                else {
+                    discountchng = changedValue;
+                }
+                if ($gridInvoice.get(event.recid).changes.Writeoff != undefined && event.column != wcolIndex) {
                     writeOff = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.Writeoff, dotFormatter).toString();
+                }
+                else {
+                    writeOff = changedValue;
                 }
             }
 
@@ -5224,6 +5233,12 @@
                     VIS.ADialog.warn("AppliedAmtgrtr");
                     //$gridInvoice.get(event.recid).changes.AppliedAmt = (event.value_previous != undefined ? event.value_previous : $gridInvoice.get(event.recid).Amount);
                     //$gridInvoice.refreshCell(event.recid, "AppliedAmt");
+                    event.preventDefault();
+                    return;
+                }
+                //Restrict the negative value when OpenAmt is positive Value
+                else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
+                    VIS.ADialog.warn("AppliedAmtgrtr");
                     event.preventDefault();
                     return;
                 }
@@ -5253,6 +5268,12 @@
                         event.preventDefault();
                         return;
                     }
+                    //when the AppliedAmt will not be allow -Ve Value when OpenAmt have +Ve Value
+                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        event.preventDefault();
+                        return;
+                    }
 
                     $gridInvoice.get(event.recid).changes.AppliedAmt = event.value_new != "" ? event.value_new : changedValue;
                     $gridInvoice.refreshCell(event.recid, "AppliedAmt");
@@ -5273,6 +5294,13 @@
                         event.preventDefault();
                         return;
                     }
+                    // WriteOffAmt will not be allow -Ve Value when OpenAmt have +Ve Value
+                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        event.preventDefault();
+                        return;
+                    }
+
                     $gridInvoice.get(event.recid).changes.Writeoff = event.value_new != "" ? event.value_new : changedValue;
                     $gridInvoice.refreshCell(event.recid, "Writeoff");
                 }
@@ -5291,6 +5319,13 @@
                         event.preventDefault();
                         return;
                     }
+                    //DiscountAmt will not be allow -Ve Value when OpenAmt have +Ve Value
+                    else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
+                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        event.preventDefault();
+                        return;
+                    }
+
                     $gridInvoice.get(event.recid).changes.Discount = event.value_new != "" ? event.value_new : changedValue;
                     $gridInvoice.refreshCell(event.recid, "Discount");
                 }
@@ -6260,10 +6295,10 @@
 
                         if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                             rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]]));
+                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter));
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])
+                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter)
                         }
 
                         bd = parseFloat(bd);
@@ -6289,10 +6324,10 @@
                         //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                             rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]]));
+                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter));
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]])
+                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter)
                         }
                         bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
@@ -6330,10 +6365,10 @@
                             //bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                             if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                                 rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                                bd = -1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]]));
+                                bd = -1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter));
                             }
                             else {
-                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])
+                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter)
                             }
                             bd = parseFloat(bd);
                         }
