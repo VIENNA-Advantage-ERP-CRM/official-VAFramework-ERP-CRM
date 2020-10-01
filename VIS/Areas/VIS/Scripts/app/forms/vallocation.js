@@ -6200,12 +6200,12 @@
                         var keys = Object.keys(currnetRow);
                         //var bd = parseFloat(checkcommaordot(event, rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         var bd;
-                        if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
-                            rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter))).toString();
+                        if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
+                            rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
+                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toString();
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter).toString();
+                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toString();
                         }
 
                         bd = parseFloat(bd);
@@ -6230,12 +6230,12 @@
                         var keys = Object.keys(currnetRow);
                         var bd;
                         //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
-                        if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
-                            rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter))).toString();
+                        if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
+                            rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
+                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toString();
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter).toString();
+                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toString();
                         }
                         bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
@@ -6271,12 +6271,12 @@
                         var bd;
                         if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]] != "") {
                             //bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
-                            if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
-                                rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                                bd = (-1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter))).toString();
+                            if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
+                                rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
+                                bd = (-1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toString();
                             }
                             else {
-                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter).toString();
+                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toString();
                             }
                             bd = parseFloat(bd);
                         }
