@@ -4341,11 +4341,11 @@
                 val = appliedAmount != "" ? appliedAmount : val;
             }
             else {
-                if (appliedAmt.contains("−")) {
-                    appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                if (appliedAmount.contains("−")) {
+                    appliedAmount = (-1 * format.GetConvertedNumber(appliedAmount, dotFormatter)).toString();
                 }
                 else if (appliedAmount.contains(".")) {
-                    appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                    appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
                 }
                 val = appliedAmount != "" ? appliedAmount : val;
             }
@@ -6538,22 +6538,7 @@
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
                                     var appliedAmt = rowsCash[i].AppliedAmt;
-                                    if (!dotFormatter) {
-                                        if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
-                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                        }
-                                        else if (appliedAmt.contains(",")) {
-                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                        }
-                                    }
-                                    else {
-                                        if (appliedAmt.contains("−")) {
-                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                        }
-                                        else if (rowsCash[i].AppliedAmt.contains(".")) {
-                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                        }
-                                    }
+                                    appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
                                     cashData.push({
                                         AppliedAmt: appliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val())
@@ -6687,22 +6672,7 @@
                             payment = keys[10];
                             if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                 var appliedAmt = rowsPayment[i].AppliedAmt;
-                                if (!dotFormatter) {
-                                    if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
-                                        appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                    }
-                                    else if (appliedAmt.contains(",")) {
-                                        appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                    }
-                                }
-                                else {
-                                    if (appliedAmt.contains("−")) {
-                                        appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                    }
-                                    else if (rowsCash[i].AppliedAmt.contains(".")) {
-                                        appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                    }
-                                }
+                                appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
                                 paymentData.push({
                                     appliedamt: appliedAmt, date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
                                     multiplierap: row.Multiplierap, openamt: row.OpenAmt, payment: row.Payment, Org: parseInt($cmbOrg.val())
@@ -6851,22 +6821,7 @@
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
                                     var appliedAmt = rowsPayment[i].AppliedAmt;
-                                    if (!dotFormatter) {
-                                        if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
-                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                        }
-                                        else if (appliedAmt.contains(",")) {
-                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                        }
-                                    }
-                                    else {
-                                        if (appliedAmt.contains("−")) {
-                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                        }
-                                        else if (rowsCash[i].AppliedAmt.contains(".")) {
-                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                        }
-                                    }
+                                    appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
                                     paymentData.push({
                                         AppliedAmt: appliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0, payment: payment
@@ -6884,22 +6839,7 @@
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
                                     var appliedAmt = rowsCash[i].AppliedAmt;
-                                    if (!dotFormatter) {
-                                        if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
-                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                        }
-                                        else if (appliedAmt.contains(",")) {
-                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                        }
-                                    }
-                                    else {
-                                        if (appliedAmt.contains("−")) {
-                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
-                                        }
-                                        else if (rowsCash[i].AppliedAmt.contains(".")) {
-                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
-                                        }
-                                    }
+                                    appliedAmt = convertAppliedAmtculture(appliedAmt, dotFormatter);
                                     cashData.push({
                                         AppliedAmt: appliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0, payment: payment
