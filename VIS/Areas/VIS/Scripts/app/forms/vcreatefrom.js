@@ -2704,15 +2704,21 @@
                     return '<div><input type=checkbox disabled="true"></div>';
                 }
             });
-            this.arrListColumns.push({ field: "Quantity", caption: VIS.Msg.getMsg("QtyPending"), sortable: false, size: '150px', render: 'number:4', hidden: false });
+            this.arrListColumns.push({
+                field: "Quantity", caption: VIS.Msg.getMsg("QtyPending"), sortable: false, size: '150px', hidden: false, style: 'text-align: right',
+                render: function (record, index, col_index) {
+                    var val = record["Quantity"];
+                    return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
+                }
+            });
             this.arrListColumns.push({ field: "QuantityPending", caption: VIS.Msg.getMsg("Quantity"), sortable: false, size: '150px', render: 'number:4', hidden: true });
             this.arrListColumns.push({
-                field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'number' }, sortable: false, size: '150px', hidden: false,
+                field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'number' }, sortable: false, size: '150px', hidden: false, style: 'text-align: right',
                 //Added to get QuantityEntered value acc.to culture
                 render: function (record, index, col_index) {
                     var val = record["QuantityEntered"];
                     val = checkcommaordot(event, val);
-                    return parseFloat(val).toLocaleString();
+                    return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
                 }});
             this.arrListColumns.push({ field: "C_UOM_ID", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: false });
             //Add product search key column in Grid 

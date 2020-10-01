@@ -64,6 +64,8 @@
         var SubGridCol = [];
         var SubGridArray = [];
         // End------------------------------
+        var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+        var dotFormatter = VIS.Env.isDecimalPoint();
         var label = null;
         var ctrl = null;
         var cmbWarehoue = null;
@@ -729,6 +731,55 @@
             //dr.close();
             GetPriceList(M_PriceList_ID);
         }
+
+        // function to check comma or dot from given value and return new value
+        function checkcommaordot(event, val) {
+            var foundComma = false;
+            event.value_new = VIS.Utility.Util.getValueOfString(val);
+            if (event.value_new.contains(".")) {
+                foundComma = true;
+                var indices = [];
+                for (var i = 0; i < event.value_new.length; i++) {
+                    if (event.value_new[i] === ".")
+                        indices.push(i);
+                }
+                if (indices.length > 1) {
+                    event.value_new = removeAllButLast(event.value_new, '.');
+                }
+            }
+            if (event.value_new.contains(",")) {
+                if (foundComma) {
+                    event.value_new = removeAllButLast(event.value_new, ',');
+                }
+                else {
+                    var indices = [];
+                    for (var i = 0; i < event.value_new.length; i++) {
+                        if (event.value_new[i] === ",")
+                            indices.push(i);
+                    }
+                    if (indices.length > 1) {
+                        event.value_new = removeAllButLast(event.value_new, ',');
+                    }
+                    else {
+                        event.value_new = event.value_new.replace(",", ".");
+                    }
+                }
+            }
+            if (event.value_new == "") {
+                event.value_new = "0";
+            }
+            return event.value_new;
+        };
+
+        // Remove all seperator but only bring last seperator
+        function removeAllButLast(amt, seprator) {
+            var parts = amt.split(seprator);
+            amt = parts.slice(0, -1).join('') + '.' + parts.slice(-1);
+            if (amt.indexOf('.') == (amt.length - 1)) {
+                amt = amt.replace(".", "");
+            }
+            return amt;
+        };
 
         function GetDefaultPriceList() {
             var retValue = 0;
@@ -2135,9 +2186,15 @@
                     //}
                     if (displayCols[item].ColumnName.toUpperCase() == 'QTYENTERED') {
                         if (multiSelection && !updating) {
+                            oColumn.style = 'text-align : right',
                             oColumn.editable = {
-                                type: 'float'
-                            }
+                                type: 'number'
+                            },
+                                oColumn.render = function (record, index, colIndex) {
+                                    var val = record[grdCols[colIndex].field];
+                                    val = checkcommaordot(event, val);
+                                    return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 2 });
+                                };
                         }
                     }
                 }
@@ -2306,11 +2363,45 @@
                     }, 500);
                 },
 
+                onEditField: function (event) {
+                    id = event.recid;
+                    if (event.column == 5) {
+                        w2ui[grdname].records[event.index]["QTYENTERED"] = checkcommaordot(event, w2ui[grdname].records[event.index]["QTYENTERED"]);
+                        var _value = format.GetFormatAmount(w2ui[grdname].records[event.index]["QTYENTERED"], "init", dotFormatter);
+                        w2ui[grdname].records[event.index]["QTYENTERED"] = format.GetConvertedString(_value, dotFormatter);
+                        $("#grid_" + dGrid.name + "_rec_" + id).keydown(function (event) {
+                            if (!dotFormatter && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
+                                return false;
+                            }
+                            else if (dotFormatter && event.keyCode == 188) { // . separator
+                                return false;
+                            }
+                            if (event.target.value.contains(".") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                if (event.target.value.indexOf('.') > -1) {
+                                    event.target.value = event.target.value.replace('.', '');
+                                }
+                            }
+                            else if (event.target.value.contains(",") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                                if (event.target.value.indexOf(',') > -1) {
+                                    event.target.value = event.target.value.replace(',', '');
+                                }
+                            }
+                            if (event.keyCode != 8 && event.keyCode != 9 && (event.keyCode < 37 || event.keyCode > 40) &&
+                                (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)
+                                && event.keyCode != 109 && event.keyCode != 189 && event.keyCode != 110
+                                && event.keyCode != 144 && event.keyCode != 188 && event.keyCode != 190) {
+                                return false;
+                            }
+                        });
+                    }
+                },
+
                 //On Expand Function ends here                
 
                 onChange: function (event) {
                     var chk = -1;
-                    w2ui[grdname].records[event.index]["QTYENTERED"] = event.value_new;
+                    var _val = format.GetConvertedNumber(event.value_new, dotFormatter);
+                    w2ui[grdname].records[event.index]["QTYENTERED"] = _val.toFixed(2);
                     if (multiValues.length > 0) {
                         for (var item in multiValues) {
                             if (multiValues[item].M_PRODUCT_ID == w2ui[grdname].records[event.index].M_PRODUCT_ID && multiValues[item].M_AttributeSetInstance_ID == 0) {
@@ -2319,7 +2410,7 @@
                             }
                         }
                         if (chk > -1) {
-                            multiValues[chk].QTYENTERED = event.value_new;
+                            multiValues[chk].QTYENTERED = _val.toFixed(2);
                         }
                         else {
                             multiValues.push(w2ui[grdname].records[event.index]);
