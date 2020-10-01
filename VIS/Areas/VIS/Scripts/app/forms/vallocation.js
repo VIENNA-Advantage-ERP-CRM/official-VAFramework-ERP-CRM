@@ -1523,6 +1523,8 @@
             selectedInvoices = [];
             selectedPayments = [];
             SelectedGL = [];
+            //refresh AccountDate
+            $dateAcct.val(Globalize.format(new Date(), "yyyy-MM-dd"));
             refreshLabel();
         }
 
@@ -3939,16 +3941,7 @@
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
                                 //val = record.changes.AppliedAmt;
                                 record.changes.AppliedAmt = record.OpenAmt;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount != "" ? appliedAmount : val;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                             else {
                                 val = 0;
@@ -3959,31 +3952,13 @@
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
                                 //val = record.changes.AppliedAmt;
                                 record.changes.AppliedAmt = record.OpenAmt;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount != "" ? appliedAmount : val;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                             else {
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.AppliedAmt);
                                 //val = record.changes.AppliedAmt;
                                 //record.changes.AppliedAmt = record.changes.AppliedAmt.toString();
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount != "" ? appliedAmount : val;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                         }
                     }
@@ -4062,7 +4037,7 @@
                     }
                     //when the OpenAmt is Equal to AppliedAmt
                     if (record.OpenAmt != 0 && record.AppliedAmt != 0 && record.OpenAmt != "" && record.AppliedAmt != "" && record.changes != undefined && record.changes.SelectRow == true) {
-                        if (record.OpenAmt == record.AppliedAmt) {
+                        if (record.OpenAmt == record.AppliedAmt && parseFloat(record.changes.AppliedAmt) == record.AppliedAmt) {
                             calculate();
                         }
                     }
@@ -4099,16 +4074,7 @@
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
                                 //val = record.changes.AppliedAmt;
                                 record.changes.AppliedAmt = record.OpenAmt;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount != "" ? appliedAmount : val;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                             else {
                                 val = 0;
@@ -4119,31 +4085,13 @@
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.OpenAmt);
                                 //val = record.changes.AppliedAmt;
                                 record.changes.AppliedAmt = record.OpenAmt;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount != "" ? appliedAmount : val;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                             else {
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.OpenAmt);
                                 //val = record.changes.AppliedAmt;
                                 //record.changes.AppliedAmt = record.OpenAmt;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount != "" ? appliedAmount : val;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt != "" ? record.changes.AppliedAmt : val;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                         }
                     }
@@ -4222,7 +4170,7 @@
                     }
                     //when the OpenAmt is Equal to AppliedAmt
                     if (record.OpenAmt != 0 && record.AppliedAmt != 0 && record.OpenAmt != "" && record.AppliedAmt != "" && record.changes != undefined && record.changes.SelectRow == true) {
-                        if (record.OpenAmt == record.AppliedAmt) {
+                        if (record.OpenAmt == record.AppliedAmt && parseFloat(record.changes.AppliedAmt) == record.AppliedAmt) {
                             calculate();
                         }
                     }
@@ -4262,16 +4210,7 @@
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
                                 //val = record.changes.AppliedAmt;
                                 record.changes.AppliedAmt = record.Amount;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount == "" ? val : appliedAmount;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                             else {
                                 val = 0;
@@ -4282,31 +4221,13 @@
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.Amount, record.Amount);
                                 //val = record.changes.AppliedAmt;
                                 record.changes.AppliedAmt = record.Amount;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount == "" ? val : appliedAmount;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                             else {
                                 //record.changes.AppliedAmt = checkcommaordot(event, record.changes.AppliedAmt, record.Amount);
                                 //val = record.changes.AppliedAmt;
                                 //record.changes.AppliedAmt = record.Amount;
-                                if (!dotFormatter) {
-                                    var appliedAmount = record.changes.AppliedAmt.toString();
-                                    if (appliedAmount.contains(",")) {
-                                        appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
-                                    }
-                                    val = appliedAmount == "" ? val : appliedAmount;
-                                }
-                                else {
-                                    val = record.changes.AppliedAmt == "" ? val : record.changes.AppliedAmt;
-                                }
+                                val = convertAppliedAmtculture(record.changes.AppliedAmt.toString(), dotFormatter);
                             }
                         }
                     }
@@ -4317,16 +4238,7 @@
                                 //record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
                                 //val = record.changes.Writeoff;
                                 record.changes.Writeoff = record.Writeoff;
-                                if (!dotFormatter) {
-                                    var write_off = record.changes.Writeoff.toString();
-                                    if (write_off.contains(",")) {
-                                        write_off = format.GetConvertedNumber(write_off, dotFormatter).toString();
-                                    }
-                                    val = write_off == "" ? val : write_off;
-                                }
-                                else {
-                                    val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
-                                }
+                                val = convertAppliedAmtculture(record.changes.Writeoff.toString(), dotFormatter);
                             }
                             else {
                                 val = 0;
@@ -4337,31 +4249,13 @@
                                 //record.changes.Writeoff = checkcommaordot(event, record.Writeoff, record.Writeoff);
                                 //val = record.changes.Writeoff;
                                 record.changes.Writeoff = record.Writeoff;
-                                if (!dotFormatter) {
-                                    var write_off = record.changes.Writeoff.toString();
-                                    if (write_off.contains(",")) {
-                                        write_off = format.GetConvertedNumber(write_off, dotFormatter).toString();
-                                    }
-                                    val = write_off == "" ? val : write_off;
-                                }
-                                else {
-                                    val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
-                                }
+                                val = convertAppliedAmtculture(record.changes.Writeoff.toString(), dotFormatter);
                             }
                             else {
                                 //record.changes.Writeoff = checkcommaordot(event, record.changes.Writeoff, record.Writeoff);
                                 //val = record.changes.Writeoff;
                                 //record.changes.Writeoff = record.Writeoff;
-                                if (!dotFormatter) {
-                                    var write_off = record.changes.Writeoff.toString();
-                                    if (write_off.contains(",")) {
-                                        write_off = format.GetConvertedNumber(write_off, dotFormatter).toString();
-                                    }
-                                    val = write_off == "" ? val : write_off;
-                                }
-                                else {
-                                    val = record.changes.Writeoff == "" ? val : record.changes.Writeoff;
-                                }
+                                val = convertAppliedAmtculture(record.changes.Writeoff.toString(), dotFormatter);
                             }
                         }
                     }
@@ -4372,16 +4266,7 @@
                                 //record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
                                 //val = record.changes.Discount;
                                 record.changes.Discount = record.Discount;
-                                if (!dotFormatter) {
-                                    var Discount = record.changes.Discount.toString();
-                                    if (Discount.contains(",")) {
-                                        Discount = format.GetConvertedNumber(Discount, dotFormatter).toString();
-                                    }
-                                    val = Discount == "" ? val : Discount;
-                                }
-                                else {
-                                    val = record.changes.Discount == "" ? val : record.changes.Discount;
-                                }
+                                val = convertAppliedAmtculture(record.changes.Discount.toString(), dotFormatter);
                             }
                             else {
                                 val = 0;
@@ -4392,30 +4277,12 @@
                                 //record.changes.Discount = checkcommaordot(event, record.Discount, record.Discount);
                                 //val = record.changes.Discount;
                                 record.changes.Discount = record.Discount;
-                                if (!dotFormatter) {
-                                    var Discount = record.changes.Discount.toString();
-                                    if (Discount.contains(",")) {
-                                        Discount = format.GetConvertedNumber(Discount, dotFormatter).toString();
-                                    }
-                                    val = Discount == "" ? val : Discount;
-                                }
-                                else {
-                                    val = record.changes.Discount == "" ? val : record.changes.Discount;
-                                }
+                                val = convertAppliedAmtculture(record.changes.Discount.toString(), dotFormatter);
                             }
                             else {
                                 //record.changes.Discount = checkcommaordot(event, record.changes.Discount, record.Discount);
                                 //val = record.changes.Discount;
-                                if (!dotFormatter) {
-                                    var Discount = record.changes.Discount.toString();
-                                    if (Discount.contains(",")) {
-                                        Discount = format.GetConvertedNumber(Discount, dotFormatter).toString();
-                                    }
-                                    val = Discount == "" ? val : Discount;
-                                }
-                                else {
-                                    val = record.changes.Discount == "" ? val : record.changes.Discount;
-                                }
+                                val = convertAppliedAmtculture(record.changes.Discount.toString(), dotFormatter);
                             }
                         }
                     }
@@ -4433,7 +4300,25 @@
                     }
                     //when the OpenAmt is Equal to AppliedAmt
                     if (record.Amount != 0 && record.AppliedAmt != 0 && record.OpenAmt != "" && record.AppliedAmt != "" && record.changes != undefined && record.changes.SelectRow == true) {
-                        if (record.Amount == record.AppliedAmt) {
+                        if (parseFloat(record.Amount) === record.AppliedAmt && parseFloat(record.changes.AppliedAmt) == record.AppliedAmt) {
+                            if (record.changes.Discount != 0 || record.changes.Writeoff != 0) {
+                                var totAmt = parseFloat(record.changes.Discount) + parseFloat(record.changes.Writeoff) + parseFloat(record.changes.AppliedAmt);
+                                if (Math.abs(totAmt) > Math.abs(parseFloat(record.Amount))) {
+                                    VIS.ADialog.warn("AppliedAmtgrtr");
+                                    if ($gridInvoice.columns[event.column].field == "Discount") {
+                                        record.changes.Discount = 0;
+                                        val = record.changes.Discount;
+                                    }
+                                    else if ($gridInvoice.columns[event.column].field == "Writeoff") {
+                                        record.changes.Writeoff = 0;
+                                        val = record.changes.Writeoff;
+                                    }
+                                    else if ($gridInvoice.columns[event.column].field == "AppliedAmt") {
+                                        record.changes.AppliedAmt = 0;
+                                        val = record.changes.AppliedAmt;
+                                    }
+                                }
+                            }
                             calculate();
                         }
                     }
@@ -4443,7 +4328,29 @@
             }
             //End
         };
-
+        //handle culture for AppliedAmt, writeOffAmt and DiscountAmt
+        function convertAppliedAmtculture(appliedAmount, dotFormatter) {
+            var val = 0;
+            if (!dotFormatter) {
+                if (appliedAmount.contains("−") && !appliedAmount.contains(".")) {
+                    appliedAmount = (-1 * format.GetConvertedNumber(appliedAmount, dotFormatter)).toString();
+                }
+                else if (appliedAmount.contains(",")) {
+                    appliedAmount = format.GetConvertedNumber(appliedAmount, dotFormatter).toString();
+                }
+                val = appliedAmount != "" ? appliedAmount : val;
+            }
+            else {
+                if (appliedAmt.contains("−")) {
+                    appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                }
+                else if (appliedAmount.contains(".")) {
+                    appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                }
+                val = appliedAmount != "" ? appliedAmount : val;
+            }
+            return val;
+        }
         // function to check comma or dot from given value and return new value
         function checkcommaordot(event, val, amt) {
             var foundComma = false;
@@ -6292,13 +6199,13 @@
                         allocDate = timeUtil.max(allocDate, ts);
                         var keys = Object.keys(currnetRow);
                         //var bd = parseFloat(checkcommaordot(event, rowsPayment[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
-
+                        var bd;
                         if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                             rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter));
+                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter))).toString();
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter)
+                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter).toString();
                         }
 
                         bd = parseFloat(bd);
@@ -6321,13 +6228,14 @@
                         allocDate = timeUtil.max(allocDate, ts);
                         //************************************** Changed
                         var keys = Object.keys(currnetRow);
+                        var bd;
                         //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                             rowsCash[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                            bd = -1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter));
+                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter))).toString();
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter)
+                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter).toString();
                         }
                         bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
@@ -6365,10 +6273,10 @@
                             //bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                             if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("-") ||
                                 rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].contains("−")) {
-                                bd = -1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter));
+                                bd = (-1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter))).toString();
                             }
                             else {
-                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter)
+                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]], dotFormatter).toString();
                             }
                             bd = parseFloat(bd);
                         }
@@ -6629,8 +6537,25 @@
                                 var row = $gridCashline.get(rowsCash[i].recid);
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
+                                    var appliedAmt = rowsCash[i].AppliedAmt;
+                                    if (!dotFormatter) {
+                                        if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
+                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                        }
+                                        else if (appliedAmt.contains(",")) {
+                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                        }
+                                    }
+                                    else {
+                                        if (appliedAmt.contains("−")) {
+                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                        }
+                                        else if (rowsCash[i].AppliedAmt.contains(".")) {
+                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                        }
+                                    }
                                     cashData.push({
-                                        AppliedAmt: checkcommaordot(event, rowsCash[i].AppliedAmt), Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
+                                        AppliedAmt: appliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val())
                                     });
                                 }
@@ -6659,9 +6584,12 @@
                                     writeoffs = row.Writeoff;
                                 }
                                 if (appliedamts != 0 && appliedamts != undefined) {
+                                    appliedamts = convertAppliedAmtculture(appliedamts, dotFormatter);
+                                    discounts = convertAppliedAmtculture(discounts, dotFormatter);
+                                    writeoffs = convertAppliedAmtculture(writeoffs, dotFormatter);
                                     if (countVA009 <= 0) {
                                         invoiceData.push({
-                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
+                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             Date: row.Date1, Docbasetype: row.DocBaseType,
                                             documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount, Org: parseInt($cmbOrg.val())
@@ -6669,7 +6597,7 @@
                                     }
                                     else {
                                         invoiceData.push({
-                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
+                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             //Date: row.Date1, Docbasetype: row.DocBaseType,
                                             // send invoice schedule date if va009 module is updated
@@ -6758,8 +6686,25 @@
                             C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                             payment = keys[10];
                             if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
+                                var appliedAmt = rowsPayment[i].AppliedAmt;
+                                if (!dotFormatter) {
+                                    if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
+                                        appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                    }
+                                    else if (appliedAmt.contains(",")) {
+                                        appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                    }
+                                }
+                                else {
+                                    if (appliedAmt.contains("−")) {
+                                        appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                    }
+                                    else if (rowsCash[i].AppliedAmt.contains(".")) {
+                                        appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                    }
+                                }
                                 paymentData.push({
-                                    appliedamt: checkcommaordot(event, rowsPayment[i].AppliedAmt), date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
+                                    appliedamt: appliedAmt, date: row.Date1, converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, documentno: row.Documentno, isocode: row.Isocode,
                                     multiplierap: row.Multiplierap, openamt: row.OpenAmt, payment: row.Payment, Org: parseInt($cmbOrg.val())
                                 });
                             }
@@ -6800,9 +6745,12 @@
                                     writeoffs = row.Writeoff;
                                 }
                                 if (appliedamts != 0 && appliedamts != undefined) {
+                                    appliedamts = convertAppliedAmtculture(appliedamts, dotFormatter);
+                                    discounts = convertAppliedAmtculture(discounts, dotFormatter);
+                                    writeoffs = convertAppliedAmtculture(writeoffs, dotFormatter);
                                     if (countVA009 <= 0) {
                                         invoiceData.push({
-                                            appliedamt: checkcommaordot(event, appliedamts), discount: checkcommaordot(event, discounts), writeoff: checkcommaordot(event, writeoffs),
+                                            appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
                                             cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
                                             date: row.Date1, docbasetype: row.DocBaseType,
                                             documentno: row.Documentno, isocode: row.Isocode, multiplierap: row.Multiplierap, amount: row.Amount, Org: parseInt($cmbOrg.val())
@@ -6810,7 +6758,7 @@
                                     }
                                     else {
                                         invoiceData.push({
-                                            appliedamt: checkcommaordot(event, appliedamts), discount: checkcommaordot(event, discounts), writeoff: checkcommaordot(event, writeoffs),
+                                            appliedamt: appliedamts, discount: discounts, writeoff: writeoffs,
                                             cinvoiceid: row.CinvoiceID, converted: row.Converted, currency: row.Currency,
                                             //date: row.Date1, docbasetype: row.DocBaseType,
                                             // send invoice schedule date if va009 module is updated
@@ -6902,8 +6850,25 @@
                                 var row = $gridPayment.get(rowsPayment[i].recid);
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsPayment[i].AppliedAmt != undefined && rowsPayment[i].AppliedAmt != 0) {
+                                    var appliedAmt = rowsPayment[i].AppliedAmt;
+                                    if (!dotFormatter) {
+                                        if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
+                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                        }
+                                        else if (appliedAmt.contains(",")) {
+                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                        }
+                                    }
+                                    else {
+                                        if (appliedAmt.contains("−")) {
+                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                        }
+                                        else if (rowsCash[i].AppliedAmt.contains(".")) {
+                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                        }
+                                    }
                                     paymentData.push({
-                                        AppliedAmt: checkcommaordot(event, rowsPayment[i].AppliedAmt), Date: row.Date1, Converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
+                                        AppliedAmt: appliedAmt, Date: row.Date1, Converted: row.ConvertedAmount, cpaymentid: row.CpaymentID, Documentno: row.Documentno, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, Payment: row.Payment, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0, payment: payment
                                     });
                                 }
@@ -6918,8 +6883,25 @@
                                 var row = $gridCashline.get(rowsCash[i].recid);
                                 C_CurrencyType_ID = parseInt(row.C_ConversionType_ID);
                                 if (rowsCash[i].AppliedAmt != 0 && rowsCash[i].AppliedAmt != undefined) {
+                                    var appliedAmt = rowsCash[i].AppliedAmt;
+                                    if (!dotFormatter) {
+                                        if (appliedAmt.contains("−") && !appliedAmt.contains(".")) {
+                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                        }
+                                        else if (appliedAmt.contains(",")) {
+                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                        }
+                                    }
+                                    else {
+                                        if (appliedAmt.contains("−")) {
+                                            appliedAmt = (-1 * format.GetConvertedNumber(appliedAmt, dotFormatter)).toString();
+                                        }
+                                        else if (rowsCash[i].AppliedAmt.contains(".")) {
+                                            appliedAmt = format.GetConvertedNumber(appliedAmt, dotFormatter).toString();
+                                        }
+                                    }
                                     cashData.push({
-                                        AppliedAmt: checkcommaordot(event, rowsCash[i].AppliedAmt), Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
+                                        AppliedAmt: appliedAmt, Date: row.Created, Amount: row.Amount, ccashlineid: row.CcashlineiID, Converted: row.ConvertedAmount, Isocode: row.Isocode,
                                         Multiplierap: row.Multiplierap, OpenAmt: row.OpenAmt, ReceiptNo: row.ReceiptNo, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0, payment: payment
                                     });
                                 }
@@ -6948,9 +6930,12 @@
                                     writeoffs = row.Writeoff;
                                 }
                                 if (appliedamts != 0 && appliedamts != undefined) {
+                                    appliedamts = convertAppliedAmtculture(appliedamts, dotFormatter);
+                                    discounts = convertAppliedAmtculture(discounts, dotFormatter);
+                                    writeoffs = convertAppliedAmtculture(writeoffs, dotFormatter);
                                     if (countVA009 <= 0) {
                                         invoiceData.push({
-                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
+                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             Date: row.Date1, Docbasetype: row.DocBaseType, applied: applied, discount: discount, open: open, writeOff: writeOff,
                                             documentno: row.Documentno, Isocode: row.Isocode, Multiplierap: row.Multiplierap, Amount: row.Amount, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0
@@ -6958,7 +6943,7 @@
                                     }
                                     else {
                                         invoiceData.push({
-                                            AppliedAmt: checkcommaordot(event, appliedamts), Discount: checkcommaordot(event, discounts), Writeoff: checkcommaordot(event, writeoffs),
+                                            AppliedAmt: appliedamts, Discount: discounts, Writeoff: writeoffs,
                                             cinvoiceid: row.CinvoiceID, Converted: row.Converted, Currency: row.Currency,
                                             //Date: row.Date1, Docbasetype: row.DocBaseType,
                                             // send invoice schedule date if va009 module is updated

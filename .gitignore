@@ -378,3 +378,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /ViennaBase/Scripts/modernizr-2.6.2.js
+/VIS/Areas/VIS/Controllers/PaymentAllocationController.cs.bak
+/VIS/Areas/VIS/Models/PaymentAllocation.cs.bak
+/VIS/Areas/VIS/Scripts/app/forms/vallocation.js.bak
