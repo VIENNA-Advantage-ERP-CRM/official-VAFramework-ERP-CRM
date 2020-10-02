@@ -4331,6 +4331,7 @@
         //handle culture for AppliedAmt, writeOffAmt and DiscountAmt
         function convertAppliedAmtculture(appliedAmount, dotFormatter) {
             var val = 0;
+            typeof appliedAmount === "string" ? appliedAmount : appliedAmount = appliedAmount.toString();
             if (!dotFormatter) {
                 if (appliedAmount.contains("−") && !appliedAmount.contains(".")) {
                     appliedAmount = (-1 * format.GetConvertedNumber(appliedAmount, dotFormatter)).toString();
