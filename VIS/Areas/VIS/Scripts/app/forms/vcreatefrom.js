@@ -2705,7 +2705,7 @@
                 }
             });
             this.arrListColumns.push({
-                field: "Quantity", caption: VIS.Msg.getMsg("QtyPending"), sortable: false, size: '150px', hidden: false, style: 'text-align: right',
+                field: "Quantity", caption: VIS.Msg.getMsg("QtyPending"), sortable: false, size: '150px', hidden: false,
                 render: function (record, index, col_index) {
                     var val = record["Quantity"];
                     return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
@@ -2713,7 +2713,7 @@
             });
             this.arrListColumns.push({ field: "QuantityPending", caption: VIS.Msg.getMsg("Quantity"), sortable: false, size: '150px', render: 'number:4', hidden: true });
             this.arrListColumns.push({
-                field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'number' }, sortable: false, size: '150px', hidden: false, style: 'text-align: right',
+                field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'number' }, sortable: false, size: '150px', hidden: false,
                 //Added to get QuantityEntered value acc.to culture
                 render: function (record, index, col_index) {
                     var val = record["QuantityEntered"];

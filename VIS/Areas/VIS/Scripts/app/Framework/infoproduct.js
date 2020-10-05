@@ -2178,7 +2178,7 @@
                     else {          //if (displayType == VIS.DisplayType.Amount) {
                         oColumn.render = function (record, index, colIndex) {
                             var val = VIS.Utility.Util.getValueOfDecimal(record[grdCols[colIndex].field]);
-                            return (val).toLocaleString();
+                            return (val).toLocaleString(undefined, { minimumFractionDigits: 2 });
                         };
                     }
                     //else {
@@ -2186,7 +2186,6 @@
                     //}
                     if (displayCols[item].ColumnName.toUpperCase() == 'QTYENTERED') {
                         if (multiSelection && !updating) {
-                            oColumn.style = 'text-align : right',
                             oColumn.editable = {
                                 type: 'number'
                             },
