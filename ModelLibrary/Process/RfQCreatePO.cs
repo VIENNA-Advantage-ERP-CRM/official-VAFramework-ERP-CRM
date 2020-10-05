@@ -181,6 +181,7 @@ namespace VAdvantage.Process
 
 
             //	Selected Winner on Line Level
+            StringBuilder Orderno = new StringBuilder();
             int noOrders = 0;
             for (int i = 0; i < responses.Length; i++)
             {
@@ -223,7 +224,7 @@ namespace VAdvantage.Process
                         if (bp.GetVA009_PO_PaymentMethod_ID() == 0)
                         {
                             result = null;
-                            result=GetPaymentMethod(rfq.GetAD_Org_ID());
+                            result = GetPaymentMethod(rfq.GetAD_Org_ID());
                             if (result != null && result.Tables[0].Rows.Count > 0)
                             {
                                 order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -268,12 +269,18 @@ namespace VAdvantage.Process
                 }	//	for all Response Lines
                 if (order != null)
                 {
+                    //Check Orderno. Already existing
+                    if (Orderno.Length > 0)
+                    {
+                        Orderno.Append(",");
+                    }
+                    Orderno.Append(order.GetDocumentNo());
                     response.SetC_Order_ID(order.GetC_Order_ID());
                     response.Save();
                 }
             }
-
-            return "#" + noOrders;
+            // Show the message in RfQ after click Create Purchase Order button
+            return Msg.GetMsg(GetCtx(), "VIS_PurchaseOrder", "") + " " + Orderno;
         }
         //Added by Neha Thakur
         /// <summary>

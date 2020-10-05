@@ -387,7 +387,13 @@ namespace VAdvantage.Model
                     int ii = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetM_Requisition_ID());
                     SetLine(ii);
                 }
+                // Check Product_ID or charge_id for before save
 
+                if (GetM_Product_ID() == 0 && GetC_Charge_ID() == 0)
+                {
+                    log.SaveError("VIS_NOProductOrCharge", "");
+                    return false;
+                }
                 // change to set Converted Quantity in Movement quantity if there is differnce in UOM of Base Product and UOM Selected on line
                 if (GetM_Product_ID() > 0 && Get_ColumnIndex("QtyEntered") > 0 && (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID")))
                 {
