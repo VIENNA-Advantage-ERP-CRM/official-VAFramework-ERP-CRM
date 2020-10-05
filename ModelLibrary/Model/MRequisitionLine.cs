@@ -397,11 +397,11 @@ namespace VAdvantage.Model
                         SetQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("C_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
                     }
                 }
-                //Qty Entered should not be zero
-                if (Util.GetValueOfInt(Get_Value("QtyEntered")) <= 0)
+                //QtyEntered should not be zero
+                if (Util.GetValueOfInt(Get_Value("QtyEntered")) == 0)
                 {
-                    log.SaveError( "",Msg.GetMsg(GetCtx(), "FillMandatoryFeilds"));
-                        return false;
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "Quantity"));
+                    return false;
                 }
                 // SI_0657_3 - precision of Qty should be according to the precision of UOM attached.
                 if (newRecord || Is_ValueChanged("Qty"))
