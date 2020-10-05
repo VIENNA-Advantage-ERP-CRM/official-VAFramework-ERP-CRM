@@ -218,7 +218,8 @@ html[dir="rtl"] .VIS-Tm-unlinkforbottmo,
 html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
 html[dir="rtl"] span.vis-ad-w-p-tb-rc-action,
 html[dir="rtl"] .vis-groupbtn,
-html[dir="rtl"] .vis-Dialog-buttons input {
+html[dir="rtl"] .vis-Dialog-buttons input,
+html[dir="rtl"] .vis-processbtnwrap input[type="button"] {
     margin-left: 0;
     margin-right: 10px;
 }
@@ -339,6 +340,7 @@ html[dir="rtl"] label.vis-ec-col-lblchkbox{
 }
 html[dir="rtl"] .vis-ev-ctrlinfowrap,
 html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap input:not(:focus):placeholder-shown + label,
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap textarea:not(:focus):placeholder-shown + label,
 html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap input:not(:focus):placeholder-shown + label {
     right: 10px;
     left: auto;
@@ -612,9 +614,14 @@ html[dir="rtl"] .k-treeview .k-item {
     padding-right: 16px;
 }
 
-html[dir="rtl"] .k-treeview .k-in p {
+html[dir="rtl"] .k-treeview .k-in p,
+html[dir="rtl"] .vis-fp-currntrcrds {
     padding-left: 0;
     padding-right: 6px;
+}
+html[dir="rtl"] .vis-paymentselect-field .vis-input-wrap .vis-paymentPrintChk-field label {
+    padding-right: 0;
+    padding-left: 7px;
 }
 html[dir="rtl"] .vis-info-botdatafield:first-child {
     padding-left: 15px;
@@ -665,6 +672,10 @@ html[dir="rtl"] .vis-acctviewer-tabswrap div:first-child {
 .vis-leftpanel-inn-wrap ~ div {
     padding-left: 10px;
     padding-right: 0 !important;
+}
+html[dir="rtl"] .vis-acctviewerbottdiv input[type="checkbox"] {
+    margin-left: 5px !important;
+    margin-right: 20px !important;
 }
 
 /*rtl css End here*/
