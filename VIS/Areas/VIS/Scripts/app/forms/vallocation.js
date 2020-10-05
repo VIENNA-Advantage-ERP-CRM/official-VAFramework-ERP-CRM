@@ -3916,6 +3916,10 @@
         };
 
         function paymentDoubleClicked(event) {
+            if ($gridPayment.columns[event.column] == undefined) {
+                event.preventDefault();
+                return;
+            }
             if ($gridPayment.columns[event.column].field == "AppliedAmt") {
                 var getChanges = $gridPayment.getChanges();
                 if (getChanges == undefined || getChanges.length == 0) {
@@ -4049,6 +4053,10 @@
         };
 
         function cashDoubleClicked(event) {
+            if ($gridCashline.columns[event.column] == undefined) {
+                event.preventDefault();
+                return;
+            }
             if ($gridCashline.columns[event.column].field == "AppliedAmt") {
                 var getChanges = $gridCashline.getChanges();
                 if (getChanges == undefined || getChanges.length == 0) {
@@ -4182,6 +4190,10 @@
         };
 
         function invoiceDoubleClicked(event) {
+            if ($gridInvoice.columns[event.column] == undefined) {
+                event.preventDefault();
+                return;
+            }
             if ($gridInvoice.columns[event.column].field == "AppliedAmt" ||
                 $gridInvoice.columns[event.column].field == "Writeoff" ||
                 $gridInvoice.columns[event.column].field == "Discount") {
@@ -4882,12 +4894,28 @@
 
             // when Applied amount cell changed 
             changedValue = event.value_new != "" ? event.value_new : changedValue;
-            if (event.column == colIndex && !dotFormatter) {
-                if (!changedValue.toString().contains(",")) {
-                    changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+            if (event.column == colIndex) {
+                if (!dotFormatter) {
+                    if (!changedValue.toString().contains("−") && !changedValue.toString().contains(",")) {
+                        changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+                    }
+                    else if (changedValue.toString().contains("−")) {
+                        changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
+                    }
+                    else {
+                        changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
+                    }
                 }
-                else if (changedValue.toString().contains(",")) {
-                    changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
+                else {
+                    if (changedValue.toString().contains("−")) {
+                        changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
+                    }
+                }
+                //validate changed Amount is valid number or not
+                if (isNaN(changedValue)) {
+                    VIS.ADialog.warn("VIS_ValidAmount");
+                    event.preventDefault();
+                    return;
                 }
             }
 
@@ -4927,7 +4955,7 @@
                     }
                     //logic to not set greater appliedAmount then open amount
                     else if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
-                    
+
                     }
                     else {
                         $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
@@ -5012,12 +5040,28 @@
 
             // when Applied amount cell changed 
             changedValue = event.value_new != "" ? event.value_new : changedValue;
-            if (event.column == colIndex && !dotFormatter) {
-                if (!changedValue.toString().contains(",")) {
-                    changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+            if (event.column == colIndex) {
+                if (!dotFormatter) {
+                    if (!changedValue.toString().contains("−") && !changedValue.toString().contains(",")) {
+                        changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+                    }
+                    else if (changedValue.toString().contains("−")) {
+                        changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
+                    }
+                    else {
+                        changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
+                    }
                 }
-                else if (changedValue.toString().contains(",")) {
-                    changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
+                else {
+                    if (changedValue.toString().contains("−")) {
+                        changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
+                    }
+                }
+                //validate changed Amount is valid number or not
+                if (isNaN(changedValue)) {
+                    VIS.ADialog.warn("VIS_ValidAmount");
+                    event.preventDefault();
+                    return;
                 }
             }
 
@@ -5097,31 +5141,44 @@
 
             // when Applied amount cell changed 
             changedValue = event.value_new != "" ? event.value_new : changedValue;
-            if ((event.column == colIndex || event.column == wcolIndex || event.column == dcolIndex) && !dotFormatter) {
-                if (!changedValue.toString().contains(",")) {
-                    changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
-                }
-                else if (changedValue.toString().contains(",")) {
-                    changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
-                }
-            }
-            //get the changes and converting amount into standard culture.
             if (event.column == colIndex || event.column == wcolIndex || event.column == dcolIndex) {
-
+                if (!dotFormatter) {
+                    if (!changedValue.toString().contains("−") && !changedValue.toString().contains(",")) {
+                        changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+                    }
+                    else if (changedValue.toString().contains("−")) {
+                        changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
+                    }
+                    else {
+                        changedValue = format.GetConvertedNumber(changedValue, dotFormatter).toString();
+                    }
+                }
+                else {
+                    if (changedValue.toString().contains("−")) {
+                        changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
+                    }
+                }
+                //validate changed Amount is valid number or not
+                if (isNaN(changedValue)) {
+                    VIS.ADialog.warn("VIS_ValidAmount");
+                    event.preventDefault();
+                    return;
+                }
+                //get the changes and converting amount into standard culture.
                 if ($gridInvoice.get(event.recid).changes.AppliedAmt != undefined && event.column != colIndex) {
-                    appliedAmt = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.AppliedAmt, dotFormatter).toString();
+                    appliedAmt = convertAppliedAmtculture($gridInvoice.get(event.recid).changes.AppliedAmt, dotFormatter);
                 }
                 else {
                     appliedAmt = changedValue;
                 }
                 if ($gridInvoice.get(event.recid).changes.Discount != undefined && event.column != dcolIndex) {
-                    discountchng = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.Discount, dotFormatter).toString();
+                    discountchng = convertAppliedAmtculture($gridInvoice.get(event.recid).changes.Discount, dotFormatter);
                 }
                 else {
                     discountchng = changedValue;
                 }
                 if ($gridInvoice.get(event.recid).changes.Writeoff != undefined && event.column != wcolIndex) {
-                    writeOff = format.GetConvertedNumber($gridInvoice.get(event.recid).changes.Writeoff, dotFormatter).toString();
+                    writeOff = convertAppliedAmtculture($gridInvoice.get(event.recid).changes.Writeoff, dotFormatter);
                 }
                 else {
                     writeOff = changedValue;
@@ -5702,7 +5759,7 @@
                         Date1: record.Date1,
                         DOCUMENTNO: record.DOCUMENTNO,
                         //added account column
-                        Account: record.Account, 
+                        Account: record.Account,
                         DATEDOC: record.DATEDOC,
                         Isocode: record.Isocode,
                         GL_JOURNALLINE_ID: record.GL_JOURNALLINE_ID,
@@ -6144,7 +6201,7 @@
             if (name == "C_BPartner_ID") {
                 if (_C_BPartner_ID != value) {
                     //clear right side  filters and selected records
-                    clearRightPanelFilters(); 
+                    clearRightPanelFilters();
                     //added to load all blank grids
                     blankAllGrids();
                 }
@@ -6203,10 +6260,10 @@
                         var bd;
                         if (rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
                             rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
-                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toString();
+                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toFixed(stdPrecision);
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toString();
+                            bd = format.GetConvertedNumber(rowsPayment[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toFixed(stdPrecision);
                         }
 
                         bd = parseFloat(bd);
@@ -6214,6 +6271,9 @@
                         _noPayments++;
                     }
                 }
+                //decimal digits as per culture.
+                totalPay = totalPay.toFixed(stdPrecision);
+                totalPay = parseFloat(totalPay);
             }
             $lblPaymentSum.text(_noPayments + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + parseFloat(totalPay).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }) + " ");//VIS.Msg.getMsg("SelectedPayments") 
 
@@ -6233,16 +6293,19 @@
                         //var bd = parseFloat(checkcommaordot(event, rowsCash[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                         if (rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
                             rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
-                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toString();
+                            bd = (-1 * Math.abs(format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toFixed(stdPrecision);
                         }
                         else {
-                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toString();
+                            bd = format.GetConvertedNumber(rowsCash[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toFixed(stdPrecision);
                         }
                         bd = parseFloat(bd);
                         totalCash = totalCash + (isNaN(bd) ? 0 : bd);  //  Applied Pay
                         _noCashLines++;
                     }
                 }
+                //decimal digits as per culture.
+                totalCash = totalCash.toFixed(stdPrecision);
+                totalCash = parseFloat(totalCash);
             }
             $lblCashSum.text(_noCashLines + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + parseFloat(totalCash).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }) + " ");//VIS.Msg.getMsg("SelectedCashlines") + 
 
@@ -6274,10 +6337,10 @@
                             //bd = parseFloat(checkcommaordot(event, rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]])).toFixed(stdPrecision);
                             if (rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("-") ||
                                 rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString().contains("−")) {
-                                bd = (-1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toString();
+                                bd = (-1 * Math.abs(format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter))).toFixed(stdPrecision);
                             }
                             else {
-                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toString();
+                                bd = format.GetConvertedNumber(rowsInvoice[i][keys[keys.indexOf("AppliedAmt")]].toString(), dotFormatter).toFixed(stdPrecision);
                             }
                             bd = parseFloat(bd);
                         }
@@ -6288,6 +6351,9 @@
                         _noInvoices++;
                     }
                 }
+                //decimal digits as per culture.
+                totalInv = totalInv.toFixed(stdPrecision);
+                totalInv = parseFloat(totalInv);
             }
             $lblInvoiceSum.text(_noInvoices + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + parseFloat(totalInv).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }) + " ");//VIS.Msg.getMsg("SelectedInvoices") +
 
@@ -6315,6 +6381,9 @@
                         _noGL++;
                     }
                 }
+                //decimal digits as per culture.
+                totalGL = totalGL.toFixed(stdPrecision);
+                totalGL = parseFloat(totalGL);
             }
             $lblglSum.text(_noGL + " " + VIS.Msg.getMsg("SelectedLines") + " - " + summation + " " + parseFloat(totalGL).toLocaleString(navigator.language, { minimumFractionDigits: stdPrecision, maximumFractionDigits: stdPrecision }) + " ");//VIS.Msg.getMsg("SelectedGL") +
             //end
