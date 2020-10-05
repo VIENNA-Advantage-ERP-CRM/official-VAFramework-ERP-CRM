@@ -224,7 +224,7 @@ namespace VAdvantage.Process
                         if (bp.GetVA009_PO_PaymentMethod_ID() == 0)
                         {
                             result = null;
-                            result=GetPaymentMethod(rfq.GetAD_Org_ID());
+                            result = GetPaymentMethod(rfq.GetAD_Org_ID());
                             if (result != null && result.Tables[0].Rows.Count > 0)
                             {
                                 order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -269,6 +269,7 @@ namespace VAdvantage.Process
                 }	//	for all Response Lines
                 if (order != null)
                 {
+                    //Check Orderno. Already existing
                     if (Orderno.Length > 0)
                     {
                         Orderno.Append(",");
@@ -279,7 +280,7 @@ namespace VAdvantage.Process
                 }
             }
             // Show the message in RfQ after click Create Purchase Order button
-            return Msg.GetMsg(GetCtx(),"CMS02_PurchaseOrder","")+" " + Orderno;
+            return Msg.GetMsg(GetCtx(), "VIS_PurchaseOrder", "") + " " + Orderno;
         }
         //Added by Neha Thakur
         /// <summary>
