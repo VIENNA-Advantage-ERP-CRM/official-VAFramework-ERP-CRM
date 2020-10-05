@@ -22350,4 +22350,35 @@
     }
     VIS.Model.CalloutLandedCost = CalloutLandedCost;
 
+    // workcompletedate Should be greater than workstartdate
+    function CalloutCompareDates() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutCompareDates");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutCompareDates, VIS.CalloutEngine); //inherit prototype
+    CalloutCompareDates.prototype.EndDateGreater = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        this.setCalloutActive(true);
+        var _startDate = new Date(mTab.getValue("DateWorkStart"));
+        var _endDate = new Date(mTab.getValue("DateWorkComplete"));
+        if (mField.getColumnName() == "DateWorkStart") {
+            if (_startDate >= _endDate && mTab.getValue("DateWorkComplete") != null) {
+                mTab.setValue("DateWorkStart", "");                
+                this.setCalloutActive(false);
+                return VIS.ADialog.info("DateworkCompleted");;
+            }
+        }
+        else {
+            if (_startDate >= _endDate) {
+                mTab.setValue("DateWorkComplete", "");
+                this.setCalloutActive(false);                
+                return VIS.ADialog.info("DateworkCompleted");
+            }
+        }
+        this.setCalloutActive(false);
+        return "";
+    }
+    VIS.Model.CalloutCompareDates = CalloutCompareDates;
+
 })(VIS, jQuery);
