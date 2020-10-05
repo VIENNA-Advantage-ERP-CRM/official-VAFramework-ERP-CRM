@@ -22350,12 +22350,12 @@
     }
     VIS.Model.CalloutLandedCost = CalloutLandedCost;
 
-    // workcompletedate Should be greater than workstartdate
-    function CalloutCompareDates() {
-        VIS.CalloutEngine.call(this, "VIS.CalloutCompareDates");//must call
+    // In RFQ window, workcompletedate Should be greater than workstartdate
+    function CalloutRFQ() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutRFQ");//must call
     };
-    VIS.Utility.inheritPrototype(CalloutCompareDates, VIS.CalloutEngine); //inherit prototype
-    CalloutCompareDates.prototype.EndDateGreater = function (ctx, windowNo, mTab, mField, value, oldValue) {
+    VIS.Utility.inheritPrototype(CalloutRFQ, VIS.CalloutEngine); //inherit prototype
+    CalloutRFQ.prototype.Comparedates = function (ctx, windowNo, mTab, mField, value, oldValue) {
         if (this.isCalloutActive() || value == null || value.toString() == "") {
             return "";
         }
@@ -22366,19 +22366,19 @@
             if (_startDate >= _endDate && mTab.getValue("DateWorkComplete") != null) {
                 mTab.setValue("DateWorkStart", "");                
                 this.setCalloutActive(false);
-                return VIS.ADialog.info("DateworkCompleted");;
+                return VIS.ADialog.info("DateWorkGreater");
             }
         }
         else {
-            if (_startDate >= _endDate) {
+            if (_startDate >= _endDate && mTab.getValue("DateWorkStart") != null) {
                 mTab.setValue("DateWorkComplete", "");
                 this.setCalloutActive(false);                
-                return VIS.ADialog.info("DateworkCompleted");
+                return VIS.ADialog.info("DateWorkGreater");
             }
         }
         this.setCalloutActive(false);
         return "";
     }
-    VIS.Model.CalloutCompareDates = CalloutCompareDates;
+    VIS.Model.CalloutRFQ = CalloutRFQ;
 
 })(VIS, jQuery);
