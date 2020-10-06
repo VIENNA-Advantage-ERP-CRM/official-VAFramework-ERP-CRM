@@ -762,7 +762,15 @@
             });
 
             // filteration based on from and toDates for Invoice Grid
-            $fromDate.on("change", function (e) {
+            $fromDate.on("blur", function (e) {
+                var dateVal = Date.parse($fromDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -789,7 +797,15 @@
                     $fromDate.val('');
                 }
             });
-            $toDate.on("change", function (e) {
+            $toDate.on("blur", function (e) {
+                var dateVal = Date.parse($toDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -818,7 +834,15 @@
             });
 
             // filteration based on from and toDates for Payment Grid
-            $pfromDate.on("change", function (e) {
+            $pfromDate.on("blur", function (e) {
+                var dateVal = Date.parse($pfromDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -845,7 +869,15 @@
                     $pfromDate.val('');
                 }
             });
-            $ptoDate.on("change", function (e) {
+            $ptoDate.on("blur", function (e) {
+                var dateVal = Date.parse($ptoDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -874,7 +906,15 @@
             });
 
             //filteration based on from and toDates for cash journal Grid
-            $cfromDate.on("change", function (e) {
+            $cfromDate.on("blur", function (e) {
+                var dateVal = Date.parse($cfromDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -902,7 +942,15 @@
                     $cfromDate.val('');
                 }
             });
-            $ctoDate.on("change", function (e) {
+            $ctoDate.on("blur", function (e) {
+                var dateVal = Date.parse($ctoDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -931,7 +979,15 @@
             });
 
             // filteration based on from and toDates for GL journal Grid
-            $gfromDate.on("change", function (e) {
+            $gfromDate.on("blur", function (e) {
+                var dateVal = Date.parse($gfromDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -958,7 +1014,15 @@
                     $gfromDate.val('');
                 }
             });
-            $gtoDate.on("change", function (e) {
+            $gtoDate.on("blur", function (e) {
+                var dateVal = Date.parse($gtoDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
                     VIS.ADialog.warn("VIS_SlctcnvrsnDate");
@@ -4036,7 +4100,7 @@
                         val = parseFloat(record.OpenAmt);
                     }
                     else if (parseFloat(record.OpenAmt) > 0 && parseFloat(val) < 0) {
-                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        VIS.ADialog.warn("VIS_AppliedAmtleszero");
                         val = parseFloat(record.OpenAmt);
                     }
                     //when the OpenAmt is Equal to AppliedAmt
@@ -4173,7 +4237,7 @@
                         val = parseFloat(record.OpenAmt);
                     }
                     else if (parseFloat(record.OpenAmt) > 0 && parseFloat(val) < 0) {
-                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        VIS.ADialog.warn("VIS_AppliedAmtleszero");
                         val = parseFloat(record.OpenAmt);
                     }
                     //when the OpenAmt is Equal to AppliedAmt
@@ -4306,8 +4370,8 @@
                         VIS.ADialog.warn("AppliedAmtgrtr");
                         val = parseFloat(record.Amount);
                     }
-                    else if (parseFloat(record.Amount) < 0 && parseFloat(val) > 0) {
-                        VIS.ADialog.warn("AppliedAmtgrtr");
+                    else if (parseFloat(record.Amount) > 0 && parseFloat(val) < 0) {
+                        VIS.ADialog.warn("VIS_AppliedAmtleszero");
                         val = parseFloat(record.Amount);
                     }
                     //when the OpenAmt is Equal to AppliedAmt
@@ -4897,7 +4961,8 @@
             if (event.column == colIndex) {
                 if (!dotFormatter) {
                     if (!changedValue.toString().contains("−") && !changedValue.toString().contains(",")) {
-                        changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+                        if (!isNaN(changedValue))
+                            changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
                     }
                     else if (changedValue.toString().contains("−")) {
                         changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
@@ -5043,7 +5108,8 @@
             if (event.column == colIndex) {
                 if (!dotFormatter) {
                     if (!changedValue.toString().contains("−") && !changedValue.toString().contains(",")) {
-                        changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+                        if (!isNaN(changedValue))
+                            changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
                     }
                     else if (changedValue.toString().contains("−")) {
                         changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
@@ -5144,7 +5210,8 @@
             if (event.column == colIndex || event.column == wcolIndex || event.column == dcolIndex) {
                 if (!dotFormatter) {
                     if (!changedValue.toString().contains("−") && !changedValue.toString().contains(",")) {
-                        changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
+                        if (!isNaN(changedValue))
+                            changedValue = format.GetFormatedValue(changedValue, "init", dotFormatter).toString();
                     }
                     else if (changedValue.toString().contains("−")) {
                         changedValue = (-1 * format.GetConvertedNumber(changedValue, dotFormatter)).toString();
@@ -5203,7 +5270,7 @@
                 }
                 //Restrict the negative value when OpenAmt is positive Value
                 else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
-                    VIS.ADialog.warn("AppliedAmtgrtr");
+                    VIS.ADialog.warn("VIS_AppliedAmtleszero");
                     event.preventDefault();
                     return;
                 }
@@ -5235,7 +5302,7 @@
                     }
                     //when the AppliedAmt will not be allow -Ve Value when OpenAmt have +Ve Value
                     else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
-                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        VIS.ADialog.warn("VIS_AppliedAmtleszero");
                         event.preventDefault();
                         return;
                     }
@@ -5261,7 +5328,7 @@
                     }
                     // WriteOffAmt will not be allow -Ve Value when OpenAmt have +Ve Value
                     else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
-                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        VIS.ADialog.warn("VIS_AppliedAmtleszero");
                         event.preventDefault();
                         return;
                     }
@@ -5286,7 +5353,7 @@
                     }
                     //DiscountAmt will not be allow -Ve Value when OpenAmt have +Ve Value
                     else if (VIS.Utility.Util.getValueOfDecimal($gridInvoice.get(event.recid).Amount) > 0 && VIS.Utility.Util.getValueOfDecimal(changedValue) < 0) {
-                        VIS.ADialog.warn("AppliedAmtgrtr");
+                        VIS.ADialog.warn("VIS_AppliedAmtleszero");
                         event.preventDefault();
                         return;
                     }
