@@ -41,7 +41,7 @@
 
     ProcessCtl.prototype.ORIGIN_WINDOW = "W";
     ProcessCtl.prototype.ORIGIN_FORM = "F";
-    ProcessCtl.prototype.ORIGIN_MENU = "M";
+    ProcessCtl.prototype.ORIGIN_MENU = "P";
 
     //ProcessCtl.prototype.setIsPdf = function (ispdf) {
     //    this.isPdf = ispdf;

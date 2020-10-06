@@ -89,19 +89,23 @@ namespace VAdvantage.Model
         }/** Get Table/View.
 @return Database Table information */
         public int GetAD_Table_ID() { Object ii = Get_Value("AD_Table_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Action AD_Reference_ID=1000492 */
-        public static int ACTION_AD_Reference_ID = 1000492;/** Form = F */
-        public static String ACTION_Form = "F";/** Menu = M */
-        public static String ACTION_Menu = "M";/** Window = W */
-        public static String ACTION_Window = "W";/** Is test a valid value.
+        /** Action AD_Reference_ID=104 */
+        public static int ACTION_AD_Reference_ID = 104;/** Workbench = B */
+        public static String ACTION_Workbench = "B";/** WorkFlow = F */
+        public static String ACTION_WorkFlow = "F";/** Process = P */
+        public static String ACTION_Process = "P";/** Report = R */
+        public static String ACTION_Report = "R";/** Task = T */
+        public static String ACTION_Task = "T";/** Window = W */
+        public static String ACTION_Window = "W";/** Form = X */
+        public static String ACTION_Form = "X";/** Is test a valid value.
 @param test testvalue
 @returns true if valid **/
-        public bool IsActionValid(String test) { return test == null || test.Equals("F") || test.Equals("M") || test.Equals("W"); }/** Set Action.
+        public bool IsActionValid(String test) { return test == null || test.Equals("B") || test.Equals("F") || test.Equals("P") || test.Equals("R") || test.Equals("T") || test.Equals("W") || test.Equals("X"); }/** Set Action.
 @param Action Indicates the Action to be performed */
         public void SetAction(String Action)
         {
             if (!IsActionValid(Action))
-                throw new ArgumentException("Action Invalid value - " + Action + " - Reference_ID=1000492 - F - M - W"); if (Action != null && Action.Length > 1) { log.Warning("Length > 1 - truncated"); Action = Action.Substring(0, 1); }
+                throw new ArgumentException("Action Invalid value - " + Action + " - Reference_ID=104 - B - F - P - R - T - W - X"); if (Action != null && Action.Length > 1) { log.Warning("Length > 1 - truncated"); Action = Action.Substring(0, 1); }
             Set_Value("Action", Action);
         }/** Get Action.
 @return Indicates the Action to be performed */
