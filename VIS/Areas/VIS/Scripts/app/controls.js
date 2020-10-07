@@ -246,6 +246,7 @@
             var isReadOnly = mField.getIsReadOnly();
             var isUpdateable = mField.getIsEditable(false);
             var windowNo = mField.getWindowNo();
+            var tabNo = mTab.getTabNo();
 
             if (displayType == VIS.DisplayType.Button) {
 
@@ -370,12 +371,12 @@
             }
             else if (displayType == VIS.DisplayType.PAttribute) {
 
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true);
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true,tabNo);
                 txtP.setField(mField);
                 ctrl = txtP;
             }
             else if (displayType == VIS.DisplayType.GAttribute) {
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false);
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false,tabNo);
                 txtP.setField(mField);
                 ctrl = txtP;
             }
@@ -4317,7 +4318,7 @@
     //END
 
     //pAttribute control
-    function VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, windowNop, isActivityForm, search, fromDMS, pAttribute) {
+    function VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, windowNop, isActivityForm, search, fromDMS, pAttribute, tabNo) {
 
         //Variable region
         /**	No Instance Key					*/
@@ -4335,6 +4336,7 @@
         this.value = null;
 
         this.windowNo = windowNop;
+        this.tabNo = tabNo;
         //set lookup into current object from pttribute/gattribute lookup
         this.lookup = lookup;
 
@@ -4457,7 +4459,7 @@
         function OpenPAttributeDialog(oldValue) {
             var M_AttributeSetInstance_ID = (oldValue == null) ? 0 : oldValue;
             var M_Product_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Product_ID");
-            var M_ProductBOM_ID = VIS.context.getWindowContext(windowNop, 3, "M_ProductBOM_ID");
+            var M_ProductBOM_ID = VIS.context.getWindowContext(windowNop, tabNo, "M_ProductBOM_ID");
             var M_Locator_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Locator_ID");
             self.log.config("M_Product_ID=" + M_Product_ID + "/" + M_ProductBOM_ID + ",M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", AD_Column_ID=" + self.AD_Column_ID);
             var productWindow = self.AD_Column_ID == 8418;		//	HARDCODED
