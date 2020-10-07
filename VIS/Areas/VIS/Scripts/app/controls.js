@@ -729,7 +729,7 @@
             this.ctrl.removeClass();
             if (e.length > 0)
                 this.ctrl.addClass(e);
-            this.activeClass = e;
+            this.activeClass = e;                    
             //this.ctrl.css('background-color', color);
             //console.log(this.ctrl.css('background-color'));
         }
@@ -920,10 +920,22 @@
             }
         });
 
+        /* Event */
+        $ctrl.on("blur", function (e) {
+           // e.stopPropagation();
+            var newValue = $ctrl.val();
+           
+            if (self.obscureType && newValue!="" && self.oldValue == newValue) {
+                self.ctrl.val(VIS.Env.getObscureValue(self.obscureType, newValue));
+                self.setReadOnly(true);
+            }
+        });
+
         $btnSearch.on("click", function () {
             if (self.mField.getIsEditable(true)) {
                 self.setReadOnly(false, true, true);
                 $ctrl.val(self.mField.getValue());
+                $ctrl.focus();
             }
         });
 
@@ -942,7 +954,7 @@
 
 
     VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
-        if (!readOnly && this.obscureType && !forceWritable && !this.mField.getIsInserting()) {
+        if (!readOnly && this.obscureType && !forceWritable && (!this.mField.getIsInserting() || this.ctrl.val() != "")) {
             readOnly = true;
         }
 
@@ -958,15 +970,17 @@
      */
     VTextBox.prototype.setValue = function (newValue) {
         if (this.oldValue != newValue) {
-            this.oldValue = newValue;
+            
             //console.log(newValue);
 
-            if (this.obscureType && !this.mField.getIsInserting()) {
+            if (this.obscureType && (!this.mField.getIsInserting() || this.ctrl.val() !="")) {
                 this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
                 this.setReadOnly(true);
             }
             else
                 this.ctrl.val(newValue);
+
+            this.oldValue = newValue;
             //this.setBackground("white");
         }
     };
@@ -3431,7 +3445,8 @@
         var length = fieldLength;
 
         //Init Control
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length,'data-type':'int' });
+       
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3451,7 +3466,7 @@
 
         // Assign Value
         this.dotFormatter = VIS.Env.isDecimalPoint();
-
+       
         // For testing purpose
         //this.dotFormatter = true;
 
@@ -3703,7 +3718,8 @@
         var displayType = VIS.DisplayType.Integer;
         var length = fieldLength;
         //Init Control
-        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length, 'data-type': 'int' });
+       
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3717,7 +3733,7 @@
             this.setReadOnly(false);
         }
         var self = this; //self pointer
-
+        //$ctrl.addClass("vis-control-wrap-int-amount");
 
         //On key down event
         $ctrl.on("keydown", function (event) {

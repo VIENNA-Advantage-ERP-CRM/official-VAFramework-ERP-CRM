@@ -5,11 +5,12 @@
         var isSMALoaded = false;
         var isLTRLoaded = false;
         var isAPPLoaded = false;
-
+        this.isWindowAction = false;
         var dLAContent = null;
         var dOldAtt = null;
         var dOAContent = null;
         var cmbFileLocation = null;
+        this.windowNo = windowNo;
         var AD_Attachment_ID = 0;
         if (!newRecord_ID) {
             newRecord_ID = 0;
@@ -1351,7 +1352,10 @@
 
 
         var DownloadFile = function (index, sender) {
-
+            var actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_WINDOW;
+            if (!selfi.isWindowAction) {
+                actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_FORM;
+            }
             bsyDiv[0].style.visibility = "visible";
             $.ajax({
                 url: VIS.Application.contextUrl + "Attachment/DownloadAttachment",
@@ -1359,7 +1363,11 @@
                 data: {
                     fileName: oldFiles[index].Name,
                     AD_Attachment_ID: AD_Attachment_ID,
-                    AD_AttachmentLine_ID: oldFiles[index].Line_ID
+                    AD_AttachmentLine_ID: oldFiles[index].Line_ID,
+                    actionOrigin: actionOrigin,
+                    originName: VIS.context.getWindowContext(selfi.windowNo, "WindowName"),
+                    AD_Table_ID: AD_Table_ID,
+                    recordID: Record_ID
 
                 },
                 error: function () {
@@ -1515,5 +1523,10 @@
             return imgUrl;
         };
     };
+
+    attachmentForm.prototype.setIsWindowAction = function (iswindowAction) {
+        this.isWindowAction = iswindowAction;
+    };
+
     VIS.attachmentForm = attachmentForm;
 })(VIS, jQuery);
