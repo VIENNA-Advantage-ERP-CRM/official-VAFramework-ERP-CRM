@@ -219,7 +219,8 @@ html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
 html[dir="rtl"] span.vis-ad-w-p-tb-rc-action,
 html[dir="rtl"] .vis-groupbtn,
 html[dir="rtl"] .vis-Dialog-buttons input,
-html[dir="rtl"] .vis-processbtnwrap input[type="button"] {
+html[dir="rtl"] .vis-processbtnwrap input[type="button"],
+html[dir="rtl"] .vis-menuSearch a {
     margin-left: 0;
     margin-right: 10px;
 }
@@ -453,7 +454,8 @@ html[dir="rtl"] .vis-archive-sb-t-button {
 html[dir="rtl"] .vis-control-wrap > button {
     text-align: center;
 }
-html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i {
+html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i,
+html[dir="rtl"] .vis-menuSearch a.fa-search {
     transform: rotate(90deg);
 }
 html[dir="rtl"] .vis-ad-w-p-t-c-tc i,
@@ -677,7 +679,18 @@ html[dir="rtl"] .vis-acctviewerbottdiv input[type="checkbox"] {
     margin-left: 5px !important;
     margin-right: 20px !important;
 }
-
+html[dir="rtl"] .vis-filter-dialog {
+    left: auto;
+    right: 200px;
+}
+#vis_mainMenu .vis-menuTitle {
+    border-top-right-radius: 0;
+    border-top-left-radius: 5px;
+}
+html[dir="rtl"] .vis-procss-more {
+    right: auto !important;
+    left: 29px;
+}
 /*rtl css End here*/
 
 

@@ -4981,6 +4981,9 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 .vis-acctviewer-tabswrap {
     height: 35px;
 }
+.vis-process-description-Span p {
+    margin-bottom: 0;
+}
 
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {
