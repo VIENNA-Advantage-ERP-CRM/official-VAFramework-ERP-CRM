@@ -76,8 +76,8 @@
 
         //check Arebic Calture
         if (VIS.Application.isRTL) {
-            Okbtn.css("margin-right", "-132px");
-            cancelbtn.css("margin-right", "55px");
+            //Okbtn.css("margin-right", "-132px");
+            cancelbtn.css("margin-right", "10px");
         }
 
         this.btnSelect = $root.find("#btnSelect_" + windowNo);

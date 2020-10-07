@@ -14,8 +14,8 @@ namespace VAdvantage.Model
     public class MSession : X_AD_Session
     {
         //Sessions			
-        private static CCache<int, MSession> s_sessions = new CCache<int, MSession>("AD_Session_ID", 30);	//	no
-        	/**	Logger	*/
+        private static CCache<int, MSession> s_sessions = new CCache<int, MSession>("AD_Session_ID", 30);   //	no
+        /**	Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MSession).FullName);
 
         //	get
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
             if (AD_Session_ID > 0)
                 session = cache[AD_Session_ID];
 
-            if (session == null && AD_Session_ID >0)
+            if (session == null && AD_Session_ID > 0)
             {
                 // check from DB
                 session = new MSession(ctx, AD_Session_ID, null);
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
             if (session != null && session.IsProcessed())
             {
                 s_log.Log(Level.WARNING, "Session Processed=" + session);
-               
+
                 cache.Remove(AD_Session_ID);
                 session = null;
             }
@@ -97,12 +97,12 @@ namespace VAdvantage.Model
                 ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
                 cache.Add(AD_Session_ID, session);
             }
-           
+
             if (session == null)
             {
                 s_log.Fine("No Session");
             }
-           
+
             return session;
 
 
@@ -169,9 +169,9 @@ namespace VAdvantage.Model
                     s_log.Warning("No Session!");
             }
             return session;
-        }	//	get
+        }   //	get
 
-        
+
 
         /// <summary>
         /// 	 * 	Standard Constructor
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
                 //InetAddress lh = InetAddress.getLocalHost();
                 SetAD_Role_ID(ctx.GetAD_Role_ID());
 
-               
+
 
 
             }
@@ -337,7 +337,7 @@ namespace VAdvantage.Model
             if (_webStoreSession						//	log if WebStore
                 || MChangeLog.IsLogged(AD_Table_ID, type)		//	im/explicit log
                 || (role != null && role.IsChangeLog()))//	Role Logging
-            { ;}
+            {; }
             else
             {
                 return null;
@@ -403,6 +403,44 @@ namespace VAdvantage.Model
             }
             return qlog;
         }
+
+        /// <summary>
+        /// Log view/download action events
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="AD_Session_ID">sessioni id</param>
+        /// <param name="AD_Client_ID"client id></param>
+        /// <param name="AD_Org_ID">org id</param>
+        /// <param name="action">menu action (window.proces etc)</param>
+        /// <param name="actionType"type of action></param>
+        /// <param name="actionOrigin">origin of action</param>
+        /// <param name="desc">additional info</param>
+        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="Record_ID">record id</param>
+        /// <returns></returns>
+        public MActionLog ActionLog(Ctx ctx, int AD_Session_ID,
+    int AD_Client_ID, int AD_Org_ID,
+    String actionOrigin, string actionType, String OriginName, string desc, int AD_Table_ID, int Record_ID = 0)
+        {
+           
+
+            MActionLog alog = null;
+            try
+            {
+                alog = new MActionLog(GetCtx(), GetAD_Session_ID(),
+                    AD_Client_ID, AD_Org_ID, actionOrigin, actionType, OriginName, desc, AD_Table_ID, Record_ID);
+
+                alog.Save();
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
+                    + ", AD_Table_ID=" + AD_Table_ID + ", actionOrigin=" + OriginName
+                   , e);
+            }
+            return alog;
+        }
+
 
         /// <summary>
         /// 
@@ -514,7 +552,7 @@ namespace VAdvantage.Model
 
             return Get(ctx, false, "");
 
-           
+
         }
 
         /// <summary>

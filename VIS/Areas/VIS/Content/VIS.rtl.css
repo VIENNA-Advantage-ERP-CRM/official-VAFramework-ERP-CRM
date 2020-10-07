@@ -5,12 +5,16 @@ html[dir="rtl"] * {
 }
 html[dir="rtl"] .VIS-AMTD-MainContent .VIS_Pref_btn-2,
 html[dir="rtl"] .pull-right,
-html[dir="rtl"] .vis-pull-right {
+html[dir="rtl"] .vis-pull-right,
+html[dir="rtl"] .vis-group-finish,
+html[dir="rtl"] .VIS_Pref_btn-2,
+html[dir="rtl"] .vis-leftpanel-inn-wrap ~ div {
     float: left !important;
 }
 
 html[dir="rtl"] .vis-pull-left,
-html[dir="rtl"] .pull-left {
+html[dir="rtl"] .pull-left,
+html[dir="rtl"] .vis-alert-img {
     float: right !important;
 }
 html[dir="rtl"] #favLinks > [class^="col"],
@@ -49,12 +53,22 @@ html[dir="rtl"] .vis-rad-recordData,
 html[dir="rtl"] .vis-paymentselect-field,
 html[dir="rtl"] .vis-paymentPrint-field,
 html[dir="rtl"] .vis-sms-leftDiv,
-html[dir="rtl"] .vis-Email-leftFooter {
+html[dir="rtl"] .vis-Email-leftFooter,
+html[dir="rtl"] .vis-orgaccess-description,
+html[dir="rtl"] .vis-group-assinRole-check .vis-group-user-profile input[type="Checkbox"],
+html[dir="rtl"] .vis-advancedSearchInput,
+html[dir="rtl"] .vis-advancedSearchHorigontal,
+html[dir="rtl"] .vis-cardviewmainsecondchild,
+html[dir="rtl"] .VIS_Pref_err-btn,
+html[dir="rtl"] .VIS_form-col,
+html[dir="rtl"] .VIS_form-data-col,
+html[dir="rtl"] .vis-advancedSearchInput > input,
+html[dir="rtl"] .vis-advancedSearchInput > select,
+html[dir="rtl"] .vis-advancedSearchInput > button {
     float: right;
 }
 
 html[dir="rtl"] .vis-pull-right,
-html[dir="rtl"] .VIS_Pref_btn-2,
 html[dir="rtl"] li.active:after,
 html[dir="rtl"] .VIS_Pref_li:hover:after,
 html[dir="rtl"] .VIS_Pref_pass,
@@ -72,7 +86,10 @@ html[dir="rtl"] .vis-ctrfrm-btnwrp div,
 html[dir="rtl"] .btns,
 html[dir="rtl"] .vis-email-btns,
 html[dir="rtl"] .vis-email-sendbtn,
-html[dir="rtl"] .vis-email-saveAttachbtn {
+html[dir="rtl"] .vis-email-saveAttachbtn,
+html[dir="rtl"] .vis-Dialog-buttons,
+html[dir="rtl"] .vis-creategroup-btnwrap,
+html[dir="rtl"] .VIS_pop-btn-wrap {
     float: left;
 }
 html[dir="rtl"] #fllupsScreen h2 span,
@@ -94,7 +111,10 @@ html[dir="rtl"] .vis-advancedSearchInput,
 html[dir="rtl"] .vis-advancedSearchContentArea,
 html[dir="rtl"] .vis-tree-search,
 html[dir="rtl"] .vis-pref-ctrl-lblwrp,
-html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:first-child {
+html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:first-child,
+html[dir="rtl"] .vis-group-content-headDown,
+html[dir="rtl"] .w2ui-overlay .w2ui-col-on-off table td label,
+html[dir="rtl"] .vis-cardviewmainsecondchild {
     padding-right: 0;
     padding-left: 10px;
 }
@@ -105,7 +125,8 @@ html[dir="rtl"] .vis-info-datasec,
 html[dir="rtl"] .VIS-AMTD-formData select,
 html[dir="rtl"] .VIS-AMTD-formData input,
 html[dir="rtl"] .vis-advancedSearch-RecentRecords,
-html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:not(:first-child){
+html[dir="rtl"] .VIS_Pref_show .VIS_Pref_dd:not(:first-child),
+html[dir="rtl"] .vis-group-role-pad .vis-group-user-profile label{
     padding-left: 0;
     padding-right: 10px;
 }
@@ -121,11 +142,13 @@ html[dir="rtl"] .vis-ulrole li {
 html[dir="rtl"] .vis-app-hdr-r-user a,
 html[dir="rtl"] .vis-app-hdr,
 html[dir="rtl"] .vis-attachhistory-attach-download,
-html[dir="rtl"] .vis-advancedSearchHorigontal > label {
+html[dir="rtl"] .vis-advancedSearchHorigontal > label,
+html[dir="rtl"] .vis-ad-w-p-nav-btns {
     padding-right: 0;
     padding-left: 5px;
 }
-html[dir="rtl"] .vis-attachhistory-email-dropdown {
+html[dir="rtl"] .vis-attachhistory-email-dropdown,
+html[dir="rtl"] .VIS_tree-container .nav-list .nav-list {
     padding-left: 0;
     padding-right: 15px;
 }
@@ -134,13 +157,26 @@ html[dir="rtl"] .vis-attachhistory-right-row > ul > li {
     padding-right: 0;
     padding-left: 15px;
 }
+html[dir="rtl"] .VIS_form-row .VIS_form-col:not(:first-child),
+html[dir="rtl"] .VIS_form-data-col:not(:first-child),
+html[dir="rtl"] .zip-input {
+    padding-left: 0;
+    padding-right: 7px;
+}
+html[dir="rtl"] .VIS_form-row .VIS_form-col:not(:last-child),
+html[dir="rtl"] .VIS_form-data-col:not(:last-child),
+html[dir="rtl"] .form-input {
+    padding-left: 7px;
+    padding-right: 0;
+}
 html[dir="rtl"] .vis-feedIcons.vis-icon-feed,
 html[dir="rtl"] .vis-processpara-table-td3 label.vis-ec-col-lblchkbox input,
 html[dir="rtl"] .VIS-Lavel-float,
 html[dir="rtl"] .VIS_Pref_btn-margin,
 html[dir="rtl"] .vis-group-content-tittle i,
 html[dir="rtl"] .vis-tm-childnodeinidailog,
-html[dir="rtl"] .vis-rad-actionBtn {
+html[dir="rtl"] .vis-rad-actionBtn,
+html[dir="rtl"] .vis-fp-inputspan input[type=checkbox] {
     margin-right: 0;
     margin-left: 5px;
 }
@@ -150,7 +186,9 @@ html[dir="rtl"] .vis-group-head-right:after,
 html[dir="rtl"] .VIS-Tm-btnicon:last-child,
 html[dir="rtl"] .vis-allocation-rightContainer p + input[type="checkbox"],
 html[dir="rtl"] .vis-CardView button,
-html[dir="rtl"] .vis-Email-leftFooter > label {
+html[dir="rtl"] .vis-Email-leftFooter > label,
+html[dir="rtl"] .vis-treewindow-span,
+html[dir="rtl"] .VIS_buttons-wrap span {
     margin-left: 0;
     margin-right: 5px;
 }
@@ -158,10 +196,12 @@ html[dir="rtl"] .vis-Email-leftFooter > label {
 html[dir="rtl"] .vis-info-ls-btnswrap button,
 html[dir="rtl"] .VIS_Pref_err_btnRight span,
 html[dir="rtl"] .vis-viewMoreComments,
-html[dir="rtl"] .vis-group-user-ico,
+/*html[dir="rtl"] .vis-group-user-ico,*/
 html[dir="rtl"] .VIS-TM-data-head input[type="checkbox"],
 html[dir="rtl"] .vis-advancedSearchHorigontal,
-html[dir="rtl"] .vis-btnOk {
+html[dir="rtl"] .vis-btnOk,
+html[dir="rtl"] .vis-group-user-wrap input[type="radio"],
+html[dir="rtl"] .VIS-VImage-file-label {
     margin-right: 0;
     margin-left: 10px;
 }
@@ -176,11 +216,17 @@ html[dir="rtl"] .vis-ctrfrm-btnwrp input,
 html[dir="rtl"] .btns > input[type=button],
 html[dir="rtl"] .VIS-Tm-unlinkforbottmo,
 html[dir="rtl"] .VIS-Tm-glyphiconglyphicon-link,
-html[dir="rtl"] span.vis-ad-w-p-tb-rc-action {
+html[dir="rtl"] span.vis-ad-w-p-tb-rc-action,
+html[dir="rtl"] .vis-groupbtn,
+html[dir="rtl"] .vis-Dialog-buttons input,
+html[dir="rtl"] .vis-processbtnwrap input[type="button"],
+html[dir="rtl"] .vis-menuSearch a {
     margin-left: 0;
     margin-right: 10px;
 }
-html[dir="rtl"] #userFavs h2 {
+html[dir="rtl"] #userFavs h2,
+html[dir="rtl"] .ui-dialog .ui-dialog-buttonpane button,
+html[dir="rtl"] .VIS-VImage-testBottom-btn a {
     margin-right: 10px;
 }
 
@@ -243,8 +289,12 @@ html[dir="rtl"] .vis-file-close-ico,
 html[dir="rtl"] .vis-ad-w-p-a-main,
 html[dir="rtl"] .VIS_Pref_close-btn,
 html[dir="rtl"] .vis-leftpanel-wrapper:after,
-html[dir="rtl"] .address-close-icon {
+html[dir="rtl"] .address-close-icon,
+html[dir="rtl"] .w2ui-grid .w2ui-toolbar-search .w2ui-search-down {
     right: auto;
+}
+html[dir="rtl"] .w2ui-grid .w2ui-toolbar-search .w2ui-search-down {
+    left: 5px;
 }
 html[dir="rtl"] .vis-ev-col-msign {
     left: 10px;
@@ -270,7 +320,9 @@ html[dir="rtl"] .vis-input-wrap input:not(:placeholder-shown) ~ label,
 html[dir="rtl"] .vis-input-wrap textarea:not(:placeholder-shown) ~ label,
 html[dir="rtl"] .vis-input-wrap select:focus ~ label,
 html[dir="rtl"] .vis-input-wrap textarea:focus ~ label,
-html[dir="rtl"] .vis-input-wrap select ~ label {
+html[dir="rtl"] .vis-input-wrap select ~ label,
+html[dir="rtl"] .vis-advancedSearchInput > label, 
+html[dir="rtl"] .vis-advancedSearchHorigontal > label {
     right: 5px;
     left: auto;
 }
@@ -287,7 +339,10 @@ html[dir="rtl"] .vis-control-wrap > button {
 html[dir="rtl"] label.vis-ec-col-lblchkbox{
     right: 0;
 }
-html[dir="rtl"] .vis-ev-ctrlinfowrap {
+html[dir="rtl"] .vis-ev-ctrlinfowrap,
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap input:not(:focus):placeholder-shown + label,
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap textarea:not(:focus):placeholder-shown + label,
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap input:not(:focus):placeholder-shown + label {
     right: 10px;
     left: auto;
 }
@@ -320,22 +375,26 @@ html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:last-
 html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:last-child > .input-group-text:not(:last-child),
 html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-append:not(:last-child) > .btn,
 html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .btn,
-html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .input-group-text,
-html[dir="rtl"] .location input.form-control:not(:last-child) {
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group > .input-group-prepend > .input-group-text/*,
+html[dir="rtl"] .location input.form-control:not(:last-child)*/ {
     border-top-right-radius: .25rem !important;
     border-bottom-right-radius: .25rem !important;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
 }
 
-html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap * {
+html[dir="rtl"] .vis-input-wrap .input-group-prepend + .vis-control-wrap *,
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap .input-group-append:last-child > .input-group-text,
+html[dir="rtl"] .vis-formouterwrpdiv .vis-input-wrap .input-group-append:last-child > .input-group-text:last-child {
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     border-top-left-radius: .25rem !important;
     border-bottom-left-radius: .25rem !important;
 }
 
-html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group> .input-group-append:not(:last-child) > .input-group-text {
+html[dir="rtl"] .vis-ad-w-p-vc-editview .input-group> .input-group-append:not(:last-child) > .input-group-text,
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap .input-group-append:last-child > .input-group-text:not(:last-child),
+html[dir="rtl"] .vis-leftsidebarouterwrap .vis-input-wrap .input-group-append:last-child > .input-group-text:not(:last-child){
     border-radius: 0 !important;
 }
 
@@ -365,7 +424,9 @@ html[dir="rtl"] .input-group:focus-within .input-group-append:not(:last-child) .
 }
 
 html[dir="rtl"] .input-group-append,
-html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child {
+html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child,
+html[dir="rtl"] .vis-formouterwrpdiv .input-group-append .input-group-text + .input-group-text,
+html[dir="rtl"] .vis-leftsidebarouterwrap .input-group-append .input-group-text + .input-group-text {
     margin-right: -1px;
     margin-left: 0;
 }
@@ -384,13 +445,17 @@ html[dir="rtl"] .vis-ad-w-p-tabs-oflow a,
 html[dir="rtl"] .vis-statusbar-ul div,
 html[dir="rtl"] .vis-ad-w-p-s-plst li:nth-child(2),
 html[dir="rtl"] .vis-ad-w-p-s-plst li:last-child,
-html[dir="rtl"] .input-group-text .fa-arrow-left {
+html[dir="rtl"] .input-group-text .fa-arrow-left,
+html[dir="rtl"] .vis-cardviewbutton button.vis-btnright,
+html[dir="rtl"] .vis-cardviewbutton button.vis-btnleft,
+html[dir="rtl"] .vis-archive-sb-t-button {
     transform: rotate(180deg);
 }
 html[dir="rtl"] .vis-control-wrap > button {
     text-align: center;
 }
-html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i {
+html[dir="rtl"] .vis-ad-w-p-tb-search span:first-child i,
+html[dir="rtl"] .vis-menuSearch a.fa-search {
     transform: rotate(90deg);
 }
 html[dir="rtl"] .vis-ad-w-p-t-c-tc i,
@@ -420,7 +485,9 @@ html[dir="rtl"] .VIS-AMTD-formDynmicInput .VIS-AMTD-formData {
     padding-left: 0;
 }
 html[dir="rtl"] .VIS-AMTD-formBtns a,
-html[dir="rtl"] .vis-advancedSearchHorigontal:last-child {
+html[dir="rtl"] .vis-advancedSearchHorigontal:last-child,
+html[dir="rtl"] .VIS-TM-path,
+html[dir="rtl"] .vis-orgaccess-description {
     /*float: right;*/
     margin-left: 0px;
 }
@@ -441,11 +508,13 @@ html[dir="rtl"] .VIS_Pref_content-right,
 html[dir="rtl"] .VIS_Pref_content-right-2,
 html[dir="rtl"] .VIS_Pref_content-right-3,
 html[dir="rtl"] .VIS_Pref_content-right-4,
-html[dir="rtl"] .VIS_Pref_content-right-5{
+html[dir="rtl"] .VIS_Pref_content-right-5 {
     padding-right: 20px;
+    padding-left: 0;
 }
 html[dir="rtl"] .VIS_Pref_content-right,
-html[dir="rtl"] .VIS_Pref_content-right-5 {
+html[dir="rtl"] .VIS_Pref_content-right-5,
+html[dir="rtl"] .vis-css-treeview ul li {
     padding-left: 10px;
 }
 html[dir="rtl"] .vis-cs-op-lbl {
@@ -461,7 +530,6 @@ html[dir="rtl"] input[type="checkbox"].vis-tm-chkbox {
     margin: 0 0 0 10px !important;
 }
 html[dir="rtl"] .VIS-TM-path {
-    margin-left: 0;
     margin-right: -15px;
 }
 html[dir="rtl"] .VIS-TM-tree-search .VIS-Tm-btnicon,
@@ -485,7 +553,7 @@ html[dir="rtl"] .ui-dialog input[type=checkbox] {
     margin: 4px 0 0 4px;
 }
 html[dir="rtl"] .vis-processpara-table-td3 {
-    padding: 5px 5px 5px 0px;
+    /*padding: 5px 5px 5px 0px;*/
 }
 html[dir="rtl"] .vis-tree-search input.form-control:not(:last-child) {
     border-top-right-radius: 1.5rem;
@@ -528,6 +596,108 @@ html[dir="rtl"] .vis-Email-rytWrap {
     margin-left: 0px;
     border-left: 0px;
 }
+
+
+html[dir="rtl"] .mr-3 {
+    margin-right: 0 !important;
+    margin-left: 1rem !important;
+}
+
+html[dir="rtl"] .k-treeview .k-minus,
+html[dir="rtl"] .k-treeview .k-minus-disabled,
+html[dir="rtl"] .k-treeview .k-plus,
+html[dir="rtl"] .k-treeview .k-plus-disabled {
+    margin-left: 0;
+    margin-right: -16px;
+    transform: rotate(90deg);
+}
+
+html[dir="rtl"] .k-treeview .k-item {
+    padding-left: 0;
+    padding-right: 16px;
+}
+
+html[dir="rtl"] .k-treeview .k-in p,
+html[dir="rtl"] .vis-fp-currntrcrds {
+    padding-left: 0;
+    padding-right: 6px;
+}
+html[dir="rtl"] .vis-paymentselect-field .vis-input-wrap .vis-paymentPrintChk-field label {
+    padding-right: 0;
+    padding-left: 7px;
+}
+html[dir="rtl"] .vis-info-botdatafield:first-child {
+    padding-left: 15px;
+}
+html[dir="rtl"] .vis-paymentPrint-field input[name='vis-name'],
+html[dir="rtl"] .vis-paymentPrint-field select[name='vis-name'] {
+    margin-right: 0;
+    margin-left: 15px;
+}
+html[dir="rtl"] .vis-group-user-text {
+    padding-left: 10px;
+    padding-right: 15px;
+}
+html[dir="rtl"] .vis-group-colwrap:nth-child(3) .vis-group-user-right li:first-child {
+    margin-left: 10px;
+}
+html[dir="rtl"] .vis-orgaccess-description {
+    margin-right: 30px;
+}
+html[dir="rtl"] .vis-ev-col-fg-more {
+    padding-right: 0 !important;
+    padding-left: 10px !important;
+}
+html[dir="rtl"] .vis-PopupInput-alert > label {
+    padding-left: 0 !important;
+    padding-right: 10px !important;
+}
+html[dir="rtl"] .vis-img-ctrl-icon {
+    right: auto;
+    left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: .25rem;
+}
+html[dir="rtl"] .w2ui-grid .w2ui-toolbar-search .w2ui-search-all {
+    padding: 3px 10px 3px 18px;
+}
+html[dir="rtl"] .w2ui-overlay .w2ui-col-on-off table td:first-child {
+    padding: 4px 6px 4px 0;
+}
+
+html[dir="rtl"] .w2ui-overlay .w2ui-col-on-off table td:last-child {
+    padding: 4px 0 4px 6px;
+}
+html[dir="rtl"] .vis-acctviewer-tabswrap div:first-child {
+    margin-right: 0 !important;
+    margin-left: 15px;
+}
+.vis-leftpanel-inn-wrap ~ div {
+    padding-left: 10px;
+    padding-right: 0 !important;
+}
+html[dir="rtl"] .vis-acctviewerbottdiv input[type="checkbox"] {
+    margin-left: 5px !important;
+    margin-right: 20px !important;
+}
+html[dir="rtl"] .vis-filter-dialog {
+    left: auto;
+    right: 200px;
+}
+#vis_mainMenu .vis-menuTitle {
+    border-top-right-radius: 0;
+    border-top-left-radius: 5px;
+}
+html[dir="rtl"] .vis-procss-more {
+    right: auto !important;
+    left: 29px;
+}
+
+html[dir="rtl"] .vis-ad-w-p-vc-gc [data-type='int'] {
+    text-align: left;
+}
+
+
 /*rtl css End here*/
 
 

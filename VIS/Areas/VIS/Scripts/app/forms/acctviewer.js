@@ -1183,14 +1183,16 @@
         }
 
         function initializeComponent() {
+
             notShowPosted = VIS.Env.getCtx().getContext('#SHOW_REPOST').equals("N");
             topDiv = $("<div id='" + "topDiv_" + windowNo + "' style='float: left; width: 100%;'>" +
                 "<div id='" + "queryDiv_" + windowNo + "'style='display: inline-block; margin-right: 15px; margin-top: 5px' >" +
+
                 "<label id='" + "lblquery_" + windowNo + "' class='VIS_Pref_Label_Font' style='cursor: pointer;font-size: 1rem;color: rgba(var(--v-c-primary), 1);'>"
                 + VIS.Msg.getMsg("ViewerQuery") + "</label></div>" +
                 "<div id='" + "resulttopDiv_" + windowNo + "' style='display: inline-block; width: 160px;'>" +
                 "<label id='" + "lblresult_" + windowNo + "' class='VIS_Pref_Label_Font' style='vertical-align: middle; cursor: pointer;'>"
-                + VIS.Msg.getMsg("ViewerResult") + "</label></div>" +
+                + VIS.Msg.getMsg("ViewerResult") + "</label></div></div>" +
                 "</div>");
             var localdiv = $("<div id='" + "resultTopFilterDiv_" + windowNo + "' style='float: right;width: 50%;'>");
             var $DivInputWrap = $('<div class="input-group vis-input-wrap">');

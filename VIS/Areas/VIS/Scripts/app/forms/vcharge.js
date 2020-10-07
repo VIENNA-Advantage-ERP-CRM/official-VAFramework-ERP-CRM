@@ -49,9 +49,9 @@
 
         var sideDivWidth = 260;
         var minSideWidth = 50;
-        var selectDivWidth = $(window).width() - (sideDivWidth);
-        var selectDivFullWidth = $(window).width() - (minSideWidth);
-        var selectDivToggelWidth = selectDivWidth + sideDivWidth ;
+        var selectDivWidth = $(window).width() - (sideDivWidth + 20 + 5);
+        var selectDivFullWidth = $(window).width() - (20 + minSideWidth);
+        var selectDivToggelWidth = selectDivWidth + sideDivWidth + 5;
         var sideDivHeight = $(window).height() - 210;
 
 
@@ -73,9 +73,9 @@
 
             //topLeftSide div
             topLeftDiv = $("<div id='btnSpaceDiv_" + $self.windowNo + "' class='vis-archive-l-s-head'>" +
-                       "<button id='btnSpace_" + $self.windowNo + "' class='vis-archive-sb-t-button'>" +
-                       "<i class='vis vis-arrow-left'></i></button></div>" +
-                      "</div>");
+                "<button id='btnSpace_" + $self.windowNo + "' class='vis-archive-sb-t-button'>" +
+                "<i class='vis vis-arrow-left'></i></button></div>" +
+                "</div>");
 
             //left side parameter div
             paradiv = $("<div class='vis-archive-l-s-content' id='parameterDiv_" + $self.windowNo + "'>");
@@ -305,7 +305,7 @@
                     expense: expense
                 },
                 success: function (data) {
-                    if (data.ID == 0) {                        
+                    if (data.ID == 0) {
                         VIS.ADialog.info("ChargeNotCreated", true, null);
                         setBusy(false);
                         return;
@@ -337,10 +337,10 @@
                     'expense': expenselst
                 }),
                 success: function (data) {
-                    if (data.listCreatedP) {                        
+                    if (data.listCreatedP) {
                         VIS.ADialog.info("ChargeCreated", true, null);
                     }
-                    if (data.listRejectedP) {                        
+                    if (data.listRejectedP) {
                         VIS.ADialog.info("ChargeNotCreated", true, null);
 
                     }
@@ -377,7 +377,15 @@
 
             if (btnToggel != null)
                 btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
+                    var borderspace = 0;
                     if (toggleside) {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 180;
+                        }
+                        else {
+                            borderspace = 0;
+
+                        }
                         btnCreateCharge.show();
                         btnRefresh.show();
                         lblSearchKey.getControl().show();
@@ -386,7 +394,7 @@
                         txtName.getControl().show();
                         chkExpense.getControl().show();
 
-                        btnToggel.animate({ borderSpacing: 0 }, {
+                        btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
@@ -398,13 +406,20 @@
                         toggleside = false;
                         // btnToggel.animate({ width: sideDivWidth }, "slow");
                         rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
-                        //paradiv.css("display", "block");
+                        paradiv.css("display", "block");
                         //topLeftDiv.animate({ width: sideDivWidth }, "slow");
                         leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
                             dGrid.resize();
                         });
                     }
                     else {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 0;
+                        }
+                        else {
+                            borderspace = 180;
+
+                        }
                         btnCreateCharge.hide();
                         btnRefresh.hide();
                         lblSearchKey.getControl().hide();
@@ -412,7 +427,7 @@
                         txtSearchKey.getControl().hide();
                         txtName.getControl().hide();
                         chkExpense.getControl().hide();
-                        btnToggel.animate({ borderSpacing: 180 }, {
+                        btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
@@ -425,7 +440,7 @@
                         // btnToggel.animate({ width: minSideWidth }, "slow");
                         //topLeftDiv.animate({ width: minSideWidth }, "slow");
                         leftsideDiv.animate({ width: minSideWidth }, "slow");
-                        // paradiv.css("display", "none");
+                        paradiv.css("display", "none");
                         rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
                             dGrid.resize();
                         });
@@ -544,7 +559,7 @@
 
         this.display = function () {
             setTimeout(
-            dynInit(), 5);
+                dynInit(), 5);
         }
 
         //Privilized function

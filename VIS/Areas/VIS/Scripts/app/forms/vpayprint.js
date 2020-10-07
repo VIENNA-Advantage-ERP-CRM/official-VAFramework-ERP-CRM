@@ -38,11 +38,11 @@
         //Load BusyDiv
         //*****************
         function busyIndicator() {
-            $divBusy = $("<div>");
-            $divBusy.css({
-                "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
-                "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
-            });
+            $divBusy = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$divBusy.css({
+            //    "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
+            //    "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
+            //});
             $divBusy[0].style.visibility = "hidden";
             $root.append($divBusy);
         };
@@ -61,7 +61,7 @@
         //Custom Design of Paymnet Selection Form
         //******************
         function customDesign() {
-            $divContainer = $("<div class='vis-mainContainer'>");
+            $divContainer = $("<div class='vis-mainContainer vis-formouterwrpdiv'>");
             var designPSelectInfo = " <div class='vis-pPrintInfo'>"  // div pSelectInfo starts here                            
                 + " <div class='vis-paymentselect-field' style='margin-top: 8px;'>"  // div PaySelection starts here
                              + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'

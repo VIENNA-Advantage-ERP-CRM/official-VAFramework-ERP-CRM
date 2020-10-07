@@ -5,7 +5,7 @@
         this.onClose = null;
         var $self = this;
         var $root = $("<div style='position:relative'>");
-        var $busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var windowNo = VIS.Env.getWindowNo();
         var mAttributeSetInstanceId = null;
@@ -80,8 +80,11 @@
         btnSelect.children(0).attr("src", VIS.Application.contextUrl + "Areas/VIS/Images/base/Locator10.png")
         //check Arebic Calture
         if (VIS.Application.isRTL) {
-            Okbtn.css("margin-right", "-138px");
-            cancelbtn.css("margin-right", "55px");
+            Okbtn.css("margin-right", "0px");
+            Okbtn.css("margin-left", "10px");
+            Okbtn.css("float", "left");
+            cancelbtn.css("margin-right", "0px");
+            cancelbtn.css("float", "left");
         }
 
         //var dt = new Date(this.dtGuaranteeDate.attr("value"));

@@ -764,11 +764,15 @@ input.vis-group-search-icon {
     margin-top: 15px;
     float: left;
 }
+.vis-creategroup-btnwrap {
+    width: auto !important;
+    float: right;
+}
+.vis-group-asignrole-btnwrap {
+    display: flex;
+    justify-content: space-between;
+}
 /*******************************************/
-
-
-
-
 @media (max-width: 1366px) {
     .vis-group-content-headDown > input[type=text] {
         /*width: 80%;*/
