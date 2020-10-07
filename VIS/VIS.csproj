@@ -605,14 +605,6 @@
     <Content Include="Areas\VIS\Images\zoom.png" />
     <Content Include="Areas\VIS\Images\Zoom16.png" />
     <Content Include="Areas\VIS\Images\zoomfav.png" />
-    <Content Include="Areas\VIS\ReportViewer\js\kendo.subset.2015.3.930.min.js" />
-    <Content Include="Areas\VIS\ReportViewer\js\telerikReportViewer-10.0.16.204.js" />
-    <Content Include="Areas\VIS\ReportViewer\js\telerikReportViewer-10.0.16.204.min.js" />
-    <Content Include="Areas\VIS\ReportViewer\styles\kendo.blueopal.min.css" />
-    <Content Include="Areas\VIS\ReportViewer\styles\kendo.common.min.css" />
-    <Content Include="Areas\VIS\ReportViewer\styles\telerikReportViewer.css" />
-    <Content Include="Areas\VIS\ReportViewer\templates\telerikReportViewerTemplate-FA.html" />
-    <Content Include="Areas\VIS\ReportViewer\templates\telerikReportViewerTemplate.html" />
     <Content Include="Areas\VIS\Scripts\app\adialog.js" />
     <Content Include="Areas\VIS\Scripts\app\ajaxlogin.js" />
     <Content Include="Areas\VIS\Scripts\app\areport.js" />
@@ -747,7 +739,6 @@
     <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
-    <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\bipanel.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\verinfo.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
@@ -797,6 +788,7 @@
     <Compile Include="Areas\VIS\Controllers\CallOut\MOrderLineController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPaymentTermController.cs" />
+    <Compile Include="Areas\VIS\Controllers\CallOut\MPeriodController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MPriceListVersionController.cs" />
     <Compile Include="Areas\VIS\Controllers\CallOut\MProductCategoryController.cs" />
@@ -913,6 +905,7 @@
     <Compile Include="Areas\VIS\Models\Callouts\MOrderModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPaymentTermModel.cs" />
+    <Compile Include="Areas\VIS\Models\Callouts\MPeriodModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPriceListModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MPriceListVersionModel.cs" />
     <Compile Include="Areas\VIS\Models\Callouts\MProductCategoryModel.cs" />
@@ -1024,6 +1017,7 @@
     <Folder Include="Areas\VIS\Views\Group\" />
     <Folder Include="Areas\VIS\Views\MarkModule\" />
     <Folder Include="Areas\VIS\Views\ModulePrefix\" />
+    <Folder Include="Areas\VIS\Views\MPeriod\" />
     <Folder Include="Areas\VIS\Views\OrgStructure\" />
     <Folder Include="Areas\VIS\Views\Payment\" />
     <Folder Include="Areas\VIS\Views\RecordAccess\" />

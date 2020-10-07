@@ -359,8 +359,8 @@ namespace ViennaAdvantage.Process
                                         toInvoice, oLine.GetQtyEntered()),
                                         oLine.GetQtyOrdered()), 12, MidpointRounding.AwayFromZero);
                                 }
-                               //
-                                if (oLine.IsContract() == false)
+                                //JID_1139_1 avoided the charge line with 0 qty inserted
+                                if (oLine.IsContract() == false && oLine.GetQtyOrdered() > oLine.GetQtyInvoiced())
                                 {
                                     CreateLine(order, oLine, toInvoice, qtyEntered);
                                     log.Info("ID " + oLine.Get_ID() + "Qty Ordered " + oLine.GetQtyOrdered() + " Qty Invoiced " + oLine.GetQtyInvoiced());

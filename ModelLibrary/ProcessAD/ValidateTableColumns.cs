@@ -184,7 +184,7 @@ namespace VAdvantage.Process
                                 sbHTML.Append("<div class='vis-val-tc-col-r' style='" + style + "'>" + Msg.GetMsg(GetCtx(), "VIS_DBNotFound") + "</div>");
                         }
                         sbHTML.Append("</div>");
-                        ADCols.Add(adColName.ToString());
+                        ADCols.Add(adColName.ToString().ToLower());
                     }
                 }
 
@@ -196,7 +196,7 @@ namespace VAdvantage.Process
                     {
                         dbColName.Clear();
                         dbColName.Append(dt.Tables[0].Rows[d]["Column_Name"]);
-                        if (ADCols.Contains(dbColName.ToString()))
+                        if (ADCols.Contains(dbColName.ToString().ToLower()))
                             continue;
                         else
                         {

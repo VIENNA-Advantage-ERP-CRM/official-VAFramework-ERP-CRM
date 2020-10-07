@@ -43,7 +43,7 @@ namespace VAdvantage.Model
             IDataReader idr = null;
             try
             {
-                 idr = DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, null);
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();

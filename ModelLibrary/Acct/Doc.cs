@@ -1142,10 +1142,10 @@ namespace VAdvantage.Acct
             }
             if (_period == null)
             {
-                _period = MPeriod.Get(GetCtx(), GetDateAcct());
+                _period = MPeriod.Get(GetCtx(), GetDateAcct() , GetAD_Org_ID());
             }
             //	Is Period Open?
-            if (_period != null && _period.IsOpen(GetDocumentType()))
+            if (_period != null && MPeriod.IsOpen(GetCtx(), GetDateAcct(), GetDocumentType(), GetAD_Org_ID()))
             {
                 _C_Period_ID = _period.GetC_Period_ID();
             }

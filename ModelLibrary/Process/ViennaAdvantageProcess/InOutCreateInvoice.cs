@@ -35,7 +35,8 @@ namespace ViennaAdvantage.Process
         private int _M_PriceList_ID = 0;
         //Document No					
         private String _InvoiceDocumentNo = null;
-
+        //Document Type
+        private int _C_DocType_ID = 0;
         //Checkbox for Generating charges proportional to line quantities on Invoice line. By Sukhwnder on 14 Dec, 2017
         private bool _GenerateCharges = false;
 
@@ -64,6 +65,10 @@ namespace ViennaAdvantage.Process
                 else if (name.Equals("GenerateCharges"))
                 {
                     _GenerateCharges = "Y".Equals(para[i].GetParameter());
+                }
+                else if (name.Equals("C_DocType_ID"))
+                {
+                    _C_DocType_ID = para[i].GetParameterAsInt(); ;
                 }
                 else
                 {
@@ -203,35 +208,48 @@ namespace ViennaAdvantage.Process
                     // JID_0779: Create AP Credit memo if we run the Generate TO process from Returm to Vendor window.
 
                     //if (invoice.GetC_DocTypeTarget_ID() == 0)
-                    //{
-                    int C_DocTypeTarget_ID = DB.GetSQLValue(null, "SELECT C_DocTypeInvoice_ID FROM C_DocType WHERE C_DocType_ID=@param1", ship.GetC_DocType_ID());
-                    if (C_DocTypeTarget_ID > 0)
+                    //{ 
+                    if (_C_DocType_ID > 0)
                     {
-                        invoice.SetC_DocTypeTarget_ID(C_DocTypeTarget_ID);
+                        invoice.SetC_DocTypeTarget_ID(_C_DocType_ID);
                     }
                     else
                     {
-                        invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        int C_DocTypeTarget_ID = DB.GetSQLValue(null, "SELECT C_DocTypeInvoice_ID FROM C_DocType WHERE C_DocType_ID=@param1", ship.GetC_DocType_ID());
+                        if (C_DocTypeTarget_ID > 0)
+                        {
+                            invoice.SetC_DocTypeTarget_ID(C_DocTypeTarget_ID);
+                        }
+                        else
+                        {
+                            invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        }
                     }
-                    //}
                     invoice.SetIsReturnTrx(ship.IsReturnTrx());
                     invoice.SetIsSOTrx(ship.IsSOTrx());
                 }
                 else
                 {
                     // Sales Return
-                    if (ship.GetC_Order_ID() >= 0)
+                    if (_C_DocType_ID > 0)
                     {
-                        int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocType_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
-                        MDocType dt = MDocType.Get(GetCtx(), C_DocType_ID);
-                        if (dt.GetC_DocTypeInvoice_ID() != 0)
-                            invoice.SetC_DocTypeTarget_ID(dt.GetC_DocTypeInvoice_ID(), true);
-                        else
-                            invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        invoice.SetC_DocTypeTarget_ID(_C_DocType_ID);
                     }
                     else
                     {
-                        invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        if (ship.GetC_Order_ID() >= 0)
+                        {
+                            int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select C_DocType_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                            MDocType dt = MDocType.Get(GetCtx(), C_DocType_ID);
+                            if (dt.GetC_DocTypeInvoice_ID() != 0)
+                                invoice.SetC_DocTypeTarget_ID(dt.GetC_DocTypeInvoice_ID(), true);
+                            else
+                                invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        }
+                        else
+                        {
+                            invoice.SetC_DocTypeTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                        }
                     }
                 }
             }
@@ -239,9 +257,15 @@ namespace ViennaAdvantage.Process
             {
                 invoice.SetM_PriceList_ID(_M_PriceList_ID);
             }
+            //Set InvoiceDocumentNo to InvoiceReference
             if (_InvoiceDocumentNo != null && _InvoiceDocumentNo.Length > 0)
             {
-                invoice.SetDocumentNo(_InvoiceDocumentNo);
+                invoice.Set_Value("InvoiceReference", _InvoiceDocumentNo);
+            }
+            //Set TargetDoctype  
+            if (_C_DocType_ID > 0 && !ship.IsReturnTrx())
+            {
+                invoice.Set_Value("C_DocTypeTarget_ID", _C_DocType_ID);
             }
 
             // Added by Bharat on 30 Jan 2018 to set Inco Term from Order
@@ -271,10 +295,10 @@ namespace ViennaAdvantage.Process
 
             for (int i = 0; i < shipLines.Length; i++)
             {
-                MInOutLine sLine = shipLines[i];               
+                MInOutLine sLine = shipLines[i];
                 // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
                 string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty- SUM(COALESCE(li.QtyInvoiced, 0)) as QtyInvoiced" +
-                    " FROM M_InOutLine ml INNER JOIN C_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID "+
+                    " FROM M_InOutLine ml INNER JOIN C_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN C_Invoice ci ON ci.C_Invoice_ID = li.C_Invoice_ID " +
                     " WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.M_InOutLine_ID =" + sLine.GetM_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -295,7 +319,7 @@ namespace ViennaAdvantage.Process
                                 string no = invDocumentNo.ToString();
                                 if (invDocumentNo.Length > 0 && no != Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]))
                                 {
-                                   invDocumentNo.Append(", " + Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
+                                    invDocumentNo.Append(", " + Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
                                 }
                                 else
                                 {
@@ -416,7 +440,7 @@ namespace ViennaAdvantage.Process
                     line.SetQtyEntered(sLine.GetQtyEntered());
                     line.SetQtyInvoiced(sLine.GetMovementQty());
                     line.Set_ValueNoCheck("IsDropShip", sLine.Get_Value("IsDropShip")); //Arpit Rai 20-Sept-2017              
-                   
+
                     // Change By Mohit Amortization process -------------
                     if (_CountVA038 > 0)
                     {
@@ -491,7 +515,7 @@ namespace ViennaAdvantage.Process
                                     amrtDS.Dispose();
                                 }
                             }
-                        }                                               
+                        }
                     }
                     // End Change Amortization process--------------
                     if (!line.Save())
@@ -506,7 +530,7 @@ namespace ViennaAdvantage.Process
                 }
             }
 
-           
+
             #region[Enhancement for Charges Distribution/Generation by Sukhwinder on 13 December 2017]
 
             if (_GenerateCharges && count > 0)
@@ -651,3 +675,4 @@ namespace ViennaAdvantage.Process
         }
     }
 }
+
