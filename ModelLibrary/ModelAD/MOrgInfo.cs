@@ -22,6 +22,9 @@ namespace VAdvantage.Model
     {
         // Static Logger					
          private static VLogger _log = VLogger.GetVLogger(typeof(MOrgInfo).FullName);
+        //Account Schema				
+        private MAcctSchema _acctSchema = null;
+
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -82,6 +85,30 @@ namespace VAdvantage.Model
             }
             return retValue;
         }
+
+        /// <summary>
+        ///Get primary Acct Schema
+        /// </summary>
+        /// <returns>acct schema</returns>
+        public MAcctSchema GetMAcctSchema()
+        {
+            if (_acctSchema == null && GetC_AcctSchema_ID() != 0)
+                _acctSchema = new MAcctSchema(GetCtx(), GetC_AcctSchema_ID(), null);
+            return _acctSchema;
+        }
+
+        /// <summary>
+        ///Get Default Accounting Currency
+        /// </summary>
+        /// <returns>currency or 0</returns>
+        public int GetC_Currency_ID()
+        {
+            if (_acctSchema == null)
+                GetMAcctSchema();
+            if (_acctSchema != null)
+                return _acctSchema.GetC_Currency_ID();
+            return 0;
+        }	//	getC_Currency_ID
 
         /// <summary>
         /// Get Default Org Warehouse

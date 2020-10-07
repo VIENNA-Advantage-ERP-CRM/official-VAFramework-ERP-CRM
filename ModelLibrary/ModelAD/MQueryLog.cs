@@ -19,21 +19,21 @@ namespace VAdvantage.Model
 {
     public class MQueryLog : X_AD_QueryLog
     {
-        /// <summary>
-        /// Standard Constructor
-        /// </summary>
-        /// <param name="ctx">context</param>
-        /// <param name="AD_QueryLog_ID">id</param>
-        /// <param name="trxName">trx</param>
-        public MQueryLog(Ctx ctx, int AD_QueryLog_ID, Trx trxName)
-            : base(ctx, AD_QueryLog_ID, trxName)
-        {
-            //super(ctx, AD_QueryLog_ID, trxName);
-            if (AD_QueryLog_ID == 0)
+            /// <summary>
+            /// Standard Constructor
+            /// </summary>
+            /// <param name="ctx">context</param>
+            /// <param name="AD_QueryLog_ID">id</param>
+            /// <param name="trxName">trx</param>
+            public MQueryLog(Ctx ctx, int AD_QueryLog_ID, Trx trxName)
+                : base(ctx, AD_QueryLog_ID, trxName)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                SetAD_Role_ID(AD_Role_ID);
-            }
+                //super(ctx, AD_QueryLog_ID, trxName);
+                if (AD_QueryLog_ID == 0)
+                {
+                    int AD_Role_ID = ctx.GetAD_Role_ID();
+                    SetAD_Role_ID(AD_Role_ID);
+                }
         }	//	MQueryLog
 
         /// <summary>

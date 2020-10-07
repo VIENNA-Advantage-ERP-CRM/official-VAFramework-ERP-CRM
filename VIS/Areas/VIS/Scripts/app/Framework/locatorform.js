@@ -444,10 +444,11 @@
 
             sep = separator;
             //show values in the value text box
-            var buf = warehouseValue + " " + separator + " " + txtX.val()
-                + " " + separator + " " + txtY.val()
-                + " " + separator + " " + txtZ.val();
+            //var buf = dsw["Value"] + " " + separator + " " + txtX.val()
+            //    + " " + separator + " " + txtY.val()
+            //    + " " + separator + " " + txtZ.val();
 
+            var buf = dsw["Value"];
             txtValue.val(buf);
 
             //	Set Warehouse

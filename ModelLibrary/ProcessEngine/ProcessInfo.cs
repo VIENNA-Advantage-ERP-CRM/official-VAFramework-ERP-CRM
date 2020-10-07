@@ -116,6 +116,8 @@ namespace VAdvantage.ProcessEngine
         private int _AD_ReportMaster_ID;
         private bool useCrysalReportViewer = false;
         private bool isReport = false;
+        private string ActionOrigin = "W";
+        private string OriginName = "";
 
         private Dictionary<string, string> ctxLocal = new Dictionary<string, string>();
 
@@ -159,6 +161,8 @@ namespace VAdvantage.ProcessEngine
             lst.Add("AD_ReportView_ID", _AD_ReportView_ID);
             lst.Add("UseCrystalReportViewer", useCrysalReportViewer);
             lst.Add("IsReport", isReport);
+            lst.Add("ActionOrigin", ActionOrigin);
+            lst.Add("OriginName", OriginName);
             return lst;
         }
 
@@ -199,7 +203,8 @@ namespace VAdvantage.ProcessEngine
 
             info._ad_window_ID = Util.GetValueOfInt(lst["AD_Window_ID"]);
             info._windowNo = Util.GetValueOfInt(lst["WindowNo"]);
-
+            info.ActionOrigin = Util.GetValueOfString(lst["ActionOrigin"]);
+            info.OriginName = Util.GetValueOfString(lst["OriginName"]);
             return info;
         }
 
@@ -410,6 +415,42 @@ namespace VAdvantage.ProcessEngine
             useCrysalReportViewer = useCRV;
         }
 
+        /// <summary>
+        /// Set Action Origin (Menu, Window, Form)
+        /// </summary>
+        /// <param name="ActionOrigin"></param>
+        public void SetActionOrigin(string ActionOrigin)
+        {
+            this.ActionOrigin = ActionOrigin;
+        }
+
+
+        /// <summary>
+        /// get Action Origin
+        /// </summary>
+        /// <returns></returns>
+        public String GetActionOrigin()
+        {
+            return ActionOrigin;
+        }
+
+        /// <summary>
+        /// Set Action(report or other action viewed or downloaded) origin Name
+        /// </summary>
+        /// <param name="OriginName"></param>
+        public void SetOriginName(string OriginName)
+        {
+            this.OriginName = OriginName;
+        }
+
+        /// <summary>
+        /// Get Action Origin Name
+        /// </summary>
+        /// <returns></returns>
+        public String GetOriginName()
+        {
+            return OriginName;
+        }
 
         /// <summary>
         /// get system will use crystal report viewer

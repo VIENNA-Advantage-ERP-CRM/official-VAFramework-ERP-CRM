@@ -23,7 +23,8 @@ using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class RfQResponseCComplete : ProcessEngine.SvrProcess
     {
@@ -67,7 +68,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             //
             response.Save();
-            return "OK";
+            //Deekshant changes in return Completed Sucessfully
+            return Msg.GetMsg(GetCtx(), "Success", "");
         }
     }
 }

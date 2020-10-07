@@ -34,6 +34,7 @@ namespace VAdvantage.Process
         private Boolean _IncludeInDispute = false;
         private Boolean _OnlySOTrx = false;
         private Boolean _IsAllCurrencies = false;
+        private Boolean _IncludePDC = false;
         private int _SalesRep_ID = 0;
         private int _C_Currency_ID = 0;
         private int _C_BPartner_ID = 0;
@@ -97,6 +98,10 @@ namespace VAdvantage.Process
                 {
                     _C_BP_Group_ID = para[i].GetParameterAsInt();
                 }
+                else if (name.Equals("IsIncludePDC"))
+                {
+                    _IncludePDC = "Y".Equals(para[i].GetParameter());
+                }
                 else
                 {
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
@@ -140,6 +145,15 @@ namespace VAdvantage.Process
             int inv = AddInvoices();
             // add up all payments
             int pay = AddPayments();
+            // add up all cash journal
+            int cash = AddCashJournal();
+            // add up all GL journal
+            int GlJournal = AddGLJournal();
+            //add up all post dated check if includepdc is true
+            if (Env.IsModuleInstalled("VA027_") && _IncludePDC)
+            {
+                int pdc = AddPostDatedCheck();
+            }
 
             // If the level should charge a fee do it now...
             // Add charge line only if any invoice line is added on run line.
@@ -201,7 +215,7 @@ namespace VAdvantage.Process
             }
 
             sql.Append("SELECT I.C_INVOICE_ID,  I.C_CURRENCY_ID, I.GRANDTOTAL, INVOICEOPEN(I.C_INVOICE_ID,Ips.C_INVOICEPAYSCHEDULE_ID),  "
-                    + " DAYSBETWEEN(@param1,IPS.DUEDATE),"
+                    + " DAYSBETWEEN(@param1,IPS.DUEDATE) AS DaysDue ,"
                     + " i.IsInDispute, i.C_BPartner_ID, "
                     + " CASE "
                     + " WHEN i.issotrx   ='Y' AND i.isreturntrx='N'" // Invoice Customer
@@ -335,7 +349,7 @@ namespace VAdvantage.Process
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-                
+
                 sql.Clear();
                 //
                 foreach (DataRow dr in dt.Rows)
@@ -344,14 +358,14 @@ namespace VAdvantage.Process
                     C_Invoice_ID = 0; C_Currency_ID = 0; GrandTotal = 0; Open = 0; DaysDue = 0;
                     IsInDispute = false; C_BPartner_ID = 0; PaySchedule_ID = 0;
 
-                    C_Invoice_ID = Utility.Util.GetValueOfInt(dr[0]);
-                    C_Currency_ID = Utility.Util.GetValueOfInt(dr[1]);
-                    GrandTotal = Utility.Util.GetValueOfDecimal(dr[2]);
-                    Open = Utility.Util.GetValueOfDecimal(dr[7]);
-                    DaysDue = Utility.Util.GetValueOfInt(dr[4]);
-                    IsInDispute = "Y".Equals(Utility.Util.GetValueOfString(dr[5]));
-                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr[6]);
-                    PaySchedule_ID = Utility.Util.GetValueOfInt(dr[8]);
+                    C_Invoice_ID = Utility.Util.GetValueOfInt(dr["C_Invoice_ID"]);
+                    C_Currency_ID = Utility.Util.GetValueOfInt(dr["C_Currency_ID"]);
+                    GrandTotal = Utility.Util.GetValueOfDecimal(dr["GrandTotal"]);
+                    Open = Utility.Util.GetValueOfDecimal(dr["DueAmt"]);
+                    DaysDue = Utility.Util.GetValueOfInt(dr["DaysDue"]);
+                    IsInDispute = "Y".Equals(Utility.Util.GetValueOfString(dr["IsInDispute"]));
+                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr["C_BPartner_ID"]);
+                    PaySchedule_ID = Utility.Util.GetValueOfInt(dr["C_INVOICEPAYSCHEDULE_ID"]);
 
                     //
                     // Check for Dispute
@@ -414,7 +428,7 @@ namespace VAdvantage.Process
                         count++;
                     }
                 }
-               // idr.Close();
+                // idr.Close();
             }
             catch (Exception e)
             {
@@ -460,11 +474,11 @@ namespace VAdvantage.Process
                     ValueNamePair vp = VLogger.RetrieveError();
                     if (vp != null)
                     {
-                        log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunEntry"), vp.GetName());
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + vp.GetName());
                     }
                     else
                     {
-                        log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunEntry"), "");
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
                     }
                     return false;
                 }
@@ -484,11 +498,11 @@ namespace VAdvantage.Process
                 if (vp != null)
                 {
 
-                    log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + vp.GetName());
                 }
                 else
                 {
-                    log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), "");
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
                 }
                 return false;
             }
@@ -502,22 +516,29 @@ namespace VAdvantage.Process
         /// <returns>no of payments inserted.</returns>
         private int AddPayments()
         {
+            sql.Clear();
+            int VA027_PostDatedCheck_ID = 0;
             int C_Payment_ID = 0;
             Decimal PayAmt = 0;
             Decimal openAmt = 0;
 
             sql.Append("SELECT C_Payment_ID, C_Currency_ID, PayAmt,"
-               + " paymentAvailable(C_Payment_ID), C_BPartner_ID "
-               + "FROM C_Payment_v p "
-               + "WHERE AD_Client_ID=" + _run.GetAD_Client_ID()			//	##1
-               + " AND AD_Org_ID=" + _run.GetAD_Org_ID()
-               + " AND IsAllocated='N' AND C_BPartner_ID IS NOT NULL"
-               + " AND C_Charge_ID IS NULL"
-               + " AND DocStatus IN ('CO','CL')"
-                //	Only BP with Dunning defined
-               + " AND EXISTS (SELECT * FROM C_BPartner bp "
-                   + "WHERE p.C_BPartner_ID=bp.C_BPartner_ID"
-                   + " AND bp.C_Dunning_ID=(SELECT C_Dunning_ID FROM C_DunningLevel WHERE C_DunningLevel_ID=" + _run.GetC_DunningLevel_ID() + "))");	// ##2
+               + " paymentAvailable(C_Payment_ID) AS OpenAmt, C_BPartner_ID ");
+
+            if (Env.IsModuleInstalled("VA027_") && _IncludePDC)
+            {
+                sql.Append(", (SELECT VA027_PostDatedCheck_ID FROM C_Payment WHERE C_Payment_ID= p.C_Payment_ID) AS VA027_postdatedcheck_ID ");
+            }
+            sql.Append("FROM C_Payment_v p "
+           + "WHERE AD_Client_ID=" + _run.GetAD_Client_ID()        //	##1
+           + " AND AD_Org_ID=" + _run.GetAD_Org_ID()
+           + " AND IsAllocated='N' AND C_BPartner_ID IS NOT NULL"
+           + " AND C_Charge_ID IS NULL"
+           + " AND DocStatus IN ('CO','CL')"
+           //	Only BP and BPGroup with Dunning defined
+           + "AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
+           " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
+           "INNER JOIN C_BP_Group bpg  ON (bp.C_BP_Group_ID =bpg.C_BP_Group_ID) WHERE p.C_BPartner_ID=bp.C_BPartner_ID ))");
             if (_C_BPartner_ID != 0)
             {
                 sql.Append(" AND C_BPartner_ID=" + _C_BPartner_ID);		//	##3
@@ -548,33 +569,37 @@ namespace VAdvantage.Process
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-              
-                    sql.Clear();
+
+                sql.Clear();
                 foreach (DataRow dr in dt.Rows)
-
-                    //while (idr.Read())
                 {
-                    C_Payment_ID = 0; C_Currency_ID = 0; PayAmt = 0; openAmt = 0; C_BPartner_ID = 0;
+                    C_Payment_ID = 0; C_Currency_ID = 0; PayAmt = 0; openAmt = 0; C_BPartner_ID = 0; VA027_PostDatedCheck_ID = 0;
 
-                    C_Payment_ID = Utility.Util.GetValueOfInt(dr[0]);
-                    C_Currency_ID = Utility.Util.GetValueOfInt(dr[1]);
-                    PayAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr[2]));//.getBigDecimal(3).negate();
-                    openAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr[3]));// rs.getBigDecimal(4).negate();
-                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr[4]);//.getInt(5);
+                    C_Payment_ID = Utility.Util.GetValueOfInt(dr["C_Payment_ID"]);
+                    C_Currency_ID = Utility.Util.GetValueOfInt(dr["C_Currency_ID"]);
+                    PayAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr["PayAmt"]));//.getBigDecimal(3).negate();
+                    openAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr["OpenAmt"]));// rs.getBigDecimal(4).negate();
+                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr["C_BPartner_ID"]);//.getInt(5);
 
+                    //if include pdc is true then add PDC reference against the payment if payment is generated from PDC
+                    if (Env.IsModuleInstalled("VA027_") && _IncludePDC)
+                    {
+                        VA027_PostDatedCheck_ID = Utility.Util.GetValueOfInt(dr["VA027_PostDatedCheck_ID"]);
+                    }
                     // checkup the amount
                     if (Env.ZERO.CompareTo(openAmt) == 0)
                     {
                         continue;
                     }
+
                     //
                     if (CreatePaymentLine(C_Payment_ID, C_Currency_ID, PayAmt, openAmt,
-                        C_BPartner_ID))
+                        C_BPartner_ID, VA027_PostDatedCheck_ID))
                     {
                         count++;
                     }
                 }
-               // idr.Close();
+                // idr.Close();
             }
             catch (Exception e)
             {
@@ -597,7 +622,7 @@ namespace VAdvantage.Process
         /// <param name="openAmt">Open.</param>
         /// <param name="C_BPartner_ID">Business Partner ID.</param>
         private bool CreatePaymentLine(int C_Payment_ID, int C_Currency_ID,
-            Decimal PayAmt, Decimal openAmt, int C_BPartner_ID)
+            Decimal PayAmt, Decimal OpenAmt, int C_BPartner_ID, int VA027_PostDatedCheck_ID)
         {
             MDunningRunEntry entry = _run.GetEntry(C_BPartner_ID, _C_Currency_ID, _SalesRep_ID);
             if (entry.Get_ID() == 0)
@@ -612,18 +637,18 @@ namespace VAdvantage.Process
                     if (vp != null)
                     {
                         string val = vp.GetName();
-                        log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunEntry"), val);
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + val);
                     }
                     else
                     {
-                        log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunEntry"), "");
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
                     }
                     return false;
                 }
             }
             //
             MDunningRunLine line = new MDunningRunLine(entry);
-            line.SetPayment(C_Payment_ID, C_Currency_ID, PayAmt, openAmt);
+            line.SetPayment(C_Payment_ID, C_Currency_ID, PayAmt, OpenAmt, VA027_PostDatedCheck_ID);
 
             if (!line.Save())
             {
@@ -634,11 +659,11 @@ namespace VAdvantage.Process
                 if (vp != null)
                 {
 
-                    log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + vp.GetName());
                 }
                 else
                 {
-                    log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), "");
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
                 }
                 return false;
             }
@@ -669,17 +694,469 @@ namespace VAdvantage.Process
                         if (vp != null)
                         {
 
-                            log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                            log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + vp.GetName());
                         }
                         else
                         {
-                            log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), "");
+                            log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
                         }
                         return;
                     }
                     entries[i].SetQty(Decimal.Subtract(entries[i].GetQty(), new Decimal(1)));
                 }
             }
+        }
+
+        /// <summary>
+        /// Add CashJournal to line tab of dunnig run Window
+        /// </summary>
+        /// <returns>no of Cashjournalline inserted.</returns>
+        private int AddCashJournal()
+        {
+            sql.Clear();
+            int C_CashLine_ID = 0;
+            Decimal Amount = 0;
+            Decimal openAmt = 0;
+            String PaymentType = "";
+            sql.Append("SELECT C_CashLine_ID ,cl.C_Currency_ID, cl.C_BPartner_ID, alloccashavailable(C_CashLine_ID) AS openAmt, cl.Vss_PaymentType, " +
+                "CASE " +
+                "WHEN(cl.Vss_PaymentType = 'R' OR cl.Vss_PaymentType = 'A') AND cl.Amount > 0 THEN cl.Amount * -1 " + // Amount should be - ve for paymentType : Cash Receipt and Payment Return
+                "WHEN(cl.Vss_PaymentType = 'P' OR cl.Vss_PaymentType = 'E') AND cl.Amount < 0 THEN cl.Amount * -1 " +  //Amount should be +ve for PaymentType : Cash Payment and Receipt Return
+                "ELSE " +
+                "cl.Amount END AS Amount " +              
+                "FROM c_CashLine cl" +
+                " INNER JOIN C_Cash c on cl.C_Cash_ID = c.C_Cash_ID"+
+                " WHERE cl.cashtype ='B' AND cl.IsAllocated='N'  " +
+                "AND c.DocStatus In ('CO','Cl') " +
+                "AND cl.Ad_Client_ID =" + _run.GetAD_Client_ID() + " AND cl.Ad_Org_ID=  " + _run.GetAD_Org_ID() +
+                 //	Only BP and BPGroup with Dunning defined
+                 " AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
+                 " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
+                 "INNER JOIN C_BP_Group bpg  ON (bp.C_BP_Group_ID =bpg.C_BP_Group_ID) WHERE cl.C_BPartner_ID=bp.C_BPartner_ID ))");
+
+
+            if (_C_BPartner_ID != 0)
+            {
+                sql.Append(" AND cl.C_BPartner_ID=" + _C_BPartner_ID);
+            }
+            else if (_C_BP_Group_ID != 0)
+            {
+                sql.Append(" AND EXISTS (SELECT * FROM C_BPartner bp "
+                    + "WHERE cl.C_BPartner_ID=bp.C_BPartner_ID AND bp.C_BP_Group_ID=" + _C_BP_Group_ID + ")");	//	##3
+            }
+            //only single currency
+            if (!_IsAllCurrencies)
+            {
+                sql.Append(" AND cl.C_Currency_ID=" + _C_Currency_ID);
+            }
+
+            if (!_level.GetDaysAfterDue().Equals(new Decimal(-9999)))
+            {
+                sql.Append(" AND C_BPartner_ID IN (SELECT C_BPartner_ID FROM C_DunningRunEntry WHERE C_DunningRun_ID=" + _run.Get_ID() + ")");
+            }
+            int count = 0;
+            IDataReader idr = null;
+            DataTable dt = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+
+                sql.Clear();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    C_CashLine_ID = 0; C_Currency_ID = 0; Amount = 0; openAmt = 0; C_BPartner_ID = 0; PaymentType = "";
+                    C_CashLine_ID = Utility.Util.GetValueOfInt(dr["C_CashLine_ID"]);
+                    C_Currency_ID = Utility.Util.GetValueOfInt(dr["C_Currency_ID"]);
+                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr["C_BPartner_ID"]);
+                    PaymentType = Utility.Util.GetValueOfString(dr["Vss_PaymentType"]);
+                    Amount = Utility.Util.GetValueOfDecimal(dr["Amount"]);
+                    openAmt = Utility.Util.GetValueOfDecimal(dr["openAmt"]);
+
+                    // checkup the amount
+                    if (Env.ZERO.CompareTo(openAmt) == 0)
+                    {
+                        continue;
+                    }
+                    //openAmt should be -ve in case of Cash Receipt and Payment Return 
+                    if(PaymentType.Equals("R") || PaymentType.Equals("A"))
+                    {
+                        if (openAmt > 0)
+                        {
+                            openAmt = Decimal.Negate(openAmt);
+                        }
+                    }
+                    //openAAmt should be +ve in case of Cash Payment and Receipt Return
+                    else if (PaymentType.Equals("P") || PaymentType.Equals("E"))
+                    {
+                        if (openAmt < 0)
+                        {
+                            openAmt = Decimal.Negate(openAmt);
+                        }
+                    }
+                    //crate records at line tab of Dunning Run window
+                    if (CreatCashLine(C_CashLine_ID, Amount, openAmt, C_Currency_ID, C_BPartner_ID))
+                    {
+                        count++;
+                    }
+                }
+                // idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, sql.ToString(), e);
+            }
+
+
+            return count;
+        }
+
+
+        /// <summary>
+        /// create cashline on line tab of dunning run window
+        /// </summary>
+        /// <param name="C_CashLine_ID">C_CashLine_ID</param>
+        /// <param name="Amount">Amount</param>
+        /// <param name="openAmt">openAmt</param>
+        /// <param name="C_Currency_ID">C_Currency_ID</param>
+        /// <param name="C_BPartner_ID">C_BPartner_ID</param>
+        /// <returns>true/False</returns>
+        private bool CreatCashLine(int C_CashLine_ID, Decimal Amount, Decimal OpenAmt, int C_Currency_ID, int C_BPartner_ID)
+        {
+            MDunningRunEntry entry = _run.GetEntry(C_BPartner_ID, _C_Currency_ID, _SalesRep_ID);
+            if (entry.Get_ID() == 0)
+            {
+                if (!entry.Save())
+                {
+
+                    ValueNamePair vp = VLogger.RetrieveError();
+                    if (vp != null)
+                    {
+                        string val = vp.GetName();
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + val);
+                    }
+                    else
+                    {
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
+                    }
+                    return false;
+                }
+            }
+            //
+            MDunningRunLine line = new MDunningRunLine(entry);
+            line.SetcashLine(C_CashLine_ID, Amount, OpenAmt, C_Currency_ID);
+
+            if (!line.Save())
+            {
+                ValueNamePair vp = VLogger.RetrieveError();
+                if (vp != null)
+                {
+
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + vp.GetName());
+                }
+                else
+                {
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
+                }
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Add GLjournal to Run tab of dunnig run Window
+        /// </summary>
+        /// <returns>no of GlJournal line inserted.</returns>
+        private int AddGLJournal()
+        {
+            sql.Clear();
+            int GL_JournalLine_ID = 0;
+            Decimal Amount = 0;
+            Decimal openAmt = 0;
+
+            sql.Append("SELECT GL_JournalLine_ID ,GL.C_Currency_ID, GL.C_BPartner_ID, AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) AS openAmt, " +
+               "CASE " +
+               "WHEN Gl.AmtSourceDr > 0 Then Gl.AmtSourceDr " +
+               "WHEN Gl.AmtSourceCr > 0 Then Gl.AmtSourceCr * -1 " +
+               "END AS Amount " +               
+                "FROM Gl_JournalLine GL " +
+                "INNER JOIN GL_Journal J ON GL.GL_Journal_ID =J.GL_Journal_ID " +
+                "INNER JOIN C_ElementValue EV ON Gl.Account_ID = EV.C_ElementValue_ID " +
+                "WHERE EV.IsAllocationRelated ='Y' AND GL.IsAllocated='N'  " +
+                "AND J.DocStatus In ('CO','Cl') " +
+                "AND GL.Ad_Client_ID ="+ _run.GetAD_Client_ID()+" AND GL.Ad_Org_ID=  "+_run.GetAD_Org_ID() +
+                //	Only BP and BPGroup with Dunning defined
+                " AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
+                " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
+                "INNER JOIN C_BP_Group bpg  ON (bp.C_BP_Group_ID =bpg.C_BP_Group_ID) WHERE Gl.C_BPartner_ID=bp.C_BPartner_ID ))");
+
+  
+            if (_C_BPartner_ID != 0)
+            {
+                sql.Append(" AND GL.C_BPartner_ID=" + _C_BPartner_ID);
+            }
+            else if (_C_BP_Group_ID != 0)
+            {
+                sql.Append(" AND EXISTS (SELECT * FROM C_BPartner bp "
+                    + "WHERE GL.C_BPartner_ID=bp.C_BPartner_ID AND bp.C_BP_Group_ID=" + _C_BP_Group_ID + ")");	//	##3
+            }
+            //only single currency
+            if (!_IsAllCurrencies)
+            {
+                sql.Append(" AND GL.C_Currency_ID=" + _C_Currency_ID);
+            }
+            if (!_level.GetDaysAfterDue().Equals(new Decimal(-9999)))
+            {
+                sql.Append(" AND C_BPartner_ID IN (SELECT C_BPartner_ID FROM C_DunningRunEntry WHERE C_DunningRun_ID=" + _run.Get_ID() + ")");
+            }
+
+            int count = 0;
+            IDataReader idr = null;
+            DataTable dt = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+
+                sql.Clear();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    GL_JournalLine_ID = 0; C_Currency_ID = 0; Amount = 0; openAmt = 0; C_BPartner_ID = 0;
+                    GL_JournalLine_ID = Utility.Util.GetValueOfInt(dr["GL_JournalLine_ID"]);
+                    C_Currency_ID = Utility.Util.GetValueOfInt(dr["C_Currency_ID"]);
+                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr["C_BPartner_ID"]);
+                    Amount = Utility.Util.GetValueOfDecimal(dr["Amount"]);
+                    openAmt = Utility.Util.GetValueOfDecimal(dr["openAmt"]);
+
+                    // checkup the amount
+                    if (Env.ZERO.CompareTo(openAmt) == 0)
+                    {
+                        continue;
+                    }
+                    //crate records at line tab of Dunning Run window
+                    if (CreatGLJournalLine(GL_JournalLine_ID, C_Currency_ID, C_BPartner_ID, Amount, openAmt))
+                    {
+                        count++;
+                    }
+                }
+                // idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, sql.ToString(), e);
+            }
+
+
+            return count;
+        }
+
+
+        /// <summary>
+        /// create journalline on line tab of dunning run window
+        /// </summary>
+        /// <param name="Gl_JournalLine_ID">Gl_JournalLine_ID</param>
+        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="C_BPartner_ID">Business partner</param>
+        /// <param name="Amount">Amount</param>
+        /// <param name="openAmt">OpenAmount</param>
+        /// <returns>true/false</returns>
+        private bool CreatGLJournalLine(int Gl_JournalLine_ID, int C_Currency_ID, int C_BPartner_ID, Decimal Amount, Decimal OpenAmt)
+        {
+            MDunningRunEntry entry = _run.GetEntry(C_BPartner_ID, _C_Currency_ID, _SalesRep_ID);
+            if (entry.Get_ID() == 0)
+            {
+                if (!entry.Save())
+                {
+                    ValueNamePair vp = VLogger.RetrieveError();
+                    if (vp != null)
+                    {
+                        string val = vp.GetName();
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + val);
+
+                    }
+                    else
+                    {
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
+
+                    }
+                    return false;
+                }
+            }
+            //
+            MDunningRunLine line = new MDunningRunLine(entry);
+            line.SetJournalLine(Gl_JournalLine_ID, C_Currency_ID, Amount, OpenAmt);
+
+            if (!line.Save())
+            {
+                ValueNamePair vp = VLogger.RetrieveError();
+                if (vp != null)
+                {
+
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + vp.GetName());
+                }
+                else
+                {
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
+                }
+                return false;
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// Add postdatedcheck to line tab of dunnig run Window
+        /// </summary>
+        /// <returns>no of postdaetedcheck inserted.</returns>
+        private int AddPostDatedCheck()
+        {
+            sql.Clear();
+            int VA027_PostDatedCheck_ID = 0;
+            Decimal payAmt = 0;
+
+            sql.Append("SELECT VA027_PostDatedCheck_ID,pdc.C_Currency_ID, pdc.C_BPartner_ID, " +
+                "CASE " +
+                "WHEN dt.DocBaseType='PDR' AND VA027_PayAmt>0 THEN VA027_PayAmt*-1 " +  //PDC Receivable : Amounts should be -ve 
+                "WHEN dt.DocBaseType='PDP' AND VA027_PayAmt<0 THEN VA027_PayAmt*-1 " +   //PDC Payable : Amounts should be +ve 
+                "ELSE VA027_PayAmt " +
+                "END AS VA027_PayAmt " +
+                "FROM  VA027_PostDatedCheck pdc INNER JOIN C_DocType dt on pdc.C_DocType_ID = dt.C_DocType_ID " +
+                "WHERE pdc.VA027_PaymentGenerated='N' " +
+                "AND DocStatus IN ('CO','CL')" +
+                "AND pdc.Ad_Client_ID =" + _run.GetAD_Client_ID() + " AND pdc.Ad_Org_ID=  " + _run.GetAD_Org_ID() +
+                 //	Only BP and BPGroup with Dunning defined
+                "AND EXISTS  (SELECT *  FROM C_DunningLevel dl  WHERE dl.C_DunningLevel_ID=  " + _run.GetC_DunningLevel_ID() +
+                " AND dl.C_Dunning_ID  IN  (SELECT COALESCE(bp.C_Dunning_ID, bpg.C_Dunning_ID)  FROM C_BPartner bp  " +
+                "INNER JOIN C_BP_Group bpg  ON (bp.C_BP_Group_ID =bpg.C_BP_Group_ID) WHERE pdc.C_BPartner_ID=bp.C_BPartner_ID ))");
+
+
+            if (_C_BPartner_ID != 0)
+            {
+                sql.Append(" AND pdc.C_BPartner_ID=" + _C_BPartner_ID);
+            }
+            else if (_C_BP_Group_ID != 0)
+            {
+                sql.Append(" AND EXISTS (SELECT * FROM C_BPartner bp "
+                    + "WHERE pdc.C_BPartner_ID=bp.C_BPartner_ID AND bp.C_BP_Group_ID=" + _C_BP_Group_ID + ")");	//	##3
+            }
+            // Only Sales Trx
+            if (_OnlySOTrx)
+            {
+                sql.Append(" AND pdc.IsSOTrx='Y'");
+            }
+            // only single currency
+            if (!_IsAllCurrencies)
+            {
+                sql.Append(" AND pdc.C_Currency_ID=" + _C_Currency_ID);
+            }
+            if (!_level.GetDaysAfterDue().Equals(new Decimal(-9999)))
+            {
+                sql.Append(" AND C_BPartner_ID IN (SELECT C_BPartner_ID FROM C_DunningRunEntry WHERE C_DunningRun_ID=" + _run.Get_ID() + ")");
+            }
+            int count = 0;
+            IDataReader idr = null;
+            DataTable dt = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+
+                sql.Clear();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    VA027_PostDatedCheck_ID = 0; C_Currency_ID = 0; payAmt = 0; C_BPartner_ID = 0;
+                    VA027_PostDatedCheck_ID = Utility.Util.GetValueOfInt(dr["VA027_PostDatedCheck_ID"]);
+                    C_Currency_ID = Utility.Util.GetValueOfInt(dr["C_Currency_ID"]);
+                    C_BPartner_ID = Utility.Util.GetValueOfInt(dr["C_BPartner_ID"]);
+                    payAmt = Utility.Util.GetValueOfDecimal(dr["VA027_PayAmt"]);
+
+                    // checkup the amount
+                    if (Env.ZERO.CompareTo(payAmt) == 0)
+                    {
+                        continue;
+                    }
+                    //crate records at line tab of Dunning Run window
+                    if (CreatePostDatedCheck(VA027_PostDatedCheck_ID, payAmt, C_Currency_ID, C_BPartner_ID))
+                    {
+                        count++;
+                    }
+                }
+                // idr.Close();
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, sql.ToString(), e);
+            }
+
+
+            return count;
+        }
+
+        /// <summary>
+        /// Create PDC on line tab of dunning run window
+        /// </summary>
+        /// <param name="VA027_PostDatedCheck_ID">Postdatedcheque</param>
+        /// <param name="payAmt">Amount</param>
+        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="C_BPartner_ID">Business Partner</param>
+        /// <returns>True/False</returns>
+        private bool CreatePostDatedCheck(int VA027_PostDatedCheck_ID, Decimal PayAmt, int C_Currency_ID, int C_BPartner_ID)
+        {
+            MDunningRunEntry entry = _run.GetEntry(C_BPartner_ID, _C_Currency_ID, _SalesRep_ID);
+            if (entry.Get_ID() == 0)
+            {
+                if (!entry.Save())
+                {
+                    ValueNamePair vp = VLogger.RetrieveError();
+                    if (vp != null)
+                    {
+                        string val = vp.GetName();
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + val);
+                    }
+                    else
+                    {
+                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
+                    }
+                    return false;
+                }
+            }
+            //
+            MDunningRunLine line = new MDunningRunLine(entry);
+            line.SetPostDatedCheque(VA027_PostDatedCheck_ID, C_Currency_ID, PayAmt);
+
+            if (!line.Save())
+            {
+                ValueNamePair vp = VLogger.RetrieveError();
+                if (vp != null)
+                {
+
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine" + vp.GetName()));
+                }
+                else
+                {
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
+                }
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -713,11 +1190,11 @@ namespace VAdvantage.Process
                                     if (vp != null)
                                     {
 
-                                        log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), vp.GetName());
+                                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine") + vp.GetName());
                                     }
                                     else
                                     {
-                                        log.SaveError(Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"), "");
+                                        log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "NotSaveDunRunLine"));
                                     }
 
                                 }

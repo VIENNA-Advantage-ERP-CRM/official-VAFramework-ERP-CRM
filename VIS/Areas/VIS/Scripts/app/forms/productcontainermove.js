@@ -115,7 +115,7 @@
             $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
             $lblToWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_WarehouseTo_ID") + '</label>');
-            $cmbToWarehouse = $('<select>');
+            $cmbToWarehouse = $('<select disabled class="vis-ev-col-readonly">');
             $formDataR.append($formDataRCtrlWrp);
             $formDataRCtrlWrp.append($cmbToWarehouse).append($lblToWarehouse);
 
@@ -551,15 +551,11 @@
                 success: function (data) {
                     var result = JSON.parse(data);
                     if (result) {
-                        $cmbToWarehouse.append("<option value= 0 >Select</option>");
                         for (var i = 0; i < result.length; i++) {
                             key = VIS.Utility.Util.getValueOfInt(result[i].ID);
                             value = VIS.Utility.Util.getValueOfString(result[i].Name);
                             $cmbToWarehouse.append(" <option value=" + key + ">" + value + "</option>");
                         }
-                    }
-                    else {
-                        $cmbToWarehouse.append("<option value= 0 >Select</option>");
                     }
                     $cmbToWarehouse.prop('selectedIndex', 0);
                 },

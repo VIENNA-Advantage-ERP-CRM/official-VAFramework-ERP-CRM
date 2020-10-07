@@ -234,12 +234,82 @@ namespace VAdvantage.Model
         public void SetPayment(int C_Payment_ID, int C_Currency_ID,
             Decimal payAmt, Decimal openAmt)
         {
+            SetPayment(C_Payment_ID, C_Currency_ID, payAmt, openAmt,0);
+        }
+
+        /// <summary>
+        /// set payment from dunningRunCreate process
+        /// </summary>
+        /// <param name="C_Payment_ID">payment</param>
+        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="payAmt">amount</param>
+        /// <param name="openAmt">openamont</param>
+        /// <param name="VA027_PostDatedCheck_ID">PostDatedCheque</param>
+        public void SetPayment(int C_Payment_ID, int C_Currency_ID,
+            Decimal payAmt, Decimal openAmt, int VA027_PostDatedCheck_ID)
+        {
             SetC_Payment_ID(C_Payment_ID);
             _C_CurrencyFrom_ID = C_Currency_ID;
             SetAmt(payAmt);
             SetOpenAmt(openAmt);
             SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
                 C_Currency_ID, GetC_CurrencyTo_ID(), GetAD_Client_ID(), GetAD_Org_ID()));
+            if (Env.IsModuleInstalled("VA027_") && VA027_PostDatedCheck_ID > 0)
+            {
+                Set_Value("VA027_PostDatedCheck_ID", VA027_PostDatedCheck_ID);
+            }
+        }
+
+
+        /// <summary>
+        /// Set CashJournalLine
+        /// </summary>
+        /// <param name="C_CashLine_ID">cash Jurnal Line</param>
+        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="payAmt">amount</param>
+        /// <param name="openAmt">openAmount</param>
+        public void SetcashLine(int C_CashLine_ID,
+            Decimal payAmt, Decimal openAmt, int C_Currency_ID)
+        {
+            Set_Value("C_CashLine_ID", C_CashLine_ID);
+            _C_CurrencyFrom_ID = C_Currency_ID;
+            SetAmt(payAmt);
+            SetOpenAmt(openAmt);
+            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+           C_Currency_ID, GetC_CurrencyTo_ID(), GetAD_Client_ID(), GetAD_Org_ID()));
+        }
+        /// <summary>
+        /// Set GLJournalLine 
+        /// </summary>
+        /// <param name="Gl_JournalLine_ID">cash Jurnal Line</param>
+        /// <param name="C_Currency_ID">currency</param>
+        /// <param name="Amtount">amount</param>
+        /// <param name="openAmt">openAmount</param>
+        public void SetJournalLine(int Gl_JournalLine_ID, int C_Currency_ID, Decimal Amount, Decimal OpenAmt)
+        {
+            Set_Value("GL_JournalLine_ID", Gl_JournalLine_ID);
+            _C_CurrencyFrom_ID = C_Currency_ID;
+            SetAmt(Amount);
+            SetOpenAmt(Amount);
+            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+           C_Currency_ID, GetC_CurrencyTo_ID(), GetAD_Client_ID(), GetAD_Org_ID()));
+        }
+        /// <summary>
+        /// set PostDatedCheque
+        /// </summary>
+        /// <param name="VA027_PostDatedCheck_ID">PostDatedCheque</param>
+        /// <param name="C_Currency_ID">Currency</param>
+        /// <param name="Amount">Amount</param>
+        /// <param name="openAmt">openAmount</param>
+        public void SetPostDatedCheque(int VA027_PostDatedCheck_ID, int C_Currency_ID, Decimal Amount)
+        {
+            Set_Value("VA027_PostDatedCheck_ID", VA027_PostDatedCheck_ID);
+            _C_CurrencyFrom_ID = C_Currency_ID;
+            SetAmt(Amount);
+            //openAmount same as Amount in PDC  whose payment is not generated
+            SetOpenAmt(Amount);
+            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+            C_Currency_ID, GetC_CurrencyTo_ID(), GetAD_Client_ID(), GetAD_Org_ID()));
         }
 
         /// <summary>
@@ -283,7 +353,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             //	Set Amt
-            if (GetC_Invoice_ID() == 0 && GetC_Payment_ID() == 0)
+            if (GetC_Invoice_ID() == 0 && GetC_Payment_ID() == 0 && Util.GetValueOfInt(Get_Value("C_CashLine_ID")) == 0 && Util.GetValueOfInt(Get_Value("GL_JournalLine_ID")) == 0 && (!Env.IsModuleInstalled("VA027_") || (Get_ColumnIndex("VA027_PostDatedCheck_ID") > 0 && Util.GetValueOfInt(Get_Value("VA027_PostDatedCheck_ID")) == 0)))
             {
                 SetAmt(Env.ZERO);
                 SetOpenAmt(Env.ZERO);

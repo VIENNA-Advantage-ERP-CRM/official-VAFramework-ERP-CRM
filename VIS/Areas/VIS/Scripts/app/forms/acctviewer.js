@@ -86,7 +86,8 @@
         this.ELEMENTTYPE_UserElement1 = "X1";
         this.ELEMENTTYPE_UserElement2 = "X2";
 
-
+        //show posted button or not ("Y" or ""), when "N" - not to show button
+        var notShowPosted;
 
         // get Accounting Schema
         this.getClientAcctSchema = function (AD_Client_ID, OrgID) {
@@ -841,9 +842,16 @@
             // South
             lblstatusLine.getControl().css("color", "rgba(var(--v-c-primary), 1)");//css("font-size", "28px").
             btnRePost.text(VIS.Msg.getMsg("RePost"));
-            btnRePost.show();
-            chkforcePost.find("label").text(VIS.Msg.getMsg("Force"));
-            chkforcePost.show();
+            if (notShowPosted) {
+                btnRePost.hide();
+                chkforcePost.find("label").text(VIS.Msg.getMsg("Force"));
+                chkforcePost.hide();
+            }
+            else {
+                btnRePost.show();
+                chkforcePost.find("label").text(VIS.Msg.getMsg("Force"));
+                chkforcePost.show();
+            }
         }
 
         function tab1Select() {
@@ -868,8 +876,14 @@
             rightSideDiv.hide();
             leftSideDiv.hide();
             resultDiv.css("display", "block");
-            btnRePost.show();
-            chkforcePost.show();
+            if (notShowPosted) {
+                btnRePost.hide();
+                chkforcePost.hide();
+            }
+            else {
+                btnRePost.show();
+                chkforcePost.show();
+            }
             lblAccSchemaFilter.getControl().show();
             cmbAccSchemaFilter.getControl().show();
         }
@@ -1170,8 +1184,10 @@
 
         function initializeComponent() {
 
-            topDiv = $("<div id='" + "topDiv_" + windowNo + "' class='vis-acctviewer-topwrap'>" +
-                "<div class='vis-acctviewer-tabswrap'><div id='" + "queryDiv_" + windowNo + "'style='display: inline-block; margin-right: 15px;' >" +
+            notShowPosted = VIS.Env.getCtx().getContext('#SHOW_REPOST').equals("N");
+            topDiv = $("<div id='" + "topDiv_" + windowNo + "' style='float: left; width: 100%;'>" +
+                "<div id='" + "queryDiv_" + windowNo + "'style='display: inline-block; margin-right: 15px; margin-top: 5px' >" +
+
                 "<label id='" + "lblquery_" + windowNo + "' class='VIS_Pref_Label_Font' style='cursor: pointer;font-size: 1rem;color: rgba(var(--v-c-primary), 1);'>"
                 + VIS.Msg.getMsg("ViewerQuery") + "</label></div>" +
                 "<div id='" + "resulttopDiv_" + windowNo + "' style='display: inline-block; width: 160px;'>" +

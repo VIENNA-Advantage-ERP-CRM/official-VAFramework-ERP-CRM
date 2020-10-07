@@ -597,6 +597,7 @@ html[dir="rtl"] .vis-Email-rytWrap {
     border-left: 0px;
 }
 
+
 html[dir="rtl"] .mr-3 {
     margin-right: 0 !important;
     margin-left: 1rem !important;
@@ -691,6 +692,12 @@ html[dir="rtl"] .vis-procss-more {
     right: auto !important;
     left: 29px;
 }
+
+html[dir="rtl"] .vis-ad-w-p-vc-gc [data-type='int'] {
+    text-align: left;
+}
+
+
 /*rtl css End here*/
 
 
