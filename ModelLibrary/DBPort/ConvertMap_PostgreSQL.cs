@@ -82,7 +82,7 @@ namespace VAdvantage.DBPort
             s_pg.Add("\\bCASCADE CONSTRAINTS\\b", "");
 
             //  Select
-            s_pg.Add("\\sFROM\\s+DUAL\\b", "");
+            s_pg.Add("\\bFROM\\s+DUAL\\b", "");
 
             //  Statements
             s_pg.Add("\\bELSIF\\b", "ELSE IF");
