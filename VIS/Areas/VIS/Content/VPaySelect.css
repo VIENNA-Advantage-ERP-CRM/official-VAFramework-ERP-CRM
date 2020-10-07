@@ -159,9 +159,7 @@
 .vis-leftsidebarouterwrap .vis-paymentselect-field:first-child {
     margin-top: 6px;
 }
-.vis-paymentPrint-field .vis-input-wrap input + label {
-    left: 10px;
-}
+
 
 @media (max-width: 1024px)
 {

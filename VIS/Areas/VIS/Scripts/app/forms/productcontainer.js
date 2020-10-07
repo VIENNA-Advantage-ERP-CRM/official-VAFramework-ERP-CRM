@@ -12,7 +12,8 @@
         this.windowNo;
         var $self = this;
         var $root = $("<div style='height:100%;background-color:white;' >");
-        var $bsyDiv = $("<div class='vis-apanel-busy' style='height:100%;position:relative;z-index: 2'>");
+        //var $bsyDiv = $("<div class='vis-apanel-busy' style='height:100%;position:relative;z-index: 2'>");
+        var $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         /**Create Main View Variable **/
         var $mainpageContent = null;

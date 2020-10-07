@@ -4,7 +4,7 @@
 
     function getTemplate(winNo) {
         var str =
-            ' <div class="vis-fp-bodycontent">                                                 ' +
+            ' <div class="vis-fp-bodycontent vis-formouterwrpdiv">                                                 ' +
             '     <div class="vis-fp-viwall" >                                                  ' +
             '         <span>' + VIS.Msg.getMsg("ViewMore") + '</span>                               ' +
             '     </div>                                                                       ' +

@@ -627,9 +627,18 @@
 
             if (this.btnToggel != null)
                 this.btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
+                    var borderspace=0
+                    
                     if (toggleside) {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 180;
+                        }
+                        else {
+                            borderspace = 0;
+
+                        }
                         //$self.btnRefresh.hide();
-                        $self.btnToggel.animate({ borderSpacing: 0 }, {
+                        $self.btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
@@ -647,7 +656,14 @@
                         });
                     }
                     else {
-                        $self.btnToggel.animate({ borderSpacing: 180 }, {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 0;
+                        }
+                        else {
+                            borderspace = 180;
+
+                        }
+                        $self.btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');

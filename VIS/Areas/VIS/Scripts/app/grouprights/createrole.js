@@ -31,7 +31,7 @@
                 '</select>' +
                 '<label>' + VIS.Msg.getMsg("VIS_UserLevel") + '</label>' +
             '</div></div></div>' +
-            '<div class="vis-group-assinRole-data">' +
+            '<div class="vis-group-assinRole-data vis-group-asignrole-btnwrap">' +
                 '<a style="float:left"  tabindex="3"  class="vis-group-btn vis-group-orgAccess vis-group-pointer vis-group-grayBtn">' + VIS.Msg.getMsg("VIS_OrgAccess") + '</a>' +
                 '<a  tabindex="4"  class="vis-group-btn vis-group-Save vis-group-pointer vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg("Save") + '</a>' +
             '</div>' +
@@ -68,7 +68,7 @@
          Create busyIndicator
      */
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='vis-apanel-busy' style='height:96%; width:98%;'></div>");
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             $bsyDiv[0].style.visibility = "hidden";
             $root.append($bsyDiv);
         }

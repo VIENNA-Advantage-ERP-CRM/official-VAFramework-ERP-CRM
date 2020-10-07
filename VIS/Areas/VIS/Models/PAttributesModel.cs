@@ -115,6 +115,7 @@ namespace VIS.Models
                 //obj.tableStucture += "</td>";
 
                 obj.tableStucture += "<td>";
+                obj.tableStucture += "<div style='display: flex'>";
                 obj.tableStucture += "<div class='input-group vis-input-wrap' style='width: 50%; float: left;'>";
                 obj.tableStucture += "<div class='vis-control-wrap'>";
                 obj.tableStucture += "<label class='vis-ec-col-lblchkbox'><input type='checkbox' style='float:left;' id=chkNewEdit_" + windowNo
@@ -124,6 +125,7 @@ namespace VIS.Models
                 obj.tableStucture += "<label id=lblEdit_" + windowNo + " class='vis-ec-col-lblchkbox'><input type='checkbox' id=chkEdit_" + windowNo
                     + ">" + Msg.GetMsg(ctx, "EditRecord") + "</label></div></div>";
                 //obj.tableStucture += "<input type='checkbox' style='height: 31px;' id=chkEdit_" + windowNo + " >";
+                obj.tableStucture += "</div>";
                 obj.tableStucture += "</td>";
                 obj.tableStucture += "</tr>";
 

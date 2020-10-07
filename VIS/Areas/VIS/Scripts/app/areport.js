@@ -1615,7 +1615,7 @@
 
     function ReportViewerContainer(reportInfo) {
         var $root = $('<div class="vis-reportrootdiv"> ');
-        var bsyDiv = $("<div class='vis-apanel-busy bsyCrsyVwr' style='width:98%;height:98%;position:absolute'>");
+        var bsyDiv = $('<div class="vis-busyindicatorouterwrap bsyCrsyVwr"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         this.getRoot = function () {
             return $root;
         };

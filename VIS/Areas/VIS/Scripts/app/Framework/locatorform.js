@@ -150,8 +150,8 @@
 
             //check Arebic Calture
             if (VIS.Application.isRTL) {
-                Okbtn.css("margin-right", "-132px");
-                cancelbtn.css("margin-right", "55px");
+                //Okbtn.css("margin-right", "-132px");
+                cancelbtn.css("margin-right", "10px");
                 divCreateNew.children(0).css("float", "left");
             }
 

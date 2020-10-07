@@ -37,11 +37,11 @@
         };
 
         function busyIndicatior() {
-            $bsyDiv = $("<div>");
-            $bsyDiv.css({
-                "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
-                "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1'
-            });
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$bsyDiv.css({
+            //    "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
+            //    "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1'
+            //});
             $bsyDiv[0].style.visibility = "hidden";
             $mainDiv.append($bsyDiv);
         };

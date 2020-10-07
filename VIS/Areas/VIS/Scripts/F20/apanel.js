@@ -200,9 +200,9 @@
             setToolTipMessages();
         };
 
-         var setToolTipMessages = function () {
+        var setToolTipMessages = function () {
             $btnFilter.attr('title', VIS.Msg.getMsg('FilterRecord'));
-             $spanSetting.attr('title', VIS.Msg.getMsg('Settings'));
+            $spanSetting.attr('title', VIS.Msg.getMsg('Settings'));
         };
 
         this.createSearchAutoComplete = function (text) {
@@ -792,32 +792,51 @@
                 }
             }
             if (dir == 'r') {
-                if ((cPos + offSet) >= ulWidth - offSet)
+
+                if ((cPos + offSet) >= ulWidth - offSet && !VIS.Application.isRTL)
                     return;
                 var ms = ulWidth - dWidth;
                 s = cPos + offSet;
                 $divTabControl.animate({ scrollLeft: s > ms ? ms : s }, 1000);
             }
             else if (dir == 'b') {
-                if (cPos == 0)
-                    return;
-                s = (cPos - offSet);
-                $divTabControl.animate({ scrollLeft: s < 0 ? 0 : s }, 1000);
-                //$divTabControl.scrollLeft(cPos - offSet);
+                if (VIS.Application.isRTL) {
+                    s = (cPos - offSet);
+                    $divTabControl.animate({ scrollLeft: s > 0 ? 0 : s }, 1000);
+                }
+                else {
+                    if (cPos == 0)
+                        return;
+                    s = (cPos - offSet);
+                    $divTabControl.animate({ scrollLeft: s < 0 ? 0 : s }, 1000);
+                    //$divTabControl.scrollLeft(cPos - offSet);
+                }
             }
             if (dir == 'rl') {
                 if ((cPos + offSet) >= ulWidth - offSet)
                     return;
-                var ms = ulWidth - dWidth;
-                //s = cPos + offSet;
-                $divTabControl.animate({ scrollLeft: ms }, 500);
+                if (VIS.Application.isRTL) {
+                    $divTabControl.animate({ scrollLeft: 0 }, 500);
+                }
+                else {
+                    var ms = ulWidth - dWidth;
+                    //s = cPos + offSet;
+                    $divTabControl.animate({ scrollLeft: ms }, 500);
+                }
             }
             else if (dir == 'bf') {
-                if (cPos == 0)
-                    return;
-                s = (cPos - offSet);
-                $divTabControl.animate({ scrollLeft: 0 }, 500);
-                //$divTabControl.scrollLeft(cPos - offSet);
+                if (VIS.Application.isRTL) {
+                    var ms = ulWidth - dWidth;
+                    //s = cPos + offSet;
+                    $divTabControl.animate({ scrollLeft: -ms }, 500);
+                }
+                else {
+                    if (cPos == 0)
+                        return;
+                    s = (cPos - offSet);
+                    $divTabControl.animate({ scrollLeft: 0 }, 500);
+                    //$divTabControl.scrollLeft(cPos - offSet);
+                }
             }
 
         });
@@ -1018,8 +1037,8 @@
             if (!query)
                 query = new VIS.Query();
             //if (query != null && query.getIsActive()) {
-                this.curGC.applyFilters(query);
-                //, this.curGC.treeNodeID, this.treeID
+            this.curGC.applyFilters(query);
+            //, this.curGC.treeNodeID, this.treeID
             //}
             //else {
             //    //var maxRows = VIS.MRole.getMaxQueryRecords();
