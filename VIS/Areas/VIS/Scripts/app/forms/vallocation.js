@@ -1361,7 +1361,16 @@
 
             });
             //Currency Conversion Date change event
-            $conversionDate.on("change", function (e) {
+            $conversionDate.on("blur", function (e) {
+                var dateVal = Date.parse($conversionDate.val());
+                var currentTime = new Date(parseInt(dateVal));
+                //check if date is valid
+                //this check will work for 01/01/1970 on words
+                if (!isNaN(currentTime.getTime()) && currentTime.getTime() < 0) {
+                    VIS.ADialog.warn("VIS_InvalidDate");
+                    return;
+                }
+
                 conversionDate = $conversionDate.val();
                 //when select MultiCurrency without selecting conversionDate it will return a Message
                 if ($vchkMultiCurrency.is(':checked') && $conversionDate.val() == "") {
@@ -7074,6 +7083,7 @@
                     selectedPayments = [];
                     selectedCashlines = [];
                     SelectedGL = [];
+                    getGLChanges = []; //clear the array which is holding Credit or Debit Amount records.
                     setallgridsLoaded = true;
                     loadBPartner();
                     //loadGLDataGrid(e);
