@@ -4455,12 +4455,10 @@
 
         //Open PAttribute form
         function OpenPAttributeDialog(oldValue) {
-
             var M_AttributeSetInstance_ID = (oldValue == null) ? 0 : oldValue;
             var M_Product_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Product_ID");
-            var M_ProductBOM_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_ProductBOM_ID");
+            var M_ProductBOM_ID = VIS.context.getWindowContext(windowNop, 3, "M_ProductBOM_ID");
             var M_Locator_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Locator_ID");
-
             self.log.config("M_Product_ID=" + M_Product_ID + "/" + M_ProductBOM_ID + ",M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", AD_Column_ID=" + self.AD_Column_ID);
             var productWindow = self.AD_Column_ID == 8418;		//	HARDCODED
 
@@ -4482,7 +4480,7 @@
                     data: {
                         productId: M_Product_ID,
                         adColumn: self.AD_Column_ID,
-                        windowNo: windowNop
+                        windowNo: windowNop,
                     },
                     success: function (data) {
                         exclude = data.result;
