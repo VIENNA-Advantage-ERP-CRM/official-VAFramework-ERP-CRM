@@ -54,6 +54,7 @@ namespace VAdvantage.Model
                 SetAD_Table_ID(AD_Table_ID);
             if (Record_ID > 0)
                 SetRecord_ID(Record_ID);
+            SetAD_Role_ID(ctx.GetAD_Role_ID());
         }
     }
 }
