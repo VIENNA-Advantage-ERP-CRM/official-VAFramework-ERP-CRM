@@ -6643,6 +6643,7 @@
                     if (result != "") {
                         //alert(result);
                         VIS.ADialog.info("", true, result, "");
+                        setallgridsLoaded = true;
                         loadBPartner();
                         $bsyDiv[0].style.visibility = "hidden";
                         return "";
@@ -6787,6 +6788,7 @@
                 success: function (result) {
                     if (result != "") {
                         VIS.ADialog.info("", true, result, "");
+                        setallgridsLoaded = true;
                         loadBPartner();
                         $bsyDiv[0].style.visibility = "hidden";
                         return "";
@@ -6933,6 +6935,7 @@
                     if (result != "") {
                         var e;
                         VIS.ADialog.info("", true, result, "");
+                        setallgridsLoaded = true;
                         loadBPartner();
                         //loadGLDataGrid(e);
                         $bsyDiv[0].style.visibility = "hidden";
