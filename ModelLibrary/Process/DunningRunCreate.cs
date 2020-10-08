@@ -214,17 +214,23 @@ namespace VAdvantage.Process
                 param = new SqlParameter[1];
             }
 
-            sql.Append("SELECT I.C_INVOICE_ID,  I.C_CURRENCY_ID, I.GRANDTOTAL, INVOICEOPEN(I.C_INVOICE_ID,Ips.C_INVOICEPAYSCHEDULE_ID),  "
+            sql.Append("SELECT I.C_INVOICE_ID,  I.C_CURRENCY_ID, INVOICEOPEN(I.C_INVOICE_ID,Ips.C_INVOICEPAYSCHEDULE_ID),  "
                     + " DAYSBETWEEN(@param1,IPS.DUEDATE) AS DaysDue ,"
                     + " i.IsInDispute, i.C_BPartner_ID, "
+                    + "CASE " 
+                    + " WHEN i.issotrx ='Y' AND i.isreturntrx='N' THEN ABS(I.GrandTotal ) "                        //Invoice Customer
+                    + " WHEN i.issotrx ='Y' AND i.isreturntrx='Y' AND I.GrandTotal > 0 THEN I.GrandTotal * -1 "    //AR Credit Memo
+                    + " WHEN i.issotrx ='N' AND i.isreturntrx ='N' AND I.GrandTotal > 0 THEN I.GrandTotal * -1 "   //Invoice Vendor
+                    + " ELSE I.GrandTotal"                                                                         // AP Credit Memo
+                    + " END AS GrandTotal,"
                     + " CASE "
-                    + " WHEN i.issotrx   ='Y' AND i.isreturntrx='N'" // Invoice Customer
-                    + " THEN ips.DueAmt"
-                    + " WHEN i.issotrx   ='Y' AND i.isreturntrx='Y'" // AR Credit Memo
+                    + " WHEN i.issotrx   ='Y' AND i.isreturntrx='N' "                   // Invoice Customer
+                    + " THEN ABS(ips.DueAmt )"
+                    + " WHEN i.issotrx   ='Y' AND i.isreturntrx='Y' AND ips.DueAmt > 0" // AR Credit Memo
                     + " THEN ips.DueAmt * -1"
-                    + " WHEN i.issotrx   ='N' AND i.isreturntrx='N'" // Invoice Vendor
+                    + " WHEN i.issotrx   ='N' AND i.isreturntrx='N' AND ips.DueAmt > 0" // Invoice Vendor
                     + " THEN ips.DueAmt * -1"
-                    + " ELSE ips.DueAmt"                             // AP Credit Memo
+                    + " ELSE ips.DueAmt"                                                // AP Credit Memo
                     + " END AS DueAmt,"
                     + " ips.C_INVOICEPAYSCHEDULE_ID"
                     + " FROM C_Invoice i "
@@ -671,7 +677,7 @@ namespace VAdvantage.Process
         }
 
         /// <summary>
-        /// Add fee line on run tab of dunning run window.
+        /// Add fee l````````````ine on run tab of dunning run window.
         /// </summary>
         private void AddFees()
         {
