@@ -120,7 +120,7 @@
         var tree_ID = treeID;
         var treeNode_ID = treeNodeID;
         var windowID = curTab.getAD_Window_ID();
-
+        var AD_Table_ID = AD_Table_ID;
         var rv = new VIS.ReportViewer(windowNo, curTab);
 
         if (treeNodeID > 0) {
@@ -311,7 +311,7 @@
                 pi.setAD_User_ID(VIS.context.getAD_User_ID());
                 pi.setAD_Client_ID(VIS.context.getAD_Client_ID());
             }
-
+            pi.setTable_ID(Ad_Table_ID);
             pi.setAD_PInstance_ID(ad_PInstance_ID);
             pi.setPageNo(pageNO);
             pi.setFileType(fileType);
@@ -347,7 +347,7 @@
         }
 
         this.setAD_Table_ID = function (AD_Table_ID) {
-            Ad_Table_ID = Ad_Table_ID;
+            Ad_Table_ID = AD_Table_ID;
         };
 
         this.showSummary = function (isSummary) {
