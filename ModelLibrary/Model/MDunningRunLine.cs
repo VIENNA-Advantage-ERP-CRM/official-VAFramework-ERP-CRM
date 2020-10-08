@@ -419,8 +419,8 @@ namespace VAdvantage.Model
                     + "WHERE e.C_DunningRunEntry_ID=l.C_DunningRunEntry_ID), "
                 + "QTY=(SELECT COUNT(*)"
                 + " FROM C_DunningRunLine l "
-                    + "WHERE e.C_DunningRunEntry_ID=l.C_DunningRunEntry_ID "
-                    + " AND (NOT C_Invoice_ID IS NULL OR NOT C_Payment_ID IS NULL))"
+                    + "WHERE e.C_DunningRunEntry_ID=l.C_DunningRunEntry_ID )"
+                    //+ " AND (NOT C_Invoice_ID IS NULL OR NOT C_Payment_ID IS NULL))"
                 + " WHERE C_DunningRunEntry_ID=" + GetC_DunningRunEntry_ID();
 
             DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
