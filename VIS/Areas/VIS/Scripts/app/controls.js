@@ -246,7 +246,9 @@
             var isReadOnly = mField.getIsReadOnly();
             var isUpdateable = mField.getIsEditable(false);
             var windowNo = mField.getWindowNo();
-            var tabNo = mTab.getTabNo();
+            var tabNo = 0;
+            if (mTab)
+                tabNo = mTab.getTabNo();
 
             if (displayType == VIS.DisplayType.Button) {
 
@@ -371,12 +373,12 @@
             }
             else if (displayType == VIS.DisplayType.PAttribute) {
 
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true,tabNo);
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true, tabNo);
                 txtP.setField(mField);
                 ctrl = txtP;
             }
             else if (displayType == VIS.DisplayType.GAttribute) {
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false,tabNo);
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false, tabNo);
                 txtP.setField(mField);
                 ctrl = txtP;
             }
@@ -729,7 +731,7 @@
             this.ctrl.removeClass();
             if (e.length > 0)
                 this.ctrl.addClass(e);
-            this.activeClass = e;                    
+            this.activeClass = e;
             //this.ctrl.css('background-color', color);
             //console.log(this.ctrl.css('background-color'));
         }
@@ -922,10 +924,10 @@
 
         /* Event */
         $ctrl.on("blur", function (e) {
-           // e.stopPropagation();
+            // e.stopPropagation();
             var newValue = $ctrl.val();
-           
-            if (self.obscureType && newValue!="" && self.oldValue == newValue) {
+
+            if (self.obscureType && newValue != "" && self.oldValue == newValue) {
                 self.ctrl.val(VIS.Env.getObscureValue(self.obscureType, newValue));
                 self.setReadOnly(true);
             }
@@ -970,10 +972,10 @@
      */
     VTextBox.prototype.setValue = function (newValue) {
         if (this.oldValue != newValue) {
-            
+
             //console.log(newValue);
 
-            if (this.obscureType && (!this.mField.getIsInserting() || this.ctrl.val() !="")) {
+            if (this.obscureType && (!this.mField.getIsInserting() || this.ctrl.val() != "")) {
                 this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
                 this.setReadOnly(true);
             }
@@ -3445,8 +3447,8 @@
         var length = fieldLength;
 
         //Init Control
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length,'data-type':'int' });
-       
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3466,7 +3468,7 @@
 
         // Assign Value
         this.dotFormatter = VIS.Env.isDecimalPoint();
-       
+
         // For testing purpose
         //this.dotFormatter = true;
 
@@ -3719,7 +3721,7 @@
         var length = fieldLength;
         //Init Control
         var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length, 'data-type': 'int' });
-       
+
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
