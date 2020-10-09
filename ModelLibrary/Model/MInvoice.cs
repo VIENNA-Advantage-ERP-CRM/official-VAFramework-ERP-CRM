@@ -1343,8 +1343,8 @@ namespace VAdvantage.Model
                 }
             }
 
-            //APInvoice Case: invoice Reference can't be same for same financial year and Business Partner          
-            if (Is_ValueChanged("InvoiceReference") && !IsSOTrx() && !IsReturnTrx() && checkFinancialYear() > 0)
+            //APInvoice Case: invoice Reference can't be same for same financial year and Business Partner and DoCTypeTarget and DateAcct      
+            if ((Is_ValueChanged("DateAcct")|| Is_ValueChanged("C_BPartner_ID") || Is_ValueChanged("C_DocTypeTarget_ID") || Is_ValueChanged("InvoiceReference")) && !IsSOTrx() && !IsReturnTrx() && checkFinancialYear() > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(),"InvoiceReferenceExist"));
                 return false;
@@ -1528,8 +1528,8 @@ namespace VAdvantage.Model
                             //}
                         }
                     }
-                    //}
-                }
+                    //}   
+                } 
             }
 
             return true;
