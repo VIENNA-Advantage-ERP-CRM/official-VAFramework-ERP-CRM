@@ -570,7 +570,7 @@ namespace VAdvantage.Common
             }
             else if (fileType.Equals(ProcessCtl.ReportType_HTML))
             {
-                reportTypeForLog = MActionLog.ACTIONTYPE_Download;
+                reportTypeForLog = MActionLog.ACTIONTYPE_View;
                 descriptonForLog = "Report Viewed";
             }
             if (processID > 0)
