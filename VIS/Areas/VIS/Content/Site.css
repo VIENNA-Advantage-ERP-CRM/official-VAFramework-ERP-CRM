@@ -1174,11 +1174,7 @@ html[dir="rtl"] .vis-auth-dialog
     right: 20px;
 }
 
-html[dir="rtl"] .vis-filter-dialog
-{
-    left:auto;
-    right: 15px;
-}
+
 .vis-css-treeview ul li input[type="checkbox"] {
     position: absolute;
 }

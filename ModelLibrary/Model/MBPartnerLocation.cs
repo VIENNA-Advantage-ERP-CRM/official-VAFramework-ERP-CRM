@@ -162,6 +162,7 @@ namespace VAdvantage.Model
             //if (!newRecord)
             //    return true;
 
+
             if (Util.GetValueOfString(Get_ValueOld("Name")) == GetName() && Util.GetValueOfInt(Get_ValueOld("C_Location_ID")) == GetC_Location_ID())
             {
                 return true;

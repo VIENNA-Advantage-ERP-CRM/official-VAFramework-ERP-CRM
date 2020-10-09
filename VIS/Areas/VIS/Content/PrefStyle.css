@@ -899,6 +899,7 @@ input:required:valid {
     padding: 8px 15px;
     cursor: pointer;
     font-weight: normal;
+    margin-right: 10px;
 }
 
 /*#file-input {

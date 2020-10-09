@@ -208,7 +208,7 @@ namespace VAdvantage.Process
 
                             if (dr != null)
                             {
-                                // change done for PostgreSQL
+                                // change done for PostgreSQL.
                                 if (DB.IsPostgreSQL())
                                     sbHTML.Append("<div class='vis-val-tc-col-red-r'>" + Util.GetValueOfString(dr["Column_Name"]) + " (" + Util.GetValueOfString(dr["Data_Type"]) + ")" + "</div>");
                                 else

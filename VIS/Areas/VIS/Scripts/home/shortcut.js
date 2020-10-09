@@ -142,7 +142,11 @@
         var $root = $("<div>");
         //var $divScroll = $('<div  class="scrollerVertical" style="width:auto">').html('<div class="vis-apanel-busy" style="height:280px;position:static"> </div>');
         // Manish 29/6/2017
-        var $divScroll = $('<div style="width:auto;z-index:1">').html('<div class="vis-apanel-busy" style="height:280px;position:static"> </div>');
+        //var $divScroll = $('<div style="width:auto;z-index:1">').html('<div class="vis-apanel-busy" style="height:280px;position:static"> </div>');
+
+        var $divScroll = $('<div style="width:auto;z-index:1">').html('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+
+        
         // end 29/6/2017
 
         var log = VIS.Logging.VLogger.getVLogger("SettingDialog");

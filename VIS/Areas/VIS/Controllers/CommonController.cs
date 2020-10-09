@@ -2995,9 +2995,13 @@ namespace VIS.Controllers
             return false;
         }
 
-        public string DownloadPdf(Ctx ctx, int archiveId)
+        public string DownloadPdf(Ctx _ctx, int archiveId)
         {
-            MArchive ar = new MArchive(ctx, archiveId, null);//  m_archives[m_index];
+            MArchive ar = new MArchive(_ctx, archiveId, null);//  m_archives[m_index];
+            MSession sess = MSession.Get(_ctx);
+            
+            //Save Action Log
+            VAdvantage.Common.Common.SaveActionLog(_ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetAD_Table_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);
 
             byte[] report = ar.GetBinaryData();
             //if (report != null && (report.Length > 1048576))

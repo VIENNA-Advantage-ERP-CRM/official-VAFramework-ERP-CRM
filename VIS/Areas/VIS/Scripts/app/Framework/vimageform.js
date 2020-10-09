@@ -39,11 +39,11 @@
             cancelbtn = $root.find("#btnCancel_" + windowNo);
             delbtn = $root.find("#btnImgDelete_" + windowNo);
 
-            if (VIS.Application.isRTL) {
-                Okbtn.css("margin-right", "-128px");
-                cancelbtn.css("margin-right", "110px");
-                delbtn.css("margin-right", "55px");
-            }
+            //if (VIS.Application.isRTL) {
+            //    Okbtn.css("margin-right", "-128px");
+            //    cancelbtn.css("margin-right", "110px");
+            //    delbtn.css("margin-right", "55px");
+            //}
             // if ad_image_id > 0, it is for update or delete
             if (ad_image_id > 0) {
                 delbtn.css("display", "inline-block");

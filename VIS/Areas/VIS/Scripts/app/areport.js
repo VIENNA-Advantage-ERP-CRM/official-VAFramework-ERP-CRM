@@ -119,8 +119,8 @@
         var list = null;
         var tree_ID = treeID;
         var treeNode_ID = treeNodeID;
-
-
+        var windowID = curTab.getAD_Window_ID();
+        var AD_Table_ID = AD_Table_ID;
         var rv = new VIS.ReportViewer(windowNo, curTab);
 
         if (treeNodeID > 0) {
@@ -203,7 +203,7 @@
             if (pp != null) id = pp.Key;
             else id = Ad_Table_ID;
 
-            var data = rv.getGenerateReportPara(queryInfo, query.getCode(0), (Ad_Table_ID > 0 && AD_Tab_ID > 0), treeNode_ID, tree_ID, IsSummary, 0, 1, "", id);
+            var data = rv.getGenerateReportPara(queryInfo, query.getCode(0), (Ad_Table_ID > 0 && AD_Tab_ID > 0), treeNode_ID, tree_ID, IsSummary, 0, 1, "", id, windowID);
 
 
             $.ajax({
@@ -302,19 +302,28 @@
         var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
         var IsSummary = true;
         var pi = null;
+        var windowID = curTab.getAD_Window_ID();
 
-        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, ad_PInstance_ID, pageNO, fileType, ad_PrintFormat_ID) {
+        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, ad_PInstance_ID, pageNO, fileType, ad_PrintFormat_ID,AD_Window_ID) {
 
             if (!pi) {
                 pi = new VIS.ProcessInfo("", 0, Ad_Table_ID, 0);
                 pi.setAD_User_ID(VIS.context.getAD_User_ID());
                 pi.setAD_Client_ID(VIS.context.getAD_Client_ID());
             }
-
+            pi.setTable_ID(Ad_Table_ID);
             pi.setAD_PInstance_ID(ad_PInstance_ID);
             pi.setPageNo(pageNO);
             pi.setFileType(fileType);
             pi.set_AD_PrintFormat_ID(ad_PrintFormat_ID);
+            pi.setAD_Window_ID(AD_Window_ID);
+            if (AD_Window_ID > 0) {
+                pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_WINDOW);
+            }
+            else {
+                pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_FORM);
+            }
+            pi.setOriginName(VIS.context.getWindowContext(windowNo, "WindowName"));
 
             var data = {
                 processInfo: pi.toJson(),
@@ -338,12 +347,16 @@
         }
 
         this.setAD_Table_ID = function (AD_Table_ID) {
-            Ad_Table_ID = Ad_Table_ID;
+            Ad_Table_ID = AD_Table_ID;
         };
 
         this.showSummary = function (isSummary) {
             IsSummary = isSummary;
         };
+
+        this.setAD_Window_ID = function (windowID) {
+            windowID = windowID;
+        }
 
         this.setReportBytes = function (bytes) {
             reportBytes = bytes;
@@ -742,7 +755,7 @@
                     isCreateNew = true;
                 }
 
-                var data = self.getGenerateReportPara(queryInfo, code, isCreateNew, node_ID, tree_ID, IsSummary, 0, cmbPage.val(), "", id);
+                var data = self.getGenerateReportPara(queryInfo, code, isCreateNew, node_ID, tree_ID, IsSummary, 0, cmbPage.val(), "", id, windowID);
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
@@ -927,7 +940,7 @@
             //}
             setBusy(true);
 
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, "", AD_PrintFormat_ID);
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, "", AD_PrintFormat_ID, windowID);
 
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
@@ -973,7 +986,7 @@
             //var id = null;
             //if (processInfo != null) id = processInfo.Key;
             //else id = Ad_Table_ID;
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_PDF, AD_PrintFormat_ID);
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_PDF, AD_PrintFormat_ID,windowID);
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                 dataType: "json",
@@ -1050,7 +1063,7 @@
             //var id = null;
             //if (processInfo != null) id = processInfo.Key;
             //else id = Ad_Table_ID;
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_CSV, AD_PrintFormat_ID);
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_CSV, AD_PrintFormat_ID, windowID);
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                 dataType: "json",
@@ -1302,6 +1315,7 @@
 
     function APrint(AD_Process_ID, table_ID, record_ID, WindowNo, recIds, curTab, isShowRTF) {
         //var overla = null;
+        var windowID = curTab.getAD_Window_ID();
         $menu.off("click");
         $menu.on("click", "LI", function (e) {
             var filetype = $(e.target).data("val");
@@ -1448,7 +1462,10 @@
         };
 
         function process(csv, callback, filetype) {
-
+            var actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_FORM;
+            if (windowID > 0) {
+                actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_WINDOW;
+            }
             if (!recIds || recIds.length == 0) {
                 $.ajax({
                     url: VIS.Application.contextUrl + "JsonData/GeneratePrint/",
@@ -1459,7 +1476,9 @@
                         AD_Table_ID: table_ID,
                         Record_ID: record_ID,
                         WindowNo: WindowNo,
-                        filetype: filetype
+                        filetype: filetype,
+                        actionOrigin: actionOrigin,
+                        originName: VIS.context.getWindowContext(WindowNo, "WindowName")
 
                     },
                     success: function (data) {
@@ -1546,7 +1565,9 @@
                         AD_Table_ID: table_ID,
                         RecIDs: recIds,
                         WindowNo: WindowNo,
-                        filetype: filetype
+                        filetype: filetype,
+                        actionOrigin: actionOrigin,
+                        originName: VIS.context.getWindowContext(WindowNo, "WindowName")
 
                     },
                     success: function (data) {
@@ -1594,7 +1615,7 @@
 
     function ReportViewerContainer(reportInfo) {
         var $root = $('<div class="vis-reportrootdiv"> ');
-        var bsyDiv = $("<div class='vis-apanel-busy bsyCrsyVwr' style='width:98%;height:98%;position:absolute'>");
+        var bsyDiv = $('<div class="vis-busyindicatorouterwrap bsyCrsyVwr"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         this.getRoot = function () {
             return $root;
         };

@@ -251,10 +251,10 @@
             //------------------------------
             $root.append($row1.append($innerRow)).append(rowContiner);
             // to set process button static in design it will not scroll with other filters
-            var $divProcess = $('<div style="padding-right: 15px;float: right; margin-top: 10px;">');
+            var $divProcess = $('<div style="padding-right: 10px;float: right; margin-top: 10px;">');
             $divProcess.append(' <a class="vis-group-btn vis-group-create vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg('Process') + '</a>');
             $row1.append($divProcess);
-            var $divSearch = $('<div style="padding-right: 15px;float: right; margin-top: 10px;">');
+            var $divSearch = $('<div style="padding-right: 10px;float: right; margin-top: 10px;">');
             $divSearch.append(' <a class="vis-group-create vis-group-grayBtn" id="vis_srchbtn_' + $self.windowNo + '" style="float: left;">' + VIS.Msg.getMsg('Search') + '</a>');
             $row1.append($divSearch);
             $root.append($row1.append($innerRow).append($divProcess).append($divSearch)).append(rowContiner);
