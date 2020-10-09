@@ -213,7 +213,8 @@ namespace VIS.Helpers
             ProcessInfo pi = new ProcessInfo().FromList(processInfo);
 
             //Saved Action Log
-         VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(),pi.GetOriginName(), pi.GetTable_ID(),pi.GetRecord_ID(),pi.GetAD_Process_ID(),pi.GetTitle(),pi.GetFileType(),"","");
+            if (pi.GetIsReport())
+                VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(), pi.GetOriginName(), pi.GetTable_ID(), pi.GetRecord_ID(), pi.GetAD_Process_ID(), pi.GetTitle(), pi.GetFileType(), "", "");
             pi.SetAD_User_ID(ctx.GetAD_User_ID());
             pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
             if (pi.GetAD_PInstance_ID() == 0)
@@ -429,7 +430,7 @@ namespace VIS.Helpers
             return rep;
         }
 
-       
+
         // vinay bhatt window id
 
         /// <summary>
@@ -541,11 +542,11 @@ namespace VIS.Helpers
             Query _query = null;
             int Record_ID = 0;
             object AD_tab_ID = 0;
-            
+
             //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, Util.GetValueOfString(nProcessInfo["ActionOrigin"]), Util.GetValueOfString(nProcessInfo["OriginName"]),
                 Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]), Util.GetValueOfInt(nProcessInfo["Process_ID"]),
-                MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(),fileType,"","");
+                MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(), fileType, "", "");
 
 
             // _ctx.SetContext("#TimeZoneName", "India Standard Time");
@@ -749,7 +750,7 @@ namespace VIS.Helpers
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
             //Saved Action Log
-            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, AD_Table_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType,"","");
+            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, AD_Table_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType, "", "");
 
             try
             {

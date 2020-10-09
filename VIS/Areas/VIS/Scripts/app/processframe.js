@@ -439,7 +439,10 @@
             pi.setIsReport(self.isReport);
             //Set Action Origin and Origin name
             pi.setActionOrigin(self.ActionOrigin);
-            pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
+            var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
+            if (!orginName)
+                orginName = "Menu";
+            pi.setOriginName(orginName);
             var ctl = new VIS.ProcessCtl(self, pi, null);
             pi.setFileType($cmbType.val());
 
@@ -764,7 +767,10 @@
         function createControls(panel, repObj) {
             //Set Action Origin and Origin name
             pctl.pi.setActionOrigin(self.ActionOrigin);
-            pctl.pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
+            var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
+            if (!orginName)
+                orginName = "Menu";
+            pctl.pi.setOriginName(orginName);
             var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
 
             canExport = VIS.MRole.getDefault().getIsCanExport(AD_Table_ID);
@@ -953,12 +959,18 @@
                 pctl.pi.setFileType(fileType);
                 //Set Action Origin and Origin name
                 pctl.pi.setActionOrigin(self.ActionOrigin);
-                pctl.pi.setOriginName(VIS.context.getWindowContext(self.windowNo, "WindowName"));
+                 var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
+            if (!orginName)
+                    orginName = "Menu";
+                pctl.pi.setOriginName(orginName);
                 var data = { processInfo: pctl.pi.toJson(), parameterList: pctl.paraList }
                 return data;
             };
 
             function getExecuteReportforCsvPara(pageNo, PageSize) {
+                var orginName = pctl.pi.getOriginName();
+                if (!orginName)
+                    orginName = "Menu";
                 var data = {
                     AD_Process_ID: pctl.pi.getAD_Process_ID(),
                     Name: pctl.pi.getTitle(),
@@ -970,7 +982,7 @@
                     saveAll: false,
                     //Set Action Origin and Origin name
                     ActionOrigin: pctl.pi.getActionOrigin(),
-                    OriginName: pctl.pi.getOriginName()
+                    OriginName: orginName
                 }
                 return data;
             };
@@ -989,6 +1001,9 @@
             };
 
             function getExecuteReportComposerData(AD_Process_ID, Name, AD_PInstance_ID, AD_Table_ID, Record_ID, pageNumber, page_Size, printAllPages) {
+                var orginName = pctl.pi.getOriginName();
+                if (!orginName)
+                    orginName = "Menu";
                 var data = {
                     AD_Process_ID: AD_Process_ID,
                     Name: Name,
@@ -1000,7 +1015,7 @@
                     printAllPages: printAllPages,
                     //Set Action Origin and Origin name
                     ActionOrigin: pctl.pi.getActionOrigin(),
-                    OriginName: pctl.pi.getOriginName()
+                    OriginName: orginName
 
                 }
 
