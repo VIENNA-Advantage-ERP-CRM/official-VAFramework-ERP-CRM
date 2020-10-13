@@ -5286,7 +5286,6 @@ namespace VAdvantage.Model
                 foreach (MAsset ass in asset)
                 {
                     ass.SetIsActive(false);
-                    ass.SetIsActive(false);
                     ass.AddDescription("(" + reversal.GetDocumentNo() + " #" + rLine.GetLine() + "<-)");
                     ass.Save();
                 }
