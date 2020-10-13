@@ -2113,12 +2113,12 @@ html[dir="rtl"] .vis-attachhistory-save-btn {
 }
 .vis-attachhistory-apanel-tabcontrol-ul > li.vis-attachhistory-apanel-tab-selected {
     color: rgba(var(--v-c-primary), 1);
-    font-size: 1.7rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 .vis-attachhistory-apanel-tabcontrol-ul > li {
     /* font-family: helvetica; */
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 400;
     /* color: #535353; */
     margin: 0px 10px;

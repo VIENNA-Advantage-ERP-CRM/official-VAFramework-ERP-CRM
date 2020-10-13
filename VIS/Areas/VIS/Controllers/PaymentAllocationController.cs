@@ -21,7 +21,6 @@ namespace VIS.Controllers
         /// <summary>
         /// to create view allocation against cash journal line
         /// </summary>
-        /// <param name="paymentData">Selected payment data</param>
         /// <param name="cashData"> Selected cash line data</param>
         /// <param name="invoiceData">Selected invoice data</param>
         /// <param name="currency">Currency ID</param>
@@ -37,6 +36,8 @@ namespace VIS.Controllers
         /// <param name="DateAcct">Account Date</param>
         /// <param name="_CurrencyType_ID">Currency ConversionType ID</param>
         /// <param name="isInterBPartner">Inter Business Partner</param>
+        /// <param name="conversionDate"> Conversion Date </param>
+        /// <param name="chk"> for MultiCurrency Check </param>
         /// <returns></returns>
         [HttpPost]
         public string SaveCashData(string cashData, string invoiceData, string currency, bool isCash, int _C_BPartner_ID, int _windowNo, string payment, string DateTrx,
@@ -73,10 +74,8 @@ namespace VIS.Controllers
         /// to create view allocation against Payment
         /// </summary>
         /// <param name="paymentData">Selected payment data</param>
-        /// <param name="cashData"> Selected cash line data</param>
         /// <param name="invoiceData">Selected invoice data</param>
         /// <param name="currency">Currency ID</param>
-        /// <param name="isCash"> bool Value </param>
         /// <param name="_C_BPartner_ID"> Business Partner ID </param>
         /// <param name="_windowNo"> Window Number</param>
         /// <param name="payment"> Payment ID </param>
@@ -88,6 +87,8 @@ namespace VIS.Controllers
         /// <param name="DateAcct">Account Date</param>
         /// <param name="_CurrencyType_ID">Currency ConversionType ID</param>
         /// <param name="isInterBPartner">Inter Business Partner</param>
+        /// <param name="conversionDate"> Conversion Date </param>
+        /// <param name="chk"> for MultiCurrency Check </param>
         /// <returns></returns>
         [HttpPost]
         public string SavePaymentData(string paymentData, string invoiceData, string currency, int _C_BPartner_ID, int _windowNo, string payment, string DateTrx,
@@ -135,18 +136,18 @@ namespace VIS.Controllers
         /// <summary>
         /// To get all the unallocated payments
         /// </summary>
+        /// <param name="AD_Org_ID">Organization ID</param>
         /// <param name="_C_Currency_ID">Currency</param>
         /// <param name="_C_BPartner_ID">Business Partner</param>
         /// <param name="isInterBPartner">Inter-Business Partner</param>
         /// <param name="chk">For MultiCurrency Check</param>
         /// <param name="page">Page Number</param>
         /// <param name="size">Page Size</param>
-        /// <param name="toDate">to Date</param>
-        /// <param name="fromDate">From Date</param>
-        /// <param name="srchText">Search Document No</param>
-        /// <param name="AD_Org_ID">Organization ID</param>
-        /// <param name="docBaseType">DocBaseType</param>
         /// <param name="c_docType_ID">DocType ID</param>
+        /// <param name="docBaseType">DocBaseType</param>
+        /// <param name="fromDate">From Date</param>
+        /// <param name="toDate">to Date</param>
+        /// <param name="srchText">Search Document No</param>
         /// <returns>No of unallocated payments</returns>
         public JsonResult GetPayments(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size,int c_docType_ID,string docBaseType, DateTime? fromDate, DateTime? toDate,string srchText)
         {
@@ -158,17 +159,17 @@ namespace VIS.Controllers
         /// <summary>
         /// To get all the unallocated Cash Lines
         /// </summary>
+        /// <param name="AD_Org_ID">Organisation ID</param>
         /// <param name="_C_Currency_ID">Currency</param>
         /// <param name="_C_BPartner_ID">Business Partner</param>
         /// <param name="isInterBPartner">Inter-Business Partner</param>
         /// <param name="chk">For MultiCurrency Check</param>
         /// <param name="page">Page Number</param>
         /// <param name="size">Page Size</param>
-        /// <param name="AD_Org_ID">Organisation ID</param>
-        /// <param name="srchText">Search for Document No</param>
         /// <param name="fromDate">From Date</param>
-        /// <param name="paymentType_ID">Payment Type ID</param>
         /// <param name="toDate">To Date</param>
+        /// <param name="paymentType_ID">Payment Type ID</param>
+        /// <param name="srchText">Search for Document No</param>
         /// <returns>No of unallocated Cash Lines</returns>
         public JsonResult GetCashJounral(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, int page, int size, DateTime? fromDate, DateTime? toDate,string paymentType_ID,string srchText)
         {
@@ -181,6 +182,7 @@ namespace VIS.Controllers
         /// <summary>
         /// To get all the invoices 
         /// </summary>
+        /// <param name="AD_Org_ID">Organization ID</param>
         /// <param name="_C_Currency_ID">Currency ID</param>
         /// <param name="_C_BPartner_ID"> Business Partner ID</param>
         /// <param name="isInterBPartner">bool Value </param>
@@ -190,12 +192,11 @@ namespace VIS.Controllers
         /// <param name="size">Total Page Size</param>
         /// <param name="docNo">Document Number</param>
         /// <param name="c_docType_ID">Document Type ID</param>
+        /// <param name="docBaseType">DocBase Type</param>
         /// <param name="fromDate">From Date</param>
         /// <param name="toDate">To Date</param>
         /// <param name="conversionDate">ConversionType Date</param>
         /// <param name="srchText">Search the Document No</param>
-        /// <param name="docBaseType">DocBase Type</param>
-        /// <param name="AD_Org_ID">Organization ID</param>
         /// <returns></returns>
         public JsonResult GetInvoice(int AD_Org_ID, int _C_Currency_ID, int _C_BPartner_ID, bool isInterBPartner, bool chk, string date, int page, int size, string docNo, int c_docType_ID,string docBaseType, DateTime? fromDate, DateTime? toDate, string conversionDate,string srchText)
         {
@@ -298,15 +299,15 @@ namespace VIS.Controllers
 
         /// <summary>
         /// To get all the unallocated GL Lines
+        /// <param name="AD_Org_ID"> Organization ID </param>
         /// <param name="_C_Currency_ID">Currency</param>
         /// <param name="_C_BPartner_ID">Business Partner</param>
         /// <param name="page">Page Number</param>
         /// <param name="size">Page Size</param>
-        /// <paramref name="AD_Org_ID"/>Organization ID
-        /// <paramref name="chk"/>MultiCurrency 
         /// <paramref name="fromDate"/>From Date
-        /// <paramref name="srchText"/>Search Document No
         /// <paramref name="toDate"/>To Date
+        /// <paramref name="srchText"/>Search Document No
+        /// <paramref name="chk"/>MultiCurrency 
         /// <returns>No of unallocated GL Lines</returns>
         public JsonResult GetGLData(int AD_Org_ID,int _C_Currency_ID, int _C_BPartner_ID, int page, int size, DateTime? fromDate, DateTime? toDate,string srchText,bool chk)
         {
@@ -328,11 +329,14 @@ namespace VIS.Controllers
         /// <param name="C_BPartner_ID"> Business Partner</param>
         /// <param name="AD_Org_ID">Org ID</param>
         /// <param name="C_CurrencyType_ID">Currency ConversionType ID</param>
+        /// <param name="DateAcct"> Account Date </param>
         /// <param name="applied"> Applied Amount </param>
         /// <param name="discount">Discount Amount</param>
         /// <param name="writeOff">Writeoff Amount</param>
         /// <param name="open">Open Amount</param>
         /// <param name="payment">Name of the Applied Amount for Payment grid</param>
+        /// <param name="conversionDate"> Conversion Date </param>
+        /// <param name="chk"> bool MultiCurrency </param>
         /// <returns>Will Return Msg Either Allocation is Saved or Not Saved</returns>
         [HttpPost]
         public string saveGLJData(string paymentData, string invoiceData, string cashData, string glData, string DateTrx, string _windowNo, int C_Currency_ID, int C_BPartner_ID, string AD_Org_ID, int C_CurrencyType_ID, string DateAcct, string applied, string discount, string open, string payment, string writeOff, string conversionDate, bool chk)
