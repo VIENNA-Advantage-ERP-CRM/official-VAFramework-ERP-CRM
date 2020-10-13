@@ -23,6 +23,7 @@ using System.Data;
 using System.Globalization;
 using System.Web.UI;
 using VAdvantage.Logging;
+using System.Net.Http.Headers;
 
 namespace VAdvantage.Model
 {
@@ -43,9 +44,9 @@ namespace VAdvantage.Model
         /// <param name="M_InOutLine_ID">shipment line</param>
         /// <param name="trxName">transaction</param>
         /// <returns>asset or null</returns>
-        public static MAsset GetFromShipment(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        public static List<MAsset> GetFromShipment(Ctx ctx, int M_InOutLine_ID, Trx trxName)
         {
-            MAsset retValue = null;
+            List<MAsset> retValue = new List<MAsset>();
             String sql = "SELECT * FROM A_Asset WHERE M_InOutLine_ID=" + M_InOutLine_ID;
             DataSet ds = new DataSet();
             try
@@ -54,7 +55,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    retValue = new MAsset(ctx, dr, trxName);
+                    retValue.Add(new MAsset(ctx, dr, trxName));
                 }
                 ds = null;
             }
@@ -238,7 +239,6 @@ namespace VAdvantage.Model
             {
                 Set_Value("VAFAM_AssetType", _assetGroup.Get_Value("VAFAM_AssetType").ToString());
                 Set_Value("VAFAM_DepreciationType_ID", Utility.Util.GetValueOfInt(_assetGroup.Get_Value("VAFAM_DepreciationType_ID")));
-
             }
             ////////////////////////////////////
 
