@@ -4188,72 +4188,81 @@ namespace VIS.Models
         public decimal? getAmount(string AccountType, bool isCustomer, bool isVendor, decimal? dbAmt, decimal? crAmt)
         {
             decimal? amt = 0;
-            if (isCustomer && isVendor) // Customer & Vendor Both
+            //to get amount for gl line as suggested by ashish on 28 june 2020 we need to check if dbAmount then return positive otherwise negeative 
+            if (dbAmt != 0)
             {
-                if (AccountType == "A" || AccountType == "L")
-                {
-                    if (dbAmt > 0)
-                    {
-                        amt = dbAmt;
-                    }
-                    if (crAmt > 0)
-                    {
-                        amt = (-1 * crAmt);
-                    }
-                }
+                amt = Math.Abs(dbAmt.Value);
             }
-            else if (isCustomer && !isVendor) // Only Customer
+            if (crAmt != 0 && crAmt > 0)
             {
-                if (AccountType == "A")
-                {
-                    if (dbAmt > 0)
-                    {
-                        amt = dbAmt;
-                    }
-                    if (crAmt > 0)
-                    {
-                        amt = (-1 * crAmt);
-                    }
-                }
+                amt = Decimal.Negate(crAmt.Value);
+            }
+            //if (isCustomer && isVendor) // Customer & Vendor Both
+            //{
+            //    if (AccountType == "A" || AccountType == "L")
+            //    {
+            //        if (dbAmt > 0)
+            //        {
+            //            amt = dbAmt;
+            //        }
+            //        if (crAmt > 0)
+            //        {
+            //            amt = (-1 * crAmt);
+            //        }
+            //    }
+            //}
+            //else if (isCustomer && !isVendor) // Only Customer
+            //{
+            //    if (AccountType == "A")
+            //    {
+            //        if (dbAmt > 0)
+            //        {
+            //            amt = dbAmt;
+            //        }
+            //        if (crAmt > 0)
+            //        {
+            //            amt = (-1 * crAmt);
+            //        }
+            //    }
 
-                if (AccountType == "L")
-                {
-                    if (dbAmt > 0)
-                    {
-                        amt = dbAmt;
-                    }
-                    if (crAmt > 0)
-                    {
-                        amt = (-1 * crAmt);
-                    }
-                }
+            //    if (AccountType == "L")
+            //    {
+            //        if (dbAmt > 0)
+            //        {
+            //            amt = dbAmt;
+            //        }
+            //        if (crAmt > 0)
+            //        {
+            //            amt = (-1 * crAmt);
+            //        }
+            //    }
 
-            }
-            else if (!isCustomer && isVendor) // Only Vendor
-            {
-                if (AccountType == "A")
-                {
-                    if (dbAmt > 0)
-                    {
-                        amt = (-1 * dbAmt);
-                    }
-                    if (crAmt > 0)
-                    {
-                        amt = crAmt;
-                    }
-                }
-                if (AccountType == "L")
-                {
-                    if (dbAmt > 0)
-                    {
-                        amt = (-1 * dbAmt);
-                    }
-                    if (crAmt > 0)
-                    {
-                        amt = crAmt;
-                    }
-                }
-            }
+            //}
+            //else if (!isCustomer && isVendor) // Only Vendor
+            //{
+            //    if (AccountType == "A")
+            //    {
+            //        if (dbAmt > 0)
+            //        {
+            //            amt = (-1 * dbAmt);
+            //        }
+            //        if (crAmt > 0)
+            //        {
+            //            amt = crAmt;
+            //        }
+            //    }
+            //    if (AccountType == "L")
+            //    {
+            //        if (dbAmt > 0)
+            //        {
+            //            amt = (-1 * dbAmt);
+            //        }
+            //        if (crAmt > 0)
+            //        {
+            //            amt = crAmt;
+            //        }
+            //    }
+            //}
             return amt;
         }
 
