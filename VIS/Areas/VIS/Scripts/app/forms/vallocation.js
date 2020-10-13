@@ -247,7 +247,8 @@
             "Payment_Type",
             "CreditOrDebit",
             "Account",
-            "VIS_Check"
+            "VIS_Check",
+            "AD_OrgTrx_ID"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -2383,7 +2384,7 @@
             //    + '<span class="vis-allocation-lbldifferenceAmt" style="float:right;">'
             //    + '</span>');
 
-            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_Org_ID + '</label>');
+            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_OrgTrx_ID + '</label>');
 
             $resultDiv.append('<div class="vis-allocation-leftControls">'
                 + '<div class="input-group vis-input-wrap">'
