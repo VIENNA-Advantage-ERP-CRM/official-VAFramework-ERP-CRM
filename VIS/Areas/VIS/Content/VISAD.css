@@ -2314,7 +2314,7 @@ findImg {
     width: calc(100% - 300px);
     height: 100%;
     float: left;
-    padding: 10px 15px;
+    padding: 10px 10px 0 10px;
 }
 
 .vis-allocation-leftControls {
@@ -2343,8 +2343,12 @@ findImg {
     width: 91%;
 }
 /*added new gl grid*/
-.vis-allocate-paymentdiv, .vis-allocate-cashdiv, .vis-allocate-invoicediv, .vis-allocation-gl-grid {
+.vis-allocate-paymentdiv,
+.vis-allocate-cashdiv,
+.vis-allocate-invoicediv,
+.vis-allocation-gl-grid {
     height: 50%;
+    padding-bottom: 10px;					 
 }
 /*
 .vis-allocate-cashdiv {
@@ -2354,9 +2358,12 @@ findImg {
     height:33%;
 }*/
 
-.vis-allocate-paymentSum, .vis-allocate-cashSum, .vis-allocate-invoiceSum {
-    text-align: right;
-    margin-right: 10px;
+.vis-allocate-paymentSum,
+.vis-allocate-cashSum,
+.vis-allocate-invoiceSum {
+    /*text-align: right;*/
+    /*margin-right: 10px;*/
+    white-space: nowrap;				
 }
 
 
@@ -2366,7 +2373,8 @@ findImg {
     float: left;
     width: 92%;
     position: absolute;
-    bottom: 20PX;
+    bottom: 20px;
+	padding-top: 15px;				  
 }
 
 .vis-allocate-root {
@@ -2378,7 +2386,7 @@ findImg {
 }
 /*added new gl grid*/
 .vis-allocation-payment-grid, .vis-allocation-cashLine-grid, .vis-allocation-invoice-grid, .vis-allocation-gl-grid {
-    height: 92%;
+    height: 50%;
     width: 100%;
 }
 /*Added new classes*/
@@ -4735,8 +4743,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     margin-top: 0;
     height: 40px;
 }
-.vis-info-ctrlwrap select, .vis-info-ctrlwrap input:not([type="button"]),
-.vis-acctviewer-tabswrap {
+.vis-info-ctrlwrap select, .vis-info-ctrlwrap input:not([type="button"]) {
     flex: 1;
 }
 .vis-info-ctrlwrap button, .vis-info-l-s-wrap button {
@@ -4756,7 +4763,7 @@ td.vis-processpara-table-td3.vis-processpara-table-SplitUI {
     flex: 1;
 }
 .vis-leftpanel-inn-wrap {
-    height: calc(100% - 59px);
+    height: calc(100% - 90px);
     padding: 15px 10px;
     overflow: auto;
 }
@@ -4926,31 +4933,23 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
 .vis-markmodulemainwrap .vis-gc-vpanel-table-label-checkbox input[type="checkbox"] {
     margin-right: 7px;
 }
-.vis-valpreferencedatawrp,
-.VIS-AMTD-formBtns,
-.vis-acctviewer-topwrap,
-.vis-acctviewer-tabswrap,
-.vis-valpreferencedatawrp .vis-input-wrap + label,
-.vis-acctviewerbottdiv,
-.vis-excelimportbtn a {
+.vis-valpreferencedatawrp {
     display: flex;
-}
-.vis-valpreferencedatawrp .vis-input-wrap + labels,
-.vis-acctviewerbottdiv,
-.vis-excelimportbtn a,
-.vis-acctviewer-tabswrap{
-    align-items: center;
 }
 .vis-valpreferencedatawrp .vis-input-wrap + label {
     flex: 1;
     padding-left: 10px;
-    margin-bottom: 15px !important;    
+    margin-bottom: 15px !important;
+    display: flex;
+    align-items: center;			  
 }
 .vis-process-toolbar .vis-icon-menuclose .vis-cross {
     padding: 0 10px;
 }
 .vis-acctviewerbottdiv {
+	display: flex;
     float: left;
+	align-items: center;											   
     width: 100%;
 }
 .vis-acctviewerbottdiv > label{
@@ -4965,25 +4964,57 @@ a.VIS_Pref_btn-2, a.VIS_Pref_btn-2:hover {
     padding: 5px 10px;
 }
 .vis-excelimportbtn {font-size: 1.2rem;}
-
+.VIS-AMTD-formBtns,
+.vis-allocation-topFields-wrap,
+.vis-doc-AllocOuter-wrap > div,
+.vis-DiffernceWrapDiv {
+    display: flex;
+}			
 .vis-excelimportbtn a {
     height: 35px;
+    display: flex;
+    align-items: center;																						
     background: rgba(var(--v-c-on-secondary), 1);
 }
-.vis-orgaccess-description {
-    float: left;
-    margin-left: 30px;
+
+.vis-allocation-topFields-wrap {
+    flex: 1;
 }
-.vis-acctviewer-topwrap {
-    float: left;
-    width: 100%;
+.vis-allocation-topFields-wrap > div {
+    padding: 0 5px;
 }
-.vis-acctviewer-tabswrap {
-    height: 35px;
+.vis-doc-AllocOuter-wrap {
+    padding-right: 5px;
 }
-.vis-process-description-Span p {
+.vis-doc-AllocOuter-wrap > div p {
     margin-bottom: 0;
 }
+.vis-allocation-topFields-wrap > div:last-child {
+    padding-right: 0;
+}
+.vis-DiffernceWrapDiv {
+    padding: 0 10px;
+}
+.vis-DiffernceWrapDiv .vis-allocation-inputLabels {
+    margin: 0;
+}
+.vis-allocation-leftpanel-bottomDiv {
+    float: left;
+    width: 100%;
+    margin-top: 5px;
+						  
+				 
+}
+.vis-allocation-resultdiv .vis-allocation-leftControls:last-child .vis-input-wrap {
+    margin-bottom: 0;
+}
+.vis-DiffernceWrapDiv .vis-allocation-leftControls:last-child {
+    text-align: right;
+    flex: 2;
+}
+.vis-DiffernceWrapDiv .vis-allocation-leftControls:first-child {
+    flex: 1;
+}					
 
 /*busy indicator css for vis*/
 .vis-busyindicatorouterwrap {

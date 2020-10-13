@@ -4546,6 +4546,11 @@ namespace VAdvantage.Model
                     Msg.Translate(GetCtx(), "C_Payment_ID") + ": " + GetDocumentNo(),
                     Get_TrxName());
             alloc.SetAD_Org_ID(GetAD_Org_ID());
+            // Update ConversionDate from payment to view allocation 
+            if (alloc.Get_ColumnIndex("DateAcct") > 0) 
+            {
+                alloc.SetConversionDate(GetDateAcct());
+            }		 
             // Update conversion type from payment to view allocation (required for posting)
             if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
             {

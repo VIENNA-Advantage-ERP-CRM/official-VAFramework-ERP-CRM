@@ -461,19 +461,24 @@ namespace VAdvantage.Model
         public static String VSS_PAYMENTTYPE_Payment = "P";
         /** Receipt = R */
         public static String VSS_PAYMENTTYPE_Receipt = "R";
+
+        /* Payment Return = A */
+         public static String VSS_PAYMENTTYPE_PaymentReturn = "A";
+         /* Receipt Return = E */
+         public static String VSS_PAYMENTTYPE_ReceiptReturn = "E";																  
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
         public bool IsVSS_PAYMENTTYPEValid(String test)
         {
-            return test == null || test.Equals("P") || test.Equals("R");
+            return test == null || test.Equals("A") || test.Equals("E") || test.Equals("P") || test.Equals("R");
         }
         /** Set Payment Type.
         @param VSS_PAYMENTTYPE Payment Type */
         public void SetVSS_PAYMENTTYPE(String VSS_PAYMENTTYPE)
         {
             if (!IsVSS_PAYMENTTYPEValid(VSS_PAYMENTTYPE))
-                throw new ArgumentException("VSS_PAYMENTTYPE Invalid value - " + VSS_PAYMENTTYPE + " - Reference_ID=1000108 - P - R");
+                throw new ArgumentException("VSS_PAYMENTTYPE Invalid value - " + VSS_PAYMENTTYPE + " - Reference_ID=1000108 - A - E - P - R");
             if (VSS_PAYMENTTYPE != null && VSS_PAYMENTTYPE.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");
