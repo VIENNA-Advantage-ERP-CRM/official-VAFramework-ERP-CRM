@@ -5032,23 +5032,23 @@
                         event.preventDefault();
                         return;
                     }
-                    //logic to not set greater appliedAmount then open amount
-                    else if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
+                    ////logic to not set greater appliedAmount then open amount
+                    //else if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
 
-                    }
-                    else {
-                        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
-                    }
+                    //}
+                    //else {
+                    //    $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
+                    //}
                 }
-                else {
-                    //logic to not set greater appliedAmount then open amount
-                    if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
+                //else {
+                //    //logic to not set greater appliedAmount then open amount
+                //    if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
 
-                    }
-                    else {
-                        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
-                    }
-                }
+                //    }
+                //    else {
+                //        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
+                //    }
+                //}
             }
             //when AppliedAmt cell changed then only this function will call
             if (colIndex == event.column) {
@@ -6628,7 +6628,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val() },
+                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val()},
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -6774,7 +6774,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val() },
+                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -6920,7 +6920,7 @@
         function glData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, DateAcct) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VIS/PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val() },
+                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
