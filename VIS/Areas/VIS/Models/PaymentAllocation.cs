@@ -332,7 +332,7 @@ namespace VIS.Models
                             else
                             {
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                if (neg_Invoice_IDS.Contains(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"])))
+                                if (neg_Invoice_IDS.Contains(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"])))
                                 {
                                     OverUnderAmt = 0;
                                     isScheduleAllocated = true;
@@ -447,7 +447,7 @@ namespace VIS.Models
 
                             if (AppliedAmt < 0)
                             {
-                                neg_Invoice_IDS.Add(C_Invoice_ID);
+                                neg_Invoice_IDS.Add(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
                             }
                             //  Apply Discounts and WriteOff only first time
                             DiscountAmt = Env.ZERO;
@@ -635,12 +635,12 @@ namespace VIS.Models
                                 mpay2 = null;
 
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["cinvoiceid"])))
+                                if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"])))
                                 {
                                     //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                                     NOverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(negInvList[c][open]),
                                     Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
-                                    neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
+                                    neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]));
                                     is_NegScheduleAllocated = false;
                                 }
                                 else
@@ -976,12 +976,12 @@ namespace VIS.Models
                                 mpay2 = null;
 
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["cinvoiceid"])))
+                                if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"])))
                                 {
                                     //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                                     NOverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(negInvList[c][open]),
                                     Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
-                                    neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
+                                    neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]));
                                     is_NegScheduleAllocated = false;
                                 }
                                 else
@@ -1821,7 +1821,7 @@ namespace VIS.Models
                                 else
                                 {
                                     //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                    if (neg_Invoice_IDS.Contains(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"])))
+                                    if (neg_Invoice_IDS.Contains(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"])))
                                     {
                                         OverUnderAmt = 0;
                                         isScheduleAllocated = true;
@@ -1971,7 +1971,7 @@ namespace VIS.Models
                                 //if the amount is -ve then the id will add in this list for Set OverUnderAmt for invoice to invoice allocation for -ve amount 
                                 if (AppliedAmt < 0)
                                 {
-                                    neg_Invoice_IDS.Add(C_Invoice_ID);
+                                    neg_Invoice_IDS.Add(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
                                 }
                                 //  Apply Discounts and WriteOff only first time
                                 DiscountAmt = Env.ZERO;
@@ -2161,12 +2161,12 @@ namespace VIS.Models
                                     mpay2 = null;
 
                                     //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                    if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["cinvoiceid"])))
+                                    if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"])))
                                     {
                                         //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                                         NOverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(negInvList[c][open]),
                                         Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
-                                        neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
+                                        neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]));
                                         is_NegScheduleAllocated = false;
                                     }
                                     else
@@ -2507,12 +2507,12 @@ namespace VIS.Models
                                     mpay2 = null;
 
                                     //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                    if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["cinvoiceid"])))
+                                    if (!neg_Invoice_IDS.Contains(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"])))
                                     {
                                         //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                                         NOverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(negInvList[c][open]),
                                         Decimal.Add(Util.GetValueOfDecimal(negInvList[c][applied.ToLower()]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
-                                        neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["cinvoiceid"]));
+                                        neg_Invoice_IDS.Add(Util.GetValueOfInt(negInvList[c]["c_invoicepayschedule_id"]));
                                         is_NegScheduleAllocated = false;
                                     }
                                     else
@@ -2965,7 +2965,7 @@ namespace VIS.Models
         /// <returns>Return Empty if period is OPEN else it will return ErrorMsg</returns>
         public string CheckPeriodState(DateTime DateTrx, int AD_Org_ID)
         {
-            if (!MPeriod.IsOpen(ctx, DateTrx, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION,AD_Org_ID))
+            if (!MPeriod.IsOpen(ctx, DateTrx, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, AD_Org_ID))
             {
                 return Msg.GetMsg(ctx, "PeriodClosed");
             }
@@ -3668,7 +3668,7 @@ namespace VIS.Models
                 }
                 //to get invoice schedules against related business partner
                 if (!string.IsNullOrEmpty(relatedBpids))
-                    sqlInvoice.Append( " OR i.C_BPartner_ID IN ( " + relatedBpids + " ) ");
+                    sqlInvoice.Append(" OR i.C_BPartner_ID IN ( " + relatedBpids + " ) ");
 
                 sql += " AND ((invoiceOpen(C_Invoice_ID,C_InvoicePaySchedule_ID)) *i.MultiplierAP ) <> 0 ";
                 sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "i", true, false);
@@ -4935,7 +4935,7 @@ namespace VIS.Models
                             else
                             {
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                if (neg_Invoice_IDs.Contains(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"])))
+                                if (neg_Invoice_IDs.Contains(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"])))
                                 {
                                     overUnderAmt = 0;
                                 }
@@ -5033,7 +5033,7 @@ namespace VIS.Models
                             {
                                 if (Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]) < 0)
                                 {
-                                    neg_Invoice_IDs.Add(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
+                                    neg_Invoice_IDs.Add(Util.GetValueOfInt(rowsInvoice[i]["c_invoicepayschedule_id"]));
                                 }
                                 paid = (Util.GetValueOfDecimal(rowsGL[j]["paidAmt"]) + netAmt);
                                 rowsGL[j]["paidAmt"] = paid.ToString();
@@ -5226,12 +5226,12 @@ namespace VIS.Models
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negList[j]["c_invoicepayschedule_id"]), trx);
                                 mpay2 = null;
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
-                                if (!neg_Invoice_IDs.Contains(Util.GetValueOfInt(negList[j]["cinvoiceid"])))
+                                if (!neg_Invoice_IDs.Contains(Util.GetValueOfInt(negList[j]["c_invoicepayschedule_id"])))
                                 {
                                     //// Updated over/under amount on allocation line, it should be open -( applied + discount + writeoff ) Update by vivek on 05/01/2018 issue reported by Savita
                                     NOverUnderAmt = Decimal.Subtract(Util.GetValueOfDecimal(negList[j][open]),
                                     Decimal.Add(Util.GetValueOfDecimal(negList[j][applied]), Decimal.Add(NDiscountAmt, NWriteOffAmt)));
-                                    neg_Invoice_IDs.Add(Util.GetValueOfInt(negList[j]["cinvoiceid"]));
+                                    neg_Invoice_IDs.Add(Util.GetValueOfInt(negList[j]["c_invoicepayschedule_id"]));
                                     is_NegScheduleAllocated = false;
                                 }
                                 else
