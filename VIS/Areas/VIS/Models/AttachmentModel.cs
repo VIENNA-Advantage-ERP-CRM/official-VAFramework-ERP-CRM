@@ -99,6 +99,15 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             return att.GetFile(AD_AttachmentLine_ID);
         }
 
+        public string DownloadAttachment(Ctx _ctx, string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID)
+        {
+            //Saved Action Log
+            MAttachment att = new MAttachment(_ctx, AD_Attachment_ID, null);
+
+            return att.GetFile(AD_AttachmentLine_ID);
+        }
+
+
         public int DeleteAttachment(string AttachmentLines)
         {
             if (AttachmentLines == null || AttachmentLines.Length == 0)
