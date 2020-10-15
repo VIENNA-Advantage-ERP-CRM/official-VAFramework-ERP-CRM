@@ -2961,15 +2961,16 @@ namespace VIS.Models
         /// to check period is open or not for allocation
         /// </summary>
         /// <param name="DateTrx">Transaction Date</param>
+        /// <param name="AD_Org_ID"> Trx_Organisation_ID </param>
         /// <returns>Return Empty if period is OPEN else it will return ErrorMsg</returns>
-        public string CheckPeriodState(DateTime DateTrx)
+        public string CheckPeriodState(DateTime DateTrx, int AD_Org_ID)
         {
-            if (!MPeriod.IsOpen(ctx, DateTrx, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
+            if (!MPeriod.IsOpen(ctx, DateTrx, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION,AD_Org_ID))
             {
                 return Msg.GetMsg(ctx, "PeriodClosed");
             }
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(ctx, DateTrx))
+            if (MNonBusinessDay.IsNonBusinessDay(ctx, DateTrx, AD_Org_ID))
             {
                 return Msg.GetMsg(ctx, "DateIsInNonBusinessDay");
             }
