@@ -226,6 +226,7 @@ namespace VAdvantage.Process
                         log.Config("Opt out: " + Name);
                         continue;
                     }
+                    // JID_1858 IF User's Notification Type is Notice is allow to send notification to respective User
                     if ((X_AD_User.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
                         || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
                         && (email == null || email.Length == 0))
@@ -239,7 +240,7 @@ namespace VAdvantage.Process
                         }
                     }
                     if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
-                        && AD_Role_ID >= 0)
+                        && AD_Role_ID < 0)
                     {
                         log.Config("No internal User: " + Name);
                         continue;
