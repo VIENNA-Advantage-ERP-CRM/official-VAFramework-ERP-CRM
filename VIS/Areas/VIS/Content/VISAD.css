@@ -2311,7 +2311,7 @@ findImg {
 /***************************************PAYMENT ALLOCATION********************************/
 
 .vis-allocation-rightContainer {
-    width: calc(100% - 300px);
+    width: calc(100% - 250px);
     height: 100%;
     float: left;
     padding: 10px 10px 0 10px;
@@ -2396,19 +2396,19 @@ findImg {
     height: 100%;
     position: relative;
     padding: 15px;
-    border-right: 5px solid rgba(var(--v-c-on-secondary), .3);
-    width: 300px;
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .3);
+    width: 250px;
 }
-.vis-leftpanel-wrapper:after {
-    position: absolute;
-    content: '...';
-    font-size: 38px;
-    transform: rotate(90deg);
-    right: -28px;
-    top: 50%;
-    color: rgba(var(--v-c-on-secondary), 1);
-    filter: brightness(.4);
-}
+    .vis-leftpanel-wrapper:after {
+        position: absolute;
+        /*content: '...';*/
+        font-size: 38px;
+        transform: rotate(90deg);
+        right: -28px;
+        top: 50%;
+        color: rgba(var(--v-c-on-secondary), 1);
+        filter: brightness(.4);
+    }
 .vis-allocation-leftControls .panel-default > .panel-heading {
     background-color: rgba(var(--v-c-on-secondary), .2);
     background-image: none;
