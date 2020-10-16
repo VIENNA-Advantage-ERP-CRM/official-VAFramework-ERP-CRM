@@ -240,7 +240,7 @@ namespace VAdvantage.Process
                         }
                     }
                     if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
-                        && AD_Role_ID <= 0)
+                        && AD_Role_ID < 0)
                     {
                         log.Config("No internal User: " + Name);
                         continue;
