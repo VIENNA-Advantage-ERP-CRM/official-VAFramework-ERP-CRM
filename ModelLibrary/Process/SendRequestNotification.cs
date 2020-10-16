@@ -226,8 +226,10 @@ namespace VAdvantage.Process
                         log.Config("Opt out: " + Name);
                         continue;
                     }
+                    // JID_1858 IF User's Notification Type is Notice is allow to send notification to respective User
                     if ((X_AD_User.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
-                        || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
+                        || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType)
+                        || X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType))
                         && (email == null || email.Length == 0))
                     {
                         if (AD_Role_ID >= 0)
@@ -238,12 +240,12 @@ namespace VAdvantage.Process
                             continue;
                         }
                     }
-                    if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
-                        && AD_Role_ID >= 0)
-                    {
-                        log.Config("No internal User: " + Name);
-                        continue;
-                    }
+                    //if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
+                    //    && AD_Role_ID >= 0)
+                    //{
+                    //    log.Config("No internal User: " + Name);
+                    //    continue;
+                    //}
 
                     //	Check duplicate receivers
                     int ii = AD_User_ID;
@@ -447,7 +449,8 @@ namespace VAdvantage.Process
                 NotificationType = to.GetNotificationType();
             //	Send Mail
             if (X_AD_User.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
-                || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
+                || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType)
+                || X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType))
             {
                 VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
                 _mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
