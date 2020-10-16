@@ -301,17 +301,17 @@
             //---Set Business Partner Mandatory---Neha
             //$vSearchBPartner.getControl().next().addClass('vis-ev-col-mandatory');
             //---Resize the Parameter div and Display and hide Payment and Cash div----Neha-----
-            $row1.resizable({
-                handles: 'e',
-                minWidth: 226,
-                maxWidth: 600,
-                resize: function (event, ui) {
-                    var width = ui.size.width;
-                    if (width > 197) {
-                        rowContiner.width($(document).width() - (width + 40));
-                    }
-                }
-            });
+            //$row1.resizable({
+            //    handles: 'e',
+            //    minWidth: 226,
+            //    maxWidth: 600,
+            //    resize: function (event, ui) {
+            //        var width = ui.size.width;
+            //        if (width > 197) {
+            //            rowContiner.width($(document).width() - (width + 40));
+            //        }
+            //    }
+            //});
             $row2.css('display', '');
             $row3.css('display', 'none');
             //------------------------------
