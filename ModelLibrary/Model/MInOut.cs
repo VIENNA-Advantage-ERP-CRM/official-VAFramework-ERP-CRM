@@ -1999,9 +1999,7 @@ namespace VAdvantage.Model
                             sql.Append(DBFunctionCollection.ConcatinateListOfProducts(products.ToString()));
                             string prod = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
-                            //JID_0878 Need to showing the Proper Message
-                            //_processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
-                            _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQty");
+                            _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
 
                             return DocActionVariables.STATUS_INVALID;
                         }
