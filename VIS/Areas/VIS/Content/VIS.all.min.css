@@ -1,4 +1,4 @@
-﻿/*** version 1.0.25.0*/
+﻿/*** version 1.0.26.0*/
 html, body {
     height: 100%;
     width: 100%;
@@ -3484,7 +3484,7 @@ findImg {
 /***************************************PAYMENT ALLOCATION********************************/
 
 .vis-allocation-rightContainer {
-    width: calc(100% - 300px);
+    width: calc(100% - 250px);
     height: 100%;
     float: left;
     padding: 10px 10px 0 10px;
@@ -3569,13 +3569,13 @@ findImg {
     height: 100%;
     position: relative;
     padding: 15px;
-    border-right: 5px solid rgba(var(--v-c-on-secondary), .3);
-    width: 300px;
+    border-right: 1px solid rgba(var(--v-c-on-secondary), .3);
+    width: 250px;
 }
 
     .vis-leftpanel-wrapper:after {
         position: absolute;
-        content: '...';
+        /*content: '...';*/
         font-size: 38px;
         transform: rotate(90deg);
         right: -28px;
