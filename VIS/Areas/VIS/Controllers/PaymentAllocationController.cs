@@ -124,13 +124,14 @@ namespace VIS.Controllers
         /// To check state of period weather it is Open or Close
         /// </summary>
         /// <param name="DateTrx">Transaction Date </param>
+        /// <param name="AD_Org_ID"> Trx_Organisation_ID </param>
         /// <returns>Return Empty if period is OPEN else it will return ErrorMsg</returns>
-        public string CheckPeriodState(string DateTrx)
+        public string CheckPeriodState(string DateTrx,int AD_Org_ID)
         {
             Ctx ct = Session["ctx"] as Ctx;
             DateTime date = Convert.ToDateTime(DateTrx);
             PaymentAllocation payments = new PaymentAllocation(ct);
-            return payments.CheckPeriodState(date);
+            return payments.CheckPeriodState(date, AD_Org_ID);
         }
 
         /// <summary>

@@ -301,17 +301,17 @@
             //---Set Business Partner Mandatory---Neha
             //$vSearchBPartner.getControl().next().addClass('vis-ev-col-mandatory');
             //---Resize the Parameter div and Display and hide Payment and Cash div----Neha-----
-            $row1.resizable({
-                handles: 'e',
-                minWidth: 226,
-                maxWidth: 600,
-                resize: function (event, ui) {
-                    var width = ui.size.width;
-                    if (width > 197) {
-                        rowContiner.width($(document).width() - (width + 40));
-                    }
-                }
-            });
+            //$row1.resizable({
+            //    handles: 'e',
+            //    minWidth: 226,
+            //    maxWidth: 600,
+            //    resize: function (event, ui) {
+            //        var width = ui.size.width;
+            //        if (width > 197) {
+            //            rowContiner.width($(document).width() - (width + 40));
+            //        }
+            //    }
+            //});
             $row2.css('display', '');
             $row3.css('display', 'none');
             //------------------------------
@@ -5032,23 +5032,23 @@
                         event.preventDefault();
                         return;
                     }
-                    //logic to not set greater appliedAmount then open amount
-                    else if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
+                    ////logic to not set greater appliedAmount then open amount
+                    //else if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
 
-                    }
-                    else {
-                        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
-                    }
+                    //}
+                    //else {
+                    //    $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
+                    //}
                 }
-                else {
-                    //logic to not set greater appliedAmount then open amount
-                    if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
+                //else {
+                //    //logic to not set greater appliedAmount then open amount
+                //    if (parseFloat($gridPayment.get(event.index).OpenAmt) > parseFloat($gridPayment.get(event.index).AppliedAmt)) {
 
-                    }
-                    else {
-                        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
-                    }
-                }
+                //    }
+                //    else {
+                //        $gridPayment.set(0, { "AppliedAmt": $gridPayment.get(event.index).OpenAmt });
+                //    }
+                //}
             }
             //when AppliedAmt cell changed then only this function will call
             if (colIndex == event.column) {
@@ -6628,7 +6628,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val() },
+                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val()},
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -6774,7 +6774,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val() },
+                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -6920,7 +6920,7 @@
         function glData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, DateAcct) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VIS/PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val() },
+                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
