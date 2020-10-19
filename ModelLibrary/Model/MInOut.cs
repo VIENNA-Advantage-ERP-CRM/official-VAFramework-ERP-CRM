@@ -2001,6 +2001,7 @@ namespace VAdvantage.Model
                             string prod = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                             _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
+
                             return DocActionVariables.STATUS_INVALID;
                         }
                     }

@@ -25,6 +25,7 @@ namespace ViennaAdvantageServer.Process
         IDataReader dr;
         VAdvantage.Model.X_C_Contract contact = null;
         VAdvantage.Model.X_C_OrderLine line = null;
+        string DocumntNo;
 
         protected override void Prepare()
         {
@@ -223,6 +224,7 @@ namespace ViennaAdvantageServer.Process
                             DB.ExecuteScalar(_qry, null, Get_TrxName());
                         }
                         //C_Contract_ID = contact.GetC_Contract_ID();
+                        DocumntNo += contact.GetDocumentNo() + "," ;
 
                     }
 
@@ -234,7 +236,7 @@ namespace ViennaAdvantageServer.Process
 
                 }
                 // Added Document No on Message
-                return Msg.GetMsg(GetCtx(), "ServiceContractGenerationDone") + contact.GetDocumentNo();
+                return Msg.GetMsg(GetCtx(), "ServiceContractGenerationDone") + DocumntNo.TrimEnd(',');
             }
             catch (Exception ex)
             {
