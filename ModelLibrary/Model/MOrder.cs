@@ -1703,7 +1703,7 @@ namespace VAdvantage.Model
                         MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
                         ol.SetHeaderInfo(this);
                         //JID_1673 Quantity entered should not be zero
-                        if((Utility.Util.GetValueOfInt(dr["QtyEntered"])) >0)
+                        if((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
                              list.Add(ol);
                     }
                 }
@@ -4976,9 +4976,7 @@ namespace VAdvantage.Model
                     shipment.Save(Get_TrxName());
                     if (!DOCSTATUS_Completed.Equals(statuss))
                     {
-                        //_processMsg = "@M_InOut_ID@: " + shipment.GetProcessMsg();
-                        //JID_0882 Need to show the Proper Message
-                        _processMsg = Msg.GetMsg(GetCtx(), "VIS_InsufficientQty");
+                        _processMsg = "@M_InOut_ID@: " + shipment.GetProcessMsg();
                         return null;
                     }
                 }
