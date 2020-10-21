@@ -599,24 +599,24 @@ namespace VAdvantage.Model
                         SetDiscountAmt(Env.ZERO);
                         SetIsOverUnderPayment(false);
                         SetOverUnderAmt(Env.ZERO);
-                        string sql = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
-                        string isAdvCharge = "";
-                        try
-                        {
-                            isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
-                        }
-                        catch
-                        {
+                        //string sql = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
+                        //string isAdvCharge = "";
+                        //try
+                        //{
+                        //    isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
+                        //}
+                        //catch
+                        //{
 
-                        }
-                        if (isAdvCharge.Equals("Y"))
-                        {
-                            SetIsPrepayment(true);
-                        }
-                        else
-                        {
-                            SetIsPrepayment(false);
-                        }
+                        //}
+                        //if (isAdvCharge.Equals("Y"))
+                        //{
+                        //    SetIsPrepayment(true);
+                        //}
+                        //else
+                        //{
+                        //    SetIsPrepayment(false);
+                        //}
                     }
                 }
                 //	We need a BPartner
@@ -705,28 +705,27 @@ namespace VAdvantage.Model
                 //                || (GetC_Project_ID() != 0 && GetC_Invoice_ID() == 0)));
                 //}
 
-                // Already written above
-                //if (GetC_Charge_ID() != 0)
-                //{
-                //    string sqlAdvCharge = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
-                //    string isAdvCharge = "";
-                //    try
-                //    {
-                //        isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sqlAdvCharge, null, null));
-                //    }
-                //    catch
-                //    {
+                if (GetC_Charge_ID() != 0)
+                {
+                    string sqlAdvCharge = "SELECT IsAdvanceCharge FROM C_Charge WHERE C_Charge_ID = " + GetC_Charge_ID();
+                    string isAdvCharge = "";
+                    try
+                    {
+                        isAdvCharge = Util.GetValueOfString(DB.ExecuteScalar(sqlAdvCharge, null, null));
+                    }
+                    catch
+                    {
 
-                //    }
-                //    if (isAdvCharge.Equals("Y"))
-                //    {
-                //        SetIsPrepayment(true);
-                //    }
-                //    else
-                //    {
-                //        SetIsPrepayment(false);
-                //    }
-                //}
+                    }
+                    if (isAdvCharge.Equals("Y"))
+                    {
+                        SetIsPrepayment(true);
+                    }
+                    else
+                    {
+                        SetIsPrepayment(false);
+                    }
+                }
 
                 if (IsPrepayment())
                 {
