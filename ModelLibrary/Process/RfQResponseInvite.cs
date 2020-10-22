@@ -22,15 +22,15 @@ using VAdvantage.Utility;
 using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
-
-
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class RfQResponseInvite : ProcessEngine.SvrProcess
     {
+        StringBuilder str = null;
         //RfQ Response				
         private int _C_RfQResponse_ID = 0;
-
+        //StringBuilder str = new StringBuilder();
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -58,8 +58,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
+            
             MRfQResponse response = new MRfQResponse(GetCtx(), _C_RfQResponse_ID, Get_TrxName());
             log.Info("doIt - " + response);
+            str = new StringBuilder();
             String error = response.GetRfQ().CheckQuoteTotalAmtOnly();
             if (error != null && error.Length > 0)
             {
@@ -70,8 +72,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 return "OK";
             }
-            //
-            return "@Error@";
+            return response.str.ToString(); ;
         }
     }
 }

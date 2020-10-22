@@ -27,6 +27,10 @@ namespace VAdvantage.Model
 {
     public class MRfQResponse : X_C_RfQResponse
     {
+        /// <summary>
+        /// Public StringBuilder is used for RFQResponseInvite for display message
+        /// </summary>
+        public StringBuilder str = new StringBuilder();
         //	underlying RfQ				
         private MRfQ _rfq = null;
         // Lines						
@@ -77,6 +81,8 @@ namespace VAdvantage.Model
         {
 
         }
+
+
 
         /// <summary>
         /// Parent Constructor
@@ -227,7 +233,7 @@ namespace VAdvantage.Model
                 .Append("]");
             return sb.ToString();
         }
-
+        
         /// <summary>
         /// 	Send RfQ, mail subject and body from mail template 
         /// </summary>
@@ -239,10 +245,11 @@ namespace VAdvantage.Model
                 MUser to = MUser.Get(GetCtx(), GetAD_User_ID());
                 MClient client = MClient.Get(GetCtx());
                 MMailText mtext = new MMailText(GetCtx(), GetRfQ().GetR_MailText_ID(), Get_TrxName());
-
                 if (to.Get_ID() == 0 || to.GetEMail() == null || to.GetEMail().Length == 0)
                 {
                     log.Log(Level.SEVERE, "No User or no EMail - " + to);
+                    //Check The Email if email is not existing then Create a Message 
+                    str.Append(Msg.GetMsg(GetCtx(), "VIS_EmailError") + " " + to.GetName());
                     return false;
                 }
 
@@ -266,6 +273,8 @@ namespace VAdvantage.Model
                 EMail email = client.CreateEMail(to.GetEMail(), to.GetName(), subject, message.ToString());
                 if (email == null)
                 {
+                    //Check if email is empty then create a message
+                    str.Append(Msg.GetMsg(GetCtx(), "VIS_ClientEmailError") + " " + client.GetName());
                     return false;
                 }
                 email.AddAttachment(CreatePDF());
@@ -282,10 +291,9 @@ namespace VAdvantage.Model
                 log.Severe(ex.ToString());
                 //MessageBox.Show("error--" + ex.ToString());
             }
+
             return false;
         }
-
-        /// <summary>
         /// Create PDF file
         /// </summary>
         /// <returns>File or null</returns>
