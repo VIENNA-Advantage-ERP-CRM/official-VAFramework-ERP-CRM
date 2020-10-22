@@ -72,6 +72,7 @@ namespace VAdvantage.Process
             {
                 return "OK";
             }
+            //if SendRfQ is not success then show the error message
             return response.str.ToString(); ;
         }
     }
