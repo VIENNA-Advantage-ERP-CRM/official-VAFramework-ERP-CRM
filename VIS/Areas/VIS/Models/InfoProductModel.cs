@@ -82,7 +82,7 @@ namespace VIS.Models
 					"bomPriceLimit(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceLimit", DisplayType.Amount).Seq(170),
 				new InfoColumn(Msg.Translate(ctx, "IsInstanceAttribute"), "IsInstanceAttribute",true,
 					"pa.IsInstanceAttribute", DisplayType.YesNo).Seq(180),
-                new InfoColumn(Msg.Translate(ctx,"GuranteeDays"),"GuranteeDays",true, "Sysdate+p.GuaranteeDays as GuranteeDays",DisplayType.Date).Seq(190)
+                new InfoColumn(Msg.Translate(ctx,"GuranteeDays"),"GuranteeDays",true, "adddays(Sysdate, p.GuaranteeDays) as GuranteeDays",DisplayType.Date).Seq(190)
                     //new InfoColumn(Msg.Translate(ctx, "Quantity"), "0 as Quantity" , typeof(Boolean)).Seq(180) 
                    
 			};
@@ -178,7 +178,7 @@ namespace VIS.Models
                         "bomPriceLimit(p.M_Product_ID, pr.M_PriceList_Version_ID) AS PriceLimit", DisplayType.Amount).Seq(200));
                 }
                 list.Add(new InfoColumn(Msg.Translate(ctx, "IsInstanceAttribute"), "IsInstanceAttribute", true, "pa.IsInstanceAttribute", DisplayType.YesNo).Seq(210));
-                list.Add(new InfoColumn(Msg.Translate(ctx, "GuranteeDays"), "GuranteeDays", true, "Sysdate+p.GuaranteeDays as GuranteeDays", DisplayType.Date).Seq(220));
+                list.Add(new InfoColumn(Msg.Translate(ctx, "GuranteeDays"), "GuranteeDays", true, "adddays(Sysdate, p.GuaranteeDays) as GuranteeDays", DisplayType.Date).Seq(220));
                 list.Add(new InfoColumn(Msg.Translate(ctx, "Discontinued"), "Discontinued", true, "p.Discontinued", DisplayType.YesNo).Seq(230));
                 list.Add(new InfoColumn(s_headerWarehouse, "M_Warehouse_ID", true, "w.M_Warehouse_ID", DisplayType.ID).Seq(240));
                 list.Add(new InfoColumn(s_headerPriceList, "M_PriceList_Version_ID", true, "plv.M_PriceList_Version_ID", DisplayType.ID).Seq(250));
