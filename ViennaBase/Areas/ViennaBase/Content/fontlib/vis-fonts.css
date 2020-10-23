@@ -54,6 +54,16 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.vis-export-translation:before {
+  content: "\e9c6";
+}
+.vis-import-translation:before {
+  content: "\e9c7";
+}
+.vis-translation:before {
+  content: "\e9c8";
+}
+
 .vis-wallet:before {
   content: "\e9c2";
 }
