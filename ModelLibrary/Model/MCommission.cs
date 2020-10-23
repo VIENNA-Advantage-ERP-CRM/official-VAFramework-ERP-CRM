@@ -36,15 +36,15 @@ namespace VAdvantage.Model
         {
             if (C_Commission_ID == 0)
             {
-            //	SetName (null);
-		    //	SetC_BPartner_ID (0);
-		    //	SetC_Charge_ID (0);
-		    //	SetC_Commission_ID (0);
-		    //	SetC_Currency_ID (0);
-			    //
-			    SetDocBasisType (DOCBASISTYPE_Invoice);	// I
-			    SetFrequencyType (FREQUENCYTYPE_Monthly);	// M
-			    SetListDetails (false);
+                //	SetName (null);
+                //	SetC_BPartner_ID (0);
+                //	SetC_Charge_ID (0);
+                //	SetC_Commission_ID (0);
+                //	SetC_Currency_ID (0);
+                //
+                SetDocBasisType(DOCBASISTYPE_Invoice);  // I
+                SetFrequencyType(FREQUENCYTYPE_Monthly);    // M
+                SetListDetails(false);
             }
         }
 
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         /// <returns>array of lines</returns>
         public MCommissionLine[] GetLines()
         {
-            String sql = "SELECT * FROM C_CommissionLine WHERE C_Commission_ID=@comid ORDER BY M_Product_ID, M_Product_Category_ID,C_BPartner_ID,C_BP_Group_ID,AD_Org_ID,C_SalesRegion_ID";
+            String sql = "SELECT * FROM C_CommissionLine WHERE C_Commission_ID=@comid AND ISActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,C_BPartner_ID,C_BP_Group_ID,AD_Org_ID,C_SalesRegion_ID";
             List<MCommissionLine> list = new List<MCommissionLine>();
             try
             {
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            
+
             //	Convert
             MCommissionLine[] retValue = new MCommissionLine[list.Count];
             retValue = list.ToArray();
