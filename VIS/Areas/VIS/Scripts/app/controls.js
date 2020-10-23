@@ -902,7 +902,10 @@
         };
 
         this.getBtnCount = function () {
-            return 1;
+
+            if (obscureType)
+                return 1;
+            return 0;
         };
 
         var self = this; //self pointer

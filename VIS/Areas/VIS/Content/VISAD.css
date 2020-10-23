@@ -309,7 +309,7 @@
     /*max-width: 780px;*/
     width: 60%;
     width: calc(100% - 325px);
-    overflow-x: scroll;
+    overflow-x: auto;
     white-space: nowrap;
     float: left;
     margin-left: 7px;
