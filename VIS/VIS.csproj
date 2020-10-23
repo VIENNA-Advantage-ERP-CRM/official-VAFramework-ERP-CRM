@@ -683,6 +683,7 @@
     <Content Include="Areas\VIS\Scripts\app\Framework\recordaccessdialog.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\sms.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\treemaintenance.js" />
+    <Content Include="Areas\VIS\Scripts\app\Framework\UploadAmountDimension.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\userpreference.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\valuepreference.js" />
     <Content Include="Areas\VIS\Scripts\app\Framework\vbinaryform.js" />

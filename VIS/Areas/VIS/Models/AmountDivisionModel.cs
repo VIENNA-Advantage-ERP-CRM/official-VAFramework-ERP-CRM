@@ -778,5 +778,82 @@ namespace VIS.Models
 
             return c_element_id;
         }
+
+        /// <summary>
+        /// get the Id of the table
+        /// </summary>
+        /// <param name="columName">value of the columnname</param>
+        /// <param name="tableName">name of the table</param>
+        /// <param name="value">value</param>
+        /// <returns>Id of the table</returns>
+        public int DimnesionValue(string columName, string tableName, string value)
+        {
+            string qry = null;
+            int DimensionId = 0;
+            try
+            {
+                qry = "SELECT " + columName + " from " + tableName + "  WHERE  value ='" + value + "' OR Name='" + value + "'";
+                DimensionId = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+            }
+            catch
+            {
+                qry = "SELECT " + columName + " from " + tableName + "  WHERE  Name ='" + value + "'";
+                DimensionId = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+            }
+            return DimensionId;
+        }
+        /// <summary>
+        /// get the Id of the table
+        /// </summary>
+        /// <param name="columName">value of the columnname</param>
+        /// <param name="tableName">name of the table</param>
+        /// <param name="value">value</param>
+        /// <returns>Id of the table</returns>
+        public int UserElementDimnesionValue(string columName, string tableName, string value)
+        {
+            string qry = null;
+            int DimensionId = 0;
+            qry = "SELECT " + tableName + "_ID from " + tableName + "  WHERE  " + columName + " ='" + value + "'";
+            DimensionId = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+            return DimensionId;
+        }
+
+        /// <summary>
+        /// get the details of Element
+        /// </summary>
+        /// <param name="acctschemaid"> value of the acctschemaid</param>
+        /// <param name="type">value of the</param>
+        /// <param name="value">value</param>
+        /// <param name="rowNo">rowno of the table</param>
+        /// <param name="dt">data of the table</param>
+        /// <returns>Object of the datatable</returns>
+        public DataTable GetAcountIdByValue(int acctschemaid, string type, string value, int rowNo, DataTable dt)
+        {
+            string qry = null;
+            //DataSet ds1 = ds;
+            qry = "select cv.C_ElementValue_ID, ac.C_Element_ID, cv.value || '_' || cv.name AS ElementName from c_acctschema_element ac "
+                  + " inner join C_Element ce on ce.C_Element_ID = ac.C_Element_ID"
+                  + " inner JOIN c_elementvalue cv on cv.C_Element_ID = ce.C_Element_ID where ac.c_acctschema_id =" + acctschemaid + " AND  "
+                  + " ac.ElementType = '" + type + "'  and cv.Value = '" + value + "'";
+            DataSet dsAccountElement = (DB.ExecuteDataset(qry, null, null));
+            if (dsAccountElement != null && dsAccountElement.Tables.Count > 0 && dsAccountElement.Tables[0].Rows.Count > 0)
+            {
+                dt.Rows[rowNo]["AccoutId"] = dsAccountElement.Tables[0].Rows[0]["C_ElementValue_ID"];
+                dt.Rows[rowNo]["AccountValue"] = dsAccountElement.Tables[0].Rows[0]["ElementName"];
+                dt.Rows[rowNo]["C_Element_ID"] = dsAccountElement.Tables[0].Rows[0]["C_Element_ID"];
+            }
+            return dt;
+        }
+
+
+    }
+
+    public class UploadResponse
+    {
+        public string _path { get; set; }
+        public string _filename { get; set; }
+        public string _error { get; set; }
+        public string _statementID { get; set; }
+        public string _orgfilename { get; set; }
     }
 }
