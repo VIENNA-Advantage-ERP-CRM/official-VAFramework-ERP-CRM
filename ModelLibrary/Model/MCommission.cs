@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         /// <returns>array of lines</returns>
         public MCommissionLine[] GetLines()
         {
-            String sql = "SELECT * FROM C_CommissionLine WHERE C_Commission_ID=@comid AND ISActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,C_BPartner_ID,C_BP_Group_ID,AD_Org_ID,C_SalesRegion_ID";
+            String sql = "SELECT * FROM C_CommissionLine WHERE C_Commission_ID=@comid AND IsActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,C_BPartner_ID,C_BP_Group_ID,AD_Org_ID,C_SalesRegion_ID";
             List<MCommissionLine> list = new List<MCommissionLine>();
             try
             {

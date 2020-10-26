@@ -53,6 +53,7 @@ namespace VAdvantage.Process
         /// <returns>Message (text with variables)</returns>
         protected override String DoIt()
         {
+            string msg;
             log.Info("C_Commission_ID=" + GetRecord_ID() + ", StartDate=" + p_StartDate);
             if (p_StartDate == null)
                 p_StartDate = DateTime.Now;
@@ -87,7 +88,8 @@ namespace VAdvantage.Process
             //should not generate commission if there is no active commission lines
             if (lines.Length <= 0)
             {
-                throw new Exception("No Active Records Found");
+                msg= Msg.GetMsg(GetCtx(), "NoActiveRecordsFound");
+                return msg;
             }
             for (int i = 0; i < lines.Length; i++)
             {
@@ -154,7 +156,7 @@ namespace VAdvantage.Process
                     {
                         sql.Append("SELECT h.C_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
                             + " SUM(l.QtyOrdered) AS Qty, "
-                            + "l.C_orderline_ID, NULL, NULL, NULL, MAX(h.DateOrdered) "
+                            + "l.C_OrderLine_ID, NULL, NULL, NULL, MAX(h.DateOrdered) "
                             + "FROM C_Order h"
                             + " INNER JOIN C_OrderLine l ON (h.C_Order_ID = l.C_Order_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
@@ -261,7 +263,7 @@ namespace VAdvantage.Process
                 //	Grouping according to Calculation Basis
                 if (!m_com.IsListDetails() && m_com.GetDocBasisType().Equals("O"))
                 {
-                    sql.Append(" GROUP BY h.C_Currency_ID,l.C_orderline_ID");
+                    sql.Append(" GROUP BY h.C_Currency_ID,l.C_OrderLine_ID");
                 }
                 else
                     sql.Append(" GROUP BY h.C_Currency_ID,l.C_InvoiceLine_ID");
@@ -284,7 +286,7 @@ namespace VAdvantage.Process
             //	comRun.updateFromAmt();
             //	comRun.save();
 
-            //	Save Last Run
+            //	Save Last Run according to the current date and time
             m_com.SetDateLastRun(DateTime.Now);
             m_com.Save();
 
