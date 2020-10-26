@@ -924,7 +924,9 @@ namespace VAdvantage.Model
                 {
                     if (string.IsNullOrEmpty(GetCheckNo()))
                     {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        //"Error" not required
+                        //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
                 }
@@ -1026,12 +1028,16 @@ namespace VAdvantage.Model
                 {
                     if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetCheckNo() == null)
                     {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        //"Error" not required
+                        //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
                     else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetCheckNo() == null)
                     {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        //"Error" not required
+                        //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
 
@@ -1042,13 +1048,17 @@ namespace VAdvantage.Model
                     // if AP Pay and payamt less than 0
                     if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() < 0 && GetCheckNo() == null)
                     {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        //"Error" not required
+                        //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
                     // if AR Rec and payamt greater than 0
                     else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() >= 0 && GetCheckNo() == null)
                     {
-                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        //"Error" not required
+                        //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
+                        log.SaveError("", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
 
