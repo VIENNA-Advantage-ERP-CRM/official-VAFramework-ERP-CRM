@@ -227,17 +227,17 @@
             divAcctSchemaCtrlWrp.append(cmbAcctSchema).append(lblAcctSchema);
             var divDimType = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
             var divDimTypeCtrlWrp = $("<div class='vis-control-wrap'>");
-            var divButton2 = $('<div for="VA028-file-input" class="vis-excelimportbtn VIS-AMTD-formBtns" style=" display: block; "><a tabindex="" class="vis vis-doc-excel"></a></div>');
+            var divAmountDimExcel = $('<div class="vis-excelimportbtn VIS-AMTD-formBtns" style=" display: block; "><a tabindex="" class="vis vis-doc-excel"></a></div>');
             divDimType.append(divDimTypeCtrlWrp);
-            divDimType.append(divButton2);
+            divDimType.append(divAmountDimExcel);
             divDimTypeCtrlWrp.append(cmbDimensionType).append(lblDimensionType);
 
             /* Create the element of input File */
-            var divExcelDim = $('<div style="float: right;margin-right: 5px;display:none" ><input id="VA028-file-input" style="display:none" type="file"  accept=".xls,.xlsx"><label title="'
-                + VIS.Msg.getMsg("VA028_ExcelImport") + '"  for="VA028-file-input" class="VA028-change-picture-ico"></label></div>');
+            var divExcelDim = $('<div style="float: right;margin-right: 5px;display:none" ><input id="VIS-AMTD-file-input" style="display:none" type="file"  accept=".xls,.xlsx"><label title="'
+                + VIS.Msg.getMsg("VIS_ExcelImport") + '"  for="VIS-AMTD-file-input" ></label></div>');
             divDimType.append(divExcelDim);
 
-            fileUpldIconDim = divDimType.find("#VA028-file-input");
+            fileUpldIconDim = divDimType.find("#VIS-AMTD-file-input");
 
             var divTotalAmount = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
             var divTotalAmountCtrlWrp = $("<div class='vis-control-wrap'>");
@@ -639,13 +639,12 @@
             
 
             /* Click event of the Input file*/ 
-            divButton2.on('click', function () {
-                $("#VA028-file-input").val("");
+            divAmountDimExcel.on('click', function () {
+                $("#VIS-AMTD-file-input").val("");
                 if (cmbDimensionType.val() == "0") {
-                    VIS.ADialog.error("Select Dimension Type");
+                    VIS.ADialog.error("VIS_DimensionType", true, "", "");
                     return false;
                 }
-               
                 fileUpldIconDim.trigger("click");
             });
 
@@ -653,9 +652,16 @@
           
             fileUpldIconDim.on("change", function (e) {
                 var file = this;
-                busyDiv("visible");
+                var validExts = new Array(".xlsx", ".xls");
+                var fileExt = $("#VIS-AMTD-file-input").val();
+                fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+                if (validExts.indexOf(fileExt) < 0) {
+                    VIS.ADialog.error("VIS_InValidFile", true, "", "");
+                    return false;
+                }
                 window.setTimeout(function () {
-                    _result = $.parseJSON(VIS.UploadExcel(file, null));
+                    busyDiv("visible");
+                    _result = $.parseJSON(VIS.UploadAmountDimension(file, null));
                     // upload excel work on dialog
                     UploadFileReadAndImport(_result);
                 }, 400);
@@ -1024,7 +1030,7 @@
                 for (var i = 0; i < data.result.length; i++) {
                     var dimTypeVal = cmbDimensionType.find("option:selected").val();
                     if (dimTypeVal == "AY" || dimTypeVal == "BP" || dimTypeVal == "MC" || dimTypeVal == "OO" || dimTypeVal == "OT" || dimTypeVal == "PJ" || dimTypeVal == "PR" || dimTypeVal == "SR") {
-                        if (parseInt(data.result[i]["Activity_ID"]) != 0)
+                        if (parseInt(data.result[i]["Record_ID"]) != 0)
                             addDimensionAmount(cmbDimensionType.find("option:selected").text(), data.result[i]["Search Key/Name"], data.result[i]["Amount"], recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), data.result[i]["Record_ID"], -1, dimensionLineID, 0, "");
                     }
                     else if (dimTypeVal == "U1" || dimTypeVal == "U2" || dimTypeVal == "AC") {

@@ -1,6 +1,6 @@
 ﻿; VIS = window.VIS || {};
 (function (VIS, $) {
-    VIS.UploadExcel = function (control, _mapping) {
+    VIS.UploadAmountDimension = function (control, _mapping) {
 
         //**************************Global Variables**********************************************       
         var _result = null;
@@ -63,26 +63,6 @@
                 return;
             }
             if (currentFile >= lstLatestFiles.length) {
-                //Change the metadata attachment 
-                //$.ajax({
-                //    url: VIS.Application.contextUrl + "VIS/UploadExcel/SaveAttachmentEntries",
-                //    dataType: "json",
-                //    type: "POST",
-                //    data: {
-                //        files: JSON.stringify(filesInfo),
-                //        folderKey: folder,
-                //        fileName: savedFileName,
-                //        mapping: ExcelMapping
-                //    },
-                //    error: function () {
-                //        console.log(e);
-                //    },
-                //    success: function (data) {
-                //        showProgress(false);
-                //        var result = jQuery.parseJSON(data);
-                //        excelResult = result;
-                //    }
-                //});
                 return;
             }
 
@@ -127,21 +107,7 @@
                 if (file == undefined) {
                     return;
                 }
-                //if (file.size > VADMS.Common.MAX_FILESIZE) {
-                //    lstLatestFiles = [];
-                //    oldFiles = [];
-                //    currentchunk = 0;
-                //    currentFile = 0;
-                //    folder = null;
-                //    chunkSize = null;
-                //    totalChunks = 0;
-                //    currentFileChunkNo = 0;
-                //    filesInfo = [];
-                //    file = null;
-                //    VIS.ADialog.info('VADMS_FileSizeShouldLessThan25MB');
-                //    showProgress(false);
-                //    return false;
-                //}
+               
                 if (file.size <= 0) {
                     lstLatestFiles = [];
                     oldFiles = [];
@@ -217,7 +183,7 @@
                 lblpercentage = $("<span class='vis-ui-label'  style='position:absolute;left: 60%;top: 4px;'>").append("0%");
                 divGreen.append(lblpercentage);
                 divProgress.append(divGreen);
-                var $isBusy = $("<div id='progressbar' style='z-index: 999999;' class='vadms-Busy-Progress'></div>");
+                var $isBusy = $("<div id='progressbar' style='z-index: 999999;' class='VIS-AMTD-Busy-Progress'></div>");
                 $isBusy.append(divProgress);
                 $isBusy.appendTo('<body>');
             }
