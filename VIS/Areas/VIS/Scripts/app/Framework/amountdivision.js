@@ -105,6 +105,10 @@
         var C_Element_ID = 0;
         var IsElementOk = true;
         var oldBPartnerID = 0;
+        var $bsyDiv = null;
+
+        var fileUpldIconDim = null;
+
 
         function initializeComponent() {
             lblAcctSchema = $("<label>");
@@ -117,7 +121,7 @@
             cmbAcctSchema = $("<select tabindex='2'>");
             cmbDimensionType = $("<select tabindex='3'>");
             cmbElement = $("<select>");
-
+          
             txtAmount = new VIS.Controls.VAmountTextBox("Amount", false, false, true, 50, 100, VIS.DisplayType.Amount, VIS.Msg.getMsg("Amount")); //$("<input type='number' min='0' tabindex='6'>");
             modalTxtAmount = new VIS.Controls.VAmountTextBox("ModalAmount", false, false, true, 50, 100, VIS.DisplayType.Amount, VIS.Msg.getMsg("Amount")); //$("<input type='number' min='0' tabindex='11'>");
 
@@ -223,10 +227,18 @@
             divAcctSchemaCtrlWrp.append(cmbAcctSchema).append(lblAcctSchema);
             var divDimType = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
             var divDimTypeCtrlWrp = $("<div class='vis-control-wrap'>");
-            var divButton2 = $('<div class="vis-excelimportbtn VIS-AMTD-formBtns" style=" display: none; "><a tabindex="" class="vis vis-doc-excel"></a></div>');
+            var divAmountDimExcel = $('<div class="vis-excelimportbtn VIS-AMTD-formBtns" style=" display: block; "><a tabindex="" class="vis vis-doc-excel"></a></div>');
             divDimType.append(divDimTypeCtrlWrp);
-            divDimType.append(divButton2);
+            divDimType.append(divAmountDimExcel);
             divDimTypeCtrlWrp.append(cmbDimensionType).append(lblDimensionType);
+
+            /* Create the element of input File */
+            var divExcelDim = $('<div style="float: right;margin-right: 5px;display:none" ><input id="VIS-AMTD-file-input" style="display:none" type="file"  accept=".xls,.xlsx"><label title="'
+                + VIS.Msg.getMsg("VIS_ExcelImport") + '"  for="VIS-AMTD-file-input" ></label></div>');
+            divDimType.append(divExcelDim);
+
+            fileUpldIconDim = divDimType.find("#VIS-AMTD-file-input");
+
             var divTotalAmount = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
             var divTotalAmountCtrlWrp = $("<div class='vis-control-wrap'>");
             divTotalAmount.append(divTotalAmountCtrlWrp);
@@ -624,7 +636,36 @@
 
             });
 
+            
 
+            /* Click event of the Input file*/ 
+            divAmountDimExcel.on('click', function () {
+                $("#VIS-AMTD-file-input").val("");
+                if (cmbDimensionType.val() == "0") {
+                    VIS.ADialog.error("VIS_DimensionType", true, "", "");
+                    return false;
+                }
+                fileUpldIconDim.trigger("click");
+            });
+
+        /* Change event of the Excel file*/
+          
+            fileUpldIconDim.on("change", function (e) {
+                var file = this;
+                var validExts = new Array(".xlsx", ".xls");
+                var fileExt = $("#VIS-AMTD-file-input").val();
+                fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+                if (validExts.indexOf(fileExt) < 0) {
+                    VIS.ADialog.error("VIS_InValidFile", true, "", "");
+                    return false;
+                }
+                window.setTimeout(function () {
+                    busyDiv("visible");
+                    _result = $.parseJSON(VIS.UploadAmountDimension(file, null));
+                    // upload excel work on dialog
+                    UploadFileReadAndImport(_result);
+                }, 400);
+            });
             //Cancel Button Click.................
             btnNew.on("click", function () {
                 busyDiv("visible");
@@ -926,6 +967,86 @@
             });
 
         }
+
+        /* Send the File details to Controller*/
+        function UploadFileReadAndImport(_result) {
+            
+            if (_result != null) {
+                if (_result._filename == null || _result._filename == "" || _result._path == null || _result._path == "") {
+                    return;
+                }
+                else if (_result._error != null && _result._error != "") {
+                    VIS.ADialog.info(_result._error, null, "", "");
+                    return;
+                }
+                else {
+
+                    var _path = _result._path;
+                    var _filename = _result._filename;
+                    var dimType = cmbDimensionType.find("option:selected").val();
+                    var acctschema= cmbAcctSchema.find("Option:selected").val();
+                    var param = [];
+                    param.push(_path);
+                    param.push(dimType)
+                    param.push(acctschema)
+                   
+
+                    $.ajax({
+                        url: VIS.Application.contextUrl + "AmountDivision/GetDataFromExcelOrText",
+                        type: "POST",
+                        datatype: "json",
+                        contentType: "application/json; charset=utf-8",
+                        async: false,
+                        data: JSON.stringify(param),
+                        success: function (result) {
+                       
+                            callbackReadFileData(result);
+                            
+                        },
+                        error: function () {
+                            $bsyDiv[0].style.visibility = "hidden";
+                            VIS.ADialog.info(VIS.Msg.getMsg("error"), null, "", "");
+                        }
+                    })
+                    //$bsyDiv[0].style.visibility = "hidden";
+                }
+            }
+        };
+
+        /* bind the Excel records into grid */
+        function callbackReadFileData(data) {
+            var amount = parseFloat(txtTotalAmount.getValue());
+            var amountExcel = 0;
+
+            data = JSON.parse(data);
+            for (var i = 0; i < data.result.length; i++) {
+                amountExcel = parseFloat(amountExcel) + parseFloat(data.result[i]["Amount"]);
+            }
+            if (amountExcel > amount) {
+                VIS.ADialog.warn("LineTotalNotGrater");
+                return false;
+            }
+            else {
+                for (var i = 0; i < data.result.length; i++) {
+                    var dimTypeVal = cmbDimensionType.find("option:selected").val();
+                    if (dimTypeVal == "AY" || dimTypeVal == "BP" || dimTypeVal == "MC" || dimTypeVal == "OO" || dimTypeVal == "OT" || dimTypeVal == "PJ" || dimTypeVal == "PR" || dimTypeVal == "SR") {
+                        if (parseInt(data.result[i]["Record_ID"]) != 0)
+                            addDimensionAmount(cmbDimensionType.find("option:selected").text(), data.result[i]["Search Key/Name"], data.result[i]["Amount"], recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), data.result[i]["Record_ID"], -1, dimensionLineID, 0, "");
+                    }
+                    else if (dimTypeVal == "U1" || dimTypeVal == "U2" || dimTypeVal == "AC") {
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), data.result[i]["AccountValue"], data.result[i]["Amount"], recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), data.result[i]["AccoutId"], data.result[i]["C_Element_ID"], dimensionLineID, data.result[i]["BPartnerId"], data.result[i]["Search Key/Name"]);
+                        modalCmbElement.val("-1");
+                        modalTxtAccountElement.val("");
+                        modalTxtAcctElementValue.setValue("-1");
+                    }//User List 1//User List 2
+                    else if (dimTypeVal == "X1" || dimTypeVal == "X2" || dimTypeVal == "X3" || dimTypeVal == "X4" || dimTypeVal == "X5" || dimTypeVal == "X6" ||
+                        dimTypeVal == "X7" || dimTypeVal == "X8" || dimTypeVal == "X9") {
+                        addDimensionAmount(cmbDimensionType.find("option:selected").text(), data.result[i]["Search Key/Name"], data.result[i]["Amount"], recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), data.result[i]["Record_ID"], -1, dimensionLineID, 0, "");
+                        modalCmbUserElement.val(-1);
+                    }
+                }
+            }
+        };
         function hideShowDimensionValue() {
             if (cmbDimensionType.val() == "" || cmbDimensionType.val() == 0) {
                 divAmount.css("display", "none");

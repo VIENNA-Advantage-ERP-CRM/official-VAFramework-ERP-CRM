@@ -3794,6 +3794,19 @@ html[dir="rtl"] .VIS-AMTD-ModalformBtns {
     padding-left: 0px;
 }
 
+.VIS-AMTD-Busy-Progress {
+    width: 100%;
+    min-height: 400px;
+    height: 93%;
+    position: fixed;
+    top: 40px;
+    /*margin-left: 40px;*/
+    padding-left: 5px;
+    background: transparent;
+    box-shadow: 16px 0px 38px #55AAD0;
+    /*background-color: gray;*/
+    position: absolute;
+}
 .VIS-AMTD-ModalformBtns a {
     float: left;
     margin-top: 19px;
