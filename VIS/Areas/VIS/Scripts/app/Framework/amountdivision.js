@@ -2400,7 +2400,7 @@
             divBPartnerBtnWrap.append(txtb.getBtn(0));//.append(txtb.getBtn(1));
             generateControl.append(divBPartner);
 
-            if (cmbDimensionType.val() == "AC") {
+            if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                 dGrid.showColumn("C_BPartner");
                 divAccountElementVal.css("width", "49%");
                 divBPartner.css("width", "49%").css("margin-left", '9px');
@@ -2463,7 +2463,7 @@
             modalDivBPartner.css("width", "49%");
             modalDivBPartner.append(modalDivBPartnerCtrlWrap);
             modalDivBPartner.append(modalDivBPartnerBtnWrap);
-            if (cmbDimensionType.val() == "AC") {
+            if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                 modalDivAccountElementVal.css("width", "49%");
                 modalDivBPartner.css("width", "48%").css("margin-left", '9px');
                 modalDivAmount.css("width", "26%");
