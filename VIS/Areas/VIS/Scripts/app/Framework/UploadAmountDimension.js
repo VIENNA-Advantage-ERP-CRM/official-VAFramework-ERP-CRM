@@ -207,27 +207,7 @@
         this.GetUploadedExcelColumns = function () {
 
             if (currentFile >= lstLatestFiles.length) {
-                //$.ajax({
-                //    url: VIS.Application.contextUrl + "VIS/UploadExcel/SaveAttachmentEntries",
-                //    dataType: "json",
-                //    type: "POST",
-                //    data: {
-                //        files: JSON.stringify(filesInfo),
-                //        folderKey: folder,
-                //        fileName: savedFileName,
-                //        mapping: _mapping
-                //    },
-                //    error: function () {
-                //        console.log(e);
-                //    },
-                //    success: function (data) {
-                //        showProgress(false);
-                //        var result = jQuery.parseJSON(data);
-                //        _mapping.ExcelCol = result.ExcelCol;
-                //        _mapping.FileName = result.FileName;
-                //        FillExcelColumns(result);
-                //    }
-                //});
+               
                 var param = [];
                 var url = VIS.Application.contextUrl + "contextUrl/SaveAttachmentEntries";
                 param.push({ Files: JSON.stringify(filesInfo) });
