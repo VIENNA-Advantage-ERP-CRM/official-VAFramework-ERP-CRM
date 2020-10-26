@@ -898,11 +898,11 @@ namespace VIS.Helpers
                         }
                         else if (DisplayType.YesNo == displayType)
                         {
-                            string boolval = "N";
-                            if("Y".Equals(Util.GetValueOfString(colval)))
-                                 boolval = "Y";
-                            //if (VAdvantage.Utility.Util.GetValueOfBool(colval))
-                            //    boolval = "Y";
+                            string boolval = "Y";
+                            if("N".Equals(Util.GetValueOfString(colval)))
+                                 boolval = "N";
+                            else if (!VAdvantage.Utility.Util.GetValueOfBool(colval))
+                                 boolval = "N";
                             sb.Append("'").Append(boolval).Append("'");
                         }
                         else
