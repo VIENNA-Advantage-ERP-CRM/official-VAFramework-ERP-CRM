@@ -281,6 +281,10 @@ namespace VIS.Models
                             else if (elementTypeID == "U1" || elementTypeID == "U2")
                             {
                                 Sql += " and c_elementvalue_id=" + oldDimensionName;
+                                if (oldBPartner_ID > 0)
+                                {
+                                    Sql += " AND NVL(C_BPartner_ID, 0)= " + oldBPartner_ID;
+                                }
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
                                      elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { Sql += " and AD_Column_ID=" + oldDimensionName; }//User Element 1 to User Element 9
@@ -320,6 +324,7 @@ namespace VIS.Models
                             {
                                 objDimAmtLine.SetC_Element_ID(elementID);
                                 objDimAmtLine.SetC_ElementValue_ID(dimensionValue);
+                                objDimAmtLine.SetC_BPartner_ID(bpartner_ID);
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
                                      elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { objDimAmtLine.SetAD_Column_ID(dimensionValue); }//User Element 1 to User Element 9
