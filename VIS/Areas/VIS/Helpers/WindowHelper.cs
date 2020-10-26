@@ -900,8 +900,11 @@ namespace VIS.Helpers
                             string boolval = "N";
                             if("Y".Equals(Util.GetValueOfString(colval)))
                                  boolval = "Y";
+                            else if (colval.Equals(true))
+                                 boolval = "Y";
                             //if (VAdvantage.Utility.Util.GetValueOfBool(colval))
                             //    boolval = "Y";
+
                             sb.Append("'").Append(boolval).Append("'");
                         }
                         else
