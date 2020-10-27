@@ -1168,7 +1168,7 @@
 
         function validateControl() {
 
-            if (txtTotalAmount.getValue() == "" && txtTotalAmount.getValue().trim().length == 0) {
+            if (txtTotalAmount.getValue() == 0 || (txtTotalAmount.getValue() == "" && txtTotalAmount.getValue().trim().length == 0)) {
                 VIS.ADialog.warn("ValidateTotalAmount");
                 txtTotalAmount.getControl().focus();
                 busyDiv("hidden");
@@ -1186,14 +1186,14 @@
                 busyDiv("hidden");
                 return false;
             }
-            else if (txtTotalAmount.getValue() == "" && txtTotalAmount.getValue().trim().length == 0) {
+            else if (txtTotalAmount.getValue() == 0 || (txtTotalAmount.getValue() == "" && txtTotalAmount.getValue().trim().length == 0)) {
                 VIS.ADialog.warn("ValidateTotalAmount");
                 txtTotalAmount.getControl().focus();
                 busyDiv("hidden");
                 return false;
             }
             if (!checkValUpdate) {
-                if (txtAmount.getValue() == "" && txtAmount.getValue().trim().length == 0) {
+                if (txtAmount.getValue() == 0 || (txtAmount.getValue() == "" && txtAmount.getValue().trim().length == 0)) {
                     VIS.ADialog.warn("ValidateAmount");
                     txtAmount.getControl().focus();
                     busyDiv("hidden");
@@ -1227,7 +1227,7 @@
             }
 
             else if (checkValUpdate) {
-                if (modalTxtAmount.getValue() == "" && modalTxtAmount.getValue().trim().length == 0) {
+                if (modalTxtAmount.getValue() == 0 || (modalTxtAmount.getValue() == "" && modalTxtAmount.getValue().trim().length == 0)) {
                     VIS.ADialog.warn("ValidateAmount");
                     modalTxtAmount.getControl().focus();
                     busyDiv("hidden");
@@ -2631,7 +2631,7 @@
                 }
             });
 
-            if (cmbDimensionType.val() == "AC") {
+            if (cmbDimensionType.val() == "AC" || cmbDimensionType.val() == "U1" || cmbDimensionType.val() == "U2") {
                 dGrid.showColumn("C_BPartner");
             }
             // busyDiv("hidden");
