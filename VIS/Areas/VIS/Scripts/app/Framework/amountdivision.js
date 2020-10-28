@@ -986,11 +986,12 @@
 					var _filename = _result._filename;
 					var dimType = cmbDimensionType.find("option:selected").val();
 					var acctschema = cmbAcctSchema.find("Option:selected").val();
+					 var docAmount= parseFloat(txtTotalAmount.getValue())
 					var param = [];
 					param.push(_path);
 					param.push(dimType)
 					param.push(acctschema)
-
+					param.push(docAmount)
 
 					$.ajax({
 						url: VIS.Application.contextUrl + "AmountDivision/GetDataFromExcelOrText",
@@ -1000,9 +1001,9 @@
 						async: false,
 						data: JSON.stringify(param),
 						success: function (result) {
-
-							callbackReadFileData(result);
-							if (count == 0) {
+							var flag = true;
+							flag = callbackReadFileData(result);
+							if (count == 0 && flag) {
 								VIS.ADialog.warn("VIS_InCorrectData", null, "", "");
 							}
 						},
@@ -1019,13 +1020,10 @@
 		/* bind the Excel records into grid */
 		function callbackReadFileData(data) {
 			var amount = parseFloat(txtTotalAmount.getValue());
-			var amountExcel = 0;
 
 			data = JSON.parse(data);
-			for (var i = 0; i < data.result.length; i++) {
-				amountExcel = parseFloat(amountExcel) + parseFloat(data.result[i]["Amount"]);
-			}
-			if (amountExcel > amount) {
+			var amountExcel = parseFloat(data.result[0]["TotalAmount"])
+			if ((amount > 0 && amountExcel > amount) || (amount < 0 && Math.abs(amountExcel) > Math.abs(amount))) {
 				VIS.ADialog.warn("LineTotalNotGrater");
 				busyDiv("hidden");
 				return false;
@@ -1035,7 +1033,7 @@
 				for (var i = 0; i < data.result.length; i++) {
 					var dimTypeVal = cmbDimensionType.find("option:selected").val();
 					if (dimTypeVal == "AY" || dimTypeVal == "BP" || dimTypeVal == "MC" || dimTypeVal == "OO" || dimTypeVal == "OT" || dimTypeVal == "PJ" || dimTypeVal == "PR" || dimTypeVal == "SR") {
-						if (parseInt(data.result[i]["Record_ID"]) != 0) {
+						if (parseInt(data.result[i]["Record_ID"]) > 0) {
 							addDimensionAmount(cmbDimensionType.find("option:selected").text(), data.result[i]["Search Key/Name"], data.result[i]["Amount"], recid, cmbAcctSchema.find("Option:selected").val(), cmbDimensionType.find("option:selected").val(), data.result[i]["Record_ID"], -1, dimensionLineID, 0, "");
 							count++;
 						}
