@@ -120,64 +120,179 @@ namespace VIS.Controllers
                 _ds = ImportExcelXLS(param[0].ToString(), false);
                 dt = _ds.Tables[0];
                 dt.Columns.Add("Record_ID", typeof(int));
+                dt.Columns.Add("TotalAmount", typeof(decimal));
+                decimal totalAmt = 0.0M;
+                decimal docAmount = Util.GetValueOfDecimal(param[3]);
                 if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Activity))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.DimnesionValue("C_Activity_ID", "C_Activity", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.DimnesionValue("C_Activity_ID", "C_Activity", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign))
                 {
                     dt.Columns.Add("Campaign_ID", typeof(int));
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.DimnesionValue("C_Campaign_ID", "C_Campaign", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.DimnesionValue("C_Campaign_ID", "C_Campaign", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Organization) || param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Organization) || param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.DimnesionValue("AD_Org_ID", "AD_Org", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.DimnesionValue("AD_Org_ID", "AD_Org", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Project))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Project))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.DimnesionValue("C_Project_ID", "C_Project", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.DimnesionValue("C_Project_ID", "C_Project", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Product))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Product))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.DimnesionValue("M_Product_ID", "M_Product", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.DimnesionValue("M_Product_ID", "M_Product", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.DimnesionValue("C_SalesRegion_ID", "C_SalesRegion", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.DimnesionValue("C_SalesRegion_ID", "C_SalesRegion", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Account) ||
+               else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Account) ||
                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1) ||
                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList2))
                 {
@@ -188,12 +303,28 @@ namespace VIS.Controllers
                     dt.Columns.Add("BPartnerId", typeof(int));
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        dt = model.GetAcountIdByValue(Util.GetValueOfInt(param[2]), param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
-                        bpid = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
-                        dt.Rows[i]["BPartnerId"] = bpid;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            dt = model.GetAcountIdByValue(Util.GetValueOfInt(param[2]), param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
+                            bpid = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
+                            dt.Rows[i]["BPartnerId"] = bpid;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement1) ||
+               else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement1) ||
                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement2) ||
                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement3) ||
                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement4) ||
@@ -217,11 +348,29 @@ namespace VIS.Controllers
                     }
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        Id = model.UserElementDimnesionValue(columName, tableName, dt.Rows[i][1].ToString());
-                        dt.Rows[i]["Record_ID"] = Id;
+                        if (docAmount < 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) > 0)
+                        {
+                            continue;
+                        }
+                        else if (docAmount > 0 && Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) < 0)
+                        {
+                            continue;
+                        }
+                        else if (Util.GetValueOfDecimal(dt.Rows[i]["Amount"]) == 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Id = model.UserElementDimnesionValue(columName, tableName, dt.Rows[i][1].ToString());
+                            dt.Rows[i]["Record_ID"] = Id;
+                            totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
+                        }
                     }
                 }
+                dt.Rows[0]["TotalAmount"] = totalAmt;
             }
+
             var jRes = Json(JsonConvert.SerializeObject(new { result = dt }), JsonRequestBehavior.AllowGet);
             jRes.MaxJsonLength = int.MaxValue;
             return jRes;
@@ -290,7 +439,7 @@ namespace VIS.Controllers
             }
 
         }
-       
+
         /// <summary>
         /// Get the dataset of the Excel File Records
         /// </summary>
