@@ -18,7 +18,7 @@ namespace VAdvantage.Model
 
         }
 
-         /// <summary>
+        /// <summary>
         /// Load Constructor
         /// </summary>
         /// <param name="ctx"></param>
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
             MGenAttributeInstance retValue = null;
             String sql = "SELECT * "
                 + "FROM C_GenAttributeInstance "
-                + "WHERE C_GenAttribute_ID=" + GetC_GenAttribute_ID() + " AND C_GenAttributeSetInstance_ID='" + C_GenAttributeSetInstance_ID + "'";
+                + "WHERE C_GenAttribute_ID=" + GetC_GenAttribute_ID() + " AND C_GenAttributeSetInstance_ID=" + C_GenAttributeSetInstance_ID;
             DataSet ds = null;
             try
             {
