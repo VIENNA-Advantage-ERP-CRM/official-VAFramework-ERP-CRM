@@ -43,9 +43,9 @@ namespace VAdvantage.Model
         /// <param name="M_InOutLine_ID">shipment line</param>
         /// <param name="trxName">transaction</param>
         /// <returns>asset or null</returns>
-        public static MAsset GetFromShipment(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        public static List<MAsset> GetFromShipment(Ctx ctx, int M_InOutLine_ID, Trx trxName)
         {
-            MAsset retValue = null;
+            List<MAsset> retValue = new List<MAsset>();
             String sql = "SELECT * FROM A_Asset WHERE M_InOutLine_ID=" + M_InOutLine_ID;
             DataSet ds = new DataSet();
             try
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    retValue = new MAsset(ctx, dr, trxName);
+                    retValue.Add(new MAsset(ctx, dr, trxName));
                 }
                 ds = null;
             }
@@ -473,7 +473,8 @@ namespace VAdvantage.Model
         public new Decimal GetQty()
         {
             Decimal qty = base.GetQty();
-            if (qty == null || qty.Equals(Env.ZERO))
+            // In Case of Disposal, no need to set Asset Qty to One.
+            if (qty.Equals(Env.ZERO) && !IsDisposed())
                 SetQty(Env.ONE);
             return base.GetQty();
         }
@@ -723,7 +724,16 @@ namespace VAdvantage.Model
             {
                 string name = "";
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());
-                name = ctl.CreateSerNo();
+
+                // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
+                if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
+                {
+                    name = ctl.CreateDefiniteSerNo(this);
+                }
+                else
+                {
+                    name = ctl.CreateSerNo();
+                }
                 SetValue(name);
             }
             #region Fixed Asset Management
