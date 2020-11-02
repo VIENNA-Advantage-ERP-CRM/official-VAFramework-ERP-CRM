@@ -112,7 +112,7 @@
             }	//	BPartner != 0
 
             msql = prepareTable(msqlFrom, msqlWhere, false, "patr") + " ORDER BY asi.GuaranteeDate, QtyOnHand DESC";	//	oldest, smallest first
-            refresh();
+            //refresh();
             topdiv.append(chkShowAll);
             bottomdiv.append(btnCancel).append(btnOk);
             $root.append($busyDiv).append(topdiv).append(middeldiv).append(bottomdiv);
@@ -173,7 +173,7 @@
             try {
                 var _sql = VIS.secureEngine.encrypt(sql);
                 dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetAttributeData", { "Sq1Atribute": _sql, "Product_ID": mProductID }, null);
-                if (dr.length > 0) {
+                if (dr != null && dr.length > 0) {
                     var count = 1;
                     for (var i in dr) {
                         var line = {};
@@ -290,6 +290,7 @@
                     $self.dGrid.search('all', lotNo);
             }
             //$self.dGrid.hideColumn('M_Locator_ID');
+            $busyDiv.css("display", 'none');
         }
 
         function enableButtons() {

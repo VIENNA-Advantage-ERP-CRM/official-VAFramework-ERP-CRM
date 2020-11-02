@@ -211,18 +211,20 @@ namespace VIS.Models
 
                 int startPage = ((pageNo - 1) * pageSize) + 1;
                 int endPage = pageNo * pageSize;
-                string sqlPaging = @"SELECT p.M_Product_ID, NVL(pr.M_AttriButeSetInstance_ID,0) AS M_AttriButeSetInstance_ID, NVL(pr.C_UOM_ID,0) AS C_UOM_ID, 
+                string sqlPaging = @"SELECT DISTINCT p.M_Product_ID, NVL(pr.M_AttriButeSetInstance_ID,0) AS M_AttriButeSetInstance_ID, NVL(pr.C_UOM_ID,0) AS C_UOM_ID, 
                         NVL(pr.M_PriceList_Version_ID,0) AS M_PriceList_Version_ID, w.M_Warehouse_ID FROM M_Product p 
                         LEFT OUTER JOIN M_ProductPrice pr  ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive ='Y') 
                         LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID) 
                         LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)
+                        LEFT OUTER JOIN M_Manufacturer mr ON (p.M_Product_ID = mr.M_Product_ID)
+                        LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID = patr.M_Product_ID)
                         , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, w.M_Warehouse_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
                 sqlPaging = MRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, row_number() over (order by prd.M_Product_ID) AS row_num FROM 
                         (" + sqlPaging + @") prd) t WHERE row_num BETWEEN " + startPage + " AND " + endPage +
                         @") pp ON pp.M_Product_ID = p.M_Product_ID AND pp.M_AttriButeSetInstance_ID = NVL(pr.M_AttriButeSetInstance_ID,0) AND pp.C_UOM_ID = NVL(pr.C_UOM_ID,0) 
                         AND pp.M_Warehouse_ID = w.M_Warehouse_ID AND pp.M_PriceList_Version_ID = NVL(pr.M_PriceList_Version_ID,0)";
-                sql += sqlPaging + where;
+                sql += sqlPaging;       // + where;
                 DataSet data = DB.ExecuteDataset(sql, null, null);
                 if (data == null)
                 {

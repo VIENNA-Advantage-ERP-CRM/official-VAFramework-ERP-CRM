@@ -76,7 +76,9 @@ namespace VAdvantage.Model
                 //
                 String sql = "SELECT * FROM C_GenAttributeValue "
                     + "WHERE C_GenAttribute_ID=" + GetC_GenAttribute_ID()
-                    + "ORDER BY Value";
+                    + " ORDER BY Value";
+                sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_GenAttributeValue", true, false);
+
                 DataSet ds = null;
                 try
                 {
