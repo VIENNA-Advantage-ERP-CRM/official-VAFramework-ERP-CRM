@@ -223,6 +223,11 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         protected override Boolean AfterSave(Boolean newRecord, Boolean success)
         {
+            if (!success)
+            {
+                return success;
+            }
+
             PO wrhus = null;
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
@@ -318,10 +323,6 @@ namespace VAdvantage.Model
         /// <returns></returns>
         protected override Boolean BeforeSave(Boolean newRecord)
         {
-
-            
-
-
             /* Disallow Negative Inventory cannot be checked if there are storage records 
             with negative onhand. */
             if (Is_ValueChanged("IsDisallowNegativeInv") && IsDisallowNegativeInv())
@@ -411,18 +412,15 @@ namespace VAdvantage.Model
 
             // JID_1888 Checks for the duplicate search key
 
-            int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '"
-                + GetValue() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
+            int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '" + GetValue() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
             if (count > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
                 return false;
             }
-
             //JID_1888 checks for the duplicate name
 
-            int countName = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) FROM M_Warehouse WHERE Name= '" 
-                + GetName() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
+            int countName = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) FROM M_Warehouse WHERE Name= '" + GetName() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
             if (countName > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(), "RequiredUniqueName"));

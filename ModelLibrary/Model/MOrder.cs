@@ -15,7 +15,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//////using System.Windows.Forms;
+//using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -25,6 +25,8 @@ using System.IO;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
 using VAdvantage.Print;
+using System.Reflection;
+using ModelLibrary.Classes;
 
 namespace VAdvantage.Model
 {
@@ -39,7 +41,7 @@ namespace VAdvantage.Model
         #region Variables
         /**	Process Message 			*/
         private String _processMsg = null;
-        
+
         /**	Order Lines					*/
         private MOrderLine[] _lines = null;
         /**	Tax Lines					*/
@@ -74,6 +76,9 @@ namespace VAdvantage.Model
         public Decimal? OnHandQty = 0;
         /**is container applicable */
         private bool isContainerApplicable = false;
+
+        private String _budgetMessage = String.Empty;
+
         #endregion
 
         /* 	Create new Order by copying
@@ -1697,7 +1702,9 @@ namespace VAdvantage.Model
                     {
                         MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
                         ol.SetHeaderInfo(this);
-                        list.Add(ol);
+                        //JID_1673 Quantity entered should not be zero
+                        if ((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
+                            list.Add(ol);
                     }
                 }
             }
@@ -2689,7 +2696,7 @@ namespace VAdvantage.Model
             SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -3085,22 +3092,26 @@ namespace VAdvantage.Model
                             Weight = Decimal.Add(Weight, (Decimal.Multiply(product.GetWeight(), line.GetQtyOrdered())));
                         }
 
-                        // Work done by Vivek on 13/11/2017 assigned by Mukesh sir
-                        // Work done to update qtyordered at storage and qtyreserved at order line
-                        // when document is processed in closing state
-                        if (DOCACTION_Close.Equals(GetDocAction()))
+                        //JID_1686,JID_1687 only Items are updated in storage tab
+                        if (product.IsStocked())
                         {
-                            Decimal ordered = isSOTrx ? Env.ZERO : line.GetQtyReserved();
-                            Decimal reserved = isSOTrx ? line.GetQtyReserved() : Env.ZERO;
-                            M_Locator_ID = wh.GetDefaultM_Locator_ID();
-                            if (!MStorage.Add(GetCtx(), line.GetM_Warehouse_ID(), M_Locator_ID,
-                                        line.GetM_Product_ID(),
-                                        line.GetM_AttributeSetInstance_ID(), reserved,
-                                        ordered, Get_TrxName()))
-                                return false;
-                            line.SetQtyReserved(Env.ZERO);
-                            if (!line.Save(Get_TrxName()))
-                                return false;
+                            // Work done by Vivek on 13/11/2017 assigned by Mukesh sir
+                            // Work done to update qtyordered at storage and qtyreserved at order line
+                            // when document is processed in closing state
+                            if (DOCACTION_Close.Equals(GetDocAction()))
+                            {
+                                Decimal ordered = isSOTrx ? Env.ZERO : line.GetQtyReserved();
+                                Decimal reserved = isSOTrx ? line.GetQtyReserved() : Env.ZERO;
+                                M_Locator_ID = wh.GetDefaultM_Locator_ID();
+                                if (!MStorage.Add(GetCtx(), line.GetM_Warehouse_ID(), M_Locator_ID,
+                                            line.GetM_Product_ID(),
+                                            line.GetM_AttributeSetInstance_ID(), reserved,
+                                            ordered, Get_TrxName()))
+                                    return false;
+                                line.SetQtyReserved(Env.ZERO);
+                                if (!line.Save(Get_TrxName()))
+                                    return false;
+                            }
                         }
                         continue;
                     }
@@ -3556,53 +3567,53 @@ namespace VAdvantage.Model
                         #endregion
 
                     }
-                    //
 
-                    if (dt.GetDocBaseType() == "BOO") ///dt.GetValue() == "BSO" || dt.GetValue() == "BPO")
+                    // Enabled Order History Tab
+                    //if (dt.GetDocBaseType() == "BOO") ///dt.GetValue() == "BSO" || dt.GetValue() == "BPO")
+                    //{
+                    if (PO.Get_Table_ID("C_OrderlineHistory") > 0)
                     {
-                        if (PO.Get_Table_ID("C_OrderlineHistory") > 0)
+                        #region C_OrderlineHistory
+                        MOrderlineHistory lHist = null;
+                        GetLines(true, null);
+                        if (_lines.Length > 0)
                         {
-                            #region C_OrderlineHistory
-                            MOrderlineHistory lHist = null;
-                            GetLines(true, null);
-                            if (_lines.Length > 0)
+                            for (int i = 0; i < _lines.Length; i++)
                             {
-                                for (int i = 0; i < _lines.Length; i++)
+                                lHist = new MOrderlineHistory(GetCtx(), 0, Get_TrxName());
+                                lHist.SetClientOrg(_lines[i]);
+                                lHist.SetC_OrderLine_ID(_lines[i].Get_ID());
+                                lHist.SetC_Charge_ID(_lines[i].GetC_Charge_ID());
+                                lHist.SetC_Frequency_ID(_lines[i].GetC_Frequency_ID());
+                                lHist.SetC_Tax_ID(_lines[i].GetC_Tax_ID());
+                                lHist.SetDateOrdered(_lines[i].GetDateOrdered());
+                                lHist.SetDatePromised(_lines[i].GetDatePromised());
+                                lHist.SetDescription(_lines[i].GetDescription());
+                                lHist.SetDiscount(_lines[i].GetDiscount());
+                                lHist.SetEndDate(_lines[i].GetEndDate());
+                                lHist.SetLineNetAmt(_lines[i].GetLineNetAmt());
+                                lHist.SetM_Product_ID(_lines[i].GetM_Product_ID());
+                                lHist.SetC_UOM_ID(_lines[i].GetC_UOM_ID());
+                                lHist.SetM_Shipper_ID(_lines[i].GetM_Shipper_ID());
+                                lHist.SetNoofCycle(_lines[i].GetNoofCycle());
+                                lHist.SetPriceActual(_lines[i].GetPriceActual());
+                                lHist.SetPriceCost(_lines[i].GetPriceCost());
+                                lHist.SetPriceEntered(_lines[i].GetPriceEntered());
+                                lHist.SetPriceList(_lines[i].GetPriceList());
+                                lHist.SetProcessed(true);
+                                lHist.SetQtyEntered(_lines[i].GetQtyEntered());
+                                lHist.SetQtyOrdered(_lines[i].GetQtyOrdered());
+                                lHist.SetQtyPerCycle(_lines[i].GetQtyPerCycle());
+                                lHist.SetStartDate(_lines[i].GetStartDate());
+                                if (!lHist.Save(Get_TrxName()))
                                 {
-                                    lHist = new MOrderlineHistory(GetCtx(), 0, Get_TrxName());
-                                    lHist.SetClientOrg(_lines[i]);
-                                    lHist.SetC_OrderLine_ID(_lines[i].Get_ID());
-                                    lHist.SetC_Charge_ID(_lines[i].GetC_Charge_ID());
-                                    lHist.SetC_Frequency_ID(_lines[i].GetC_Frequency_ID());
-                                    lHist.SetC_Tax_ID(_lines[i].GetC_Tax_ID());
-                                    lHist.SetDateOrdered(_lines[i].GetDateOrdered());
-                                    lHist.SetDatePromised(_lines[i].GetDatePromised());
-                                    lHist.SetDescription(_lines[i].GetDescription());
-                                    lHist.SetDiscount(_lines[i].GetDiscount());
-                                    lHist.SetEndDate(_lines[i].GetEndDate());
-                                    lHist.SetLineNetAmt(_lines[i].GetLineNetAmt());
-                                    lHist.SetM_Product_ID(_lines[i].GetM_Product_ID());
-                                    lHist.SetC_UOM_ID(_lines[i].GetC_UOM_ID());
-                                    lHist.SetM_Shipper_ID(_lines[i].GetM_Shipper_ID());
-                                    lHist.SetNoofCycle(_lines[i].GetNoofCycle());
-                                    lHist.SetPriceActual(_lines[i].GetPriceActual());
-                                    lHist.SetPriceCost(_lines[i].GetPriceCost());
-                                    lHist.SetPriceEntered(_lines[i].GetPriceEntered());
-                                    lHist.SetPriceList(_lines[i].GetPriceList());
-                                    lHist.SetProcessed(true);
-                                    lHist.SetQtyEntered(_lines[i].GetQtyEntered());
-                                    lHist.SetQtyOrdered(_lines[i].GetQtyOrdered());
-                                    lHist.SetQtyPerCycle(_lines[i].GetQtyPerCycle());
-                                    lHist.SetStartDate(_lines[i].GetStartDate());
-                                    if (!lHist.Save(Get_TrxName()))
-                                    {
-                                        _processMsg = "Could not Create Order Line History";
-                                        return DocActionVariables.STATUS_INVALID;
-                                    }
+                                    _processMsg = "Could not Create Order Line History";
+                                    return DocActionVariables.STATUS_INVALID;
                                 }
                             }
-                            #endregion
                         }
+                        #endregion
+                        //}
                     }
 
                     //	Re-Check
@@ -3611,6 +3622,30 @@ namespace VAdvantage.Model
                         String status = PrepareIt();
                         if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                             return status;
+                    }
+                }
+
+                // Handle Budget Control
+                if (Env.IsModuleInstalled("FRPT_") && !IsSOTrx() && !IsReturnTrx())
+                {
+                    // budget control functionality work when Financial Managemt Module Available
+                    try
+                    {
+                        log.Info("Budget Control Start for PO Document No  " + GetDocumentNo());
+                        EvaluateBudgetControlData();
+                        if (_budgetMessage.Length > 0)
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                            SetProcessed(false);
+                            return DocActionVariables.STATUS_INPROGRESS;
+                        }
+                        log.Info("Budget Control Completed for PO Document No  " + GetDocumentNo());
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Severe("Budget Control Issue " + ex.Message);
+                        SetProcessed(false);
+                        return DocActionVariables.STATUS_INPROGRESS;
                     }
                 }
 
@@ -3682,7 +3717,7 @@ namespace VAdvantage.Model
                         if (shipment == null)
                             return DocActionVariables.STATUS_INVALID;
                         Info.Append("Successfully created:@M_InOut_ID@ & doc no.: ").Append(shipment.GetDocumentNo());
-                        _processMsg= Info.ToString();
+                        _processMsg = Info.ToString();
                         if (shipment.GetDocStatus() == "DR")
                         {
                             if (String.IsNullOrEmpty(_processMsg))
@@ -3719,7 +3754,7 @@ namespace VAdvantage.Model
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
                         _processMsg += Info.ToString();
-                       
+
                         String msg = invoice.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
                             Info.Append(" (").Append(msg).Append(")");
@@ -3802,7 +3837,7 @@ namespace VAdvantage.Model
                 _processMsg = Info.ToString();
                 //
                 SetDocAction(DOCACTION_Close);
-               //Changes by abhishek suggested by lokesh on 7/1/2016
+                //Changes by abhishek suggested by lokesh on 7/1/2016
                 //try
                 //{
                 //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from AD_ModuleInfo Where Prefix='VAPOS_'"));
@@ -3872,8 +3907,423 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-           
+
             return DocActionVariables.STATUS_COMPLETED;
+        }
+
+        /// <summary>
+        /// This function is used to check, document is budget control or not.
+        /// </summary>
+        /// <returns>True, when budget controlled or not applicable</returns>
+        private bool EvaluateBudgetControlData()
+        {
+            DataSet dsRecordData;
+            DataRow[] drRecordData = null;
+            DataRow[] drBudgetControl = null;
+            DataSet dsBudgetControlDimension;
+            DataRow[] drBudgetControlDimension = null;
+            List<BudgetControl> _budgetControl = new List<BudgetControl>();
+            StringBuilder sql = new StringBuilder();
+            BudgetCheck budget = new BudgetCheck();
+
+            sql.Clear();
+            sql.Append(@"SELECT GL_Budget.GL_Budget_ID , GL_Budget.BudgetControlBasis, GL_Budget.C_Year_ID , GL_Budget.C_Period_ID,GL_Budget.Name As BudgetName, 
+                  GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName 
+                FROM GL_Budget INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
+                INNER JOIN Ad_ClientInfo ON Ad_ClientInfo.AD_Client_ID = GL_Budget.AD_Client_ID
+                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.AD_Org_ID IN (0 , " + GetAD_Org_ID() + @")
+                   AND GL_BudgetControl.CommitmentType IN('B', 'C') AND
+                  ((GL_Budget.BudgetControlBasis = 'P' AND GL_Budget.C_Period_ID =
+                  (SELECT C_Period.C_Period_ID FROM C_Period INNER JOIN C_Year ON C_Year.C_Year_ID = C_Period.C_Year_ID
+                  WHERE C_Period.IsActive = 'Y'  AND C_Year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID
+                  AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.StartDate AND C_Period.EndDate))
+                OR(GL_Budget.BudgetControlBasis = 'A' AND GL_Budget.C_Year_ID =
+                  (SELECT C_Period.C_Year_ID FROM C_Period INNER JOIN C_Year ON C_Year.C_Year_ID = C_Period.C_Year_ID
+                  WHERE C_Period.IsActive = 'Y'   AND C_Year.C_Calendar_ID = AD_ClientInfo.C_Calendar_ID
+                AND " + GlobalVariable.TO_DATE(GetDateAcct(), true) + @" BETWEEN C_Period.StartDate AND C_Period.EndDate) ) ) 
+                AND(SELECT COUNT(Fact_Acct_ID) FROM Fact_Acct
+                WHERE GL_Budget_ID = GL_Budget.GL_Budget_ID
+                AND(C_Period_ID  IN (NVL(GL_Budget.C_Period_ID, 0))
+                OR C_Period_ID    IN (SELECT C_Period_ID FROM C_Period   WHERE C_Year_ID = NVL(GL_Budget.C_Year_ID, 0)))) > 0");
+            DataSet dsBudgetControl = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
+            if (dsBudgetControl != null && dsBudgetControl.Tables.Count > 0 && dsBudgetControl.Tables[0].Rows.Count > 0)
+            {
+                // get budget control ids (TODO for postgre)
+                object[] budgetControlIds = dsBudgetControl.Tables[0].AsEnumerable().Select(r => r.Field<object>("GL_BUDGETCONTROL_ID")).ToArray();
+                string result = string.Join(",", budgetControlIds);
+                dsBudgetControlDimension = budget.GetBudgetDimension(result);
+
+                // get record posting data 
+                dsRecordData = BudgetControlling();
+                if (dsRecordData != null && dsRecordData.Tables.Count > 0 && dsRecordData.Tables[0].Rows.Count > 0)
+                {
+                    // datarows of Debit values which to be controlled
+                    drRecordData = dsRecordData.Tables[0].Select("Debit > 0 ", " Account_ID ASC");
+                    if (drRecordData != null)
+                    {
+                        // loop on PO record data which is to be debited only 
+                        for (int i = 0; i < drRecordData.Length; i++)
+                        {
+                            // datarows of Budget, of selected accouting schema
+                            drBudgetControl = dsBudgetControl.Tables[0].Select("C_AcctSchema_ID  = " + Util.GetValueOfInt(drRecordData[i]["C_AcctSchema_ID"]));
+
+                            // loop on Budget which to be controlled 
+                            if (drBudgetControl != null)
+                            {
+                                for (int j = 0; j < drBudgetControl.Length; j++)
+                                {
+                                    // get budget Dimension datarow 
+                                    drBudgetControlDimension = dsBudgetControlDimension.Tables[0].Select("GL_BudgetControl_ID  = "
+                                                                + Util.GetValueOfInt(drBudgetControl[j]["GL_BudgetControl_ID"]));
+
+                                    // get BUdgeted Controlled Value based on dimension
+                                    _budgetControl = budget.GetBudgetControlValue(drRecordData[i], drBudgetControl[j], drBudgetControlDimension, GetDateAcct(),
+                                        _budgetControl, Get_Trx(), 'O', GetC_Order_ID());
+
+                                    // Reduce amount from Budget controlled value
+                                    _budgetControl = ReduceAmountFromBudget(drRecordData[i], drBudgetControl[j], drBudgetControlDimension, _budgetControl);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //  no recod found for budget control 
+                log.Info("Budget control not found" + sql.ToString());
+                return true;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// This Function is used to get data based on Posting Logic, which is to be posted after completion.
+        /// </summary>
+        /// <returns>DataSet of Posting Records</returns>
+        private DataSet BudgetControlling()
+        {
+            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE  Export_ID = 'VIS_181'")); // Purchase Order
+            DataSet result = new DataSet();
+            Type type = null;
+            MethodInfo methodInfo = null;
+            string className = "FRPTSvc.Controllers.PostAccLocalizationVO";
+            type = ClassTypeContainer.GetClassType(className, "FRPTSvc");
+            if (type != null)
+            {
+                methodInfo = type.GetMethod("BudgetControlled");
+                if (methodInfo != null)
+                {
+                    ParameterInfo[] parameters = methodInfo.GetParameters();
+                    if (parameters.Length == 8)
+                    {
+                        object[] parametersArray = new object[] { GetCtx(),
+                                                                Util.GetValueOfInt(GetAD_Client_ID()),
+                                                                Util.GetValueOfInt(X_C_Order.Table_ID),//MTable.Get(GetCtx() , "C_Order").GetAD_Table_ID()
+                                                                Util.GetValueOfInt(GetC_Order_ID()),
+                                                                true,
+                                                                Util.GetValueOfInt(GetAD_Org_ID()),
+                                                                ad_window_id,
+                                                                Util.GetValueOfInt(GetC_DocTypeTarget_ID()) };
+                        result = (DataSet)methodInfo.Invoke(null, parametersArray);
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// This Function is used to Reduce From Budget controlled amount
+        /// </summary>
+        /// <param name="drDataRecord">document Posting Record</param>
+        /// <param name="drBUdgetControl">BUdget Control information</param>
+        /// <param name="drBudgetComtrolDimension">Budget Control dimension which is applicable</param>
+        /// <param name="_listBudgetControl">list of budget controls</param>
+        /// <returns>modified list Budget Control</returns>
+        public List<BudgetControl> ReduceAmountFromBudget(DataRow drDataRecord, DataRow drBUdgetControl, DataRow[] drBudgetComtrolDimension, List<BudgetControl> _listBudgetControl)
+        {
+            BudgetControl _budgetControl = null;
+            List<String> selectedDimension = new List<string>();
+            if (drBudgetComtrolDimension != null)
+            {
+                for (int i = 0; i < drBudgetComtrolDimension.Length; i++)
+                {
+                    selectedDimension.Add(Util.GetValueOfString(drBudgetComtrolDimension[i]["ElementType"]));
+                }
+            }
+
+            if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                              (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
+                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
+                                              (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
+                                              (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
+                                              (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
+                                              (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
+                                              (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
+                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
+                                              (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
+                                              (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
+                                              (x.UserList2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList2) ? Util.GetValueOfInt(drDataRecord["UserList2_ID"]) : 0)) &&
+                                              (x.UserElement1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement1) ? Util.GetValueOfInt(drDataRecord["UserElement1_ID"]) : 0)) &&
+                                              (x.UserElement2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement2) ? Util.GetValueOfInt(drDataRecord["UserElement2_ID"]) : 0)) &&
+                                              (x.UserElement3_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement3) ? Util.GetValueOfInt(drDataRecord["UserElement3_ID"]) : 0)) &&
+                                              (x.UserElement4_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement4) ? Util.GetValueOfInt(drDataRecord["UserElement4_ID"]) : 0)) &&
+                                              (x.UserElement5_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement5) ? Util.GetValueOfInt(drDataRecord["UserElement5_ID"]) : 0)) &&
+                                              (x.UserElement6_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement6) ? Util.GetValueOfInt(drDataRecord["UserElement6_ID"]) : 0)) &&
+                                              (x.UserElement7_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement7) ? Util.GetValueOfInt(drDataRecord["UserElement7_ID"]) : 0)) &&
+                                              (x.UserElement8_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement8) ? Util.GetValueOfInt(drDataRecord["UserElement8_ID"]) : 0)) &&
+                                              (x.UserElement9_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement9) ? Util.GetValueOfInt(drDataRecord["UserElement9_ID"]) : 0))
+                                             ))
+            {
+                _budgetControl = _listBudgetControl.Find(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                              (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
+                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
+                                              (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
+                                              (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
+                                              (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
+                                              (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
+                                              (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
+                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
+                                              (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
+                                              (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
+                                              (x.UserList2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList2) ? Util.GetValueOfInt(drDataRecord["UserList2_ID"]) : 0)) &&
+                                              (x.UserElement1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement1) ? Util.GetValueOfInt(drDataRecord["UserElement1_ID"]) : 0)) &&
+                                              (x.UserElement2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement2) ? Util.GetValueOfInt(drDataRecord["UserElement2_ID"]) : 0)) &&
+                                              (x.UserElement3_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement3) ? Util.GetValueOfInt(drDataRecord["UserElement3_ID"]) : 0)) &&
+                                              (x.UserElement4_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement4) ? Util.GetValueOfInt(drDataRecord["UserElement4_ID"]) : 0)) &&
+                                              (x.UserElement5_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement5) ? Util.GetValueOfInt(drDataRecord["UserElement5_ID"]) : 0)) &&
+                                              (x.UserElement6_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement6) ? Util.GetValueOfInt(drDataRecord["UserElement6_ID"]) : 0)) &&
+                                              (x.UserElement7_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement7) ? Util.GetValueOfInt(drDataRecord["UserElement7_ID"]) : 0)) &&
+                                              (x.UserElement8_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement8) ? Util.GetValueOfInt(drDataRecord["UserElement8_ID"]) : 0)) &&
+                                              (x.UserElement9_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement9) ? Util.GetValueOfInt(drDataRecord["UserElement9_ID"]) : 0))
+                                             );
+                _budgetControl.ControlledAmount = Decimal.Subtract(_budgetControl.ControlledAmount, Util.GetValueOfDecimal(drDataRecord["Debit"]));
+                if (_budgetControl.ControlledAmount < 0)
+                {
+                    if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
+                    {
+                        _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                            + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
+                    }
+                    log.Info("Budget control Exceed - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                        + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - (" + _budgetControl.ControlledAmount + ") - Table ID : " +
+                                        Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]));
+                }
+            }
+            else
+            {
+                if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                             (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                             (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
+                                            ))
+                {
+                    if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
+                    {
+                        _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                            + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
+                    }
+                    log.Info("Budget control not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                        + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - Table ID : " +
+                                        Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]) +
+                                        " - Account ID : " + Util.GetValueOfInt(drDataRecord["Account_ID"]));
+                }
+            }
+
+            return _listBudgetControl;
+        }
+
+        /// <summary>
+        /// This Function is used to get those dimension which is not to controlled
+        /// </summary>
+        /// <param name="selectedDimension">controlled dimension</param>
+        /// <returns>where Condition</returns>
+        public String GetNonSelectedDimension(List<String> selectedDimension)
+        {
+            String where = "";
+            String sql = @" SELECT AD_Ref_List.Value FROM AD_Reference INNER JOIN AD_Ref_List ON AD_Ref_List.AD_Reference_ID = AD_Reference.AD_Reference_ID 
+                            WHERE  AD_Reference.AD_Reference_ID=181 AND AD_Ref_List.Value NOT IN ('AC' , 'SA')";
+            DataSet dsElementType = DB.ExecuteDataset(sql, null, null);
+            if (dsElementType != null && dsElementType.Tables.Count > 0)
+            {
+                for (int i = 0; i < dsElementType.Tables[0].Rows.Count; i++)
+                {
+                    if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner)
+                        && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner))
+                    {
+                        where += " AND NVL(C_BPartner_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_Product)
+                        && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product))
+                    {
+                        where += " AND NVL(M_Product_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_Activity)
+                        && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity))
+                    {
+                        where += " AND NVL(C_Activity_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom)
+                        && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom))
+                    {
+                        where += " AND NVL(C_LocFrom_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo))
+                    {
+                        where += " AND NVL(C_LocTo_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign)
+                      && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign))
+                    {
+                        where += " AND NVL(C_Campaign_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx)
+                      && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx))
+                    {
+                        where += " AND NVL(AD_OrgTrx_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_Project)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project))
+                    {
+                        where += " AND NVL(C_Project_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion))
+                    {
+                        where += " AND NVL(C_SalesRegion_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement1)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement1))
+                    {
+                        where += " AND NVL(UserElement1_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement2)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement2))
+                    {
+                        where += " AND NVL(UserElement2_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement3)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement3))
+                    {
+                        where += " AND NVL(UserElement3_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement4)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement4))
+                    {
+                        where += " AND NVL(UserElement4_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement5)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement5))
+                    {
+                        where += " AND NVL(UserElement5_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement6)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement6))
+                    {
+                        where += " AND NVL(UserElement6_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement7)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement7))
+                    {
+                        where += " AND NVL(UserElement7_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement8)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement8))
+                    {
+                        where += " AND NVL(UserElement8_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement9)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement9))
+                    {
+                        where += " AND NVL(UserElement9_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1))
+                    {
+                        where += " AND NVL(User1_ID, 0) = 0 ";
+                    }
+                    else if (Util.GetValueOfString(dsElementType.Tables[0].Rows[i]["Value"]).Equals(X_C_AcctSchema_Element.ELEMENTTYPE_UserList2)
+                       && !selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList2))
+                    {
+                        where += " AND NVL(User2_ID, 0) = 0 ";
+                    }
+                }
+            }
+            return where;
+        }
+
+        /// <summary>
+        /// This function is used to create default record
+        /// </summary>
+        /// <param name="budget_id"></param>
+        /// <param name="budgetControl_Id"></param>
+        /// <param name="acctSchema_ID"></param>
+        /// <param name="account_id"></param>
+        public void CheckOrCreateDefault(int budget_id, int budgetControl_Id, int acctSchema_ID, int account_id, List<BudgetControl> _listBudgetControl)
+        {
+            BudgetControl budgetControl = null;
+            if (!_listBudgetControl.Exists(x => (x.GL_Budget_ID == budget_id) &&
+                                             (x.GL_BudgetControl_ID == budgetControl_Id) &&
+                                             (x.Account_ID == account_id) &&
+                                             (x.AD_Org_ID == 0) &&
+                                             (x.C_BPartner_ID == 0) &&
+                                             (x.M_Product_ID == 0) &&
+                                             (x.C_Activity_ID == 0) &&
+                                             (x.C_LocationFrom_ID == 0) &&
+                                             (x.C_LocationTo_ID == 0) &&
+                                             (x.C_Campaign_ID == 0) &&
+                                             (x.AD_OrgTrx_ID == 0) &&
+                                             (x.C_Project_ID == 0) &&
+                                             (x.C_SalesRegion_ID == 0) &&
+                                             (x.UserList1_ID == 0) &&
+                                             (x.UserList2_ID == 0) &&
+                                             (x.UserElement1_ID == 0) &&
+                                             (x.UserElement2_ID == 0) &&
+                                             (x.UserElement3_ID == 0) &&
+                                             (x.UserElement4_ID == 0) &&
+                                             (x.UserElement5_ID == 0) &&
+                                             (x.UserElement6_ID == 0) &&
+                                             (x.UserElement7_ID == 0) &&
+                                             (x.UserElement8_ID == 0) &&
+                                             (x.UserElement9_ID == 0)
+                                            ))
+            {
+                budgetControl = new BudgetControl();
+                budgetControl.GL_Budget_ID = budget_id;
+                budgetControl.GL_BudgetControl_ID = budgetControl_Id;
+                budgetControl.C_AcctSchema_ID = acctSchema_ID;
+                budgetControl.Account_ID = account_id;
+                budgetControl.AD_Org_ID = 0;
+                budgetControl.M_Product_ID = 0;
+                budgetControl.C_BPartner_ID = 0;
+                budgetControl.C_Activity_ID = 0;
+                budgetControl.C_LocationFrom_ID = 0;
+                budgetControl.C_LocationTo_ID = 0;
+                budgetControl.C_Campaign_ID = 0;
+                budgetControl.AD_OrgTrx_ID = 0;
+                budgetControl.C_Project_ID = 0;
+                budgetControl.C_SalesRegion_ID = 0;
+                budgetControl.UserList1_ID = 0;
+                budgetControl.UserList2_ID = 0;
+                budgetControl.UserElement1_ID = 0;
+                budgetControl.UserElement2_ID = 0;
+                budgetControl.UserElement3_ID = 0;
+                budgetControl.UserElement4_ID = 0;
+                budgetControl.UserElement5_ID = 0;
+                budgetControl.UserElement6_ID = 0;
+                budgetControl.UserElement7_ID = 0;
+                budgetControl.UserElement8_ID = 0;
+                budgetControl.UserElement9_ID = 0;
+                budgetControl.ControlledAmount = 0;
+                _listBudgetControl.Add(budgetControl);
+            }
         }
 
         /// <summary>
@@ -3898,7 +4348,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateOrdered());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -4318,7 +4768,7 @@ namespace VAdvantage.Model
                         int M_Locator_ID = MStorage.GetM_Locator_ID(oLine.GetM_Warehouse_ID(),
                                 oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(),
                                 MovementQty, Get_TrxName());
-                        if (M_Locator_ID == 0)		//	Get default Location
+                        if (M_Locator_ID == 0)      //	Get default Location
                         {
                             MProduct product = ioLine.GetProduct();
                             int M_Warehouse_ID = oLine.GetM_Warehouse_ID();
@@ -4370,7 +4820,7 @@ namespace VAdvantage.Model
                         int M_Locator_ID = MStorage.GetM_Locator_ID(oLine.GetM_Warehouse_ID(),
                                 oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(),
                                 MovementQty, Get_TrxName());
-                        if (M_Locator_ID == 0)		//	Get default Location
+                        if (M_Locator_ID == 0)      //	Get default Location
                         {
                             MProduct product = ioLine.GetProduct();
                             M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
@@ -4860,7 +5310,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else	//	Create Invoice from Order
+                else    //	Create Invoice from Order
                 {
                     if (!INVOICERULE_Immediate.Equals(GetInvoiceRule()))
                         SetInvoiceRule(INVOICERULE_Immediate);
@@ -4952,8 +5402,8 @@ namespace VAdvantage.Model
             MOrder counter = CopyFrom(this, GetDateOrdered(),
                 C_DocTypeTarget_ID, true, true, Get_TrxName());
             //
-            counter.SetDatePromised(GetDatePromised());		// default is date ordered 
-            //	Refernces (Should not be required
+            counter.SetDatePromised(GetDatePromised());     // default is date ordered 
+                                                            //	Refernces (Should not be required
             counter.SetSalesRep_ID(GetSalesRep_ID());
             //
             counter.SetProcessing(false);
@@ -4964,7 +5414,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < counterLines.Length; i++)
             {
                 MOrderLine counterLine = counterLines[i];
-                counterLine.SetOrder(counter);	//	copies header values (BP, etc.)
+                counterLine.SetOrder(counter);  //	copies header values (BP, etc.)
                 counterLine.SetPrice();
                 counterLine.SetTax();
                 counterLine.Save(Get_TrxName());
@@ -5010,9 +5460,9 @@ namespace VAdvantage.Model
             // Added by Vivek on 08/11/2017 assigned by Mukesh sir
             // return false if linked document is in completed or closed stage
             // when we void SO then system void all transaction which is linked with that SO
-            if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)	//	(W)illCall(I)nvoice
-                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
-                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))			//	(W)alkIn(R)eceipt
+            if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)    //	(W)illCall(I)nvoice
+                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)    //	(W)illCall(P)ickup	
+                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))         //	(W)alkIn(R)eceipt
             {
                 // when we void SO then system void all transaction which is linked with that SO
             }
@@ -5099,7 +5549,7 @@ namespace VAdvantage.Model
                 //	Reverse All *Shipments*
                 //Info.Append("@M_InOut_ID@:");
                 Info.Append(Msg.GetMsg(GetCtx(), "Shipment") + ":");
-                MInOut[] shipments = GetShipments(false);	//	get all (line based)
+                MInOut[] shipments = GetShipments(false);   //	get all (line based)
                 for (int i = 0; i < shipments.Length; i++)
                 {
                     MInOut ship = shipments[i];
@@ -5145,12 +5595,12 @@ namespace VAdvantage.Model
                     }
                     ship.SetDocAction(MInOut.DOCACTION_None);
                     ship.Save(Get_TrxName());
-                }	//	for all shipments
+                }   //	for all shipments
 
                 //	Reverse All *Invoices*
                 Info.Append(" - @C_Invoice_ID@:");
                 //Info.Append(Msg.GetMsg(GetCtx(), "SalesOrder"));
-                MInvoice[] invoices = GetInvoices(false);	//	get all (line based)
+                MInvoice[] invoices = GetInvoices(false);   //	get all (line based)
                 for (int i = 0; i < invoices.Length; i++)
                 {
                     MInvoice invoice = invoices[i];
@@ -5167,7 +5617,7 @@ namespace VAdvantage.Model
                         if (invoice.VoidIt())
                             invoice.SetDocStatus(MInvoice.DOCSTATUS_Voided);
                     }
-                    else if (invoice.ReverseCorrectIt())	//	completed invoice
+                    else if (invoice.ReverseCorrectIt())    //	completed invoice
                     {
                         invoice.SetDocStatus(MInvoice.DOCSTATUS_Reversed);
                         Info.Append(" ").Append(invoice.GetDocumentNo());
@@ -5189,7 +5639,7 @@ namespace VAdvantage.Model
                     }
                     invoice.SetDocAction(MInvoice.DOCACTION_None);
                     invoice.Save(Get_TrxName());
-                }	//	for all shipments
+                }   //	for all shipments
 
                 //	Reverse All *RMAs*
                 //Info.Append("@C_Order_ID@:");
@@ -5234,7 +5684,7 @@ namespace VAdvantage.Model
                     }
                     rma.SetDocAction(MInOut.DOCACTION_None);
                     rma.Save(Get_TrxName());
-                }	//	for all shipments
+                }   //	for all shipments
 
                 _processMsg = Info.ToString();
             }
@@ -5323,14 +5773,21 @@ namespace VAdvantage.Model
                     return false;
                 }
 
+                // JID_1035 before reactivating the order user need to void the payment first if orderschedule  exist against current order
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT( VA009_OrderPaySchedule_ID ) FROM VA009_OrderPaySchedule WHERE c_order_id =" + GetC_Order_ID() + " AND (c_payment_id !=0 OR c_cashline_id!=0)")) > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "PaymentmustvoidedFirst");
+                    return false;
+                }
+
                 MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
                 MOrderLine[] lines = null;
                 // Added by Vivek on 08/11/2017 assigned by Mukesh sir
                 // return false if linked document is in completed or closed stage
-                if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)	//	(W)illCall(I)nvoice
-                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
-                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))			//	(W)alkIn(R)eceipt
+                if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)    //	(W)illCall(I)nvoice
+                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)    //	(W)illCall(P)ickup	
+                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))         //	(W)alkIn(R)eceipt
                 {
                     // when we void SO then system void all transaction which is linked with that SO
                 }
@@ -5436,9 +5893,9 @@ namespace VAdvantage.Model
                     log.Info("Existing documents not modified - " + dt);
                 }
                 //	Reverse Direct Documents
-                else if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)	//	(W)illCall(I)nvoice
-                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
-                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))			//	(W)alkIn(R)eceipt
+                else if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)   //	(W)illCall(I)nvoice
+                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)    //	(W)illCall(P)ickup	
+                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))         //	(W)alkIn(R)eceipt
                 {
                     if (!CreateReversals())
                         return false;
@@ -5657,4 +6114,37 @@ namespace VAdvantage.Model
         public int M_ASI_ID { get; set; }
         public int M_ProductContainer_ID { get; set; }
     }
+
+
+    public class BudgetControl
+    {
+        public int GL_Budget_ID { get; set; }
+        public int GL_BudgetControl_ID { get; set; }
+        public int C_AcctSchema_ID { get; set; }
+        public int Account_ID { get; set; }
+        public int AD_Org_ID { get; set; }
+        public int M_Product_ID { get; set; }
+        public int C_BPartner_ID { get; set; }
+        public int C_Activity_ID { get; set; }
+        public int C_LocationFrom_ID { get; set; }
+        public int C_LocationTo_ID { get; set; }
+        public int C_Campaign_ID { get; set; }
+        public int AD_OrgTrx_ID { get; set; }
+        public int C_Project_ID { get; set; }
+        public int C_SalesRegion_ID { get; set; }
+        public int UserElement1_ID { get; set; }
+        public int UserElement2_ID { get; set; }
+        public int UserElement3_ID { get; set; }
+        public int UserElement4_ID { get; set; }
+        public int UserElement5_ID { get; set; }
+        public int UserElement6_ID { get; set; }
+        public int UserElement7_ID { get; set; }
+        public int UserElement8_ID { get; set; }
+        public int UserElement9_ID { get; set; }
+        public int UserList1_ID { get; set; }
+        public int UserList2_ID { get; set; }
+        public Decimal ControlledAmount { get; set; }
+        public String WhereClause { get; set; }
+    }
+
 }

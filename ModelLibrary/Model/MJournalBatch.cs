@@ -13,7 +13,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//////using System.Windows.Forms;
+//using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -414,7 +414,7 @@ namespace VAdvantage.Model
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -617,7 +617,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateDoc());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -757,7 +757,7 @@ namespace VAdvantage.Model
             else
             {
                 description += " ** " + GetDocumentNo() + " **";
-                reverse.SetDescription(description);                
+                reverse.SetDescription(description);
             }
             if (!reverse.Save())
             {
@@ -784,7 +784,7 @@ namespace VAdvantage.Model
                 }
                 if (journal.ReverseCorrectIt(reverse.GetGL_JournalBatch_ID()) == null)
                 {
-                    m_processMsg = "Could not reverse " + journal;                    
+                    m_processMsg = "Could not reverse " + journal;
                     return false;
                 }
                 journal.Save();

@@ -104,7 +104,9 @@ namespace VAdvantage.Model
         /// <returns>year as int or 0</returns>
         public int GetYearAsInt()
         {
-            String year = GetFiscalYear();
+            //String year = GetFiscalYear();
+
+            String year = GetCalendarYears();
             try
             {
                 return int.Parse(year);
