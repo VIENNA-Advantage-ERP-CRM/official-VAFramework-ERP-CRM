@@ -384,6 +384,26 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
+        /** Set Accounting Book.
+     @param C_AcctSchema_ID Rules for accounting */
+        public void SetC_AcctSchema_ID(int C_AcctSchema_ID)
+        {
+            if (C_AcctSchema_ID <= 0)
+                Set_Value("C_AcctSchema_ID", null);
+            else
+                Set_Value("C_AcctSchema_ID", C_AcctSchema_ID);
+        }
+
+        /** Get Accounting Book.
+        @return Rules for accounting */
+        public int GetC_AcctSchema_ID()
+        {
+            Object ii = Get_Value("C_AcctSchema_ID");
+            if (ii == null)
+                return 0;
+            return Convert.ToInt32(ii);
+        }
+
     }
 
 }

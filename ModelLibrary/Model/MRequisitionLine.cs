@@ -380,6 +380,20 @@ namespace VAdvantage.Model
         {
             try
             {
+                // Check Product_ID or charge_ID before save
+                if (GetM_Product_ID() == 0 && GetC_Charge_ID() == 0)
+                {
+                    log.SaveError("VIS_NOProductOrCharge", "");
+                    return false;
+                }
+
+                // QtyEntered should not be zero
+                if (Util.GetValueOfInt(Get_Value("QtyEntered")) == 0)
+                {
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "Quantity"));
+                    return false;
+                }
+
                 MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
                 if (GetLine() == 0)
                 {

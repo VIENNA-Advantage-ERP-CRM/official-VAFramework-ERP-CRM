@@ -566,7 +566,11 @@ namespace VIS.Models
                 return null;
             }
 
-            Type baseClass = type.BaseType;
+            Type baseClass = null;
+            if (type != null)
+            {
+                baseClass = type.BaseType;
+            }
 
             while (baseClass != null)
             {

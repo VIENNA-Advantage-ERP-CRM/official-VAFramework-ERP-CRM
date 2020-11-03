@@ -15,7 +15,7 @@ using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
 using VAdvantage.Print;
-//////using System.Windows.Forms;
+//using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -23,6 +23,8 @@ using VAdvantage.Utility;
 using System.Data;
 using System.IO;
 using VAdvantage.Logging;
+using System.Reflection;
+using ModelLibrary.Classes;
 
 namespace VAdvantage.Model
 {
@@ -36,6 +38,9 @@ namespace VAdvantage.Model
         private MRequisitionLine[] _lines = null;
         MStorage storage = null;
         MStorage Swhstorage = null;
+
+        String _budgetMessage = String.Empty;
+
         /**
         * 	Standard Constructor
         *	@param Ctx context
@@ -298,10 +303,10 @@ namespace VAdvantage.Model
                     || GetM_Warehouse_ID() == 0)
                     return DocActionVariables.STATUS_INVALID;
 
-                
+
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, GetAD_Org_ID()))
                 {
                     _processMsg = "@PeriodClosed@";
                     return DocActionVariables.STATUS_INVALID;
@@ -383,6 +388,29 @@ namespace VAdvantage.Model
                     String status = PrepareIt();
                     if (!DocActionVariables.STATUS_INPROGRESS.Equals(status))
                         return status;
+                }
+
+                if (Env.IsModuleInstalled("FRPT_"))
+                {
+                    // budget control functionality work when Financial Managemt Module Available
+                    try
+                    {
+                        log.Info("Budget Control Start for Rquisition Document No  " + GetDocumentNo());
+                        EvaluateBudgetControlData();
+                        if (_budgetMessage.Length > 0)
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "BudgetExceedFor") + _budgetMessage;
+                            SetProcessed(false);
+                            return DocActionVariables.STATUS_INPROGRESS;
+                        }
+                        log.Info("Budget Control Completed for Rquisition Document No  " + GetDocumentNo());
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Severe("Budget Control Issue " + ex.Message);
+                        SetProcessed(false);
+                        return DocActionVariables.STATUS_INPROGRESS;
+                    }
                 }
 
                 // JID_1290: Set the document number from completed document sequence after completed (if needed)
@@ -535,7 +563,7 @@ namespace VAdvantage.Model
                 SetDateDoc(DateTime.Now.Date);
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
                 {
                     throw new Exception("@PeriodClosed@");
                 }
@@ -557,6 +585,233 @@ namespace VAdvantage.Model
                     SetDocumentNo(value);
                 }
             }
+        }
+
+        /// <summary>
+        /// This function is used to check, document is budget control or not.
+        /// </summary>
+        /// <returns>True, when budget controlled or not applicable</returns>
+        private bool EvaluateBudgetControlData()
+        {
+            DataSet dsRecordData;
+            DataRow[] drRecordData = null;
+            DataRow[] drBudgetControl = null;
+            DataSet dsBudgetControlDimension;
+            DataRow[] drBudgetControlDimension = null;
+            List<BudgetControl> _budgetControl = new List<BudgetControl>();
+            StringBuilder sql = new StringBuilder();
+            BudgetCheck budget = new BudgetCheck();
+
+            sql.Clear();
+            sql.Append(@"SELECT GL_Budget.GL_Budget_ID , GL_Budget.BudgetControlBasis, GL_Budget.C_Year_ID , GL_Budget.C_Period_ID,GL_Budget.Name As BudgetName, 
+                  GL_BudgetControl.C_AcctSchema_ID, GL_BudgetControl.CommitmentType, GL_BudgetControl.BudgetControlScope,  GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControl.Name AS ControlName 
+                FROM GL_Budget INNER JOIN GL_BudgetControl ON GL_Budget.GL_Budget_ID = GL_BudgetControl.GL_Budget_ID
+                INNER JOIN Ad_ClientInfo ON Ad_ClientInfo.AD_Client_ID = GL_Budget.AD_Client_ID
+                WHERE GL_BudgetControl.IsActive = 'Y' AND GL_Budget.IsActive = 'Y' AND GL_BudgetControl.AD_Org_ID IN (0 , " + GetAD_Org_ID() + @")  
+                   AND GL_BudgetControl.CommitmentType IN ('B' ) AND 
+                  (( GL_Budget.BudgetControlBasis = 'P' AND GL_Budget.C_Period_ID =
+                  (SELECT C_Period.C_Period_ID FROM C_Period INNER JOIN c_year ON c_year.c_year_ID      = C_Period.c_year_ID
+                  WHERE C_Period.IsActive  = 'Y'  AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID
+                  AND " + GlobalVariable.TO_DATE(GetDateDoc(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate )) 
+                OR ( GL_Budget.BudgetControlBasis = 'A' AND GL_Budget.C_Year_ID =
+                  (SELECT C_Period.C_Year_ID FROM C_Period INNER JOIN c_year ON c_year.c_year_ID = C_Period.c_year_ID
+                  WHERE C_Period.IsActive  = 'Y'   AND c_year.C_Calendar_ID = Ad_ClientInfo.C_Calendar_ID  
+                AND " + GlobalVariable.TO_DATE(GetDateDoc(), true) + @" BETWEEN C_Period.startdate AND C_Period.enddate   ) ) ) 
+                AND (SELECT COUNT(fact_acct_id) FROM fact_acct
+                WHERE gl_budget_id = GL_Budget.GL_Budget_ID
+                AND (c_period_id  IN ( NVL(GL_Budget.C_Period_ID ,0 ))
+                OR c_period_id    IN (SELECT C_Period_ID FROM C_Period   WHERE C_Year_ID = NVL(GL_Budget.C_Year_ID , 0) ) ) ) > 0");
+            DataSet dsBudgetControl = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
+            if (dsBudgetControl != null && dsBudgetControl.Tables.Count > 0 && dsBudgetControl.Tables[0].Rows.Count > 0)
+            {
+                // get budget control ids
+                object[] budgetControlIds = dsBudgetControl.Tables[0].AsEnumerable().Select(r => r.Field<object>("GL_BUDGETCONTROL_ID")).ToArray();
+                string result = string.Join(",", budgetControlIds);
+                dsBudgetControlDimension = budget.GetBudgetDimension(result);
+
+                // get record posting data 
+                dsRecordData = BudgetControlling();
+                if (dsRecordData != null && dsRecordData.Tables.Count > 0)
+                {
+                    // datarows of Debit values which to be controlled
+                    drRecordData = dsRecordData.Tables[0].Select("Debit > 0 ", " Account_ID ASC");
+                    if (drRecordData != null)
+                    {
+                        // loop on PO record data which is to be debited only 
+                        for (int i = 0; i < drRecordData.Length; i++)
+                        {
+                            // datarows of Budget, of selected accouting schema
+                            drBudgetControl = dsBudgetControl.Tables[0].Select("C_AcctSchema_ID  = " + Util.GetValueOfInt(drRecordData[i]["C_AcctSchema_ID"]));
+
+                            // loop on Budget which to be controlled 
+                            if (drBudgetControl != null)
+                            {
+                                for (int j = 0; j < drBudgetControl.Length; j++)
+                                {
+                                    // get budget Dimension datarow 
+                                    drBudgetControlDimension = dsBudgetControlDimension.Tables[0].Select("GL_BudgetControl_ID  = "
+                                                                + Util.GetValueOfInt(drBudgetControl[j]["GL_BudgetControl_ID"]));
+
+                                    // get BUdgeted Controlled Value based on dimension
+                                    _budgetControl = budget.GetBudgetControlValue(drRecordData[i], drBudgetControl[j], drBudgetControlDimension,
+                                        GetDateDoc(), _budgetControl, Get_Trx(), 'R', 0);
+
+                                    // Reduce amount from Budget controlled value
+                                    _budgetControl = ReduceAmountFromBudget(drRecordData[i], drBudgetControl[j], drBudgetControlDimension, _budgetControl);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //  no recod found for budget control 
+                return true;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// This Function is used to get data based on Posting Logic, which is to be posted after completion.
+        /// </summary>
+        /// <returns>DataSet of Posting Records</returns>
+        private DataSet BudgetControlling()
+        {
+            int ad_window_id = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Window_ID FROM AD_Window WHERE  Export_ID = 'VIS_322'"));
+            DataSet result = new DataSet();
+            Type type = null;
+            MethodInfo methodInfo = null;
+            string className = "FRPTSvc.Controllers.PostAccLocalizationVO";
+            type = ClassTypeContainer.GetClassType(className, "FRPTSvc");
+            if (type != null)
+            {
+                methodInfo = type.GetMethod("BudgetControlled");
+                if (methodInfo != null)
+                {
+                    ParameterInfo[] parameters = methodInfo.GetParameters();
+                    if (parameters.Length == 8)
+                    {
+                        object[] parametersArray = new object[] { GetCtx(),
+                                                                Util.GetValueOfInt(GetAD_Client_ID()),
+                                                                Util.GetValueOfInt(X_M_Requisition.Table_ID),//MTable.Get(GetCtx() , "M_Requisition").GetAD_Table_ID()
+                                                                Util.GetValueOfInt(GetM_Requisition_ID()),
+                                                                true,
+                                                                Util.GetValueOfInt(GetAD_Org_ID()),
+                                                                ad_window_id,
+                                                                Util.GetValueOfInt(GetC_DocType_ID()) };
+                        result = (DataSet)methodInfo.Invoke(null, parametersArray);
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// This Function is used to Reduce From Budget controlled amount
+        /// </summary>
+        /// <param name="drDataRecord">document Posting Record</param>
+        /// <param name="drBUdgetControl">BUdget Control information</param>
+        /// <param name="drBudgetComtrolDimension">Budget Control dimension which is applicable</param>
+        /// <param name="_listBudgetControl">list of Budget controls</param>
+        /// <returns>modified list Budget Control</returns>
+        public List<BudgetControl> ReduceAmountFromBudget(DataRow drDataRecord, DataRow drBUdgetControl, DataRow[] drBudgetComtrolDimension, List<BudgetControl> _listBudgetControl)
+        {
+            BudgetControl _budgetControl = null;
+            List<String> selectedDimension = new List<string>();
+            if (drBudgetComtrolDimension != null)
+            {
+                for (int i = 0; i < drBudgetComtrolDimension.Length; i++)
+                {
+                    selectedDimension.Add(Util.GetValueOfString(drBudgetComtrolDimension[i]["ElementType"]));
+                }
+            }
+
+            if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                              (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
+                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
+                                              (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
+                                              (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
+                                              (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
+                                              (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
+                                              (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
+                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
+                                              (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
+                                              (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
+                                              (x.UserList2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList2) ? Util.GetValueOfInt(drDataRecord["UserList2_ID"]) : 0)) &&
+                                              (x.UserElement1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement1) ? Util.GetValueOfInt(drDataRecord["UserElement1_ID"]) : 0)) &&
+                                              (x.UserElement2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement2) ? Util.GetValueOfInt(drDataRecord["UserElement2_ID"]) : 0)) &&
+                                              (x.UserElement3_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement3) ? Util.GetValueOfInt(drDataRecord["UserElement3_ID"]) : 0)) &&
+                                              (x.UserElement4_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement4) ? Util.GetValueOfInt(drDataRecord["UserElement4_ID"]) : 0)) &&
+                                              (x.UserElement5_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement5) ? Util.GetValueOfInt(drDataRecord["UserElement5_ID"]) : 0)) &&
+                                              (x.UserElement6_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement6) ? Util.GetValueOfInt(drDataRecord["UserElement6_ID"]) : 0)) &&
+                                              (x.UserElement7_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement7) ? Util.GetValueOfInt(drDataRecord["UserElement7_ID"]) : 0)) &&
+                                              (x.UserElement8_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement8) ? Util.GetValueOfInt(drDataRecord["UserElement8_ID"]) : 0)) &&
+                                              (x.UserElement9_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement9) ? Util.GetValueOfInt(drDataRecord["UserElement9_ID"]) : 0))
+                                             ))
+            {
+                _budgetControl = _listBudgetControl.Find(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                              (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
+                                              (x.AD_Org_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["AD_Org_ID"]) : 0)) &&
+                                              (x.C_BPartner_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["C_BPartner_ID"]) : 0)) &&
+                                              (x.M_Product_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
+                                              (x.C_Activity_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["C_Activity_ID"]) : 0)) &&
+                                              (x.C_LocationFrom_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
+                                              (x.C_LocationTo_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
+                                              (x.C_Campaign_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["C_Campaign_ID"]) : 0)) &&
+                                              (x.AD_OrgTrx_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["AD_OrgTrx_ID"]) : 0)) &&
+                                              (x.C_Project_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
+                                              (x.C_SalesRegion_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
+                                              (x.UserList1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
+                                              (x.UserList2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserList2) ? Util.GetValueOfInt(drDataRecord["UserList2_ID"]) : 0)) &&
+                                              (x.UserElement1_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement1) ? Util.GetValueOfInt(drDataRecord["UserElement1_ID"]) : 0)) &&
+                                              (x.UserElement2_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement2) ? Util.GetValueOfInt(drDataRecord["UserElement2_ID"]) : 0)) &&
+                                              (x.UserElement3_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement3) ? Util.GetValueOfInt(drDataRecord["UserElement3_ID"]) : 0)) &&
+                                              (x.UserElement4_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement4) ? Util.GetValueOfInt(drDataRecord["UserElement4_ID"]) : 0)) &&
+                                              (x.UserElement5_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement5) ? Util.GetValueOfInt(drDataRecord["UserElement5_ID"]) : 0)) &&
+                                              (x.UserElement6_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement6) ? Util.GetValueOfInt(drDataRecord["UserElement6_ID"]) : 0)) &&
+                                              (x.UserElement7_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement7) ? Util.GetValueOfInt(drDataRecord["UserElement7_ID"]) : 0)) &&
+                                              (x.UserElement8_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement8) ? Util.GetValueOfInt(drDataRecord["UserElement8_ID"]) : 0)) &&
+                                              (x.UserElement9_ID == (selectedDimension.Contains(X_C_AcctSchema_Element.ELEMENTTYPE_UserElement9) ? Util.GetValueOfInt(drDataRecord["UserElement9_ID"]) : 0))
+                                             );
+                _budgetControl.ControlledAmount = Decimal.Subtract(_budgetControl.ControlledAmount, Util.GetValueOfDecimal(drDataRecord["Debit"]));
+                if (_budgetControl.ControlledAmount < 0)
+                {
+                    if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
+                    {
+                        _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                            + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
+                    }
+                    log.Info("Budget control Exceed - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                        + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - (" + _budgetControl.ControlledAmount + ") - Table ID : " +
+                                        Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]));
+                }
+            }
+            else
+            {
+                if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
+                                             (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                                             (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
+                                            ))
+                {
+                    if (!_budgetMessage.Contains(Util.GetValueOfString(drBUdgetControl["BudgetName"])))
+                    {
+                        _budgetMessage += Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                            + Util.GetValueOfString(drBUdgetControl["ControlName"]) + ", ";
+                    }
+                    log.Info("Budget control not defined for - " + Util.GetValueOfString(drBUdgetControl["BudgetName"]) + " - "
+                                        + Util.GetValueOfString(drBUdgetControl["ControlName"]) + " - Table ID : " +
+                                        Util.GetValueOfInt(drDataRecord["LineTable_ID"]) + " - Record ID : " + Util.GetValueOfInt(drDataRecord["Line_ID"]) +
+                                        " - Account ID : " + Util.GetValueOfInt(drDataRecord["Account_ID"]));
+                }
+            }
+
+            return _listBudgetControl;
         }
 
         /*	Set Processed.

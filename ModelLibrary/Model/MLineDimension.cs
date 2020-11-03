@@ -11,6 +11,8 @@ namespace VAdvantage.Model
 {
     public class MLineDimension : X_GL_LineDimension
     {
+        /** Is record save from GL Voucher form **/
+        private bool _isSaveFromForm;
         public MLineDimension(Ctx ctx, int GL_LineDimension_ID, Trx trxName)
              : base(ctx, GL_LineDimension_ID, trxName)
         {
@@ -24,8 +26,9 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             MJournalLine obj = new MJournalLine(GetCtx(), GetGL_JournalLine_ID(), Get_Trx());
-            // In Case of reversal, bypass this condition
-            if (!(obj.Get_ColumnIndex("ReversalDoc_ID") > 0 && obj.GetReversalDoc_ID() > 0))
+
+            // In Case of reversal and form data, bypass this condition
+            if (!(obj.Get_ColumnIndex("ReversalDoc_ID") > 0 && obj.GetReversalDoc_ID() > 0) && !GetIsFormData())
             {
                 string val = "";
                 if (obj.GetAmtSourceDr() > 0)
@@ -54,7 +57,22 @@ namespace VAdvantage.Model
             return true;
         }
 
+        /// setter property for checking data to be manual creation of through process
+        /// </summary>
+        /// <param name="isformData">true, if data saved through process</param>
+        public void SetIsFormData(bool isformData)
+        {
+            _isSaveFromForm = isformData;
+        }
 
+        /// <summary>
+        /// getter property for checking data saved from procss or manual
+        /// </summary>
+        /// <returns></returns>
+        public bool GetIsFormData()
+        {
+            return _isSaveFromForm;
+        }
 
 
     }

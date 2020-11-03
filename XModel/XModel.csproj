@@ -56,6 +56,7 @@
     <Compile Include="ModelAD\X_AD_AssignSet.cs" />
     <Compile Include="ModelAD\X_AD_AssignTarget.cs" />
     <Compile Include="ModelAD\X_AD_Attachment.cs" />
+    <Compile Include="ModelAD\X_AD_AttachmentLine.cs" />
     <Compile Include="ModelAD\X_AD_AttachmentNote.cs" />
     <Compile Include="ModelAD\X_AD_AttachmentReference.cs" />
     <Compile Include="ModelAD\X_AD_Attribute.cs" />

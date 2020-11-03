@@ -3945,7 +3945,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
             // Get Workflow Activity details from selected Text Template
             MWFNode node = MWFNode.Get(po.GetCtx(), GetAD_WF_Node_ID());
-            if (node.Get_ColumnIndex("AD_TextTemplate_ID") > 0 && node.GetAD_TextTemplate_ID() > 0)
+            if (node.Get_ColumnIndex("AD_TextTemplate_ID") >= 0 && node.GetAD_TextTemplate_ID() > 0)
             {
                 string mailtext = Util.GetValueOfString(DB.ExecuteScalar("SELECT MailText FROM AD_TextTemplate WHERE AD_TextTemplate_ID = " + node.GetAD_TextTemplate_ID()));
                 sb.Append(VAdvantage.Common.Common.Parse(mailtext, po));

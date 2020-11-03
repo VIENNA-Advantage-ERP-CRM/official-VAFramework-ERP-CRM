@@ -605,14 +605,14 @@ namespace VAdvantage.Model
                 return false;
             }
             MStorage storageASI = null;
-            if (M_AttributeSetInstance_ID != reservationAttributeSetInstance_ID)
+            if (M_AttributeSetInstance_ID != reservationAttributeSetInstance_ID && reservationAttributeSetInstance_ID != 0)
             {
                 int reservationM_Locator_ID = M_Locator_ID;
-                if (reservationAttributeSetInstance_ID == 0)
-                {
-                    MWarehouse wh = MWarehouse.Get(Ctx, M_Warehouse_ID);
-                    reservationM_Locator_ID = wh.GetDefaultM_Locator_ID();
-                }
+                //if (reservationAttributeSetInstance_ID == 0)
+                //{
+                //    MWarehouse wh = MWarehouse.Get(Ctx, M_Warehouse_ID);
+                //    reservationM_Locator_ID = wh.GetDefaultM_Locator_ID();
+                //}
                 storageASI = Get(Ctx, reservationM_Locator_ID, M_Product_ID, reservationAttributeSetInstance_ID, trxName);
                 if (storageASI == null)	//	create if not existing - should not happen
                 {
