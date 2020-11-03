@@ -762,6 +762,14 @@ namespace VAdvantage.Model
             //    }
             //}
             //End
+            if (CASHTYPE_BusinessPartner.Equals(GetCashType()) && VSS_PAYMENTTYPE_PaymentReturn.Equals(GetVSS_PAYMENTTYPE()) && GetAmount() < 0)
+            {
+                SetAmount(Math.Abs(GetAmount()));
+            }
+            else if (CASHTYPE_BusinessPartner.Equals(GetCashType()) && VSS_PAYMENTTYPE_ReceiptReturn.Equals(GetVSS_PAYMENTTYPE()) && GetAmount() > 0)
+            {
+                SetAmount(Decimal.Negate(GetAmount()));
+            }
 
             // Reset Amount Dimension if Amount is different
             if (Util.GetValueOfInt(Get_Value("AmtDimAmount")) > 0)
