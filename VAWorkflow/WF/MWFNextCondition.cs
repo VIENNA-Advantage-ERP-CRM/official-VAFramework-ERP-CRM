@@ -93,6 +93,30 @@ namespace VAdvantage.WF
             if (value2 == null)
                 value2 = "";
 
+            // If column is of bool type and user insert y or n in condition, then convert them to true or false to match with value got from PO.
+            if (MColumn.Get(GetCtx(), GetAD_Column_ID()).GetAD_Reference_ID().Equals(DisplayType.YesNo))
+            {
+                if (value1.ToLower().Equals("y"))
+                {
+                    value1 = "true";
+                }
+                else if (value1.ToLower().Equals("n"))
+                {
+                    value1 = "false";
+                }
+
+                if (value2.ToLower().Equals("y"))
+                {
+                    value2 = "true";
+                }
+                else if (value2.ToLower().Equals("n"))
+                {
+                    value2 = "false";
+                }
+
+            }
+
+
             String resultStr = "PO:{" + valueObj + "} " + GetOperation() + " Condition:{" + value1 + "}";
             if (GetOperation().Equals(OPERATION_Sql))
                 throw new ArgumentException("SQL Operator not implemented yet: " + resultStr);
@@ -784,8 +808,8 @@ namespace VAdvantage.WF
                 int wfcattSetIns = Util.GetValueOfInt(GetC_GenAttributeSetInstance_ID());
                 int rcattSetIns = Util.GetValueOfInt(po.Get_Value("C_GenAttributeSetInstance_ID"));
 
-                DataSet wfcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id='" + wfcattSetIns + "'", null);
-                DataSet rcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id='" + rcattSetIns + "'", null);
+                DataSet wfcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id=" + wfcattSetIns, null);
+                DataSet rcDs = DB.ExecuteDataset("select c_genattribute_id,c_genattributevalue_id from C_GenAttributeInstance where C_GenAttributeSetInstance_id=" + rcattSetIns, null);
                 bool retVal = true;
                 for (int i = 0; i < wfcDs.Tables[0].Rows.Count; i++)
                 {

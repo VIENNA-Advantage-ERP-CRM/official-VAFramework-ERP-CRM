@@ -132,6 +132,7 @@
     <Compile Include="ModelAD\MAssignTarget.cs" />
     <Compile Include="ModelAD\MAttachment.cs" />
     <Compile Include="ModelAD\MAttachmentEntry.cs" />
+    <Compile Include="ModelAD\MAttachmentLine.cs" />
     <Compile Include="ModelAD\MAttachmentNote.cs" />
     <Compile Include="ModelAD\MAttachmentReference.cs" />
     <Compile Include="ModelAD\MCardView.cs" />

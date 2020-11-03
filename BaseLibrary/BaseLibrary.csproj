@@ -56,10 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audit\MActionLog.cs" />
     <Compile Include="Audit\MChangeLog.cs" />
     <Compile Include="Audit\MQueryLog.cs" />
     <Compile Include="Audit\MSession.cs" />
     <Compile Include="Audit\MWindowLog.cs" />
+    <Compile Include="Audit\X_AD_ActionLog.cs" />
     <Compile Include="Audit\X_AD_ChangeLog.cs" />
     <Compile Include="Audit\X_AD_Issue.cs" />
     <Compile Include="Audit\X_AD_QueryLog.cs" />

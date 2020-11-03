@@ -1,11 +1,11 @@
 ﻿/********************************************************
- * Project Name   : VAdvantage
- * Class Name     : CommissionAPInvoice
- * Purpose        : Create AP Invoices for Commission 
- * Class Used     : ProcessEngine.SvrProcess
- * Chronological    Development
- * Raghunandan      11-Dec-2009
-  ******************************************************/
+* Project Name   : VAdvantage
+* Class Name     : CommissionAPInvoice
+* Purpose        : Create AP Invoices for Commission 
+* Class Used     : ProcessEngine.SvrProcess
+* Chronological    Development
+* Raghunandan      11-Dec-2009
+ ******************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
 using VAdvantage.Utility;
-//using System.Windows.Forms;
+using System.Windows.Forms;
 
 using System.Data;
 using System.Data.SqlClient;
@@ -29,6 +29,8 @@ namespace VAdvantage.Process
 {
     public class CommissionAPInvoice : ProcessEngine.SvrProcess
     {
+        //Document Type 
+        private int _C_DocType_ID = 0;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -41,6 +43,10 @@ namespace VAdvantage.Process
                 if (para[i].GetParameter() == null)
                 {
                     ;
+                }
+                else if (name.Equals("C_DocType_ID"))
+                {
+                    _C_DocType_ID = para[i].GetParameterAsInt(); ;
                 }
                 else
                 {
@@ -81,10 +87,12 @@ namespace VAdvantage.Process
                 throw new ArgumentException("CommissionAPInvoice - No BPartner");
             }
 
-            //	Create Invoice
+            //	Create Expense Invoice 
             MInvoice invoice = new MInvoice(GetCtx(), 0, null);
             invoice.SetClientOrg(com.GetAD_Client_ID(), com.GetAD_Org_ID());
-            invoice.SetC_DocTypeTarget_ID(MDocBaseType.DOCBASETYPE_APINVOICE);	//	API
+            invoice.SetC_DocTypeTarget_ID(_C_DocType_ID);   //	API
+            invoice.SetIsExpenseInvoice(true);
+            invoice.SetIsSOTrx(false);
             invoice.SetBPartner(bp);
 
             // JID_0101: When we generate the AP invoice from Commission run window, its giving price list error.
