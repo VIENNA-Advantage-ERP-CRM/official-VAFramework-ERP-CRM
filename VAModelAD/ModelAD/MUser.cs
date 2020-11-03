@@ -975,7 +975,8 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="value">value</param>
         /// <returns>lower case cleaned value</returns>
-        private String CleanValue(String value)
+        private String 
+            CleanValue(String value)
         {
             char[] chars = value.ToCharArray();
             StringBuilder sb = new StringBuilder();
@@ -984,7 +985,7 @@ namespace VAdvantage.Model
                 char ch = chars[i];
                 //ch = Char.ToLower(ch);
                 if ((ch >= '0' && ch <= '9')		//	digits
-                    || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '.')	//	characters
+                    || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '.' || ch == '@' || ch == '_')	// Characters
                     sb.Append(ch);
             }
             return sb.ToString();

@@ -521,6 +521,7 @@
     <Compile Include="Process\BPartnerOrgUnLink.cs" />
     <Compile Include="Process\BPartnerValidate.cs" />
     <Compile Include="Process\BPGroupAcctCopy.cs" />
+    <Compile Include="Process\CalculateCrossCurrRate.cs" />
     <Compile Include="Process\CalculateForeignCost.cs" />
     <Compile Include="Process\CommissionAPInvoice.cs" />
     <Compile Include="Process\CommissionCalc.cs" />
