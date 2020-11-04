@@ -1509,6 +1509,11 @@ namespace VAdvantage.CrystalReport
             return true;
         }
 
+        /// <summary>
+        /// Check if a column is marked as obscure and add regaular expression.
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns>SQL</returns>
         private string GetObscureSql(string sql)
         {
             string tableName = sql.Substring(sql.IndexOf("FROM") + 4).Trim().Split(' ')[0].ToString().Trim();

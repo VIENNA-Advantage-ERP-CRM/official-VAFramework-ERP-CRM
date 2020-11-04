@@ -23,6 +23,9 @@ namespace ViennaAdvantageServer.Process
         bool isTaxIncluded = false;
         int StdPrecision = 0;
         IDataReader dr;
+        VAdvantage.Model.X_C_Contract contact = null;
+        VAdvantage.Model.X_C_OrderLine line = null;
+        string DocumntNo;
 
         protected override void Prepare()
         {
@@ -52,11 +55,11 @@ namespace ViennaAdvantageServer.Process
 
                 while (dr.Read())
                 {
-                    VAdvantage.Model.X_C_OrderLine line = new VAdvantage.Model.X_C_OrderLine(GetCtx(), Util.GetValueOfInt(dr[0]), Get_TrxName());
+                    line = new VAdvantage.Model.X_C_OrderLine(GetCtx(), Util.GetValueOfInt(dr[0]), Get_TrxName());
                     if (line.IsContract() && line.GetC_Contract_ID() == 0)
                     {
 
-                        VAdvantage.Model.X_C_Contract contact = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, Get_TrxName());
+                        contact = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, Get_TrxName());
                         int M_PriceList_ID = Util.GetValueOfInt(order.GetM_PriceList_ID());
 
                         //Neha---Commented code because object created but not used in further class---04 Sep,2018
@@ -221,7 +224,7 @@ namespace ViennaAdvantageServer.Process
                             DB.ExecuteScalar(_qry, null, Get_TrxName());
                         }
                         //C_Contract_ID = contact.GetC_Contract_ID();
-
+                        DocumntNo += contact.GetDocumentNo() + ",";
                     }
 
                 }
@@ -231,7 +234,7 @@ namespace ViennaAdvantageServer.Process
                 {
 
                 }
-                return Msg.GetMsg(GetCtx(), "ServiceContractGenerationDone");
+                return Msg.GetMsg(GetCtx(), "ServiceContractGenerationDone") + DocumntNo.TrimEnd(',');
             }
             catch (Exception ex)
             {

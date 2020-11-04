@@ -267,6 +267,8 @@ namespace VAdvantage.Controller
         public bool ShowFilterOption = false;
 
         public bool IsUnique = false;
+        /**	Display Obscure	*/
+        public String ObscureFieldType = null;
 
 
         /// <summary>

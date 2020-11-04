@@ -54,7 +54,7 @@ namespace VAdvantage.Process
                 }
                 string changedValues = _reqAction.GetChangedValues();
                 bool _changed = false;
-                 sendInfo = new List<String>();
+                sendInfo = new List<String>();
 
                 if (!string.IsNullOrEmpty(changedValues))
                 {
@@ -226,6 +226,7 @@ namespace VAdvantage.Process
                         log.Config("Opt out: " + Name);
                         continue;
                     }
+                    // JID_1858 IF User's Notification Type is Notice is allow to send notification to respective User
                     if ((X_AD_User.NOTIFICATIONTYPE_EMail.Equals(NotificationType)
                         || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
                         && (email == null || email.Length == 0))
@@ -239,7 +240,7 @@ namespace VAdvantage.Process
                         }
                     }
                     if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
-                        && AD_Role_ID >= 0)
+                        && AD_Role_ID < 0)
                     {
                         log.Config("No internal User: " + Name);
                         continue;
@@ -389,10 +390,10 @@ namespace VAdvantage.Process
             else
             {
                 message = new StringBuilder();
-                
+
                 MMailText text = new MMailText(GetCtx(), mailText_ID, null);
                 text.SetPO(_req, true); //Set _Po Current value
-                subject += _req. GetDocumentNo() + ": " + text.GetMailHeader();
+                subject += _req.GetDocumentNo() + ": " + text.GetMailHeader();
 
                 message.Append(text.GetMailText(true));
                 if (_req.GetDateNextAction() != null)
