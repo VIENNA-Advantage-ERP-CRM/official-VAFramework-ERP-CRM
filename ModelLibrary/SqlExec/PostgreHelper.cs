@@ -574,7 +574,7 @@ namespace VAdvantage.SqlExec.PostgreSql
 
 
 
-            commandText = "select * FROM (SELECT t.*, row_number() OVER () as rnum FROM (" + commandText + ") t ) WHERE rnum BETWEEN (((" + pageNumber + " - 1) * " + pageSize + ") + 1) AND ((" + pageNumber + " * " + pageSize + "))";
+            commandText = "select * FROM (SELECT t.*, row_number() OVER () as rnum FROM (" + commandText + ") t )t1 WHERE rnum BETWEEN (((" + pageNumber + " - 1) * " + pageSize + ") + 1) AND ((" + pageNumber + " * " + pageSize + "))";
 
 
 
