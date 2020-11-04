@@ -727,8 +727,13 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
-
-
+        /// <summary>
+        /// Return Regulax expression to used to sql for gettng obscure data
+        /// </summary>
+        /// <param name="obscureType"></param>
+        /// <param name="tableName"></param>
+        /// <param name="columnName"></param>
+        /// <returns>SQL</returns>
         public static string GetObscureColumn(string obscureType, string tableName, string columnName)
         {
             if (DB.IsOracle())
@@ -773,5 +778,6 @@ namespace VAdvantage.DataBase
 
             return tableName + "." + columnName;
         }
+
     }
 }
