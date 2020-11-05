@@ -4342,6 +4342,8 @@
                     // if saved for future then display Message and refresh UI
                     else if (out.Status == "F")
                         VIS.ADialog.info("SavedForFuture");
+                    else if (out.Status == "B")
+                        VIS.ADialog.info("SavedForBackDate");
                 }
             }
             return out.Status;

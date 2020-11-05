@@ -2720,14 +2720,14 @@ namespace VAdvantage.Model
                                 if (keyCols[w] != null)
                                     whereCond.Append(keyCols[w] + " = " + Get_Value(keyCols[w]));
                                 else
-                                    whereCond.Append(" NVL(" + keyCols[w] + ",0) = 0");
+                                    whereCond.Append(" COALESCE(" + keyCols[w] + ",0) = 0");
                             }
                             else
                             {
                                 if (keyCols[w] != null)
                                     whereCond.Append(" AND " + keyCols[w] + " = " + Get_Value(keyCols[w]));
                                 else
-                                    whereCond.Append(" AND NVL(" + keyCols[w] + ",0) = 0");
+                                    whereCond.Append(" AND COALESCE(" + keyCols[w] + ",0) = 0");
                             }
                         }
                         po = tbl.GetPO(p_ctx, whereCond.ToString(), _trx);
