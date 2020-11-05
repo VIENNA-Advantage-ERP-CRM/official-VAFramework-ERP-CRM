@@ -1612,7 +1612,7 @@
 
                             //var Where = "UPPER( " + columnName + ") BETWEEN UPPER('" + parsedValue + "') AND UPPER('" + parsedValue2 + "')";
 
-                            var Where = createDirectSql(parsedValue, parsedValue2, columnName, optr, true);
+                            var Where = createDirectSql(parsedValue, parsedValue2, columnName, optr, true, true);
 
                             where = VIS.Env.parseContext(VIS.context, windowNo, Where, false);
                             _query.addRestriction(Where);
@@ -1620,7 +1620,7 @@
                         else {
                             //var Where = columnName + optr + value;
 
-                            var Where = createDirectSql(parsedValue, parsedValue2, columnName, optr, true);
+                            var Where = createDirectSql(parsedValue, parsedValue2, columnName, optr, true, true);
                             where = VIS.Env.parseContext(VIS.context, windowNo, Where, false);
                             _query.addRestriction(Where);
                         }
@@ -1676,7 +1676,7 @@
 
 
                             if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
-                                var Where = createDirectSql(parsedValue, parsedValue2, columnSQL, optr, false);
+                                var Where = createDirectSql(parsedValue, parsedValue2, columnSQL, optr, false, false);
                                 where = VIS.Env.parseContext(VIS.context, windowNo, Where, false);
                                 _query.addRestriction(Where);
                             }
@@ -1713,7 +1713,7 @@
                             }
                             else {
                                 if (field.getDisplayType() == VIS.DisplayType.AmtDimension) {
-                                    var Where = createDirectSql(parsedValue, parsedValue2, columnSQL, optr, false);
+                                    var Where = createDirectSql(parsedValue, parsedValue2, columnSQL, optr, false, false);
                                     where = VIS.Env.parseContext(VIS.context, windowNo, Where, false);
                                     _query.addRestriction(Where);
                                 }
@@ -1730,14 +1730,16 @@
             return _query;
         };
 
-        function createDirectSql(code, code_to, column, operator, convertToString) {
+        function createDirectSql(code, code_to, column, operator, convertToString, isVirtualCol) {
             var sb = "";
             var isoDateRegx = /(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})/;
             if (typeof code == "string") {
                 sb += " UPPER( ";
             }
 
-            sb += tableName+"."+ column;
+            if (!isVirtualCol)
+                sb += tableName + ".";
+            sb += column;
 
 
             if (typeof code == "string") {
