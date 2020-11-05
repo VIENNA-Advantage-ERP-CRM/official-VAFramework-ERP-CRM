@@ -117,12 +117,12 @@ namespace VIS.Controllers
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult DownloadAttachment(string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID)
+        public JsonResult DownloadAttachment(string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID, string actionOrigin, string originName, int AD_Table_ID, int recordID)
         {
             //List<AttFileInfo> _files = JsonConvert.DeserializeObject<List<AttFileInfo>>(files);
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentModel am = new AttachmentModel();
-            return Json(new { result = am.DownloadAttachment(ctx, fileName, AD_Attachment_ID, AD_AttachmentLine_ID) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = am.DownloadAttachment(ctx, fileName, AD_Attachment_ID, AD_AttachmentLine_ID, actionOrigin, originName, AD_Table_ID, recordID) }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
