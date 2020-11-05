@@ -844,8 +844,8 @@ span.vis-ad-w-p-tb-rc-action {
 }
 
 
-.vis-css-treewindow input {
-    position: absolute;
+.vis-css-treewindow input[type="checkbox"] {
+    position: absolute !important;
     opacity: 0;
 }
 
@@ -881,8 +881,7 @@ span.vis-ad-w-p-tb-rc-action {
         }
 
     .vis-css-treewindow > ul {
-        /*-- color: #00f;*/
-        margin: 10px 10px 0px 0px;
+        padding: 2px 10px 0px 7px;
         width: auto;
     }
 

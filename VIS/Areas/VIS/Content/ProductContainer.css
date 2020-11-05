@@ -70,6 +70,7 @@
 .VIS_tree-container ul.nav-list {
     /*padding-left: 20px;
     flex-flow: column;*/
+    padding: 0;
 }
 
 .current {
