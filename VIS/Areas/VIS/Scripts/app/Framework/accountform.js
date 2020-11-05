@@ -3,7 +3,8 @@
     function AccountForm(header, account, cAcctSchemaId, tblID_s) {
         this.onClose = null;
         var root = $("<div style='position:relative;'>");
-        var $busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        //var $busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var $self = this;
 

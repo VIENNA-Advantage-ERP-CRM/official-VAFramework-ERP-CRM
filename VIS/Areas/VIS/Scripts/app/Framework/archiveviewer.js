@@ -92,7 +92,7 @@
         function initializeComponent() {
 
             chkReportQ = $("<label id='" + "lblReportQ_" + $self.windowNo + "' class='vis-ec-col-lblchkbox'><input id='" + "chkReportQ_" + $self.windowNo + "' type='checkbox' style='margin-left: 0px;' class='VIS_Pref_automatic'>" + VIS.Msg.translate(VIS.Env.getCtx(), "IsReport") +
-           "</label>");
+                "</label>");
 
             lblBPartnerQ = new VIS.Controls.VLabel();
             lblProcessQ = new VIS.Controls.VLabel();
@@ -147,7 +147,7 @@
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
             topLeftDiv = $("<div class='vis-archive-left-sidebar' id='" + "topLeftDiv_" + $self.windowNo + "'>" +
                 "<div id='" + "topToggalDiv_" + $self.windowNo + "' class='vis-archive-l-s-head'>" +
-                       "<button id='" + "btnToggal_" + $self.windowNo + "' class='vis-archive-sb-t-button'><i class='vis vis-arrow-left'></i></button></div></div>");
+                "<button id='" + "btnToggal_" + $self.windowNo + "' class='vis-archive-sb-t-button'><i class='vis vis-arrow-left'></i></button></div></div>");
 
             this.btnToggal = topLeftDiv.find("#btnToggal_" + $self.windowNo);
 
@@ -399,7 +399,7 @@
             Leftformfieldwrp.append(Leftformfieldctrlwrp);
             Leftformfieldctrlwrp.append(txtName.getControl().attr('data-placeholder', '').attr('placeholder', ' ').addClass("VIS_Pref_Label_Font"));
             Leftformfieldctrlwrp.append(lblName.getControl().addClass("VIS_Pref_Label_Font"));
-            
+
             td = $("<td colspan='2' class='VIS-archive-table-padding'>");
             var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
             var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
@@ -473,10 +473,10 @@
             var defaultItem = true;
             //	Processes
             var sql = "SELECT DISTINCT p.AD_Process_ID, p.Name "
-                    + "FROM AD_Process p INNER JOIN AD_Process_Access pa ON (p.AD_Process_ID=pa.AD_Process_ID) "
-                    + "WHERE pa.AD_Role_ID=" + AD_Role_ID
-                    + " AND p.IsReport='Y' AND p.IsActive='Y' AND pa.IsActive='Y' "
-                    + "ORDER BY 2";
+                + "FROM AD_Process p INNER JOIN AD_Process_Access pa ON (p.AD_Process_ID=pa.AD_Process_ID) "
+                + "WHERE pa.AD_Role_ID=" + AD_Role_ID
+                + " AND p.IsReport='Y' AND p.IsActive='Y' AND pa.IsActive='Y' "
+                + "ORDER BY 2";
 
             var dr = VIS.DB.executeReader(sql.toString(), null);
             var key, value;
@@ -519,7 +519,7 @@
             //	Internal Users
             sql = "SELECT AD_User_ID, Name "
                 + "FROM AD_User u WHERE EXISTS "
-                    + "(SELECT * FROM AD_User_Roles ur WHERE u.AD_User_ID=ur.AD_User_ID) "
+                + "(SELECT * FROM AD_User_Roles ur WHERE u.AD_User_ID=ur.AD_User_ID) "
                 + "ORDER BY 2";
 
             sql = VIS.MRole.getDefault().addAccessSQL(sql,		//	Own First
@@ -528,7 +528,7 @@
             dr = VIS.DB.executeReader(sql.toString(), null);
             while (dr.read()) {
                 key = VIS.Utility.Util.getValueOfInt(dr.getString(0));
-                value =VIS.Utility.encodeText( dr.getString(1));
+                value = VIS.Utility.encodeText(dr.getString(1));
                 if (defaultItem) {
                     cmbCreatedByQ.getControl().append(" <option></option>");
                     defaultItem = false;
@@ -685,25 +685,26 @@
 
                 //	Created
                 var tt = dtpCreatedFromQ.val();
+                //JID_1725 getting the Data between fromdate and todate
                 if (tt != "")
-                    sql = sql.concat(" AND Created>=").concat(VIS.DB.to_date(tt));
-                tt = dtpCreatedToQ.val();
+                    sql = sql.concat(" AND ").concat("TRUNC(").concat("Created,'DD') >= ").concat(VIS.DB.to_date(tt));
+                var tt = dtpCreatedToQ.val();
                 if (tt != "")
-                    sql = sql.concat(" AND Created<").concat(VIS.DB.to_date(tt));
+                    sql = sql.concat(" AND ").concat("TRUNC(").concat("Created,'DD') <= ").concat(VIS.DB.to_date(tt));
 
                 $self.log.fine(sql.toString());
 
                 //	Process Access
                 sql = sql.concat(" AND (AD_Process_ID IS NULL OR AD_Process_ID IN "
-        + "(SELECT AD_Process_ID FROM AD_Process_Access WHERE AD_Role_ID=")
-        .concat(VIS.context.getAD_Role_ID()).concat("))");
+                    + "(SELECT AD_Process_ID FROM AD_Process_Access WHERE AD_Role_ID=")
+                    .concat(VIS.context.getAD_Role_ID()).concat("))");
                 //	Table Access
                 sql = sql.concat(" AND (AD_Table_ID IS NULL "
-        + "OR (AD_Table_ID IS NOT NULL AND AD_Process_ID IS NOT NULL) "	//	Menu Reports 
-        + "OR AD_Table_ID IN "
-        + "(SELECT t.AD_Table_ID FROM AD_Tab t"
-        + " INNER JOIN AD_Window_Access wa ON (t.AD_Window_ID=wa.AD_Window_ID) "
-        + "WHERE wa.AD_Role_ID=").concat(VIS.context.getAD_Role_ID()).concat("))");
+                    + "OR (AD_Table_ID IS NOT NULL AND AD_Process_ID IS NOT NULL) "	//	Menu Reports 
+                    + "OR AD_Table_ID IN "
+                    + "(SELECT t.AD_Table_ID FROM AD_Tab t"
+                    + " INNER JOIN AD_Window_Access wa ON (t.AD_Window_ID=wa.AD_Window_ID) "
+                    + "WHERE wa.AD_Role_ID=").concat(VIS.context.getAD_Role_ID()).concat("))");
                 $self.log.finest(sql.toString());
             }
             catch (e) {
@@ -712,7 +713,7 @@
             var whereClause = sql;
 
             var sqlMain = "SELECT AD_ARCHIVE_ID,AD_CLIENT_ID,AD_ORG_ID,AD_PROCESS_ID,AD_TABLE_ID,C_BPARTNER_ID,CREATED,CREATEDBY,DESCRIPTION,HELP," +
-            " ISACTIVE,ISREPORT,NAME,RECORD_ID,UPDATED,UPDATEDBY,EXPORT_ID FROM AD_Archive WHERE AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID();
+                " ISACTIVE,ISREPORT,NAME,RECORD_ID,UPDATED,UPDATEDBY,EXPORT_ID FROM AD_Archive WHERE AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID();
             if (whereClause != null && whereClause.length > 0)
                 sqlMain += whereClause;
             sqlMain += " ORDER BY Created desc";
@@ -945,48 +946,63 @@
                 });
 
             if (this.btnToggal != null)
-                this.btnToggal.on(VIS.Events.onTouchStartOrClick, function () {
-                    if (toggleside) {
-                        btnToggal.animate({ borderSpacing: 0 }, {
-                            step: function (now, fx) {
-                                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('transform', 'rotate(' + now + 'deg)');
-                            },
-                            duration: 'slow'
-                        }, 'linear');
-
-                        toggleside = false;
-                        topLeftDiv.animate({ width: leftDivWidth }, "slow");
-                        topleftparaDiv.animate({ width: leftDivWidth }, "slow");
-                        topleftparaDiv.find("table").css("display", "block");
-                        //topleftparaDiv.css("background-color", "transparent");
-                        btnOk.css("display", "block");
-                        topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
-                            dGrid.resize();
-                        });
+                var borderspace = 0;
+            this.btnToggal.on(VIS.Events.onTouchStartOrClick, function () {
+                if (toggleside) {
+                    if (VIS.Application.isRTL) {
+                        borderspace = 180;
                     }
                     else {
-                        btnToggal.animate({ borderSpacing: 180 }, {
-                            step: function (now, fx) {
-                                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('transform', 'rotate(' + now + 'deg)');
-                            },
-                            duration: 'slow'
-                        }, 'linear');
+                        borderspace = 0;
 
-                        toggleside = true;
-                        topLeftDiv.animate({ width: minSideWidth }, "slow");
-                        topleftparaDiv.animate({ width: minSideWidth }, "slow");
-                        topleftparaDiv.find("table").css("display", "none");
-                        //topleftparaDiv.css("background-color", "#F1F1F1");
-                        btnOk.css("display", "none");
-                        topRightDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
-                            dGrid.resize();
-                        });
                     }
-                });
+                    btnToggal.animate({ borderSpacing: borderspace }, {
+                        step: function (now, fx) {
+                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('transform', 'rotate(' + now + 'deg)');
+                        },
+                        duration: 'slow'
+                    }, 'linear');
+
+                    toggleside = false;
+                    topLeftDiv.animate({ width: leftDivWidth }, "slow");
+                    topleftparaDiv.animate({ width: leftDivWidth }, "slow");
+                    topleftparaDiv.find("table").css("display", "block");
+                    //topleftparaDiv.css("background-color", "transparent");
+                    btnOk.css("display", "block");
+                    topRightDiv.animate({ width: selectLeftDivWidth }, "slow", null, function () {
+                        dGrid.resize();
+                    });
+                }
+                else {
+                    if (VIS.Application.isRTL) {
+                        borderspace = 0;
+                    }
+                    else {
+                        borderspace = 180;
+
+                    }
+                    btnToggal.animate({ borderSpacing: borderspace }, {
+                        step: function (now, fx) {
+                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('transform', 'rotate(' + now + 'deg)');
+                        },
+                        duration: 'slow'
+                    }, 'linear');
+
+                    toggleside = true;
+                    topLeftDiv.animate({ width: minSideWidth }, "slow");
+                    topleftparaDiv.animate({ width: minSideWidth }, "slow");
+                    topleftparaDiv.find("table").css("display", "none");
+                    //topleftparaDiv.css("background-color", "#F1F1F1");
+                    btnOk.css("display", "none");
+                    topRightDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
+                        dGrid.resize();
+                    });
+                }
+            });
 
             chkReportQ.change(function () {
                 cmbProcess.getControl().hide();
