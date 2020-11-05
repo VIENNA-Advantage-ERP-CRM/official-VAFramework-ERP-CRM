@@ -31,16 +31,16 @@
 
         function createTemplate() {
             var script = ' <script type="text/x-handlebars-template">' +
-              '{{#each this}}' +
-           '<div style="border-bottom:1px solid lightgray" class="vis-group-assinRole-check">' +
-            '<div style="width:100%" class="vis-group-user-profile">' +
-                           '<input type="Checkbox" data-uid="{{OrgID}}"> ' +
-                            '<p style="margin-bottom:2px">{{OrgName}}</p>' +
-                            '<span style="margin-left:30px;float:left">{{Description}}</span>' +
-                        '</div>' +
-                        '</div>' +
-                         '{{/each}}​' +
-               '</script>';
+                '{{#each this}}' +
+                '<div style="border-bottom:1px solid rgba(var(--v-c-on-secondary), .2); margin-bottom: 10px" class="vis-group-assinRole-check">' +
+                '<div style="width:100%" class="vis-group-user-profile">' +
+                '<input type="Checkbox" data-uid="{{OrgID}}"> ' +
+                '<p style="margin-bottom:2px">{{OrgName}}</p>' +
+                '<span class="vis-orgaccess-description">{{Description}}</span>' +
+                '</div>' +
+                '</div>' +
+                '{{/each}}​' +
+                '</script>';
             groupmodtmp = $(script).html();
             grouptheModTmp = Handlebars.compile(groupmodtmp);
         };
