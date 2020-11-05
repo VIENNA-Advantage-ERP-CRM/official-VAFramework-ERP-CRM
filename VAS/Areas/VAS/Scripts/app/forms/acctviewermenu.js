@@ -33,16 +33,16 @@
 
             //Click event for button
             //window.setTimeout(function () {
-                _btnResult.trigger("click");
-          //  }, 10);
+            _btnResult.trigger("click");
+            //  }, 10);
         };
 
         /** Create busy indicator **/
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='vis-apanel-busy'>");
-            $bsyDiv.css({
-                "position": "absolute", "width": "98%", "height": "97%", 'text-align': 'center', 'z-index': '999'
-            });
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$bsyDiv.css({
+            //    "position": "absolute", "width": "98%", "height": "97%", 'text-align': 'center', 'z-index': '999'
+            //});
         };
 
         /** Initialize events of controls **/

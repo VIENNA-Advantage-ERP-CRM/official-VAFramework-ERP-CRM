@@ -9,7 +9,8 @@
 
         var $self = this;
         var $root = $("<div style='width: 100%; height: 100%; background-color: white;'>");
-        var $busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        //var $busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         var okBtn = null;
         var btnOkA = null;
         var cancelBtn = null;

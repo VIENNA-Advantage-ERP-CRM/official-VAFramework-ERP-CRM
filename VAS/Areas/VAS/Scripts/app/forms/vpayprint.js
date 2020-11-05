@@ -38,11 +38,11 @@
         //Load BusyDiv
         //*****************
         function busyIndicator() {
-            $divBusy = $("<div>");
-            $divBusy.css({
-                "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
-                "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
-            });
+            $divBusy = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
+            //$divBusy.css({
+            //    "position": "absolute", "bottom": "0", "background": "url('" + VIS.Application.contextUrl + "Areas/VIS/Images/busy.gif') no-repeat", "background-position": "center center",
+            //    "width": "98%", "height": "98%", 'text-align': 'center', 'opacity': '.1', 'z-index': '9999999'
+            //});
             $divBusy[0].style.visibility = "hidden";
             $root.append($divBusy);
         };
@@ -61,56 +61,56 @@
         //Custom Design of Paymnet Selection Form
         //******************
         function customDesign() {
-            $divContainer = $("<div class='vis-mainContainer'>");
+            $divContainer = $("<div class='vis-mainContainer vis-formouterwrpdiv'>");
             var designPSelectInfo = " <div class='vis-pPrintInfo'>"  // div pSelectInfo starts here                            
                 + " <div class='vis-paymentselect-field' style='margin-top: 8px;'>"  // div PaySelection starts here
-                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <div class='vis-paymentPrintChk-field'>"  // div ShowPrintedPayments starts here
-                             + " <input type='checkbox' id='VIS_chkShowPrintPayment_" + $self.windowNo + "' data-placeholder='' placeholder=' '>"
-                             + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("ShowPrintedPayments") + " </label>"
-                             + " </div>" // div ShowPrintedPayments ends here 
-                             + " <select id='VIS_PaySelection_" + $self.windowNo + "'></select>"
-                             + " <label style='top: 11px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_PaySelection_ID") + " </label>"
-                             + "</div></div> </div>" // div PaySelection ends here 
-                             + " <div class='vis-paymentPrint-field'>"  // div bankAccount starts here
-                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input type='text' name='vis-name vis-fieldreadonly' class='vis-fieldreadonly' disabled id='VIS_txtBankAccount_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"
-                             + " </div></div></div>" // div bankAccount ends here 
-                             + " <div class='vis-paymentPrint-field'>"  // div currentBalance starts here
-                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrentBal_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
-                             + " <label>" + VIS.Msg.getMsg("CurrentBalance") + " </label>"
-                             + " </div></div></div>" // div currentBalance ends here                             
-                             + " <div class='vis-paymentPrint-field'>"  // div paymentMethod starts here
-                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <select name='vis-name' id='VIS_cmbPaymentMethod_" + $self.windowNo + "'></select>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "PaymentRule") + " </label>"
-                             + " </div></div></div>" // div paymentMethod ends here 
-                             + " <div class='vis-paymentPrint-field'>"  // div Currency starts here
-                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrency_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Currency_ID") + " </label>"
-                             + " </div></div></div>" // div Currency ends here                            
-                             + " <div class='vis-paymentPrint-field'>"  // div CheckNo starts here
-                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input type='number' name='vis-name'  id='VIS_txtCheckNo_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
-                             + " <label>" + VIS.Msg.getMsg("CheckNo") + " </label>"
-                             + " </div></div></div>" // div CheckNo ends here    
-                             + " <div class='vis-paymentPrint-field'>"  // div NoOfPayments starts here
-                             + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
-                             + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtNoOfPayments_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
-                             + " <label>" + VIS.Msg.getMsg("NoOfPayments") + " </label>"
-                             + " </div></div></div>" // div NoOfPayments ends here  
-                             + " </div>" // div pSelectInfo ends here      
+                + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <div class='vis-paymentPrintChk-field'>"  // div ShowPrintedPayments starts here
+                + " <input type='checkbox' id='VIS_chkShowPrintPayment_" + $self.windowNo + "' data-placeholder='' placeholder=' '>"
+                + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("ShowPrintedPayments") + " </label>"
+                + " </div>" // div ShowPrintedPayments ends here 
+                + " <select id='VIS_PaySelection_" + $self.windowNo + "'></select>"
+                + " <label style='top: 11px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_PaySelection_ID") + " </label>"
+                + "</div></div> </div>" // div PaySelection ends here 
+                + " <div class='vis-paymentPrint-field'>"  // div bankAccount starts here
+                + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <input type='text' name='vis-name vis-fieldreadonly' class='vis-fieldreadonly' disabled id='VIS_txtBankAccount_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
+                + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_BankAccount_ID") + " </label>"
+                + " </div></div></div>" // div bankAccount ends here 
+                + " <div class='vis-paymentPrint-field'>"  // div currentBalance starts here
+                + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrentBal_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
+                + " <label>" + VIS.Msg.getMsg("CurrentBalance") + " </label>"
+                + " </div></div></div>" // div currentBalance ends here                             
+                + " <div class='vis-paymentPrint-field'>"  // div paymentMethod starts here
+                + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <select name='vis-name' id='VIS_cmbPaymentMethod_" + $self.windowNo + "'></select>"
+                + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "PaymentRule") + " </label>"
+                + " </div></div></div>" // div paymentMethod ends here 
+                + " <div class='vis-paymentPrint-field'>"  // div Currency starts here
+                + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtCurrency_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
+                + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Currency_ID") + " </label>"
+                + " </div></div></div>" // div Currency ends here                            
+                + " <div class='vis-paymentPrint-field'>"  // div CheckNo starts here
+                + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <input type='number' name='vis-name'  id='VIS_txtCheckNo_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
+                + " <label>" + VIS.Msg.getMsg("CheckNo") + " </label>"
+                + " </div></div></div>" // div CheckNo ends here    
+                + " <div class='vis-paymentPrint-field'>"  // div NoOfPayments starts here
+                + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
+                + " <input type='text' class='vis-fieldreadonly' disabled id='VIS_txtNoOfPayments_" + $self.windowNo + "' MaxLength='50' data-placeholder='' placeholder=' '>"
+                + " <label>" + VIS.Msg.getMsg("NoOfPayments") + " </label>"
+                + " </div></div></div>" // div NoOfPayments ends here  
+                + " </div>" // div pSelectInfo ends here      
 
             var designPSelectProcess = " <div class='vis-pPrintProcess'>"  // div pSelectProcess starts here
-                                     + " <div class='vis-paymentPrint-field'>"  // div starts here  
-                                      + " <input id='VIS_btnCancel_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' >"
-                                      //+ " <input id='VIS_btnExport_" + $self.windowNo + "' style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;margin-left:10px;height:40px;' type='submit' value='" + VIS.Msg.getMsg("Export") + "' ></input>"
-                                      + " <input id='VIS_btnPrint_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Print") + "' ></input>"
-                                     + " </div>" // div ends here 
-                                     + " </div>" // div pSelectProcess ends here 
+                + " <div class='vis-paymentPrint-field'>"  // div starts here  
+                + " <input id='VIS_btnCancel_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Cancel") + "' >"
+                //+ " <input id='VIS_btnExport_" + $self.windowNo + "' style='background-color:#616364;color: white;font-weight: 200;font-family: helvetica;font-size: 14px;padding: 10px 15px;float:right;width:100px;margin-top:10px;margin-left:10px;height:40px;' type='submit' value='" + VIS.Msg.getMsg("Export") + "' ></input>"
+                + " <input id='VIS_btnPrint_" + $self.windowNo + "' class='vis-frm-btn' type='submit' value='" + VIS.Msg.getMsg("Print") + "' ></input>"
+                + " </div>" // div ends here 
+                + " </div>" // div pSelectProcess ends here 
             $divContainer.append($(designPSelectInfo)).append($(designPSelectProcess));
             $root.append($divContainer);
             busyIndicator();
@@ -384,7 +384,7 @@
                     var params = [];
                     params[0] = new VIS.DB.SqlParam("@BankAcct_ID", C_BankAccount_ID);
                     var ad_process_id = executeScalar(sql, params);
-                    
+
                     sql = "VIS_150";
                     var ad_table_id = executeScalar(sql);
 

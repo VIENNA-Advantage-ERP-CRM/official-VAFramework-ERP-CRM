@@ -32,31 +32,31 @@ namespace VIS.Models
             string sql = "";
             if (isBaseLanguage)
             {
-                sql = "SELECT Name, AD_InfoWindow_ID FROM AD_InfoWindow WHERE IsActive='Y'";
+                sql = "SELECT Name, AD_InfoWindow_ID FROM AD_InfoWindow WHERE IsActive='Y' ORDER BY Name ASC";
             }
             else
             {
                 sql = @" SELECT WT.Name, W.AD_InfoWindow_ID FROM AD_InfoWindow W
-                            INNER JOIN AD_InfoWindow_Trl WT ON (W.AD_InfoWindow_ID=WT.AD_InfoWindow_ID AND WT.ad_language='"+ctx.GetAD_Language()+@"')
-                            WHERE W.IsActive='Y'";
+                            INNER JOIN AD_InfoWindow_Trl WT ON (W.AD_InfoWindow_ID=WT.AD_InfoWindow_ID AND WT.ad_language='" + ctx.GetAD_Language() + @"')
+                            WHERE W.IsActive='Y' ORDER BY WT.Name ASC";
             }
-           
+
             DataSet ds = VAdvantage.DataBase.DB.ExecuteDataset(sql);
             List<InfoWin> menu = new List<InfoWin>();
             InfoWin item = null;
-           // StringBuilder menu = new StringBuilder();
+            // StringBuilder menu = new StringBuilder();
             //menu.Append("<SELECT multiple='multiple' style='height:300px'>");
             //menu.Append("<ul>");
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
-             //   menu.Append("<OPTION>" + ds.Tables[0].Rows[i]["Name"] + "_" + ds.Tables[0].Rows[i]["AD_InfoWindow_ID"] + "</OPTION>");
+                //   menu.Append("<OPTION>" + ds.Tables[0].Rows[i]["Name"] + "_" + ds.Tables[0].Rows[i]["AD_InfoWindow_ID"] + "</OPTION>");
                 //menu.Append("<li>" + ds.Tables[0].Rows[i]["Name"] + "_" + ds.Tables[0].Rows[i]["AD_InfoWindow_ID"] + "</li>");
                 item = new InfoWin();
                 item.Name = (ds.Tables[0].Rows[i]["Name"]).ToString();
-                item.AD_InfoWindow_ID= Convert.ToInt32(ds.Tables[0].Rows[i]["AD_InfoWindow_ID"]);
+                item.AD_InfoWindow_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_InfoWindow_ID"]);
                 ////menu.Add((Convert.ToInt32(ds.Tables[0].Rows[i]["AD_InfoWindow_ID"])), (ds.Tables[0].Rows[i]["Name"]).ToString());
                 menu.Add(item);
-             }
+            }
             //menu.Append("</SELECT>");
             //menu.Append("</ul>");
             InfoWinMenu = menu;
