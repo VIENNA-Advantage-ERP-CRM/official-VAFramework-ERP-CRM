@@ -146,11 +146,12 @@ namespace VIS.Controllers
 
         #region lookup
 
-        public JsonResult GetWareProWiseLocator(string colName, int warehouseId, int productId, bool onlyIsSOTrx)
+        // JID_0932 Passed Organization ID as parameter  for adding validation
+        public JsonResult GetWareProWiseLocator(string colName, int orgId, int warehouseId, int productId, bool onlyIsSOTrx)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
-            return Json(JsonConvert.SerializeObject(model.GetWareProWiseLocator(ctx, colName, warehouseId, productId, onlyIsSOTrx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetWareProWiseLocator(ctx, colName, orgId, warehouseId, productId, onlyIsSOTrx)), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetValidAccountCombination(int AD_Client_ID, bool onlyActive)

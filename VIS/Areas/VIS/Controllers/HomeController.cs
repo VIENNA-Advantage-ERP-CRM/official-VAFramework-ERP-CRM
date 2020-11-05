@@ -176,22 +176,27 @@ namespace VIS.Controllers
                     var OrgList = new List<KeyNamePair>();
                     var WareHouseList = new List<KeyNamePair>();
 
-                   IDataReader drRoles= LoginHelper.GetRoles(model.Login1Model.UserValue,false,false);
+                    string username = "";
+                    IDataReader drRoles= LoginHelper.GetRoles(model.Login1Model.UserValue,false,false);
 
+                    int AD_User_ID = 0;
                     if (drRoles.Read())
                     {
                         do  //	read all roles
                         {
+                            AD_User_ID = Util.GetValueOfInt(drRoles[0].ToString());
                             int AD_Role_ID = Util.GetValueOfInt(drRoles[1].ToString());
                             String Name = drRoles[2].ToString();
                             KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
                             RoleList.Add(p);
+                            username = Util.GetValueOfString(drRoles["username"].ToString());
                         }
                         while (drRoles.Read());
                     }
                     drRoles.Close();
 
-
+                    model.Login1Model.AD_User_ID = AD_User_ID;
+                    model.Login1Model.DisplayName = username;
 
                     //string diableMenu = ctx.GetContext("#DisableMenu");
                     Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(ctx); // inilitilize menu class
