@@ -4,7 +4,7 @@
 
     function getTemplate(winNo) {
         var str =
-            ' <div class="vis-fp-bodycontent">                                                 ' +
+            ' <div class="vis-fp-bodycontent vis-formouterwrpdiv">                                                 ' +
             '     <div class="vis-fp-viwall" >                                                  ' +
             '         <span>' + VIS.Msg.getMsg("ViewMore") + '</span>                               ' +
             '     </div>                                                                       ' +
@@ -14,9 +14,9 @@
             '     </div>                                                                       ' +
             '     <div class="vis-fp-custcolumns" id="accordion_' + winNo + '"">                ' +
             '         <div class="card">                                                       ' +
-            '             <div class="card-header">                                            ' +
+            '             <div class="card-header" style="cursor:pointer" data-toggle="collapse" href="#collapseOne_' + winNo + '">                                            ' +
             '                 <span>' + VIS.Msg.getMsg("CustomCondition") + '</span>                                  ' +
-            '                 <a class="card-link" data-toggle="collapse" href="#collapseOne_' + winNo + '"> ' +
+            '                 <a class="card-link" > ' +
             '                     <i class="vis vis-arrow-up"></i>                             ' +
             '                 </a>                                                             ' +
             '             </div>                                                               ' +
@@ -305,7 +305,7 @@
                 }
             }
             if (!fields || fields.length == 0) {
-                fields = $('<div class="vis-fp-lst-searchrcrds"></div>');
+                fields = $('<div class="vis-fp-lst-searchrcrds vis-fp-lst-searchrcrdswrp"></div>');
                 wrapper.append(fields);
             }
 
@@ -345,7 +345,7 @@
         };
 
         this.hardRefreshFilterPanel = function () {
-            divStatic.find('.vis-fp-lst-searchrcrds').remove();
+            divStatic.find('.vis-fp-lst-searchrcrdswrp').remove();
             divStatic.find('.vis-fp-currntrcrdswrap').remove();
             divDynFilters.find('.vis-fp-currntrcrds').remove();
             dsAdvanceData = [];
@@ -849,8 +849,16 @@
         //Fill Dynamic Column List 
         for (var c = 0; c < curTabfieldlist.length; c++) {
             // get field
-            var field = jQuery.extend(true, {}, curTabfieldlist[c]);
-            field.lookup = jQuery.extend(true, {}, curTabfieldlist[c].lookup);
+            var fieldorg = curTabfieldlist[c];
+            var field = jQuery.extend(true, {}, fieldorg);
+            if (VIS.DisplayType.IsLookup(fieldorg.getDisplayType()) || VIS.DisplayType.ID == fieldorg.getDisplayType()) {
+                field.lookup = jQuery.extend(true, {}, fieldorg.lookup);
+                if (field.lookup.initialize)
+                    field.lookup.initialize();
+            }
+
+
+
             this.curTabfields.push(field);
 
             if (field.getIsEncrypted())
