@@ -74,8 +74,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 responses[i].Save();
                 counter++;
             }
-            //
-            return "# " + counter;
+            //showing the message Closed successfully
+            return Msg.GetMsg(GetCtx(), "VIS_Closed", "");
         }
     }
 }

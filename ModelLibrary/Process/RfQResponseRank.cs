@@ -1,11 +1,11 @@
 ﻿/********************************************************
- * Project Name   : VAdvantage
- * Class Name     : RfQResponseRank
- * Purpose        : Rank RfQ Responses	
- * Class Used     : ProcessEngine.SvrProcess
- * Chronological    Development
- * Raghunandan     11-Aug.-2009
-  ******************************************************/
+* Project Name   : VAdvantage
+* Class Name     : RfQResponseRank
+* Purpose        : Rank RfQ Responses	
+* Class Used     : ProcessEngine.SvrProcess
+* Chronological    Development
+* Raghunandan     11-Aug.-2009
+ ******************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//using System.Windows.Forms;
+using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -24,7 +24,8 @@ using System.Data.SqlClient;
 using VAdvantage.Logging;
 
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class RfQResponseRank : ProcessEngine.SvrProcess
     {
@@ -162,7 +163,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         try
                         {
                             Array.Sort(respQtys, respQtys[0]);
-                           // Arrays.sort(respQtys, respQtys[0]);
+                            // Arrays.sort(respQtys, respQtys[0]);
                             //Array.Sort(respQtys, respQtys);
                         }
                         catch { }
@@ -184,7 +185,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             }
                             else
                             {
-                                if (lastAmt.Value.CompareTo(netAmt.Value) != 0)
+                                // JID_1064  only Submitted responce will set rank
+                                if (lastAmt.Value.Equals(Env.ZERO))
+                                {
+                                    lastRank = rank;
+                                }
+                                else if (lastAmt.Value.CompareTo(netAmt.Value) != 0)
                                 {
                                     lastRank = rank + 1;
                                     lastAmt = qty.GetNetAmt();
@@ -279,7 +285,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int ii = 0; ii < responses.Length; ii++)
             {
                 MRfQResponse response = responses[ii];
-                if ( response.GetPrice().CompareTo(Env.ZERO) > 0)
+                if (response.GetPrice().CompareTo(Env.ZERO) > 0)
                 {
                     if (response.IsSelectedWinner() != (ranking == 1))
                         response.SetIsSelectedWinner(ranking == 1);

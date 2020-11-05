@@ -1,13 +1,13 @@
 ﻿/********************************************************
- * Project Name   : VAdvantage
- * Class Name     : RfQCreatePO
- * Purpose        : Create RfQ PO.
- *	                Create purchase order(s) for the resonse(s) and lines marked as 
- *              	Selected Winner using the selected Purchase Quantity (in RfQ Line Quantity)
- * Class Used     : ProcessEngine.SvrProcess
- * Chronological    Development
- * Raghunandan     11-Aug.-2009
-  ******************************************************/
+* Project Name   : VAdvantage
+* Class Name     : RfQCreatePO
+* Purpose        : Create RfQ PO.
+*	                Create purchase order(s) for the resonse(s) and lines marked as 
+*              	Selected Winner using the selected Purchase Quantity (in RfQ Line Quantity)
+* Class Used     : ProcessEngine.SvrProcess
+* Chronological    Development
+* Raghunandan     11-Aug.-2009
+ ******************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//using System.Windows.Forms;
+using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -181,6 +181,7 @@ namespace VAdvantage.Process
 
 
             //	Selected Winner on Line Level
+            StringBuilder Orderno = new StringBuilder();
             int noOrders = 0;
             for (int i = 0; i < responses.Length; i++)
             {
@@ -223,7 +224,7 @@ namespace VAdvantage.Process
                         if (bp.GetVA009_PO_PaymentMethod_ID() == 0)
                         {
                             result = null;
-                            result=GetPaymentMethod(rfq.GetAD_Org_ID());
+                            result = GetPaymentMethod(rfq.GetAD_Org_ID());
                             if (result != null && result.Tables[0].Rows.Count > 0)
                             {
                                 order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -268,12 +269,18 @@ namespace VAdvantage.Process
                 }	//	for all Response Lines
                 if (order != null)
                 {
+                    //Check Orderno. Already existing
+                    if (Orderno.Length > 0)
+                    {
+                        Orderno.Append(",");
+                    }
+                    Orderno.Append(order.GetDocumentNo());
                     response.SetC_Order_ID(order.GetC_Order_ID());
                     response.Save();
                 }
             }
-
-            return "#" + noOrders;
+            // Show the message in RfQ after click Create Purchase Order button
+            return Msg.GetMsg(GetCtx(), "VIS_PurchaseOrder", "") + " " + Orderno;
         }
         //Added by Neha Thakur
         /// <summary>
@@ -284,7 +291,7 @@ namespace VAdvantage.Process
         {
             VA009_PaymentMethod_ID = 0;
             //get organisation default 
-            string _sql = "SELECT VA009_PaymentMethod_ID,VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string _sql = "SELECT VA009_PaymentMethod_ID, VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PaymentBaseType='S' AND IsActive='Y' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", Org_ID);
             DataSet _ds = DB.ExecuteDataset(_sql, param, Get_TrxName());

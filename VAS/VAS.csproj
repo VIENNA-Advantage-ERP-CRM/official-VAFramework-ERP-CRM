@@ -191,6 +191,7 @@
     <Compile Include="Areas\VAS\Models\Callouts\MOrderModel.cs" />
     <Compile Include="Areas\VAS\Models\Callouts\MPaymentModel.cs" />
     <Compile Include="Areas\VAS\Models\Callouts\MPaymentTermModel.cs" />
+    <Compile Include="Areas\VAS\Models\Callouts\MPeriodModel.cs" />
     <Compile Include="Areas\VAS\Models\Callouts\MPriceListModel.cs" />
     <Compile Include="Areas\VAS\Models\Callouts\MPriceListVersionModel.cs" />
     <Compile Include="Areas\VAS\Models\Callouts\MProductCategoryModel.cs" />

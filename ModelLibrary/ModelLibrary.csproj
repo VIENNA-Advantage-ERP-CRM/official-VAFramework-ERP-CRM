@@ -239,6 +239,8 @@
     <Compile Include="Model\MBPartnerLocation.cs" />
     <Compile Include="Model\MBPBankAccount.cs" />
     <Compile Include="Model\MBPGroup.cs" />
+    <Compile Include="Model\MBPWithholding.cs" />
+    <Compile Include="Model\MBudgetControl.cs" />
     <Compile Include="Model\MCalendar.cs" />
     <Compile Include="Model\MCampaign.cs" />
     <Compile Include="Model\MCash.cs" />
@@ -272,6 +274,7 @@
     <Compile Include="Model\MCStage.cs" />
     <Compile Include="Model\MCStageElement.cs" />
     <Compile Include="Model\MCtxArea.cs" />
+    <Compile Include="Model\MCurrCrossRate.cs" />
     <Compile Include="Model\MCurrency.cs" />
     <Compile Include="Model\MCurrencyAcct.cs" />
     <Compile Include="Model\MCurrencySource.cs" />
@@ -567,6 +570,7 @@
     <Compile Include="Process\GenerateGroupSubGroup.cs" />
     <Compile Include="Process\GenerateOrder.cs" />
     <Compile Include="Process\GenerateQuotation.cs" />
+    <Compile Include="Process\GenPeriodControl.cs" />
     <Compile Include="Process\ImportAccount.cs" />
     <Compile Include="Process\ImportBankStatement.cs" />
     <Compile Include="Process\ImportBPartner.cs" />

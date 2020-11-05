@@ -878,7 +878,15 @@ namespace VAdvantage.Print
                     if (format.IsGridReport)
                     {
                         int pageSize = Util.GetValueOfInt(ctx.GetContext("#REPORT_PAGE_SIZE")); //500;
-                        int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + pd.GetSQL() + " ) as SQLQuery", null, null));
+                        string sql = "SELECT COUNT(*) FROM ( " + pd.GetSQL() + " )";
+                        if (DataBase.DatabaseType.IsPostgre)
+                        {
+                            sql += " as SQLQuery ";
+                        }
+
+
+                        int totalRec = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+
                         format.TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
                         ds = VAdvantage.DataBase.DB.GetDatabase().ExecuteDatasetPaging(pd.GetSQL(), format.PageNo, pageSize, 0);
 

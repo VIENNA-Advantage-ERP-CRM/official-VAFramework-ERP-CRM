@@ -1,11 +1,11 @@
 ﻿/********************************************************
- * Project Name   : VAdvantage
- * Class Name     : PeriodStatus
- * Purpose        : 
- * Class Used     : 
- * Chronological    Development
- * Raghunandan     25-Jun-2009
-  ******************************************************/
+* Project Name   : VAdvantage
+* Class Name     : PeriodStatus
+* Purpose        : 
+* Class Used     : 
+* Chronological    Development
+* Raghunandan     25-Jun-2009
+ ******************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//using System.Windows.Forms;
+using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -30,7 +30,10 @@ namespace VAdvantage.Process
         private int _C_Period_ID = 0;
         //Action					
         private String _PeriodAction = null;
-
+        //Organization					
+        private string _AD_Org_ID = null;
+        // Document BaseType
+        private string _docBaseType = null;
 
         /// <summary>
         ///  Prepare - e.g., get Parameters.
@@ -44,6 +47,14 @@ namespace VAdvantage.Process
                 if (para[i].GetParameter() == null)
                 {
 
+                }
+                else if (name.Equals("AD_Org_ID"))
+                {
+                    _AD_Org_ID = Util.GetValueOfString(para[i].GetParameter());
+                }
+                else if (name.Equals("DocBaseType"))
+                {
+                    _docBaseType = Util.GetValueOfString(para[i].GetParameter());
                 }
                 else if (name.Equals("PeriodAction"))
                 {
@@ -89,7 +100,17 @@ namespace VAdvantage.Process
                 .Append(" AND PeriodStatus<>'P'")
                 .Append(" AND PeriodStatus<>'").Append(_PeriodAction).Append("'");
 
+            // if organization is selected then update period control of selected organizations
+            if (!String.IsNullOrEmpty(_AD_Org_ID))
+            {
+                sql.Append(" AND AD_Org_ID IN (" + _AD_Org_ID + ")");
+            }
 
+            // if Document BaseType is selected then update period control for selected Document BaseType
+            if (!String.IsNullOrEmpty(_docBaseType))
+            {
+                sql.Append(" AND DocBaseType IN (SELECT DocBaseType FROM C_DocBaseType WHERE C_DocBaseType_ID IN (" + _docBaseType + "))");
+            }
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
 

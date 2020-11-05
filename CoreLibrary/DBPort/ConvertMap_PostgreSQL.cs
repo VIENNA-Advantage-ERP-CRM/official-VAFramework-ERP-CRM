@@ -37,8 +37,8 @@ namespace VAdvantage.DBPort
             //begin vpj-cd e-evolution 03/11/2005 PostgreSQL
             s_pg.Add("\\bBLOB\\b", "BYTEA");                 //  BLOB not directly supported
             s_pg.Add("\\bCLOB\\b", "TEXT");                //  CLOB not directly supported
-            //s_pg.Add("\\bLIMIT\\b", "\"limit\"");
-           // s_pg.Add("\\bACTION\\b", "\"action\"");
+                                                           //s_pg.Add("\\bLIMIT\\b", "\"limit\"");
+                                                           // s_pg.Add("\\bACTION\\b", "\"action\"");
             s_pg.Add("\\bold\\b", "\"old\"");
             s_pg.Add("\\bnew\\b", "\"new\"");
             //s_pg.Add("\\bBLOB\\b",                  "OID");                 //  BLOB not directly supported
@@ -82,7 +82,7 @@ namespace VAdvantage.DBPort
             s_pg.Add("\\bCASCADE CONSTRAINTS\\b", "");
 
             //  Select
-            s_pg.Add("\\sFROM\\s+DUAL\\b", "");
+            s_pg.Add("\\bFROM\\s+DUAL\\b", "");
 
             //  Statements
             s_pg.Add("\\bELSIF\\b", "ELSE IF");
