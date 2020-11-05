@@ -83,12 +83,12 @@
 
             $self.topDiv = $("<div id='" + topDivId + "' class='vis-archive-l-s-head vis-frm-ls-top' style='padding: 0;'>" +
                 "<div id='" + btnSpaceDivId + "' class='vis-l-s-headwrp'>" +
-                       "<button id='" + btnSpaceId + "'  class='vis-archive-sb-t-button'>" +
-                       "<i class='vis vis-arrow-left'></i></button></div>" +
-                       "<div id='" + spnSelectid + "'style='display: inline-block;  padding-left: 15px;margin-right: 15px;' >" +
-                       "<label id='" + lblSelectid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 28px;color: rgba(var(--v-c-primary), 1);'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Select") + "</label></div>" +
-                       "<div id='" + spnGenerateid + "' style='display: inline-block; width: 160px;'>" +
-                       "<label id='" + lblGenerateid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 17px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Generate") + "</label></div></div>");
+                "<button id='" + btnSpaceId + "'  class='vis-archive-sb-t-button'>" +
+                "<i class='vis vis-arrow-left'></i></button></div>" +
+                "<div id='" + spnSelectid + "'style='display: inline-block;  padding-left: 15px;margin-right: 15px;' >" +
+                "<label id='" + lblSelectid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 28px;color: rgba(var(--v-c-primary), 1);'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Select") + "</label></div>" +
+                "<div id='" + spnGenerateid + "' style='display: inline-block; width: 160px;'>" +
+                "<label id='" + lblGenerateid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 17px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Generate") + "</label></div></div>");
 
             var sideDivId = "sideDiv_" + $self.windowNo;
             var parameterDivId = "parameterDiv_" + $self.windowNo;
@@ -337,12 +337,12 @@
                             for (var i = 0; i < ress.length; i++) {
                                 var line = {};
                                 line['C_Order_ID'] = ress[i].c_order_id,
-                                line['AD_Org_ID'] = ress[i].ord,
-                                line['C_DocType_ID'] = ress[i].doctype,
-                                line['DocumentNo'] = VIS.Utility.encodeText(ress[i].documentno),
-                                line['C_BPartner_ID'] = ress[i].bpname,
-                                line['DateOrdered'] = ress[i].dateordered,
-                                line['recid'] = count;
+                                    line['AD_Org_ID'] = ress[i].ord,
+                                    line['C_DocType_ID'] = ress[i].doctype,
+                                    line['DocumentNo'] = VIS.Utility.encodeText(ress[i].documentno),
+                                    line['C_BPartner_ID'] = ress[i].bpname,
+                                    line['DateOrdered'] = ress[i].dateordered,
+                                    line['recid'] = count;
                                 count++;
                                 data.push(line);
                             }
@@ -351,7 +351,7 @@
 
                         }
                     }
-                        // JID_1110: done by Bharat on 27 Feb 2019 to disable Ok button when there in no data in the grid and On selection of order which is not shown in grid message "No Document found" should show.
+                    // JID_1110: done by Bharat on 27 Feb 2019 to disable Ok button when there in no data in the grid and On selection of order which is not shown in grid message "No Document found" should show.
                     else {
                         VIS.ADialog.info("NoDataFound");
                         $self.okBtn.attr('disabled', 'disabled');
@@ -627,9 +627,18 @@
 
             if (this.btnToggel != null)
                 this.btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
+                    var borderspace = 0
+
                     if (toggleside) {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 180;
+                        }
+                        else {
+                            borderspace = 0;
+
+                        }
                         //$self.btnRefresh.hide();
-                        $self.btnToggel.animate({ borderSpacing: 0 }, {
+                        $self.btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
@@ -647,7 +656,14 @@
                         });
                     }
                     else {
-                        $self.btnToggel.animate({ borderSpacing: 180 }, {
+                        if (VIS.Application.isRTL) {
+                            borderspace = 0;
+                        }
+                        else {
+                            borderspace = 180;
+
+                        }
+                        $self.btnToggel.animate({ borderSpacing: borderspace }, {
                             step: function (now, fx) {
                                 $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
                                 $(this).css('-moz-transform', 'rotate(' + now + 'deg)');

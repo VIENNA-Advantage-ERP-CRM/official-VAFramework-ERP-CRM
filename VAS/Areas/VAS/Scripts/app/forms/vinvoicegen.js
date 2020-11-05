@@ -78,12 +78,12 @@
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/arrow-left.png";
 
             $self.topDiv = $("<div id='" + topDivId + "' class='vis-archive-l-s-head vis-frm-ls-top' style='padding: 0;'>" +
-                       "<div id='" + btnSpaceDivId + "' class='vis-l-s-headwrp'>" +
-                       "<button id='" + btnSpaceId + "' class='vis-archive-sb-t-button' ><i class='vis vis-arrow-left'></i></button></div>" +
-                       "<div id='" + spnSelectid + "'style='display: inline-block;  padding-left: 15px;margin-right: 15px;' >" +
-                       "<label id='" + lblSelectid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 28px;color: rgba(var(--v-c-primary), 1);'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Select") + "</label></div>" +
-                       "<div id='" + spnGenerateid + "' style='display: inline-block; width: 160px;'>" +
-                       "<label id='" + lblGenerateid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle; font-size: 17px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Generate") + "</label></div></div>");
+                "<div id='" + btnSpaceDivId + "' class='vis-l-s-headwrp'>" +
+                "<button id='" + btnSpaceId + "' class='vis-archive-sb-t-button' ><i class='vis vis-arrow-left'></i></button></div>" +
+                "<div id='" + spnSelectid + "'style='display: inline-block;  padding-left: 15px;margin-right: 15px;' >" +
+                "<label id='" + lblSelectid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle;font-size: 28px;color: rgba(var(--v-c-primary), 1);'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Select") + "</label></div>" +
+                "<div id='" + spnGenerateid + "' style='display: inline-block; width: 160px;'>" +
+                "<label id='" + lblGenerateid + "' class='VIS_Pref_Label_Font' style='vertical-align: middle; font-size: 17px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "Generate") + "</label></div></div>");
 
             var sideDivId = "sideDiv_" + $self.windowNo;
             var parameterDivId = "parameterDiv_" + $self.windowNo;
@@ -202,7 +202,7 @@
             name = "btnRefresh_" + $self.windowNo;
             var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
             $self.btnRefresh = $("<button id='" + name + "' style='margin-top: 0px; float: left;height: 38px; ' class='VIS_Pref_btn-2'>" +
-                       "<i class='vis vis-refresh'></i></button>");
+                "<i class='vis vis-refresh'></i></button>");
 
             var discriptionDivId = "discriptionDiv_" + $self.windowNo;
             $self.bottumDiv = $("<div class='vis-info-btmcnt-wrap vis-p-t-10'>");
@@ -273,7 +273,8 @@
                         return new Date(val).toLocaleDateString();
                     }
                 });
-                $self.arrListColumns.push({ field: "TotalLines", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "TotalLines"), sortable: true, size: '20%', min: 150, hidden: false, align: 'right',
+                $self.arrListColumns.push({
+                    field: "TotalLines", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "TotalLines"), sortable: true, size: '20%', min: 150, hidden: false, align: 'right',
                     render: function (record, index, col_index) {
                         var val = record["TotalLines"];
                         return parseFloat(val).toLocaleString();
@@ -337,16 +338,16 @@
                             for (var i = 0; i < ress.length; i++) {
                                 var line = {};
                                 line['C_Order_ID'] = ress[i].c_order_id,
-                                line['AD_Org_ID'] = ress[i].ord,
-                                line['C_DocType_ID'] = ress[i].doctype,
-                                line['DocumentNo'] = ress[i].documentno,
-                                line['C_BPartner_ID'] = ress[i].bpname,
-                                line['DateOrdered'] = ress[i].dateordered,
-                                line['TotalLines'] = ress[i].tLines,
-                                line['recid'] = count;
+                                    line['AD_Org_ID'] = ress[i].ord,
+                                    line['C_DocType_ID'] = ress[i].doctype,
+                                    line['DocumentNo'] = ress[i].documentno,
+                                    line['C_BPartner_ID'] = ress[i].bpname,
+                                    line['DateOrdered'] = ress[i].dateordered,
+                                    line['TotalLines'] = ress[i].tLines,
+                                    line['recid'] = count;
                                 count++;
                                 data.push(line);
-                            }                            
+                            }
                         }
                         catch (e) {
 
@@ -601,7 +602,7 @@
                         generateInvoices(whereClause);
                     }
                     else { // show msg if user didn't selected any order
-                        $self.$busyDiv[0].style.visibility = 'hidden';                        
+                        $self.$busyDiv[0].style.visibility = 'hidden';
                         VIS.ADialog.error("PlzSelectatLeast1Inv");
                     }
                     $self.okBtn.removeAttr('disabled');
@@ -624,46 +625,59 @@
                 });
 
             if (this.btnToggel != null)
-                this.btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
-                    if (toggleside) {
-                        // $self.btnRefresh.hide();
-                        $self.btnToggel.animate({ borderSpacing: 0 }, {
-                            step: function (now, fx) {
-                                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('transform', 'rotate(' + now + 'deg)');
-                            },
-                            duration: 'slow'
-                        }, 'linear');
-
-                        toggleside = false;
-                        $self.btnSpaceDiv.animate({ width: sideDivWidth }, "slow");
-                        $self.gridSelectDiv.animate({ width: selectDivWidth }, "slow");
-                        $self.div.css("display", "block");
-                        $self.sideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
-                            $self.dGrid.resize();
-                        });
+                var borderspace = 0;
+            this.btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
+                if (toggleside) {
+                    if (VIS.Application.isRTL) {
+                        borderspace = 180;
                     }
                     else {
-                        // $self.btnRefresh.show();
-                        $self.btnToggel.animate({ borderSpacing: 180 }, {
-                            step: function (now, fx) {
-                                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('transform', 'rotate(' + now + 'deg)');
-                            },
-                            duration: 'slow'
-                        }, 'linear');
+                        borderspace = 0;
 
-                        toggleside = true;
-                        $self.btnSpaceDiv.animate({ width: minSideWidth }, "slow");
-                        $self.sideDiv.animate({ width: minSideWidth }, "slow");
-                        $self.div.css("display", "none");
-                        $self.gridSelectDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
-                            $self.dGrid.resize();
-                        });
                     }
-                });
+                    $self.btnToggel.animate({ borderSpacing: borderspace }, {
+                        step: function (now, fx) {
+                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('transform', 'rotate(' + now + 'deg)');
+                        },
+                        duration: 'slow'
+                    }, 'linear');
+
+                    toggleside = false;
+                    $self.btnSpaceDiv.animate({ width: sideDivWidth }, "slow");
+                    $self.gridSelectDiv.animate({ width: selectDivWidth }, "slow");
+                    $self.div.css("display", "block");
+                    $self.sideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
+                        $self.dGrid.resize();
+                    });
+                }
+                else {
+                    if (VIS.Application.isRTL) {
+                        borderspace = 0;
+                    }
+                    else {
+                        borderspace = 180;
+
+                    }
+                    $self.btnToggel.animate({ borderSpacing: borderspace }, {
+                        step: function (now, fx) {
+                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('transform', 'rotate(' + now + 'deg)');
+                        },
+                        duration: 'slow'
+                    }, 'linear');
+
+                    toggleside = true;
+                    $self.btnSpaceDiv.animate({ width: minSideWidth }, "slow");
+                    $self.sideDiv.animate({ width: minSideWidth }, "slow");
+                    $self.div.css("display", "none");
+                    $self.gridSelectDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
+                        $self.dGrid.resize();
+                    });
+                }
+            });
 
             if (this.spnGenerate != null)
                 this.spnGenerate.on(VIS.Events.onTouchStartOrClick, function () {
