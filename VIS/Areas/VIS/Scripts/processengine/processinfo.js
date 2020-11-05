@@ -39,6 +39,8 @@
         this.useCrystalReportViewer = false;
         this.isReport = false;
         this.isBackground = false;
+        this.ActionOrigin = "";
+        this.OriginName = "";
     };
 
     ProcessInfo.prototype.toJson = function () {
@@ -72,7 +74,9 @@
             "AD_ReportView_ID": this.AD_ReportView_ID,
             "UseCrystalReportViewer": this.useCrystalReportViewer,
             "IsReport": this.isReport,
-            "IsBackground": this.isBackground
+            "IsBackground": this.isBackground,
+            "ActionOrigin": this.ActionOrigin,
+            "OriginName": this.OriginName
         }
         return o;
 
@@ -124,6 +128,8 @@
         info.useCrystalReportViewer = o.UseCrystalReportViewer;
         info.isReport = o.IsReport;
         info.isBackground = o.IsBackground;
+        info.ActionOrigin = o.ActionOrigin;
+        info.OriginName = o.OriginName;
     };
 
     ProcessInfo.prototype.setPrintFormatTableName = function (tableName) {
@@ -394,6 +400,22 @@
 
     ProcessInfo.prototype.getIsBackground = function () {
         return this.isBackground;
+    }
+
+    ProcessInfo.prototype.getActionOrigin = function () {
+        return this.ActionOrigin;
+    }
+
+    ProcessInfo.prototype.setActionOrigin = function (ActionOrigin) {
+        this.ActionOrigin = ActionOrigin;
+    }
+
+    ProcessInfo.prototype.getOriginName = function () {
+        return this.OriginName;
+    }
+
+    ProcessInfo.prototype.setOriginName = function (OriginName) {
+        this.OriginName = OriginName;
     }
 
     ProcessInfo.prototype.setSummary = function (summary, error) {
