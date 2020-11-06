@@ -135,6 +135,7 @@
     <Compile Include="Areas\VAS\Controllers\CallOut\MOrderLineController.cs" />
     <Compile Include="Areas\VAS\Controllers\CallOut\MPaymentController.cs" />
     <Compile Include="Areas\VAS\Controllers\CallOut\MPaymentTermController.cs" />
+    <Compile Include="Areas\VAS\Controllers\CallOut\MPeriodController.cs" />
     <Compile Include="Areas\VAS\Controllers\CallOut\MPriceListController.cs" />
     <Compile Include="Areas\VAS\Controllers\CallOut\MPriceListVersionController.cs" />
     <Compile Include="Areas\VAS\Controllers\CallOut\MProductCategoryController.cs" />

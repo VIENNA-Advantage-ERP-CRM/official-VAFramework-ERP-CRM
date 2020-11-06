@@ -447,10 +447,13 @@ namespace VIS.Models
             bool isSOTrx = ctx.IsSOTrx(_windowNo);
             _partner.SetIsCustomer(isSOTrx);
             _partner.SetIsVendor(!isSOTrx);
+            // JID_1197 IN Business partner  updating Createdby,Updatedby,Created,Updated fields as per changed date
+            _partner.Set_ValueNoCheck("CreatedBy", ctx.GetAD_User_ID());
+            _partner.Set_ValueNoCheck("Created", DateTime.Now);
+            _partner.Set_ValueNoCheck("Updated", DateTime.Now);
+            _partner.Set_ValueNoCheck("UpdatedBy", ctx.GetAD_User_ID());
             if (BPtype != null && (!isCustomer && !isVendor))
             {
-
-
                 if (BPtype.Contains("Customer"))
                 {
                     _partner.SetIsCustomer(true);

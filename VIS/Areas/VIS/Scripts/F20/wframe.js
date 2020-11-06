@@ -572,7 +572,7 @@
 
             jsonData.AD_Process_ID = AD_Process_ID;
             //console.log(jsonData);
-
+            self.cPanel.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_MENU);
             if (!self.cPanel.init(jsonData, self, windowNo)) {
                 self.dispose();
                 self = null;

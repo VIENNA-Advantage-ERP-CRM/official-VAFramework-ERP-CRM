@@ -279,6 +279,7 @@ html[dir="rtl"] .vis-advancedSearchInput > label, html[dir="rtl"] .vis-advancedS
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center !important;
 }
 
     .vis-ads-icon i {

@@ -22,20 +22,20 @@
 
 
             var script = '<div class="vis-group-assinRole-content">' +
-        	'<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
                 '<input tabindex="1" maxlength="60" data-placeholder="" placeholder=" " class="vis-group-role-text vis-ev-col-mandatory" type="text"><label>' + VIS.Msg.getMsg("Role") + '</label>' +
-            '</div></div></div>' +
-            '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '</div></div></div>' +
+                '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
                 '<select  tabindex="2"  class="vis-group-role-select" >' +
 
                 '</select>' +
                 '<label>' + VIS.Msg.getMsg("VIS_UserLevel") + '</label>' +
-            '</div></div></div>' +
-            '<div class="vis-group-assinRole-data">' +
+                '</div></div></div>' +
+                '<div class="vis-group-assinRole-data vis-group-asignrole-btnwrap">' +
                 '<a style="float:left"  tabindex="3"  class="vis-group-btn vis-group-orgAccess vis-group-pointer vis-group-grayBtn">' + VIS.Msg.getMsg("VIS_OrgAccess") + '</a>' +
                 '<a  tabindex="4"  class="vis-group-btn vis-group-Save vis-group-pointer vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg("Save") + '</a>' +
-            '</div>' +
-        '</div>';
+                '</div>' +
+                '</div>';
 
             $root.append(script);
             $txtRole = $root.find('.vis-group-role-text');
@@ -68,7 +68,7 @@
          Create busyIndicator
      */
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='vis-apanel-busy' style='height:96%; width:98%;'></div>");
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             $bsyDiv[0].style.visibility = "hidden";
             $root.append($bsyDiv);
         }
@@ -77,12 +77,11 @@
             $btnOrgAccess.on("click", orgAccess);
             $btnOrgAccess.on("keydown", orgAccessTabClick);
             $btnSave.on("click", save);
-            $btnSave.on("keydown",saveTabClick);
+            $btnSave.on("keydown", saveTabClick);
             $txtRole.on("change", checkRoleName);
         };
 
-        function orgAccessTabClick(e)
-        {
+        function orgAccessTabClick(e) {
             if (e.keyCode != undefined && e.keyCode != 13) {
                 return;
             }

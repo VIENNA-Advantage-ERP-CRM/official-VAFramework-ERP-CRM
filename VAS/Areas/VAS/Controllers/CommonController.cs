@@ -247,7 +247,7 @@ namespace VIS.Controllers
 
         #endregion
 
-       
+
 
         #region VAttributeGrid
         public JsonResult GetDataQueryAttribute()
@@ -1498,7 +1498,7 @@ namespace VIS.Controllers
             return true;
         }
 
-   
+
 
         public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int C_Order_ID, int C_Invoice_ID, int M_InOut_ID)
         {
@@ -2957,6 +2957,10 @@ namespace VIS.Controllers
         public string DownloadPdf(Ctx ctx, int archiveId)
         {
             MArchive ar = new MArchive(ctx, archiveId, null);//  m_archives[m_index];
+            MSession sess = MSession.Get(ctx);
+
+            //Save Action Log
+            VAdvantage.Common.Common.SaveActionLog(ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetAD_Table_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);
 
             byte[] report = ar.GetBinaryData();
             //if (report != null && (report.Length > 1048576))

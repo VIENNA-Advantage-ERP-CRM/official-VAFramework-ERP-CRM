@@ -103,7 +103,14 @@ namespace VAdvantage.Process
                 int pricelist = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (pricelist == 0)
                 {
-                    pricelist = MPriceList.GetDefault(GetCtx(), false).Get_ID();
+                    try
+                    {
+                        pricelist = MPriceList.GetDefault(GetCtx(), false).Get_ID();
+                    }
+                    catch
+                    {
+                        throw new ArgumentException(Msg.GetMsg(GetCtx(), "CR_NoDefaultPurchasePL"));
+                    }
                 }
                 if (pricelist > 0)
                 {

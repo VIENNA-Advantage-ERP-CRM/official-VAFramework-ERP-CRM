@@ -691,7 +691,7 @@ html[dir="rtl"] .vis-hasSubMenu:after
 
                 .vis-css-treeview ul li ul li
                 {
-                    margin-bottom: 1px;
+                    margin-bottom: 2px;
                 }
 
                     .vis-css-treeview ul li ul li ul
@@ -1179,8 +1179,6 @@ html[dir="rtl"] .vis-auth-dialog
     right: 20px;
 }
 
-html[dir="rtl"] .vis-filter-dialog
-{
-    left:auto;
-    right: 15px;
+.vis-css-treeview ul li input[type="checkbox"] {
+    position: absolute;
 }

@@ -35,9 +35,10 @@
 
         this.$root = $("<div style='position:relative'>");
         this.log = VIS.Logging.VLogger.getVLogger("VCreateFrom");
-        this.$busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        //this.$busyDiv = $("<div class='vis-apanel-busy' style='width:98%;height:98%;position:absolute'>");
+        this.$busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
-        this.topDiv = $("<div class='vis-locatormainwrap'>");
+        this.topDiv = $("<div class='vis-locatormainwrap vis-formouterwrpdiv'>");
         this.middelDiv = $("<div class='vis-crtfrm-datawrp'>");
         this.bottomDiv = $("<div class='vis-ctrfrm-btnwrp'>");
         this.divPaging = $('<div>');
@@ -57,12 +58,12 @@
         name = "btnDelete_" + this.windowNo;
         var src = VIS.Application.contextUrl + "Areas/VIS/Images/base/uncheck-icon.png";
         this.selectAllButton = $("<button type='button' id='" + name + "' style='margin-bottom:0px;margin-top:0px;display: none;float: left;padding: 0px;border: 0px;' value='Ok' role='button' aria-disabled='false'>" +
-       "<img src='" + src + "'></button>");
+            "<img src='" + src + "'></button>");
 
         name = "btnRefresh_" + this.windowNo;
         src = VIS.Application.contextUrl + "Areas/VIS/Images/base/Refresh24.png";
         this.btnRefresh = $("<button id='" + name + "' style='margin-bottom: 1px; margin-top: 0px;display: none; float: left; margin-left: 0px;height: 38px; ' class='VIS_Pref_btn-2'>" +
-                   "<img src='" + src + "'></button>");
+            "<img src='" + src + "'></button>");
 
         name = "btnApply_" + this.windowNo;
         this.Applybtn = $("<input id='" + name + "' class='VIS_Pref_btn-2' style='display: none;' type='button' value='" + VIS.Msg.getMsg("Apply") + "'>");
@@ -173,7 +174,7 @@
                 var Amount = $self.Amount.getValue();
                 VIS.VCreateFromStatement.prototype.loadBankAccounts(C_BankAccount_ID, C_BPartner_ID, trxDate, DocumentNo, DepositSlip, AuthCode, CheckNo, Amount, 1);
             }
-                // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
+            // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
             else if (evt.propertyName == "M_Locator_ID") {
                 if ($self.locatorField != null) {
                     $self.isApplied = false;
@@ -183,7 +184,7 @@
                         VIS.VCreateFromShipment.prototype.initContainerDetails(M_locator_ID);
                 }
             }
-                //End
+            //End
             else {
                 this.locatorField.setBackground("");
             }
@@ -660,7 +661,7 @@
     VCreateFrom.prototype.getOrders = function (ctx, C_BPartner_ID, isReturnTrx, forInvoice) {
 
         var display = "o.DocumentNo||' - ' ||".concat(VIS.DB.to_char("o.DateOrdered", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("||' - '||").concat(
-                VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+            VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
 
         var column = "m.M_InOutLine_ID";
         if (forInvoice) {
@@ -719,7 +720,7 @@
         //return pairs;
     }
 
-    
+
     VCreateFrom.prototype.jbInit = function () {
         this.init();
 
@@ -742,7 +743,7 @@
         this.lblAuthCode.getControl().text(VIS.Msg.getMsg("AuthCode"));
         this.lblCheckNo.getControl().text(VIS.Msg.getMsg("CheckNo"));
 
-        
+
         //First Row
         /*******************************/
         var line = $("<div class='VIS_Pref_show'>");
@@ -767,26 +768,26 @@
         col.append(DivInputWrap);
         DivInputWrap.append(DivInputCtrlWrap);
         DivInputWrap.append(DivCtrlBtnWrap);
-        
+
         //else {
-            // To append Business Partner Control.. 
-            if (this.vBPartner != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(DivInputWrap);
-                //DivInputWrap.append(DivInputCtrlWrap);
-                //DivInputWrap.append(DivCtrlBtnWrap);
-                if (this.cmbBankAccount != null) {
-                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
-                }
-                else {
-                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
-                }
-                DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
+        // To append Business Partner Control.. 
+        if (this.vBPartner != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(DivInputWrap);
+            //DivInputWrap.append(DivInputCtrlWrap);
+            //DivInputWrap.append(DivCtrlBtnWrap);
+            if (this.cmbBankAccount != null) {
+                DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+                DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
             }
-            //End Business Partner Control
+            else {
+                DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+            }
+            DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        //End Business Partner Control
         //}
         //End First Column
         /*******************************/
@@ -809,42 +810,42 @@
         DivInputWrap.append(DivInputCtrlWrap);
         DivInputWrap.append(DivCtrlBtnWrap);
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order            
-            if (this.vBPartner != null) {
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order            
+        //    if (this.vBPartner != null) {
+        //        //ctrl.removeClass("VIS_Pref_slide-show pp");
+        //        //col.append(DivInputWrap);
+        //        //DivInputWrap.append(DivInputCtrlWrap);
+        //        //DivInputWrap.append(DivCtrlBtnWrap);
+        //        if (this.cmbBankAccount != null) {
+        //            DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+        //            DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+        //            DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
+        //        }
+        //        else {
+        //            DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+        //            DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
+        //        }
+        //        DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        //else {
+        if (this.cmbBankAccount != null) {
+            //col.append(DivInputWrap);
+            //DivInputWrap.append(DivInputCtrlWrap);
+            DivInputCtrlWrap.append(this.cmbBankAccount.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        else {
+            if (this.DocumentNoRef != null) {
                 //ctrl.removeClass("VIS_Pref_slide-show pp");
                 //col.append(DivInputWrap);
                 //DivInputWrap.append(DivInputCtrlWrap);
-                //DivInputWrap.append(DivCtrlBtnWrap);
-                if (this.cmbBankAccount != null) {
-                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(1));
-                }
-                else {
-                    DivInputCtrlWrap.append(this.vBPartner.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.vBPartner.getBtn(0));
-                }
-                DivInputCtrlWrap.append(this.lblBPartner.getControl().addClass('VIS_Pref_Label_Font'));
+                DivInputCtrlWrap.append(this.DocumentNoRef.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                DivInputCtrlWrap.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
             }
         }
-        else {
-            if (this.cmbBankAccount != null) {
-                //col.append(DivInputWrap);
-                //DivInputWrap.append(DivInputCtrlWrap);
-                DivInputCtrlWrap.append(this.cmbBankAccount.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblBankAccount.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-            else {
-                if (this.DocumentNoRef != null) {
-                    //ctrl.removeClass("VIS_Pref_slide-show pp");
-                    //col.append(DivInputWrap);
-                    //DivInputWrap.append(DivInputCtrlWrap);
-                    DivInputCtrlWrap.append(this.DocumentNoRef.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                    DivInputCtrlWrap.append(this.lblDocumentNoRef.getControl().addClass('VIS_Pref_Label_Font'));
-                }
-            }
-        }
+        //}
         //End Second Column
         /*******************************/
         //End First Row
@@ -882,44 +883,45 @@
         col.append(DivInputWrap);
         DivInputWrap.append(DivInputCtrlWrap);
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.Date != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.Date != null) {
+        //        //ctrl.removeClass("VIS_Pref_slide-show pp");
+        //        col.append(DivInputWrap);
+        //        DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        //else {
+        if (this.DocumentNo != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
         }
-        else {
-            if (this.DocumentNo != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-        }
+        //}
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.cmbInvoice != null) {
-                col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-            if (this.cmbShipment != null) {
-                col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-        } else {
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.cmbInvoice != null) {
+        //        col.append(DivInputWrap);
+        //        DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //    if (this.cmbShipment != null) {
+        //        col.append(DivInputWrap);
+        //        DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        // else {
 
-            if (this.cmbOrder != null) {
-                col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbOrder.getControl());
-                DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        if (this.cmbOrder != null) {
+            col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.cmbOrder.getControl());
+            DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
         }
+        //}
 
         // Amount Control
         if (this.Amount != null) {
@@ -969,44 +971,45 @@
         col.append(DivInputWrap);
         DivInputWrap.append(DivInputCtrlWrap);
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.cmbOrder != null) {
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbOrder.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.cmbOrder != null) {
+        //        //col.append(DivInputWrap);
+        //        DivInputCtrlWrap.append(this.cmbOrder.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblOrder.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
 
-        } else {
-            if (this.cmbInvoice != null) {
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-            if (this.cmbShipment != null) {
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //} 
+        //else {
+        if (this.cmbInvoice != null) {
+            //col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.cmbInvoice.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblInvoice.getControl().addClass('VIS_Pref_Label_Font'));
         }
+        if (this.cmbShipment != null) {
+            //col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.cmbShipment.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblShipment.getControl().addClass('VIS_Pref_Label_Font'));
+        }
+        // }
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.DocumentNo != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.DocumentNo != null) {
+        //        //ctrl.removeClass("VIS_Pref_slide-show pp");
+        //        //col.append(DivInputWrap);
+        //        DivInputCtrlWrap.append(this.DocumentNo.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblDocumentNo.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        //else {
+        if (this.Date != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(DivInputWrap);
+            DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
         }
-        else {
-            if (this.Date != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(DivInputWrap);
-                DivInputCtrlWrap.append(this.Date.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDate.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-        }
+        // }
 
         //End Second Row
         /*******************************/
@@ -1035,34 +1038,34 @@
             DivInputWrap.append(DivInputCtrlWrap);
             DivInputWrap.append(DivCtrlBtnWrap);
 
-            if (VIS.Application.isRTL) {
-                // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
-                if (this.cmbContainer != null) {
-                    //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
-                    col.css('visibility', 'hidden');
-                    //.append(ctrl);
-                    if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
-                        if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
-                            col.css('visibility', 'visible');
-                            //.append(ctrl);
-                            this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
-                        }
-                    }
-                    DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' '));
-                    DivCtrlBtnWrap.append(this.ContainerTree);
-                    DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
-                }
-            }
-            else {
+            //if (VIS.Application.isRTL) {
+            //    // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
+            //    if (this.cmbContainer != null) {
+            //        //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
+            //        col.css('visibility', 'hidden');
+            //        //.append(ctrl);
+            //        if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
+            //            if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
+            //                col.css('visibility', 'visible');
+            //                //.append(ctrl);
+            //                this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
+            //            }
+            //        }
+            //        DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' '));
+            //        DivCtrlBtnWrap.append(this.ContainerTree);
+            //        DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
+            //    }
+            //}
+            //else {
 
-                if (this.locatorField != null) {
-                    //ctrl.removeClass("VIS_Pref_slide-show pp");
-                    //col.append(ctrl);
-                    DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
-                    DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
-                }
+            if (this.locatorField != null) {
+                //ctrl.removeClass("VIS_Pref_slide-show pp");
+                //col.append(ctrl);
+                DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+                DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
+                DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
             }
+            //}
 
 
             col = $("<div class='VIS_Pref_dd'>");
@@ -1081,31 +1084,31 @@
             DivInputWrap.append(DivInputCtrlWrap);
             DivInputWrap.append(DivCtrlBtnWrap);
 
-            if (VIS.Application.isRTL) {
-                if (this.locatorField != null) {
-                    //ctrl.removeClass("VIS_Pref_slide-show pp");
-                    //col.append(ctrl);
-                    DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                    DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
-                    DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
-                }
-            }
-            else {
-                // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
-                if (this.cmbContainer != null) {
-                    //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
-                    col.css('visibility', 'hidden');//.append(ctrl);
-                    if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
-                        if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
-                            col.css('visibility', 'visible');//.append(ctrl);
-                            this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
-                        }
+            //if (VIS.Application.isRTL) {
+            //    if (this.locatorField != null) {
+            //        //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //        //col.append(ctrl);
+            //        DivInputCtrlWrap.append(this.locatorField.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            //        DivCtrlBtnWrap.append(this.locatorField.getBtn(0));
+            //        DivInputCtrlWrap.append(this.lblLocator.getControl().addClass('VIS_Pref_Label_Font'));
+            //    }
+            //}
+            //else {
+            // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
+            if (this.cmbContainer != null) {
+                //var src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
+                col.css('visibility', 'hidden');//.append(ctrl);
+                if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"] != undefined) {
+                    if (VIS.context.ctx["#PRODUCT_CONTAINER_APPLICABLE"].equals("Y", true)) {
+                        col.css('visibility', 'visible');//.append(ctrl);
+                        this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
                     }
-                    DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' '));
-                    DivCtrlBtnWrap.append(this.ContainerTree);
-                    DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
                 }
+                DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' '));
+                DivCtrlBtnWrap.append(this.ContainerTree);
+                DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
             }
+            //}
         }
         //End Third Row
         /*******************************/
@@ -1149,42 +1152,42 @@
         DivInputWrap.append(DivInputCtrlWrap);
         DivInputWrap.append(DivCtrlBtnWrap);
         // Added by Bharat on 05/May/2017
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.AuthCode != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.AuthCode != null) {
+        //        //ctrl.removeClass("VIS_Pref_slide-show pp");
+        //        //col.append(ctrl);
+        //        DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        //else {
+        if (this.DepositSlip != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
         }
-        else {
-            if (this.DepositSlip != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-        }
+        //}
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.vProduct != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
-                DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
-                DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.vProduct != null) {
+        //        //ctrl.removeClass("VIS_Pref_slide-show pp");
+        //        //col.append(ctrl);
+        //        DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+        //        DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
+        //        DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
+        //        DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        //else {
+        if (this.deliveryDate != null) {
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
         }
-        else {
-            if (this.deliveryDate != null) {
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-        }
+        //}
 
         // Check No Control
         if (this.CheckNo != null) {
@@ -1236,42 +1239,42 @@
         DivInputWrap.append(DivInputCtrlWrap);
         DivInputWrap.append(DivCtrlBtnWrap);
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.deliveryDate != null) {
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.deliveryDate != null) {
+        //        //col.append(ctrl);
+        //        DivInputCtrlWrap.append(this.deliveryDate.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblDeliveryDate.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        //else {
+        if (this.vProduct != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
+            DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
+            DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
+            DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
         }
-        else {
-            if (this.vProduct != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.vProduct.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
-                DivCtrlBtnWrap.append(this.vProduct.getBtn(0));
-                DivCtrlBtnWrap.append(this.vProduct.getBtn(1));
-                DivInputCtrlWrap.append(this.lblProduct.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-        }
+        //}
 
-        if (VIS.Application.isRTL) {
-            //reverse controls order
-            if (this.DepositSlip != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
-            }
+        //if (VIS.Application.isRTL) {
+        //    //reverse controls order
+        //    if (this.DepositSlip != null) {
+        //        //ctrl.removeClass("VIS_Pref_slide-show pp");
+        //        //col.append(ctrl);
+        //        DivInputCtrlWrap.append(this.DepositSlip.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+        //        DivInputCtrlWrap.append(this.lblDepositSlip.getControl().addClass('VIS_Pref_Label_Font'));
+        //    }
+        //}
+        //else {
+        if (this.AuthCode != null) {
+            //ctrl.removeClass("VIS_Pref_slide-show pp");
+            //col.append(ctrl);
+            DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+            DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
         }
-        else {
-            if (this.AuthCode != null) {
-                //ctrl.removeClass("VIS_Pref_slide-show pp");
-                //col.append(ctrl);
-                DivInputCtrlWrap.append(this.AuthCode.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                DivInputCtrlWrap.append(this.lblAuthCode.getControl().addClass('VIS_Pref_Label_Font'));
-            }
-        }
+        //}
         //End Forth Row
         /******************************/
 
@@ -2687,6 +2690,8 @@
     //}
 
     VCreateFrom.prototype.loadGrid = function (data) {
+        var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
+        var dotFormatter = VIS.Env.isDecimalPoint();
         if (this.dGrid != null) {
             this.dGrid.destroy();
             this.dGrid = null;
@@ -2700,9 +2705,23 @@
                     return '<div><input type=checkbox disabled="true"></div>';
                 }
             });
-            this.arrListColumns.push({ field: "Quantity", caption: VIS.Msg.getMsg("QtyPending"), sortable: false, size: '150px', render: 'number:4', hidden: false });
+            this.arrListColumns.push({
+                field: "Quantity", caption: VIS.Msg.getMsg("QtyPending"), sortable: false, size: '150px', hidden: false,
+                render: function (record, index, col_index) {
+                    var val = record["Quantity"];
+                    return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
+                }
+            });
             this.arrListColumns.push({ field: "QuantityPending", caption: VIS.Msg.getMsg("Quantity"), sortable: false, size: '150px', render: 'number:4', hidden: true });
-            this.arrListColumns.push({ field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'float' }, render: 'number:4', sortable: false, size: '150px', hidden: false });
+            this.arrListColumns.push({
+                field: "QuantityEntered", caption: VIS.Msg.getMsg("QtyEntered"), editable: { type: 'number' }, sortable: false, size: '150px', hidden: false,
+                //Added to get QuantityEntered value acc.to culture
+                render: function (record, index, col_index) {
+                    var val = record["QuantityEntered"];
+                    val = checkcommaordot(event, val);
+                    return parseFloat(val).toLocaleString(undefined, { minimumFractionDigits: 4 });
+                }
+            });
             this.arrListColumns.push({ field: "C_UOM_ID", caption: VIS.Msg.getMsg("UomName"), sortable: false, size: '150px', hidden: false });
             //Add product search key column in Grid 
             this.arrListColumns.push({ field: "M_Product_SearchKey", caption: VIS.Msg.getMsg("ProductSearchKey"), sortable: false, size: '150px', hidden: false });
@@ -2762,6 +2781,39 @@
                 event.onComplete = function () {
                     // Issue No : JID_0564 : make row non editable
                     CreateNonEditableRecord();
+                }
+            },
+            // Added to get value acc. to culture while editing grid column
+            onEditField: function (event) {
+                id = event.recid;
+                if (event.column == 3) {
+                    $self.dGrid.records[event.index]["QuantityEntered"] = checkcommaordot(event, $self.dGrid.records[event.index]["QuantityEntered"]);
+                    var _value = format.GetFormatAmount($self.dGrid.records[event.index]["QuantityEntered"], "init", dotFormatter);
+                    $self.dGrid.records[event.index]["QuantityEntered"] = format.GetConvertedString(_value, dotFormatter);
+                    $("#grid_" + $self.dGrid.name + "_rec_" + id).keydown(function (event) {
+                        if (!dotFormatter && (event.keyCode == 190 || event.keyCode == 110)) {// , separator
+                            return false;
+                        }
+                        else if (dotFormatter && event.keyCode == 188) { // . separator
+                            return false;
+                        }
+                        if (event.target.value.contains(".") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                            if (event.target.value.indexOf('.') > -1) {
+                                event.target.value = event.target.value.replace('.', '');
+                            }
+                        }
+                        else if (event.target.value.contains(",") && (event.which == 110 || event.which == 190 || event.which == 188)) {
+                            if (event.target.value.indexOf(',') > -1) {
+                                event.target.value = event.target.value.replace(',', '');
+                            }
+                        }
+                        if (event.keyCode != 8 && event.keyCode != 9 && (event.keyCode < 37 || event.keyCode > 40) &&
+                            (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)
+                            && event.keyCode != 109 && event.keyCode != 189 && event.keyCode != 110
+                            && event.keyCode != 144 && event.keyCode != 188 && event.keyCode != 190) {
+                            return false;
+                        }
+                    });
                 }
             }
         });
@@ -2828,23 +2880,24 @@
         this.dGrid.on("change", function (e) {
             CreateNonEditableRecord();
             if ($self.dGrid.columns[e.column].field == "QuantityEntered") {
+                var _val = format.GetConvertedNumber(e.value_new, dotFormatter);
                 if ($self.fromInvoice) {
-                    if ($self.dGrid.records[e.index]["QuantityPending"] < parseFloat(e.value_new).toFixed(4)) {
+                    if ($self.dGrid.records[e.index]["QuantityPending"] < _val.toFixed(4)) {
                         VIS.ADialog.error("InvoiceQtyGreater");
                         e.value_new = e.value_original;
                         return;
                     }
                 }       // JID_0273: Create line from on material Recipt allow user set qty more than PO qty
                 else {
-                    if ($self.dGrid.records[e.index]["QuantityPending"] < parseFloat(e.value_new).toFixed(4)) {
+                    if ($self.dGrid.records[e.index]["QuantityPending"] < _val.toFixed(4)) {
                         VIS.ADialog.error("QtyCanNotbeGreater");
                         e.value_new = e.value_original;
                         return;
                     }
                 }
-                $self.dGrid.records[e.index]["QuantityEntered"] = parseFloat(e.value_new).toFixed(4);
+                $self.dGrid.records[e.index]["QuantityEntered"] = _val.toFixed(4);
                 if (C_Order_ID > 0 || C_Invoice_ID > 0) {
-                    AddEditedLine("QuantityEntered", e.index, parseFloat(e.value_new).toFixed(4));
+                    AddEditedLine("QuantityEntered", e.index, _val.toFixed(4));
                 }
             }
             else if ($self.dGrid.columns[e.column].field == "M_AttributeSetInstance_ID") {
@@ -2891,7 +2944,54 @@
             }
         };
 
+        // function to check comma or dot from given value and return new value
+        function checkcommaordot(event, val) {
+            var foundComma = false;
+            event.value_new = VIS.Utility.Util.getValueOfString(val);
+            if (event.value_new.contains(".")) {
+                foundComma = true;
+                var indices = [];
+                for (var i = 0; i < event.value_new.length; i++) {
+                    if (event.value_new[i] === ".")
+                        indices.push(i);
+                }
+                if (indices.length > 1) {
+                    event.value_new = removeAllButLast(event.value_new, '.');
+                }
+            }
+            if (event.value_new.contains(",")) {
+                if (foundComma) {
+                    event.value_new = removeAllButLast(event.value_new, ',');
+                }
+                else {
+                    var indices = [];
+                    for (var i = 0; i < event.value_new.length; i++) {
+                        if (event.value_new[i] === ",")
+                            indices.push(i);
+                    }
+                    if (indices.length > 1) {
+                        event.value_new = removeAllButLast(event.value_new, ',');
+                    }
+                    else {
+                        event.value_new = event.value_new.replace(",", ".");
+                    }
+                }
+            }
+            if (event.value_new == "") {
+                event.value_new = "0";
+            }
+            return event.value_new;
+        };
 
+        // Remove all seperator but only bring last seperator
+        function removeAllButLast(amt, seprator) {
+            var parts = amt.split(seprator);
+            amt = parts.slice(0, -1).join('') + '.' + parts.slice(-1);
+            if (amt.indexOf('.') == (amt.length - 1)) {
+                amt = amt.replace(".", "");
+            }
+            return amt;
+        };
 
         //this.dGrid.on("click", function (e) {
         //    e.preventDefault;
