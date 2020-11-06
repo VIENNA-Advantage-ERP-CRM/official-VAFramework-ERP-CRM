@@ -6,14 +6,14 @@
 }
 
 
-<table style="margin-bottom: 10px; width:100%;">
+<table style="margin-bottom: 10px; width:100%;" class="vis-formouterwrpdiv">
     <tr>
         <td>
             <div class="location input-group vis-input-wrap">
                 <div class="vis-control-wrap">
                     <input type="text" class="form-control" placeholder="Search" aria-haspopup="true" id="lstLocation_@windowNo" data-hasbtn=" ">
-                    </div>
-                    <div class="input-group-append"><span class="input-group-text"><a href="javascript:void(0)" class="glyphicon glyphicon-search"></a></span></div>
+                </div>
+                <div class="input-group-append"><span class="input-group-text"><a href="javascript:void(0)" class="glyphicon glyphicon-search"></a></span></div>
             </div>
         </td>
     </tr>
@@ -93,8 +93,8 @@
         <td>
             <div class="form-input pull-left location input-group vis-input-wrap">
                 <div class="vis-control-wrap">
-                    @Html.TextBoxFor(m => m.RegionName, new { autofocus = "autofocus", id = "txtState_" + ViewBag.WindowNumber, @maxlength = "40", @class = "form-control", @placeholder = @VAdvantage.Utility.Msg.GetMsg(lang, "State") })
-                    <label id="lblState_@windowNo" class="VIS_Pref_Label_Font control-label">@VAdvantage.Utility.Msg.GetMsg(lang, "State") </label>
+                    @Html.TextBoxFor(m => m.RegionName, new { autofocus = "autofocus", id = "txtState_" + ViewBag.WindowNumber, @maxlength = "40", @class = "form-control", @placeholder = @VAdvantage.Utility.Msg.GetMsg(lang, "Region") })
+                    <label id="lblState_@windowNo" class="VIS_Pref_Label_Font control-label">@VAdvantage.Utility.Msg.GetMsg(lang, "Region") </label>
                     <input id="Statehdn_@windowNo" type="hidden" value="@Model.C_Region_ID" placeholder=" ">
                 </div>
             </div>
@@ -110,8 +110,8 @@
     <tr>
         <td>
             <div class="btns">
-                <input id="btnOk_@windowNo"   class="VIS_Pref_btn-2 pull-left" style="margin-top:0px;margin-bottom:0px;" type="button" value=@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(lang, "OK"))  />
-                <input id= "btnCancel_@windowNo" class="VIS_Pref_btn-2 pull-right" style="margin-top:0px;margin-bottom:0px" type="button" value=@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(lang, "Cancel"))  />
+                <input id="btnCancel_@windowNo" class="VIS_Pref_btn-2 pull-right" style="margin-top:0px;margin-bottom:0px" type="button" value=@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(lang, "Cancel")) />
+                <input id="btnOk_@windowNo" class="VIS_Pref_btn-2 pull-left" style="margin-top:0px;margin-bottom:0px;" type="button" value=@VAdvantage.Utility.Util.CleanMnemonic(VAdvantage.Utility.Msg.GetMsg(lang, "OK")) />
             </div>
 
         </td>
