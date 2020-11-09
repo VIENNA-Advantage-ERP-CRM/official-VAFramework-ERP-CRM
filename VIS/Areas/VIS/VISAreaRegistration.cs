@@ -126,7 +126,7 @@ namespace VIS
                     "~/Areas/VIS/Scripts/app/Framework/attachmentHistory.js",
                     "~/Areas/VIS/Scripts/app/Framework/recordaccessdialog.js",
                     "~/Areas/VIS/Scripts/app/forms/vallocation.js",
-                //"~/Areas/VIS/Scripts/app/forms/vallocation-branch.js",
+                "~/Areas/VIS/Scripts/app/forms/vallocation-branch.js",
 
                 "~/Areas/VIS/Scripts/app/grouprights/group.js",
                 "~/Areas/VIS/Scripts/app/grouprights/createuser.js",
