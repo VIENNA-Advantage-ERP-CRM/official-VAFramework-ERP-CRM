@@ -111,6 +111,7 @@ namespace VIS.Controllers
         [HttpPost]
         public JsonResult GetDataFromExcelOrText(List<object> param)
         {
+            Ctx ctx = Session["ctx"] as Ctx;
             DataSet _ds = null;
             DataTable dt = new DataTable();
             if (Path.GetExtension(param[0].ToString()) == ".xlsx" || Path.GetExtension(param[0].ToString()) == ".xls")
@@ -317,7 +318,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            dt = model.GetAcountIdByValue(Util.GetValueOfInt(param[2]), param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
+                            dt = model.GetAcountIdByValue((Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$C_AcctSchema_ID") : Util.GetValueOfInt(param[2])) , param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
                             bpid = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
                             dt.Rows[i]["BPartnerId"] = bpid;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
@@ -339,7 +340,7 @@ namespace VIS.Controllers
                     var sql = "select adt.columnname,adtab.TableName from c_acctschema_element ac inner join ad_column ad on ac.ad_column_id=ad.ad_column_id " +
                 " inner join ad_column adt on ad.ad_table_ID=adt.ad_table_ID and adt.isactive='Y' " +
                 "  inner join ad_table adtab on adtab.ad_table_id=ad.ad_table_ID " +
-                " where ac.c_acctschema_id=" + Util.GetValueOfInt(param[2]) + " and ac.elementtype='" + param[1].ToString() + "' and adt.isidentifier='Y' order by adt.seqno ASC ";
+                " where ac.c_acctschema_id=" + (Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$C_AcctSchema_ID") : Util.GetValueOfInt(param[2])) + " and ac.elementtype='" + param[1].ToString() + "' and adt.isidentifier='Y' order by adt.seqno ASC ";
                     DataSet dsColumnDetail = (DB.ExecuteDataset(sql, null, null));
                     if (dsColumnDetail != null && dsColumnDetail.Tables.Count > 0 && dsColumnDetail.Tables[0].Rows.Count > 0)
                     {
