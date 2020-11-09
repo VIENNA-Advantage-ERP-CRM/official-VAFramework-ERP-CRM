@@ -987,12 +987,11 @@ namespace VIS.Helpers
                 versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
                 versionInfo.TableName = inn.TableName;
-                if (!(inn.ValidFrom != null && !inn.ImmediateSave && IsBackDateVersion(inn.ValidFrom.Value)))
-                {
-                    // check whether any Document Value type workflow is attached with Version table
-                    hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
-                    versionInfo.HasDocValWF = hasDocValWF;
-                }
+
+                // check whether any Document Value type workflow is attached with Version table
+                hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
+                versionInfo.HasDocValWF = hasDocValWF;
+
 
                 // check applied, no need to check save in case of backdate entry
                 if (!IsBackDateVersion(inn.ValidFrom.Value))
@@ -1068,7 +1067,8 @@ namespace VIS.Helpers
                     }
 
                     string sqlOldVer = @"SELECT * FROM " + inn.TableName + "_Ver WHERE " + inn.WhereClause
-                                + " AND VersionValidFrom < " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + " ORDER BY VersionValidFrom DESC";
+                                + " AND VersionValidFrom < " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) 
+                                + " AND ProcessedVersion = 'Y' AND IsVersionApproved = 'Y' ORDER BY VersionValidFrom DESC";
                     DataSet dsOldVers = DB.ExecuteDataset(sqlOldVer);
                     if (dsOldVers != null && dsOldVers.Tables[0].Rows.Count > 0)
                     {
@@ -1574,7 +1574,6 @@ namespace VIS.Helpers
                     else if (IsBackDateVersion(inn.ValidFrom.Value))
                     {
                         po.Set_Value("ProcessedVersion", true);
-                        po.Set_Value("IsVersionApproved", true);
                     }
                 }
             }
