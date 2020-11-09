@@ -431,6 +431,11 @@ namespace CoreLibrary.DataBase
             }
             else
             {
+                if (DB.IsPostgreSQL())
+                {
+                    NpgsqlParameter[] pparam = VAdvantage.SqlExec.ExecuteQuery.GetPostgreParameter(param);
+                    return VAdvantage.SqlExec.PostgreSql.PostgreHelper.ExecuteDataset(GetConnectionString(), CommandType.Text, ConvertSqlQuery(sql), pageSize, pageNumber, pparam);
+                }
                 OracleParameter[] oparam = VAdvantage.SqlExec.ExecuteQuery.GetOracleParameter(param);
                 return VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteDataset(GetConnectionString(), CommandType.Text, ConvertSqlQuery(sql), pageSize, pageNumber, oparam);
             }
