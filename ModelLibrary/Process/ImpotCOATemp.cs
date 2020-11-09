@@ -64,6 +64,7 @@ namespace VAdvantage.Process
             extension = filename.Substring(ind, filename.Length - ind);
             int client = Util.GetValueOfInt(GetAD_Client_ID());
             int user = GetAD_User_ID();
+            int result = 0;
             if (extension.ToUpper() == ".XLS" || extension.ToUpper() == ".CSV" )
             {
                
@@ -135,6 +136,111 @@ namespace VAdvantage.Process
                                     {
                                         eleValue.SetIsSummary(false);
                                     }
+                                    // Document controlled
+                                    if (dt.Columns.Contains("(Document_Controlled)") && dt.Rows[i]["(Document_Controlled)"] != DBNull.Value)
+                                    {
+                                        if (dt.Rows[i]["(Document_Controlled)"].ToString().ToUpper() == "YES")
+                                        {
+                                            eleValue.SetIsDocControlled(true);
+                                        }
+                                        else
+                                        {
+                                            eleValue.SetIsDocControlled(false);
+                                        }
+                                    }
+
+                                    // Bank Account
+                                    if (dt.Columns.Contains("(Bank_Account)") && dt.Rows[i]["(Bank_Account)"] != DBNull.Value)
+                                    {
+                                        if (dt.Rows[i]["(Bank_Account)"].ToString().ToUpper() == "YES")
+                                        {
+                                            eleValue.SetIsBankAccount(true);
+                                        }
+                                        else
+                                        {
+                                            eleValue.SetIsBankAccount(false);
+                                        }
+                                    }
+
+                                    // when bank account true, then only set Foreign Currency Account
+                                    if (eleValue.IsBankAccount() && dt.Columns.Contains("(Foreign_Currency_Account)") && dt.Rows[i]["(Foreign_Currency_Account)"] != DBNull.Value)
+                                    {
+                                        if (dt.Rows[i]["(Foreign_Currency_Account)"].ToString().ToUpper() == "YES")
+                                        {
+                                            eleValue.SetIsForeignCurrency(true);
+                                        }
+                                        else
+                                        {
+                                            eleValue.SetIsForeignCurrency(false);
+                                        }
+                                    }
+
+                                    // when Foreign Currency true, then only set Currency
+                                    if (eleValue.IsForeignCurrency() && eleValue.Get_ColumnIndex("C_Currency_ID") >= 0)
+                                    {
+                                        sql = "SELECT C_Currency_ID FROM C_Currency WHERE IsActive='Y' AND ISO_CODE='"
+                                            + Util.GetValueOfString(dt.Rows[i]["(Currency)"]) + "'";
+                                        result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                                        if (result > 0)
+                                        {
+                                            eleValue.Set_Value("C_Currency_ID", result);
+                                        }
+                                    }
+
+                                    // Intermediate_Code
+                                    if (eleValue.Get_ColumnIndex("IsInterMediateCode") >= 0 &&
+                                        dt.Columns.Contains("(Intermediate_Code)") && dt.Rows[i]["(Intermediate_Code)"] != DBNull.Value)
+                                    {
+                                        if (dt.Rows[i]["(Intermediate_Code)"].ToString().ToUpper() == "YES")
+                                        {
+                                            eleValue.Set_Value("IsInterMediateCode", true);
+                                        }
+                                        else
+                                        {
+                                            eleValue.Set_Value("IsInterMediateCode", false);
+                                        }
+                                    }
+
+                                    // Allocation_Related
+                                    if (eleValue.Get_ColumnIndex("IsAllocationRelated") >= 0 &&
+                                        dt.Columns.Contains("(Allocation_Related)") && dt.Rows[i]["(Allocation_Related)"] != DBNull.Value)
+                                    {
+                                        if (dt.Rows[i]["(Allocation_Related)"].ToString().ToUpper() == "YES")
+                                        {
+                                            eleValue.Set_Value("IsAllocationRelated", true);
+                                        }
+                                        else
+                                        {
+                                            eleValue.Set_Value("IsAllocationRelated", false);
+                                        }
+                                    }
+
+                                    // Has Group
+                                    if (eleValue.Get_ColumnIndex("HasGroup") >= 0 &&
+                                        dt.Columns.Contains("(Has_Group)") && dt.Rows[i]["(Has_Group)"] != DBNull.Value)
+                                    {
+                                        if (dt.Rows[i]["(Has_Group)"].ToString().ToUpper() == "YES")
+                                        {
+                                            eleValue.Set_Value("HasGroup", true);
+                                        }
+                                        else
+                                        {
+                                            eleValue.Set_Value("HasGroup", false);
+                                        }
+                                    }
+
+                                    // Conversion Type
+                                    if (eleValue.Get_ColumnIndex("C_ConversionType_ID") >= 0)
+                                    {
+                                        sql = "SELECT C_ConversionType_ID FROM C_ConversionType WHERE IsActive='Y' AND Value='"
+                                            + Util.GetValueOfString(dt.Rows[i]["(Currency_Type)"]) + "'";
+                                        result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                                        if (result > 0)
+                                        {
+                                            eleValue.Set_Value("C_ConversionType_ID", result);
+                                        }
+                                    }
+
                                     // For Account Type                   
                                     if (Util.GetValueOfString(dt.Rows[i]["(Account_Type)"]).ToUpper() == "ASSET")
                                     {
