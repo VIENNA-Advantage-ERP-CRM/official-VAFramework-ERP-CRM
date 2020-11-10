@@ -1417,7 +1417,7 @@ namespace VAdvantage.Model
 
             }
 
-            int count = DB.ExecuteQuery("UPDATE C_BPartner_Location SET CreditStatusSettingOn = '" + GetCreditStatusSettingOn() + "' WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, null);
+            int count = DB.ExecuteQuery("UPDATE C_BPartner_Location SET CreditStatusSettingOn = '" + GetCreditStatusSettingOn() + "' WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx());
 
             //---------End----------------------------------------------------
             return success;
