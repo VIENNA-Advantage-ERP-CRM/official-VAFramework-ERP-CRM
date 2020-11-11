@@ -1301,18 +1301,6 @@ namespace VIS.Helpers
         }
 
         /// <summary>
-        /// function to check whether back date version or not
-        /// </summary>
-        /// <param name="verDate">Version Date</param>
-        /// <returns>True/False</returns>
-        private bool IsBackDateVersion(DateTime? verDate)
-        {
-            if (verDate != null && Util.GetValueOfDateTime(verDate.Value).Value.Date < Util.GetValueOfDateTime(System.DateTime.Now).Value.Date)
-                return true;
-            return false;
-        }
-
-        /// <summary>
         /// function to check whether there is any Document Value 
         /// type workflow linked with table
         /// check Document Value workflow in Tenant Only
