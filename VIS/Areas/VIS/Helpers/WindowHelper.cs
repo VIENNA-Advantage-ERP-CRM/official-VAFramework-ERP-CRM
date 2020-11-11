@@ -1132,7 +1132,7 @@ namespace VIS.Helpers
                     return;
             }
             else
-                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey, versionInfo.IsLatestVersion))
+                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey, false))
                 return;
 
             if (!po.Save())
