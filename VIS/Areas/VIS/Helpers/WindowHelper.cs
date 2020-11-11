@@ -987,6 +987,7 @@ namespace VIS.Helpers
                 versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
                 versionInfo.TableName = inn.TableName;
+
                 versionInfo.IsLatestVersion = false;
 
                 // check whether any Document Value type workflow is attached with Version table
@@ -1285,6 +1286,18 @@ namespace VIS.Helpers
             if (Util.GetValueOfInt(DB.ExecuteScalar(sqlOldVer)) > 0)
                 return false;
             return true;
+        }
+
+        /// <summary>
+        /// function to check whether back date version or not
+        /// </summary>
+        /// <param name="verDate">Version Date</param>
+        /// <returns>True/False</returns>
+        private bool IsBackDateVersion(DateTime? verDate)
+        {
+            if (verDate != null && Util.GetValueOfDateTime(verDate.Value).Value.Date < Util.GetValueOfDateTime(System.DateTime.Now).Value.Date)
+                return true;
+            return false;
         }
 
         /// <summary>
