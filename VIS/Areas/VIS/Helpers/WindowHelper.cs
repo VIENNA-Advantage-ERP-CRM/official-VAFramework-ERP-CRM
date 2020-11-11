@@ -1097,6 +1097,14 @@ namespace VIS.Helpers
                             break;
                         }
                     }
+                    else
+                    {
+                        outt.IsError = true;
+                        outt.FireEEvent = true;
+                        outt.EventParam = new EventParamOut() { Msg = "VIS_NoAppVerDate", Info = "", IsError = true };
+                        outt.Status = GridTable.SAVE_ERROR;
+                        return;
+                    }
                 }
             }
 
@@ -1210,10 +1218,13 @@ namespace VIS.Helpers
                     // if record is not Immediate Save then return Save in Future (F)
                     else if (!inn.ImmediateSave)
                     {
-                        if (IsBackDateVersion(inn.ValidFrom))
-                            outt.Status = GridTable.SAVE_BACKDATEVER;
-                        else
-                            outt.Status = GridTable.SAVE_FUTURE;
+                        if (!versionInfo.IsLatestVersion)
+                        {
+                            if (IsBackDateVersion(inn.ValidFrom))
+                                outt.Status = GridTable.SAVE_BACKDATEVER;
+                            else
+                                outt.Status = GridTable.SAVE_FUTURE;
+                        }
                     }
                 }
                 else
