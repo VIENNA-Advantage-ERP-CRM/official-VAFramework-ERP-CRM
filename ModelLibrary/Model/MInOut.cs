@@ -4978,9 +4978,9 @@ namespace VAdvantage.Model
             {
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (!String.IsNullOrEmpty(pp.GetName()))
-                    counter._processMsg = "Could not create Shipment Lines, " + pp.GetName();
+                    counter._processMsg = Msg.GetMsg(GetCtx(), "CouldNotCreateShipLines") + "," + pp.GetName();
                 else
-                    counter._processMsg = "Could not create Shipment Lines";
+                    counter._processMsg = Msg.GetMsg(GetCtx(), "CouldNotCreateShipLines");
                 counter = null;
                 throw new Exception(counter._processMsg);
             }
