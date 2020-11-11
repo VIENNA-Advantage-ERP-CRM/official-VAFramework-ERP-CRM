@@ -116,7 +116,7 @@
                 if (!dtValidFromDate || dtValidFromDate == "")
                     dtValidFromDate = new Date();
                 // Cases if save immediate is false
-                if (!chkImmSave.prop("checked")) {
+                if (!chkImmSave.prop("checked") && (new Date(dtValFrom.val()) > new Date())) {
                     // get rows from Dialog that are already saved
                     var rows = masVerUI.find(".vis-mas-ver-recRow");
                     var recordExist = false;
@@ -231,16 +231,16 @@
 
         // change event for Valid From field
         dtValFrom.on("change", function () {
-            //// selected date from control
-            //var valFromDate = new Date(dtValFrom.val()).setHours(0, 0, 0, 0);
-            //// current date from system
-            //var curDate = new Date().setHours(0, 0, 0, 0);
-            //// check if selected date is less than or equal to system date then set tomorrow's date in 
-            //// valid from date control
-            //if (valFromDate <= curDate) {
-            //    // add message here for info to not allow to set previous date
-            //    dtValFrom.val(self.getDateString());
-            //}
+            // selected date from control
+            var valFromDate = new Date(dtValFrom.val()).setHours(0, 0, 0, 0);
+            // current date from system
+            var curDate = new Date().setHours(0, 0, 0, 0);
+            // check if selected date is less than or equal to system date then set tomorrow's date in 
+            // valid from date control
+            if (valFromDate == curDate) {
+                // add message here for info to not allow to set previous date
+                dtValFrom.val(self.getDateString());
+            }
         });
     };
 

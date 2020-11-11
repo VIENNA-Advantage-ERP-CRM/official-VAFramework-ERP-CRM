@@ -988,6 +988,8 @@ namespace VIS.Helpers
                 versionInfo.ImmediateSave = inn.ImmediateSave;
                 versionInfo.TableName = inn.TableName;
 
+                versionInfo.IsLatestVersion = false;
+
                 // check whether any Document Value type workflow is attached with Version table
                 hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
@@ -1011,7 +1013,7 @@ namespace VIS.Helpers
                         {
                             throw new NullReferenceException("No Persistent Obj");
                         }
-                        if (!SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false))
+                        if (!SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false, false))
                             return;
                         if (!poMas.Save(trxMas))
                         {
@@ -1057,6 +1059,7 @@ namespace VIS.Helpers
                 }
                 else
                 {
+                    versionInfo.IsLatestVersion = CheckLatestVersion(inn);
                     List<string> colsChanged = new List<string>();
                     foreach (string key in inn.RowData.Keys)
                     {
@@ -1068,7 +1071,7 @@ namespace VIS.Helpers
 
                     string sqlOldVer = @"SELECT * FROM " + inn.TableName + "_Ver WHERE " + inn.WhereClause
                                 + " AND VersionValidFrom < " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) 
-                                + " AND ProcessedVersion = 'Y' AND IsVersionApproved = 'Y' ORDER BY VersionValidFrom DESC";
+                                + " AND IsVersionApproved = 'Y' ORDER BY VersionValidFrom DESC, RecordVersion DESC";
                     DataSet dsOldVers = DB.ExecuteDataset(sqlOldVer);
                     if (dsOldVers != null && dsOldVers.Tables[0].Rows.Count > 0)
                     {
@@ -1117,11 +1120,11 @@ namespace VIS.Helpers
                 hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
                 po.SetAD_Window_ID(Ver_Window_ID);
-                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey))
+                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey, versionInfo.IsLatestVersion))
                     return;
             }
             else
-                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey))
+                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey, versionInfo.IsLatestVersion))
                 return;
 
             if (!po.Save())
@@ -1272,6 +1275,31 @@ namespace VIS.Helpers
                 outt.Status = GridTable.SAVE_OK;
         }
 
+        private bool CheckLatestVersion(SaveRecordIn inn)
+        {
+            string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause                                
+                                + " AND IsVersionApproved = 'Y' AND "
+                                + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + @" < TRUNC(SysDate)
+                                AND (TRUNC(VersionValidFrom) > "+ GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + 
+                                @" AND TRUNC(VersionValidFrom) < TRUNC(Sysdate))
+                                 ORDER BY VersionValidFrom DESC";
+            if (Util.GetValueOfInt(DB.ExecuteScalar(sqlOldVer)) > 0)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// function to check whether back date version or not
+        /// </summary>
+        /// <param name="verDate">Version Date</param>
+        /// <returns>True/False</returns>
+        private bool IsBackDateVersion(DateTime? verDate)
+        {
+            if (verDate != null && Util.GetValueOfDateTime(verDate.Value).Value.Date < Util.GetValueOfDateTime(System.DateTime.Now).Value.Date)
+                return true;
+            return false;
+        }
+
         /// <summary>
         /// function to check whether back date version or not
         /// </summary>
@@ -1342,7 +1370,7 @@ namespace VIS.Helpers
         /// <param name="Record_ID"></param>
         /// <param name="HasDocValWF"></param>
         /// <param name="VersionRecord"></param>
-        private bool SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey)
+        private bool SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey, bool isLatestVersion)
         {
             var rowData = inn.RowData; // new 
             var _rowData = inn.OldRowData;
@@ -1571,7 +1599,7 @@ namespace VIS.Helpers
                 {
                     if (inn.ValidFrom == null)
                         inn.ImmediateSave = true;
-                    else if (IsBackDateVersion(inn.ValidFrom.Value))
+                    else if (IsBackDateVersion(inn.ValidFrom.Value) && isLatestVersion)
                     {
                         po.Set_Value("ProcessedVersion", true);
                     }
