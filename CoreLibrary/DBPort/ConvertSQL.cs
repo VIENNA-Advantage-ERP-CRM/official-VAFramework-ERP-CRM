@@ -333,7 +333,7 @@ namespace VAdvantage.DBPort
         private static bool DontLog(String statement)
         {
             String[] exceptionTables = new String[] {
-                "AD_ACCESSLOG",
+                "VAF_RIGHTSLOG",
                 "AD_ALERTPROCESSORLOG",
                 "AD_CHANGELOG",
                 "AD_ISSUE",
