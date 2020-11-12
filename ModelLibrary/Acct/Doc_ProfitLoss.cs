@@ -60,7 +60,8 @@ namespace ModelLibrary.Acct
             {
                 MProfitLossLines line = lines[i];
                 DocLine docLine = new DocLine(line, this);
-                docLine.SetAmount(line.GetAccountDebit(), line.GetAccountCredit());
+                docLine.SetAmount(line.GetC_ProfitAndLoss_ID() != 0 ? line.GetAccountDebit() : Math.Abs(line.GetAccountDebit()),
+                                line.GetC_ProfitAndLoss_ID() != 0 ? line.GetAccountCredit() : Math.Abs(line.GetAccountCredit()));
                 //docLine.SetConvertedAmt(line.GetC_AcctSchema_ID(), line.GetAccountDebit(), line.GetAccountCredit());
 
                 // set primary key value 
