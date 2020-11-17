@@ -1070,7 +1070,7 @@ namespace VIS.Helpers
                     }
 
                     string sqlOldVer = @"SELECT * FROM " + inn.TableName + "_Ver WHERE " + inn.WhereClause
-                                + " AND VersionValidFrom < " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) 
+                                + " AND VersionValidFrom <= " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) 
                                 + " AND IsVersionApproved = 'Y' ORDER BY VersionValidFrom DESC, RecordVersion DESC";
                     DataSet dsOldVers = DB.ExecuteDataset(sqlOldVer);
                     if (dsOldVers != null && dsOldVers.Tables[0].Rows.Count > 0)
@@ -1292,7 +1292,7 @@ namespace VIS.Helpers
                                 + " AND IsVersionApproved = 'Y' AND "
                                 + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + @" < TRUNC(SysDate)
                                 AND (TRUNC(VersionValidFrom) > "+ GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + 
-                                @" AND TRUNC(VersionValidFrom) < TRUNC(Sysdate))
+                                @" AND TRUNC(VersionValidFrom) <= TRUNC(Sysdate))
                                  ORDER BY VersionValidFrom DESC";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sqlOldVer)) > 0)
                 return false;
