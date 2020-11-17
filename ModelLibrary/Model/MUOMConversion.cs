@@ -836,9 +836,10 @@ namespace VAdvantage.Model
             //    return false;
             //}
             //	Nothing to convert
+            //Getting the message from messagewindow for UOM conversion
             if (GetMultiplyRate().CompareTo(Env.ZERO) <= 0)
             {
-                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@MultiplyRate@ <= 0"));
+                log.SaveError("", Msg.GetMsg(GetCtx(), "ProductUOMConversionRateError"));
                 return false;
             }
             //	Enforce Product UOM
