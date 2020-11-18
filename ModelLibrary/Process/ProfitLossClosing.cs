@@ -44,13 +44,13 @@ namespace VAdvantage.Process
                 {
                     sql.Append(" and CP.PostingType = '" + prof.Get_Value("PostingType") + "' ");
                 }
-                sql.Append(" AND (( " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " > = CP.DateFrom "
-                         + " AND " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " < = CP.DateTo "
-                         + " OR " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " < = CP.DateFrom "
-                         + " AND " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " < = CP.DateTo ))  "
+                sql.Append(" AND (( " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " >= CP.DateFrom "
+                         + " AND " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " <= CP.DateTo "
+                         + " OR " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateFrom "
+                         + " AND " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateTo ))  "
                          + " AND (ev.accounttype      ='E' OR ev.accounttype        ='R')     "
                          + " AND ev.isintermediatecode='N' AND CP.AD_Org_ID        IN (    (SELECT Ad_Org_ID   FROM AD_Org   WHERE isactive      = 'Y'             "
-                         + " AND (legalentityorg =" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")  )) AND DOCstatus in ('CO', 'CL') ");
+                         + " AND ( " + DBFunctionCollection.TypecastColumnAsInt("legalentityorg") + " =" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")  )) AND DOCstatus in ('CO', 'CL') ");
 
                 if (Util.GetValueOfInt(PL.Get_Value("C_AcctSchema_ID")) > 0)
                 {
@@ -76,9 +76,9 @@ namespace VAdvantage.Process
                           UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID, UserElement9_ID , GL_Budget_ID, C_ProjectPhase_ID, C_ProjectTask_ID, LedgerCode,LedgerName, Line ) ");
 
                 qry.Clear();
-                qry.Append(@"select " + C_ProfitLossLines_ID + " + rownum AS C_ProfitLossLines_id, ft.AD_Client_ID , ft.AD_Org_ID , " + PL.GetC_ProfitLoss_ID() + " , " + prof.GetC_ProfitAndLoss_ID() + ",  ft.C_AcctSchema_ID,ft.PostingType,ft.AmtAcctDr,ft.AmtAcctCr,ft.Account_ID,ft.C_SubAcct_ID,ft.C_BPartner_ID,ft.M_Product_ID,ft.C_Project_ID,ft.C_SalesRegion_ID,ft.C_Campaign_ID,ft.AD_OrgTrx_ID,ft.C_LocFrom_ID,ft.C_LocTo_ID,ft.C_Activity_ID,ft.User1_ID,ft.User2_ID,ft.UserElement1_ID,ft.UserElement2_ID,"
+                qry.Append(@"select " + C_ProfitLossLines_ID + " + " + DBFunctionCollection.RowNumAggregation("rownum") + " AS C_ProfitLossLines_id, ft.AD_Client_ID , ft.AD_Org_ID , " + PL.GetC_ProfitLoss_ID() + " , " + prof.GetC_ProfitAndLoss_ID() + ",  ft.C_AcctSchema_ID,ft.PostingType,ft.AmtAcctDr,ft.AmtAcctCr,ft.Account_ID,ft.C_SubAcct_ID,ft.C_BPartner_ID,ft.M_Product_ID,ft.C_Project_ID,ft.C_SalesRegion_ID,ft.C_Campaign_ID,ft.AD_OrgTrx_ID,ft.C_LocFrom_ID,ft.C_LocTo_ID,ft.C_Activity_ID,ft.User1_ID,ft.User2_ID,ft.UserElement1_ID,ft.UserElement2_ID,"
                          + " ft.UserElement3_ID,ft.UserElement4_ID, ft.UserElement5_ID, ft.UserElement6_ID, ft.UserElement7_ID,ft.UserElement8_ID, ft.UserElement9_ID,ft.GL_Budget_ID,ft.C_ProjectPhase_ID,ft.C_ProjectTask_ID,"
-                         + @" ev.Value as LedgerCode,ev.Name as LedgerName , (SELECT NVL(MAX(Line),0) FROM C_ProfitLossLines   WHERE C_ProfitLoss_ID=" + PL.GetC_ProfitLoss_ID() + "   ) + (rownum *10) AS lineno from Fact_Acct ft inner join c_elementvalue ev on ft.account_id=ev.c_elementvalue_id where ft.ad_client_id= " + GetAD_Client_ID());
+                         + @" ev.Value as LedgerCode,ev.Name as LedgerName , (SELECT NVL(MAX(Line),0) FROM C_ProfitLossLines   WHERE C_ProfitLoss_ID=" + PL.GetC_ProfitLoss_ID() + "   ) + (" + DBFunctionCollection.RowNumAggregation("rownum") + " *10) AS lineno from Fact_Acct ft inner join c_elementvalue ev on ft.account_id=ev.c_elementvalue_id where ft.ad_client_id= " + GetAD_Client_ID());
 
 
                 // Added by SUkhwinder on 27 Nov 2017, for filtering query on the basis of postingtype. And string variable converted to stringBuilder also.
@@ -88,7 +88,7 @@ namespace VAdvantage.Process
                 }
 
                 qry.Append(" and ft.DateAcct >=" + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " AND ft.DateAcct <= " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " AND (ev.accounttype='E' OR ev.accounttype='R') and ev.isintermediatecode='N'"
-                + "   AND ft.AD_Org_ID IN ( (SELECT Ad_Org_ID FROM AD_Org WHERE isactive = 'Y' AND (legalentityorg =" + PL.GetAD_Org_ID() + " OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")))");
+                + "   AND ft.AD_Org_ID IN ( (SELECT Ad_Org_ID FROM AD_Org WHERE isactive = 'Y' AND (" + DBFunctionCollection.TypecastColumnAsInt("legalentityorg") + " =" + PL.GetAD_Org_ID() + " OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")))");
 
                 if (Util.GetValueOfInt(PL.Get_Value("C_AcctSchema_ID")) > 0)
                 {
@@ -113,10 +113,11 @@ namespace VAdvantage.Process
                     {
                         ds.Dispose();
                         Rollback();
-                       // return GetReterivedError(prof, "ProfitNotSaved");
+                        // return GetReterivedError(prof, "ProfitNotSaved");
                         return Msg.GetMsg(GetCtx(), "ProfitNotSaved");
                     }
-                    else {
+                    else
+                    {
                         Get_Trx().Commit();
 
                         // insert record against Income summary acct
