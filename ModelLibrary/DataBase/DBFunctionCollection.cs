@@ -776,7 +776,27 @@ namespace VAdvantage.DataBase
 
             }
 
-                return tableName + "." + columnName;
+            return tableName + "." + columnName;
+        }
+
+        /// <summary>
+        /// Create Query, which will check table exitence into Schema
+        /// </summary>
+        /// <param name="table_catalog">For Oracle - User_ID, For PostGre -- DataBase Name</param>
+        /// <param name="tableName">tableName</param>
+        /// <returns></returns>
+        public static string CheckTableExistence(string table_catalog, string tableName)
+        {
+            if (DB.IsPostgreSQL())
+            {
+                return "SELECT COUNT(*) FROM information_schema.tables WHERE  UPPER(table_catalog) = UPPER('" + table_catalog + "')" +
+                    " AND UPPER(table_name)   = UPPER('" + tableName + "')";
+            }
+            else
+            {
+                return "SELECT COUNT(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('" + tableName + "')" +
+                   " AND OWNER LIKE '" + table_catalog + "'";
+            }
         }
 
     }

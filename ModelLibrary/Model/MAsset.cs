@@ -769,7 +769,8 @@ namespace VAdvantage.Model
             // create default Account
             StringBuilder _sql = new StringBuilder("");
             // check table exist or not
-            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Asset_Group_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Asset_Group_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Asset_Group_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
@@ -790,11 +791,11 @@ namespace VAdvantage.Model
                         " From FRPT_Asset_Group_Acct PCA " +
                         " inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id " +
                         " where PCA.A_Asset_Group_ID=" + assetGroupId +
-                        " and acc.frpt_relatedto=" + _RelatedToProduct + 
-                        " AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
+                        " and acc.frpt_relatedto='" + _RelatedToProduct + 
+                        "' AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());
-                    if (ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
