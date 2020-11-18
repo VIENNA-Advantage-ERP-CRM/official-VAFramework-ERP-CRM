@@ -799,5 +799,41 @@ namespace VAdvantage.DataBase
             }
         }
 
+        /// <summary>
+        /// This function is used to type columen name as intezer
+        /// </summary>
+        /// <param name="columnName">Column Name</param>
+        /// <returns>type cast column</returns>
+        public static string TypecastColumnAsInt(string columnName)
+        {
+            if (DB.IsOracle())
+            {
+                return columnName;
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                return columnName + " :: INT ";
+            }
+            return columnName;
+        }
+
+        /// <summary>
+        /// This Function is used to get auto sequence no
+        /// </summary>
+        /// <param name="aggregation">rownum keyword</param>
+        /// <returns>aggregation syntax</returns>
+        public static string RowNumAggregation(string aggregation)
+        {
+            if (DB.IsOracle())
+            {
+                return aggregation;
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                return "row_number()over()";
+            }
+            return aggregation;
+        }
+
     }
 }
