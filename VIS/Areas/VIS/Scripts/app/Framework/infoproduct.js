@@ -2026,24 +2026,25 @@
                         if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
                             srchValue = srchValue + "●";
                         }
+                        srchValue = VIS.DB.to_string(srchValue);
                     }
 
                     if (srchCtrls[i].Ctrl.colName == "Value") {
-                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
                     }
 
                     else if (srchCtrls[i].Ctrl.colName == "Name") {
-                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
                     }
 
                     else if (srchCtrls[i].Ctrl.colName == "UPC") {
                         upcSearch = true;
                         //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
-                        whereClause += " AND (UPPER(patr.UPC) LIKE '" + srchValue.toUpperCase() + "' OR UPPER(p.UPC) LIKE '" + srchValue.toUpperCase() + "' OR UPPER(mr.UPC) LIKE '" + srchValue.toUpperCase() + "')"
+                        whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(p.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase() + ")"
                     }
 
                     else if (srchCtrls[i].Ctrl.colName == "SKU") {
-                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                        whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
                     }
 
                     else if (srchCtrls[i].Ctrl.colName == "M_Warehouse_ID") {
