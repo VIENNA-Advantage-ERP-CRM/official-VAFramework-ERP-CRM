@@ -167,9 +167,9 @@ namespace VAdvantage.DBPort
             // Convert cr/lf/tab to single space
             //clean = Regex.Replace(clean, "\\s+", " ", REGEX_FLAGS);
             //exclude space betewwen quote ' '
-            clean = Regex.Replace(clean, "(?<= ^([^\']|[\'][^\']*[\'])*)\\s+", " ", REGEX_FLAGS);
+            //clean = Regex.Replace(clean, "(?<=^([^\']|[\'][^\']*[\'])*)\\s+", " ", REGEX_FLAGS);
 
-            clean = clean.Trim();
+            //clean = clean.Trim();
             return clean;
         } // removeComments
 

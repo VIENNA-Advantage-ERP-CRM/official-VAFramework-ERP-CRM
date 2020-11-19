@@ -193,6 +193,27 @@ namespace VAdvantage.DBPort
                     convert = convert + Utility.Util.Replace(subselect, "AND ROWNUM=1", "");
 
                 }
+                else if (subselect.IndexOf("AND ROWNUM =1") > 1)
+                {
+                    subselect = subselect.Substring(0, subselect.Length - 1)
+                    + " LIMIT 1 )";
+
+                    convert = convert + Utility.Util.Replace(subselect, "AND ROWNUM =1", "");
+                }
+                else if (subselect.IndexOf("AND ROWNUM = 1") > 1)
+                {
+                    subselect = subselect.Substring(0, subselect.Length - 1)
+                    + " LIMIT 1 )";
+
+                    convert = convert + Utility.Util.Replace(subselect, "AND ROWNUM = 1", "");
+                }
+                else if (subselect.IndexOf("AND ROWNUM= 1") > 1)
+                {
+                    subselect = subselect.Substring(0, subselect.Length - 1)
+                    + " LIMIT 1 )";
+
+                    convert = convert + Utility.Util.Replace(subselect, "AND ROWNUM= 1", "");
+                }
                 else if (subselect.IndexOf(" WHERE ROWNUM=1 AND") > 1)
                 {
                     subselect = subselect.Substring(0, subselect.Length - 1)
@@ -236,10 +257,43 @@ namespace VAdvantage.DBPort
                     subselect = subselect.Substring(0, rownum) + rnumStr.Substring(indAnd);
                     convert = convert + subselect + " LIMIT " + rnumStr.Substring(0, indAnd);
                 }
+                else if (subselect.IndexOf("AND ROWNUM<=") > 1)
+                {
+                    int rownum = subselect.IndexOf("AND ROWNUM<=");
+                    int indAnd = rownum + 12;
+                    string rnumStr = subselect.Substring(indAnd);
+                    if (rnumStr.Contains("AND"))
+                    {
+                        indAnd = rnumStr.IndexOf("AND");
+                    }
+                    else
+                    {
+                        indAnd = rnumStr.Length;
+                    }
+
+                    subselect = subselect.Substring(0, rownum) + rnumStr.Substring(indAnd);
+                    convert = convert + subselect + " LIMIT " + rnumStr.Substring(0, indAnd);
+                }
                 else if (subselect.IndexOf("ROWNUM <=") > 1)
                 {
                     int rownum = subselect.IndexOf("ROWNUM <=");
                     int indAnd = rownum + 9;
+                    string rnumStr = subselect.Substring(indAnd);
+                    if (rnumStr.Contains("AND"))
+                    {
+                        indAnd = rnumStr.IndexOf("AND");
+                    }
+                    else
+                    {
+                        indAnd = rnumStr.Length;
+                    }
+                    subselect = Utility.Util.Replace(subselect.Substring(0, rownum), "WHERE", "") + rnumStr.Substring(indAnd);
+                    convert = convert + subselect + " LIMIT " + rnumStr.Substring(0, indAnd);
+                }
+                else if (subselect.IndexOf("ROWNUM<=") > 1)
+                {
+                    int rownum = subselect.IndexOf("ROWNUM<=");
+                    int indAnd = rownum + 8;
                     string rnumStr = subselect.Substring(indAnd);
                     if (rnumStr.Contains("AND"))
                     {

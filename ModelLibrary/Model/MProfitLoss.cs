@@ -453,13 +453,13 @@ namespace VAdvantage.Model
             {
                 sql.Append(" and CP.PostingType = '" + prof.Get_Value("PostingType") + "' ");
             }
-            sql.Append(" AND (( " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " > = CP.DateFrom "
-                     + " AND " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " < = CP.DateTo "
-                     + " OR " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " < = CP.DateFrom "
-                     + " AND " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " < = CP.DateTo ))  "
+            sql.Append(" AND (( " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " >= CP.DateFrom "
+                     + " AND " + GlobalVariable.TO_DATE(prof.GetDateFrom(), true) + " <= CP.DateTo "
+                     + " OR " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateFrom "
+                     + " AND " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateTo ))  "
                      + " AND (ev.accounttype      ='E' OR ev.accounttype        ='R')     "
                      + " AND ev.isintermediatecode='N' AND CP.AD_Org_ID        IN (    (SELECT Ad_Org_ID   FROM AD_Org   WHERE isactive      = 'Y'             "
-                     + " AND (legalentityorg =" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")  )) AND DOCstatus in ('CO', 'CL') ");
+                     + " AND (" + DBFunctionCollection.TypecastColumnAsInt("legalentityorg") + " =" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")  )) AND DOCstatus in ('CO', 'CL') ");
 
             if (Util.GetValueOfInt(PL.Get_Value("C_AcctSchema_ID")) > 0)
             {
