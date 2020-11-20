@@ -192,6 +192,22 @@ namespace VAdvantage.Process
                             recordProcessed = true;
                     }
 
+                    // Change done to check for back date versions
+                    sqlSB.Clear().Append("SELECT COUNT(*) FROM " + TableName + " WHERE IsVersionApproved = 'Y'" +
+                            " AND TRUNC(VersionValidFrom) > " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true)
+                            + " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " <= TRUNC(SysDate)"
+                            + " AND " + whereCond);
+
+                    int CountRecs = Util.GetValueOfInt(DB.ExecuteScalar(sqlSB.ToString(), null, null));
+                    if (CountRecs > 0)
+                    {
+                        sqlSB.Clear().Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE ProcessedVersion = 'N' AND IsVersionApproved = 'Y'" +
+                            " AND TRUNC(VersionValidFrom) <= " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " AND " + whereCond);
+                        count = Util.GetValueOfInt(DB.ExecuteQuery(sqlSB.ToString(), null, null));
+                        _tblKeysProcessed.Add(sbKey.ToString());
+                        continue;
+                    }
+
                     // set client and Organization ID from Version table to Master
                     // as copy PO set these ID's as 0
                     poDest.SetAD_Client_ID(poSource.GetAD_Client_ID());
