@@ -106,9 +106,9 @@ namespace VIS.Controllers
             if (User.Identity.IsAuthenticated)
             {
 
-                if (Request.QueryString.Count > 0)
+                if (Request.QueryString.Count > 0) /* if has value */
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index"); /*redirect to same url without querystring*/
                 }
                 try
                 {
@@ -336,22 +336,20 @@ namespace VIS.Controllers
             else
             {
 
-
-
                 model = new LoginModel();
                 model.Login1Model = new Login1Model();
-                if (Request.QueryString.Count > 0)
+                if (Request.QueryString.Count > 0) /* if query has values*/
                 {
                     try
                     {
-                        TempData["user"] = SecureEngine.Decrypt(Request.QueryString["U"]);
-                        TempData["pwd"] = SecureEngine.Decrypt(Request.QueryString["P"]);
+                        TempData["user"] = SecureEngine.Decrypt(Request.QueryString["U"]); //get uservalue
+                        TempData["pwd"] = SecureEngine.Decrypt(Request.QueryString["P"]);//get userpwd
                     }
                     catch
                     {
                         TempData.Clear();
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index"); // redirect to same url to remove cookie
                 }
 
                 if (TempData.ContainsKey("user"))

@@ -224,6 +224,11 @@ namespace VIS.Controllers
             return Json(new { errors = GetErrorsFromModelState() });
         }
 
+        /// <summary>
+        /// set authorize cookie in response object
+        /// </summary>
+        /// <param name="model">login model</param>
+        /// <param name="response">http response</param>
         internal void SetAuthCookie(LoginModel model, HttpResponseBase  response)
         {
             LoginContext lCtx = LoginHelper.GetLoginContext(model);
