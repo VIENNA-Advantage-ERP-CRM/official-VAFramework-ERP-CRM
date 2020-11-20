@@ -354,7 +354,7 @@ namespace VIS.Controllers
 
                 if (TempData.ContainsKey("user"))
                 {
-                    model.Login1Model.UserValue = TempData.Peek("user").ToString() + "$Y$"+ TempData.Peek("pwd").ToString();
+                    model.Login1Model.UserValue = TempData["user"].ToString() + "^Y^"+ TempData["pwd"].ToString();
                    // model.Login1Model.Password = TempData.Peek("pwd").ToString();
                 }
 

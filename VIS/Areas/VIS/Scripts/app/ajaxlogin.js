@@ -402,7 +402,7 @@
     };
 
     function autoLogin(val) {
-        var arr = val.split('$Y$');
+        var arr = val.split('^Y^');
 
         $txtUser.val(arr[0]);
         $txtPwd.val(arr[1]);
