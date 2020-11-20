@@ -180,31 +180,15 @@ namespace VIS.Controllers
                     saveSetting = true;
                 }
 
-                LoginContext lCtx = LoginHelper.GetLoginContext(model);
+                
 
 
                 if (!string.IsNullOrEmpty(model.Login1Model.UserValue))
                 {
-                    Response.Cookies.Clear();
-
-                    DateTime expiryDate = DateTime.Now.AddDays(30);
-
-                    HttpCookie authCookie = FormsAuthentication.GetAuthCookie(model.Login1Model.UserValue, model.Login1Model.RememberMe);
-
-                    if (model.Login1Model.RememberMe)
+                    if (Response != null)
                     {
-                        authCookie.Expires = expiryDate;
+                        SetAuthCookie(model,  Response);
                     }
-
-                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
-
-                    FormsAuthenticationTicket newTicket = new FormsAuthenticationTicket(ticket.Version, ticket.Name, ticket.IssueDate, model.Login1Model.RememberMe ? expiryDate : ticket.Expiration, ticket.IsPersistent, JsonHelper.Serialize(lCtx));
-
-                    // Update the authCookie's Value to use the encrypted version of newTicket
-
-                    authCookie.Value = FormsAuthentication.Encrypt(newTicket);
-
-                    Response.Cookies.Add(authCookie);
 
 
                     // Determine redirect URL and send user there
@@ -238,6 +222,31 @@ namespace VIS.Controllers
 
             // If we got this far, something failed
             return Json(new { errors = GetErrorsFromModelState() });
+        }
+
+        internal void SetAuthCookie(LoginModel model, HttpResponseBase  response)
+        {
+            LoginContext lCtx = LoginHelper.GetLoginContext(model);
+            response.Cookies.Clear();
+
+            DateTime expiryDate = DateTime.Now.AddDays(30);
+
+            HttpCookie authCookie = FormsAuthentication.GetAuthCookie(model.Login1Model.UserValue, model.Login1Model.RememberMe);
+
+            if (model.Login1Model.RememberMe)
+            {
+                authCookie.Expires = expiryDate;
+            }
+
+            FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
+
+            FormsAuthenticationTicket newTicket = new FormsAuthenticationTicket(ticket.Version, ticket.Name, ticket.IssueDate, model.Login1Model.RememberMe ? expiryDate : ticket.Expiration, ticket.IsPersistent, JsonHelper.Serialize(lCtx));
+
+            // Update the authCookie's Value to use the encrypted version of newTicket
+
+            authCookie.Value = FormsAuthentication.Encrypt(newTicket);
+
+            response.Cookies.Add(authCookie);
         }
 
         [AllowAnonymous]
