@@ -838,7 +838,7 @@ namespace VAdvantage.Model
             //	Nothing to convert
             if (GetMultiplyRate().CompareTo(Env.ZERO) <= 0)
             {
-                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@MultiplyRate@ <= 0"));
+                log.SaveError("", Msg.GetMsg(GetCtx(), "ProductUOMConversionRateError"));
                 return false;
             }
             //	Enforce Product UOM
@@ -857,7 +857,7 @@ namespace VAdvantage.Model
             if (GetM_Product_ID() != 0 && GetDivideRate().CompareTo(Env.ONE) < 0)
             {
                 // JID_0239: Currenly system show message when multiple rate is less than one like below "Product UOM Coversion rate error"
-                log.SaveError("Error", Msg.GetMsg(GetCtx(), "ProductUOMConversionRateError"));
+                log.SaveError("", Msg.GetMsg(GetCtx(), "ProductUOMConversionRateError"));
                 return false;
             }
             if (!String.IsNullOrEmpty(GetUPC()) &&
