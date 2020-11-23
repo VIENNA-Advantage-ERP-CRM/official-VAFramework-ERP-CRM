@@ -68,7 +68,8 @@ namespace VIS.Models
         {
             string Sql = "";
             List<ListAccountingSchema> listAcctSchema = new List<ListAccountingSchema>();
-            Sql = "SELECT object_name FROM all_objects WHERE object_type IN ('TABLE','VIEW') AND (object_name)  = UPPER('FRPT_ASSIGNEDORG') AND OWNER LIKE '" + DB.GetSchema() + "'";
+            //Sql = "SELECT object_name FROM all_objects WHERE object_type IN ('TABLE','VIEW') AND (object_name)  = UPPER('FRPT_ASSIGNEDORG') AND OWNER LIKE '" + DB.GetSchema() + "'";
+            Sql = DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_ASSIGNEDORG");
             string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
             if (ObjectName != "")
             {
@@ -143,7 +144,7 @@ namespace VIS.Models
             }
             else
             {
-                decimal chkAmount = Convert.ToDecimal(DB.ExecuteScalar("select Amount from c_DimAmtline where rownum=1 and c_dimAmt_ID=" + RecordID + ""));
+                decimal chkAmount = Convert.ToDecimal(DB.ExecuteScalar("select Amount from c_DimAmtline where c_dimAmt_ID=" + RecordID + " AND ROWNUM=1"));
                 if (chkAmount == 0)
                 {
                     return true;
