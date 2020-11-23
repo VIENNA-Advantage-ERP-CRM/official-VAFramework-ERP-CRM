@@ -79,9 +79,9 @@ namespace VAdvantage.DataBase
 
         public String ConvertStatement(string oraStatement)
         {
-            while (oraStatement.StartsWith("\t"))
+            if (oraStatement.Contains("\t"))
             {
-                oraStatement = oraStatement.Replace("\t", "");
+                oraStatement = oraStatement.Replace("\t", " ").Trim();
             }
 
             if (oraStatement.StartsWith("ALTER TABLE") && (oraStatement.IndexOf(" MODIFY ") > 0))
@@ -384,7 +384,8 @@ namespace VAdvantage.DataBase
                 {
                     page = 1;
                 }
-                adapter.Fill(ds, ((page - 1) * pageSize) + increment, pageSize - increment, "Data");
+                //adapter.Fill(ds, ((page - 1) * pageSize) + increment, pageSize - increment, "Data");
+                adapter.Fill(ds, ((page - 1) * pageSize), pageSize, "Data");
 
                 //adapter.FillSchema(ds, SchemaType.Mapped, "DataSchema");
 
