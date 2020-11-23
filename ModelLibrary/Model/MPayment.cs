@@ -3104,7 +3104,7 @@ namespace VAdvantage.Model
                             {
                                 loc = new MBPartnerLocation(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_BPartner_Location_ID"]), Get_Trx());
 
-                                payAmt = Decimal.Add(Decimal.Add(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"]), 
+                                payAmt = Decimal.Add(Decimal.Add(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"]),
                                     Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"])), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"]));
                                 // If Amount is ZERO then no need to check currency conversion
                                 if (!payAmt.Equals(Env.ZERO))
