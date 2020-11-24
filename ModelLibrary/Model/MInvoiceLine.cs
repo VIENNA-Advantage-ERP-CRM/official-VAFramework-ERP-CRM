@@ -3495,16 +3495,16 @@ namespace VAdvantage.Model
                             decimal invAmt = 0, ordAmt = 0, discrepancyAmt = 0;
                             invoicedQty = GetQtyEntered();
                             invAmt = GetPriceEntered();
-                            if (GetM_InOutLine_ID() > 0)
-                            {
-                                MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
-                                receivedQty = iol.GetQtyEntered();
-                                qtyDiff = invoicedQty - receivedQty;
-                                if (qtyDiff > 0)
-                                {
-                                    discrepancyAmt = Decimal.Multiply(qtyDiff, invAmt);
-                                }
-                            }
+                            //if (GetM_InOutLine_ID() > 0)
+                            //{
+                            //    MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                            //    receivedQty = iol.GetQtyEntered();
+                            //    qtyDiff = invoicedQty - receivedQty;
+                            //    if (qtyDiff > 0)
+                            //    {
+                            //        discrepancyAmt = Decimal.Multiply(qtyDiff, invAmt);
+                            //    }
+                            //}
                             if (GetC_OrderLine_ID() > 0)
                             {
                                 MOrderLine ol = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_TrxName());
@@ -3515,10 +3515,10 @@ namespace VAdvantage.Model
                                     discrepancyAmt = Decimal.Add(discrepancyAmt, Decimal.Multiply(diffAmt, invoicedQty));
                                 }
                             }
-                            if (GetM_InOutLine_ID() == 0 && GetC_OrderLine_ID() == 0)
-                            {
-                                discrepancyAmt = Decimal.Add(discrepancyAmt, Decimal.Multiply(invAmt, invoicedQty));
-                            }
+                            //if (GetM_InOutLine_ID() == 0 && GetC_OrderLine_ID() == 0)
+                            //{
+                            //    discrepancyAmt = Decimal.Add(discrepancyAmt, Decimal.Multiply(invAmt, invoicedQty));
+                            //}
                             SetDiscrepancyAmt(discrepancyAmt);
                         }
                     }
