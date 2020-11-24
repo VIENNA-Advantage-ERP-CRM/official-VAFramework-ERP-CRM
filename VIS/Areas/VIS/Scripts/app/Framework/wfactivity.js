@@ -1062,7 +1062,7 @@
             aOk.append($("<span class='vis-btn-ico vis-btn-done-bg vis-btn-done-border'>"));
             aOk.append(VIS.Msg.getMsg('Done'));
             liDoit.append(aOk);
-            aOk.on(VIS.Events.onTouchStartOrClick, function (e) {
+            aOk.one(VIS.Events.onTouchStartOrClick, function (e) {
 
                 // Digital signature work - Apply default sign at default location with selected status
                 if (window.VA055 && window.VADMS && info.ColName == 'VADMS_SignStatus') {
