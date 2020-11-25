@@ -593,7 +593,11 @@ namespace VAdvantage.Model
             String prefix = seq.GetPrefix();
             String suffix = seq.GetSuffix();
             //get the PrefixAndDocNoSeperator
-            string prefixAndDocNoSeperator = seq.GetPrefixAndDocNoSeperator();
+            string prefixAndDocNoSeperator = null;
+            //check the column available or not
+            if (seq.Get_ColumnIndex("PrefixAndDocNoSeperator") > 0)
+                prefixAndDocNoSeperator = seq.GetPrefixAndDocNoSeperator();
+
             bool isAutoSequence = seq.IsAutoSequence();
 
             String selectSQL = null;
