@@ -506,5 +506,23 @@ namespace VIS.Controllers
             }
             return output;
         }
+
+        /// <summary>
+        /// This Function is used to get Line Amount against dimension
+        /// </summary>
+        /// <param name="fields">Dimesnion amount line id</param>
+        /// <returns>amount</returns>
+        public JsonResult GetTempDimLineAmount(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                Decimal temLineAmount = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT amount FROM c_dimamtline WHERE c_dimamtline_id IN ("
+                                                                                + fields + ") AND ROWNUM=1"));
+                retJSON = JsonConvert.SerializeObject(temLineAmount);
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

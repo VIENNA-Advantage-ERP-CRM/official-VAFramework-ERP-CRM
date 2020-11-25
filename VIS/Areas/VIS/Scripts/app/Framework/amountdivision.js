@@ -1796,7 +1796,8 @@
 					DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and AD_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
 				chkDuplicate = VIS.DB.executeScalar(sql);
 				if (chkDuplicate == null) {
-					var tempLineAmount = VIS.DB.executeScalar("select amount from c_dimamtline where c_dimamtline_id in (" + DimensionLineID + ") and rownum=1");
+					var paramStr = DimensionLineID.toString();
+					var tempLineAmount = VIS.dataContext.getJSONRecord("AmountDivision/GetTempDimLineAmount", paramStr);
 
 					// handle the cases of negative amount.
 					if (Math.abs((parseFloat(txtTotal.getValue()) + parseFloat(Amount)) - parseFloat(tempLineAmount)) <= Math.abs(parseFloat(txtTotalAmount.getValue()))) {//Dimension Line Sum Must Equal to Total Amout..............

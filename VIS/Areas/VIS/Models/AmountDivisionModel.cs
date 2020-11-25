@@ -568,15 +568,15 @@ namespace VIS.Models
                 int tempDimensionID = Convert.ToInt32(DB.ExecuteScalar("select nvl(c_dimamt_id,0) as DimID from c_dimamtline where c_dimamt_id=" + dimensionID + ""));
                 if (tempDimensionID != 0)
                 {
-                    string uQuery = "select main.TableName,listagg(TO_CHAR(('ac.'||main.Colname)),'||''_''||') WITHIN GROUP(order by main.ColId) ColName from " +
-                             "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.ad_column_id as ColId from c_dimamtaccttype ct " +
-                             "inner join c_dimamtline cl on cl.c_dimamt_id=ct.c_dimamt_id and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
-                             "inner join c_acctschema_element se on se.c_acctschema_id=ct.c_acctschema_id and se.elementtype=ct.elementtype " +
-                             "inner join ad_column col1 on col1.ad_column_id=se.ad_column_id " +
-                             "inner join ad_table tab on tab.ad_table_id=col1.ad_table_id " +
-                             "inner join ad_column col2 on col2.ad_table_id=tab.ad_table_id and col2.isidentifier='Y' " +
-                             "where ct.c_dimamt_id=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by col2.ad_column_id)  main " +
-                             "group by main.TableName";
+                    string uQuery = "select main.TableName," + DBFunctionCollection.ListAggregationAmountDimesnionLine("listagg(TO_CHAR(('ac.'||main.Colname)),'||''_''||') WITHIN GROUP(order by main.ColId)") + " AS ColName from " +
+                         "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.ad_column_id as ColId from c_dimamtaccttype ct " +
+                         "inner join c_dimamtline cl on cl.c_dimamt_id=ct.c_dimamt_id and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
+                         "inner join c_acctschema_element se on se.c_acctschema_id=ct.c_acctschema_id and se.elementtype=ct.elementtype " +
+                         "inner join ad_column col1 on col1.ad_column_id=se.ad_column_id " +
+                         "inner join ad_table tab on tab.ad_table_id=col1.ad_table_id " +
+                         "inner join ad_column col2 on col2.ad_table_id=tab.ad_table_id and col2.isidentifier='Y' " +
+                         "where ct.c_dimamt_id=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by col2.ad_column_id)  main " +
+                         "group by main.TableName";
                     DataSet dsUelement = DB.ExecuteDataset(uQuery);
                     if (dsUelement != null && dsUelement.Tables[0].Rows.Count > 0)
                     {
@@ -673,7 +673,7 @@ namespace VIS.Models
                        " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
                        " LEFT JOIN AD_org o ON cl.org_id=o.AD_org_id " +
-                       " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by  ct.c_acctschema_id ) main";
+                       " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId + "  ) main";//order by  ct.c_acctschema_id
 
                     DataSet Record = DB.ExecuteDataset(sqlcount);
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
