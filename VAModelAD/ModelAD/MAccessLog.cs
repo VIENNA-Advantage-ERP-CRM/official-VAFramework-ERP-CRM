@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Access Log Model
- * Class Used     : X_AD_AccessLog
+ * Class Used     : X_VAF_RightsLog
  * Chronological Development
  * Veena         28-Oct-2009
  ******************************************************/
@@ -23,10 +23,10 @@ namespace VAdvantage.Model
     /// <summary>
     /// Access Log Model
     /// </summary>
-    public class MAccessLog : X_AD_AccessLog
+    public class MVAFRightsLog : X_VAF_RightsLog
     {
 
-        private static VLogger _log = VLogger.GetVLogger(typeof(MAccessLog).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAFRightsLog).FullName);
 
 
         /// <summary>
@@ -35,8 +35,8 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="M_MovementLineConfirm_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAccessLog(Context ctx, int M_AccessLog_ID, Trx trxName)
-            : base(ctx, M_AccessLog_ID, trxName)
+        public MVAFRightsLog(Context ctx, int M_VAF_RightsLog_ID, Trx trxName)
+            : base(ctx, M_VAF_RightsLog_ID, trxName)
 	    {
 	    }
 
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transation</param>
-        public MAccessLog(Context ctx, DataRow dr, Trx trxName)
+        public MVAFRightsLog(Context ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         /// <param name="remoteAddr">addr</param>
         /// <param name="textMsg">text message</param>
         /// <param name="trxName">transaction</param>
-        public MAccessLog(Context ctx, String email, String remoteHost, String remoteAddr,
+        public MVAFRightsLog(Context ctx, String email, String remoteHost, String remoteAddr,
             String textMsg, Trx trxName)
             : this(new Context(ctx), 0, trxName)
         {
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
         /// <param name="AD_Column_ID">column</param>
         /// <param name="Record_ID">record</param>
         /// <param name="trxName">transaction</param>
-        public MAccessLog(Context ctx, String email, int AD_Table_ID, int AD_Column_ID, 
+        public MVAFRightsLog(Context ctx, String email, int AD_Table_ID, int AD_Column_ID, 
             int Record_ID, Trx trxName)
             : this(new Context(ctx), 0, trxName)
         {

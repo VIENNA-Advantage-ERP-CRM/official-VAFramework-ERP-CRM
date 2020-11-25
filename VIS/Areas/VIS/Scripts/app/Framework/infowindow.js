@@ -719,7 +719,8 @@
                             if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
                                 srchValue = srchValue + "●";
                             }
-                            whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                            srchValue = VIS.DB.to_string(srchValue);
+                            whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE " + srchValue.toUpperCase();
                         }
                         else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date) {
                             var fromValue = null;
