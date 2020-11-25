@@ -835,5 +835,23 @@ namespace VAdvantage.DataBase
             return aggregation;
         }
 
+        /// <summary>
+        /// This function is used to convert ListAgg to String_Agg
+        /// </summary>
+        /// <param name="listAggregation">aggregated to</param>
+        /// <returns>aggregation syntax</returns>
+        public static string ListAggregationAmountDimesnionLine (string listAggregation)
+        {
+            if (DB.IsOracle())
+            {
+                return listAggregation;
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                return "STRING_AGG('ac.'||main.Colname,'||''_''||' order by main.ColId)";
+            }
+            return listAggregation;
+        }
+
     }
 }

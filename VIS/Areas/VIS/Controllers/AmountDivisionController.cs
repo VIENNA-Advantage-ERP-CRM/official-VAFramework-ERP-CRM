@@ -293,9 +293,9 @@ namespace VIS.Controllers
                         }
                     }
                 }
-               else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Account) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList2))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Account) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList2))
                 {
                     int bpid = 0;
                     dt.Columns.Add("AccoutId", typeof(int));
@@ -318,22 +318,22 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            dt = model.GetAcountIdByValue((Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$C_AcctSchema_ID") : Util.GetValueOfInt(param[2])) , param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
+                            dt = model.GetAcountIdByValue((Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$C_AcctSchema_ID") : Util.GetValueOfInt(param[2])), param[1].ToString(), dt.Rows[i][0].ToString(), i, dt);
                             bpid = model.DimnesionValue("C_Bpartner_ID", "C_Bpartner", dt.Rows[i][1].ToString());
                             dt.Rows[i]["BPartnerId"] = bpid;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }
                     }
                 }
-               else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement1) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement2) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement3) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement4) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement5) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement6) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement7) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement8) ||
-                    param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement9))
+                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement1) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement2) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement3) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement4) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement5) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement6) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement7) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement8) ||
+                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement9))
                 {
                     string columName = "";
                     string tableName = "";
@@ -506,6 +506,23 @@ namespace VIS.Controllers
                 return null;
             }
             return output;
+        }
+
+        /// <summary>
+        /// This Function is used to get Line Amount against dimension
+        /// </summary>
+        /// <param name="fields">Dimesnion amount line id</param>
+        /// <returns>amount</returns>
+        public JsonResult GetTempDimLineAmount(string fields)
+        {
+            string retJSON = "";
+            if (Session["ctx"] != null)
+            {
+                Decimal temLineAmount = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT amount FROM c_dimamtline WHERE c_dimamtline_id IN ("
+                                                                                + fields + ") AND ROWNUM=1"));
+                retJSON = JsonConvert.SerializeObject(temLineAmount);
+            }
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
     }
 }
