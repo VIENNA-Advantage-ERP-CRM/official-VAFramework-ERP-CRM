@@ -18,7 +18,7 @@
                         <img src="~/Areas/VIS/Images/login/user-ico.png" alt="icon">
                     </label>
                     @*<input type="text" name="user" placeholder="User Name">*@
-                    @Html.TextBoxFor(m => m.Login1Model.UserValue, new { autofocus = "autofocus", id = "loginName", })
+                    @Html.TextBoxFor(m => m.Login1Model.UserValue, new { id = "loginName", })
                     @Html.ValidationMessageFor(m => m.Login1Model.UserValue)
                 </div>
                 <!-- end of input-row -->
@@ -72,7 +72,7 @@
                          new SelectListItem() {Text = "العربية (Saudi Arabia)",  Value="ar_SA"},
                            new SelectListItem() {Text = "繁體中文 (Chinese Taiwan)",  Value="zh_TW"},
             }*@
-new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
+ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
                     </div>
                 </div>
                 <!-- end of input-row -->
@@ -143,25 +143,13 @@ new SelectList(ViewBag.Languages, "Key", "Name"), new { id = "cmbLang" })
         </div>
         <!-- end of login-content -->
         <div class="vienna-logo">
+
             <img src="~/Areas/VIS/Images/login/logo.png" alt="logo">
         </div>
+        <img style="display: none;margin:0px auto 10px;position: absolute;left: 44%;z-index: 999;" class="img-autologin" src="~/Areas/VIS/Images/busy.gif" />
         <!-- end of vienna-logo -->
 
     </div>
     <!-- end of login-wrap -->
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
