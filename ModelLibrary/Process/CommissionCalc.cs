@@ -53,6 +53,7 @@ namespace VAdvantage.Process
         /// <returns>Message (text with variables)</returns>
         protected override String DoIt()
         {
+            string msg;
             log.Info("C_Commission_ID=" + GetRecord_ID() + ", StartDate=" + p_StartDate);
             if (p_StartDate == null)
                 p_StartDate = DateTime.Now;
@@ -84,6 +85,12 @@ namespace VAdvantage.Process
                 throw new Exception("Could not save Commission Run please check Organization");
 
             MCommissionLine[] lines = m_com.GetLines();
+            //should not generate commission if there is no active commission lines
+            if (lines.Length <= 0)
+            {
+                msg= Msg.GetMsg(GetCtx(), "NoActiveRecordsFound");
+                return msg;
+            }
             for (int i = 0; i < lines.Length; i++)
             {
                 #region
@@ -149,7 +156,7 @@ namespace VAdvantage.Process
                     {
                         sql.Append("SELECT h.C_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
                             + " SUM(l.QtyOrdered) AS Qty, "
-                            + "NULL, NULL, NULL, NULL, MAX(h.DateOrdered) "
+                            + "l.C_OrderLine_ID, NULL, NULL, NULL, MAX(h.DateOrdered) "
                             + "FROM C_Order h"
                             + " INNER JOIN C_OrderLine l ON (h.C_Order_ID = l.C_Order_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
@@ -169,7 +176,7 @@ namespace VAdvantage.Process
                             + "FROM C_Invoice h"
                             + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID)"
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
-                            + "WHERE h.DocStatus IN ('CL','CO','RE')"
+                            + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND h.AD_Client_ID = @clientid"
@@ -179,10 +186,10 @@ namespace VAdvantage.Process
                     {
                         sql.Append("SELECT h.C_Currency_ID, SUM(l.LineNetAmt) AS Amt,"
                             + " SUM(l.QtyInvoiced) AS Qty, "
-                            + "NULL, NULL, NULL, NULL, MAX(h.DateInvoiced) "
+                            + "NULL, l.C_InvoiceLine_ID, NULL, NULL, MAX(h.DateInvoiced) "
                             + "FROM C_Invoice h"
                             + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
-                            + "WHERE h.DocStatus IN ('CL','CO','RE')"
+                            + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND h.AD_Client_ID = @clientid"
@@ -253,9 +260,14 @@ namespace VAdvantage.Process
                 if (lines[i].GetM_Product_Category_ID() != 0)
                     sql.Append(" AND l.M_Product_ID IN "
                         + "(SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID=").Append(lines[i].GetM_Product_Category_ID()).Append(")");
-                //	Grouping
-                if (!m_com.IsListDetails())
-                    sql.Append(" GROUP BY h.C_Currency_ID");
+                //	Grouping according to Calculation Basis
+                if (!m_com.IsListDetails() && m_com.GetDocBasisType().Equals("O"))
+                {
+                    sql.Append(" GROUP BY h.C_Currency_ID,l.C_OrderLine_ID");
+                }
+                else
+                    sql.Append(" GROUP BY h.C_Currency_ID,l.C_InvoiceLine_ID");
+
                 //
                 log.Fine("Line=" + lines[i].GetLine() + " - " + sql);
                 //
@@ -264,7 +276,7 @@ namespace VAdvantage.Process
                 comAmt.CalculatecommissionwithNewLogic();
                 comAmt.Save();
 
-                int countDetails = Util.GetValueOfInt(DataBase.DB.ExecuteScalar("SELECT COUNT(*) FROM C_CommissionDetail WHERE C_CommissionAmt_ID=" + comAmt.GetC_CommissionAmt_ID(),null,Get_TrxName()));
+                int countDetails = Util.GetValueOfInt(DataBase.DB.ExecuteScalar("SELECT COUNT(*) FROM C_CommissionDetail WHERE C_CommissionAmt_ID=" + comAmt.GetC_CommissionAmt_ID(), null, Get_TrxName()));
                 if (countDetails == 0)
                 {
                     comAmt.Delete(true, Get_Trx());
@@ -274,8 +286,8 @@ namespace VAdvantage.Process
             //	comRun.updateFromAmt();
             //	comRun.save();
 
-            //	Save Last Run
-            m_com.SetDateLastRun(p_StartDate);
+            //	Save Last Run according to the current date and time
+            m_com.SetDateLastRun(DateTime.Now);
             m_com.Save();
 
             return "@C_CommissionRun_ID@ = " + comRun.GetDocumentNo()
@@ -369,8 +381,8 @@ namespace VAdvantage.Process
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-                foreach(DataRow dr in dt.Rows)
-                      //while (idr.Read())
+                foreach (DataRow dr in dt.Rows)
+                //while (idr.Read())
                 {
                     //	CommissionAmount, C_Currency_ID, Amt, Qty,
                     MCommissionDetail cd = new MCommissionDetail(comAmt,
@@ -379,12 +391,14 @@ namespace VAdvantage.Process
                     //	C_OrderLine_ID, C_InvoiceLine_ID,
                     cd.SetLineIDs(Utility.Util.GetValueOfInt(dr[3]), Utility.Util.GetValueOfInt(dr[4]));
 
-                    if (Utility.Util.GetValueOfInt(dr[3]) > 0) {
+                    if (Utility.Util.GetValueOfInt(dr[3]) > 0)
+                    {
                         MOrderLine _ordline = new MOrderLine(GetCtx(), Utility.Util.GetValueOfInt(dr[3]), Get_TrxName());
                         _ordline.SetIsCommissionCalculated(true);
                         _ordline.Save();
                     }
-                    if (Utility.Util.GetValueOfInt(dr[4]) > 0) {
+                    if (Utility.Util.GetValueOfInt(dr[4]) > 0)
+                    {
                         MInvoiceLine _invline = new MInvoiceLine(GetCtx(), Utility.Util.GetValueOfInt(dr[4]), Get_TrxName());
                         _invline.SetIsCommissionCalculated(true);
                         _invline.Save();

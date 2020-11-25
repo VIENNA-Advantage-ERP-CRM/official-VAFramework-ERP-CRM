@@ -352,7 +352,9 @@ namespace VAdvantage.Model
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaymentAllocate   WHERE C_Payment_ID = " + GetC_Payment_ID() +
                           @" AND IsActive = 'Y' AND C_InvoicePaySchedule_ID = " + GetC_InvoicePaySchedule_ID(), null, Get_Trx())) > 0)
                 {
-                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
+                    //"Error" not required
+                    //log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
+                    log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_NotSaveDuplicateRecord"));
                     return false;
                 }
             }

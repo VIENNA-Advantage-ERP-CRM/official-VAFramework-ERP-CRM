@@ -343,7 +343,7 @@ namespace VIS.Models
                 return gInfo;
             }
 
-            string sql = @"SELECT Name, AD_GroupInfo_ID FROM AD_GroupINfo WHERE IsActive='Y'";
+            string sql = @"SELECT Name, AD_GroupInfo_ID FROM AD_GroupInfo WHERE IsActive='Y'";
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -351,6 +351,8 @@ namespace VIS.Models
             }
 
             sql += " ORDER BY upper(name) ";
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_GroupInfo", true, false);
+            
             DataSet ds = DB.ExecuteDataset(sql);        // get All Groups.
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

@@ -1196,7 +1196,8 @@ namespace VAdvantage.Model
             StringBuilder _sql = new StringBuilder("");
 
             //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_BP_Customer_Acct'");
-            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Customer_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Customer_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_BP_Customer_Acct"));
             int countC = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (countC > 0)
             {
@@ -1217,9 +1218,9 @@ namespace VAdvantage.Model
                     {
 
                         _sql.Clear();
-                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto=" + _RelatedToCustmer + " AND BPG.IsActive = 'Y' AND BPG.AD_Client_ID = " + GetAD_Client_ID());
+                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto='" + _RelatedToCustmer + "' AND BPG.IsActive = 'Y' AND BPG.AD_Client_ID = " + GetAD_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
-                        if (ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
@@ -1240,7 +1241,8 @@ namespace VAdvantage.Model
             }
             _sql.Clear();
             //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_BP_Vendor_Acct'");
-            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Vendor_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Vendor_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_BP_Vendor_Acct"));
             int countV = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (countV > 0)
             {
@@ -1262,9 +1264,9 @@ namespace VAdvantage.Model
                     if (value < 1)
                     {
                         _sql.Clear();
-                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto=" + _RelatedToVendor + " AND BPG.IsActive = 'Y' AND BPG.AD_Client_ID = " + GetAD_Client_ID());
+                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto='" + _RelatedToVendor + "' AND BPG.IsActive = 'Y' AND BPG.AD_Client_ID = " + GetAD_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
-                        if (ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
@@ -1285,7 +1287,8 @@ namespace VAdvantage.Model
             }
             _sql.Clear();
             //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_BP_Employee_Acct'");
-            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Employee_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_BP_Employee_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_BP_Employee_Acct"));
             int countE = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (countE > 0)
             {
@@ -1307,9 +1310,9 @@ namespace VAdvantage.Model
                     if (value < 1)
                     {
                         _sql.Clear();
-                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto=" + _RelatedToEmployee + " AND BPG.IsActive = 'Y' AND BPG.AD_Client_ID = " + GetAD_Client_ID());
+                        _sql.Append("Select  BPG.c_acctschema_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.C_BP_Group_ID=" + C_BP_Group_ID + " and ACC.frpt_relatedto='" + _RelatedToEmployee + "' AND BPG.IsActive = 'Y' AND BPG.AD_Client_ID = " + GetAD_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
-                        if (ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
@@ -1416,7 +1419,7 @@ namespace VAdvantage.Model
 
             }
 
-            int count = DB.ExecuteQuery("UPDATE C_BPartner_Location SET CreditStatusSettingOn = '" + GetCreditStatusSettingOn() + "' WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, null);
+            int count = DB.ExecuteQuery("UPDATE C_BPartner_Location SET CreditStatusSettingOn = '" + GetCreditStatusSettingOn() + "' WHERE C_BPartner_ID = " + GetC_BPartner_ID(), null, Get_Trx());
 
             //---------End----------------------------------------------------
             return success;

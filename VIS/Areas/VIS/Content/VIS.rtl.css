@@ -64,7 +64,8 @@ html[dir="rtl"] .VIS_form-col,
 html[dir="rtl"] .VIS_form-data-col,
 html[dir="rtl"] .vis-advancedSearchInput > input,
 html[dir="rtl"] .vis-advancedSearchInput > select,
-html[dir="rtl"] .vis-advancedSearchInput > button {
+html[dir="rtl"] .vis-advancedSearchInput > button,
+html[dir="rtl"] .vis-initial-btn {
     float: right;
 }
 
@@ -334,7 +335,7 @@ html[dir="rtl"] .vis-input-wrap label {
 html[dir="rtl"] .vis-ev-col input:not([type=button]):not([type="checkbox"]), 
 html[dir="rtl"] .vis-ev-col textarea, 
 html[dir="rtl"] .vis-control-wrap > button {
-    padding: 5px 30px 5px 10px;
+    padding: 5px 30px 5px 16px;
 }
 html[dir="rtl"] label.vis-ec-col-lblchkbox{
     right: 0;
@@ -695,6 +696,12 @@ html[dir="rtl"] .vis-procss-more {
 
 html[dir="rtl"] .vis-ad-w-p-vc-gc [data-type='int'] {
     text-align: left;
+}
+html[dir="rtl"] .k-button-icontext .k-icon,
+html[dir="rtl"] .k-button-icontext .k-image,
+html[dir="rtl"] .k-button-icontext .k-sprite {
+    margin-left: .3rem;
+    margin-right: -.3rem;
 }
 
 

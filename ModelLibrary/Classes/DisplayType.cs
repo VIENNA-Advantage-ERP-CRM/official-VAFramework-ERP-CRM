@@ -118,7 +118,7 @@ namespace VAdvantage.Classes
             if (displayType == ID || displayType == Table || displayType == TableDir
                 || displayType == Search || displayType == Location || displayType == Locator
                 || displayType == Account || displayType == Assignment || displayType == PAttribute
-                || displayType == Image || displayType == Color || displayType == AmtDimension || displayType == ProductContainer)
+                || displayType == Image || displayType == Color || displayType == AmtDimension || displayType == ProductContainer|| displayType== GAttribute)
                 return true;
             return false;
         }	//	isID

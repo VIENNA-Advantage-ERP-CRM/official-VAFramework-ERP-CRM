@@ -279,7 +279,7 @@ namespace VIS.Helpers
                         }
                     }
 
-                    else if ((DisplayType.IsID(pp.DisplayType) || DisplayType.Integer == pp.DisplayType))
+                    else if ((DisplayType.IsID(pp.DisplayType) || DisplayType.Integer == pp.DisplayType || DisplayType.MultiKey == pp.DisplayType))
                     {
 
                         if (pp.Result != null)
