@@ -595,7 +595,8 @@ namespace VAdvantage.Model
             //get the PrefixAndDocNoSeperator
             string prefixAndDocNoSeperator = null;
             //check the column available or not
-            if (seq.Get_ColumnIndex("PrefixAndDocNoSeperator") > 0)
+            //column index starts from 0
+            if (seq.Get_ColumnIndex("PrefixAndDocNoSeperator") > -1)
                 prefixAndDocNoSeperator = seq.GetPrefixAndDocNoSeperator();
 
             bool isAutoSequence = seq.IsAutoSequence();
@@ -781,7 +782,7 @@ namespace VAdvantage.Model
                         yearmonthPrefix += separator + (docDate.Value.Month.ToString().Length > 1 ? docDate.Value.Month.ToString() : "0" + docDate.Value.Month.ToString());
                     }
                     //to separate year/date from sequenceNo adding separtor
-                     if (!string.IsNullOrEmpty(prefixAndDocNoSeperator))
+                    if (!string.IsNullOrEmpty(prefixAndDocNoSeperator))
                     {
                         yearmonthPrefix += prefixAndDocNoSeperator;
                     }
