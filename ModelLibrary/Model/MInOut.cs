@@ -1951,7 +1951,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                                         INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                             " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + iol.GetM_Locator_ID() +
                                             " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
@@ -1976,7 +1976,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
+                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                                         INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
                                             " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + iol.GetM_Locator_ID() +
                                             " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
@@ -3814,37 +3814,32 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-            _processMsg = Info.ToString();
-            SetProcessed(true);
-            SetDocAction(DOCACTION_Close);
-            SetPickDate(DateTime.Now);
+            _processMsg = Info.ToString();           
 
 
             #region Added by vikas 29 August 2016 cost sheet
             try
             {
                 if (Env.IsModuleInstalled("VA033_"))
-                {
-                    //if (!IsReversal()) { 
+                {                    
                     if (GetVA033_CostSheet_ID() > 0 && IsSOTrx() == false && IsReturnTrx() == false)
                     {
-
+                        if (IsReversal())
+                        {
+                            DB.ExecuteQuery(" Update VA033_CostSheet SET VA033_IsUtilized='N' where isactive='Y' and VA033_CostSheet_ID=" + GetVA033_CostSheet_ID(), null, null);
+                        }
+                        else
+                        {
+                            DB.ExecuteQuery(" Update VA033_CostSheet SET VA033_IsUtilized='Y' where isactive='Y' and VA033_CostSheet_ID=" + GetVA033_CostSheet_ID(), null, null);
+                        }
                     }
-                    else
-                    {
-                        //Added by Vivek  (Mentis issue no. 0000460)
-                        SetDateReceived(GetMovementDate());
-                        FreezeDoc();//Arpit Rai
-                        return DocActionVariables.STATUS_COMPLETED;
-                    }
-                    if (GetDescription() != null && GetDescription().Contains("{->"))
-                    {
-                        DB.ExecuteQuery(" Update VA033_CostSheet SET VA033_IsUtilized='N' where isactive='Y' and VA033_CostSheet_ID=" + GetVA033_CostSheet_ID(), null, null);
-                    }
-                    else
-                    {
-                        DB.ExecuteQuery(" Update VA033_CostSheet SET VA033_IsUtilized='Y' where isactive='Y' and VA033_CostSheet_ID=" + GetVA033_CostSheet_ID(), null, null);
-                    }
+                    //else
+                    //{
+                    //    //Added by Vivek  (Mentis issue no. 0000460)
+                    //    SetDateReceived(GetMovementDate());
+                    //    FreezeDoc();//Arpit Rai
+                    //    return DocActionVariables.STATUS_COMPLETED;
+                    //}                    
                 }
             }
             catch (Exception e)
@@ -3885,7 +3880,12 @@ namespace VAdvantage.Model
             {
                 log.Severe("Error in generating shipment  - " + e.Message);
             }
+
+            // Handled Drop shipment issues
             SetDateReceived(GetMovementDate());
+            SetPickDate(DateTime.Now);
+            SetProcessed(true);
+            SetDocAction(DOCACTION_Close);            
             return DocActionVariables.STATUS_COMPLETED;
         }
 

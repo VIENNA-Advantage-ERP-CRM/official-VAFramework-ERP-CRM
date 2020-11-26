@@ -115,7 +115,7 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder(
                 @"WITH mt AS (SELECT m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, SUM(CurrentQty) AS CurrentQty FROM
-                (SELECT DISTINCT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID 
+                (SELECT DISTINCT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID
                 ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
                 WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
                 @" AND t.AD_Client_ID = " + _inventory.GetAD_Client_ID() + " AND l.AD_Org_ID = " + _inventory.GetAD_Org_ID() +
@@ -129,7 +129,7 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder(@"WITH mt AS (SELECT m_product_id, M_Locator_ID, M_AttributeSetInstance_ID, SUM(CurrentQty) AS CurrentQty, M_ProductContainer_ID
                 FROM (SELECT DISTINCT t.M_Product_ID, t.M_Locator_ID, t.M_AttributeSetInstance_ID, NVL(t.M_ProductContainer_ID , 0) AS M_ProductContainer_ID,
-                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
+                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
                 FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
                 WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(_inventory.GetMovementDate(), true) +
                 @" AND t.AD_Client_ID = " + _inventory.GetAD_Client_ID() + " AND l.AD_Org_ID = " + _inventory.GetAD_Org_ID() +
