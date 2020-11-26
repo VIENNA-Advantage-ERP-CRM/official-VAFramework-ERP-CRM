@@ -383,9 +383,15 @@ public String GetPrefix()
 {
 return (String)Get_Value("Prefix");
 }
-/** Set Year & Month Separator.
+        /** Set Prefix(Year & Month) and Doc No Seperator.
+@param PrefixAndDocNoSeperator Prefix and Document number seperator */
+        public void SetPrefixAndDocNoSeperator(String PrefixAndDocNoSeperator) { if (PrefixAndDocNoSeperator != null && PrefixAndDocNoSeperator.Length > 1) { log.Warning("Length > 1 - truncated"); PrefixAndDocNoSeperator = PrefixAndDocNoSeperator.Substring(0, 1); } Set_Value("PrefixAndDocNoSeperator", PrefixAndDocNoSeperator); }
+        /** Get Prefix(Year & Month) and Doc No Seperator.
+@return Prefix and Document number seperator */
+        public String GetPrefixAndDocNoSeperator() { return (String)Get_Value("PrefixAndDocNoSeperator"); }
+        /** Set Year & Month Separator.
 @param Separator Element Separator */
-public void SetSeparator(String Separator)
+        public void SetSeparator(String Separator)
 {
     if (Separator != null && Separator.Length > 1)
     {
