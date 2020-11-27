@@ -99,6 +99,7 @@ namespace VAdvantage.Model
             if (count > 0)
             {
                 // ShowMessage.Info("UserAlreadyAssignedToResource", true, null, null);
+                log.SaveError("UserAlreadyAssignedToResource", "");
                 return false;
             }
 
