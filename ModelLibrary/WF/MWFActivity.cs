@@ -1132,7 +1132,11 @@ namespace VAdvantage.WF
                         //	same user = approved
                         autoApproval = startAD_User_ID == nextAD_User_ID;
                         if (!autoApproval)
+                        {
+                            // applied check for user whether user is available or user is active
+                            CheckUser(nextAD_User_ID);
                             SetAD_User_ID(nextAD_User_ID);
+                        }
 
                         //Lakhwinder
                         //if (GetAD_User_ID() == 0)
@@ -1143,10 +1147,20 @@ namespace VAdvantage.WF
                     }
                     else	//	fixed Approver
                     {
-                        MWFResponsible resp = GetResponsible();
-                        autoApproval = resp.GetAD_User_ID() == GetAD_User_ID();
-                        if (!autoApproval && resp.GetAD_User_ID() != 0)
-                            SetAD_User_ID(resp.GetAD_User_ID());
+                        // MWFResponsible resp = GetResponsible();
+                        //autoApproval = resp.GetAD_User_ID() == GetAD_User_ID();
+                        //if (!autoApproval && resp.GetAD_User_ID() != 0)
+                        //{
+                        //    SetAD_User_ID(resp.GetAD_User_ID());
+                        //}
+
+                        // Change to fetch user from responsible
+                        int userID = GetUserFromWFResponsible(_node.GetAD_WF_Responsible_ID(), GetPO());
+                        if (!autoApproval && userID != 0)
+                        {
+                            CheckUser(userID);
+                            SetAD_User_ID(userID);
+                        }
                     }
 
                     if (autoApproval
@@ -1173,15 +1187,61 @@ namespace VAdvantage.WF
                                                                     WHERE WFE.AD_WF_Node_ID  =" + GetAD_WF_Node_ID() + @"
                                                                     AND WFA.AD_WF_Activity_ID=" + GetAD_WF_Activity_ID()));
                     MWFEventAudit eve = new MWFEventAudit(GetCtx(), evendID, null);
+                    // Changes done to handle Workflow Responsible in case of Multi Approval
+                    int nextAD_User_ID = 0;
+
                     if (_node.GetAD_Column_ID_3() > 0)
                     {
                         startAD_User_ID = Util.GetValueOfInt(_po.Get_Value((new MColumn(GetCtx(), _node.GetAD_Column_ID_3(), null).GetColumnName())));
-
+                    }
+                    // Added check to handle approver in case of workflow Responsible
+                    else if (_node.GetAD_WF_Responsible_ID() > 0 || _node.GetWorkflow().GetAD_WF_Responsible_ID() > 0)
+                    {
+                        int AD_WF_Responsible_ID = 0;
+                        if (_node.GetAD_WF_Responsible_ID() > 0)
+                            AD_WF_Responsible_ID = _node.GetAD_WF_Responsible_ID();
+                        else if (_node.GetWorkflow().GetAD_WF_Responsible_ID() > 0)
+                            AD_WF_Responsible_ID = _node.GetWorkflow().GetAD_WF_Responsible_ID();
+                        MWFResponsible resp = new MWFResponsible(GetCtx(), AD_WF_Responsible_ID, Get_TrxName());
+                        if (!resp.IsInvoker() || resp.IsOrganization() || resp.IsSQL())
+                        {
+                            startAD_User_ID = GetAD_User_ID();
+                            if (doc != null && startAD_User_ID == 0)
+                                startAD_User_ID = doc.GetDoc_User_ID();
+                            if (_node.GetApprovalLeval() == 0)
+                            {
+                                SetAD_User_ID(startAD_User_ID);
+                                eve.SetAD_User_ID(startAD_User_ID);
+                                eve.Save();
+                                return true;
+                            }
+                            nextAD_User_ID = GetUserFromWFResponsible(AD_WF_Responsible_ID, GetPO());
+                            CheckUser(nextAD_User_ID);
+                            if (nextAD_User_ID == 0)
+                            {
+                                SetAD_User_ID(startAD_User_ID);
+                                eve.SetAD_User_ID(startAD_User_ID);
+                                eve.Save();
+                                return true;
+                            }
+                            if (resp.IsOrganization())
+                            {
+                                SetResponsibleOrg_ID(_po.GetAD_Org_ID());
+                                eve.SetResponsibleOrg_ID(_po.GetAD_Org_ID());
+                            }
+                            SetAD_User_ID(nextAD_User_ID);
+                            eve.SetAD_User_ID(nextAD_User_ID);
+                            eve.Save();
+                            return false;
+                        }
+                        else
+                            startAD_User_ID = GetAD_User_ID();
                     }
                     else if (startAD_User_ID == 0)
                     {
                         startAD_User_ID = GetAD_User_ID();
                     }
+
                     if (doc != null && startAD_User_ID == 0)
                         startAD_User_ID = doc.GetDoc_User_ID();
                     if (_node.GetApprovalLeval() == 0)
@@ -1193,9 +1253,10 @@ namespace VAdvantage.WF
                     }
 
                     SetAD_User_ID(startAD_User_ID);
-                    int nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + startAD_User_ID));
+                    nextAD_User_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + startAD_User_ID));
                     //	same user = approved
                     //autoApproval = startAD_User_ID == nextAD_User_ID;
+                    CheckUser(nextAD_User_ID);
                     if (nextAD_User_ID == 0)
                     {
                         SetAD_User_ID(startAD_User_ID);
@@ -1247,6 +1308,7 @@ namespace VAdvantage.WF
                     {
                         userID = (GetCtx().GetAD_User_ID());
                     }
+                    CheckUser(userID);
                     SetAD_User_ID(userID);
                     eve.SetAD_User_ID(userID);
                     eve.Save();
@@ -1495,6 +1557,24 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //
             //
             throw new ArgumentException("Invalid Action (Not Implemented) =" + action);
+        }
+
+        /// <summary>
+        /// function to check for non 0 user id and to check whether user is active or not
+        /// </summary>
+        /// <param name="AD_User_ID"></param>
+        /// <returns>true or false, if user not found or user not active</returns>
+        public bool CheckUser(int AD_User_ID)
+        {
+            if (AD_User_ID == 0)
+                throw new Exception(Msg.GetMsg(GetCtx(),"Terminated") + " :: " + Msg.GetMsg(GetCtx(), "ApproverNotFound"));
+            else
+            {
+                bool chkActiveUser = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM AD_User WHERE AD_User_ID = " + AD_User_ID)).ToLower() == "y";
+                if (!chkActiveUser)
+                    throw new Exception(Msg.GetMsg(GetCtx(), "Terminated") + " :: " + Msg.GetMsg(GetCtx(), "ApproverNotActive"));
+            }
+            return true;
         }
 
         /// <summary>
@@ -1756,6 +1836,16 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     userIds.Add(org.GetSupervisor_ID());
                     //  SendEMail(client, org.GetSupervisor_ID(), null, subject, message, data, isHTML, tableID, RecID);
                 }
+            }
+            // Added check for new Responsible Type (SQL)
+            else if (resp.IsSQL())
+            {
+                string txt = ParseCustomQuery(_po, resp.GetCustomSQL());
+                int _uID = Util.GetValueOfInt(DB.ExecuteScalar(txt));
+                if (_uID > 0)
+                    userIds.Add(_uID);
+                else
+                    sbLog.Append("No Supervisor found with SQL");
             }
 
 
@@ -2379,7 +2469,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <param name="AD_User_ID">user</param>
         /// <param name="textMsg">message</param>
         /// <returns>true if forwarded</returns>
-        public bool ForwardTo(int AD_User_ID, String textMsg, bool isFromActivityForm = false)
+        public bool ForwardTo(int AD_User_ID, String textMsg, bool isFromActivityForm = false, bool isForwarded = false)
         {
             if (AD_User_ID == GetAD_User_ID())
             {
@@ -2388,7 +2478,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             //
             MUser oldUser = MUser.Get(GetCtx(), GetAD_User_ID());
+            // Set current user on event and activity in case of forward
+            if (isForwarded)
+            {
+                oldUser = MUser.Get(GetCtx(), GetCtx().GetAD_User_ID());
+            }
             MUser user = MUser.Get(GetCtx(), AD_User_ID);
+
             if (user == null || user.Get_ID() == 0)
             {
                 log.Log(Level.WARNING, "Does not exist - AD_User_ID=" + AD_User_ID);
@@ -2396,7 +2492,6 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             //	Update 
             SetAD_User_ID(user.GetAD_User_ID());
-
 
             if (textMsg != null)
                 // textMsg += " - " + GetNode().GetAttributeName() + " Froward To:" + AD_User_ID;
@@ -2426,6 +2521,9 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             _audit.Save();
             //	Create new one
             _audit = new MWFEventAudit(this);
+            // set organization responsible
+            if (GetResponsibleOrg_ID() > 0)
+                _audit.SetResponsibleOrg_ID(GetResponsibleOrg_ID());
             _audit.Save();
             return true;
         }
@@ -2876,6 +2974,16 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     }
                     else
                         SendEMail(client, org.GetSupervisor_ID(), null, subject, message, pdf, isHTML, tableID, RecID, action);
+                }
+                // Added check for new Responsible Type (SQL)
+                else if (resp.IsSQL())
+                {
+                    string txt = ParseCustomQuery(_po, resp.GetCustomSQL());
+                    int _uID = Util.GetValueOfInt(DB.ExecuteScalar(txt));
+                    if (_uID > 0)
+                        SendEMail(client, _uID, null, subject, message, pdf, isHTML, tableID, RecID, action);
+                    else
+                        log.Fine("No Supervisor found with SQL");
                 }
             }
 
@@ -3418,6 +3526,16 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     else
                         SendFaxEMail(client, org.GetSupervisor_ID(), null, subject, message, pdf, isHTML);
                 }
+                // Added check for new Responsible Type (SQL)
+                else if (resp.IsSQL())
+                {
+                    string txt = ParseCustomQuery(_po, resp.GetCustomSQL());
+                    int _uID = Util.GetValueOfInt(DB.ExecuteScalar(txt));
+                    if (_uID > 0)
+                        SendFaxEMail(client, _uID, null, subject, message, pdf, isHTML);
+                    else
+                        log.Fine("No Supervisor found with SQL");
+                }
             }
             else if (recipient.Equals(MWFNode.EMAILRECIPIENT_DocumentOwnerSSupervisor))
             {
@@ -3884,7 +4002,14 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             else if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_Role))
             {
-                return Util.GetValueOfInt(DB.ExecuteScalar("select ad_user_ID from ad_user_roles where Ad_role_ID=" + resp.GetAD_Role_ID() + " AND isactive='Y'"));
+                return Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_User_ID FROM AD_User_Roles WHERE AD_Role_ID=" + resp.GetAD_Role_ID() + " AND IsActive='Y'"));
+            }
+            // Handled code for new Responsible type being added
+            else if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_SQL))
+            {
+                string txt = ParseCustomQuery(po, resp.GetCustomSQL());
+                log.Info("Query Text" + txt);
+                return Util.GetValueOfInt(DB.ExecuteScalar(txt));
             }
             else if (Util.GetValueOfInt(po.Get_Value("SalesRep_ID")) > 0)
             {
@@ -3896,7 +4021,62 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
         }
 
+        /// <summary>
+        /// Function to parse query passed in the parameter
+        /// </summary>
+        /// <param name="po"></param>
+        /// <param name="text"></param>
+        /// <returns>String SQL Query</returns>
+        private string ParseCustomQuery(PO po, String text)
+        {
+            if (po == null || text.IndexOf("@") == -1)
+                return text;
 
+            String inStr = text;
+            String token;
+            StringBuilder outStr = new StringBuilder();
+
+            int i = inStr.IndexOf("@");
+            while (i != -1)
+            {
+                outStr.Append(inStr.Substring(0, i));			// up to @
+                inStr = inStr.Substring(i + 1); ///from first @
+
+                int j = inStr.IndexOf("@");						// next @
+                if (j < 0)										// no second tag
+                {
+                    inStr = "@" + inStr;
+                    break;
+                }
+
+                token = inStr.Substring(0, j);
+                if (token == "Tenant")
+                {
+                    int id = po.GetAD_Client_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_Client WHERE AD_Client_ID=" + id));
+                }
+                else if (token == "Org")
+                {
+                    int id = po.GetAD_Org_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_ORG WHERE AD_ORG_ID=" + id));
+                }
+                else if (token == "BPName")
+                {
+                    if (po.Get_TableName() == "C_BPartner")
+                        outStr.Append(ParseVariable("Name", po));
+                    else
+                        outStr.Append("@" + token + "@");
+                }
+                else
+                    outStr.Append(ParseVariable(token, po));		// replace context
+                inStr = inStr.Substring(j + 1);
+                // from second @
+                i = inStr.IndexOf("@");
+            }
+
+            outStr.Append(inStr);           					//	add remainder
+            return outStr.ToString();
+        }
 
         private string SaveActionLog(string emailto, Trx trxname)
         {
