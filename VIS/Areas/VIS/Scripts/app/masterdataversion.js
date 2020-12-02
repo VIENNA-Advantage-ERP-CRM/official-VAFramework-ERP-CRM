@@ -247,6 +247,7 @@
                 dtValFrom.val(self.getDateString());
             }
 
+            // check added in case for version in case of new record
             if (self._newRec && valFromDate >= curDate) {
                 dtValFrom.val(self.getDateString(true));
             }
