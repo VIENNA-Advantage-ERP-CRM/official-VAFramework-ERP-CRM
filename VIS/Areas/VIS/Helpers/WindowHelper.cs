@@ -1059,52 +1059,57 @@ namespace VIS.Helpers
                 }
                 else
                 {
-                    versionInfo.IsLatestVersion = CheckLatestVersion(inn);
-                    List<string> colsChanged = new List<string>();
-                    foreach (string key in inn.RowData.Keys)
+                    if (Util.GetValueOfString(inn.WhereClause) != "")
                     {
-                        if (!Util.GetValueOfString(inn.RowData[key]).Equals(Util.GetValueOfString(inn.OldRowData[key])))
+                        versionInfo.IsLatestVersion = CheckLatestVersion(inn);
+                        List<string> colsChanged = new List<string>();
+                        foreach (string key in inn.RowData.Keys)
                         {
-                            colsChanged.Add(key);
-                        }
-                    }
-
-                    string sqlOldVer = @"SELECT * FROM " + inn.TableName + "_Ver WHERE " + inn.WhereClause
-                                + " AND VersionValidFrom <= " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) 
-                                + " AND IsVersionApproved = 'Y' ORDER BY VersionValidFrom DESC, RecordVersion DESC";
-                    DataSet dsOldVers = DB.ExecuteDataset(sqlOldVer);
-                    if (dsOldVers != null && dsOldVers.Tables[0].Rows.Count > 0)
-                    {
-                        foreach (DataRow drRow in dsOldVers.Tables[0].Rows)
-                        {
-                            Dictionary<String, Object> oldVerRowData = new Dictionary<string, object>();
-
-                            foreach (string key in rowData.Keys)
+                            if (!Util.GetValueOfString(inn.RowData[key]).Equals(Util.GetValueOfString(inn.OldRowData[key])))
                             {
-                                if (colsChanged.Contains(key))
-                                {
-                                    oldVerRowData.Add(key, inn.RowData[key]);
-                                }
-                                else
-                                {
-                                    if (drRow.Table.Columns.Contains(key))
-                                        oldVerRowData.Add(key, drRow[key]);
-                                    else
-                                        oldVerRowData.Add(key, rowData[key]);
-                                }
+                                colsChanged.Add(key);
                             }
-                            inn.RowData = oldVerRowData;
-                            break;
+                        }
+
+                        string sqlOldVer = @"SELECT * FROM " + inn.TableName + "_Ver WHERE " + inn.WhereClause
+                                    + " AND VersionValidFrom <= " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true)
+                                    + " AND IsVersionApproved = 'Y' ORDER BY VersionValidFrom DESC, RecordVersion DESC";
+                        DataSet dsOldVers = DB.ExecuteDataset(sqlOldVer);
+                        if (dsOldVers != null && dsOldVers.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow drRow in dsOldVers.Tables[0].Rows)
+                            {
+                                Dictionary<String, Object> oldVerRowData = new Dictionary<string, object>();
+
+                                foreach (string key in rowData.Keys)
+                                {
+                                    if (colsChanged.Contains(key))
+                                    {
+                                        oldVerRowData.Add(key, inn.RowData[key]);
+                                    }
+                                    else
+                                    {
+                                        if (drRow.Table.Columns.Contains(key))
+                                            oldVerRowData.Add(key, drRow[key]);
+                                        else
+                                            oldVerRowData.Add(key, rowData[key]);
+                                    }
+                                }
+                                inn.RowData = oldVerRowData;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            outt.IsError = true;
+                            outt.FireEEvent = true;
+                            outt.EventParam = new EventParamOut() { Msg = "VIS_NoAppVerDate", Info = "", IsError = true };
+                            outt.Status = GridTable.SAVE_ERROR;
+                            return;
                         }
                     }
                     else
-                    {
-                        outt.IsError = true;
-                        outt.FireEEvent = true;
-                        outt.EventParam = new EventParamOut() { Msg = "VIS_NoAppVerDate", Info = "", IsError = true };
-                        outt.Status = GridTable.SAVE_ERROR;
-                        return;
-                    }
+                        versionInfo.IsLatestVersion = true;
                 }
             }
 
