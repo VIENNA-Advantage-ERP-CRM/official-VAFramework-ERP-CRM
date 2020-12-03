@@ -275,11 +275,11 @@
             var attributeValueyId = 0;
 
             if (xValue) {
-                attributeId = xValue.GetM_Attribute_ID;
+                attributeId = xValue.GetVAM_ProductFeature_ID;
                 attributeValueId = xValue.GetM_AttributeValue_ID;
             }
             if (yValue) {
-                attributeyId = yValue.GetM_Attribute_ID;
+                attributeyId = yValue.GetVAM_ProductFeature_ID;
                 attributeValueyId = yValue.GetM_AttributeValue_ID;
             }
 
