@@ -256,7 +256,7 @@ namespace VIS.Controllers
             {
                 var ctx = Session["ctx"] as Ctx;
                 List<AttributeGrid> lst = new List<AttributeGrid>();
-                var value = MAttribute.GetOfClient(ctx, true, true);
+                var value = MVAMProductFeature.GetOfClient(ctx, true, true);
 
                 for (int i = 0; i < value.Length; i++)
                 {
@@ -269,7 +269,7 @@ namespace VIS.Controllers
                         if (attrValue != null)
                         {
                             MAttributeValueList localObj = new MAttributeValueList();
-                            localObj.GetM_Attribute_ID = attrValue.GetM_Attribute_ID();
+                            localObj.GetVAM_ProductFeature_ID = attrValue.GetVAM_ProductFeature_ID();
                             localObj.GetM_AttributeValue_ID = attrValue.GetM_AttributeValue_ID();
                             localObj.Name = attrValue.GetName();
                             lstAttValueObj.Add(localObj);
@@ -456,7 +456,7 @@ namespace VIS.Controllers
 
     public class MAttributeValueList
     {
-        public int GetM_Attribute_ID { get; set; }
+        public int GetVAM_ProductFeature_ID { get; set; }
         public int GetM_AttributeValue_ID { get; set; }
         public string Name { get; set; }
     }
@@ -475,7 +475,7 @@ namespace VIS.Controllers
                 sql += " AND M_AttributeSetInstance_ID IN "
                     + "(SELECT M_AttributeSetInstance_ID "
                     + "FROM M_AttributeInstance "
-                    + "WHERE M_Attribute_ID=" + xM_Attribute_ID
+                    + "WHERE VAM_ProductFeature_ID=" + xM_Attribute_ID
                     + " AND M_AttributeValue_ID=" + xM_AttributeValue_ID + ")";
             }
             if (yM_Attribute_ID > 0)
@@ -483,7 +483,7 @@ namespace VIS.Controllers
                 sql += " AND M_AttributeSetInstance_ID IN "
                     + "(SELECT M_AttributeSetInstance_ID "
                     + "FROM M_AttributeInstance "
-                    + "WHERE M_Attribute_ID=" + yM_Attribute_ID
+                    + "WHERE VAM_ProductFeature_ID=" + yM_Attribute_ID
                     + " AND M_AttributeValue_ID=" + yM_AttributeValue_ID + ")";
             }
             sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Product", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
