@@ -204,7 +204,7 @@
                 var inputFrac = inputSplit[1].replace(/[\D\s\,_\-]+/g, "");
             }
             // Format the number string on thousand separator using the regex
-            var inputPrime = inputSplit[0].replace(/[\s\._]+/g, "");
+            var inputPrime = inputSplit[0].replace(/[\s\.\,_]+/g, "");
             inputPrime = inputPrime ? parseInt(inputPrime, 10) : 0;
             if (inputFrac != undefined) {
                 if (_typeFormat == "init" || _typeFormat == "formatOnly") {
