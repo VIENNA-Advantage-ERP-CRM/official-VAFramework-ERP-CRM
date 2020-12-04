@@ -158,6 +158,7 @@ OR
                               INNER JOIN AD_User_Roles ur
                               ON (r.AD_Role_ID            =ur.AD_Role_ID)
                               WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND ur.IsActive = 'Y'
                               AND (ur.AD_User_ID          =" + AD_User_ID + @" 
                               OR a.AD_User_ID            IN
                                 (SELECT AD_User_ID
