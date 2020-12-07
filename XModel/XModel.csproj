@@ -564,7 +564,7 @@
     <Compile Include="Model\X_K_Synonym.cs" />
     <Compile Include="Model\X_K_Topic.cs" />
     <Compile Include="Model\X_K_Type.cs" />
-    <Compile Include="Model\X_M_Attribute.cs" />
+    <Compile Include="Model\X_VAM_ProductFeature.cs" />
     <Compile Include="Model\X_M_AttributeInstance.cs" />
     <Compile Include="Model\X_M_AttributeSearch.cs" />
     <Compile Include="Model\X_M_AttributeSet.cs" />

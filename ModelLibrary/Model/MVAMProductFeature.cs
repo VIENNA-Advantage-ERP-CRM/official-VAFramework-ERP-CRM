@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAttribute
- * Purpose        : Used for M_Attribute table
- * Class Used     : X_M_Attribute
+ * Class Name     : MVAMProductFeature
+ * Purpose        : Used for VAM_ProductFeature table
+ * Class Used     : X_VAM_ProductFeature
  * Chronological    Development
  * Raghunandan     04-Jun-2009
   ******************************************************/
@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAttribute : X_M_Attribute
+    public class MVAMProductFeature : X_VAM_ProductFeature
     {
         /// <summary>
         /// Get Attributes Of Client
@@ -36,11 +36,11 @@ namespace VAdvantage.Model
         /// <param name="onlyProductAttributes">only Product Attributes</param>
         /// <param name="onlyListAttributes">st Attributes</param>
         /// <returns>array of attributes</returns>
-        public static MAttribute[] GetOfClient(Ctx ctx, bool onlyProductAttributes, bool onlyListAttributes)
+        public static MVAMProductFeature[] GetOfClient(Ctx ctx, bool onlyProductAttributes, bool onlyListAttributes)
         {
-            List<MAttribute> list = new List<MAttribute>();
+            List<MVAMProductFeature> list = new List<MVAMProductFeature>();
             int AD_Client_ID = ctx.GetAD_Client_ID();
-            String sql = "SELECT * FROM M_Attribute "
+            String sql = "SELECT * FROM VAM_ProductFeature "
                 + "WHERE AD_Client_ID=" + AD_Client_ID + " AND IsActive='Y'";
             if (onlyProductAttributes)
                 sql += " AND IsInstanceAttribute='N'";
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MAttribute(ctx, dr, null));
+                    list.Add(new MVAMProductFeature(ctx, dr, null));
                 }
                 ds = null;
             }
@@ -63,26 +63,26 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MAttribute[] retValue = new MAttribute[list.Count];
+            MVAMProductFeature[] retValue = new MVAMProductFeature[list.Count];
             retValue = list.ToArray();
             _log.Fine("AD_Client_ID=" + AD_Client_ID + " - #" + retValue.Length);
             return retValue;
         }
 
         //Logger
-        // private static CLogger s_log = CLogger.GetCLogger(typeof(MAttribute));
-        private static VLogger _log = VLogger.GetVLogger(typeof(MAttribute).FullName);
+        // private static CLogger s_log = CLogger.GetCLogger(typeof(MVAMProductFeature));
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMProductFeature).FullName);
 
         /// <summary>
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Attribute_ID">id</param>
+        /// <param name="VAM_ProductFeature_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAttribute(Ctx ctx, int M_Attribute_ID, Trx trxName)
-            : base(ctx, M_Attribute_ID, trxName)
+        public MVAMProductFeature(Ctx ctx, int VAM_ProductFeature_ID, Trx trxName)
+            : base(ctx, VAM_ProductFeature_ID, trxName)
         {
-            if (M_Attribute_ID == 0)
+            if (VAM_ProductFeature_ID == 0)
             {
                 SetAttributeValueType(ATTRIBUTEVALUETYPE_StringMax40);
                 SetIsInstanceAttribute(false);
@@ -96,7 +96,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">set</param>
         /// <param name="trxName">transaction</param>
-        public MAttribute(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMProductFeature(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
                     list.Add(val);
                 //
                 String sql = "SELECT * FROM M_AttributeValue "
-                    + "WHERE M_Attribute_ID=" + GetM_Attribute_ID()
+                    + "WHERE VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID()
                     + "ORDER BY Value";
                 DataSet ds = null;
                 try
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
             MAttributeInstance retValue = null;
             String sql = "SELECT * "
                 + "FROM M_AttributeInstance "
-                + "WHERE M_Attribute_ID=" + GetM_Attribute_ID() + " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                + "WHERE VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID() + " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
             DataSet ds = null;
             try
             {
@@ -186,13 +186,13 @@ namespace VAdvantage.Model
             {
                 if (value != null)
                 {
-                    instance = new MAttributeInstance(GetCtx(), GetM_Attribute_ID(),
+                    instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                       M_AttributeSetInstance_ID, value.GetM_AttributeValue_ID(),
                     value.GetName(), Get_TrxName()); 					//	Cached !!
                 }
                 else
                 {
-                    instance = new MAttributeInstance(GetCtx(), GetM_Attribute_ID(),
+                    instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                         M_AttributeSetInstance_ID, 0, null, Get_TrxName());
                 }
                 // Create new Attribute Instances in * Organization
@@ -224,7 +224,7 @@ namespace VAdvantage.Model
             MAttributeInstance instance = GetMAttributeInstance(M_AttributeSetInstance_ID);
             if (instance == null)
             {
-                instance = new MAttributeInstance(GetCtx(), GetM_Attribute_ID(),
+                instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                     M_AttributeSetInstance_ID, value, Get_TrxName());
             }
             else
@@ -244,7 +244,7 @@ namespace VAdvantage.Model
             MAttributeInstance instance = GetMAttributeInstance(M_AttributeSetInstance_ID);
             if (instance == null)
             {
-                instance = new MAttributeInstance(GetCtx(), GetM_Attribute_ID(),
+                instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                     M_AttributeSetInstance_ID, value, Get_TrxName());
             }
             else
@@ -261,7 +261,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MAttribute[");
+            StringBuilder sb = new StringBuilder("MVAMProductFeature[");
             sb.Append(Get_ID()).Append("-").Append(GetName())
                 .Append(",Type=").Append(GetAttributeValueType())
                 .Append(",Instance=").Append(IsInstanceAttribute())
@@ -285,7 +285,7 @@ namespace VAdvantage.Model
                     + "WHERE IsInstanceAttribute='N'"
                     + " AND EXISTS (SELECT * FROM M_AttributeUse mau "
                         + "WHERE mas.M_AttributeSet_ID=mau.M_AttributeSet_ID"
-                        + " AND mau.M_Attribute_ID=" + GetM_Attribute_ID() + ")";
+                        + " AND mau.VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID() + ")";
                 int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
                 log.Fine("AttributeSet Instance set #" + no);
             }

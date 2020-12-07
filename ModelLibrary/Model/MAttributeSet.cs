@@ -29,9 +29,9 @@ namespace VAdvantage.Model
     {
         #region Private Variables
         //	Instance Attributes					
-        private MAttribute[] _instanceAttributes = null;
+        private MVAMProductFeature[] _instanceAttributes = null;
         //	Instance Attributes					
-        private MAttribute[] _productAttributes = null;
+        private MVAMProductFeature[] _productAttributes = null;
         // Entry Exclude						
         private X_M_AttributeSetExclude[] _excludes = null;
         // Lot create Exclude					
@@ -100,19 +100,19 @@ namespace VAdvantage.Model
          * 	@param instanceAttributes true if for instance
          *	@return instance or product attribute array
          */
-        public MAttribute[] GetMAttributes(bool instanceAttributes)
+        public MVAMProductFeature[] GetMAttributes(bool instanceAttributes)
         {
             if ((_instanceAttributes == null && instanceAttributes)
                 || _productAttributes == null && !instanceAttributes)
             {
-                String sql = "SELECT mau.M_Attribute_ID "
+                String sql = "SELECT mau.VAM_ProductFeature_ID "
                     + "FROM M_AttributeUse mau"
-                    + " INNER JOIN M_Attribute ma ON (mau.M_Attribute_ID=ma.M_Attribute_ID) "
+                    + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
                     + "WHERE mau.IsActive='Y' AND ma.IsActive='Y'"
                     + " AND mau.M_AttributeSet_ID=" + GetM_AttributeSet_ID() + " AND ma.IsInstanceAttribute= " +
                     ((instanceAttributes) ? "'Y'" : "'N'").ToString()
-                    + " ORDER BY mau.M_Attribute_ID";
-                List<MAttribute> list = new List<MAttribute>();
+                    + " ORDER BY mau.VAM_ProductFeature_ID";
+                List<MVAMProductFeature> list = new List<MVAMProductFeature>();
                 DataTable dt = null;
                 IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
                     foreach (DataRow dr in dt.Rows)
                     {
                         //DataRow dr = ds.Tables[0].Rows[i];
-                        MAttribute ma = new MAttribute(GetCtx(), Convert.ToInt32(dr[0]), Get_TrxName());
+                        MVAMProductFeature ma = new MVAMProductFeature(GetCtx(), Convert.ToInt32(dr[0]), Get_TrxName());
                         list.Add(ma);
                     }
                 }
@@ -143,12 +143,12 @@ namespace VAdvantage.Model
                 //	Differentiate attributes
                 if (instanceAttributes)
                 {
-                    _instanceAttributes = new MAttribute[list.Count];
+                    _instanceAttributes = new MVAMProductFeature[list.Count];
                     _instanceAttributes = list.ToArray();
                 }
                 else
                 {
-                    _productAttributes = new MAttribute[list.Count];
+                    _productAttributes = new MVAMProductFeature[list.Count];
                     _productAttributes = list.ToArray();
                 }
             }
@@ -413,7 +413,7 @@ namespace VAdvantage.Model
                     + " AND IsInstanceAttribute='N'"
                     + " AND (IsSerNo='Y' OR IsLot='Y' OR IsGuaranteeDate='Y'"
                         + " OR EXISTS (SELECT * FROM M_AttributeUse mau"
-                            + " INNER JOIN M_Attribute ma ON (mau.M_Attribute_ID=ma.M_Attribute_ID) "
+                            + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
                             + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
                             + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                             + " AND ma.IsInstanceAttribute='Y')"
@@ -434,7 +434,7 @@ namespace VAdvantage.Model
                     + " AND IsInstanceAttribute='Y'"
                     + "	AND IsSerNo='N' AND IsLot='N' AND IsGuaranteeDate='N'"
                     + " AND NOT EXISTS (SELECT * FROM M_AttributeUse mau"
-                        + " INNER JOIN M_Attribute ma ON (mau.M_Attribute_ID=ma.M_Attribute_ID) "
+                        + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
                         + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
                         + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                         + " AND ma.IsInstanceAttribute='Y')";

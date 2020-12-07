@@ -48,7 +48,7 @@ namespace VIS.Models
             AttributesObjects obj = new AttributesObjects();
 
             MAttributeSet aset = null;
-            MAttribute[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             //	Get Model
             MAttributeSetInstance _masi = MAttributeSetInstance.Get(ctx, _M_AttributeSetInstance_ID, _M_Product_ID);
             MProduct _prd = new MProduct(ctx, _M_Product_ID, null);
@@ -399,7 +399,7 @@ namespace VIS.Models
 
             StringBuilder sql = new StringBuilder();
             MAttributeSet aset = null;
-            MAttribute[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             string attrsetQry = "";
             int attributeSet = 0;
             MAttributeSetInstance _masi = MAttributeSetInstance.Get(ctx, _M_AttributeSetInstance_ID, _M_Product_ID);
@@ -455,16 +455,16 @@ namespace VIS.Models
                 string attrQry = "";
                 if (hasValue)
                 {
-                    attrQry = @"SELECT ats.M_Attribute_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_AttributeSetInstance ast INNER JOIN M_AttributeInstance ats 
-                    ON (ast.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) INNER JOIN M_Attribute att ON ats.M_Attribute_ID=att.M_Attribute_ID
-                    WHERE ast.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND ast.Value='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.M_Attribute_ID";
+                    attrQry = @"SELECT ats.VAM_ProductFeature_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_AttributeSetInstance ast INNER JOIN M_AttributeInstance ats 
+                    ON (ast.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) INNER JOIN VAM_ProductFeature att ON ats.VAM_ProductFeature_ID=att.VAM_ProductFeature_ID
+                    WHERE ast.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND ast.Value='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.VAM_ProductFeature_ID";
                 }
                 else
                 {
-                    attrQry = @"SELECT ats.M_Attribute_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_ProductAttributes patr INNER JOIN M_AttributeInstance ats 
+                    attrQry = @"SELECT ats.VAM_ProductFeature_ID,ats.M_AttributeValue_ID,ats.Value,att.attributevaluetype FROM M_ProductAttributes patr INNER JOIN M_AttributeInstance ats 
                     ON (patr.M_AttributeSetInstance_ID=ats.M_AttributeSetInstance_ID) INNER JOIN M_attributesetinstance ast ON (patr.M_AttributeSetInstance_ID=ast.M_AttributeSetInstance_ID)
-                    INNER JOIN M_Attribute att ON ats.M_Attribute_ID=att.M_Attribute_ID
-                    WHERE patr.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND patr.UPC='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.M_Attribute_ID";
+                    INNER JOIN VAM_ProductFeature att ON ats.VAM_ProductFeature_ID=att.VAM_ProductFeature_ID
+                    WHERE patr.AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND patr.UPC='" + attrcode + "' AND ast.M_AttributeSet_ID = " + _masi.GetM_AttributeSet_ID() + " Order By ats.VAM_ProductFeature_ID";
                 }
                 DataSet ds = null;
                 try
@@ -478,11 +478,11 @@ namespace VIS.Models
                             {
                                 if (Util.GetValueOfString(ds.Tables[0].Rows[i]["AttributeValueType"]) == "L")
                                 {
-                                    attrValues[Util.GetValueOfString(ds.Tables[0].Rows[i]["M_Attribute_ID"])] = (Util.GetValueOfString(ds.Tables[0].Rows[i]["M_AttributeValue_ID"]));
+                                    attrValues[Util.GetValueOfString(ds.Tables[0].Rows[i]["VAM_ProductFeature_ID"])] = (Util.GetValueOfString(ds.Tables[0].Rows[i]["M_AttributeValue_ID"]));
                                 }
                                 else
                                 {
-                                    attrValues[Util.GetValueOfString(ds.Tables[0].Rows[i]["M_Attribute_ID"])] = (Util.GetValueOfString(ds.Tables[0].Rows[i]["Value"]));
+                                    attrValues[Util.GetValueOfString(ds.Tables[0].Rows[i]["VAM_ProductFeature_ID"])] = (Util.GetValueOfString(ds.Tables[0].Rows[i]["Value"]));
                                 }
                             }
                             ds.Dispose();
@@ -530,7 +530,7 @@ namespace VIS.Models
 
             StringBuilder sql = new StringBuilder();
             MAttributeSet aset = null;
-            MAttribute[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             string attrsetQry = "";
             int attributeSet = 0;
             MAttributeSetInstance _masi = MAttributeSetInstance.Get(ctx, _M_AttributeSetInstance_ID, _M_Product_ID);
@@ -666,7 +666,7 @@ namespace VIS.Models
         /// <param name="attribute"></param>
         /// <param name="product"></param>
         /// <param name="readOnly"></param>
-        private string AddAttributeLine(MAttribute attribute, int M_AttributeSetInstance_ID, bool product, bool readOnly, int windowNo, AttributesObjects obj, int count)
+        private string AddAttributeLine(MVAMProductFeature attribute, int M_AttributeSetInstance_ID, bool product, bool readOnly, int windowNo, AttributesObjects obj, int count)
         {
             log.Fine(attribute + ", Product=" + product + ", R/O=" + readOnly);
             //Column 1
@@ -688,7 +688,7 @@ namespace VIS.Models
 
             MAttributeInstance instance = attribute.GetMAttributeInstance(M_AttributeSetInstance_ID);
 
-            if (MAttribute.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
+            if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
             {
                 MAttributeValue[] values = attribute.GetMAttributeValues();
                 //Column 2
@@ -752,7 +752,7 @@ namespace VIS.Models
                     log.Fine("Attribute=" + attribute.GetName() + " #" + values.Length + " no instance");
                 }
             }
-            else if (MAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
+            else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
             {
                 string value = null;
                 if (instance != null)
@@ -900,7 +900,7 @@ namespace VIS.Models
                 }
 
                 MAttributeSet aset = null;
-                MAttribute[] attributes = null;
+                MVAMProductFeature[] attributes = null;
                 String mandatory = "";
 
                 MProduct product = MProduct.Get(ctx, mProductId);
@@ -1038,10 +1038,10 @@ namespace VIS.Models
                 //}
                 //sql.Append(" ORDER BY ats.M_AttributeSetInstance_ID");
 
-                Dictionary<MAttribute, object> lst = new Dictionary<MAttribute, object>();
+                Dictionary<MVAMProductFeature, object> lst = new Dictionary<MVAMProductFeature, object>();
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MAttribute.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         object editor = editors[i];
                         MAttributeValue value = null;
@@ -1058,7 +1058,7 @@ namespace VIS.Models
                         lst[attributes[i]] = value;
                         //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
                     }
-                    else if (MAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         object editor = editors[i].Name;
                         string value = Util.GetValueOfString(editor);
@@ -1091,10 +1091,10 @@ namespace VIS.Models
                 if (attributes.Length > 0)
                 {
                     qry.Append(@"SELECT M_AttributeSetInstance_ID FROM (SELECT ats.M_AttributeSetInstance_ID, av.M_AttributeValue_ID,ats.M_AttributeSet_ID,au.Value,att.AttributeValueType FROM 
-                        M_AttributeSetInstance ats INNER JOIN M_AttributeInstance au ON ats.M_AttributeSetInstance_ID=au.M_AttributeSetInstance_ID LEFT JOIN M_Attribute att 
-                        ON au.M_Attribute_ID=att.M_Attribute_ID LEFT JOIN M_AttributeValue av ON au.M_AttributeValue_ID=av.M_AttributeValue_ID WHERE ats.M_AttributeSet_ID = "
+                        M_AttributeSetInstance ats INNER JOIN M_AttributeInstance au ON ats.M_AttributeSetInstance_ID=au.M_AttributeSetInstance_ID LEFT JOIN VAM_ProductFeature att 
+                        ON au.VAM_ProductFeature_ID=att.VAM_ProductFeature_ID LEFT JOIN M_AttributeValue av ON au.M_AttributeValue_ID=av.M_AttributeValue_ID WHERE ats.M_AttributeSet_ID = "
                         + aset.GetM_AttributeSet_ID());     // + " AND ");
-                    // Change done by mohit to consider M_Attribute_ID also with value in querry to restrict the duplicacy and updation of existing attribute set instance ids- asked by Mukesh sir.- 8 April 2019.
+                    // Change done by mohit to consider VAM_ProductFeature_ID also with value in querry to restrict the duplicacy and updation of existing attribute set instance ids- asked by Mukesh sir.- 8 April 2019.
                     bool hasAttr = false;
                     for (int i = 0; i < attributes.Length; i++)
                     {
@@ -1110,7 +1110,7 @@ namespace VIS.Models
                                 qry.Append(" OR");
                             }
                             attrCount++;
-                            qry.Append("( au.Value = '" + Util.GetValueOfString(lst[attributes[i]]) + "' AND au.M_Attribute_ID=" + attributes[i].GetM_Attribute_ID() + " )");
+                            qry.Append("( au.Value = '" + Util.GetValueOfString(lst[attributes[i]]) + "' AND au.VAM_ProductFeature_ID=" + attributes[i].GetVAM_ProductFeature_ID() + " )");
                             hasAttr = true;
                         }
                     }
@@ -1147,7 +1147,7 @@ namespace VIS.Models
 
                 if (attributes.Length > 0 && attrCount > 0)
                 {
-                    qry.Append(",au.M_Attribute_ID) t GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount);
+                    qry.Append(",au.VAM_ProductFeature_ID) t GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount);
                 }
 
                 ds = DB.ExecuteDataset(qry.ToString(), null, trx);
@@ -1258,7 +1258,7 @@ namespace VIS.Models
 
                     for (int i = 0; i < attributes.Length; i++)
                     {
-                        if (MAttribute.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                        if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                         {
                             MAttributeValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MAttributeValue : null;
                             if (value == null)
@@ -1267,7 +1267,7 @@ namespace VIS.Models
                             }
                             attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
                         }
-                        else if (MAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                        else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                         {
                             if (Convert.ToDecimal(lst[attributes[i]]) == 0)
                             {
@@ -1435,7 +1435,7 @@ namespace VIS.Models
             }
 
             MAttributeSet aset = null;
-            MAttribute[] attributes = null;
+            MVAMProductFeature[] attributes = null;
             String mandatory = "";
             var _masi = MAttributeSetInstance.Get(ctx, 0, mProductId);
             MProduct product = MProduct.Get(ctx, mProductId);
@@ -1563,10 +1563,10 @@ namespace VIS.Models
             }
             sql.Append(" ORDER BY ats.m_attributesetinstance_id");
 
-            Dictionary<MAttribute, object> lst = new Dictionary<MAttribute, object>();
+            Dictionary<MVAMProductFeature, object> lst = new Dictionary<MVAMProductFeature, object>();
             for (int i = 0; i < attributes.Length; i++)
             {
-                if (MAttribute.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i];
                     MAttributeValue value = null;
@@ -1583,7 +1583,7 @@ namespace VIS.Models
                     lst[attributes[i]] = value;
                     //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
                 }
-                else if (MAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i].Name;
                     decimal value = Convert.ToDecimal(editor);
@@ -1612,8 +1612,8 @@ namespace VIS.Models
             if (attributes.Length > 0)
             {
                 qry = @"SELECT M_AttributeSetInstance_ID FROM (SELECT ats.M_AttributeSetInstance_ID, av.M_AttributeValue_ID,ats.M_AttributeSet_ID,au.Value,att.AttributeValueType FROM M_AttributeSetInstance ats 
-                        INNER JOIN M_AttributeInstance au ON ats.M_AttributeSetInstance_ID=au.M_AttributeSetInstance_ID LEFT JOIN M_Attribute att 
-                        ON au.M_Attribute_ID=att.M_Attribute_ID LEFT JOIN M_AttributeValue av ON au.M_AttributeValue_ID=av.M_AttributeValue_ID WHERE ats.M_AttributeSet_ID = " + aset.GetM_AttributeSet_ID() + " AND (";
+                        INNER JOIN M_AttributeInstance au ON ats.M_AttributeSetInstance_ID=au.M_AttributeSetInstance_ID LEFT JOIN VAM_ProductFeature att 
+                        ON au.VAM_ProductFeature_ID=att.VAM_ProductFeature_ID LEFT JOIN M_AttributeValue av ON au.M_AttributeValue_ID=av.M_AttributeValue_ID WHERE ats.M_AttributeSet_ID = " + aset.GetM_AttributeSet_ID() + " AND (";
                 bool hasAttr = false;
                 for (int i = 0; i < attributes.Length; i++)
                 {
@@ -1641,7 +1641,7 @@ namespace VIS.Models
             }
             if (attributes.Length > 0)
             {
-                qry += ",au.M_Attribute_ID) GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount;
+                qry += ",au.VAM_ProductFeature_ID) GROUP BY M_AttributeSetInstance_ID HAVING Count(M_AttributeSetInstance_ID) = " + attrCount;
             }
 
             ds = DB.ExecuteDataset(qry, null, null);
@@ -1784,7 +1784,7 @@ namespace VIS.Models
 
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MAttribute.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         MAttributeValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MAttributeValue : null;
 
@@ -1795,7 +1795,7 @@ namespace VIS.Models
                         //}
                         attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
                     }
-                    else if (MAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         if (Convert.ToDecimal(lst[attributes[i]]) == 0)
                         {

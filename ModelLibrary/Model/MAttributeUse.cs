@@ -69,7 +69,7 @@ namespace VAdvantage.Model
                 + " AND IsInstanceAttribute='N'"
                 + " AND (IsSerNo='Y' OR IsLot='Y' OR IsGuaranteeDate='Y'"
                     + " OR EXISTS (SELECT * FROM M_AttributeUse mau"
-                        + " INNER JOIN M_Attribute ma ON (mau.M_Attribute_ID=ma.M_Attribute_ID) "
+                        + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
                         + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
                         + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                         + " AND ma.IsInstanceAttribute='Y')"
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
                 + " AND IsInstanceAttribute='Y'"
                 + "	AND IsSerNo='N' AND IsLot='N' AND IsGuaranteeDate='N'"
                 + " AND NOT EXISTS (SELECT * FROM M_AttributeUse mau"
-                    + " INNER JOIN M_Attribute ma ON (mau.M_Attribute_ID=ma.M_Attribute_ID) "
+                    + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
                     + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
                     + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                     + " AND ma.IsInstanceAttribute='Y')";

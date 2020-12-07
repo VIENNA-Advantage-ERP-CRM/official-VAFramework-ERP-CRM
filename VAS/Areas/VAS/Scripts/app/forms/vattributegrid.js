@@ -25,8 +25,8 @@
         var _M_Warehouse_ID = 0;
         var _attributes = [];
 
-        var lblA1 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_Attribute_ID"), "M_Attribute_ID", false, true);
-        var lblA2 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_Attribute_ID"), "M_Attribute_ID", false, true);
+        var lblA1 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_ProductFeature_ID"), "VAM_ProductFeature_ID", false, true);
+        var lblA2 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_ProductFeature_ID"), "VAM_ProductFeature_ID", false, true);
         var lblPriceList = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_PriceList_ID"), "M_PriceList_ID", false, true);
         var lblWareHouse = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_Warehouse_ID"), "M_Warehouse_ID", false, true);
         var lblMode = new VIS.Controls.VLabel(VIS.Msg.getMsg("Mode", false, false), "Mode", false, true);
@@ -275,11 +275,11 @@
             var attributeValueyId = 0;
 
             if (xValue) {
-                attributeId = xValue.GetM_Attribute_ID;
+                attributeId = xValue.GetVAM_ProductFeature_ID;
                 attributeValueId = xValue.GetM_AttributeValue_ID;
             }
             if (yValue) {
-                attributeyId = yValue.GetM_Attribute_ID;
+                attributeyId = yValue.GetVAM_ProductFeature_ID;
                 attributeValueyId = yValue.GetM_AttributeValue_ID;
             }
 
