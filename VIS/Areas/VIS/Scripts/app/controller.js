@@ -4241,6 +4241,8 @@
                     gridTableIn.MaintainVersions = true;
                     gridTableIn.ImmediateSave = true;
                     gridTableIn.ValidFrom = new Date().toISOString();
+                    self.showVersions(self, Record_ID, gridTableIn, rowDataNew, true);
+                    return;
                 }
                 var out = self.dataSaveDB(gridTableIn, rowDataNew);
                 // check if there is workflow linked on version table
@@ -4267,14 +4269,14 @@
                 if (res.result) {
                     VIS.ADialog.confirm("FoundVersions", true, "", "Confirm", function (result) {
                         if (result) {
-                            self.showVersions(self, Record_ID, gridTableIn, rowDataNew);
+                            self.showVersions(self, Record_ID, gridTableIn, rowDataNew, false);
                         }
                     });
                 }
                 else {
                     // in case of update display UI to user, 
                     // whether user want to save immediately or for future
-                    self.showVersions(self, Record_ID, gridTableIn, rowDataNew);
+                    self.showVersions(self, Record_ID, gridTableIn, rowDataNew, false);
                 }
             }
         }
@@ -4284,10 +4286,10 @@
         }
     };
 
-    GridTable.prototype.showVersions = function (slf, rec_ID, gTblIn, rdNew) {
+    GridTable.prototype.showVersions = function (slf, rec_ID, gTblIn, rdNew, newRecord) {
         // in case of update display UI to user, 
         // whether user want to save immediately or for future
-        var msVer = new VIS.MasterDataVersion(slf.gTable._tableName, slf.gridFields, rec_ID, gTblIn.WhereClause, slf.IsMaintainVersions, function (immediate, valFrom, verRecID) {
+        var msVer = new VIS.MasterDataVersion(slf.gTable._tableName, slf.gridFields, rec_ID, gTblIn.WhereClause, slf.IsMaintainVersions, newRecord, function (immediate, valFrom, verRecID) {
             gTblIn.MaintainVersions = true;
             gTblIn.ImmediateSave = immediate;
             gTblIn.ValidFrom = new Date(valFrom).toISOString();
@@ -4309,6 +4311,8 @@
                     // if saved for future then display Message and refresh UI
                     else if (out.Status == "F")
                         VIS.ADialog.info("SavedForFuture");
+                    else if (out.Status == "B")
+                        VIS.ADialog.info("SavedForBackDate");
                 }
             }
             return out.Status;
