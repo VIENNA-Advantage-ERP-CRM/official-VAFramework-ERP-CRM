@@ -78,7 +78,7 @@ namespace VIS.Helpers
                     outt.AskUser = dr["AskUserBGProcess"].Equals("Y");
                     outt.IsCrystal = dr["iSCrystalReport"].Equals("Y");
                     var paraCount = Util.GetValueOfInt(dr["para"]);
-                    outt.ImageUrl =Util.GetValueOfString( dr["ImageUrl"]);
+                    outt.ImageUrl = Util.GetValueOfString(dr["ImageUrl"]);
                     if (outt.ImageUrl != "" && outt.ImageUrl.Contains("/"))
                     {
                         outt.ImageUrl = outt.ImageUrl.Substring(outt.ImageUrl.LastIndexOf("/") + 1);
@@ -211,6 +211,10 @@ namespace VIS.Helpers
         internal static ProcessReportInfo ExecuteProcess(Ctx ctx, Dictionary<string, string> processInfo, ProcessPara[] pList)
         {
             ProcessInfo pi = new ProcessInfo().FromList(processInfo);
+
+            //Saved Action Log
+            if (pi.GetIsReport())
+                VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(), pi.GetOriginName(), pi.GetTable_ID(), pi.GetRecord_ID(), pi.GetAD_Process_ID(), pi.GetTitle(), pi.GetFileType(), "", "");
             pi.SetAD_User_ID(ctx.GetAD_User_ID());
             pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
             if (pi.GetAD_PInstance_ID() == 0)
@@ -275,7 +279,7 @@ namespace VIS.Helpers
                         }
                     }
 
-                    else if ((DisplayType.IsID(pp.DisplayType) || DisplayType.Integer == pp.DisplayType))
+                    else if ((DisplayType.IsID(pp.DisplayType) || DisplayType.Integer == pp.DisplayType || DisplayType.MultiKey == pp.DisplayType))
                     {
 
                         if (pp.Result != null)
@@ -422,9 +426,11 @@ namespace VIS.Helpers
 
             System.Threading.Thread.CurrentThread.CurrentCulture = original;
             System.Threading.Thread.CurrentThread.CurrentUICulture = original;
-           VAdvantage.Classes.CleanUp.Get().Start();
+            VAdvantage.Classes.CleanUp.Get().Start();
             return rep;
         }
+
+
         // vinay bhatt window id
 
         /// <summary>
@@ -536,6 +542,13 @@ namespace VIS.Helpers
             Query _query = null;
             int Record_ID = 0;
             object AD_tab_ID = 0;
+
+            //Saved Action Log
+            VAdvantage.Common.Common.SaveActionLog(_ctx, Util.GetValueOfString(nProcessInfo["ActionOrigin"]), Util.GetValueOfString(nProcessInfo["OriginName"]),
+                Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]), Util.GetValueOfInt(nProcessInfo["Process_ID"]),
+                MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(), fileType, "", "");
+
+
             // _ctx.SetContext("#TimeZoneName", "India Standard Time");
             if (queryInfo.Count > 0 || AD_PInstance_ID > 0)
             {
@@ -732,10 +745,13 @@ namespace VIS.Helpers
         /// <param name="recIDs"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType)
+        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType, string actionOrigin, string originName)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
+            //Saved Action Log
+            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, AD_Table_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType, "", "");
+
             try
             {
                 instance = new MPInstance(ctx, AD_Process_ID, Record_ID);

@@ -103,8 +103,8 @@ namespace VAdvantage.Model
             //SetIsReturnTrx(dt.IsReturnTrx());
             //SetIsSOTrx(dt.IsSOTrx());
 
-            	//Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            //Std Period open?
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;

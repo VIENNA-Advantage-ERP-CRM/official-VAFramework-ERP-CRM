@@ -119,8 +119,8 @@
         var list = null;
         var tree_ID = treeID;
         var treeNode_ID = treeNodeID;
-
-
+        var windowID = curTab.getAD_Window_ID();
+        var AD_Table_ID = AD_Table_ID;
         var rv = new VIS.ReportViewer(windowNo, curTab);
 
         if (treeNodeID > 0) {
@@ -203,7 +203,7 @@
             if (pp != null) id = pp.Key;
             else id = Ad_Table_ID;
 
-            var data = rv.getGenerateReportPara(queryInfo, query.getCode(0), (Ad_Table_ID > 0 && AD_Tab_ID > 0), treeNode_ID, tree_ID, IsSummary, 0, 1, "", id);
+            var data = rv.getGenerateReportPara(queryInfo, query.getCode(0), (Ad_Table_ID > 0 && AD_Tab_ID > 0), treeNode_ID, tree_ID, IsSummary, 0, 1, "", id, windowID);
 
 
             $.ajax({
@@ -245,7 +245,7 @@
 
                         // Archive Document automatically, if selected on Tenant
                         if (VIS.context.ctx["$AutoArchive"] == '1' || VIS.context.ctx["$AutoArchive"] == '2') {
-                            rv.archiveDocument(queryInfo, TableID, d.Report);                           
+                            rv.archiveDocument(queryInfo, TableID, d.Report);
                         }
                     }
                 }
@@ -302,19 +302,28 @@
         var divPaging, ulPaging, liFirstPage, liPrevPage, liCurrPage, liNextPage, liLastPage, cmbPage;
         var IsSummary = true;
         var pi = null;
+        var windowID = curTab.getAD_Window_ID();
 
-        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, ad_PInstance_ID, pageNO, fileType, ad_PrintFormat_ID) {
+        this.getGenerateReportPara = function (queryInfo, code, isCreateNew, nodeID, treeID, showSummary, ad_PInstance_ID, pageNO, fileType, ad_PrintFormat_ID, AD_Window_ID) {
 
             if (!pi) {
                 pi = new VIS.ProcessInfo("", 0, Ad_Table_ID, 0);
                 pi.setAD_User_ID(VIS.context.getAD_User_ID());
                 pi.setAD_Client_ID(VIS.context.getAD_Client_ID());
             }
-
+            pi.setTable_ID(Ad_Table_ID);
             pi.setAD_PInstance_ID(ad_PInstance_ID);
             pi.setPageNo(pageNO);
             pi.setFileType(fileType);
             pi.set_AD_PrintFormat_ID(ad_PrintFormat_ID);
+            pi.setAD_Window_ID(AD_Window_ID);
+            if (AD_Window_ID > 0) {
+                pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_WINDOW);
+            }
+            else {
+                pi.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_FORM);
+            }
+            pi.setOriginName(VIS.context.getWindowContext(windowNo, "WindowName"));
 
             var data = {
                 processInfo: pi.toJson(),
@@ -338,12 +347,16 @@
         }
 
         this.setAD_Table_ID = function (AD_Table_ID) {
-            Ad_Table_ID = Ad_Table_ID;
+            Ad_Table_ID = AD_Table_ID;
         };
 
         this.showSummary = function (isSummary) {
             IsSummary = isSummary;
         };
+
+        this.setAD_Window_ID = function (windowID) {
+            windowID = windowID;
+        }
 
         this.setReportBytes = function (bytes) {
             reportBytes = bytes;
@@ -400,30 +413,30 @@
             if (isNaN(currpercent)) currpercent = 0;
             if (currpercent <= percent) {
                 $("#reportcreate").removeClass("hide")
-                .find(".progress-bar")
-                .attr("aria-valuenow", percent)
-                .css({
-                    width: percent + "%"
-                }).text(percent.toFixed(0) + "%");
+                    .find(".progress-bar")
+                    .attr("aria-valuenow", percent)
+                    .css({
+                        width: percent + "%"
+                    }).text(percent.toFixed(0) + "%");
             }
         }
         function resetCreateMessage() {
             $("#reportcreateresult")
-            .removeClass()
-            .text("");
+                .removeClass()
+                .text("");
         }
         function showCreateMessage(text) {
             resetCreateMessage();
             $("#reportcreateresult")
-            .addClass("alert alert-success")
-            .text(text);
+                .addClass("alert alert-success")
+                .text(text);
             $("#forreportdownload").removeClass('hide');
         }
         function showCreateError(text) {
             resetCreateMessage();
             $("#reportcreateresult")
-            .addClass("alert alert-danger")
-            .text(text);
+                .addClass("alert alert-danger")
+                .text(text);
         }
 
         // bulk download page no variable
@@ -520,25 +533,25 @@
             //    actionContainer = $('<div class="vis-report-top-icons">');
             //    ulAction = $('<ul class="vis-reporticonsul">');
             //    actionContainer.append(ulAction);
-                //if (showPaging == true) {
+            //if (showPaging == true) {
 
 
-                //    $cmbPages = $('<select class="vis-selectcsview-page">');
-                //    var totalPages = parseInt(totalRecords / PAGE_SIZE) + parseFloat((totalRecords % PAGE_SIZE) > 0 ? 1 : 0);
+            //    $cmbPages = $('<select class="vis-selectcsview-page">');
+            //    var totalPages = parseInt(totalRecords / PAGE_SIZE) + parseFloat((totalRecords % PAGE_SIZE) > 0 ? 1 : 0);
 
-                //    for (var d = 1; d < totalPages + 1; d++) {
-                //        $cmbPages.append($('<option value=' + d + '>' + d + '</option>'));
-                //    }
-                //    ulAction.append($('<li>').append($cmbPages));
-                //    btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdf-ico'></a></li>");
-                //    ulAction.append(btnsavepdfall);
-                //    btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
-                //    ulAction.append(btnSaveCsvAll);
+            //    for (var d = 1; d < totalPages + 1; d++) {
+            //        $cmbPages.append($('<option value=' + d + '>' + d + '</option>'));
+            //    }
+            //    ulAction.append($('<li>').append($cmbPages));
+            //    btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdf-ico'></a></li>");
+            //    ulAction.append(btnsavepdfall);
+            //    btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
+            //    ulAction.append(btnSaveCsvAll);
 
 
 
-                //}
-                //if (isPrint != true) {
+            //}
+            //if (isPrint != true) {
 
             //    btnPrint = $('<li><a title="' + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Print")) + '" class="vis vis-print"></a></li>');
             //    ulAction.append(btnPrint);
@@ -578,64 +591,64 @@
             //    $root.append(toolbar);
             //}
             //else {
-                toolbar = $("<div class='vis-report-header' style='padding: 0;'>").append($('<h3 class="vis-report-tittle">').append(VIS.Msg.getMsg("Report")));
-                btnClose = $('<a href="javascript:void(0)" class="vis-icon-menuclose vis vis-cross">');
-                actionContainer = $('<div class="vis-report-top-icons">');
-                ulAction = $('<ul class="vis-reporticonsul">');
-                actionContainer.append(ulAction);
+            toolbar = $("<div class='vis-report-header' style='padding: 0;'>").append($('<h3 class="vis-report-tittle">').append(VIS.Msg.getMsg("Report")));
+            btnClose = $('<a href="javascript:void(0)" class="vis-icon-menuclose vis vis-cross">');
+            actionContainer = $('<div class="vis-report-top-icons">');
+            ulAction = $('<ul class="vis-reporticonsul">');
+            actionContainer.append(ulAction);
 
-                btnRF = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("ReportFormat")) + "'  class='vis vis-format'></a></li>");
-                ulAction.append(btnRF);
-                btnSaveCsv = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveCSV")) + "' class='vis vis-save-csv'></a></li>");
-                ulAction.append(btnSaveCsv);
+            btnRF = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("ReportFormat")) + "'  class='vis vis-format'></a></li>");
+            ulAction.append(btnRF);
+            btnSaveCsv = $("<li><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveCSV")) + "' class='vis vis-save-csv'></a></li>");
+            ulAction.append(btnSaveCsv);
 
-                // bulk download icon csv
-                btnSaveAllCsv = $("<li style='display:none'><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllRecordCsv")) + "' class='vis vis-csv-all'></a></li>");
-                ulAction.append(btnSaveAllCsv);
+            // bulk download icon csv
+            btnSaveAllCsv = $("<li style='display:none'><a  title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllRecordCsv")) + "' class='vis vis-csv-all'></a></li>");
+            ulAction.append(btnSaveAllCsv);
 
-                btnSavePdf = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SavePdf")) + "' class='vis vis-save-pdf'></a></li>");
-                ulAction.append(btnSavePdf);
+            btnSavePdf = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SavePdf")) + "' class='vis vis-save-pdf'></a></li>");
+            ulAction.append(btnSavePdf);
 
-                // bulk download icon pdf
-                btnSaveAllPdf = $("<li style='display:none'><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllPagePdf")) + "' class='vis vis-pdf-all'></a></li>");
-                ulAction.append(btnSaveAllPdf);
+            // bulk download icon pdf
+            btnSaveAllPdf = $("<li style='display:none'><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("SaveAllPagePdf")) + "' class='vis vis-pdf-all'></a></li>");
+            ulAction.append(btnSaveAllPdf);
 
-                btnArchive = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Archive")) + "' class='vis vis-archive'></a></li>");
-                ulAction.append(btnArchive);
-                btnRequery = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Requery")) + "' class='vis vis-refresh'></a></li>");
-                ulAction.append(btnRequery);
-                btnSearch = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Search")) + "' class='vis vis-find'></a></li>");
-                ulAction.append(btnSearch);
-                btnCustomize = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("PrintCustomize")) + "' class='vis vis-customize'></a></li>");
-                ulAction.append(btnCustomize);
-                btnPrint = $('<li><a title="' + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Print")) + '" class="vis vis-print"></a></li>');
-                ulAction.append(btnPrint);
-                //}
-                //if (showPaging == true) {
-                //    btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
-                //    ulAction.append(btnSaveCsvAll);
+            btnArchive = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Archive")) + "' class='vis vis-archive'></a></li>");
+            ulAction.append(btnArchive);
+            btnRequery = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Requery")) + "' class='vis vis-refresh'></a></li>");
+            ulAction.append(btnRequery);
+            btnSearch = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Search")) + "' class='vis vis-find'></a></li>");
+            ulAction.append(btnSearch);
+            btnCustomize = $("<li><a title='" + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("PrintCustomize")) + "' class='vis vis-customize'></a></li>");
+            ulAction.append(btnCustomize);
+            btnPrint = $('<li><a title="' + VIS.Utility.Util.cleanMnemonic(VIS.Msg.getMsg("Print")) + '" class="vis vis-print"></a></li>');
+            ulAction.append(btnPrint);
+            //}
+            //if (showPaging == true) {
+            //    btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "'  style='cursor:pointer;'class='vis-report-icon vis-savecsvAll-ico'></a></li>");
+            //    ulAction.append(btnSaveCsvAll);
 
-                //    btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdf-ico'></a></li>");
-                //    ulAction.append(btnsavepdfall);
+            //    btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' style='cursor:pointer;' class='vis-report-icon vis-savepdf-ico'></a></li>");
+            //    ulAction.append(btnsavepdfall);
 
-                //    $cmbPages = $('<select class="vis-selectcsview-page">');
-                //    var totalPages = parseInt(totalRecords / PAGE_SIZE) + parseFloat((totalRecords % PAGE_SIZE) > 0 ? 1 : 0);
+            //    $cmbPages = $('<select class="vis-selectcsview-page">');
+            //    var totalPages = parseInt(totalRecords / PAGE_SIZE) + parseFloat((totalRecords % PAGE_SIZE) > 0 ? 1 : 0);
 
-                //    for (var d = 1; d < totalPages + 1; d++) {
-                //        $cmbPages.append($('<option value=' + d + '>' + d + '</option>'));
-                //    }
-                //    ulAction.append($('<li>').append($cmbPages))
-                //}
+            //    for (var d = 1; d < totalPages + 1; d++) {
+            //        $cmbPages.append($('<option value=' + d + '>' + d + '</option>'));
+            //    }
+            //    ulAction.append($('<li>').append($cmbPages))
+            //}
 
-                divPaging = $("<div class='vis-report-top-icons'>");
-                createPageSettings();
-                divPaging.append(ulPaging);
+            divPaging = $("<div class='vis-report-top-icons'>");
+            createPageSettings();
+            divPaging.append(ulPaging);
 
 
-                toolbar.append(divPaging);
-                toolbar.append(actionContainer);
-                toolbar.append(btnClose);
-                $root.append(toolbar);
+            toolbar.append(divPaging);
+            toolbar.append(actionContainer);
+            toolbar.append(btnClose);
+            $root.append(toolbar);
             //}
             bindEvents();
         };
@@ -742,7 +755,7 @@
                     isCreateNew = true;
                 }
 
-                var data = self.getGenerateReportPara(queryInfo, code, isCreateNew, node_ID, tree_ID, IsSummary, 0, cmbPage.val(), "", id);
+                var data = self.getGenerateReportPara(queryInfo, code, isCreateNew, node_ID, tree_ID, IsSummary, 0, cmbPage.val(), "", id, windowID);
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
@@ -927,7 +940,7 @@
             //}
             setBusy(true);
 
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, "", AD_PrintFormat_ID);
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, "", AD_PrintFormat_ID, windowID);
 
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
@@ -973,7 +986,7 @@
             //var id = null;
             //if (processInfo != null) id = processInfo.Key;
             //else id = Ad_Table_ID;
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_PDF, AD_PrintFormat_ID);
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_PDF, AD_PrintFormat_ID, windowID);
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                 dataType: "json",
@@ -1050,7 +1063,7 @@
             //var id = null;
             //if (processInfo != null) id = processInfo.Key;
             //else id = Ad_Table_ID;
-            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_CSV, AD_PrintFormat_ID);
+            var data = self.getGenerateReportPara(queryInfo, code, false, node_ID, tree_ID, IsSummary, 0, pNo, VIS.ProcessCtl.prototype.REPORT_TYPE_CSV, AD_PrintFormat_ID, windowID);
             $.ajax({
                 url: VIS.Application.contextUrl + "JsonData/GenerateReport/",
                 dataType: "json",
@@ -1302,6 +1315,7 @@
 
     function APrint(AD_Process_ID, table_ID, record_ID, WindowNo, recIds, curTab, isShowRTF) {
         //var overla = null;
+        var windowID = curTab.getAD_Window_ID();
         $menu.off("click");
         $menu.on("click", "LI", function (e) {
             var filetype = $(e.target).data("val");
@@ -1448,7 +1462,10 @@
         };
 
         function process(csv, callback, filetype) {
-
+            var actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_FORM;
+            if (windowID > 0) {
+                actionOrigin = VIS.ProcessCtl.prototype.ORIGIN_WINDOW;
+            }
             if (!recIds || recIds.length == 0) {
                 $.ajax({
                     url: VIS.Application.contextUrl + "JsonData/GeneratePrint/",
@@ -1459,7 +1476,9 @@
                         AD_Table_ID: table_ID,
                         Record_ID: record_ID,
                         WindowNo: WindowNo,
-                        filetype: filetype
+                        filetype: filetype,
+                        actionOrigin: actionOrigin,
+                        originName: VIS.context.getWindowContext(WindowNo, "WindowName")
 
                     },
                     success: function (data) {
@@ -1546,7 +1565,9 @@
                         AD_Table_ID: table_ID,
                         RecIDs: recIds,
                         WindowNo: WindowNo,
-                        filetype: filetype
+                        filetype: filetype,
+                        actionOrigin: actionOrigin,
+                        originName: VIS.context.getWindowContext(WindowNo, "WindowName")
 
                     },
                     success: function (data) {
@@ -1594,7 +1615,7 @@
 
     function ReportViewerContainer(reportInfo) {
         var $root = $('<div class="vis-reportrootdiv"> ');
-        var bsyDiv = $("<div class='vis-apanel-busy bsyCrsyVwr' style='width:98%;height:98%;position:absolute'>");
+        var bsyDiv = $('<div class="vis-busyindicatorouterwrap bsyCrsyVwr"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         this.getRoot = function () {
             return $root;
         };

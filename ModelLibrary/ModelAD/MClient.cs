@@ -308,7 +308,7 @@ namespace VAdvantage.Model
                 sql = "SELECT Value, Name FROM AD_Ref_List WHERE AD_Reference_ID=120 AND IsActive='Y'";
             else
                 sql = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                    + "WHERE l.AD_Reference_ID=120 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID AND l.IsActive='Y'";
+                    + "WHERE l.AD_Reference_ID=120 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID AND l.IsActive='Y' AND t.AD_Language='" + language + "'";
 
             //  Tree IDs
             int AD_Tree_Org_ID = 0, AD_Tree_BPartner_ID = 0, AD_Tree_Project_ID = 0,
@@ -318,7 +318,7 @@ namespace VAdvantage.Model
             bool success = false;
             try
             {
-                //IDataReader dr = BaseLibrary.DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                //IDataReader dr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 DataSet dr = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 MTree tree = null;
                 for (int i = 0; i <= dr.Tables[0].Rows.Count - 1; i++)

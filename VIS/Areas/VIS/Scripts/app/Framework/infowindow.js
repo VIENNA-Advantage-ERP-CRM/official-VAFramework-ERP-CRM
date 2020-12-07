@@ -32,13 +32,13 @@
             inforoot.css("width", "100%");
             inforoot.css("height", "100%");
             inforoot.css("position", "relative");
-            
+
             searchTab = $("<div class='vis-info-l-s-wrap vis-leftsidebarouterwrap'>");
-                searchSec = $("<div>");
-                searchTab.append(searchSec);
-                datasec = $("<div class='vis-info-datasec'>");
-                btnsec = $("<div class='vis-info-btnsec'>");
-            
+            searchSec = $("<div>");
+            searchTab.append(searchSec);
+            datasec = $("<div class='vis-info-datasec'>");
+            btnsec = $("<div class='vis-info-btnsec'>");
+
             subroot.append(searchTab);
             subroot.append(datasec);
             subroot.append(btnsec);
@@ -63,8 +63,8 @@
             //    btnOK = $("<button class='VIS_Pref_btn-2' style='margin-top: 5px;margin-bottom: -10px;'>").append(Oktxt);
             //}
             //else {
-                btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
-                btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
+            btnCancel = $("<button class='VIS_Pref_btn-2'>").append(canceltxt);
+            btnOK = $("<button class='VIS_Pref_btn-2'>").append(Oktxt);
             //}
 
             var divbtnLeft = $("<div class='vis-info-btnleft'>");
@@ -81,9 +81,9 @@
             //    divbtnRight.append(btnRequery);
             //}
             //else {
-                divbtnRight.append(btnCancel);
-                divbtnRight.append(btnOK);
-                divbtnLeft.append(btnRequery);
+            divbtnRight.append(btnCancel);
+            divbtnRight.append(btnOK);
+            divbtnLeft.append(btnRequery);
             //}
 
             btnsec.append(divbtnLeft);
@@ -149,7 +149,7 @@
                     displayData(true, cmbPage.val());
                 });
             };
-            
+
 
         }
 
@@ -191,7 +191,7 @@
                         alert(VIS.Msg.getMsg('ERRORGettingSchema'));
                         return;
                     }
-                    
+
                     displaySchema(InfoObj);
                 }
             });
@@ -228,7 +228,7 @@
                     var td = $("<td class='vis-gc-vpanel-table-td1'>");
                     var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
                     var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
-                    var Leftformfieldbtnwrap = $('<div class="input-group-append">');                    
+                    var Leftformfieldbtnwrap = $('<div class="input-group-append">');
 
                     tr = $("<tr>");
                     tableSArea.append(tr);
@@ -241,11 +241,11 @@
                     displayType = schema[item].AD_Reference_ID;
                     ctrl = getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
                     srchCtrl.Ctrl = ctrl;
-                    
+
                     // check if there is some value needed to be set on this control.- Added by Mohit- 13 Feb 2019
                     if (schema[item].SetValue != null) {
                         var retValue = false;
-                          // If there is some condition given, then validate the condition                      
+                        // If there is some condition given, then validate the condition                      
                         if (schema[item].Condition != null) {
                             var checkAll = [];
                             var logical = [];
@@ -279,7 +279,7 @@
                                 }
                             }
                         }
-                            // if no condition, by default true.
+                        // if no condition, by default true.
                         else {
                             retValue = true;
                         }
@@ -314,7 +314,7 @@
 
                     }
 
-                    
+
                     srchCtrl.AD_Reference_ID = schema[item].AD_Reference_ID;
                     srchCtrl.ColumnName = schema[item].SelectClause;
                     if (srchCtrl.ColumnName.toUpperCase().indexOf(" AS ") > -1) {
@@ -331,9 +331,9 @@
                     }
 
                     var tdctrl = $("<td>");
-                    
 
-                    
+
+
 
                     //tr.append(tdctrl);
                     var count = ctrl.getBtnCount();
@@ -343,19 +343,19 @@
                             //div.css('margin-top', '5px');
                         }
 
-                            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                            var ctrlBtn = ctrl.getBtn(0);
-                            if (ctrlBtn != null) {
-                                Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                ctrl.getControl().attr('data-hasbtn', ' ');
-                            }
-                            ctrlBtn = ctrl.getBtn(1);
-                            if (ctrlBtn != null) {
-                                Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                ctrl.getControl().attr('data-hasbtn', ' ');
-                            }
-                            count = -1;
-                            ctrl = null;
+                        Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                        var ctrlBtn = ctrl.getBtn(0);
+                        if (ctrlBtn != null) {
+                            Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                            ctrl.getControl().attr('data-hasbtn', ' ');
+                        }
+                        ctrlBtn = ctrl.getBtn(1);
+                        if (ctrlBtn != null) {
+                            Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                            ctrl.getControl().attr('data-hasbtn', ' ');
+                        }
+                        count = -1;
+                        ctrl = null;
                         //}
                         //tdctrl.append(div);
                         //td.append(div);
@@ -367,15 +367,15 @@
                         if (appendTopMargin) {
                             //div.css('margin-top', '5px');
                         }
-                       
-                            Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                            var ctrlBtn = ctrl.getBtn(0);
-                            if (ctrlBtn != null) {
-                                Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                ctrl.getControl().attr('data-hasbtn', ' ');
-                            }
-                            count = -1;
-                            ctrl = null;
+
+                        Leftformfieldctrlwrp.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
+                        var ctrlBtn = ctrl.getBtn(0);
+                        if (ctrlBtn != null) {
+                            Leftformfieldbtnwrap.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                            ctrl.getControl().attr('data-hasbtn', ' ');
+                        }
+                        count = -1;
+                        ctrl = null;
                         //}
                         //td.append(div);
                         //Leftformfieldwrp.append(Leftformfieldctrlwrp);
@@ -400,7 +400,7 @@
                         var Leftformfieldbtnwrapto = $('<div class="input-group-append">');
                         //tableSArea.append(tr);
 
-                        
+
                         tr = $("<tr>");
                         tableSArea.append(tr);
 
@@ -417,20 +417,20 @@
                             if (appendTopMargin) {
                                 ctrl.getControl();
                             }
-                            
+
                             Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
-                                var ctrlBtn = ctrl.getBtn(0);
-                                if (ctrlBtn != null) {
-                                    Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                    ctrl.getControl().attr('data-hasbtn', ' ');
-                                }
-                                ctrlBtn = ctrl.getBtn(1);
-                                if (ctrlBtn != null) {
-                                    Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
-                                    ctrl.getControl().attr('data-hasbtn', ' ');
-                                }
-                                count = -1;
-                                ctrl = null;
+                            var ctrlBtn = ctrl.getBtn(0);
+                            if (ctrlBtn != null) {
+                                Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                                ctrl.getControl().attr('data-hasbtn', ' ');
+                            }
+                            ctrlBtn = ctrl.getBtn(1);
+                            if (ctrlBtn != null) {
+                                Leftformfieldbtnwrapto.append(ctrlBtn.css("class", "vis-controls-txtbtn-table-td2"));
+                                ctrl.getControl().attr('data-hasbtn', ' ');
+                            }
+                            count = -1;
+                            ctrl = null;
                             //}
                             //td.append(div);
                             //Leftformfieldwrp.append(Leftformfieldctrlwrp);
@@ -448,7 +448,7 @@
                             else {
                                 ctrl.getControl();
                             }
-                            Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' ')); 
+                            Leftformfieldctrlwrpto.append(ctrl.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
 
                         }
                         Leftformfieldctrlwrpto.append((new VIS.Controls.VLabel(VIS.Msg.getMsg("To"), schema[item].ColumnName)).getControl());
@@ -479,7 +479,7 @@
                         appendTopMargin = true;
                     }
 
-                    
+
                 }
 
 
@@ -719,7 +719,8 @@
                             if (!((String(srchValue).lastIndexOf("●")) == (String(srchValue).length))) {
                                 srchValue = srchValue + "●";
                             }
-                            whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE '" + srchValue.toUpperCase() + "' ";
+                            srchValue = VIS.DB.to_string(srchValue);
+                            whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE " + srchValue.toUpperCase();
                         }
                         else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date) {
                             var fromValue = null;
@@ -914,35 +915,66 @@
                     if (displayType == VIS.DisplayType.Integer) {
                         oColumn.render = 'int';
                     }
-                    else if (displayType == VIS.DisplayType.Amount) {
-                        oColumn.render = 'number:2';
+                    //else if (displayType == VIS.DisplayType.Amount) {
+                    //    oColumn.render = 'number:2';
+                    //}
+                    // JID_1809  Amount showing as per the browser culture
+                    else {          //if (displayType == VIS.DisplayType.Amount) {
+                        oColumn.render = function (record, index, colIndex) {
+                            var val = VIS.Utility.Util.getValueOfDecimal(record[grdCols[colIndex].field]);
+                            return (val).toLocaleString();
+                        };
+                    }
+                    //else {
+                    //    oColumn.render = 'number:1';
+                    //}
+                }
+                //	YesNo
+                //else if (displayType == VIS.DisplayType.YesNo) {
+
+                //    oColumn.render = function (record, index, colIndex) {
+
+                //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
+
+                //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
+                //    }
+                //}
+
+                //Date /////////
+                // JID_1809 Date is showing as per browser culture
+                else if (VIS.DisplayType.IsDate(displayType)) {
+                    if (displayType == VIS.DisplayType.Date) {
+                        oColumn.render = function (record, index, colIndex) {
+                            var d = record[grdCols[colIndex].field];
+                            if (d) {
+                                var d = new Date(d);
+                                d = d.toLocaleDateString();
+                            }
+                            else d = "";
+                            return d;
+                        }
+                    }
+                    else if (displayType == VIS.DisplayType.DateTime) {
+                        oColumn.render = function (record, index, colIndex) {
+                            var d = record[grdCols[colIndex].field];
+                            if (d) {
+                                var d = new Date(d);
+                                d = d.toDateString();
+                            }
+                            else d = "";
+                            return d;
+                        }
                     }
                     else {
-                        oColumn.render = 'number:1';
-                    }
-                }
-                    //	YesNo
-                    //else if (displayType == VIS.DisplayType.YesNo) {
-
-                    //    oColumn.render = function (record, index, colIndex) {
-
-                    //        var chk = (record[grdCols[colIndex].field]) == 'True' ? "checked" : "";
-
-                    //        return '<input type="checkbox" ' + chk + ' disabled="disabled" >';
-                    //    }
-                    //}
-
-                    //Date /////////
-                else if (VIS.DisplayType.IsDate(displayType)) {
-                    oColumn.render = function (record, index, colIndex) {
-
-                        var d = record[grdCols[colIndex].field];
-                        if (d) {
-                            d = Globalize.format(new Date(d), 'd');
+                        oColumn.render = function (record, index, colIndex) {
+                            var d = record[grdCols[colIndex].field];
+                            if (d) {
+                                var d = new Date(d);
+                                d = d.toLocaleTimeString();
+                            }
+                            else d = "";
+                            return d;
                         }
-                        else d = "";
-                        return d;
-
                     }
                 }
 

@@ -13,7 +13,8 @@
         this.windowNo;
         var $self = this;
         var $root = $("<div style='height:100%;background-color:white;' class='vis-forms-container' >");
-        var $bsyDiv = $("<div class='vis-apanel-busy' style='height:100%;position:relative;z-index: 2'>");
+        //var $bsyDiv = $("<div class='vis-apanel-busy' style='height:100%;position:relative;z-index: 2'>");
+        var $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
         var ctx = VIS.Env.getCtx();
         var $mainpageContent = null;
         var $formWrap = null;

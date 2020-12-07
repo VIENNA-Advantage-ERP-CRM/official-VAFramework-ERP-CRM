@@ -498,7 +498,8 @@ namespace VAdvantage.Model
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
             //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_Project_Acct'");
-            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Project_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Project_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Project_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {

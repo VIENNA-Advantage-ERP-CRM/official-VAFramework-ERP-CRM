@@ -1,11 +1,11 @@
 ﻿/********************************************************
- * Project Name   : VAdvantage
- * Class Name     : RfQResponseCComplete
- * Purpose        : Check if Response is Complete
- * Class Used     : ProcessEngine.SvrProcess
- * Chronological    Development
- * Raghunandan     11-Aug.-2009
-  ******************************************************/
+* Project Name   : VAdvantage
+* Class Name     : RfQResponseCComplete
+* Purpose        : Check if Response is Complete
+* Class Used     : ProcessEngine.SvrProcess
+* Chronological    Development
+* Raghunandan     11-Aug.-2009
+ ******************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//using System.Windows.Forms;
+using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -23,7 +23,8 @@ using System.Data;
 using System.Data.SqlClient;
 using VAdvantage.Logging;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class RfQResponseCComplete : ProcessEngine.SvrProcess
     {
@@ -67,7 +68,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             //
             response.Save();
-            return "OK";
+            //Deekshant changes in return Completed Sucessfully
+            return Msg.GetMsg(GetCtx(), "Success", "");
         }
     }
 }

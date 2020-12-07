@@ -25,15 +25,15 @@ namespace VIS.Model
         {
             List<string> lstString = new List<string>();
             // add this to utiiy class
-           
 
-            Type type = (Type)cache.Get("VA037");
+
+            Type type = (Type)cache.Get("VA037Svc");
 
             if (type == null)
             {
-                Assembly assem = Assembly.Load("VA037");
-                type = assem.GetType("VA037.Classes.Common");
-                cache.Add("VA037", type);
+                Assembly assem = Assembly.Load("VA037Svc");
+                type = assem.GetType("VA037Svc.Classes.Common");
+                cache.Add("VA037Svc", type);
             }
 
             if (type != null)

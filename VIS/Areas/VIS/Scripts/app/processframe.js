@@ -101,8 +101,8 @@
 
             $divOuterMain.append($busyDiv);
             $cmbType = $('<select style="display:none;width:100%">');
-            $chkIsBG = $('<label  class="vis-ec-col-lblchkbox" style="display: none;"><input type="checkbox">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
-            //$lblIsBG = $('<label  class="vis-process-background-label">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+            $lblIsBG = $('<label  class="vis-ec-col-lblchkbox" style="display: none;"><input type="checkbox">' + VIS.Msg.translate(VIS.context, "IsBackgroundProcess") + '</label>');
+            $chkIsBG = $($lblIsBG.find('input')[0]);
             $text = $("<span class='vis-process-description-Span' style='height: 40px;'>").val("asassasasasasaasa");
             //ProcessDialog
             $contentGrid.append($text);
@@ -112,7 +112,7 @@
             var divrptType = $('<div style="display:inherit"></div>');
             self.parameterFixedArea.append($DivInputWrap);
             $DivInputWrap.append($DivInputCtrlWrap);
-            $DivInputCtrlWrap.append($chkIsBG).append($cmbType).append($lblRptTypeHeader)/*.append($lblIsBG)*/;
+            $DivInputCtrlWrap.append($lblIsBG).append($cmbType).append($lblRptTypeHeader)/*.append($lblIsBG)*/;
 
             $contentGrid.append(divrptType);
             $contentGrid.append($btnOK).append($btnClose);
@@ -291,7 +291,7 @@
             });
         };
 
-       
+
 
         this.showCloseIcon = function (show) {
             if (show) {
@@ -308,8 +308,8 @@
                 $btnOK.removeClass('');
                 $btnOK.addClass('vis-process-ok-btn VIS_Pref_btn-2');
                 $btnOK.show();
-                window.setTimeout(function () { $btnOK.focus();},100)
-                
+                window.setTimeout(function () { $btnOK.focus(); }, 100)
+
             }
             else
                 $btnOK.hide();
@@ -376,12 +376,12 @@
         this.showBackgroundProcess = function (value) {
             if (value) {
                 self.parameterFixedArea.addClass('vis-process-pram-checkbox-text');
-                $chkIsBG.css('display', 'flex');
+                $lblIsBG.css('display', 'flex');
                 //$lblIsBG.css('display', 'block');
             }
             else {
                 self.parameterFixedArea.removeClass('vis-process-pram-checkbox-text');
-                $chkIsBG.css('display', 'none');
+                $lblIsBG.css('display', 'none');
                 //$lblIsBG.css('display', 'none');
             }
 
@@ -437,7 +437,12 @@
             pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
             pi.setIsBackground($chkIsBG.is(':checked'));
             pi.setIsReport(self.isReport);
-
+            //Set Action Origin and Origin name
+            pi.setActionOrigin(self.ActionOrigin);
+            var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
+            if (!orginName)
+                orginName = "Menu";
+            pi.setOriginName(orginName);
             var ctl = new VIS.ProcessCtl(self, pi, null);
             pi.setFileType($cmbType.val());
 
@@ -554,6 +559,12 @@
         this.windowNo = windowNo;
         return true;
     };
+
+    //Set Action Origin
+    //Set Action Origin
+    AProcess.prototype.setActionOrigin = function (origin) {
+        this.ActionOrigin = origin;
+    }
 
     AProcess.prototype.setTitle = function (title) {
         if (this.parent)
@@ -754,6 +765,12 @@
 
 
         function createControls(panel, repObj) {
+            //Set Action Origin and Origin name
+            pctl.pi.setActionOrigin(self.ActionOrigin);
+            var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
+            if (!orginName)
+                orginName = "Menu";
+            pctl.pi.setOriginName(orginName);
             var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
 
             canExport = VIS.MRole.getDefault().getIsCanExport(AD_Table_ID);
@@ -803,7 +820,7 @@
                 btnSaveCsvAll = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllRecordCsv") + "' class='vis vis-csv-all'></a></li>");
                 btnsavepdfall = $("<li><a  title='" + VIS.Msg.getMsg("SaveAllPagePdf") + "' class='vis vis-pdf-all'></a></li>");
             }
-           // toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
+            // toolbar = $("<div class='vis-report-header'>").append($('<h3 class="vis-report-tittle" style="float:left;padding-top: 10px;">').append(setTitle));
             toolbar = $("<div class='vis-report-header vis-ad-print-process'>");
 
             toolbar.append($('<div class="vis-ad-w-p-t-name vis-ad-process-header"><h5>' + self.parent.getName() + '</h5></div >'));
@@ -879,7 +896,7 @@
             if (!self.hideclose) {
                 toolbar.append(btnClose);
             }
-            
+
 
             if (self.splitUI) {
                 self.reportToolbar.removeClass('vis-processtoolpadd');
@@ -940,11 +957,20 @@
 
             function getExeProcessParameter(fileType) {
                 pctl.pi.setFileType(fileType);
+                //Set Action Origin and Origin name
+                pctl.pi.setActionOrigin(self.ActionOrigin);
+                var orginName = VIS.context.getWindowContext(self.windowNo, "WindowName");
+                if (!orginName)
+                    orginName = "Menu";
+                pctl.pi.setOriginName(orginName);
                 var data = { processInfo: pctl.pi.toJson(), parameterList: pctl.paraList }
                 return data;
             };
 
             function getExecuteReportforCsvPara(pageNo, PageSize) {
+                var orginName = pctl.pi.getOriginName();
+                if (!orginName)
+                    orginName = "Menu";
                 var data = {
                     AD_Process_ID: pctl.pi.getAD_Process_ID(),
                     Name: pctl.pi.getTitle(),
@@ -953,7 +979,10 @@
                     Record_ID: pctl.pi.getRecord_ID(),
                     pageNumber: pageNo,
                     page_Size: PageSize,
-                    saveAll: false
+                    saveAll: false,
+                    //Set Action Origin and Origin name
+                    ActionOrigin: pctl.pi.getActionOrigin(),
+                    OriginName: orginName
                 }
                 return data;
             };
@@ -972,6 +1001,9 @@
             };
 
             function getExecuteReportComposerData(AD_Process_ID, Name, AD_PInstance_ID, AD_Table_ID, Record_ID, pageNumber, page_Size, printAllPages) {
+                var orginName = pctl.pi.getOriginName();
+                if (!orginName)
+                    orginName = "Menu";
                 var data = {
                     AD_Process_ID: AD_Process_ID,
                     Name: Name,
@@ -980,7 +1012,11 @@
                     Record_ID: Record_ID,
                     pageNumber: pageNumber,
                     page_Size: page_Size,
-                    printAllPages: printAllPages
+                    printAllPages: printAllPages,
+                    //Set Action Origin and Origin name
+                    ActionOrigin: pctl.pi.getActionOrigin(),
+                    OriginName: orginName
+
                 }
 
                 return data;

@@ -262,11 +262,13 @@ namespace VAdvantage.Controller
         public bool IsMaintainVersions = false;
         public int CellSpace = 0;
         public int FieldBreadth = 0;
-        public bool LineBreak= false;
+        public bool LineBreak = false;
         public bool FieldGroupDefault = false;
         public bool ShowFilterOption = false;
 
         public bool IsUnique = false;
+        /**	Display Obscure	*/
+        public String ObscureFieldType = null;
 
 
         /// <summary>

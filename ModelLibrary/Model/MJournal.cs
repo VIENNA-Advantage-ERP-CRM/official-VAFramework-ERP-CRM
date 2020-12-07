@@ -840,7 +840,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -1035,7 +1035,7 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
                     SetDateAcct(GetDateDoc());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -1070,6 +1070,19 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
                 || DOCSTATUS_Invalid.Equals(GetDocStatus()))
             {
+                //Bug 124 in Devops :  set Amount as ZERO on GL journal , 
+                DB.ExecuteQuery(@"Update GL_Journal SET TotalDr = 0, TotalCr = 0
+                                    WHERE GL_Journal_ID =  " + GetGL_Journal_ID(), null, Get_Trx());
+
+                //Bug 124 in Devops :  set Amount as ZERO on GL journal Line, 
+                DB.ExecuteQuery(@"Update GL_JournalLine SET AmtSourceDr = 0, AmtSourceCr = 0, AmtAcctDr = 0, AmtAcctCr = 0 
+                                    WHERE GL_Journal_ID =  " + GetGL_Journal_ID(), null, Get_Trx());
+
+                //Bug 124 in Devops :  set Amount as ZERO on GL journal Line, 
+                DB.ExecuteQuery(@"Update GL_LineDimension  SET Amount = 0
+                                    WHERE GL_JournalLine_ID IN (SELECT GL_JournalLine_ID FROM GL_JournalLine 
+                                    WHERE GL_Journal_ID =   " + GetGL_Journal_ID() + ") ", null, Get_Trx());
+
                 SetProcessed(true);
                 SetDocAction(DOCACTION_None);
                 return true;
@@ -1110,6 +1123,13 @@ AND CA.C_AcctSchema_ID != " + GetC_AcctSchema_ID();
         public MJournal ReverseCorrectIt(int GL_JournalBatch_ID)
         {
             log.Info(ToString());
+            //If any journal line is allocated then the Journal will not Reverted
+            string sql = "SELECT Count(IsAllocated) AS IsAllocated FROM GL_JournalLine WHERE GL_Journal_ID = " + GetGL_Journal_ID() + " AND IsAllocated = 'Y'";
+            if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+            {
+                m_processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
+                return null;
+            }
             //	Journal
             MJournal reverse = new MJournal(this);
             reverse.SetGL_JournalBatch_ID(GL_JournalBatch_ID);

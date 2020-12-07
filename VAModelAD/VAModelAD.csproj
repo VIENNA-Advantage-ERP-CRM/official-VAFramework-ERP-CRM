@@ -105,6 +105,7 @@
     <Compile Include="Controller\HeaderPanelItemsVO.cs" />
     <Compile Include="CrystalReport\CrystalParams.cs" />
     <Compile Include="CrystalReport\CrystalReportEngine.cs" />
+    <Compile Include="DataBase\DBFunctionCollections.cs" />
     <Compile Include="Install\LanguageMaintenance.cs" />
     <Compile Include="Install\Translation.cs" />
     <Compile Include="Install\TranslationHandler.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="ModelAD\MAssignTarget.cs" />
     <Compile Include="ModelAD\MAttachment.cs" />
     <Compile Include="ModelAD\MAttachmentEntry.cs" />
+    <Compile Include="ModelAD\MAttachmentLine.cs" />
     <Compile Include="ModelAD\MAttachmentNote.cs" />
     <Compile Include="ModelAD\MAttachmentReference.cs" />
     <Compile Include="ModelAD\MCardView.cs" />

@@ -56,15 +56,15 @@ namespace VAdvantage.Model
         /// String Value Constructior
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Attribute_ID">attribute</param>
+        /// <param name="VAM_ProductFeature_ID">attribute</param>
         /// <param name="M_AttributeSetInstance_ID">instance</param>
         /// <param name="Value">string value</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, int M_Attribute_ID,
+        public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
             int M_AttributeSetInstance_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetM_Attribute_ID(M_Attribute_ID);
+            SetVAM_ProductFeature_ID(VAM_ProductFeature_ID);
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
             SetValue(Value);
         }
@@ -73,15 +73,15 @@ namespace VAdvantage.Model
         /// Number Value Constructior
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Attribute_ID">attribute</param>
+        /// <param name="VAM_ProductFeature_ID">attribute</param>
         /// <param name="M_AttributeSetInstance_ID">instance</param>
         /// <param name="BDValue"> number value</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, int M_Attribute_ID,
+        public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
             int M_AttributeSetInstance_ID, Decimal? BDValue, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetM_Attribute_ID(M_Attribute_ID);
+            SetVAM_ProductFeature_ID(VAM_ProductFeature_ID);
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
             SetValueNumber(BDValue);
         }
@@ -90,16 +90,16 @@ namespace VAdvantage.Model
         /// Selection Value Constructior
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Attribute_ID">attribute</param>
+        /// <param name="VAM_ProductFeature_ID">attribute</param>
         /// <param name="M_AttributeSetInstance_ID">instance</param>
         /// <param name="M_AttributeValue_ID">selection</param>
         /// <param name="Value">String representation for fast display</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, int M_Attribute_ID,
+        public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
             int M_AttributeSetInstance_ID, int M_AttributeValue_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetM_Attribute_ID(M_Attribute_ID);
+            SetVAM_ProductFeature_ID(VAM_ProductFeature_ID);
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
             SetM_AttributeValue_ID(M_AttributeValue_ID);
             SetValue(Value);

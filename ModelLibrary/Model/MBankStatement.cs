@@ -18,7 +18,7 @@ using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
 using VAdvantage.Utility;
-//////using System.Windows.Forms;
+//using System.Windows.Forms;
 //using VAdvantage.Controls;
 using System.Data;
 using System.Data.SqlClient;
@@ -374,7 +374,7 @@ namespace VAdvantage.Model
             }
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT))
+            if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -413,8 +413,8 @@ namespace VAdvantage.Model
             }
             SetStatementDifference(total);
             SetEndingBalance(Decimal.Add(GetBeginningBalance(), total));
-            if (!MPeriod.IsOpen(GetCtx(), minDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT)
-                || !MPeriod.IsOpen(GetCtx(), maxDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT))
+            if (!MPeriod.IsOpen(GetCtx(), minDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID())
+                || !MPeriod.IsOpen(GetCtx(), maxDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -466,13 +466,13 @@ namespace VAdvantage.Model
         public String CompleteIt()
         {
             //added by shubham (JID_1472) To check payment is complete or close
-                int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from c_bankstatementline WHERE c_bankstatement_id =" + GetC_BankStatement_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')",null, Get_Trx()));
-                if(docStatus != 0)
-                {
-                    m_processMsg = Msg.GetMsg(GetCtx(), "paymentnotcompleted");
-                    return DocActionVariables.STATUS_INVALID;
-                    
-                }              
+            int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from c_bankstatementline WHERE c_bankstatement_id =" + GetC_BankStatement_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')", null, Get_Trx()));
+            if (docStatus != 0)
+            {
+                m_processMsg = Msg.GetMsg(GetCtx(), "paymentnotcompleted");
+                return DocActionVariables.STATUS_INVALID;
+
+            }
             //shubham
             //	Re-Check
             if (!m_justPrepared)
@@ -613,7 +613,7 @@ namespace VAdvantage.Model
             //	Std Period open?
             else
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT))
+                if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID()))
                 {
                     m_processMsg = "@PeriodClosed@";
                     return false;

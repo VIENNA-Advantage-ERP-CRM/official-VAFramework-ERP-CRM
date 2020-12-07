@@ -43,9 +43,9 @@ namespace VAdvantage.Model
         /// <param name="M_InOutLine_ID">shipment line</param>
         /// <param name="trxName">transaction</param>
         /// <returns>asset or null</returns>
-        public static MAsset GetFromShipment(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        public static List<MAsset> GetFromShipment(Ctx ctx, int M_InOutLine_ID, Trx trxName)
         {
-            MAsset retValue = null;
+            List<MAsset> retValue = new List<MAsset>();
             String sql = "SELECT * FROM A_Asset WHERE M_InOutLine_ID=" + M_InOutLine_ID;
             DataSet ds = new DataSet();
             try
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    retValue = new MAsset(ctx, dr, trxName);
+                    retValue.Add(new MAsset(ctx, dr, trxName));
                 }
                 ds = null;
             }
@@ -473,7 +473,8 @@ namespace VAdvantage.Model
         public new Decimal GetQty()
         {
             Decimal qty = base.GetQty();
-            if (qty == null || qty.Equals(Env.ZERO))
+            // In Case of Disposal, no need to set Asset Qty to One.
+            if (qty.Equals(Env.ZERO) && !IsDisposed())
                 SetQty(Env.ONE);
             return base.GetQty();
         }
@@ -723,7 +724,16 @@ namespace VAdvantage.Model
             {
                 string name = "";
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());
-                name = ctl.CreateSerNo();
+
+                // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
+                if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
+                {
+                    name = ctl.CreateDefiniteSerNo(this);
+                }
+                else
+                {
+                    name = ctl.CreateSerNo();
+                }
                 SetValue(name);
             }
             #region Fixed Asset Management
@@ -759,7 +769,8 @@ namespace VAdvantage.Model
             // create default Account
             StringBuilder _sql = new StringBuilder("");
             // check table exist or not
-            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Asset_Group_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Asset_Group_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Asset_Group_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
@@ -780,11 +791,11 @@ namespace VAdvantage.Model
                         " From FRPT_Asset_Group_Acct PCA " +
                         " inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id " +
                         " where PCA.A_Asset_Group_ID=" + assetGroupId +
-                        " and acc.frpt_relatedto=" + _RelatedToProduct + 
-                        " AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
+                        " and acc.frpt_relatedto='" + _RelatedToProduct +
+                        "' AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());
-                    if (ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {

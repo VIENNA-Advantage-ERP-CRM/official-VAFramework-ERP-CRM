@@ -297,7 +297,15 @@ namespace VAdvantage.Classes
                         {
                             Info = Info + ", " + recResult;
                         }
-                        P_String = result;
+                        double output = 0;
+                        if (double.TryParse(result, out output))
+                        {
+                            P_Number = output;
+                        }
+                        else
+                        {
+                            P_String = result;
+                        }
 
 
                         if (Parameter_To != null && Parameter_To.ToString().Length > 0)
@@ -308,7 +316,14 @@ namespace VAdvantage.Classes
                             {
                                 Info_To = Info_To + ", " + recResult;
                             }
-                            P_String_To = result;
+                            if (double.TryParse(result, out output))
+                            {
+                                P_Number_To = output;
+                            }
+                            else
+                            {
+                                P_String_To = result;
+                            }
                         }
 
                     }

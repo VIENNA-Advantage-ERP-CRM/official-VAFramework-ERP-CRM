@@ -35,7 +35,7 @@ namespace VAdvantage.Model
         private static CCache<int, X_C_DocType> s_doctypecache = new CCache<int, X_C_DocType>("AD_seq_doctype", 10);
 
 
-        private static X_C_DocType GetDocType(Ctx ctx,int C_DocType_ID)
+        private static X_C_DocType GetDocType(Ctx ctx, int C_DocType_ID)
         {
             int key = (int)C_DocType_ID;
             X_C_DocType retValue = (X_C_DocType)s_doctypecache[key];
@@ -273,7 +273,7 @@ namespace VAdvantage.Model
                     {
                         //	int AD_Sequence_ID = dr.getInt(4);
                         //
-                        int tempRetValue =-1;
+                        int tempRetValue = -1;
                         int incrementNo = int.Parse(ds.Tables[0].Rows[0]["IncrementNo"].ToString());
                         if (viennaSys)
                         {
@@ -420,13 +420,13 @@ namespace VAdvantage.Model
 
         public static int GetNextIDMySql(int AD_Client_ID, String TableName)
         {
-            return GetNextID(AD_Client_ID,TableName);
+            return GetNextID(AD_Client_ID, TableName);
         }
 
         public static int GetNextIDMSSql(int AD_Client_ID, String TableName)
         {
             return GetNextID(AD_Client_ID, TableName);
-           
+
         }
 
         public int GetNextID()
@@ -535,6 +535,11 @@ namespace VAdvantage.Model
             int incrementNo = seq.GetIncrementNo();
             String prefix = seq.GetPrefix();
             String suffix = seq.GetSuffix();
+            //get the PrefixAndDocNoSeperator
+            string prefixAndDocNoSeperator = null;
+            //column index starts from 0
+            if (seq.Get_ColumnIndex("PrefixAndDocNoSeperator") > -1)
+                prefixAndDocNoSeperator = seq.GetPrefixAndDocNoSeperator();
             bool isAutoSequence = seq.IsAutoSequence();
 
             String selectSQL = null;
@@ -715,6 +720,11 @@ namespace VAdvantage.Model
                     {
                         // Appended the separator if selected in Year Month Separator.
                         yearmonthPrefix += separator + (docDate.Value.Month.ToString().Length > 1 ? docDate.Value.Month.ToString() : "0" + docDate.Value.Month.ToString());
+                    }
+                    //to separate year/date from sequenceNo adding separtor
+                    if (!string.IsNullOrEmpty(prefixAndDocNoSeperator))
+                    {
+                        yearmonthPrefix += prefixAndDocNoSeperator;
                     }
                 }
             }

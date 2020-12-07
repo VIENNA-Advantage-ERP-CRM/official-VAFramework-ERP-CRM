@@ -376,11 +376,13 @@
                         return;
 
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
-                    return parseFloat(val).toLocaleString(undefined, {
+                    val = parseFloat(val).toLocaleString(undefined, {
                         'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
                         'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
                     });
+                    return '<div data-type="int">' + val + '</div>';
                 };
+                //oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
             else if (VIS.DisplayType.IsNumeric(displayType)) {
                 oColumn.sortable = true;
@@ -392,11 +394,15 @@
                         return;
                     //if (record.changes && typeof record.changes[f] != 'undefined') val = record.changes[f];
                     // return  Globalize.format(Number(oColumns[colIndex].customFormat.GetFormatedValue(val)));
-                    return parseFloat(val).toLocaleString(undefined, {
+                    val = parseFloat(val).toLocaleString(undefined, {
                         'minimumFractionDigits': oColumns[colIndex].customFormat.getMinFractionDigit(),
                         'maximumFractionDigits': oColumns[colIndex].customFormat.getMaxFractionDigit()
                     });
+
+                    return '<div data-type="int">' + val + '</div>';
                 };
+                // oColumn.style = 'text-align: right';
+                // oColumn.caption = 'class="vis-control-wrap-int-amount"';
             }
             //	YesNo
             else if (displayType == VIS.DisplayType.YesNo) {
@@ -429,6 +435,14 @@
                         var val = record[oColumns[colIndex].field];
                         if (val || (val === 0))
                             return val.replace(/\w|\W/g, "*");
+                        return "";
+                    }
+                }
+                else if (mField.getObscureType()) {
+                    oColumn.render = function (record, index, colIndex) {
+                        var val = record[oColumns[colIndex].field];
+                        if (val || (val === 0))
+                            return VIS.Env.getObscureValue(oColumns[colIndex].gridField.getObscureType(), val);
                         return "";
                     }
                 }

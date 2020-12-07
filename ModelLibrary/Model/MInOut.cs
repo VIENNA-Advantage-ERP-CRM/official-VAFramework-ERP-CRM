@@ -24,9 +24,7 @@ using VAdvantage.Utility;
 using System.Data;
 using System.IO;
 using VAdvantage.Logging;
-
 using System.Data.SqlClient;
-
 
 namespace VAdvantage.Model
 {
@@ -448,7 +446,10 @@ namespace VAdvantage.Model
                 from.SetRef_InOut_ID(to.GetM_InOut_ID());
             }
 
-            if (to.CopyLinesFrom(from, counter, setOrder) == 0)
+            // Check applied by Mohit - JID_1640 - 18 Feb 2020
+            // in case of counter document - do not create the lines here - it will be created while creating the counter document.
+            // in case of reversal, need to copy the lines as well
+            if (!counter && to.CopyLinesFrom(from, counter, setOrder) == 0)
             {
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (!String.IsNullOrEmpty(pp.GetName()))
@@ -1709,7 +1710,7 @@ namespace VAdvantage.Model
             SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -2000,6 +2001,7 @@ namespace VAdvantage.Model
                             string prod = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                             _processMsg = Msg.GetMsg(Env.GetCtx(), "VIS_InsufficientQuantityFor") + prod + Msg.GetMsg(Env.GetCtx(), "VIS_OnLocators") + loc;
+
                             return DocActionVariables.STATUS_INVALID;
                         }
                     }
@@ -2103,7 +2105,7 @@ namespace VAdvantage.Model
                 // If User try to complete the Transactions if Movement Date is lesser than Last MovementDate on Product Container
                 // then we need to stop that transaction to Complete.
                 sql.Clear();
-                sql.Append(DBFunctionCollection.MInOutContainerNotAvailable(GetM_InOut_ID()));                
+                sql.Append(DBFunctionCollection.MInOutContainerNotAvailable(GetM_InOut_ID()));
                 string misMatch = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
@@ -3906,7 +3908,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetMovementDate());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -4971,6 +4973,18 @@ namespace VAdvantage.Model
             counter.SetProcessing(false);
             counter.Save(Get_TrxName());
 
+            // Create Lines
+            if (counter.CopyLinesFrom(this, true, true) == 0)
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (!String.IsNullOrEmpty(pp.GetName()))
+                    counter._processMsg = Msg.GetMsg(GetCtx(), "CouldNotCreateShipLines") + "," + pp.GetName();
+                else
+                    counter._processMsg = Msg.GetMsg(GetCtx(), "CouldNotCreateShipLines");
+                counter = null;
+                throw new Exception(counter._processMsg);
+            }
+
             string MovementType = counter.GetMovementType();
             //bool inTrx = MovementType.charAt(1) == '+';	//	V+ Vendor Receipt
             bool inTrx = MovementType.IndexOf('+') == 1;	//	V+ Vendor Receipt
@@ -5129,7 +5143,7 @@ namespace VAdvantage.Model
             string reversedDocno = null;
             string ss = ToString();
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;
@@ -5279,13 +5293,14 @@ namespace VAdvantage.Model
                         return false;
                     }
                 }
-                //	De-Activate Asset
-                MAsset asset = MAsset.GetFromShipment(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
-                if (asset != null)
+                //	De-Activate Asset 
+
+                List<MAsset> asset = MAsset.GetFromShipment(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
+                foreach (MAsset ass in asset)
                 {
-                    asset.SetIsActive(false);
-                    asset.AddDescription("(" + reversal.GetDocumentNo() + " #" + rLine.GetLine() + "<-)");
-                    asset.Save();
+                    ass.SetIsActive(false);
+                    ass.AddDescription("(" + reversal.GetDocumentNo() + " #" + rLine.GetLine() + "<-)");
+                    ass.Save();
                 }
             }
             reversal.SetC_Order_ID(GetC_Order_ID());

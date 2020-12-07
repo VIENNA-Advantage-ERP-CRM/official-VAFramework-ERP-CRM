@@ -39,7 +39,7 @@
             }
             // var info = "avc";
             // Create Dialog design
-            $ContainerPopUp = $("<div style='float: left; width: 100%;min-height:480px; max-height:480px !important'></div>");
+            $ContainerPopUp = $("<div class='vis-formouterwrpdiv' style='float: left; width: 100%;min-height:480px; max-height:480px !important'></div>");
             var $_ContainerPopUp;
             var $_CreateNewProductContainer;
             //var $_CancelProductContainer;

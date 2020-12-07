@@ -13,7 +13,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//////using System.Windows.Forms;
+//using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -131,6 +131,12 @@ namespace VAdvantage.Model
             {
                 to.AddDescription("{->" + from.GetDocumentNo() + ")");
             }
+            else
+            {
+                //set the description and invoice reference from original to counter
+                to.AddDescription(Msg.GetMsg(from.GetCtx(), "CounterDocument") + from.GetDocumentNo());
+                to.Set_Value("InvoiceReference", from.GetDocumentNo());
+            }
             //
             to.SetDocStatus(DOCSTATUS_Drafted);		//	Draft
             to.SetDocAction(DOCACTION_Complete);
@@ -142,7 +148,7 @@ namespace VAdvantage.Model
             to.SetDateAcct(dateDoc);
             to.SetDatePrinted(null);
             to.SetIsPrinted(false);
-            //
+            //    
             to.SetIsApproved(false);
             to.SetC_Payment_ID(0);
             to.SetC_CashLine_ID(0);
@@ -1266,6 +1272,84 @@ namespace VAdvantage.Model
             if (GetC_BPartner_Location_ID() == 0)
                 SetBPartner(new MBPartner(GetCtx(), GetC_BPartner_ID(), null));
 
+            // Check Unique column marked on Database table
+            StringBuilder colHeaders = new StringBuilder("");
+            int displayType;
+            string colName;
+            StringBuilder sb = new StringBuilder("SELECT ColumnName, Name FROM AD_Column WHERE IsActive = 'Y' AND IsUnique = 'Y' AND  AD_Table_ID = " + Get_Table_ID());
+            DataSet UnqFields = DB.ExecuteDataset(sb.ToString(), null, Get_Trx());
+
+            if (UnqFields != null && UnqFields.Tables[0].Rows.Count > 0)
+            {
+                sb.Clear();
+                for (int l = 0; l < UnqFields.Tables[0].Rows.Count; l++)
+                {
+                    if (sb.Length == 0)
+                    {
+                        sb.Append(" SELECT COUNT(1) FROM ");
+                        sb.Append(Get_TableName()).Append(" WHERE ");
+                    }
+                    else
+                    {
+                        sb.Append(" AND ");
+                        colHeaders.Append(", ");
+                    }
+
+                    colName = Util.GetValueOfString(UnqFields.Tables[0].Rows[l]["ColumnName"]);
+                    colHeaders.Append(UnqFields.Tables[0].Rows[l]["Name"]);
+                    object colval = Get_Value(colName);
+                    displayType = Get_ColumnDisplayType(Get_ColumnIndex(colName));
+
+                    if (colval == null || colval == DBNull.Value)
+                    {
+                        sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" IS NULL ");
+                    }
+                    else
+                    {
+                        sb.Append(UnqFields.Tables[0].Rows[l]["ColumnName"]).Append(" = ");
+                        if (DisplayType.IsID(displayType))
+                        {
+                            sb.Append(colval);
+                        }
+                        else if (DisplayType.IsDate(displayType))
+                        {
+
+                            sb.Append(DB.TO_DATE(Convert.ToDateTime(colval), DisplayType.Date == displayType));
+                        }
+                        else if (DisplayType.YesNo == displayType)
+                        {
+                            string boolval = "N";
+                            if (VAdvantage.Utility.Util.GetValueOfBool(colval))
+                                boolval = "Y";
+                            sb.Append("'").Append(boolval).Append("'");
+                        }
+                        else
+                        {
+                            sb.Append("'").Append(colval).Append("'");
+                        }
+                    }
+                }
+
+                sb.Append(" AND " + Get_TableName() + "_ID != " + Get_ID());
+
+                //Check unique record in DB 
+                int count = Util.GetValueOfInt(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
+                sb = null;
+                if (count > 0)
+                {
+                    log.SaveError("SaveErrorNotUnique", colHeaders.ToString());
+                    return false;
+
+                }
+            }
+
+            //APInvoice Case: invoice Reference can't be same for same financial year and Business Partner and DoCTypeTarget and DateAcct      
+            if ((Is_ValueChanged("DateAcct") || Is_ValueChanged("C_BPartner_ID") || Is_ValueChanged("C_DocTypeTarget_ID") || Is_ValueChanged("InvoiceReference")) && !IsSOTrx() && checkFinancialYear() > 0)
+            {
+                log.SaveError("", Msg.GetMsg(GetCtx(), "InvoiceReferenceExist"));
+                return false;
+            }
+
             //	Price List
             if (GetM_PriceList_ID() == 0)
             {
@@ -1444,7 +1528,7 @@ namespace VAdvantage.Model
                             //}
                         }
                     }
-                    //}
+                    //}   
                 }
             }
 
@@ -1531,7 +1615,7 @@ namespace VAdvantage.Model
                 Decimal invAmt = GetGrandTotal(true);
                 // If Amount is ZERO then no need to check currency conversion
                 if (!invAmt.Equals(Env.ZERO))
-                { 
+                {
                     // JID_1828 -- need to pick selected record conversion type
                     invAmt = MConversionRate.ConvertBase(GetCtx(), invAmt,  //	CM adjusted 
                         GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
@@ -1569,6 +1653,42 @@ namespace VAdvantage.Model
             return success;
         }
 
+        /// <summary>
+        /// check duplicate record against invoice reference and 
+        /// should not check the uniqueness of invoice reference in case of reverse document
+        /// </summary>
+        /// <returns>count of Invoice and 0</returns>
+        public int checkFinancialYear()
+        {
+            if (!(!String.IsNullOrEmpty(GetDescription()) && GetDescription().Contains("{->")))
+            {
+                DateTime? startDate = null;
+                DateTime? endDate = null, dt;
+                dt = (DateTime)GetDateAcct();
+                int calendar_ID = 0;
+                DataSet ds = new DataSet();
+
+                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM AD_ClientInfo WHERE ad_client_id = " + GetAD_Client_ID(), null, null));
+
+                ds = DB.ExecuteDataset($"SELECT startdate , enddate FROM c_period WHERE c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON " +
+                    $"c_year.c_year_id = C_period.c_year_id WHERE  c_year.c_calendar_id ={calendar_ID} and sysdate BETWEEN C_period.startdate AND C_period.enddate) " +
+                    $"AND periodno IN (1, 12)", null, null);
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    startDate = Convert.ToDateTime(ds.Tables[0].Rows[0]["startdate"]);
+                    endDate = Convert.ToDateTime(ds.Tables[0].Rows[1]["enddate"]);
+                }
+                string sql = "SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE DocStatus NOT IN('RE','VO') AND IsExpenseInvoice='N' AND IsSoTrx='N'" +
+                  " AND C_BPartner_ID = " + GetC_BPartner_ID() + " AND InvoiceReference = '" + Get_Value("InvoiceReference") + "'" +
+                  " AND AD_Org_ID= " + GetAD_Org_ID() + " AND AD_Client_ID= " + GetAD_Client_ID() + " AND C_DocTypeTarget_ID= " + GetC_DocTypeTarget_ID() +
+                  " AND DateAcct BETWEEN " + GlobalVariable.TO_DATE(startDate, true) + " AND " + GlobalVariable.TO_DATE(endDate, true);
+
+                return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+            }
+            else
+                return 0;
+        }
         /**
          * 	Set Price List (and Currency) when valid
          * 	@param M_PriceList_ID price list
@@ -1950,7 +2070,7 @@ namespace VAdvantage.Model
             SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -2087,8 +2207,8 @@ namespace VAdvantage.Model
                 }
             }
 
-            //	Credit Status
-            if (IsSOTrx() && !IsReversal())
+            //	Credit Status check only in case of AR Invoice 
+            if (IsSOTrx() && !IsReversal() && !IsReturnTrx())
             {
                 bool checkCreditStatus = true;
                 if (Env.IsModuleInstalled("VAPOS_"))
@@ -3436,7 +3556,7 @@ namespace VAdvantage.Model
                                                      PostCurrentCostPrice = CASE WHEN 1 = " + (isUpdatePostCurrentcostPriceFromMR ? 1 : 0) +
                                                      @" THEN " + currentCostPrice + @" ELSE PostCurrentCostPrice END 
                                                  WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
-                                                 sLine.SetIsCostImmediate(true);
+                                                sLine.SetIsCostImmediate(true);
                                             }
                                         }
                                     }
@@ -4220,7 +4340,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateInvoiced());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -4829,10 +4949,33 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
+            //if PDC available against Invoice donot void/reverse the Invoice
+            if (Env.IsModuleInstalled("VA027_"))
+            {
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VA027_postdatedcheck_id) FROM va027_Postdatedcheck WHERE DocStatus NOT IN('RE', 'VO') AND c_invoice_ID = " + GetC_Invoice_ID(), null, Get_Trx()));
+                if (count > 0)
+                {
+                    _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
+                    return false;
+                }
+                else
+                {
+                    string sql = "SELECT COUNT(Va027_CheckAllocate_ID) FROM Va027_CheckAllocate i INNER JOIN va027_chequeDetails ii ON" +
+                        " i.va027_chequedetails_ID = ii.va027_chequedetails_ID" +
+                        " INNER JOIN va027_postdatedcheck iii on ii.va027_postdatedcheck_id = iii.va027_postdatedcheck_id" +
+                        " WHERE iii. DocStatus NOT IN ('RE', 'VO') And i.C_invoice_id = " + GetC_Invoice_ID();
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
+                    {
+                        _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
+                        return false;
+                    }
 
+                }
+
+            }
             log.Info(ToString());
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;

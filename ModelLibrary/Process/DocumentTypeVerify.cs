@@ -108,7 +108,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             _log.Info("Duplicates deleted #" + no);
 
             //	Insert Missing
-            sql = "SELECT DISTINCT p.AD_Client_ID, p.C_Period_ID, dt.DocBaseType "
+            sql = "SELECT DISTINCT p.AD_Client_ID, p.AD_Org_ID, p.C_Period_ID, dt.DocBaseType "
                 + "FROM C_Period p"
                 + " FULL JOIN C_DocType dt ON (p.AD_Client_ID=dt.AD_Client_ID) "
                 + "WHERE p.AD_Client_ID='" + AD_Client_ID + "'"
@@ -123,12 +123,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     int Client_ID = Utility.Util.GetValueOfInt(idr[0].ToString());
-                    int C_Period_ID = Utility.Util.GetValueOfInt(idr[1].ToString());
-                    String DocBaseType = idr[2].ToString();
+                    int Org_ID = Utility.Util.GetValueOfInt(idr[1].ToString());
+                    int C_Period_ID = Utility.Util.GetValueOfInt(idr[2].ToString());
+                    String DocBaseType = idr[3].ToString();
                    _log.Config("AD_Client_ID=" + Client_ID
                         + ", C_Period_ID=" + C_Period_ID + ", DocBaseType=" + DocBaseType);
                     //
                     MPeriodControl pc = new MPeriodControl(ctx, Client_ID, C_Period_ID, DocBaseType, trxName);
+                    pc.SetAD_Org_ID(Org_ID);                // Set Organization of Period, on Period Control.
                     if (pc.Save())
                     {
                         counter++;

@@ -276,6 +276,13 @@
                         colValue = colValue.replace(/[a-zA-Z0-9-. ]/g, '*').replace(/[^a-zA-Z0-9-. ]/g, '*');
                     }
                 }
+
+                if (mField.getObscureType()) {
+                    if (colValue && colValue.length > 0) {
+                        colValue = VIS.Env.getObscureValue(mField.getObscureType(), colValue);
+                    }
+                }
+
             }
             else {
                 colValue = null;

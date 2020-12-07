@@ -17,7 +17,8 @@ using VAdvantage.Print;
 using VAdvantage.Classes;
 using Oracle.ManagedDataAccess.Client;
 using CrystalDecisions.Shared;
-
+using VAdvantage.Report;
+using VAModelAD.DataBase;
 
 namespace VAdvantage.CrystalReport
 {
@@ -477,6 +478,11 @@ namespace VAdvantage.CrystalReport
                         //}
                     }
 
+
+
+
+                    sql = GetObscureSql(sql);
+
                     if (sb.Length > 7)
                         sql = sql + sb.ToString();
 
@@ -509,9 +515,9 @@ namespace VAdvantage.CrystalReport
                             sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                         }
                     }
-
+                    sqlQ = sqlQ.ToLower();
                     DataSet ds = DB.ExecuteDataset(sqlQ);
-
+                    log.Severe("CrystalReport Query: " + sqlQ);
                     if (ds == null)
                     {
                         ValueNamePair error = VLogger.RetrieveError();
@@ -691,6 +697,11 @@ namespace VAdvantage.CrystalReport
                             if (index > -1)
                             {
                                 sqlQ = sqls[index].ToUpper();
+
+
+
+                                sqlQ = GetObscureSql(sqlQ);
+
                                 //if (sqlQ.ToUpper().Contains("T_CrystalParameters"))
                                 //{
                                 //    sqlQ = sqlQ + " AND AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
@@ -706,6 +717,7 @@ namespace VAdvantage.CrystalReport
                                         sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                                     }
                                 }
+                                sqlQ = sqlQ.ToLower();
                                 ds = DB.ExecuteDataset(sqlQ);
                                 log.Severe("CrystalReport Query: " + sqlQ);
                                 subRepDoc.SetDataSource(ds.Tables[0]);
@@ -886,7 +898,7 @@ namespace VAdvantage.CrystalReport
                         oStream.Close();
                         log.Severe("CrystalReport Info: Creating Stream End");
                     }
-                    catch(Exception exx)
+                    catch (Exception exx)
                     {
                         bytes = null;
                         log.Severe(exx.Message);
@@ -1236,6 +1248,8 @@ namespace VAdvantage.CrystalReport
                         }
                     }
 
+                    sql = GetObscureSql(sql);
+
                     if (sb.Length > 7)
                         sql = sql + sb.ToString();
 
@@ -1255,7 +1269,7 @@ namespace VAdvantage.CrystalReport
                             sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                         }
                     }
-
+                    sqlQ = sqlQ.ToLower();
                     DataSet ds = DB.ExecuteDataset(sqlQ);
                     log.Severe("CrystalReport Query: " + sqlQ);
 
@@ -1374,7 +1388,7 @@ namespace VAdvantage.CrystalReport
                         }
 
                         DataRow dr = ds.Tables[0].NewRow();
-                        
+
                         dr["ORGLOGO"] = orgLogo;
                         ds.Tables[0].Rows.Add(dr);
 
@@ -1395,6 +1409,8 @@ namespace VAdvantage.CrystalReport
                             {
                                 sqlQ = sqls[index];
 
+                                sqlQ = GetObscureSql(sqlQ);
+
                                 //Check if AD_PInstance_ID exist in query, only then apply AD_PInstance_ID in where clause.
                                 sqlQ = sqlQ.ToUpper();
 
@@ -1409,6 +1425,7 @@ namespace VAdvantage.CrystalReport
                                         sqlQ = sqlQ + " WHERE AD_PInstance_ID=" + _pi.GetAD_PInstance_ID();
                                     }
                                 }
+                                sqlQ = sqlQ.ToLower();
                                 ds = DB.ExecuteDataset(sqlQ);
                                 log.Severe("CrystalReport Query: " + sqlQ);
                                 subRepDoc.SetDataSource(ds.Tables[0]);
@@ -1490,6 +1507,36 @@ namespace VAdvantage.CrystalReport
                 throw e1;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Check if a column is marked as obscure and add regaular expression.
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns>SQL</returns>
+        private string GetObscureSql(string sql)
+        {
+            string tableName = sql.Substring(sql.IndexOf("FROM") + 4).Trim().Split(' ')[0].ToString().Trim();
+
+            MTable table = MTable.Get(_ctx, tableName);
+            if (table == null)
+                return sql;
+
+            MColumn[] columns = table.GetColumns(true);
+            List<MColumn> cols = columns.Where(a => a.GetObscureType() != null && a.GetObscureType().Length > 0).ToList<MColumn>();
+            if (cols != null && cols.Count > 0)
+            {
+                foreach (MColumn col in cols)
+                {
+                    string Name = col.GetColumnName();
+                    if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetAD_Table_ID(), col.GetAD_Column_ID(), false))
+                    {
+                        string obscureColumn = DBFunctionCollections.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name;
+                        sql = sql.Replace(Name, obscureColumn);
+                    }
+                }
+            }
+            return sql;
         }
 
     }

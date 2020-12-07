@@ -575,7 +575,11 @@
     };	//	i
 
     GridTab.prototype.getValueAsString = function (variableName) {
-        return VIS.context.getWindowContext(this.vo.windowNo, this.vo.windowNo, variableName, true);
+        var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.windowNo, variableName, true);
+        if (!value) {
+            return '';
+        }
+        return value.toString();
     };
 
     GridTab.prototype.getIsCurrent = function () {
@@ -874,6 +878,7 @@
                 if (Record_ID < 1 && rec_id > 0)
                     Record_ID = rec_id;
 
+
                 // var dr = null;
                 $.ajax({
                     type: 'Get',
@@ -885,23 +890,23 @@
                             var arguments = [];//new Object[6];
                             var filled = false;
                             var dr = new VIS.DB.DataReader().toJson(data);
+                            var format = VIS.DisplayType.GetNumberFormat(VIS.DisplayType.Amount);
                             //dr = executeReader(sql.toString());
                             if (dr.read()) {
                                 //	{0} - Number of lines
                                 var lines = dr.getInt(0);
                                 arguments[0] = lines;
                                 //	{1} - Line toral
-                                var lineTotal = dr.getDecimal(2).toLocaleString();//.toFixed(2);
-                                arguments[1] = lineTotal;
+                                arguments[1] = format.getLocaleAmount(dr.getDecimal(2));
                                 //	{2} - Grand total (including tax, etc.)
-                                var grandTotal = dr.getDecimal(3).toLocaleString();//.toFixed(2);
-                                arguments[2] = grandTotal;
+
+                                arguments[2] = format.getLocaleAmount(dr.getDecimal(3));
                                 //	{3} - Currency
                                 var currency = dr.getString(1);
                                 arguments[3] = currency;
                                 //	(4) - Grand total converted to Base
-                                var grandBase = dr.getDecimal(4).toLocaleString();//.toFixed(2);
-                                arguments[4] = grandBase;
+
+                                arguments[4] = format.getLocaleAmount(dr.getDecimal(4));
                                 arguments[5] = ctx.getContext("$CurrencyISO");
                                 filled = true;
                             }
@@ -2128,8 +2133,16 @@
                         continue;
                     }
                     else {
+
+                        if (dependentField.getValue() == null) {
+                            continue;
+                        }
+
                         this.log.fine(columnName + " changed - "
                             + dependentField.getColumnName() + " set to null");
+                        if (dependentField.getValue() == null) {
+                            return;
+                        }
                         //  invalidate current selection
                         this.setValue(dependentField, null);
                     }
@@ -3820,6 +3833,7 @@
         var gFieldsIn = this.createGridFieldArr(this.gridFields, true);
         var dataIn = { sql: this.SQL, page: this.dopaging ? this.currentPage : 0, pageSize: this.dopaging ? this.pazeSize : 0, treeID: 0, treeNode_ID: 0 };
 
+        var obscureFields = this.createObsecureFields(this.gridFields);
 
 
         dataIn.sqlDirect = VIS.secureEngine.encrypt(this.SQL_Direct);
@@ -3827,85 +3841,86 @@
         // VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, function (buffer) {
         if (this.treeNode_ID > 0) {
             //For On demand tree  add these parameter
+            // Fetch window records based on selected node of tree.
             dataIn.treeID = this.treeID, dataIn.treeNode_ID = this.treeNode_ID;
-            //VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
+            VIS.dataContext.getWindowRecordsForTreeNode(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, this.treeID, this.treeNode_ID, function (buffer) {
 
-            //    try {
+                try {
 
-            //        if (buffer != null) {
-            //            var count = 0;
+                    if (buffer != null) {
+                        var count = 0;
 
-            //            if (buffer.getTables().length != 0) {
+                        if (buffer.getTables().length != 0) {
 
-            //                var rows = buffer.getTable(0).getRows();
+                            var rows = buffer.getTable(0).getRows();
 
-            //                var columns = buffer.getTable(0).getColumnsName();
-            //                for (var row = 0; row < rows.length; row++) {
-            //                    var cells = rows[row].getJSCells();
-            //                    for (var cell = 0; cell < columns.length; cell++) {
+                            var columns = buffer.getTable(0).getColumnsName();
+                            for (var row = 0; row < rows.length; row++) {
+                                var cells = rows[row].getJSCells();
+                                for (var cell = 0; cell < columns.length; cell++) {
 
-            //                        cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
-            //                    }
-            //                    //cells.recid = row;
-            //                    that.bufferList[row] = cells;
-            //                    count++;
-            //                    //break;
-            //                }
-
-            //                //console.log(this.bufferList);
-            //            }
-            //            buffer.dispose();
-            //            buffer = null;
-            //        }
-            //    }
-            //    catch (e) {
-            //        //alert(e);
-            //        this.log.Log(Level.SEVERE, that.SQL, e);
-            //    }
-            //    that.fireQueryCompleted(true); // inform gridcontroller
-            //    that = null;
-            //});
-        }
-        // else {
-
-        VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, function (buffer, lookupDirect) {
-
-            try {
-
-                if (buffer != null) {
-                    var count = 0;
-
-                    if (buffer.getTables().length != 0) {
-
-                        var rows = buffer.getTable(0).getRows();
-                        var columns = buffer.getTable(0).getColumnsName();
-                        for (var row = 0; row < rows.length; row++) {
-                            var cells = rows[row].getJSCells();
-                            for (var cell = 0; cell < columns.length; cell++) {
-
-                                cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
+                                    cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
+                                }
+                                //cells.recid = row;
+                                that.bufferList[row] = cells;
+                                count++;
+                                //break;
                             }
-                            //cells.recid = row;
-                            that.bufferList[row] = cells;
-                            count++;
-                            //break;
+
+                            //console.log(this.bufferList);
                         }
-                        console.log(buffer.getTable(0).lookupDirect);
+                        buffer.dispose();
+                        buffer = null;
                     }
-                    buffer.dispose();
-                    buffer = null;
                 }
-                if (lookupDirect)
-                    VIS.MLookupCache.addRecordLookup(that.gTable._windowNo, that.gTable._tabNo, lookupDirect);
-            }
-            catch (e) {
-                //alert(e);
-                this.log.Log(Level.SEVERE, that.SQL, e);
-            }
-            that.fireQueryCompleted(true); // inform gridcontroller
-            that = null;
-        });
-        //}
+                catch (e) {
+                    //alert(e);
+                    this.log.Log(Level.SEVERE, that.SQL, e);
+                }
+                that.fireQueryCompleted(true); // inform gridcontroller
+                that = null;
+            });
+        }
+        else {
+
+            VIS.dataContext.getWindowRecords(dataIn, gFieldsIn, this.rowCount, this.SQL_Count, this.AD_Table_ID, obscureFields, function (buffer, lookupDirect) {
+
+                try {
+
+                    if (buffer != null) {
+                        var count = 0;
+
+                        if (buffer.getTables().length != 0) {
+
+                            var rows = buffer.getTable(0).getRows();
+                            var columns = buffer.getTable(0).getColumnsName();
+                            for (var row = 0; row < rows.length; row++) {
+                                var cells = rows[row].getJSCells();
+                                for (var cell = 0; cell < columns.length; cell++) {
+
+                                    cells[columns[cell]] = that.readDataOfColumn(columns[cell], cells[columns[cell]]);
+                                }
+                                //cells.recid = row;
+                                that.bufferList[row] = cells;
+                                count++;
+                                //break;
+                            }
+                            console.log(buffer.getTable(0).lookupDirect);
+                        }
+                        buffer.dispose();
+                        buffer = null;
+                    }
+                    if (lookupDirect)
+                        VIS.MLookupCache.addRecordLookup(that.gTable._windowNo, that.gTable._tabNo, lookupDirect);
+                }
+                catch (e) {
+                    //alert(e);
+                    this.log.Log(Level.SEVERE, that.SQL, e);
+                }
+                that.fireQueryCompleted(true); // inform gridcontroller
+                that = null;
+            });
+        }
     };
 
     GridTable.prototype.readDataOfColumn = function (colName, colValue) {
@@ -3971,6 +3986,9 @@
                     colValue = colValue.toString();//string
                 //	Encrypted
                 if (field.getIsEncryptedColumn() && displayType != VIS.DisplayType.YesNo)
+                    colValue = this.decrypt(colValue);
+
+                if (field.getObscureType() && displayType != VIS.DisplayType.YesNo)
                     colValue = this.decrypt(colValue);
             }
             catch (e) {
@@ -4167,6 +4185,8 @@
 
         var encryptedCol = this.createGridFieldArr(m_fields, true);
 
+        var obscureFields = this.createObsecureFields(m_fields);
+
         var RowData = {}, OldRowData = {};
 
         $.extend(true, RowData, rowDataNew);
@@ -4181,6 +4201,19 @@
 
                 if (OldRowData[encryptedCol[i]]) {
                     OldRowData[encryptedCol[i]] = this.encrypt(OldRowData[encryptedCol[i]]);
+                }
+            }
+        }
+
+        if (obscureFields && obscureFields.length > 0) {
+            var len = obscureFields.length;
+            for (var i = 0; i < len; i++) {
+                if (RowData[obscureFields[i]]) {
+                    RowData[obscureFields[i]] = this.encrypt(RowData[obscureFields[i]]);
+                }
+
+                if (OldRowData[obscureFields[i]]) {
+                    OldRowData[obscureFields[i]] = this.encrypt(OldRowData[obscureFields[i]]);
                 }
             }
         }
@@ -4408,14 +4441,33 @@
                         IsEncryptedColumn: field.getIsEncryptedColumn(),
                         IsParentColumn: field.getIsParentColumn(),
                         Name: field.getHeader(),
-                        IsUnique: field.getIsUnique()
+                        IsUnique: field.getIsUnique(),
+                        IsObscure: field.getObscureType() ? true : false
                     });
-                    if (field.getIsUnique() && !field.getIsVirtualColumn()) {
+                    if (field.getIsUnique() && !field.getIsVirtualColumn()
+                        && field.getIsDisplayed()) {
                         this.gFieldUnique.push(field.getColumnName());
                     }
                 }
                 return this.gFieldData;
             }
+        }
+    };
+
+    GridTable.prototype.createObsecureFields = function (mfields) {
+        var size = mfields.length;
+        if (this.gFieldObscureList)
+            return this.gFieldObscureList;
+        else {
+            this.gFieldObscureList = [];
+            for (var i = 0; i < size; i++) {
+                var field = mfields[i];
+                if (field.getObscureType()) {
+                    this.gFieldObscureList.push(field.getColumnName().toLowerCase());
+                }
+
+            }
+            return this.gFieldObscureList;
         }
     };
 
@@ -4471,7 +4523,7 @@
         try {
 
             sql = VIS.secureEngine.encrypt(sql);
-            dr = VIS.dataContext.getWindowRecord(sql, this.createGridFieldArr(this.gridFields, true));
+            dr = VIS.dataContext.getWindowRecord(sql, this.createGridFieldArr(this.gridFields, true), this.createObsecureFields(this.gridFields));
             //	only one row
             if (dr.read())
                 rowDataDB = this.readData(dr);
@@ -5245,7 +5297,7 @@
 
         var m_lookup = null;
         /* Load Lookup */
-        if (this.vo.IsDisplayedf) {
+        if (this.vo.IsDisplayedf || this.vo.ColumnName.toLower().equals("createdby") || gField._vo.ColumnName.toLower().equals("updatedby")) {
             if (gField._vo.lookupInfo != null && VIS.DisplayType.IsLookup(gField._vo.displayType)) {
                 if (VIS.DisplayType.IsLookup(gField._vo.displayType)) {
 
@@ -5299,6 +5351,10 @@
 
     GridField.prototype.setGridTab = function (gridTab) {
         this.gridTab = gridTab;
+    };
+
+    GridField.prototype.getIsInserting = function () {
+        return this.inserting;
     };
 
     GridField.prototype.getIsDisplayed = function (checkContext) {
@@ -5456,8 +5512,8 @@
         var _vo = this.vo;
         if ((_vo.IsKey && _vo.ColumnName.endsWith("_ID"))
             || _vo.ColumnName.startsWith("Created") || _vo.ColumnName.startsWith("Updated")
-            || _vo.ColumnName.equals("Value")
-            || _vo.ColumnName.equals("DocumentNo")
+            // || _vo.ColumnName.equals("Value")
+            //|| _vo.ColumnName.equals("DocumentNo")
             || _vo.ColumnName.equals("M_AttributeSetInstance_ID"))	//	0 is valid
             return false;
 
@@ -5724,7 +5780,11 @@
     }
 
     GridField.prototype.getValueAsString = function (variableName) {
-        return VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, variableName, true);
+        var value = VIS.context.getWindowContext(this.vo.windowNo, this.vo.tabNo, variableName, true);
+        if (!value) {
+            return '';
+        }
+        return value.toString();
     };
 
     GridField.prototype.getColumnSQL = function (withAS) {
@@ -5750,6 +5810,9 @@
             if (this.vo.displayType == VIS.DisplayType.YesNo) {
                 //return " (case " + _vo.ColumnName + " when 'Y' then 'True' else 'False' end) AS " + _vo.ColumnName;
             }
+            //if (this.getObscureType().length > 0) {
+
+            //}
             return this.vo.ColumnName;
         }
     };

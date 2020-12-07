@@ -55,6 +55,8 @@ namespace VIS.DataContracts
         public bool IsEncryptedColumn { get; set; }
         public bool IsParentColumn { get; set; }
         public string Name { get; set; }
+
+        public bool IsObscure { get; set; }
     }
 
 }

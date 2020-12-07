@@ -251,7 +251,8 @@ namespace VAdvantage.Model
             }
             if (IsPosted())
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
+                // Check Period Open
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
                 {
                     log.Warning("Period Closed");
                     return false;
@@ -344,7 +345,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -575,11 +576,9 @@ namespace VAdvantage.Model
 
                         // when paid amount against invoice = due amount on schedule then make invoice schedule as Paid 
                         //or wjem last record and due amount = variance amount + paid invoice amount
-                        if (((paySch.GetVA009_PaidAmntInvce() +
-                            (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (paySch.GetWithholdingAmt() + paySch.GetBackupWithholdingAmount()) : 0)) >= paySch.GetDueAmt()) ||
-                            (countUnPaidSchedule == 0 && line.GetOverUnderAmt() == 0 &&
-                            Decimal.Add(paySch.GetVA009_PaidAmntInvce(), paySch.GetVA009_Variance()) +
-                            (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (paySch.GetWithholdingAmt() + paySch.GetBackupWithholdingAmount()) : 0) == paySch.GetDueAmt()))
+                        if (((paySch.GetVA009_PaidAmntInvce()) >= paySch.GetDueAmt()) ||
+                             (countUnPaidSchedule == 0 && line.GetOverUnderAmt() == 0 &&
+                             Decimal.Add(paySch.GetVA009_PaidAmntInvce(), paySch.GetVA009_Variance()) == paySch.GetDueAmt()))
                         {
                             paySch.SetVA009_IsPaid(true);
                         }
@@ -937,7 +936,7 @@ namespace VAdvantage.Model
                 throw new Exception("Allocation already reversed (not active)");
 
             //	Can we delete posting
-            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetAD_Org_ID()))
                 throw new Exception("@PeriodClosed@");
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
@@ -1070,12 +1069,13 @@ namespace VAdvantage.Model
             MCash cash = null; MJournal journal = null;
             int currencyTo_ID = 0, C_ConversionType_ID = 0, AD_Client_ID = 0, AD_Org_ID = 0;
             DateTime? DateAcct = null;
+            DateTime? conversionDate = Get_ColumnIndex("ConversionDate") >= 0 && GetConversionDate() != null ? GetConversionDate() : GetDateAcct();
             if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
             {
                 // when we allocate invoice with invoice 
                 if (payment == null && cashline == null && journalline == null) // Invoice to Invoice
                 {
-                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
+                    currencymultiplyRate = MConversionRate.GetRate(GetC_Currency_ID(), invoice.GetC_Currency_ID(), conversionDate, GetC_ConversionType_ID(), invoice.GetAD_Client_ID(), invoice.GetAD_Org_ID());
                 }
                 else
                 {
@@ -1085,7 +1085,7 @@ namespace VAdvantage.Model
 
                         if (journalline != null && invoice != null) // journal to invoice
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
                             AD_Client_ID = invoice.GetAD_Client_ID();
@@ -1093,7 +1093,7 @@ namespace VAdvantage.Model
                         }
                         else if (journalline != null && payment != null) //Journal to payment
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = payment.GetC_Currency_ID();
                             AD_Client_ID = payment.GetAD_Client_ID();
@@ -1102,7 +1102,7 @@ namespace VAdvantage.Model
                         else if (journalline != null && cashline != null) // journal to cash
                         {
                             //cash = new MCash(cashline.GetCtx(), cashline.GetC_Cash_ID(), cashline.Get_Trx());
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = cash.GetC_Currency_ID();
                             AD_Client_ID = cash.GetAD_Client_ID();
@@ -1116,7 +1116,7 @@ namespace VAdvantage.Model
                     {
                         if (cashline != null && invoice != null) // Cash to invoice
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
                             AD_Client_ID = invoice.GetAD_Client_ID();
@@ -1130,7 +1130,7 @@ namespace VAdvantage.Model
                     {
                         if (payment != null && invoice != null) // payment to invoice
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = invoice.GetC_Currency_ID();
                             AD_Client_ID = invoice.GetAD_Client_ID();
@@ -1138,7 +1138,7 @@ namespace VAdvantage.Model
                         }
                         else if (payment != null && payment != null) //payment to payment
                         {
-                            DateAcct = GetDateAcct();
+                            DateAcct = conversionDate;
                             C_ConversionType_ID = GetC_ConversionType_ID();
                             currencyTo_ID = payment.GetC_Currency_ID();
                             AD_Client_ID = payment.GetAD_Client_ID();
@@ -1172,15 +1172,13 @@ namespace VAdvantage.Model
                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "API")
                 {
                     varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
                 }
                 else
                 {
                     varianceAmount = Decimal.Round(Decimal.Subtract((Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate)), paySch.GetDueAmt()), currency.GetStdPrecision());
                 }
                 if (_isDuplicate)
@@ -1194,8 +1192,7 @@ namespace VAdvantage.Model
                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "API")
                 {
                     if ((Decimal.Multiply(Decimal.Negate(line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate)) < paySch.GetDueAmt())
                     {
                         paySch.SetVA009_Variance(Decimal.Negate(varianceAmount));
@@ -1208,8 +1205,7 @@ namespace VAdvantage.Model
                 else
                 {
                     if (Decimal.Multiply((line.GetAmount() + line.GetWriteOffAmt() +
-                        line.GetDiscountAmt() + line.GetOverUnderAmt() +
-                        (line.Get_ColumnIndex("WithholdingAmt") > 0 ? (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) : 0))
+                        line.GetDiscountAmt() + line.GetOverUnderAmt())
                         , currencymultiplyRate) < paySch.GetDueAmt())
                     {
                         paySch.SetVA009_Variance(Decimal.Negate(varianceAmount));
@@ -1335,12 +1331,7 @@ namespace VAdvantage.Model
                 }
                 // variance = Paid Invoice amount - Due Amount 
                 //paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetVA009_PaidAmntInvce(), paySch.GetDueAmt()));
-                paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetDueAmt(), Decimal.Add(paySch.GetVA009_PaidAmntInvce(),
-                    Decimal.Round(Decimal.Multiply((line.Get_ColumnIndex("WithholdingAmt") > 0 ?
-                    ((doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) ||
-                    doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE)) ?
-                    Decimal.Negate(line.GetWithholdingAmt() + line.GetBackupWithholdingAmount()) :
-                    (line.GetWithholdingAmt() + line.GetBackupWithholdingAmount())) : 0), currencymultiplyRate), currency.GetStdPrecision()))));
+                paySch.SetVA009_Variance(Decimal.Subtract(paySch.GetDueAmt(), paySch.GetVA009_PaidAmntInvce()));
             }
             if (C_InvoicePaySch_ID != paySch.GetC_InvoicePaySchedule_ID())
             {

@@ -5,7 +5,7 @@
         var $self = this;
         this.onClose = null;
         var $root = $("<div>");
-        var $busyDiv = $("<div class='vis-apanel-busy'>");
+        var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var mWarehouseID = M_Warehouse_ID;
         var mLocatorID = M_Locator_ID;
@@ -38,9 +38,9 @@
         var chkShowAll = $("<input id='" + "chkShowAll_" + windowNo + "' type='checkbox' >" +
             "<span><label id='" + "lblShowAll_" + windowNo + "' class='VIS_Pref_Label_Font'>" + VIS.Msg.getMsg("VIS_ShowAll") + "</label></span>");
 
-        var btnOk = $("<input id='" + "btnOk_" + windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px; margin-top: 5px; float: right; margin-right: 15px ;' type='button' value='" + VIS.Msg.getMsg("OK") + "'>");
+        var btnOk = $("<input id='" + "btnOk_" + windowNo + "' class='VIS_Pref_btn-2' style='float: right; margin-right: 10px;' type='button' value='" + VIS.Msg.getMsg("OK") + "'>");
 
-        var btnCancel = $("<input id='" + "btnCancel_" + windowNo + "' class='VIS_Pref_btn-2' style='margin-bottom: 1px; margin-top: 5px; float: right;margin-right: 0px;' type='button' value='" + VIS.Msg.getMsg("Cancel") + "'>");
+        var btnCancel = $("<input id='" + "btnCancel_" + windowNo + "' class='VIS_Pref_btn-2' style='float: right;margin-right: 0px;' type='button' value='" + VIS.Msg.getMsg("Cancel") + "'>");
 
         var topdiv = $("<div id='" + "topdiv_" + windowNo + "' style='float: left; width: 100%; height: 7%; text-align: right;'>");
         var middeldiv = $("<div id='" + "middeldiv_" + windowNo + "' style='float: left; width: 100%; height: 79%;'>");
@@ -49,8 +49,11 @@
         var disableSearch = false;
         if (VIS.Application.isRTL) {
             topdiv.css("text-align", "left");
-            btnOk.css("margin-right", "-130px");
-            btnCancel.css("margin-right", "55px");
+            btnOk.css("margin-right", "0px");
+            btnOk.css("margin-left", "10px");
+            btnOk.css("float", "left");
+            btnCancel.css("margin-right", "0px");
+            btnCancel.css("float", "left");
         }
 
 
@@ -109,7 +112,7 @@
             }	//	BPartner != 0
 
             msql = prepareTable(msqlFrom, msqlWhere, false, "patr") + " ORDER BY asi.GuaranteeDate, QtyOnHand DESC";	//	oldest, smallest first
-            refresh();
+            //refresh();
             topdiv.append(chkShowAll);
             bottomdiv.append(btnCancel).append(btnOk);
             $root.append($busyDiv).append(topdiv).append(middeldiv).append(bottomdiv);
@@ -170,7 +173,7 @@
             try {
                 var _sql = VIS.secureEngine.encrypt(sql);
                 dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetAttributeData", { "Sq1Atribute": _sql, "Product_ID": mProductID }, null);
-                if (dr.length > 0) {
+                if (dr != null && dr.length > 0) {
                     var count = 1;
                     for (var i in dr) {
                         var line = {};
@@ -287,6 +290,7 @@
                     $self.dGrid.search('all', lotNo);
             }
             //$self.dGrid.hideColumn('M_Locator_ID');
+            $busyDiv.css("display", 'none');
         }
 
         function enableButtons() {

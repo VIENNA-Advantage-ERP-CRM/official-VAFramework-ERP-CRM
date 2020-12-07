@@ -117,6 +117,7 @@
                         // $imgbusy2.hide();
                         //$imgbusy1.hide();
                         $imgbusy1.css('display', 'none');
+                        showLogin1(e);
                     }
 
                 })
@@ -127,11 +128,21 @@
                     //$imgbusy2.hide();
                     //$imgbusy1.hide();
                     $imgbusy1.css('display', 'none');
+                    showLogin1(e);
                 });
         }
 
         // Prevent the normal behavior since we opened the dialog
         e.preventDefault();
+    };
+
+    /**
+     * - Show login panel 1
+     * */
+    var showLogin1 = function () {
+        $imgAuto.hide();
+        $('.login-content').show();
+        $("#loginName").focus();
     };
 
     var validatePassword = function (password) {
@@ -347,6 +358,7 @@
     var $lblWare = $('label[for="Login2Model_Warehouse"]');
     var $lblDate = $('label[for="Login2Model_Date"]');
     var $imgbusy1 = $(".img-login");
+    var $imgAuto = $(".img-autologin");
 
     var $btnLogin1 = $("#btnLogin1");
     var $btnLogin2 = $("#btnLogin2");
@@ -355,6 +367,19 @@
     $cmbLang.change(langchange);
 
     var setting = false;
+
+    /**
+     * auto login in framework
+     * @param {any} val - input value
+     */
+    function autoLogin(val) {
+        var arr = val.split('^Y^');
+
+        $txtUser.val(arr[0]);
+        $txtPwd.val(arr[1]);
+        $btnLogin1.submit();
+    };
+
 
     function setLanguage() {
         var langCode = localStorage.getItem("vis_login_langCode");
@@ -394,6 +419,14 @@
     setLanguage();
     setText();
 
+    if ($txtUser.val() != "") {
+        $imgAuto.show();
+        $(".login-content").hide();
+        autoLogin($txtUser.val());
+    }
+    else {
+        $txtUser.focus();
+    }
 });
 
 (function () {

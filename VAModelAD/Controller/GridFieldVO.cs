@@ -17,7 +17,7 @@ using VAdvantage.Classes;
 
 namespace VAdvantage.Controller
 {
-    
+  
     public class GridFieldVO : FieldVObj, Evaluatee
     {
         /*callout text*/
@@ -213,6 +213,8 @@ namespace VAdvantage.Controller
                         vo.mandatoryLogic = dr[i].ToString();
                     else if (columnName.Equals("OBSCURETYPE"))
                         vo.ObscureType = dr[i].ToString();
+                    else if (columnName.Equals("OBSCUREFIELDTYPE"))
+                        vo.ObscureFieldType = dr[i].ToString();
                     else if (columnName.Equals("ISDEFAULTFOCUS"))
                         vo.IsDefaultFocus = "Y".Equals(dr[i].ToString());
                     //
@@ -722,7 +724,7 @@ namespace VAdvantage.Controller
             }
             if (DisplayType.IsLookup(displayType))
             {
-                if (IsDisplayedf || IsDisplayedMR)
+                if (IsDisplayedf || IsDisplayedMR || ColumnName.ToLower().Equals("createdby") || ColumnName.ToLower().Equals("updatedby"))
                 {
                     try
                     {
@@ -845,6 +847,7 @@ namespace VAdvantage.Controller
             clone.FieldGroupDefault = FieldGroupDefault;
             clone.ShowFilterOption = ShowFilterOption;
             clone.IsUnique = IsUnique;
+            clone.ObscureFieldType = ObscureFieldType;
             return clone;
         }
 

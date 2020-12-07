@@ -223,11 +223,17 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         protected override Boolean AfterSave(Boolean newRecord, Boolean success)
         {
+            if (!success)
+            {
+                return success;
+            }
+
             PO wrhus = null;
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
             //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_Warehouse_Acct'");
-            _sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Warehouse_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Warehouse_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
+            _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Warehouse_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
             if (count > 0)
             {
@@ -403,6 +409,23 @@ namespace VAdvantage.Model
                 {
                     SetSeparator("*");
                 }
+            }
+
+            // JID_1888 Checks for the duplicate search key
+
+            int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '" + GetValue() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
+            if (count > 0)
+            {
+                log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
+                return false;
+            }
+            //JID_1888 checks for the duplicate name
+
+            int countName = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) FROM M_Warehouse WHERE Name= '" + GetName() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()));
+            if (countName > 0)
+            {
+                log.SaveError("", Msg.GetMsg(GetCtx(), "RequiredUniqueName"));
+                return false;
             }
 
             return true;

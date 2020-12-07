@@ -246,6 +246,9 @@
             var isReadOnly = mField.getIsReadOnly();
             var isUpdateable = mField.getIsEditable(false);
             var windowNo = mField.getWindowNo();
+            var tabNo = 0;
+            if (mTab)
+                tabNo = mTab.getTabNo();
 
             if (displayType == VIS.DisplayType.Button) {
 
@@ -370,12 +373,12 @@
             }
             else if (displayType == VIS.DisplayType.PAttribute) {
 
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true);
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, true, tabNo);
                 txtP.setField(mField);
                 ctrl = txtP;
             }
             else if (displayType == VIS.DisplayType.GAttribute) {
-                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false);
+                var txtP = new VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, mField.getLookup(), windowNo, false, false, false, false, tabNo);
                 txtP.setField(mField);
                 ctrl = txtP;
             }
@@ -757,7 +760,7 @@
             //}
             var oldVal = this.oldValue;
             this.oldValue = "";
-           // this.valSetting = true;
+            // this.valSetting = true;
             this.setValue(oldVal);
             return;
         }
@@ -862,22 +865,48 @@
     function VTextBox(columnName, isMandatory, isReadOnly, isUpdateable, displayLength, fieldLength, vFormat, obscureType, isPwdField) {
 
         var displayType = VIS.DisplayType.String;
-
+        this.obscureType = obscureType;
+        var src = "fa fa-credit-card";
         //Init Control
         var $ctrl = $('<input>', { type: (isPwdField) ? 'password' : 'text', name: columnName, maxlength: fieldLength });
-
-
+        var $btnSearch = $('<button class="input-group-text" style="display:none"><i class="' + src + '" /></button>');
+        //if (obscureType && !isReadOnly)
+        //    $ctrl.append($btnSearch);
 
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
 
-        if (isReadOnly || !isUpdateable) {
+        if (isReadOnly || !isUpdateable || obscureType) {
             this.setReadOnly(true);
-            //this.Enabled = false;
         }
         else {
             this.setReadOnly(false);
         }
+
+        this.getBtn = function (index) {
+            if (index == 0 && obscureType) {
+                this.setReadOnly(true);
+                return $btnSearch;
+            }
+        };
+
+
+        this.showObscureButton = function (show) {
+            if (show && obscureType) {
+                $btnSearch.css("display", "");
+            }
+            else {
+                $btnSearch.css("display", "none");
+                $btnSearch.off("click");
+            }
+        };
+
+        this.getBtnCount = function () {
+
+            if (obscureType)
+                return 1;
+            return 0;
+        };
 
         var self = this; //self pointer
 
@@ -891,6 +920,28 @@
                 self.fireValueChanged(evt);
                 evt = null;
             }
+            if (obscureType) {
+                self.setReadOnly(true);
+            }
+        });
+
+        /* Event */
+        $ctrl.on("blur", function (e) {
+            // e.stopPropagation();
+            var newValue = $ctrl.val();
+
+            if (self.obscureType && newValue != "" && self.oldValue == newValue) {
+                self.ctrl.val(VIS.Env.getObscureValue(self.obscureType, newValue));
+                self.setReadOnly(true);
+            }
+        });
+
+        $btnSearch.on("click", function () {
+            if (self.mField.getIsEditable(true)) {
+                self.setReadOnly(false, true, true);
+                $ctrl.val(self.mField.getValue());
+                $ctrl.focus();
+            }
         });
 
         this.disposeComponent = function () {
@@ -898,9 +949,25 @@
             $ctrl = null;
             self = null;
         }
+
+
+
+
     };
 
     VIS.Utility.inheritPrototype(VTextBox, IControl);//Inherit from IControl
+
+
+    VTextBox.prototype.setReadOnly = function (readOnly, forceWritable) {
+        if (!readOnly && this.obscureType && !forceWritable && (!this.mField.getIsInserting() || this.ctrl.val() != "")) {
+            readOnly = true;
+        }
+
+        this.isReadOnly = readOnly;
+        this.ctrl.prop('disabled', readOnly ? true : false);
+        this.setBackground(false);
+    };
+
 
     /** 
      *  set value 
@@ -908,9 +975,17 @@
      */
     VTextBox.prototype.setValue = function (newValue) {
         if (this.oldValue != newValue) {
-            this.oldValue = newValue;
+
             //console.log(newValue);
-            this.ctrl.val(newValue);
+
+            if (this.obscureType && (!this.mField.getIsInserting() || this.ctrl.val() != "")) {
+                this.ctrl.val(VIS.Env.getObscureValue(this.obscureType, newValue));
+                this.setReadOnly(true);
+            }
+            else
+                this.ctrl.val(newValue);
+
+            this.oldValue = newValue;
             //this.setBackground("white");
         }
     };
@@ -3375,7 +3450,8 @@
         var length = fieldLength;
 
         //Init Control
-        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'number', step: 'any', name: columnName, maxlength: length, 'data-type': 'int' });
+
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3558,8 +3634,13 @@
         $ctrl.on("blur", function (e) {
             e.stopPropagation();
             $ctrl.attr("type", "text");
+            var val = $ctrl.val()
+            if (!self.dotFormatter) {
+                val = val.replace(".", ",");
+            }
 
-            var _value = self.format.GetConvertedString($ctrl.val(), self.dotFormatter);
+
+            var _value = self.format.GetConvertedString(val, self.dotFormatter);
 
             var _val = self.format.GetFormatAmount(_value, "formatOnly", self.dotFormatter);
             $ctrl.val(_val);
@@ -3642,7 +3723,8 @@
         var displayType = VIS.DisplayType.Integer;
         var length = fieldLength;
         //Init Control
-        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length });
+        var $ctrl = $('<input>', { type: 'text', name: columnName, maxlength: length, 'data-type': 'int' });
+
         //Call base class
         IControl.call(this, $ctrl, displayType, isReadOnly, columnName, isMandatory);
         //Set Fration,min,max value for control according to there dispay type
@@ -3656,7 +3738,7 @@
             this.setReadOnly(false);
         }
         var self = this; //self pointer
-
+        //$ctrl.addClass("vis-control-wrap-int-amount");
 
         //On key down event
         $ctrl.on("keydown", function (event) {
@@ -4257,7 +4339,7 @@
     //END
 
     //pAttribute control
-    function VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, windowNop, isActivityForm, search, fromDMS, pAttribute) {
+    function VPAttribute(columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup, windowNop, isActivityForm, search, fromDMS, pAttribute, tabNo) {
 
         //Variable region
         /**	No Instance Key					*/
@@ -4275,6 +4357,7 @@
         this.value = null;
 
         this.windowNo = windowNop;
+        this.tabNo = tabNo;
         //set lookup into current object from pttribute/gattribute lookup
         this.lookup = lookup;
 
@@ -4395,12 +4478,10 @@
 
         //Open PAttribute form
         function OpenPAttributeDialog(oldValue) {
-
             var M_AttributeSetInstance_ID = (oldValue == null) ? 0 : oldValue;
             var M_Product_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Product_ID");
-            var M_ProductBOM_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_ProductBOM_ID");
+            var M_ProductBOM_ID = VIS.context.getTabRecordContext(windowNop, tabNo, "M_ProductBOM_ID");
             var M_Locator_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Locator_ID");
-
             self.log.config("M_Product_ID=" + M_Product_ID + "/" + M_ProductBOM_ID + ",M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", AD_Column_ID=" + self.AD_Column_ID);
             var productWindow = self.AD_Column_ID == 8418;		//	HARDCODED
 
@@ -4422,7 +4503,7 @@
                     data: {
                         productId: M_Product_ID,
                         adColumn: self.AD_Column_ID,
-                        windowNo: windowNop
+                        windowNo: windowNop,
                     },
                     success: function (data) {
                         exclude = data.result;

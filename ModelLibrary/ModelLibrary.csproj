@@ -65,6 +65,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -218,7 +219,7 @@
     <Compile Include="Model\MAssetGroup.cs" />
     <Compile Include="Model\MAssignAcctSchema.cs" />
     <Compile Include="Model\MAssignmentSlot.cs" />
-    <Compile Include="Model\MAttribute.cs" />
+    <Compile Include="Model\MVAMProductFeature.cs" />
     <Compile Include="Model\MAttributeInstance.cs" />
     <Compile Include="Model\MAttributeSet.cs" />
     <Compile Include="Model\MAttributeSetInstance.cs" />
@@ -239,6 +240,8 @@
     <Compile Include="Model\MBPartnerLocation.cs" />
     <Compile Include="Model\MBPBankAccount.cs" />
     <Compile Include="Model\MBPGroup.cs" />
+    <Compile Include="Model\MBPWithholding.cs" />
+    <Compile Include="Model\MBudgetControl.cs" />
     <Compile Include="Model\MCalendar.cs" />
     <Compile Include="Model\MCampaign.cs" />
     <Compile Include="Model\MCash.cs" />
@@ -272,6 +275,7 @@
     <Compile Include="Model\MCStage.cs" />
     <Compile Include="Model\MCStageElement.cs" />
     <Compile Include="Model\MCtxArea.cs" />
+    <Compile Include="Model\MCurrCrossRate.cs" />
     <Compile Include="Model\MCurrency.cs" />
     <Compile Include="Model\MCurrencyAcct.cs" />
     <Compile Include="Model\MCurrencySource.cs" />
@@ -521,6 +525,7 @@
     <Compile Include="Process\BPartnerOrgUnLink.cs" />
     <Compile Include="Process\BPartnerValidate.cs" />
     <Compile Include="Process\BPGroupAcctCopy.cs" />
+    <Compile Include="Process\CalculateCrossCurrRate.cs" />
     <Compile Include="Process\CalculateForeignCost.cs" />
     <Compile Include="Process\CommissionAPInvoice.cs" />
     <Compile Include="Process\CommissionCalc.cs" />
@@ -566,6 +571,7 @@
     <Compile Include="Process\GenerateGroupSubGroup.cs" />
     <Compile Include="Process\GenerateOrder.cs" />
     <Compile Include="Process\GenerateQuotation.cs" />
+    <Compile Include="Process\GenPeriodControl.cs" />
     <Compile Include="Process\ImportAccount.cs" />
     <Compile Include="Process\ImportBankStatement.cs" />
     <Compile Include="Process\ImportBPartner.cs" />

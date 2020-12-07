@@ -258,6 +258,26 @@ namespace VAdvantage.Model
                 }
             }
 
+            //	Update Cash Journal
+            if (C_CashLine_ID != 0)
+            {
+                cashLine = new MCashLine(GetCtx(), C_CashLine_ID, Get_TrxName());
+                if (GetC_BPartner_ID() != cashLine.GetC_BPartner_ID())
+                {
+                    log.Warning("C_BPartner_ID different - Invoice=" + GetC_BPartner_ID() + " - CashJournal=" + cashLine.GetC_BPartner_ID());
+                }
+                if (reverse)
+                {
+                    cashLine.SetIsAllocated(false);
+                    if (!cashLine.Save(Get_Trx()))
+                    {
+                        ValueNamePair pp = VLogger.RetrieveError();
+                        log.Log(Level.SEVERE, "Error found for updating cashLine  for  this Line ID = " + cashLine.GetC_CashLine_ID() +
+                                   " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
+                    }
+                }
+            }
+
             //	Payment - Invoice
             if (C_Payment_ID != 0 && invoice != null)
             {
@@ -299,9 +319,9 @@ namespace VAdvantage.Model
                     log.Fine("C_CashLine_ID=" + C_CashLine_ID
                         + " Unlinked from C_Invoice_ID=" + C_Invoice_ID);
                     // Set isallocated false on cashline while allocation gets deallocated assigned by Mukesh sir on 27/12/2017
-                    MCashLine cashline = new MCashLine(GetCtx(), GetC_CashLine_ID(), Get_TrxName());
-                    cashline.SetIsAllocated(false);
-                    cashline.Save();
+                    //MCashLine cashline = new MCashLine(GetCtx(), GetC_CashLine_ID(), Get_TrxName());
+                    //cashline.SetIsAllocated(false);
+                    //cashline.Save();
                 }
                 else
                 {
@@ -324,6 +344,11 @@ namespace VAdvantage.Model
                 }
             }
 
+            if (GetGL_JournalLine_ID() != 0 && reverse)
+            {
+                // set allocation as false on View Allocation reversal
+                DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='N' WHERE GL_JOURNALLINE_ID =" + GetGL_JournalLine_ID(), null, Get_TrxName());
+            }
             // Added by Bharat- Update Discrepancy amount on Invoice.
 
             if (C_Payment_ID == 0 && C_CashLine_ID == 0 && invoice != null)
@@ -428,7 +453,8 @@ namespace VAdvantage.Model
                                     {
                                         // when payment created with invoice refernce direct
                                         // convert payment amount in invoice amt with payment date and payment conversion type
-                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add(payment.GetPayAmt(), payment.GetDiscountAmt()),
+                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Negate(Decimal.Add(Decimal.Add((payment.GetPayAmt() +
+                                            (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
                                             payment.GetWriteOffAmt())), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
                                             payment.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                     }
@@ -452,7 +478,8 @@ namespace VAdvantage.Model
                                     {
                                         // when we create payment with invoice reference direct
                                         // convert payment amount in invoice amt with payment date and payment conversion type
-                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add(payment.GetPayAmt(), payment.GetDiscountAmt()),
+                                        payAmt = MConversionRate.Convert(GetCtx(), Decimal.Add(Decimal.Add((payment.GetPayAmt() +
+                                            (payment.Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (payment.GetWithholdingAmt() + payment.GetBackupWithholdingAmount()) : 0)), payment.GetDiscountAmt()),
                                             payment.GetWriteOffAmt()), payment.GetC_Currency_ID(), invoice.GetC_Currency_ID(), payment.GetDateAcct(),
                                             payment.GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                     }

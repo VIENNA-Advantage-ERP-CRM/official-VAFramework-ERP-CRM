@@ -66,6 +66,20 @@ namespace VIS.Controllers
 
             //}
 
+            // if (Request.QueryString.Count > 0)
+            // {
+            // string user = Request.QueryString["U"];
+            // string pwd = Request.QueryString["P"];
+            // AccountController ac = new AccountController();
+            // LoginModel md = new LoginModel();
+            // md.Login1Model = new Login1Model();
+            // md.Login1Model.UserValue = user;
+            // md.Login1Model.Password = pwd;
+            //JsonResult jr =  ac.JsonLogin(md, "");
+            // ac.SetAuthCookie(md, Response); //AutoLogin if all passed
+            // return RedirectToAction("Index");
+            // }
+
 
             var url = CloudLogin.IsAllowedToLogin(Request.Url.ToString());
             if (!string.IsNullOrEmpty(url))
@@ -77,7 +91,10 @@ namespace VIS.Controllers
             LoginModel model = null;
             if (User.Identity.IsAuthenticated)
             {
-                
+                if (Request.QueryString.Count > 0) /* if has value */
+                {
+                    return RedirectToAction("Index"); /*redirect to same url without querystring*/
+                }
 
                 try
                 {
@@ -133,8 +150,8 @@ namespace VIS.Controllers
 
                     if (string.IsNullOrEmpty(ctx.GetContext("##AD_User_Value")))
                     {
-                       return  new AccountController().LogOff();
-                        
+                        return new AccountController().LogOff();
+
                     }
 
                     if (key != "")
@@ -161,7 +178,7 @@ namespace VIS.Controllers
                     model = new LoginModel();
                     model.Login1Model = new Login1Model();
                     model.Login2Model = new Login2Model();
-                    model.Login1Model.UserValue =ctx.GetContext("##AD_User_Value");
+                    model.Login1Model.UserValue = ctx.GetContext("##AD_User_Value");
                     model.Login1Model.DisplayName = ctx.GetContext("##AD_User_Name");
                     model.Login1Model.LoginLanguage = ctx.GetAD_Language();
 
@@ -176,22 +193,27 @@ namespace VIS.Controllers
                     var OrgList = new List<KeyNamePair>();
                     var WareHouseList = new List<KeyNamePair>();
 
-                   IDataReader drRoles= LoginHelper.GetRoles(model.Login1Model.UserValue,false,false);
+                    string username = "";
+                    IDataReader drRoles= LoginHelper.GetRoles(model.Login1Model.UserValue,false,false);
 
+                    int AD_User_ID = 0;
                     if (drRoles.Read())
                     {
                         do  //	read all roles
                         {
+                            AD_User_ID = Util.GetValueOfInt(drRoles[0].ToString());
                             int AD_Role_ID = Util.GetValueOfInt(drRoles[1].ToString());
                             String Name = drRoles[2].ToString();
                             KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
                             RoleList.Add(p);
+                            username = Util.GetValueOfString(drRoles["username"].ToString());
                         }
                         while (drRoles.Read());
                     }
                     drRoles.Close();
 
-
+                    model.Login1Model.AD_User_ID = AD_User_ID;
+                    model.Login1Model.DisplayName = username;
 
                     //string diableMenu = ctx.GetContext("#DisableMenu");
                     Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(ctx); // inilitilize menu class
@@ -275,7 +297,7 @@ namespace VIS.Controllers
                         int libFound = 0;
                         foreach (Bundle b in BundleTable.Bundles)
                         {
-                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v") && ViewBag.LibSuffix=="")
+                            if (b.Path.Contains("ViennaBase") && b.Path.Contains("_v") && ViewBag.LibSuffix == "")
                             {
                                 ViewBag.LibSuffix = Util.GetValueOfInt(ctx.GetContext("#FRONTEND_LIB_VERSION")) > 2
                                                       ? "_v3" : "_v2";
@@ -303,6 +325,28 @@ namespace VIS.Controllers
             {
                 model = new LoginModel();
                 model.Login1Model = new Login1Model();
+
+                if (Request.QueryString.Count > 0) /* if query has values*/
+                //model.Login1Model.Password = "System";	         
+                {
+                    try
+                    {
+                        TempData["user"] = SecureEngine.Decrypt(Request.QueryString["U"]); //get uservalue
+                        TempData["pwd"] = SecureEngine.Decrypt(Request.QueryString["P"]);//get userpwd
+                    }
+                    catch
+                    {
+                        TempData.Clear();
+                    }
+                    return RedirectToAction("Index"); // redirect to same url to remove cookie
+                }
+
+                if (TempData.ContainsKey("user"))
+                {
+                    model.Login1Model.UserValue = TempData["user"].ToString() + "^Y^" + TempData["pwd"].ToString();
+                    // model.Login1Model.Password = TempData.Peek("pwd").ToString();
+                }
+
                 //model.Login1Model.UserName = "SuperUser";
                 //model.Login1Model.Password = "System";
                 model.Login1Model.LoginLanguage = "en_US";
@@ -312,7 +356,7 @@ namespace VIS.Controllers
                 ViewBag.OrgList = new List<KeyNamePair>();
                 ViewBag.WarehouseList = new List<KeyNamePair>();
                 ViewBag.ClientList = new List<KeyNamePair>();
-                
+
                 ViewBag.Languages = Language.GetLanguages(MLanguage.GetSystemLanguage());
 
                 Session["ctx"] = null;

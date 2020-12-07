@@ -25,8 +25,8 @@
         var _M_Warehouse_ID = 0;
         var _attributes = [];
 
-        var lblA1 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_Attribute_ID"), "M_Attribute_ID", false, true);
-        var lblA2 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_Attribute_ID"), "M_Attribute_ID", false, true);
+        var lblA1 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_ProductFeature_ID"), "VAM_ProductFeature_ID", false, true);
+        var lblA2 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_ProductFeature_ID"), "VAM_ProductFeature_ID", false, true);
         var lblPriceList = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_PriceList_ID"), "M_PriceList_ID", false, true);
         var lblWareHouse = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_Warehouse_ID"), "M_Warehouse_ID", false, true);
         var lblMode = new VIS.Controls.VLabel(VIS.Msg.getMsg("Mode", false, false), "Mode", false, true);
@@ -72,9 +72,9 @@
 
             //topLeftSide div
             topLeftDiv = $("<div id='btnSpaceDiv_" + $self.windowNo + "'  class='vis-archive-l-s-head'>" +
-                       "<button id='btnSpace_" + $self.windowNo + "' class='vis-archive-sb-t-button'>" +
-                       "<i class='vis vis-arrow-left'></i></button></div>" +
-                      "</div>");
+                "<button id='btnSpace_" + $self.windowNo + "' class='vis-archive-sb-t-button'>" +
+                "<i class='vis vis-arrow-left'></i></button></div>" +
+                "</div>");
 
             //left side parameter div
             paradiv = $("<div class='vis-archive-l-s-content vis-leftsidebarouterwrap' id='parameterDiv_" + $self.windowNo + "'>");
@@ -87,7 +87,7 @@
             btnOk = $("<input id='btnOk_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' style='min-width: 70px;' type='button' value='" + VIS.Msg.getMsg("OK", false, false) + "'>");
 
 
-            var tble = $("<table style='width: 100%;'>"); 
+            var tble = $("<table style='width: 100%;'>");
             //var tr = $("<tr>");
             //var td = $("<td style='padding: 0px 10px 0px;'>");
             paradiv.append(tble);
@@ -99,7 +99,7 @@
             td = $("<td style='padding: 10px 10px 0px'>");
             var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
             var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
-            
+
             tble.append(tr);
             tr.append(td);
             td.append(Leftformfieldwrp);
@@ -275,11 +275,11 @@
             var attributeValueyId = 0;
 
             if (xValue) {
-                attributeId = xValue.GetM_Attribute_ID;
+                attributeId = xValue.GetVAM_ProductFeature_ID;
                 attributeValueId = xValue.GetM_AttributeValue_ID;
             }
             if (yValue) {
-                attributeyId = yValue.GetM_Attribute_ID;
+                attributeyId = yValue.GetVAM_ProductFeature_ID;
                 attributeValueyId = yValue.GetM_AttributeValue_ID;
             }
 
@@ -431,14 +431,14 @@
                 // cmbMode.getControl().prop("SelectedIndex", MODE_VIEW);
                 return;
             }
-                //	Update Prices
+            //	Update Prices
             else if (mode == MODE_PRICE) {
                 // UpdatePrices();
                 // cmbMode.getControl().prop("SelectedIndex", MODE_VIEW);
                 return;
             }
             else if (mode == MODE_VIEW) {
-                    ;
+                ;
             }
         }
 
@@ -466,59 +466,74 @@
                 });
 
             if (btnToggel != null)
-                btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
-                    if (toggleside) {
-                        btnRefresh.show();
-                        lblA1.getControl().show();
-                        lblA2.getControl().show();
-                        btnToggel.animate({ borderSpacing: 0 }, {
-                            step: function (now, fx) {
-                                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('transform', 'rotate(' + now + 'deg)');
-                            },
-                            duration: 'slow'
-                        }, 'linear');
-
-                        toggleside = false;
-                        // btnToggel.animate({ width: sideDivWidth }, "slow");
-                        rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
-                        paradiv.css("display", "block");
-                        topLeftDiv.animate({ width: sideDivWidth }, "slow");
-                        leftsideDiv.animate({ width: sideDivWidth }, "slow");
-                        //leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
-                        //    dGrid.resize();
-                        //});
+                var borderspace = 0;
+            btnToggel.on(VIS.Events.onTouchStartOrClick, function () {
+                if (toggleside) {
+                    btnRefresh.show();
+                    lblA1.getControl().show();
+                    lblA2.getControl().show();
+                    if (VIS.Application.isRTL) {
+                        borderspace = 180;
                     }
                     else {
-                        btnRefresh.hide();
-                        lblA1.getControl().hide();
-                        lblA2.getControl().hide();
-                        btnToggel.animate({ borderSpacing: 180 }, {
-                            step: function (now, fx) {
-                                $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
-                                $(this).css('transform', 'rotate(' + now + 'deg)');
-                            },
-                            duration: 'slow'
-                        }, 'linear');
+                        borderspace = 0;
 
-                        toggleside = true;
-                        // btnToggel.animate({ width: minSideWidth }, "slow");
-                        rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow");
-                        leftsideDiv.animate({ width: minSideWidth }, "slow");
-                        topLeftDiv.animate({ width: minSideWidth }, "slow");
-                         paradiv.css("display", "none");
-                        //rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
-                        //    dGrid.resize();
-                        //});
                     }
-                });
+                    btnToggel.animate({ borderSpacing: borderspace }, {
+                        step: function (now, fx) {
+                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('transform', 'rotate(' + now + 'deg)');
+                        },
+                        duration: 'slow'
+                    }, 'linear');
+
+                    toggleside = false;
+                    // btnToggel.animate({ width: sideDivWidth }, "slow");
+                    rightSideGridDiv.animate({ width: selectDivWidth }, "slow");
+                    paradiv.css("display", "block");
+                    topLeftDiv.animate({ width: sideDivWidth }, "slow");
+                    leftsideDiv.animate({ width: sideDivWidth }, "slow");
+                    //leftsideDiv.animate({ width: sideDivWidth }, "slow", null, function () {
+                    //    dGrid.resize();
+                    //});
+                }
+                else {
+                    if (VIS.Application.isRTL) {
+                        borderspace = 0;
+                    }
+                    else {
+                        borderspace = 180;
+
+                    }
+                    btnRefresh.hide();
+                    lblA1.getControl().hide();
+                    lblA2.getControl().hide();
+                    btnToggel.animate({ borderSpacing: borderspace }, {
+                        step: function (now, fx) {
+                            $(this).css('-webkit-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('-moz-transform', 'rotate(' + now + 'deg)');
+                            $(this).css('transform', 'rotate(' + now + 'deg)');
+                        },
+                        duration: 'slow'
+                    }, 'linear');
+
+                    toggleside = true;
+                    // btnToggel.animate({ width: minSideWidth }, "slow");
+                    rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow");
+                    leftsideDiv.animate({ width: minSideWidth }, "slow");
+                    topLeftDiv.animate({ width: minSideWidth }, "slow");
+                    paradiv.css("display", "none");
+                    //rightSideGridDiv.animate({ width: selectDivFullWidth }, "slow", null, function () {
+                    //    dGrid.resize();
+                    //});
+                }
+            });
         }
 
         this.display = function () {
             setTimeout(
-            dynInit(), 5);
+                dynInit(), 5);
         }
 
         //Privilized function

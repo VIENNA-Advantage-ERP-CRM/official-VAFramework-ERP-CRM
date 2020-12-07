@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_AccessLog
+/** Generated Model for VAF_RightsLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AccessLog : PO
+public class X_VAF_RightsLog : PO
 {
-public X_AD_AccessLog (Context ctx, int AD_AccessLog_ID, Trx trxName) : base (ctx, AD_AccessLog_ID, trxName)
+public X_VAF_RightsLog (Context ctx, int VAF_RightsLog_ID, Trx trxName) : base (ctx, VAF_RightsLog_ID, trxName)
 {
-/** if (AD_AccessLog_ID == 0)
+/** if (VAF_RightsLog_ID == 0)
 {
-SetAD_AccessLog_ID (0);
+SetVAF_RightsLog_ID (0);
 }
  */
 }
-public X_AD_AccessLog (Ctx ctx, int AD_AccessLog_ID, Trx trxName) : base (ctx, AD_AccessLog_ID, trxName)
+public X_VAF_RightsLog (Ctx ctx, int VAF_RightsLog_ID, Trx trxName) : base (ctx, VAF_RightsLog_ID, trxName)
 {
-/** if (AD_AccessLog_ID == 0)
+/** if (VAF_RightsLog_ID == 0)
 {
-SetAD_AccessLog_ID (0);
+SetVAF_RightsLog_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetAD_AccessLog_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AccessLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_RightsLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_AD_AccessLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AccessLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_RightsLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_AD_AccessLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AccessLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_RightsLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AccessLog()
+static X_VAF_RightsLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1280389043393L;
 public static int Table_ID;
  // =717;
 
-/** TableName=AD_AccessLog */
-public static String Table_Name="AD_AccessLog";
+/** TableName=VAF_RightsLog */
+public static String Table_Name="VAF_RightsLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -107,21 +107,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_AccessLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_RightsLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Access Log.
-@param AD_AccessLog_ID Log of Access to the System */
-public void SetAD_AccessLog_ID (int AD_AccessLog_ID)
+@param VAF_RightsLog_ID Log of Access to the System */
+public void SetVAF_RightsLog_ID (int VAF_RightsLog_ID)
 {
-if (AD_AccessLog_ID < 1) throw new ArgumentException ("AD_AccessLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_AccessLog_ID", AD_AccessLog_ID);
+if (VAF_RightsLog_ID < 1) throw new ArgumentException ("VAF_RightsLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_RightsLog_ID", VAF_RightsLog_ID);
 }
 /** Get Access Log.
 @return Log of Access to the System */
-public int GetAD_AccessLog_ID() 
+public int GetVAF_RightsLog_ID() 
 {
-Object ii = Get_Value("AD_AccessLog_ID");
+Object ii = Get_Value("VAF_RightsLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -129,7 +129,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_AccessLog_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_RightsLog_ID().ToString());
 }
 /** Set Column.
 @param AD_Column_ID Column in the table */

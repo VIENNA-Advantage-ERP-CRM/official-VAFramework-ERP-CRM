@@ -271,7 +271,7 @@ namespace VIS.Models
             //if there is different attribute set then delete old instance
             if (mAttributeSetInstanceId != 0 && (vadms_AttributeSet_ID != _masi.GetC_GenAttributeSet_ID()))
             {
-                DB.ExecuteQuery("DELETE FROM C_GenAttributeInstance WHERE C_GenAttributeSetInstance_ID='" + mAttributeSetInstanceId + "'");
+                DB.ExecuteQuery("DELETE FROM C_GenAttributeInstance WHERE C_GenAttributeSetInstance_ID=" + mAttributeSetInstanceId );
             }
 
             _masi.SetC_GenAttributeSet_ID(vadms_AttributeSet_ID);

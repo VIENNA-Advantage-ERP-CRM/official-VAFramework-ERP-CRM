@@ -10,6 +10,7 @@ using CoreLibrary.Classes;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 //using VAdvantage.Process;
 
 namespace VAdvantage.Classes
@@ -472,7 +473,49 @@ namespace VAdvantage.Classes
             _dateTimeFormats.Add(DisplayType.Time, "{0:T}");
             _dateTimeFormats.Add(-1, "{0:F}");//not used 
             _dateTimeFormats.Add(-2, "{0:D}");//not used 
-            _dateTimeFormats.Add(-3, "{0:t}");//* reserve for future use
+            _dateTimeFormats.Add(-3, "{0:d}");//* Short Date
+        }
+
+        /// <summary>
+        /// Get Formated Date according to Culture
+        /// </summary>
+        /// <param name="obj">Date Value</param>
+        /// <param name="lang">Client Culture</param>
+        /// <returns>Formated date as String</returns>
+        public String Format(object obj, string lang, int format)
+        {
+            DateTime dt;
+            CultureInfo culture;
+
+            if (obj is DateTime)
+            {
+                dt = (DateTime)obj;
+            }
+            else if (obj is long)
+            {
+                dt = CommonFunctions.CovertMilliToDate((long)obj);
+            }
+            else
+            {
+                throw new ArgumentException("Input is not in correct format(long/datetime)");
+            }
+
+            try
+            {
+                string fmtStr = _dateTimeFormats[format];
+                if (String.IsNullOrEmpty(fmtStr))
+                {
+                    fmtStr = _dateTimeFormats[_displayType];
+                }
+
+                culture = new CultureInfo(lang);
+                return String.Format(culture, fmtStr, dt);
+            }
+            catch (Exception e)
+            {
+                Logging.VLogger.Get().Log(VAdvantage.Logging.Level.SEVERE, e.Message);
+                return obj.ToString();
+            }
         }
 
         /// <summary>

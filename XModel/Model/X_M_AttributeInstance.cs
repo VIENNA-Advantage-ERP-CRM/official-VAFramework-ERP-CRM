@@ -149,18 +149,18 @@ public KeyNamePair GetKeyNamePair()
 {
 return new KeyNamePair(Get_ID(), GetM_AttributeValue_ID().ToString());
 }
-/** Set Attribute.
-@param M_Attribute_ID Product Attribute */
-public void SetM_Attribute_ID (int M_Attribute_ID)
+        /** Set Attribute.
+@param VAM_ProductFeature_ID Product Attribute */
+        public void SetVAM_ProductFeature_ID(int VAM_ProductFeature_ID)
 {
-if (M_Attribute_ID < 1) throw new ArgumentException ("M_Attribute_ID is mandatory.");
-Set_ValueNoCheck ("M_Attribute_ID", M_Attribute_ID);
+if (VAM_ProductFeature_ID < 1) throw new ArgumentException ("VAM_ProductFeature_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductFeature_ID", VAM_ProductFeature_ID);
 }
 /** Get Attribute.
 @return Product Attribute */
-public int GetM_Attribute_ID() 
+public int GetVAM_ProductFeature_ID() 
 {
-Object ii = Get_Value("M_Attribute_ID");
+Object ii = Get_Value("VAM_ProductFeature_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

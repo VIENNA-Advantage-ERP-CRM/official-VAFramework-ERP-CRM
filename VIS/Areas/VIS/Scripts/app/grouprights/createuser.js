@@ -36,7 +36,7 @@
            Create busyIndicator
        */
         function createBusyIndicator() {
-            $bsyDiv = $("<div class='vis-apanel-busy' style='height:96%; width:98%;'></div>");
+            $bsyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
             $bsyDiv[0].style.visibility = "hidden";
             $root.append($bsyDiv);
         }
@@ -48,43 +48,43 @@
             var str = '  <div style="overflow:hidden" class="vis-group-assinRole-content"><div class="vis-group-assinRole-data" style=" margin-top: 5px; margin-bottom: 0; "><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
                 '<input  tabindex="1" class="vis-group-email" type="text" name="Name" data-placeholder="" placeholder=" "><label>' + VIS.Msg.getMsg('EMail') + '</label></div></div></div>' +
 
-            '<div style="width:auto;float:right;" class="vis-group-assinRole-data">' +
-              //'<a style="float:left" class="vis-group-btn vis-group-orgAcess vis-group-grayBtn">' + VIS.Msg.getMsg('VIS_OrgAccess') + '</a>' +
-                               ' <a tabindex="2" class="vis-group-btn vis-group-pointer vis-group-create vis-group-grayBtn" style="float: left;">' + VIS.Msg.getMsg('Create') + '</a>' +
-               '<a tabindex="3" class="vis-group-btn vis-group-pointer vis-group-invite vis-group-blueBtn" style="float: right;">' + VIS.Msg.getMsg('VIS_Invite') + '</a>' +
+                '<div class="vis-group-assinRole-data vis-creategroup-btnwrap">' +
+                //'<a style="float:left" class="vis-group-btn vis-group-orgAcess vis-group-grayBtn">' + VIS.Msg.getMsg('VIS_OrgAccess') + '</a>' +
+                ' <a tabindex="2" class="vis-group-btn vis-group-pointer vis-group-create vis-group-grayBtn" style="float: left;">' + VIS.Msg.getMsg('Create') + '</a>' +
+                '<a tabindex="3" class="vis-group-btn vis-group-pointer vis-group-invite vis-group-blueBtn" style="float: right;">' + VIS.Msg.getMsg('VIS_Invite') + '</a>' +
 
 
-         '</div>' +
+                '</div>' +
 
 
 
 
-      '</div>';
+                '</div>';
 
             createContainer = $('<div class="vis-group-assignContainer" style="visibility:hidden">' +
-         '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
                 '<input  tabindex="4" type="text" maxlength="60" data-placeholder="" placeholder=" " class="vis-group-name vis-group-mandatory"  name="Name">' +
                 '<label>' + VIS.Msg.getMsg('Name') + '</label>' +
-          '</div></div></div>' +
+                '</div></div></div>' +
 
 
-          '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
-             '<input tabindex="5" type="text" maxlength="80" data-placeholder="" placeholder=" " class="vis-group-uid"  name="Name">' +
-              '<label>' + VIS.Msg.getMsg('VIS_UserID') + '</label>' +
-          '</div></div></div>' +
+                '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<input tabindex="5" type="text" maxlength="80" data-placeholder="" placeholder=" " class="vis-group-uid"  name="Name">' +
+                '<label>' + VIS.Msg.getMsg('VIS_UserID') + '</label>' +
+                '</div></div></div>' +
 
-          '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
-             '<input tabindex="6" type="password" maxlength="250" data-placeholder="" placeholder=" " class="vis-group-pwd"  name="Name">' +
-              '<label>' + VIS.Msg.getMsg('Password') + '</label>' +
-          '</div></div></div>' +
+                '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<input tabindex="6" type="password" maxlength="250" data-placeholder="" placeholder=" " class="vis-group-pwd"  name="Name">' +
+                '<label>' + VIS.Msg.getMsg('Password') + '</label>' +
+                '</div></div></div>' +
 
-          '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
-             '<input tabindex="7" type="text"  maxlength="50" data-placeholder="" placeholder=" " class="vis-group-mobile"  name="Name">' +
-              '<label>' + VIS.Msg.getMsg('Mobile') + '</label>' +
-          '</div></div></div>' +
-                        '<a tabindex="8" class="vis-group-btn vis-group-Save vis-group-pointer vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg('Save') + '</a>' +
+                '<div class="vis-group-assinRole-data"><div class="input-group vis-input-wrap"><div class="vis-control-wrap">' +
+                '<input tabindex="7" type="text"  maxlength="50" data-placeholder="" placeholder=" " class="vis-group-mobile"  name="Name">' +
+                '<label>' + VIS.Msg.getMsg('Mobile') + '</label>' +
+                '</div></div></div>' +
+                '<a tabindex="8" class="vis-group-btn vis-group-Save vis-group-pointer vis-group-grayBtn" style="float: right;">' + VIS.Msg.getMsg('Save') + '</a>' +
 
-                        '</div>');
+                '</div>');
 
 
             $divRoleGroup = $('<div class="vis-group-roleContainer" ><div> <label >' + VIS.Msg.getMsg("SelectRole") + '</label> </div></div>');
@@ -155,10 +155,10 @@
             var script = ' <script type="text/x-handlebars-template">' +
                 '{{#each this}}' +
                 '<div class="vis-group-user-wrap vis-group-role-pad"  data-UID="{{AD_Role_ID}}">' +
-                    	'<div class="vis-group-user-profile">' +
-                            '<input tabindex="7"  type="checkbox" data-UID="{{AD_Role_ID}}" >' +
-                            '<label>{{Name}}</label>' +
-                        '</div>' +
+                '<div class="vis-group-user-profile">' +
+                '<input tabindex="7"  type="checkbox" data-UID="{{AD_Role_ID}}" >' +
+                '<label>{{Name}}</label>' +
+                '</div>' +
                 '</div>' +
                 '{{/each}}​' +
                 '</script>';
@@ -168,30 +168,30 @@
         };
 
 
-       // /*
-       //Create Roles Template
-       //*/
-       // function roleTemplate() {
-       //     var script = ' <script type="text/x-handlebars-template">' +
-       //         '{{#each this}}' +
-       //         '<div class="vis-group-user-wrap vis-group-role-pad"  data-UID="{{AD_Role_ID}}">' +
-       //             	'<div class="vis-group-user-profile">' +
-       //                 '{{#if IsAssignedToUser}}' +
-       //                 	'<input tabindex="7" type="checkbox" data-UID="{{AD_Role_ID}}">' +
-       //                     '<label style="color: #535353;font-weight: bold;">{{Name}}</label>' +
-       //                     '{{else}}' +
-       //                     '<input tabindex="7"  type="checkbox" data-UID="{{AD_Role_ID}}" >' +
-       //                     '<label>{{Name}}</label>' +
-       //                     '{{/if}}' +
+        // /*
+        //Create Roles Template
+        //*/
+        // function roleTemplate() {
+        //     var script = ' <script type="text/x-handlebars-template">' +
+        //         '{{#each this}}' +
+        //         '<div class="vis-group-user-wrap vis-group-role-pad"  data-UID="{{AD_Role_ID}}">' +
+        //             	'<div class="vis-group-user-profile">' +
+        //                 '{{#if IsAssignedToUser}}' +
+        //                 	'<input tabindex="7" type="checkbox" data-UID="{{AD_Role_ID}}">' +
+        //                     '<label style="color: #535353;font-weight: bold;">{{Name}}</label>' +
+        //                     '{{else}}' +
+        //                     '<input tabindex="7"  type="checkbox" data-UID="{{AD_Role_ID}}" >' +
+        //                     '<label>{{Name}}</label>' +
+        //                     '{{/if}}' +
 
-       //                 '</div>' +
-       //         '</div>' +
-       //         '{{/each}}​' +
-       //         '</script>';
+        //                 '</div>' +
+        //         '</div>' +
+        //         '{{/each}}​' +
+        //         '</script>';
 
-       //     rolemodtmp = $(script).html();
-       //     roletheModTmp = Handlebars.compile(rolemodtmp);
-       // };
+        //     rolemodtmp = $(script).html();
+        //     roletheModTmp = Handlebars.compile(rolemodtmp);
+        // };
 
         /*
             Load User Roles
@@ -320,12 +320,11 @@
                         if (data.length > 0) {
                             VIS.ADialog.error(data);
                         }
-                        else 
-                        {
+                        else {
                             VIS.ADialog.info("Record saved successfully")
                             ch.close();
                         }
-                           
+
                     },
                     error: function () {
                         $bsyDiv[0].style.visibility = "hidden";

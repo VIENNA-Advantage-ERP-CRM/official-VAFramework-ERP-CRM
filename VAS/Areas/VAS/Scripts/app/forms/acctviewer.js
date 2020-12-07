@@ -60,7 +60,12 @@
         }
 
 
+        var elements = [
+            "AmtAcctCr",
+            "AmtAcctDr",
+        ];
 
+        VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
 
 
         this.ELEMENTTYPE_AD_Reference_ID = 181;
@@ -81,7 +86,8 @@
         this.ELEMENTTYPE_UserElement1 = "X1";
         this.ELEMENTTYPE_UserElement2 = "X2";
 
-
+        //show posted button or not ("Y" or ""), when "N" - not to show button
+        var notShowPosted;
 
         // get Accounting Schema
         this.getClientAcctSchema = function (AD_Client_ID, OrgID) {
@@ -836,9 +842,16 @@
             // South
             lblstatusLine.getControl().css("color", "rgba(var(--v-c-primary), 1)");//css("font-size", "28px").
             btnRePost.text(VIS.Msg.getMsg("RePost"));
-            btnRePost.show();
-            chkforcePost.find("label").text(VIS.Msg.getMsg("Force"));
-            chkforcePost.show();
+            if (notShowPosted) {
+                btnRePost.hide();
+                chkforcePost.find("label").text(VIS.Msg.getMsg("Force"));
+                chkforcePost.hide();
+            }
+            else {
+                btnRePost.show();
+                chkforcePost.find("label").text(VIS.Msg.getMsg("Force"));
+                chkforcePost.show();
+            }
         }
 
         function tab1Select() {
@@ -863,8 +876,14 @@
             rightSideDiv.hide();
             leftSideDiv.hide();
             resultDiv.css("display", "block");
-            btnRePost.show();
-            chkforcePost.show();
+            if (notShowPosted) {
+                btnRePost.hide();
+                chkforcePost.hide();
+            }
+            else {
+                btnRePost.show();
+                chkforcePost.show();
+            }
             lblAccSchemaFilter.getControl().show();
             cmbAccSchemaFilter.getControl().show();
         }
@@ -888,10 +907,21 @@
                 var line = {};
                 for (var j = 0; j < dataObj.Columns.length; j++) {
                     if ($self.arrListColumns.length != dataObj.Columns.length) {
-                        $self.arrListColumns.push({
-                            field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
-                                dataObj.Columns[j]), sortable: true, size: '16%', hidden: false
-                        });
+                        // alignment of Credit and Debit field
+                        if (row[j] != null && typeof (row[j]) == "number" &&
+                            (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
+                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
+                            $self.arrListColumns.push({
+                                field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
+                                    dataObj.Columns[j]), sortable: true, size: '16%', hidden: false, style: 'text-align: right'
+                            });
+                        }
+                        else {
+                            $self.arrListColumns.push({
+                                field: dataObj.Columns[j], caption: VIS.Msg.translate(VIS.Env.getCtx(),
+                                    dataObj.Columns[j]), sortable: true, size: '16%', hidden: false
+                            });
+                        }
                     }
                     if (row[j] != null && typeof (row[j]) == "object") {
                         line[dataObj.Columns[j]] = row[j].Name;
@@ -905,8 +935,8 @@
                             }
                         }
                         else if (row[j] != null && typeof (row[j]) == "number" &&
-                            (VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctCr") == dataObj.Columns[j] ||
-                                VIS.Msg.translate(VIS.Env.getCtx(), "AmtAcctDr") == dataObj.Columns[j])) {
+                            (VIS.translatedTexts.AmtAcctCr == dataObj.Columns[j] ||
+                                VIS.translatedTexts.AmtAcctDr == dataObj.Columns[j])) {
                             line[dataObj.Columns[j]] = parseFloat(row[j]).toLocaleString();
                         }
                         else {
@@ -1154,13 +1184,15 @@
 
         function initializeComponent() {
 
+            notShowPosted = VIS.Env.getCtx().getContext('#SHOW_REPOST').equals("N");
             topDiv = $("<div id='" + "topDiv_" + windowNo + "' style='float: left; width: 100%;'>" +
                 "<div id='" + "queryDiv_" + windowNo + "'style='display: inline-block; margin-right: 15px; margin-top: 5px' >" +
+
                 "<label id='" + "lblquery_" + windowNo + "' class='VIS_Pref_Label_Font' style='cursor: pointer;font-size: 1rem;color: rgba(var(--v-c-primary), 1);'>"
                 + VIS.Msg.getMsg("ViewerQuery") + "</label></div>" +
                 "<div id='" + "resulttopDiv_" + windowNo + "' style='display: inline-block; width: 160px;'>" +
                 "<label id='" + "lblresult_" + windowNo + "' class='VIS_Pref_Label_Font' style='vertical-align: middle; cursor: pointer;'>"
-                + VIS.Msg.getMsg("ViewerResult") + "</label></div>" +
+                + VIS.Msg.getMsg("ViewerResult") + "</label></div></div>" +
                 "</div>");
             var localdiv = $("<div id='" + "resultTopFilterDiv_" + windowNo + "' style='float: right;width: 50%;'>");
             var $DivInputWrap = $('<div class="input-group vis-input-wrap">');
@@ -1234,12 +1266,15 @@
             $FrmInputWrap.append($FrmControlWrap);
             $FrmControlWrap.append(chkSelectDoc);
 
-             tr = $("<tr>");
+            tr = $("<tr>");
+
             td = $("<td>");
             var $FrmInputWrap = $('<div class="input-group vis-input-wrap">');
             var $FrmControlWrap = $('<div class="vis-control-wrap">');
             var $FrmCtrlBtnWrap = $('<div class="input-group-append">');
-             tble.append(tr);
+
+            tble.append(tr);
+
             tr.append(td);
             td.append($FrmInputWrap);
             $FrmInputWrap.append($FrmControlWrap);

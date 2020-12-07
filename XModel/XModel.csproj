@@ -56,6 +56,7 @@
     <Compile Include="ModelAD\X_AD_AssignSet.cs" />
     <Compile Include="ModelAD\X_AD_AssignTarget.cs" />
     <Compile Include="ModelAD\X_AD_Attachment.cs" />
+    <Compile Include="ModelAD\X_AD_AttachmentLine.cs" />
     <Compile Include="ModelAD\X_AD_AttachmentNote.cs" />
     <Compile Include="ModelAD\X_AD_AttachmentReference.cs" />
     <Compile Include="ModelAD\X_AD_Attribute.cs" />
@@ -371,6 +372,7 @@
     <Compile Include="Model\X_C_ConversionType.cs" />
     <Compile Include="Model\X_C_Conversion_Rate.cs" />
     <Compile Include="Model\X_C_Country.cs" />
+    <Compile Include="Model\X_C_CurrCrossRate.cs" />
     <Compile Include="Model\X_C_Currency.cs" />
     <Compile Include="Model\X_C_CurrencySource.cs" />
     <Compile Include="Model\X_C_Currency_Acct.cs" />
@@ -562,7 +564,7 @@
     <Compile Include="Model\X_K_Synonym.cs" />
     <Compile Include="Model\X_K_Topic.cs" />
     <Compile Include="Model\X_K_Type.cs" />
-    <Compile Include="Model\X_M_Attribute.cs" />
+    <Compile Include="Model\X_VAM_ProductFeature.cs" />
     <Compile Include="Model\X_M_AttributeInstance.cs" />
     <Compile Include="Model\X_M_AttributeSearch.cs" />
     <Compile Include="Model\X_M_AttributeSet.cs" />
@@ -660,6 +662,7 @@
     <Compile Include="Model\X_M_Routing.cs" />
     <Compile Include="Model\X_M_SerNoCtl.cs" />
     <Compile Include="Model\X_M_SerNoCtlExclude.cs" />
+    <Compile Include="Model\X_M_SerNoCtl_No.cs" />
     <Compile Include="Model\X_M_Shipper.cs" />
     <Compile Include="Model\X_M_StandardOperation.cs" />
     <Compile Include="Model\X_M_Storage.cs" />

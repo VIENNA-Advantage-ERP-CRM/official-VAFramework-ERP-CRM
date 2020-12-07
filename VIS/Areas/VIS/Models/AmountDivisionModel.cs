@@ -68,7 +68,8 @@ namespace VIS.Models
         {
             string Sql = "";
             List<ListAccountingSchema> listAcctSchema = new List<ListAccountingSchema>();
-            Sql = "SELECT object_name FROM all_objects WHERE object_type IN ('TABLE','VIEW') AND (object_name)  = UPPER('FRPT_ASSIGNEDORG') AND OWNER LIKE '" + DB.GetSchema() + "'";
+            //Sql = "SELECT object_name FROM all_objects WHERE object_type IN ('TABLE','VIEW') AND (object_name)  = UPPER('FRPT_ASSIGNEDORG') AND OWNER LIKE '" + DB.GetSchema() + "'";
+            Sql = DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_ASSIGNEDORG");
             string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
             if (ObjectName != "")
             {
@@ -143,7 +144,7 @@ namespace VIS.Models
             }
             else
             {
-                decimal chkAmount = Convert.ToDecimal(DB.ExecuteScalar("select Amount from c_DimAmtline where rownum=1 and c_dimAmt_ID=" + RecordID + ""));
+                decimal chkAmount = Convert.ToDecimal(DB.ExecuteScalar("select Amount from c_DimAmtline where c_dimAmt_ID=" + RecordID + " AND ROWNUM=1"));
                 if (chkAmount == 0)
                 {
                     return true;
@@ -281,6 +282,10 @@ namespace VIS.Models
                             else if (elementTypeID == "U1" || elementTypeID == "U2")
                             {
                                 Sql += " and c_elementvalue_id=" + oldDimensionName;
+                                if (oldBPartner_ID > 0)
+                                {
+                                    Sql += " AND NVL(C_BPartner_ID, 0)= " + oldBPartner_ID;
+                                }
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
                                      elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { Sql += " and AD_Column_ID=" + oldDimensionName; }//User Element 1 to User Element 9
@@ -320,6 +325,7 @@ namespace VIS.Models
                             {
                                 objDimAmtLine.SetC_Element_ID(elementID);
                                 objDimAmtLine.SetC_ElementValue_ID(dimensionValue);
+                                objDimAmtLine.SetC_BPartner_ID(bpartner_ID);
                             }//User List 1//User List 2
                             else if (elementTypeID == "X1" || elementTypeID == "X2" || elementTypeID == "X3" || elementTypeID == "X4" || elementTypeID == "X5" || elementTypeID == "X6" ||
                                      elementTypeID == "X7" || elementTypeID == "X8" || elementTypeID == "X9") { objDimAmtLine.SetAD_Column_ID(dimensionValue); }//User Element 1 to User Element 9
@@ -562,15 +568,15 @@ namespace VIS.Models
                 int tempDimensionID = Convert.ToInt32(DB.ExecuteScalar("select nvl(c_dimamt_id,0) as DimID from c_dimamtline where c_dimamt_id=" + dimensionID + ""));
                 if (tempDimensionID != 0)
                 {
-                    string uQuery = "select main.TableName,listagg(TO_CHAR(('ac.'||main.Colname)),'||''_''||') WITHIN GROUP(order by main.ColId) ColName from " +
-                             "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.ad_column_id as ColId from c_dimamtaccttype ct " +
-                             "inner join c_dimamtline cl on cl.c_dimamt_id=ct.c_dimamt_id and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
-                             "inner join c_acctschema_element se on se.c_acctschema_id=ct.c_acctschema_id and se.elementtype=ct.elementtype " +
-                             "inner join ad_column col1 on col1.ad_column_id=se.ad_column_id " +
-                             "inner join ad_table tab on tab.ad_table_id=col1.ad_table_id " +
-                             "inner join ad_column col2 on col2.ad_table_id=tab.ad_table_id and col2.isidentifier='Y' " +
-                             "where ct.c_dimamt_id=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by col2.ad_column_id)  main " +
-                             "group by main.TableName";
+                    string uQuery = "select main.TableName," + DBFunctionCollection.ListAggregationAmountDimesnionLine("listagg(TO_CHAR(('ac.'||main.Colname)),'||''_''||') WITHIN GROUP(order by main.ColId)") + " AS ColName from " +
+                         "(select distinct tab.tableName as TableName,col2.columnName as Colname,col2.ad_column_id as ColId from c_dimamtaccttype ct " +
+                         "inner join c_dimamtline cl on cl.c_dimamt_id=ct.c_dimamt_id and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id " +
+                         "inner join c_acctschema_element se on se.c_acctschema_id=ct.c_acctschema_id and se.elementtype=ct.elementtype " +
+                         "inner join ad_column col1 on col1.ad_column_id=se.ad_column_id " +
+                         "inner join ad_table tab on tab.ad_table_id=col1.ad_table_id " +
+                         "inner join ad_column col2 on col2.ad_table_id=tab.ad_table_id and col2.isidentifier='Y' " +
+                         "where ct.c_dimamt_id=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by col2.ad_column_id)  main " +
+                         "group by main.TableName";
                     DataSet dsUelement = DB.ExecuteDataset(uQuery);
                     if (dsUelement != null && dsUelement.Tables[0].Rows.Count > 0)
                     {
@@ -667,7 +673,7 @@ namespace VIS.Models
                        " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
                        " LEFT JOIN AD_org o ON cl.org_id=o.AD_org_id " +
-                       " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId + " order by  ct.c_acctschema_id ) main";
+                       " WHERE cdm.c_dimamt_ID=" + dimensionID + " and ct.c_acctschema_id=" + acctId + "  ) main";//order by  ct.c_acctschema_id
 
                     DataSet Record = DB.ExecuteDataset(sqlcount);
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -778,5 +784,82 @@ namespace VIS.Models
 
             return c_element_id;
         }
+
+        /// <summary>
+        /// get the Id of the table
+        /// </summary>
+        /// <param name="columName">value of the columnname</param>
+        /// <param name="tableName">name of the table</param>
+        /// <param name="value">value</param>
+        /// <returns>Id of the table</returns>
+        public int DimnesionValue(string columName, string tableName, string value)
+        {
+            string qry = null;
+            int DimensionId = 0;
+            try
+            {
+                qry = "SELECT " + columName + " from " + tableName + "  WHERE  value ='" + value + "' OR Name='" + value + "'";
+                DimensionId = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+            }
+            catch
+            {
+                qry = "SELECT " + columName + " from " + tableName + "  WHERE  Name ='" + value + "'";
+                DimensionId = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+            }
+            return DimensionId;
+        }
+        /// <summary>
+        /// get the Id of the table
+        /// </summary>
+        /// <param name="columName">value of the columnname</param>
+        /// <param name="tableName">name of the table</param>
+        /// <param name="value">value</param>
+        /// <returns>Id of the table</returns>
+        public int UserElementDimnesionValue(string columName, string tableName, string value)
+        {
+            string qry = null;
+            int DimensionId = 0;
+            qry = "SELECT " + tableName + "_ID from " + tableName + "  WHERE  " + columName + " ='" + value + "'";
+            DimensionId = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
+            return DimensionId;
+        }
+
+        /// <summary>
+        /// get the details of Element
+        /// </summary>
+        /// <param name="acctschemaid"> value of the acctschemaid</param>
+        /// <param name="type">value of the</param>
+        /// <param name="value">value</param>
+        /// <param name="rowNo">rowno of the table</param>
+        /// <param name="dt">data of the table</param>
+        /// <returns>Object of the datatable</returns>
+        public DataTable GetAcountIdByValue(int acctschemaid, string type, string value, int rowNo, DataTable dt)
+        {
+            string qry = null;
+            //DataSet ds1 = ds;
+            qry = "select cv.C_ElementValue_ID, ac.C_Element_ID, cv.value || '_' || cv.name AS ElementName from c_acctschema_element ac "
+                  + " inner join C_Element ce on ce.C_Element_ID = ac.C_Element_ID"
+                  + " inner JOIN c_elementvalue cv on cv.C_Element_ID = ce.C_Element_ID where ac.c_acctschema_id =" + acctschemaid + " AND  "
+                  + " ac.ElementType = '" + type + "'  and cv.Value = '" + value + "'";
+            DataSet dsAccountElement = (DB.ExecuteDataset(qry, null, null));
+            if (dsAccountElement != null && dsAccountElement.Tables.Count > 0 && dsAccountElement.Tables[0].Rows.Count > 0)
+            {
+                dt.Rows[rowNo]["AccoutId"] = dsAccountElement.Tables[0].Rows[0]["C_ElementValue_ID"];
+                dt.Rows[rowNo]["AccountValue"] = dsAccountElement.Tables[0].Rows[0]["ElementName"];
+                dt.Rows[rowNo]["C_Element_ID"] = dsAccountElement.Tables[0].Rows[0]["C_Element_ID"];
+            }
+            return dt;
+        }
+
+
+    }
+
+    public class UploadResponse
+    {
+        public string _path { get; set; }
+        public string _filename { get; set; }
+        public string _error { get; set; }
+        public string _statementID { get; set; }
+        public string _orgfilename { get; set; }
     }
 }

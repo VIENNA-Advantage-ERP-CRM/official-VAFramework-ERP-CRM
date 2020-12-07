@@ -14,7 +14,7 @@ using System.Text;
 using VAdvantage.Classes;
 using VAdvantage.Common;
 using VAdvantage.Process;
-//////using System.Windows.Forms;
+//using System.Windows.Forms;
 using VAdvantage.Model;
 using VAdvantage.DataBase;
 using VAdvantage.SqlExec;
@@ -3495,16 +3495,16 @@ namespace VAdvantage.Model
                             decimal invAmt = 0, ordAmt = 0, discrepancyAmt = 0;
                             invoicedQty = GetQtyEntered();
                             invAmt = GetPriceEntered();
-                            if (GetM_InOutLine_ID() > 0)
-                            {
-                                MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
-                                receivedQty = iol.GetQtyEntered();
-                                qtyDiff = invoicedQty - receivedQty;
-                                if (qtyDiff > 0)
-                                {
-                                    discrepancyAmt = Decimal.Multiply(qtyDiff, invAmt);
-                                }
-                            }
+                            //if (GetM_InOutLine_ID() > 0)
+                            //{
+                            //    MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                            //    receivedQty = iol.GetQtyEntered();
+                            //    qtyDiff = invoicedQty - receivedQty;
+                            //    if (qtyDiff > 0)
+                            //    {
+                            //        discrepancyAmt = Decimal.Multiply(qtyDiff, invAmt);
+                            //    }
+                            //}
                             if (GetC_OrderLine_ID() > 0)
                             {
                                 MOrderLine ol = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_TrxName());
@@ -3515,10 +3515,10 @@ namespace VAdvantage.Model
                                     discrepancyAmt = Decimal.Add(discrepancyAmt, Decimal.Multiply(diffAmt, invoicedQty));
                                 }
                             }
-                            if (GetM_InOutLine_ID() == 0 && GetC_OrderLine_ID() == 0)
-                            {
-                                discrepancyAmt = Decimal.Add(discrepancyAmt, Decimal.Multiply(invAmt, invoicedQty));
-                            }
+                            //if (GetM_InOutLine_ID() == 0 && GetC_OrderLine_ID() == 0)
+                            //{
+                            //    discrepancyAmt = Decimal.Add(discrepancyAmt, Decimal.Multiply(invAmt, invoicedQty));
+                            //}
                             SetDiscrepancyAmt(discrepancyAmt);
                         }
                     }
@@ -4032,13 +4032,13 @@ namespace VAdvantage.Model
             if (IsTaxIncluded())
                 sql = "UPDATE C_Invoice i "
                     + "SET GrandTotal=TotalLines "
-                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - WithholdingAmt - BackupWithholdingAmount)" : "")
+                    + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0)) " : "")
                     + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             else
                 sql = "UPDATE C_Invoice i "
                     + "SET GrandTotal=TotalLines+"
                         + "(SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) "
-                        + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - WithholdingAmt - BackupWithholdingAmount)" : "")
+                        + (Get_ColumnIndex("WithholdingAmt") > 0 ? " , GrandTotalAfterWithholding = (TotalLines + (SELECT COALESCE(SUM(TaxAmt),0) FROM C_InvoiceTax it WHERE i.C_Invoice_ID=it.C_Invoice_ID) - NVL(WithholdingAmt, 0) - NVL(BackupWithholdingAmount, 0))" : "")
                         + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
@@ -4056,7 +4056,7 @@ namespace VAdvantage.Model
                 {
                     if (!invoice.SetWithholdingAmount(invoice))
                     {
-                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx() , "WrongBackupWithholding"));
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
                     }
                     else
                     {

@@ -51,25 +51,25 @@
     };
 
     VIS.EnvConstants =
-        {
-            /** WindowNo for Find           */
-            WINDOW_FIND: 1110,
-            /** WinowNo for MLookup         */
-            WINDOW_MLOOKUP: 1111,
-            /** WindowNo for PrintCustomize */
-            WINDOW_CUSTOMIZE: 1112,
+    {
+        /** WindowNo for Find           */
+        WINDOW_FIND: 1110,
+        /** WinowNo for MLookup         */
+        WINDOW_MLOOKUP: 1111,
+        /** WindowNo for PrintCustomize */
+        WINDOW_CUSTOMIZE: 1112,
 
-            /** WindowNo for PrintCustomize */
-            WINDOW_INFO: 1113,
-            /** Tab for Info                */
-            TAB_INFO: 1113,
-            /** WindowNo for AccountEditor */
-            WINDOW_ACCOUNT: 1114,
-            /** Temp WindowNo for GridField */
-            WINDOW_TEMP: 11100000,
-            /** Maximum int value --code by raghu*/
-            INT32MAXVALUE: 2147483647
-        }
+        /** WindowNo for PrintCustomize */
+        WINDOW_INFO: 1113,
+        /** Tab for Info                */
+        TAB_INFO: 1113,
+        /** WindowNo for AccountEditor */
+        WINDOW_ACCOUNT: 1114,
+        /** Temp WindowNo for GridField */
+        WINDOW_TEMP: 11100000,
+        /** Maximum int value --code by raghu*/
+        INT32MAXVALUE: 2147483647
+    }
 
 
 
@@ -138,6 +138,9 @@
                     o = parseFloat(o);
                 }
                 else if (minFractionDigit === maxFractionDigit) {
+                    o = parseFloat(o).toFixed(minFractionDigit);
+                }
+                else if (o.split(".")[1].length < minFractionDigit) {
                     o = parseFloat(o).toFixed(minFractionDigit);
                 }
             }
@@ -228,13 +231,13 @@
                         return inputPrime.toLocaleString(language);
                     } else {
                         // de-DE
-                        return  inputPrime.toLocaleString(language);
+                        return inputPrime.toLocaleString(language);
                     }
                 } else {
                     if (dotFormatter) {
-                        return  inputPrime;
+                        return inputPrime;
                     } else {
-                        return  inputPrime;
+                        return inputPrime;
                     }
                 }
             }
@@ -247,6 +250,11 @@
         this.getMaxFractionDigit = function () {
             return maxFractionDigit;
         }
+
+        this.getLocaleAmount = function (amount) {
+            var formattedAmount = this.GetFormatedValue(amount).toLocaleString();//.toFixed(2);
+            return this.GetFormatAmount(formattedAmount, "init", VIS.Env.isDecimalPoint());
+        };
 
         /* privilized function */
         this.dispose = function () {
@@ -461,7 +469,7 @@
         var WINDOW_PAGE_SIZE = 50;
         var window_height = 400;
         var NULLString = "NULLValue";
-
+        var obscureTypes = { DigitButLast4: "904", DigitButFirstLast4: "944", AlphanumButLast4: "A04", AlphaNumButFirstLast4: "A44" };
 
         function getWindowNo() {
             return windowNo++;
@@ -506,9 +514,9 @@
 
                 if (token.contains(".")) {
                     token = token.substring(0, token.indexOf("."));
-                   //txInfo = ctx.getWindowContext(WindowNo, tabNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
+                    //txInfo = ctx.getWindowContext(WindowNo, tabNo, token.substring(0, token.indexOf(".")), onlyWindow);	// get context
                 }
-                
+
                 ctxInfo = ctx.getWindowContext(windowNo, tabNo, token, onlyWindow);	// get context
 
                 if (ctxInfo.length == 0 && (token.startsWith("#") || token.startsWith("$")))
@@ -530,6 +538,28 @@
             }
             outStr += value;						// add the rest of the string
             return outStr;
+        };
+
+        function getObscureValue(type, value) {
+            if (value) {
+                if (type == obscureTypes.DigitButLast4) {
+                    //return value.replace(/\d(?=\w{4})/g, "*");
+                    return value.replace(/[^a-zA-Z0-9\.\-\@]/gi, '').replace(/[0-9](?=[\w\.\-\@]{4})/g, "*");
+                }
+                else if (type == obscureTypes.DigitButFirstLast4) {
+                    //return value.replace(/(?<=\w{4})[\d](?=\w{4})/g, "*");
+                    return value.replace(/[^a-zA-Z0-9\.\-\@\s]/gi, '').replace(/(?<=[\w\.\-\@\s]{4})[0-9](?=[\w\.\-\@\s]{4})/g, "*");
+                }
+                else if (type == obscureTypes.AlphanumButLast4) {
+                    return value.replace(/[^a-zA-Z0-9\.\s\@\-]/gi, '').replace(/[a-zA-Z0-9\s\.\@\-](?=[a-zA-Z0-9\s\.\@\-]{4})/g, "*");
+                    //return value.replace(/[_\W]/g, "*").replace(/[^a-z0-9\s]/gi, '').replace(/[\w](?=\w{4})/g, "*");
+                }
+                else if (type == obscureTypes.AlphaNumButFirstLast4) {
+                    //.replace(/[^a-z0-9\.\s]/gi, '').replace(/(?<=\w{4})[\w]|[\W](?=\w{4})/g, "*")
+                    //return value.replace(/[_\W]/g, "*").replace(/[^a-z0-9\s]/gi, '').replace(/(?<=\w{4})[\w](?=\w{4})/g, "*");
+                    return value.replace(/[^a-zA-Z0-9\@\.\s\-]/gi, '').replace(/(?<=[a-zA-Z0-9\@\.\s\-]{4})([\w]|[\W])(?=[a-zA-Z0-9\s\@\.\-]{4})/g, "*");
+                }
+            }
         };
 
         function getWINDOW_PAGE_SIZE() {
@@ -788,7 +818,8 @@
             SHOW_ORG_ONLY: 2,
             HIDE_CLIENT_ORG: 3,
             NULLString: NULLString,
-            approveCol: "IsApproved"
+            approveCol: "IsApproved",
+            getObscureValue: getObscureValue
         }
     }();
     // ******************** END ENV *********************//
@@ -1736,7 +1767,7 @@
 
     DataSet.prototype.toJson = function (jsonString) {
         var tables = jsonString;
-        if(typeof(jsonString) == "string")
+        if (typeof (jsonString) == "string")
             tables = JSON.parse(jsonString);
 
         tables = $.isArray(tables) ? tables : [tables];
@@ -1778,7 +1809,7 @@
         this.rows = []; // rows of column
         this.totalRecord = 0; // total record 
         this.columnsName = [];
-        
+
     };
 
     DataTable.prototype.toJson = function (js) {
@@ -2069,12 +2100,6 @@
         }
         return null;
     };
-
-
-
-
-
-
 
     VIS.DB.DataSet = DataSet;
     VIS.DB.DataTable = DataTable;
