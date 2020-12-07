@@ -2207,8 +2207,8 @@ namespace VAdvantage.Model
                 }
             }
 
-            //	Credit Status
-            if (IsSOTrx() && !IsReversal())
+            //	Credit Status check only in case of AR Invoice 
+            if (IsSOTrx() && !IsReversal() && !IsReturnTrx())
             {
                 bool checkCreditStatus = true;
                 if (Env.IsModuleInstalled("VAPOS_"))
