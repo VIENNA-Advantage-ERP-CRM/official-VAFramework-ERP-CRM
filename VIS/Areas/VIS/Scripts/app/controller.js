@@ -4336,10 +4336,9 @@
                         VIS.ADialog.info(out.ErrorMsg);
                 }
                 else {
-                    // in case of sucess refresh UI
-                    if (!immediate)
-                        if (!out.LatestVersion)
-                            slf.dataRefreshAll();
+                    // in case of sucess and if not saved for immediate refresh UI
+                    if (!immediate && !out.LatestVersion)
+                        slf.dataRefreshAll();
                     // if sent for WF Approval then display Message
                     if (out.Status == "W")
                         VIS.ADialog.info("SentForApproval");
