@@ -2040,7 +2040,8 @@
                     else if (srchCtrls[i].Ctrl.colName == "UPC") {
                         upcSearch = true;
                         //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
-                        whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(p.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase() + ")"
+                        whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(p.UPC) LIKE " + srchValue.toUpperCase()
+                            + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase()+ " OR UPPER(uc.UPC) LIKE " + srchValue.toUpperCase() + ")"
                     }
 
                     else if (srchCtrls[i].Ctrl.colName == "SKU") {
@@ -2068,7 +2069,8 @@
                 }
 
                 if (upcSearch) {
-                    s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
+                    s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)" +
+                        " LEFT OUTER JOIN C_UOM_Conversion uc ON (p.M_Product_ID=uc.M_Product_ID)";
                 }
 
                 sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
