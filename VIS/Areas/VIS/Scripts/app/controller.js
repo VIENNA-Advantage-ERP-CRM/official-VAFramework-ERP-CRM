@@ -4337,7 +4337,9 @@
                 }
                 else {
                     // in case of sucess refresh UI
-                    slf.dataRefreshAll();
+                    if (!immediate)
+                        if (!out.LatestVersion)
+                            slf.dataRefreshAll();
                     // if sent for WF Approval then display Message
                     if (out.Status == "W")
                         VIS.ADialog.info("SentForApproval");
