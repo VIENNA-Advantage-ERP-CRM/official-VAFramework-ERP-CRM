@@ -111,6 +111,13 @@ namespace VAdvantage.Model
             return retValue;
         }
 
+        /// <summary>
+        /// This function is used to create Recognition plan and run
+        /// </summary>
+        /// <param name="C_InvoiceLine_ID">invoice line</param>
+        /// <param name="C_RevenueRecognition_ID">Revenue Recognition</param>
+        /// <param name="Invoice">Invoice</param>
+        /// <returns>true, when success</returns>
         public static bool CreateRevenueRecognitionPlan(int C_InvoiceLine_ID, int C_RevenueRecognition_ID, MInvoice Invoice)
         {
             try
@@ -134,9 +141,14 @@ namespace VAdvantage.Model
                 if (!revenueRecognitionPlan.Save())
                 {
                     ValueNamePair pp = VLogger.RetrieveError();
-                    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                    string error = pp != null ? pp.GetValue() : "";
+                    if (pp != null && string.IsNullOrEmpty(error))
                     {
-                        _log.Log(Level.SEVERE, pp.GetName());
+                        error = pp.GetName();
+                    }
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        _log.Log(Level.SEVERE, error);
                         return false;
                     }
                 }
@@ -190,9 +202,14 @@ namespace VAdvantage.Model
                                 if (!revenueRecognitionRun.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                                    string error = pp != null ? pp.GetValue() : "";
+                                    if (pp != null && string.IsNullOrEmpty(error))
                                     {
-                                        _log.Log(Level.SEVERE, pp.GetName());
+                                        error = pp.GetName();
+                                    }
+                                    if (!string.IsNullOrEmpty(error))
+                                    {
+                                        _log.Log(Level.SEVERE, error);
                                         return false;
                                     }
                                 }
@@ -213,9 +230,14 @@ namespace VAdvantage.Model
                                 if (!revenueRecognitionRun.Save())
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
+                                    string error = pp != null ? pp.GetValue() : "";
+                                    if (pp != null && string.IsNullOrEmpty(error))
                                     {
-                                        _log.Log(Level.SEVERE, pp.GetName());
+                                        error = pp.GetName();
+                                    }
+                                    if (!string.IsNullOrEmpty(error))
+                                    {
+                                        _log.Log(Level.SEVERE, error);
                                         return false;
                                     }
                                 }
@@ -230,9 +252,9 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
+                _log.Severe("Exception during creation of Recognition Plan and Run. " + ex.Message);
                 return false;
             }
-            //return "Revenue Recognition Created";
             return true;
         }
 

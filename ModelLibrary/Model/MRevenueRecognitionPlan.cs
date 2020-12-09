@@ -130,7 +130,9 @@ namespace VAdvantage.Model
             SetC_Currency_ID(invoice.GetC_Currency_ID());
             SetC_InvoiceLine_ID(invoiceLine.GetC_InvoiceLine_ID());
             SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
-            SetTotalAmt(invoiceLine.GetLineNetAmt());
+            // when tax include into price list, then reduce tax from Line Net Amount
+            bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
+            SetTotalAmt(invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0));
             SetRecognizedAmt(Env.ZERO);
         }
 
