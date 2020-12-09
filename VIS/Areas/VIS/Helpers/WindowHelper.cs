@@ -1214,7 +1214,7 @@ namespace VIS.Helpers
             outt.RowData = rowData;
             try
             {
-                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF))
+                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF) && (hasDocValWF || !versionInfo.IsLatestVersion))
                 {
                     outt.RowData = inn.OldRowData;
                     outt.LatestVersion = versionInfo.IsLatestVersion;
@@ -1294,10 +1294,10 @@ namespace VIS.Helpers
 
         private bool CheckLatestVersion(SaveRecordIn inn)
         {
-            string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause                                
+            string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause
                                 + " AND IsVersionApproved = 'Y' AND "
                                 + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + @" < TRUNC(SysDate)
-                                AND (TRUNC(VersionValidFrom) > "+ GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + 
+                                AND (TRUNC(VersionValidFrom) > " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) +
                                 @" AND TRUNC(VersionValidFrom) <= TRUNC(Sysdate))
                                  ORDER BY VersionValidFrom DESC";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sqlOldVer)) > 0)
