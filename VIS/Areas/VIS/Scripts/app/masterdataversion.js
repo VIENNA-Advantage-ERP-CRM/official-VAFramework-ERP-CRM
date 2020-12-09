@@ -7,15 +7,16 @@
 
 ; (function (VIS, $) {
 
-    function MasterDataVersion(baseTblName, gridFields, Record_ID, whereClause, mtnTblVer, callback) {
+    function MasterDataVersion(baseTblName, gridFields, Record_ID, whereClause, mtnTblVer, newRecord, callback) {
         this._tblName = baseTblName;
         this.rec_ID = Record_ID;
         this.sqlWhere = whereClause;
         this.gFields = gridFields;
         this._callbackClose = callback;
+        this._newRec = newRecord;
         this.gridCols = new Array();
         this.htmlUI = new Array();
-        
+
         this.deletable = false;
         this.maintTblVer = mtnTblVer;
 
@@ -116,7 +117,7 @@
                 if (!dtValidFromDate || dtValidFromDate == "")
                     dtValidFromDate = new Date();
                 // Cases if save immediate is false
-                if (!chkImmSave.prop("checked")) {
+                if (!chkImmSave.prop("checked") && (new Date(dtValFrom.val()) > new Date())) {
                     // get rows from Dialog that are already saved
                     var rows = masVerUI.find(".vis-mas-ver-recRow");
                     var recordExist = false;
@@ -225,7 +226,11 @@
             secVerValFrom.toggle();
             // if Save Immediate checkbox is false then display Valid From Field else hide in case of true
             if (!chkImmSave.prop("checked")) {
-                dtValFrom.val(self.getDateString());
+                if (self._newRec) {
+                    dtValFrom.val(self.getDateString(true));
+                }
+                else
+                    dtValFrom.val(self.getDateString());
             }
         });
 
@@ -237,9 +242,14 @@
             var curDate = new Date().setHours(0, 0, 0, 0);
             // check if selected date is less than or equal to system date then set tomorrow's date in 
             // valid from date control
-            if (valFromDate <= curDate) {
+            if (valFromDate == curDate) {
                 // add message here for info to not allow to set previous date
                 dtValFrom.val(self.getDateString());
+            }
+
+            // check added in case for version in case of new record
+            if (self._newRec && valFromDate >= curDate) {
+                dtValFrom.val(self.getDateString(true));
             }
         });
     };
@@ -319,23 +329,22 @@
                                 var verValFrom = Globalize.format(new Date(recRow[colName]), 'd'); // new Date(recRow[colName]).toDateString();
                                 this.htmlUI.push('<td class="vis-mas-ver-valFromDate" valdt="' + new Date(recRow[colName]) + '">' + verValFrom + '</td>');
                             }
-                                // for date type controls
+                            // for date type controls
                             else if (gf && gf.vo && gf.vo.displayType && gf.vo.displayType == 15) {
                                 var dateCol = Globalize.format(new Date(recRow[colName]), 'd');
                                 this.htmlUI.push('<td dtDate="' + new Date(recRow[colName]) + '">' + dateCol + '</td>');
                             }
-                                // for date + time type controls
+                            // for date + time type controls
                             else if (gf && gf.vo && gf.vo.displayType && gf.vo.displayType == 16) {
                                 var dateCol = Globalize.format(new Date(recRow[colName] + "Z"), 'f');
                                 this.htmlUI.push('<td dtDate="' + new Date(recRow[colName]) + '">' + dateCol + '</td>');
                             }
-                                // for time type controls
+                            // for time type controls
                             else if (gf && gf.vo && gf.vo.displayType && gf.vo.displayType == 24) {
                                 var dateCol = Globalize.format(new Date(recRow[colName] + "Z"), 't');
                                 this.htmlUI.push('<td dtDate="' + new Date(recRow[colName]) + '">' + dateCol + '</td>');
                             }
-                            else if (colName == 'RECORDVERSION')
-                            {
+                            else if (colName == 'RECORDVERSION') {
                                 this.htmlUI.push('<td style="text-align: center">' + VIS.Utility.encodeText(recRow[colName]) + '</td>');
                             }
                             else
@@ -420,13 +429,17 @@
         }
     };
 
-    MasterDataVersion.prototype.getDateString = function () {
+    MasterDataVersion.prototype.getDateString = function (previous) {
         var dateVal = new Date();
+        if (previous)
+            dateVal.setDate(dateVal.getDate() - 1);
+        else
+            dateVal.setDate(dateVal.getDate() + 1);
         var year = dateVal.getFullYear();
         var month = dateVal.getMonth() + 1;
         if (month < 10)
             month = "0" + month;
-        var date = dateVal.getDate() + 1;
+        var date = dateVal.getDate();
         if (date < 10)
             date = "0" + date;
         return year + "-" + (month) + "-" + (date);
