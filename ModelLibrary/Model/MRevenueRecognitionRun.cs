@@ -37,7 +37,7 @@ namespace VAdvantage.Model
                         " WHERE pl.c_revenuerecognition_id =" + revenueRecognition.GetC_RevenueRecognition_ID();
             if (!reverse)
             {
-                //sql += "And RecognitionDate <=" + GlobalVariable.TO_DATE(recognitionDate, true);
+                sql += "And RecognitionDate <=" + GlobalVariable.TO_DATE(recognitionDate, true);
             }
             if (_orgId > 0)
             {

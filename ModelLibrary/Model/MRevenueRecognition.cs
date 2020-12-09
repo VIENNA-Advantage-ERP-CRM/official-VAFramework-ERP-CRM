@@ -118,19 +118,16 @@ namespace VAdvantage.Model
                 MRevenueRecognitionRun revenueRecognitionRun = null;
                 DateTime? RecognizationDate = null;
                 MRevenueRecognition revenueRecognition = new MRevenueRecognition(Invoice.GetCtx(), C_RevenueRecognition_ID, Invoice.Get_Trx());
-                int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetAD_Client_ID(),  Invoice.GetAD_Org_ID());
+                int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetAD_Client_ID(), Invoice.GetAD_Org_ID());
 
-                MRevenueRecognitionPlan revenueRecognitionPlan = new MRevenueRecognitionPlan(Invoice.GetCtx(), 0, Invoice.Get_Trx());
+
                 MInvoiceLine invoiceLine = new MInvoiceLine(Invoice.GetCtx(), C_InvoiceLine_ID, Invoice.Get_Trx());
                 MInvoice invoice = new MInvoice(Invoice.GetCtx(), invoiceLine.GetC_Invoice_ID(), Invoice.Get_Trx());
 
                 string sql = "Select StartDate From C_InvoiceLine Where C_InvoiceLine_ID=" + invoiceLine.GetC_InvoiceLine_ID();
                 RecognizationDate = Util.GetValueOfDateTime(DB.ExecuteScalar(sql));
-                if (RecognizationDate == null)
-                {
-                    RecognizationDate = invoice.GetDateInvoiced();
-                }
 
+                MRevenueRecognitionPlan revenueRecognitionPlan = new MRevenueRecognitionPlan(Invoice.GetCtx(), 0, Invoice.Get_Trx());
                 revenueRecognitionPlan.SetRecognitionPlan(invoiceLine, invoice, C_RevenueRecognition_ID);
                 revenueRecognitionPlan.SetC_AcctSchema_ID(defaultAccSchemaOrg_ID);
                 revenueRecognitionPlan.SetRecognizedAmt(0);
@@ -154,6 +151,7 @@ namespace VAdvantage.Model
                         if (revenueRecognition.GetRecognitionFrequency() == "M")
                         {
                             double totaldays = (RecognizationDate.Value.AddMonths(revenueRecognition.GetNoMonths()) - RecognizationDate.Value.Date).TotalDays;
+                            // precision to be handle based on std precision defined on acct schema
                             decimal perdayAmt = Math.Round(revenueRecognitionPlan.GetTotalAmt() / Convert.ToDecimal(totaldays), 5);
                             decimal recognizedAmt = 0;
                             DateTime? lastdate = null;
@@ -222,6 +220,10 @@ namespace VAdvantage.Model
                                     }
                                 }
                             }
+                        }
+                        else if (revenueRecognition.GetRecognitionFrequency() == "Y")
+                        {
+
                         }
                     }
                 }
