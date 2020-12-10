@@ -1214,10 +1214,12 @@ namespace VIS.Helpers
             outt.RowData = rowData;
             try
             {
-                outt.LatestVersion = versionInfo.IsLatestVersion;
+                if (!inn.MaintainVersions)
+                    outt.LatestVersion = true;
                 if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF) && (hasDocValWF || !versionInfo.IsLatestVersion))
                 {
                     outt.RowData = inn.OldRowData;
+                    outt.LatestVersion = versionInfo.IsLatestVersion;
                     // if table has Workflow then return status as has WF (W)
                     if (hasDocValWF)
                         outt.Status = GridTable.SAVE_WFAPPROVAL;
