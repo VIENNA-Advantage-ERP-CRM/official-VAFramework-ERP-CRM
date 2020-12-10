@@ -2995,7 +2995,7 @@ namespace VAdvantage.Model
                         sql = "SELECT " +
                               " CASE     WHEN " + Util.GetValueOfInt(po.Get_Value("C_Currency_ID")) + " != " + Util.GetValueOfInt(GetC_Currency_ID()) +
                               " THEN CURRENCYCONVERT(" + conversionAmt + ", " + Util.GetValueOfInt(GetC_Currency_ID()) +
-                              " , " + Util.GetValueOfInt(po.Get_Value("C_Currency_ID")) + " , '" + GetDateAcct() + "' , "
+                              " , " + Util.GetValueOfInt(po.Get_Value("C_Currency_ID")) + " , " + GlobalVariable.TO_DATE(GetDateAcct(), true) + " , "
                               + Util.GetValueOfInt(GetC_ConversionType_ID()) + " , "
                               + Util.GetValueOfInt(GetAD_Client_ID()) + " , "
                               + Util.GetValueOfInt(GetAD_Org_ID()) + ")    ELSE "
