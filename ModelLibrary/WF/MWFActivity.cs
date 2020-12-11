@@ -132,6 +132,11 @@ namespace VAdvantage.WF
             }
             //	Responsible
             SetResponsible(process);
+
+            // set zoom window ID if selected on node
+            if (node.GetZoomWindow_ID() > 0)
+                SetAD_Window_ID(node.GetZoomWindow_ID());
+
             Save();
             //
             _audit = new MWFEventAudit(this);
