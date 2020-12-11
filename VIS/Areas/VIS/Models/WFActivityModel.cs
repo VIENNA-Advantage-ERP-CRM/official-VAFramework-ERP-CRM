@@ -168,7 +168,7 @@ OR
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
-                              AND r.responsibletype !='H' AND AND r.responsibletype !='C'
+                              AND r.responsibletype !='H' AND r.responsibletype !='C'
                               ) ) ";
 
             // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
