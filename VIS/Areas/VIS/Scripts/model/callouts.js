@@ -3916,8 +3916,20 @@
                 mTab.setValue("M_AttributeSetInstance_ID", Util.getValueOfInt(Orig_InOutLine["M_AttributeSetInstance_ID"]));
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(Orig_InOutLine["C_UOM_ID"]));
 
-                // JID_1310: On Selection of Shipment line on Customer/Vendor RMA. System should check Total Delivred - Total Return Qty From Sales PO line and Balance  show in qty field
-                mTab.setValue("QtyEntered", Util.getValueOfDecimal(Orig_InOutLine["QtyEntered"]));
+                // Handled UOM conversion in case of Vendor RMA
+                var QtyEntered = Util.getValueOfDecimal(Orig_InOutLine["QtyEntered"]);
+                mTab.setValue("QtyEntered", QtyEntered);
+
+                var paramStr = Orig_InOutLine["M_Product_ID"].toString().concat(",", Orig_InOutLine["C_UOM_ID"].toString(), ",",
+                    QtyEntered.toString()); //3
+                var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+
+                var QtyOrdered = pc;//(Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
+                //C_UOM_To_ID, QtyEntered.Value);
+                if (QtyOrdered == null)
+                    QtyOrdered = QtyEntered;
+                mTab.setValue("QtyOrdered", QtyOrdered);
+
                 if (Util.getValueOfString(Orig_InOutLine["IsDropShip"]) == "Y") {
                     mTab.setValue("IsDropShip", true);
                     ctx.setContext(windowNo, "IsDropShip", Util.getValueOfString(Orig_InOutLine["IsDropShip"]));
@@ -3925,8 +3937,6 @@
                 else {
                     mTab.setValue("IsDropShip", false);
                 }
-
-
             }
         }
         catch (err) {
