@@ -140,8 +140,18 @@ namespace VAdvantage.WF
         /// <returns>true if Org</returns>
         public bool IsOrganization()
         {
-            return RESPONSIBLETYPE_Organization.Equals(GetResponsibleType())
-                && GetAD_Org_ID() != 0;
+            return RESPONSIBLETYPE_Organization.Equals(GetResponsibleType());
+            //&& GetAD_Org_ID() != 0;
+        }
+
+        /// <summary>
+        /// Is Custom Query
+        /// </summary>
+        /// <returns>true if Custom Query</returns>
+        public bool IsSQL()
+        {
+            return RESPONSIBLETYPE_SQL.Equals(GetResponsibleType())
+                && GetCustomSQL().Trim() != "";
         }
 
         /// <summary>
@@ -150,7 +160,9 @@ namespace VAdvantage.WF
         /// <returns>true if invoker</returns>
         public bool IsInvoker()
         {
-            return GetAD_User_ID() == 0 && GetAD_Role_ID() == 0;
+            return GetAD_User_ID() == 0 && GetAD_Role_ID() == 0
+                && GetResponsibleType() != X_AD_WF_Responsible.RESPONSIBLETYPE_SQL
+                && GetResponsibleType() != X_AD_WF_Responsible.RESPONSIBLETYPE_Organization;
         }
 
         /// <summary>

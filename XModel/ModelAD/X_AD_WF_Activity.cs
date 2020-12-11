@@ -477,6 +477,26 @@ namespace VAdvantage.Model
             return (String)Get_Value("Summary");
         }
 
+         /** ResponsibleOrg_ID AD_Reference_ID=276 */
+        public static int RESPONSIBLEORG_ID_AD_Reference_ID = 276;
+        /** Set Responsible Organization.
+        @param ResponsibleOrg_ID Responsible Organization */
+        public void SetResponsibleOrg_ID(int ResponsibleOrg_ID)
+        {
+            if (ResponsibleOrg_ID <= 0)
+                Set_Value("ResponsibleOrg_ID", null);
+            else
+                Set_Value("ResponsibleOrg_ID", ResponsibleOrg_ID);
+        }
+        /** Get Responsible Organization.
+        @return Responsible Organization */
+        public int GetResponsibleOrg_ID()
+        {
+            Object ii = Get_Value("ResponsibleOrg_ID");
+            if (ii == null)
+                return 0;
+            return Convert.ToInt32(ii);
+        }
     }
 
 }

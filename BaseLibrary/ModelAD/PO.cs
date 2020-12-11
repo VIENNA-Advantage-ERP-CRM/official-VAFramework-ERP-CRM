@@ -2364,8 +2364,6 @@ namespace VAdvantage.Model
             else
                 log.Fine("[" + _trx.GetTrxName() + "] - " + p_info.GetTableName() + " - " + Get_WhereClause(true));
 
-         
-
             //	Set new DocumentNo
             String columnName = "DocumentNo";
             int index = p_info.GetColumnIndex(columnName);
@@ -2394,15 +2392,21 @@ namespace VAdvantage.Model
                     if (dt != -1)       //	get based on Doc Type (might return null)
                     {
                         docTypeId = get_ValueAsInt(dt);
+                        
                     }
-
-                        value = POActionEngine.Get().GetDocumentNo(docTypeId, this);
+                    value = POActionEngine.Get().GetDocumentNo(docTypeId, this);
                     //if (value == null)  //	not overwritten by DocType and not manually entered
                     //{
                     //    if (masDet != null && masDet.TableName != null && masDet.TableName != "")
-                    //        value = POActionEngine.Get().GetDocumentNo(GetAD_Client_ID(), masDet.TableName, _trx, GetCtx());
+                    //    {
+                    //        value = MSequence.GetDocumentNo(masDet.TableName, _trx, GetCtx(), this);
+                    //    }
                     //    else
-                    //        value = POActionEngine.Get().GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                    //    {
+                    //        // Handled to get DocumentNo based on Organization
+                    //        //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
+                    //        value = MSequence.GetDocumentNo(p_info.GetTableName(), _trx, GetCtx(), this);
+                    //    }
                     //}
                     Set_ValueNoCheck(columnName, value);
                 }
@@ -2417,7 +2421,7 @@ namespace VAdvantage.Model
                 if (value == null || value.Length == 0)
                 {
                     //value = MSequence.GetDocumentNo(GetAD_Client_ID(), p_info.GetTableName(), _trx, GetCtx());
-                   value = POActionEngine.Get().GetDocumentNo(this);
+                    value = POActionEngine.Get().GetDocumentNo(this);
                     Set_ValueNoCheck(columnName, value);
                 }
             }
@@ -2513,10 +2517,10 @@ namespace VAdvantage.Model
                             index = p_info.GetColumnIndex("C_DocType_ID");
                         if (index != -1)		//	get based on Doc Type (might return null)
                             docId = Get_ValueAsInt(index);
-                            //value = MSequence.GetDocumentNo(get_ValueAsInt(index), _trx, GetCtx());
+                        //value = MSequence.GetDocumentNo(get_ValueAsInt(index), _trx, GetCtx());
                         //    value = POActionEngine.Get().GetDocumentNo(get_ValueAsInt(dt),  this);
-                       // if (value == null)	//	not overwritten by DocType and not manually entered
-                            value = POActionEngine.Get().GetDocumentNo(docId, this);
+                        // if (value == null)	//	not overwritten by DocType and not manually entered
+                        value = POActionEngine.Get().GetDocumentNo(docId, this);
                     }
                     else
                         log.Warning("DocumentNo updated: " + _mOldValues[i] + " -> " + value);
@@ -2692,7 +2696,7 @@ namespace VAdvantage.Model
                 success = false;
             }
 
-           
+
 
             if (success)
             {
@@ -2736,7 +2740,7 @@ namespace VAdvantage.Model
 
         }
 
-      
+
 
         protected virtual bool AfterSave(bool newRecord, bool success)
         {
@@ -3339,7 +3343,7 @@ namespace VAdvantage.Model
             try
             {
                 success = AfterDelete(success);
-                POActionEngine.Get().AfterDelete(this , success);
+                POActionEngine.Get().AfterDelete(this, success);
             }
             catch (Exception e)
             {
@@ -3349,7 +3353,7 @@ namespace VAdvantage.Model
                 success = false;
                 //	throw new DBException(e);
             }
-                
+
             //	Reset
             if (success)
             {
@@ -3380,7 +3384,7 @@ namespace VAdvantage.Model
         }
 
 
-       
+
 
 
 
@@ -3566,7 +3570,7 @@ namespace VAdvantage.Model
             return Get_Value(index);
         }
 
-       
+
 
         /// <summary>
         /// Get the Column Processing index
@@ -3834,7 +3838,7 @@ namespace VAdvantage.Model
         protected Lookup Get_ColumnLookup(int index)
         {
             POInfoColumn col = p_info.GetColumnInfo(index);
-            return POActionEngine.Get().GetLookup(GetCtx(),col);
+            return POActionEngine.Get().GetLookup(GetCtx(), col);
         }
 
         /**
@@ -5028,7 +5032,7 @@ namespace VAdvantage.Model
                 try
                 {
                     System.Reflection.Assembly asm = System.Reflection.Assembly.Load("VAWorkflow");
-                    s_docWFMgr = (DocWorkflowMgr)asm.GetType("VAdvantage.WF.DocWorkflowManager").GetMethod("Get").Invoke(null,null);
+                    s_docWFMgr = (DocWorkflowMgr)asm.GetType("VAdvantage.WF.DocWorkflowManager").GetMethod("Get").Invoke(null, null);
                     //(DocWorkflowMgr)Activator.GetObject(typeof(DocWorkflowMgr), "VAdvantage.WF.DocWorkflowManager");
                     //s_docWFMgr = DocWorkflowManager.Get();
                 }
