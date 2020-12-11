@@ -4987,18 +4987,6 @@ namespace VAdvantage.Model
                 throw new Exception(counter._processMsg);
             }
 
-            // Create Lines
-            if (counter.CopyLinesFrom(this, true, true) == 0)
-            {
-                ValueNamePair pp = VLogger.RetrieveError();
-                if (!String.IsNullOrEmpty(pp.GetName()))
-                    counter._processMsg = Msg.GetMsg(GetCtx(), "CouldNotCreateShipLines") + "," + pp.GetName();
-                else
-                    counter._processMsg = Msg.GetMsg(GetCtx(), "CouldNotCreateShipLines");
-                counter = null;
-                throw new Exception(counter._processMsg);
-            }
-
             string MovementType = counter.GetMovementType();
             //bool inTrx = MovementType.charAt(1) == '+';	//	V+ Vendor Receipt
             bool inTrx = MovementType.IndexOf('+') == 1;	//	V+ Vendor Receipt
