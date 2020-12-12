@@ -489,7 +489,7 @@ namespace VAdvantage.Model
                                  ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' 
                                  AND ISREVERSEDCOSTCALCULATED= 'N' AND VAMFG_description like '%{->%'))";
                     }
-                    sql += ")";
+                    sql += ") t";
                     count = 0;
                     count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                     if (count == 0)

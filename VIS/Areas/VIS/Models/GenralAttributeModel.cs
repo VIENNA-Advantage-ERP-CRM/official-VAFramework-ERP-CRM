@@ -271,7 +271,7 @@ namespace VIS.Models
             //if there is different attribute set then delete old instance
             if (mAttributeSetInstanceId != 0 && (vadms_AttributeSet_ID != _masi.GetC_GenAttributeSet_ID()))
             {
-                DB.ExecuteQuery("DELETE FROM C_GenAttributeInstance WHERE C_GenAttributeSetInstance_ID=" + mAttributeSetInstanceId );
+                DB.ExecuteQuery("DELETE FROM C_GenAttributeInstance WHERE C_GenAttributeSetInstance_ID=" + mAttributeSetInstanceId);
             }
 
             _masi.SetC_GenAttributeSet_ID(vadms_AttributeSet_ID);
@@ -431,6 +431,7 @@ namespace VIS.Models
                 Dictionary<MGenAttribute, object> lst = new Dictionary<MGenAttribute, object>();
 
                 StringBuilder sql = new StringBuilder();
+                StringBuilder where = new StringBuilder();
                 StringBuilder description = new StringBuilder();
 
                 for (int i = 0; i < attributes.Length; i++)
@@ -454,23 +455,32 @@ namespace VIS.Models
                             lst[attributes[i]] = value;
                             description.Append(value + "_");
 
+                            if (i == 0)
+                            {
+                                sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
+                                where.Append(" WHERE cg.IsActive='Y'");
+                                if (value != null)
+                                {
+                                    where.Append(" AND (cg.C_GenattributeValue_ID=").Append(value.GetC_GenAttributeValue_ID()).Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                }
+                                else
+                                {
+                                    where.Append(" AND (cg.C_GenattributeValue_ID IS NULL ").Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                }
+                            }
 
                             if (i > 0 && sql.Length > 0)
                             {
-                                sql.Append(" intersect ");
+                                sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
+                                if (value != null)
+                                {
+                                    sql.Append(" AND (cg" + i + ".C_GenattributeValue_ID=").Append(value.GetC_GenAttributeValue_ID()).Append(" AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                }
+                                else
+                                {
+                                    sql.Append(" AND (cg" + i + ".C_GenattributeValue_ID IS NULL ").Append(" AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                                }
                             }
-
-                            sql.Append("SELECT DIstinct C_genAttributeSetInstance_ID FROM c_genattributeinstance WHERE IsActive='Y' ");
-
-                            if (value != null)
-                            {
-                                sql.Append(" AND (  C_GenattributeValue_ID=").Append(value.GetC_GenAttributeValue_ID()).Append(" AND C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
-                            }
-                            else
-                            {
-                                sql.Append(" AND (  C_GenattributeValue_ID is null ").Append(" AND C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
-                            }
-
                         }
                     }
                     else if (MGenAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
@@ -478,22 +488,28 @@ namespace VIS.Models
                         var editor = editors[i];
                         var value = Convert.ToDecimal(editor.Name);
 
-                        if ( value > 0)
+                        if (value > 0)
                         {
                             log.Fine(attributes[i].GetName() + "=" + value);
 
-                            if (attributes[i].IsMandatory() )
+                            if (attributes[i].IsMandatory())
                                 mandatory += " - " + attributes[i].GetName();
 
                             //attributes[i].SetMAttributeInstance(_M_AttributeSetInstance_ID, value);
                             lst[attributes[i]] = value;
+
+                            if (i == 0)
+                            {
+                                sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
+                                where.Append(" WHERE cg.IsActive='Y' AND (cg.VALUENUMBER=").Append(value).Append(" AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                            }
+
                             if (i > 0 && sql.Length > 0)
                             {
-                                sql.Append(" intersect ");
+                                sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
+                                sql.Append(" AND (cg" + i + ".VALUENUMBER=").Append(value).Append(" AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
                             }
-                            sql.Append("SELECT DIstinct C_genAttributeSetInstance_ID FROM c_genattributeinstance WHERE IsActive='Y' ");
 
-                            sql.Append(" AND (VALUENUMBER=").Append(value).Append(" AND C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
                             description.Append(value + "_");
                         }
                     }
@@ -509,13 +525,19 @@ namespace VIS.Models
                                 mandatory += " - " + attributes[i].GetName();
 
                             lst[attributes[i]] = value;
+
+                            if (i == 0)
+                            {
+                                sql.Append("SELECT DISTINCT cg.C_GenAttributeSetInstance_ID FROM C_GenAttributeInstance cg");
+                                where.Append(" WHERE cg.IsActive='Y' AND (upper(cg.VALUE)=upper('").Append(value).Append("') AND cg.C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
+                            }
+
                             if (i > 0 && sql.Length > 0)
                             {
-                                sql.Append(" intersect ");
+                                sql.Append(" JOIN C_GenAttributeInstance cg" + i + " ON cg" + i + ".C_GenAttributeSetInstance_ID = cg.C_GenAttributeSetInstance_ID AND cg" + i + ".IsActive='Y'");
+                                sql.Append(" AND (upper(cg" + i + ".VALUE)=upper('").Append(value).Append("') AND cg" + i + ".C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
                             }
-                            sql.Append("SELECT DISTINCT C_genAttributeSetInstance_ID FROM c_genattributeinstance WHERE IsActive='Y' ");
 
-                            sql.Append(" AND ( upper(VALUE)=upper('").Append(value).Append("') AND C_GenAttribute_ID=").Append(attributes[i].GetC_GenAttribute_ID() + ")");
                             description.Append(value + "_");
                         }
                     }
@@ -523,6 +545,7 @@ namespace VIS.Models
                 if (description.Length > 0)
                 {
                     description.Remove(description.Length - 1, 1);
+                    sql.Append(where.ToString());
                     DataSet ds = DB.ExecuteDataset(sql.ToString(), null);
 
                     StringBuilder ids = new StringBuilder();
