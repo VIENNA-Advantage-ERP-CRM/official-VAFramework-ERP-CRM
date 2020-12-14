@@ -2207,8 +2207,9 @@ namespace VAdvantage.Model
                 }
             }
 
-            //	Credit Status
-            if (IsSOTrx() && !IsReversal())
+
+            //	Credit Status check only in case of AR Invoice 
+            if (IsSOTrx() && !IsReversal() && !IsReturnTrx())
             {
                 bool checkCreditStatus = true;
                 if (Env.IsModuleInstalled("VAPOS_"))
@@ -2233,7 +2234,6 @@ namespace VAdvantage.Model
 
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
 
-                    // check for Credit limit and Credit validation on Customer Master or Location
                     string retMsg = "";
                     bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
                     if (!crdAll)

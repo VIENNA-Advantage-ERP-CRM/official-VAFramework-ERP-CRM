@@ -61,12 +61,14 @@ namespace VAdvantage.Model
             if (!String.IsNullOrEmpty(GetUPC()) &&
                           Util.GetValueOfString(Get_ValueOld("UPC")) != GetUPC())
             {
-                sql = "SELECT UPCUNIQUE('m','" + GetUPC() + "') as productID FROM Dual";
-                manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+                //sql = "SELECT UPCUNIQUE('m','" + GetUPC() + "') as productID FROM Dual";
+                //manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+
+                manu_ID = MProduct.UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
                 {
-                    _log.SaveError("UPC is Unique", "");
+                    _log.SaveError("UPCUnique", "");
                     return false;
                 }
             }

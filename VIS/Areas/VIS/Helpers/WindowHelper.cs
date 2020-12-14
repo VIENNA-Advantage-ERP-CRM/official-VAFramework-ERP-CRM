@@ -34,6 +34,7 @@ namespace VIS.Helpers
 
         private List<String> _createSqlColumn = new List<String>();
         private List<String> _createSqlValue = new List<String>();
+        private List<string> _defaultTblCols = new List<string> { "created", "updated", "createdby", "updatedby", "export_id" };
         List<VAdvantage.Process.PO_LOB> _lobInfo = null;
         string key;
 
@@ -898,10 +899,10 @@ namespace VIS.Helpers
                         else if (DisplayType.YesNo == displayType)
                         {
                             string boolval = "N";
-                            if("Y".Equals(Util.GetValueOfString(colval)))
-                                 boolval = "Y";
+                            if ("Y".Equals(Util.GetValueOfString(colval)))
+                                boolval = "Y";
                             else if (colval.Equals(true))
-                                 boolval = "Y";
+                                boolval = "Y";
                             //if (VAdvantage.Utility.Util.GetValueOfBool(colval))
                             //    boolval = "Y";
 
@@ -986,67 +987,129 @@ namespace VIS.Helpers
                 versionInfo.AD_Window_ID = inn.AD_WIndow_ID;
                 versionInfo.ImmediateSave = inn.ImmediateSave;
                 versionInfo.TableName = inn.TableName;
+
+                versionInfo.IsLatestVersion = false;
+
                 // check whether any Document Value type workflow is attached with Version table
                 hasDocValWF = GetDocValueWF(ctx, ctx.GetAD_Client_ID(), InsAD_Table_ID, trx);
                 versionInfo.HasDocValWF = hasDocValWF;
 
-                /// Change to Validate before save logic in master table if any
-                /// otherwise rollback and return                
-                Trx trxMas = null;
-                try
-                {
-                    trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
-                    ctx.SetContext("VerifyVersionRecord", "Y");
-                    int parentWinID = inn.AD_WIndow_ID;
-                    PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, parentWinID, inn.AD_Table_ID, true, out parentWinID);
-                    //	No Persistent Object
 
-                    if (poMas == null)
+                // check applied, no need to check save in case of backdate entry
+                if (!IsBackDateVersion(inn.ValidFrom.Value))
+                {
+                    /// Change to Validate before save logic in master table if any
+                    /// otherwise rollback and return                
+                    Trx trxMas = null;
+                    try
                     {
-                        throw new NullReferenceException("No Persistent Obj");
-                    }
-                    if (!SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false))
-                        return;
-                    if (!poMas.Save(trxMas))
-                    {
-                        String msg = "SaveError";
-                        String info = "";
-                        ValueNamePair ppE = VLogger.RetrieveError();
-                        if (ppE == null)
-                            ppE = VLogger.RetrieveWarning();
-                        if (ppE != null)
+                        trxMas = Trx.Get("VerTrx" + System.DateTime.Now.Ticks);
+                        ctx.SetContext("VerifyVersionRecord", "Y");
+                        int parentWinID = inn.AD_WIndow_ID;
+                        PO poMas = GetPO(ctx, AD_Table_ID, Record_ID, whereClause, trxMas, parentWinID, inn.AD_Table_ID, true, out parentWinID);
+                        //	No Persistent Object
+
+                        if (poMas == null)
                         {
-                            msg = ppE.GetValue();
-                            info = ppE.GetName();
-                            //	Unique Constraint
-                            Exception ex = VLogger.RetrieveException();
-                            if (ex != null)
-                                msg = "SaveErrorNotUnique";
+                            throw new NullReferenceException("No Persistent Obj");
                         }
+                        if (!SetFields(ctx, poMas, m_fields, inn, outt, Record_ID, hasDocValWF, false, false, false))
+                            return;
+                        if (!poMas.Save(trxMas))
+                        {
+                            String msg = "SaveError";
+                            String info = "";
+                            ValueNamePair ppE = VLogger.RetrieveError();
+                            if (ppE == null)
+                                ppE = VLogger.RetrieveWarning();
+                            if (ppE != null)
+                            {
+                                msg = ppE.GetValue();
+                                info = ppE.GetName();
+                                //	Unique Constraint
+                                Exception ex = VLogger.RetrieveException();
+                                if (ex != null)
+                                    msg = "SaveErrorNotUnique";
+                            }
+                            outt.IsError = true;
+                            outt.FireEEvent = true;
+                            outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
+                            outt.Status = GridTable.SAVE_ERROR;
+                            return;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
                         outt.IsError = true;
                         outt.FireEEvent = true;
-                        outt.EventParam = new EventParamOut() { Msg = msg, Info = info, IsError = true };
+                        outt.EventParam = new EventParamOut() { Msg = ex.Message, Info = "", IsError = true };
                         outt.Status = GridTable.SAVE_ERROR;
                         return;
                     }
-                }
-                catch (Exception ex)
-                {
-                    outt.IsError = true;
-                    outt.FireEEvent = true;
-                    outt.EventParam = new EventParamOut() { Msg = ex.Message, Info = "", IsError = true };
-                    outt.Status = GridTable.SAVE_ERROR;
-                    return;
-                }
-                finally
-                {
-                    ctx.SetContext("VerifyVersionRecord", "N");
-                    if (trxMas != null)
+                    finally
                     {
-                        trxMas.Rollback();
-                        trxMas.Close();
-                        trxMas = null;
+                        ctx.SetContext("VerifyVersionRecord", "N");
+                        if (trxMas != null)
+                        {
+                            trxMas.Rollback();
+                            trxMas.Close();
+                            trxMas = null;
+                        }
                     }
+                }
+                else
+                {
+                    if (Util.GetValueOfString(inn.WhereClause) != "")
+                    {
+                        versionInfo.IsLatestVersion = CheckLatestVersion(inn);
+                        List<string> colsChanged = new List<string>();
+                        foreach (string key in inn.RowData.Keys)
+                        {
+                            if (!Util.GetValueOfString(inn.RowData[key]).Equals(Util.GetValueOfString(inn.OldRowData[key])))
+                            {
+                                colsChanged.Add(key);
+                            }
+                        }
+
+                        string sqlOldVer = @"SELECT * FROM " + inn.TableName + "_Ver WHERE " + inn.WhereClause
+                                    + " AND VersionValidFrom <= " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true)
+                                    + " AND IsVersionApproved = 'Y' ORDER BY VersionValidFrom DESC, RecordVersion DESC";
+                        DataSet dsOldVers = DB.ExecuteDataset(sqlOldVer);
+                        if (dsOldVers != null && dsOldVers.Tables[0].Rows.Count > 0)
+                        {
+                            foreach (DataRow drRow in dsOldVers.Tables[0].Rows)
+                            {
+                                Dictionary<String, Object> oldVerRowData = new Dictionary<string, object>();
+
+                                foreach (string key in rowData.Keys)
+                                {
+                                    if (colsChanged.Contains(key))
+                                    {
+                                        oldVerRowData.Add(key, inn.RowData[key]);
+                                    }
+                                    else
+                                    {
+                                        if (drRow.Table.Columns.Contains(key))
+                                            oldVerRowData.Add(key, drRow[key]);
+                                        else
+                                            oldVerRowData.Add(key, rowData[key]);
+                                    }
+                                }
+                                inn.RowData = oldVerRowData;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            outt.IsError = true;
+                            outt.FireEEvent = true;
+                            outt.EventParam = new EventParamOut() { Msg = "VIS_NoAppVerDate", Info = "", IsError = true };
+                            outt.Status = GridTable.SAVE_ERROR;
+                            return;
+                        }
+                    }
+                    else
+                        versionInfo.IsLatestVersion = true;
                 }
             }
 
@@ -1070,11 +1133,11 @@ namespace VIS.Helpers
                 hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
                 po.SetAD_Window_ID(Ver_Window_ID);
-                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey))
+                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, true, hasSingleKey, versionInfo.IsLatestVersion))
                     return;
             }
             else
-                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey))
+                if (!SetFields(ctx, po, m_fields, inn, outt, Record_ID, hasDocValWF, false, hasSingleKey, false))
                 return;
 
             if (!po.Save())
@@ -1151,15 +1214,26 @@ namespace VIS.Helpers
             outt.RowData = rowData;
             try
             {
-                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF))
+                if (!inn.MaintainVersions)
+                    outt.LatestVersion = true;
+                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF) && (hasDocValWF || !versionInfo.IsLatestVersion))
                 {
                     outt.RowData = inn.OldRowData;
+                    outt.LatestVersion = versionInfo.IsLatestVersion;
                     // if table has Workflow then return status as has WF (W)
                     if (hasDocValWF)
                         outt.Status = GridTable.SAVE_WFAPPROVAL;
                     // if record is not Immediate Save then return Save in Future (F)
-                    if (!inn.ImmediateSave)
-                        outt.Status = GridTable.SAVE_FUTURE;
+                    else if (!inn.ImmediateSave)
+                    {
+                        if (!versionInfo.IsLatestVersion)
+                        {
+                            if (IsBackDateVersion(inn.ValidFrom))
+                                outt.Status = GridTable.SAVE_BACKDATEVER;
+                            else
+                                outt.Status = GridTable.SAVE_FUTURE;
+                        }
+                    }
                 }
                 else
                 {
@@ -1220,6 +1294,31 @@ namespace VIS.Helpers
                 outt.Status = GridTable.SAVE_OK;
         }
 
+        private bool CheckLatestVersion(SaveRecordIn inn)
+        {
+            string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause
+                                + " AND IsVersionApproved = 'Y' AND "
+                                + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + @" < TRUNC(SysDate)
+                                AND (TRUNC(VersionValidFrom) > " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) +
+                                @" AND TRUNC(VersionValidFrom) <= TRUNC(Sysdate))
+                                 ORDER BY VersionValidFrom DESC";
+            if (Util.GetValueOfInt(DB.ExecuteScalar(sqlOldVer)) > 0)
+                return false;
+            return true;
+        }
+
+        /// <summary>
+        /// function to check whether back date version or not
+        /// </summary>
+        /// <param name="verDate">Version Date</param>
+        /// <returns>True/False</returns>
+        private bool IsBackDateVersion(DateTime? verDate)
+        {
+            if (verDate != null && Util.GetValueOfDateTime(verDate.Value).Value.Date < Util.GetValueOfDateTime(System.DateTime.Now).Value.Date)
+                return true;
+            return false;
+        }
+
         /// <summary>
         /// function to check whether there is any Document Value 
         /// type workflow linked with table
@@ -1278,7 +1377,7 @@ namespace VIS.Helpers
         /// <param name="Record_ID"></param>
         /// <param name="HasDocValWF"></param>
         /// <param name="VersionRecord"></param>
-        private bool SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey)
+        private bool SetFields(Ctx ctx, PO po, List<WindowField> m_fields, SaveRecordIn inn, SaveRecordOut outt, int Record_ID, bool HasDocValWF, bool VersionRecord, bool SingleKey, bool isLatestVersion)
         {
             var rowData = inn.RowData; // new 
             var _rowData = inn.OldRowData;
@@ -1454,7 +1553,7 @@ namespace VIS.Helpers
                         // Check if this is a new record
                         if (po.Get_Value(inn.TableName + "_ID") != null)
                         {
-                            curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + inn.TableName + "_ID = " + Record_ID));
+                            curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COALESCE(MAX(RecordVersion), 0) + 1 FROM " + inn.TableName + "_Ver WHERE " + inn.TableName + "_ID = " + Record_ID));
                             if (curMaxVer > 1)
                             {
                                 curProcessedVer = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT RecordVersion FROM " + inn.TableName + @"_Ver WHERE VersionValidFrom <= SYSDATE AND ProcessedVersion = 'Y' 
@@ -1472,17 +1571,17 @@ namespace VIS.Helpers
                                 if (parentLinkColValue[i] != null)
                                     whClause.Append(parentLinkCols[i] + " = " + parentLinkColValue[i]);
                                 else
-                                    whClause.Append(" NVL(" + parentLinkCols[i] + ",0) = 0");
+                                    whClause.Append(" COALESCE(" + parentLinkCols[i] + ",0) = 0");
                             }
                             else
                             {
                                 if (parentLinkColValue[i] != null)
                                     whClause.Append(" AND " + parentLinkCols[i] + " = " + parentLinkColValue[i]);
                                 else
-                                    whClause.Append(" AND NVL(" + parentLinkCols[i] + ",0) = 0");
+                                    whClause.Append(" AND COALESCE(" + parentLinkCols[i] + ",0) = 0");
                             }
                         }
-                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(NVL(RecordVersion,0)) + 1 FROM " + inn.TableName + "_Ver WHERE " + whClause));
+                        curMaxVer = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COALESCE(MAX(RecordVersion),0) + 1 FROM " + inn.TableName + "_Ver WHERE " + whClause));
                         if (curMaxVer > 1)
                         {
                             curProcessedVer = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT RecordVersion FROM " + inn.TableName + @"_Ver WHERE VersionValidFrom <= SYSDATE AND ProcessedVersion = 'Y'
@@ -1494,19 +1593,23 @@ namespace VIS.Helpers
                     if (curProcessedVer > 0)
                         po.Set_Value("OldVersion", curProcessedVer);
                     po.Set_Value("RecordVersion", VerRec);
+                }
 
-                }
-                if (!inn.ImmediateSave)
-                {
-                    if (inn.ValidFrom == null)
-                        inn.ImmediateSave = true;
-                }
                 // if Document value type Workflow is attached with the table,
                 // then set "ProcessedVersion" & "IsVersionApproved" as false for Version
                 if (HasDocValWF)
                 {
                     po.Set_Value("ProcessedVersion", false);
                     po.Set_Value("IsVersionApproved", false);
+                }
+                if (!inn.ImmediateSave)
+                {
+                    if (inn.ValidFrom == null)
+                        inn.ImmediateSave = true;
+                    else if (IsBackDateVersion(inn.ValidFrom.Value) && isLatestVersion)
+                    {
+                        po.Set_Value("ProcessedVersion", true);
+                    }
                 }
             }
             return true;

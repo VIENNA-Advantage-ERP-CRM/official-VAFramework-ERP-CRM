@@ -836,6 +836,7 @@ namespace VAdvantage.Model
             //    return false;
             //}
             //	Nothing to convert
+            //Getting the message from messagewindow for UOM conversion
             if (GetMultiplyRate().CompareTo(Env.ZERO) <= 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(), "ProductUOMConversionRateError"));
@@ -863,12 +864,14 @@ namespace VAdvantage.Model
             if (!String.IsNullOrEmpty(GetUPC()) &&
                      Util.GetValueOfString(Get_ValueOld("UPC")) != GetUPC())
             {
-                string sql = "SELECT UPCUNIQUE('c','" + GetUPC() + "') as productID FROM Dual";
-                int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //string sql = "SELECT UPCUNIQUE('c','" + GetUPC() + "') as productID FROM Dual";
+                //int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
+
+                int manu_ID = MProduct.UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 {
-                    _log.SaveError("UPC is Unique", "");
+                    _log.SaveError("UPCUnique", "");
                     return false;
                 }
             }

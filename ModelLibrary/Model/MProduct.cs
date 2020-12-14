@@ -644,11 +644,13 @@ namespace VAdvantage.Model
             }
             if (newRecord)
             {
-                string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "') as productID FROM Dual";
-                int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "') as productID FROM Dual";
+                //int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+
+                int manu_ID = UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 {
-                    _log.SaveError("UPC is Unique", "");
+                    _log.SaveError("UPCUnique", "");
                     return false;
                 }
             }
@@ -657,17 +659,36 @@ namespace VAdvantage.Model
                 if (!String.IsNullOrEmpty(GetUPC()) &&
                    Util.GetValueOfString(Get_ValueOld("UPC")) != GetUPC())
                 {
-                    string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "') as productID FROM Dual";
-                    int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                    //string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "') as productID FROM Dual";
+                    //int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
+
+                    int manu_ID = UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
                     if (manu_ID > 0)
                     {
-                        _log.SaveError("UPC is Unique", "");
+                        _log.SaveError("UPCUnique", "");
                         return false;
                     }
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// Check Unique UPC client wise
+        /// </summary>
+        /// <param name="AD_Client_ID">Client ID</param>
+        /// <param name="upc">UPC of Product</param>
+        /// <returns>M_Product_ID, if records found</returns>
+        public static int UpcUniqueClientWise(int AD_Client_ID, string upc)
+        {
+            int M_Product_ID = 0;
+            string sql = @"SELECT p.M_Product_ID FROM M_Product p LEFT JOIN M_Manufacturer m ON m.M_Product_ID = p.M_Product_ID 
+                            LEFT JOIN M_ProductAttributes a ON a.M_Product_ID = p.M_Product_ID LEFT JOIN C_UOM_Conversion c ON c.M_Product_ID = p.M_Product_ID 
+                            LEFT JOIN C_UOM_ProductBarcode b ON b.M_Product_ID = p.M_Product_ID WHERE p.AD_Client_ID = " + AD_Client_ID
+                            + " AND ( p.UPC = '" + upc + "' OR m.UPC = '" + upc + "' OR a.UPC = '" + upc + "' OR c.UPC = '" + upc + "' OR b.UPC = '" + upc + "')";
+            M_Product_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            return M_Product_ID;
         }
 
         /**

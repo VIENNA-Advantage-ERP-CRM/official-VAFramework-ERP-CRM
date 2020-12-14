@@ -27,7 +27,9 @@ namespace VAdvantage.Process
         StringBuilder msg = new StringBuilder("");
         DataSet ds = null;
         List<string> defcolNames = new List<string>();
-
+        List<string> _tblKeysProcessed = new List<string>();
+        StringBuilder whereCond = new StringBuilder("");
+        int count = 0;
         #endregion Private Variables
 
         /// <summary>
@@ -67,7 +69,9 @@ namespace VAdvantage.Process
                         log.Info("Processing for " + sbTblName.ToString());
                         // Select all data from "_Version" Table which needs to be updated on Master Table
                         // only those records which are approved and Not Processed by Schedular and Valid from or effective from Today or before Today's date
-                        DataSet dsApprovedData = DB.ExecuteDataset("SELECT * FROM " + sbTblName.ToString() + " WHERE IsVersionApproved = 'Y' AND ProcessedVersion = 'N' AND VersionValidFrom <= SYSDATE AND VersionLog IS NULL ORDER BY VersionValidFrom");
+                        DataSet dsApprovedData = DB.ExecuteDataset(@"SELECT * FROM " + sbTblName.ToString() +
+                            " WHERE IsVersionApproved = 'Y' AND ProcessedVersion = 'N' " +
+                            "AND VersionValidFrom <= SYSDATE AND VersionLog IS NULL ORDER BY VersionValidFrom DESC, RecordVersion DESC");
                         if (dsApprovedData != null && dsApprovedData.Tables[0].Rows.Count > 0)
                         {
                             log.Info("Processing for " + sbTblName.ToString() + " ==>> Found unprocessed records " + dsApprovedData.Tables[0].Rows.Count);
@@ -124,6 +128,7 @@ namespace VAdvantage.Process
                 // Loop through the records which need to be updated on Master Table
                 for (int i = 0; i < dsRec.Tables[0].Rows.Count; i++)
                 {
+                    whereCond.Clear();
                     DataRow dr = dsRec.Tables[0].Rows[i];
                     sbKey.Clear();
                     PO poDest = null;
@@ -134,12 +139,12 @@ namespace VAdvantage.Process
                         // Create object of PO Class from TableName and Record ID
                         poDest = MTable.GetPO(GetCtx(), BaseTblName, Util.GetValueOfInt(dr[BaseTblName + "_ID"]), null);
                         sbKey.Append(Util.GetValueOfInt(dr[BaseTblName + "_ID"]));
+                        whereCond.Append(BaseTblName + "_ID = " + Util.GetValueOfInt(dr[BaseTblName + "_ID"]));
                     }
                     else
                     {
                         // Create object of PO Class from combination of key columns
                         string[] keyCols = tbl.GetKeyColumns();
-                        StringBuilder whereCond = new StringBuilder("");
                         for (int w = 0; w < keyCols.Length; w++)
                         {
                             if (w == 0)
@@ -160,6 +165,9 @@ namespace VAdvantage.Process
                         poDest = tbl.GetPO(GetCtx(), whereCond.ToString(), null);
                         sbKey.Append(whereCond);
                     }
+
+                    if (_tblKeysProcessed.Contains(sbKey.ToString()))
+                        continue;
 
                     // check if there is any error in processing record, then continue and do not process next versions
                     if (keys.Contains(sbKey.ToString()))
@@ -182,6 +190,22 @@ namespace VAdvantage.Process
                     {
                         if (Util.GetValueOfString(poSource.Get_Value("Processed")) == "Y")
                             recordProcessed = true;
+                    }
+
+                    // Change done to check for back date versions
+                    sqlSB.Clear().Append("SELECT COUNT(*) FROM " + TableName + " WHERE IsVersionApproved = 'Y'" +
+                            " AND TRUNC(VersionValidFrom) > " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true)
+                            + " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " <= TRUNC(SysDate)"
+                            + " AND " + whereCond);
+
+                    int CountRecs = Util.GetValueOfInt(DB.ExecuteScalar(sqlSB.ToString(), null, null));
+                    if (CountRecs > 0)
+                    {
+                        sqlSB.Clear().Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE ProcessedVersion = 'N' AND IsVersionApproved = 'Y'" +
+                            " AND TRUNC(VersionValidFrom) <= " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " AND " + whereCond);
+                        count = Util.GetValueOfInt(DB.ExecuteQuery(sqlSB.ToString(), null, null));
+                        _tblKeysProcessed.Add(sbKey.ToString());
+                        continue;
                     }
 
                     // set client and Organization ID from Version table to Master
@@ -253,7 +277,7 @@ namespace VAdvantage.Process
                         sqlSB.Clear();
 
                         sqlSB.Append("UPDATE " + TableName + " SET VersionLog = '" + error + "' WHERE " + TableName + "_ID = " + dr[TableName + "_ID"]);
-                        int count = DB.ExecuteQuery(sqlSB.ToString(), null, null);
+                        count = DB.ExecuteQuery(sqlSB.ToString(), null, null);
 
                         continue;
                     }
@@ -262,15 +286,20 @@ namespace VAdvantage.Process
                         // Update Version table, Set "ProcessedVersion" to "Y", so that it don't consider when process runs next time
                         sqlSB.Clear();
                         // Update against record id in case of Single key, and update Key column in version table as well in case of new record
-                        if (isSingleKey)
-                            sqlSB.Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y', " + BaseTblName + "_ID  = " + poDest.Get_ID() + " WHERE " + TableName + "_ID = " + dr[TableName + "_ID"]);
-                        // else 
-                        else
-                            sqlSB.Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE " + TableName + "_ID = " + dr[TableName + "_ID"]);
+                        //if (isSingleKey)
+                        //    sqlSB.Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y', " + BaseTblName + "_ID  = " + poDest.Get_ID() + " WHERE " + TableName + "_ID = " + dr[TableName + "_ID"]);
+                        //// else 
+                        //else
+                        //    sqlSB.Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE " + TableName + "_ID = " + dr[TableName + "_ID"]);
 
-                        int count = DB.ExecuteQuery(sqlSB.ToString(), null, null);
-                        if (count <= 0)
-                            log.Info(TableName + " not updated ==>> " + sqlSB.ToString());
+                        //int count = DB.ExecuteQuery(sqlSB.ToString(), null, null);
+                        //if (count <= 0)
+                        //    log.Info(TableName + " not updated ==>> " + sqlSB.ToString());
+
+                        sqlSB.Clear().Append("UPDATE " + TableName + " SET ProcessedVersion = 'Y' WHERE ProcessedVersion = 'N' AND IsVersionApproved = 'Y'" +
+                            " AND TRUNC(VersionValidFrom) <= " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dr["VersionValidFrom"]), true) + " AND " + whereCond);
+                        count = Util.GetValueOfInt(DB.ExecuteQuery(sqlSB.ToString(), null, null));
+                        _tblKeysProcessed.Add(sbKey.ToString());
                     }
                 }
             }

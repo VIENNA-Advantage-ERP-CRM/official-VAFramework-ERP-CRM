@@ -76,6 +76,8 @@ namespace VIS.DataContracts
         public Dictionary<String, Object> RowData { get; set; }
         public char Status { get; set; }
 
+        public bool LatestVersion { get; set; }
+
         public EventParamOut EventParam;
     }
 
