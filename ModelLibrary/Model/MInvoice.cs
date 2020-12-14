@@ -1529,7 +1529,7 @@ namespace VAdvantage.Model
                         }
                     }
                     //}   
-                } 
+                }
             }
 
             return true;
@@ -1590,11 +1590,11 @@ namespace VAdvantage.Model
             {
                 if (Is_ValueChanged("AD_Org_ID"))
                 {
-                   String sql = "UPDATE C_InvoiceLine ol"
-                       + " SET AD_Org_ID ="
-                           + "(SELECT AD_Org_ID"
-                           + " FROM C_Invoice o WHERE ol.C_Invoice_ID=o.C_Invoice_ID) "
-                       + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                    String sql = "UPDATE C_InvoiceLine ol"
+                        + " SET AD_Org_ID ="
+                            + "(SELECT AD_Org_ID"
+                            + " FROM C_Invoice o WHERE ol.C_Invoice_ID=o.C_Invoice_ID) "
+                        + "WHERE C_Invoice_ID=" + GetC_Invoice_ID();
                     int no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
                     log.Fine("Lines -> #" + no);
                 }
@@ -1687,7 +1687,7 @@ namespace VAdvantage.Model
                 return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
             }
             else
-               return 0;
+                return 0;
         }
         /**
          * 	Set Price List (and Currency) when valid
@@ -2207,8 +2207,9 @@ namespace VAdvantage.Model
                 }
             }
 
-            //	Credit Status
-            if (IsSOTrx() && !IsReversal())
+
+            //	Credit Status check only in case of AR Invoice 
+            if (IsSOTrx() && !IsReversal() && !IsReturnTrx())
             {
                 bool checkCreditStatus = true;
                 if (Env.IsModuleInstalled("VAPOS_"))
@@ -2233,7 +2234,6 @@ namespace VAdvantage.Model
 
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
 
-                    // check for Credit limit and Credit validation on Customer Master or Location
                     string retMsg = "";
                     bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
                     if (!crdAll)
@@ -2751,6 +2751,52 @@ namespace VAdvantage.Model
                             }
                         }
                     }
+
+                    #region Validate LOC which is created or not against Order 
+                    // Validate LOC which is created or not against Order
+                    if (line.GetC_OrderLine_ID() != 0)
+                    {
+                        int VA026_LCDetail_ID = 0;
+                        if (Env.IsModuleInstalled("VA026_") && Env.IsModuleInstalled("VA009_"))
+                        {
+                            DataSet ds = DB.ExecuteDataset(@"SELECT o.C_Order_ID, o.IsSOTrx, pm.VA009_PaymentBaseType FROM C_OrderLine ol INNER JOIN C_Order o 
+                                        ON ol.C_Order_ID=o.C_Order_ID INNER JOIN VA009_PaymentMethod pm ON pm.VA009_PaymentMethod_ID=o.VA009_PaymentMethod_ID
+                                    WHERE o.IsActive = 'Y' AND DocStatus IN ('CL' , 'CO')  AND ol.C_OrderLine_ID =" + line.GetC_OrderLine_ID(), null, Get_Trx());
+                            if (ds != null)
+                            {
+                                if (Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentBaseType"]).Equals(X_C_Invoice.PAYMENTMETHOD_LetterOfCredit))
+                                {
+                                    //Check VA026_LCDetail_ID if the LC OrderType is Single
+                                    VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(VA026_LCDetail_ID)  FROM VA026_LCDetail 
+                                                            WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE', 'VO')  AND " +
+                                                           (Util.GetValueOfString(ds.Tables[0].Rows[0]["IsSOTrx"]) == "Y" ? " VA026_Order_ID" : "c_order_id") + " = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Order_ID"]), null, Get_Trx()));
+                                    // Check SO / PO Detail tab of Letter of Credit
+                                    if (VA026_LCDetail_ID == 0)
+                                    {
+                                        VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(lc.VA026_LCDetail_ID)  FROM VA026_LCDetail lc
+                                                        INNER JOIN " + (Util.GetValueOfString(ds.Tables[0].Rows[0]["IsSOTrx"]) == "Y" ? " VA026_SODetail" : "VA026_PODetail") + @" sod ON sod.VA026_LCDetail_ID = lc.VA026_LCDetail_ID 
+                                                            WHERE sod.IsActive = 'Y' AND lc.IsActive = 'Y' AND lc.DocStatus NOT IN('RE', 'VO')  AND
+                                                            sod.C_Order_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Order_ID"]), null, Get_Trx()));
+
+                                        if (VA026_LCDetail_ID == 0)
+                                        {
+                                            _processMsg = Msg.GetMsg(GetCtx(), "VA026_LCNotDefine");
+                                            return DocActionVariables.STATUS_INVALID;
+                                        }
+                                    }
+                                    //VA026_LCDetail_ID Record is Completed or not
+                                    int docStatus = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(VA026_LCDetail_ID)  FROM VA026_LCDetail 
+                                                            WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'CO')  AND VA026_LCDetail_ID =" + Util.GetValueOfInt(VA026_LCDetail_ID), null, Get_Trx()));
+                                    if (docStatus > 0)
+                                    {
+                                        _processMsg = Msg.GetMsg(GetCtx(), "VA026_CompleteLC");
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    #endregion
 
                     int countVA038 = Env.IsModuleInstalled("VA038_") ? 1 : 0;
                     //	Matching - Inv-Shipment
@@ -4825,7 +4871,7 @@ namespace VAdvantage.Model
 
             //	Deep Copy
             MInvoice counter = CopyFrom(this, GetDateInvoiced(),
-                C_DocTypeTarget_ID, true, Get_TrxName(), true);           
+                C_DocTypeTarget_ID, true, Get_TrxName(), true);
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
             //

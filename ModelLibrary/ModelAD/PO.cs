@@ -2694,7 +2694,8 @@ namespace VAdvantage.Model
                 // Get Master Data Properties
                 var MasterDetails = GetMasterDetails();
                 // check if Record has any Workflow (Value Type) linked, or Is Immediate save etc
-                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 && MasterDetails.ImmediateSave && !MasterDetails.HasDocValWF)
+                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 && 
+                    (MasterDetails.ImmediateSave || MasterDetails.IsLatestVersion) && !MasterDetails.HasDocValWF)
                 {
                     // create object of parent table
                     MTable tbl = MTable.Get(p_ctx, MasterDetails.AD_Table_ID);
@@ -2720,14 +2721,14 @@ namespace VAdvantage.Model
                                 if (keyCols[w] != null)
                                     whereCond.Append(keyCols[w] + " = " + Get_Value(keyCols[w]));
                                 else
-                                    whereCond.Append(" NVL(" + keyCols[w] + ",0) = 0");
+                                    whereCond.Append(" COALESCE(" + keyCols[w] + ",0) = 0");
                             }
                             else
                             {
                                 if (keyCols[w] != null)
                                     whereCond.Append(" AND " + keyCols[w] + " = " + Get_Value(keyCols[w]));
                                 else
-                                    whereCond.Append(" AND NVL(" + keyCols[w] + ",0) = 0");
+                                    whereCond.Append(" AND COALESCE(" + keyCols[w] + ",0) = 0");
                             }
                         }
                         po = tbl.GetPO(p_ctx, whereCond.ToString(), _trx);
