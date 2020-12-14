@@ -1335,6 +1335,24 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("NotifyNode_ID");
         }
+
+        /** ZoomWindow_ID AD_Reference_ID=284 */
+        public static int ZOOMWINDOW_ID_AD_Reference_ID = 284;/** Set Zoom Window.
+        @param ZoomWindow_ID Zoom Window */
+        public void SetZoomWindow_ID(int ZoomWindow_ID)
+        {
+            if (ZoomWindow_ID <= 0) Set_Value("ZoomWindow_ID", null);
+            else
+                Set_Value("ZoomWindow_ID", ZoomWindow_ID);
+        }/** Get Zoom Window.
+        @return Zoom Window */
+        public int GetZoomWindow_ID()
+        {
+            Object ii = Get_Value("ZoomWindow_ID");
+            if (ii == null)
+                return 0;
+            return Convert.ToInt32(ii);
+        }
     }
 
 }

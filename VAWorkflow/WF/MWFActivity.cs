@@ -132,6 +132,11 @@ namespace VAdvantage.WF
                 //SetEndWaitTime(new DateTime(limitMS + CommonFunctions.CurrentTimeMillis())); // not gives correct output
                 SetEndWaitTime(DateTime.Now.AddMilliseconds(limitMS));
             }
+
+            // set zoom window ID if selected on node
+            if (node.GetZoomWindow_ID() > 0)
+                SetAD_Window_ID(node.GetZoomWindow_ID());
+
             //	Responsible
             SetResponsible(process);
             Save();
