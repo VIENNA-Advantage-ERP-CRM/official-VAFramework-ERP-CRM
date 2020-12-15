@@ -126,12 +126,12 @@ namespace VAdvantage.Process
                 }
                 else if (name.Equals("M_Product_Category_ID"))
                 {
-                    productCategoryID = (string)para[i].GetParameter();
+                    productCategoryID = Util.GetValueOfString(para[i].GetParameter());
                     //int[] productCategoryArr = Array.ConvertAll(productCategoryID.Split(','), int.Parse);
                 }
                 else if (name.Equals("M_Product_ID"))
                 {
-                    productID = (string)para[i].GetParameter();
+                    productID = Util.GetValueOfString(para[i].GetParameter());
                 }
                 else if (name.Equals("IsDeleteCosting"))
                 {
@@ -170,7 +170,7 @@ namespace VAdvantage.Process
 
                 if (onlyDeleteCosting.Equals("Y"))
                     return Msg.GetMsg(GetCtx(), "VIS_DeleteCostingImpacts");
-                             
+
                 // check IsCostAdjustmentOnLost exist on product 
                 sql.Clear();
                 sql.Append(@"SELECT COUNT(*) FROM AD_Column WHERE IsActive = 'Y' AND 
