@@ -1213,7 +1213,9 @@ namespace VIS.Helpers
             outt.RowData = rowData;
             try
             {
-                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF))
+                if (!inn.MaintainVersions)
+                    outt.LatestVersion = true;
+                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF) && (hasDocValWF || !versionInfo.IsLatestVersion))
                 {
                     outt.RowData = inn.OldRowData;
                     outt.LatestVersion = versionInfo.IsLatestVersion;

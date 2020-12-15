@@ -196,7 +196,7 @@ namespace VAdvantage.Process
                 {
                     sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID,
-                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, t.M_ProductContainer_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
+                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
                     " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
                 AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) 
@@ -290,7 +290,7 @@ namespace VAdvantage.Process
                                     //int cnt = DB.ExecuteQuery(updateSql.ToString(), null, Get_Trx());
                                     //log.Info(" =====>  records updated at " + DateTime.Now.ToString() + " are = " + count + " <===== ");
 
-                                    string updateQry = DBFunctionCollection.UpdateInventoryLine(GetCtx(), ds, Get_Trx());                                    
+                                    string updateQry = DBFunctionCollection.UpdateInventoryLine(GetCtx(), ds, Get_Trx());
                                     ds.Dispose();
                                     int cnt = DB.ExecuteQuery(updateQry, null, Get_Trx());
                                 }

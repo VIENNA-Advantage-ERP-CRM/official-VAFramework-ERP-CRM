@@ -34,10 +34,10 @@ namespace VIS.Models
             result["IsDropShip"] = ioLine.IsDropShip() ? "Y" : "N";
 
             // JID_1310: On Selection of Shipment line on Customer/Vendor RMA. System should check Total Delivred - Total Return Qty From Sales PO line and Balance  show in qty field
-            decimal qtyRMA = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(QtyOrdered) FROM C_Order o INNER JOIN C_OrderLine ol ON o.C_Order_ID = ol.C_Order_ID                            
+            decimal qtyRMA = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(QtyEntered) FROM C_Order o INNER JOIN C_OrderLine ol ON o.C_Order_ID = ol.C_Order_ID                            
                             WHERE ol.Orig_InOutLine_ID = " + Orig_InOutLine_ID
                             + @" AND ol.Isactive = 'Y' AND o.docstatus NOT IN ('RE' , 'VO')", null, null));
-            decimal QtyNotDelivered = ioLine.GetMovementQty() - qtyRMA;
+            decimal QtyNotDelivered = ioLine.GetQtyEntered() - qtyRMA;
 
             result["QtyEntered"] = QtyNotDelivered.ToString();
 

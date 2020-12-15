@@ -80,7 +80,7 @@ namespace VAdvantage.Process
                 }
                 else if (name.Equals("C_Order_ID"))
                 {
-                    _C_Order_ID = (string)para[i].GetParameter();
+                    _C_Order_ID = Util.GetValueOfString(para[i].GetParameter());
                     //acctSchemaRecord = Array.ConvertAll(_C_Order_ID.Split(','), int.Parse);
                     //_C_Order_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
