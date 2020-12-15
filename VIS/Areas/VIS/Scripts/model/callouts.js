@@ -15743,7 +15743,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "")
             return "";
         console.log("Before Charge Or Product");
-        if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
+        if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_Charge_ID")) == 0) {
             return "";
         }
         console.log("After Charge Or Product");
