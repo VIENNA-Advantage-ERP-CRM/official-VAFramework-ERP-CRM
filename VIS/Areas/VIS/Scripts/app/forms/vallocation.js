@@ -573,7 +573,9 @@
                         VIS.ADialog.info("", true, VIS.Msg.getMsg("InvalidDateFormat"), "");
                         return false;
                     }
-                    if (new Date($date.val()) < maxDate) {
+                    //Handled in Central America Time Zone.
+                    //if (new Date($date.val()) < maxDate) {
+                    if ($date.val() < Globalize.format(new Date(maxDate), "yyyy-MM-dd")) {
                         VIS.ADialog.info("", true, VIS.Msg.getMsg("SelectMaxDate") + Globalize.format(new Date(maxDate), "yyyy-MM-dd"), "");
                         $date.val(Globalize.format(new Date(maxDate), "yyyy-MM-dd"));
                         return false;

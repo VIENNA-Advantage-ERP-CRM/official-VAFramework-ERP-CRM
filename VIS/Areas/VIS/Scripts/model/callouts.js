@@ -15743,7 +15743,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "")
             return "";
         console.log("Before Charge Or Product");
-        if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
+        if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_Charge_ID")) == 0) {
             return "";
         }
         console.log("After Charge Or Product");
@@ -19143,6 +19143,24 @@
                     (Util.getValueOfInt(mTab.getValue("C_Order_ID")) == 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0 &&
                         Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_InvoicePaySchedule_ID")) == 0)) {
                     mTab.setValue("PayAmt", Util.getValueOfDecimal(mTab.getValue("PaymentAmount")));
+                }
+                //window --> Payment to set Loan Amount and Interest amount
+                var dataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA026_");
+                if (dataPrefix["VA026_"]) {
+                    if (mField.getColumnName() == "PaymentAmount") {
+                        //to check PaymentType using IsSOTrx
+                        var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", mTab.getValue("C_DocType_ID"));
+                        //for AP Payment
+                        if (!Util.getValueOfBoolean(dt.IsSOTrx)) {
+                            //get precision based on currency_ID
+                            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", cur);
+                            var precision = currency["StdPrecision"];
+
+                            var loanAmt = Util.getValueOfDecimal(mTab.getValue("PaymentAmount")) / Util.getValueOfDecimal((mTab.getValue("VA026_Interest") / 100) + 1).toString();
+                            mTab.setValue("VA026_InterestAmt", Util.getValueOfDecimal(loanAmt.toFixed(precision)));
+                            mTab.setValue("VA026_InterestAmount", Util.getValueOfDecimal((mTab.getValue("PaymentAmount") - mTab.getValue("VA026_InterestAmt")).toFixed(precision)));
+                        }
+                    }
                 }
                 this.setCalloutActive(false);
             }
