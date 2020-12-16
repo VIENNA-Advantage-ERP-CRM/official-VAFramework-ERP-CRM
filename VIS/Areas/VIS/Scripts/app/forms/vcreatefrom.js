@@ -96,7 +96,8 @@
         // Added by Manjot on 12/9/18 for combobox of Container on Material Receipt
         this.lblContainer = null;
         src = VIS.Application.contextUrl + "Areas/VIS/Images/pallet-icon.png";
-        this.ContainerTree = $("<img id='ContainerTree_" + this.windowNo + "' style='height: 27px;' class='pull-left VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled' src='" + src + "'>");
+        //this.ContainerTree = $("<img id='ContainerTree_" + this.windowNo + "' style='height: 27px;' class='pull-left VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled' src='" + src + "'>");
+        this.ContainerTree = $("<button class='input-group-text VIS_Tree-Container-disabled'><i id='ContainerTree_" + this.windowNo + "' class='fa fa-cubes'></i></button>");
 
         this.DocumentNo = null;
         this.Date = null;
@@ -1104,7 +1105,7 @@
                             this.ContainerTree.removeClass("VIS_Tree-Container-disabled");
                         }
                     }
-                    DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' '));
+                    DivInputCtrlWrap.append(this.cmbContainer.getControl().attr("disabled", true).attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
                     DivCtrlBtnWrap.append(this.ContainerTree);
                     DivInputCtrlWrap.append(this.lblContainer.getControl().addClass('VIS_Pref_Label_Font'));
                 }
