@@ -82,7 +82,7 @@ namespace VAdvantage.Process
 
         public string createJournals(MRevenueRecognition mRevenueRecognition)
         {
-           
+
             try
             {
                 //MRevenueRecognitionPlan[] revenueRecognitionPlans = MRevenueRecognitionPlan.GetRecognitionPlans(mRevenueRecognition, 0, GetCtx());
@@ -93,12 +93,12 @@ namespace VAdvantage.Process
                 MInvoiceLine invoiceLine = null;
                 MInvoice invoice = null;
 
-                
+
                 mRevenueRecognitionRuns = MRevenueRecognitionRun.GetRecognitionRuns(mRevenueRecognition, _RecognitionDate, _orgId, false);
-                journal_ID = new int[(mRevenueRecognitionRuns.Length)];
+                   journal_ID = new int[(mRevenueRecognitionRuns.Length)];
                 if (mRevenueRecognitionRuns.Length > 0)
                 {
-                   
+
                     for (int j = 0; j < mRevenueRecognitionRuns.Length; j++)
                     {
                         MRevenueRecognitionRun revenueRecognitionRun = mRevenueRecognitionRuns[j];
@@ -110,7 +110,7 @@ namespace VAdvantage.Process
                         {
                             if (journal != null)
                             {
-                               
+
                                 if (DocNo == null)
                                 {
                                     DocNo = journal.GetDocumentNo();
@@ -122,7 +122,7 @@ namespace VAdvantage.Process
                                 }
                                 //}
 
-                                journal_ID[j-1] = journal.GetGL_Journal_ID();
+                                journal_ID[j - 1] = journal.GetGL_Journal_ID();
 
                             }
                             journal = new MJournal(GetCtx(), 0, Get_TrxName());
@@ -190,14 +190,6 @@ namespace VAdvantage.Process
                 if (journal != null)
                 {
                    
-                    // //journal.CompleteIt();
-                    // //journal.SetProcessed(true);
-                    // //journal.SetDocStatus("CO");
-                    // //journal.SetDocAction("CL");
-                    // //journal.Save(Get_TrxName());
-                    //result= CompleteOrReverse(journal.GetCtx(), journal.GetGL_Journal_ID(), 169, "CO");
-                    // if (result[1].Equals("Y"))
-                    // {
                     if (DocNo == null)
                     {
                         DocNo = journal.GetDocumentNo();
@@ -208,14 +200,14 @@ namespace VAdvantage.Process
 
                     }
                     // }
-                    journal_ID[journal_ID.Length-1] = journal.GetGL_Journal_ID();
-                    
+                    journal_ID[journal_ID.Length - 1] = journal.GetGL_Journal_ID();
+
                 }
 
             }
             catch (Exception ex)
             {
-                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "GLJournalnotallocateddueto" )+ ex);
+                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "GLJournalnotallocateddueto") + ex);
                 return ex.ToString();
             }
             if (DocNo == null)
@@ -225,10 +217,10 @@ namespace VAdvantage.Process
 
             Get_TrxName().Commit();
             if (journal_ID != null)
-            {               
-                for (int i=0; i < journal_ID.Length; i++)
+            {
+                for (int i = 0; i < journal_ID.Length; i++)
                 {
-                  CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
+                    CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
                 }
             }
             return Msg.GetMsg(GetCtx(), "GLJournalCreated = " + DocNo);
@@ -254,10 +246,10 @@ namespace VAdvantage.Process
                 if (k == 0)
                 {
                     //account bp, prod, charge, camp, activity,trxorg,opp/project,org, +ve
-                    combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), journal.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(),revenueRecognitionRun.GetRecognizedAmt());
-                   // journalLine.SetC_ValidCombination_ID(combination_ID);
+                    combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), journal.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt());
+                    // journalLine.SetC_ValidCombination_ID(combination_ID);
                     journalLine.SetLine(lineno);
-                    if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt()>0)
+                    if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
                         journalLine.SetAmtAcctDr(revenueRecognitionRun.GetRecognizedAmt());
                         journalLine.SetAmtSourceDr(revenueRecognitionRun.GetRecognizedAmt());
@@ -271,7 +263,7 @@ namespace VAdvantage.Process
                         journalLine.SetAmtSourceDr(0);
                         journalLine.SetAmtAcctDr(0);
                     }
-                    else if(recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() > 0)
+                    else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
                         journalLine.SetAmtAcctCr(revenueRecognitionRun.GetRecognizedAmt());
                         journalLine.SetAmtSourceCr(revenueRecognitionRun.GetRecognizedAmt());
@@ -287,11 +279,11 @@ namespace VAdvantage.Process
                     }
                     int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
                     journalLine.Set_ValueNoCheck("Account_ID", account_ID);
-                    journalLine.Set_ValueNoCheck("C_BPartner_ID", invoice.GetC_BPartner_ID());                  
+                    journalLine.Set_ValueNoCheck("C_BPartner_ID", invoice.GetC_BPartner_ID());
                     journalLine.SetAD_OrgTrx_ID(invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
-                    journalLine.Set_ValueNoCheck("C_Project_ID", invoiceLine.Get_ColumnIndex("C_Project_ID") >0? invoiceLine.GetC_Project_ID():invoice.GetC_Project_ID());
-                    journalLine.Set_ValueNoCheck("C_Campaign_ID", invoiceLine.Get_ColumnIndex("C_Campaign_ID")>0 ? invoiceLine.GetC_Campaign_ID(): invoice.GetC_Campaign_ID());
-                    journalLine.Set_ValueNoCheck("C_Activity_ID", invoiceLine.Get_ColumnIndex("C_Activity_ID")>0? invoiceLine.GetC_Activity_ID():invoice.GetC_Activity_ID());
+                    journalLine.Set_ValueNoCheck("C_Project_ID", invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : invoice.Get_Value("C_ProjectRef_ID"));
+                    journalLine.Set_ValueNoCheck("C_Campaign_ID", invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID());
+                    journalLine.Set_ValueNoCheck("C_Activity_ID", invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID());
                     if (invoiceLine.GetM_Product_ID() > 0)
                     {
                         journalLine.Set_ValueNoCheck("M_Product_ID", invoiceLine.GetM_Product_ID());
@@ -305,39 +297,40 @@ namespace VAdvantage.Process
                 {
                     combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt());
                     int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
-                    journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID(),
-                    account_ID, invoiceLine.Get_ColumnIndex("C_Project_ID") > 0 ? invoiceLine.GetC_Project_ID() : invoice.GetC_Project_ID(), 
+
+                    journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(),
+                        invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID(),
+                    account_ID, invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : Util.GetValueOfInt(invoice.Get_Value("C_ProjectRef_ID")),
                     invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID(), invoice.GetC_BPartner_ID(),
                     invoice.GetAD_Org_ID(), invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
 
-                   // journalLine.SetC_ValidCombination_ID(combination_ID);
-                    journalLine.SetLine(lineno);
-
+                    // journalLine.SetC_ValidCombination_ID(combination_ID);
+                    
                     if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
-                        journalLine.SetAmtAcctCr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceCr(revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + revenueRecognitionRun.GetRecognizedAmt());
                         journalLine.SetAmtSourceDr(0);
                         journalLine.SetAmtAcctDr(0);
                     }
                     else if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() < 0)
                     {
-                        journalLine.SetAmtAcctDr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceDr(revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + revenueRecognitionRun.GetRecognizedAmt());
                         journalLine.SetAmtSourceCr(0);
                         journalLine.SetAmtAcctCr(0);
                     }
                     else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
-                        journalLine.SetAmtAcctDr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceDr(revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + revenueRecognitionRun.GetRecognizedAmt());
                         journalLine.SetAmtSourceCr(0);
                         journalLine.SetAmtAcctCr(0);
                     }
                     else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() < 0)
                     {
-                        journalLine.SetAmtAcctCr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceCr(revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + revenueRecognitionRun.GetRecognizedAmt());
                         journalLine.SetAmtSourceDr(0);
                         journalLine.SetAmtAcctDr(0);
                     }
@@ -365,7 +358,7 @@ namespace VAdvantage.Process
             journal.SetPostingType(MJournal.POSTINGTYPE_Actual);
 
             int GL_Category_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT GL_Category_ID From GL_Category Where CategoryType='M' 
-            AND  AD_Client_ID= "+ revenueRecognitionPlan.GetAD_Client_ID() + " Order by GL_Category_ID desc"));
+            AND  AD_Client_ID= " + revenueRecognitionPlan.GetAD_Client_ID() + " Order by GL_Category_ID desc"));
             journal.SetGL_Category_ID(GL_Category_ID);
 
             journal.SetDateDoc(DateTime.Now);
@@ -374,7 +367,7 @@ namespace VAdvantage.Process
             if (recFrequency.Equals("D")) //DAY
             {
                 //in case of DAY , Account date would be same as Recoganize date
-               journal.SetDateAcct(revenurecognitionRun.GetRecognitionDate());
+                journal.SetDateAcct(revenurecognitionRun.GetRecognitionDate());
             }
             else
             {
@@ -409,7 +402,7 @@ namespace VAdvantage.Process
         /// <param name="IsreturnTrx">Return Transaction</param>
         /// <param name="AcctSchema_ID">Accounting Schema</param>
         /// <returns>Combination_ID</returns>
-        public int GetCombinationID(int Product_ID, int Charge_ID, int AcctSchema_ID, bool IssoTrx, bool IsreturnTrx,decimal amount)
+        public int GetCombinationID(int Product_ID, int Charge_ID, int AcctSchema_ID, bool IssoTrx, bool IsreturnTrx, decimal amount)
         {
             string sql = "SELECT C_ValidCombination_ID FROM ";
             char isSoTrx = IssoTrx ? 'Y' : 'N';
@@ -428,8 +421,8 @@ namespace VAdvantage.Process
                 sql += "FRPT_RevenueRecognition_Acct ";
             }
             sql += "WHERE  C_AcctSchema_ID=" + AcctSchema_ID + " AND FRPT_AcctDefault_ID = (SELECT FRPT_AcctDefault_ID FROM FRPT_AcctDefault WHERE " +
-            "FRPT_RecognizeType= (CASE WHEN " + Product_ID + "> 0 AND "+amount+">0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'IE' " + //Ap/ARC
-            "WHEN " + Product_ID + "> 0 AND "+amount+"< 0 AND(('" + isSoTrx + "' = 'N' AND '" + isReturnTrx + "' = 'N') OR('" + isSoTrx + "' = 'Y' AND '" + isReturnTrx + "' = 'Y'))  THEN 'TR' " + //AR/APC
+            "FRPT_RecognizeType= (CASE WHEN " + Product_ID + "> 0 AND " + amount + ">0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'IE' " + //Ap/ARC
+            "WHEN " + Product_ID + "> 0 AND " + amount + "< 0 AND(('" + isSoTrx + "' = 'N' AND '" + isReturnTrx + "' = 'N') OR('" + isSoTrx + "' = 'Y' AND '" + isReturnTrx + "' = 'Y'))  THEN 'TR' " + //AR/APC
             "WHEN " + Charge_ID + ">0 AND " + amount + ">0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'CE' " +      //Ap/ARC
             "WHEN " + Charge_ID + ">0 AND " + amount + "<0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'CR' " +      //AR/APC
             "WHEN " + Product_ID + ">0 AND " + amount + "> 0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "' ='Y') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='N'))   THEN 'TR' " +  //AR/APC
@@ -462,7 +455,7 @@ namespace VAdvantage.Process
         /// <param name="Org_Id">Organization</param>
         /// <param name="trxOrg_ID">Transaction Organization</param>
         /// <returns>journal line object</returns>
-        public MJournalLine GetOrCreate(MJournal Journal,MJournalLine Line, int M_Product_ID,int C_Charge_ID,int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int Org_Id, int trxOrg_ID)
+        public MJournalLine GetOrCreate(MJournal Journal, MJournalLine Line, int M_Product_ID, int C_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int Org_Id, int trxOrg_ID)
         {
             MJournalLine retValue = null;
             String sql = "SELECT * FROM GL_JournalLine " +
@@ -482,13 +475,13 @@ namespace VAdvantage.Process
             IDataReader idr = null;
             try
             {
-                idr = DB.ExecuteReader(sql, null,Get_TrxName());
+                idr = DB.ExecuteReader(sql, null, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MJournalLine(Journal.GetCtx(), dr,  Get_TrxName());
+                    retValue = new MJournalLine(Journal.GetCtx(), dr, Get_TrxName());
                 }
             }
             catch (Exception ex)
@@ -506,9 +499,10 @@ namespace VAdvantage.Process
                     idr.Close();
                 }
                 dt = null;
-            }
+            }          
             if (retValue == null)
-                retValue = CreateJournalLine(Journal, Line,M_Product_ID,  C_Charge_ID,  Campaign_ID,  Account_ID,  Opprtunity_ID,  Activity_ID,  BPartner_ID, trxOrg_ID);
+                retValue = CreateJournalLine(Journal, Line, M_Product_ID, C_Charge_ID, Campaign_ID, Account_ID, Opprtunity_ID, Activity_ID, BPartner_ID, trxOrg_ID);
+
 
             return retValue;
         }
@@ -527,9 +521,10 @@ namespace VAdvantage.Process
         /// <param name="BPartner_ID">Business Partner</param>
         /// <param name="trxOrg_ID">Transaction Organization</param>
         /// <returns>object of journal line</returns>
-       public MJournalLine CreateJournalLine( MJournal Journal, MJournalLine Line ,int M_Product_ID,int C_Charge_ID,int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int trxOrg_ID)
+        public MJournalLine CreateJournalLine(MJournal Journal, MJournalLine Line, int M_Product_ID, int C_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int trxOrg_ID)
         {
             Line = new MJournalLine(Journal);
+            Line.SetLine(lineno);
             Line.Set_ValueNoCheck("Account_ID", Account_ID);
             Line.Set_ValueNoCheck("C_BPartner_ID", BPartner_ID);
             Line.Set_ValueNoCheck("M_Product_ID", M_Product_ID);
@@ -537,9 +532,9 @@ namespace VAdvantage.Process
             Line.Set_ValueNoCheck("C_Charge_ID", C_Charge_ID);
             Line.Set_ValueNoCheck("C_Campaign_ID", Campaign_ID);
             Line.Set_ValueNoCheck("C_Project_ID", Opprtunity_ID);
-            Line.Set_ValueNoCheck("C_Activity_ID", Activity_ID);   
-           
-          
+            Line.Set_ValueNoCheck("C_Activity_ID", Activity_ID);
+
+
             return Line;
         }
 
@@ -556,9 +551,9 @@ namespace VAdvantage.Process
             string result = "";
             MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
             if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
-            {      
+            {
                 DB.ExecuteQuery("UPDATE GL_Journal SET DocAction = '" + DocAction + "' WHERE GL_Journal_ID = " + Record_ID);
-                          
+
                 MProcess proc = new MProcess(ctx, Process_ID, null);
                 MPInstance pin = new MPInstance(proc, Record_ID);
                 if (!pin.Save())
@@ -572,8 +567,8 @@ namespace VAdvantage.Process
                             errorMsg = vnp.GetValue();
                     }
                     if (errorMsg == "")
-                     result=   errorMsg = Msg.GetMsg(ctx, "DocNotCompleted");
-                 
+                        result = errorMsg = Msg.GetMsg(ctx, "DocNotCompleted");
+
                     return result;
                 }
 
@@ -592,7 +587,7 @@ namespace VAdvantage.Process
                 {
                     pi.SetTable_ID(224);
                 }
-              
+
                 ProcessCtl worker = new ProcessCtl(ctx, null, pi, null);
                 worker.Run();
 
@@ -620,7 +615,7 @@ namespace VAdvantage.Process
             }
             else
             {
-               result = Msg.GetMsg(ctx, "NoAccess");
+                result = Msg.GetMsg(ctx, "NoAccess");
                 return result;
             }
             return result;
