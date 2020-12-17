@@ -31,6 +31,9 @@ namespace VAdvantage.Model
     /// </summary>
     public class MRevenueRecognitionPlan : X_C_RevenueRecognition_Plan
     {
+
+        private static VLogger _log = VLogger.GetVLogger(typeof(MRevenueRecognitionPlan).FullName);
+
         /// <summary>
         /// 	Standard Constructor
         /// </summary>
@@ -62,6 +65,18 @@ namespace VAdvantage.Model
         /// <param name="trxName"></param>
         public MRevenueRecognitionPlan(Ctx ctx, IDataReader idr, Trx trxName)
             : base(ctx, idr, trxName)
+        {
+
+        }
+
+        /// <summary>
+        /// Load Constructor
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="dr"></param>
+        /// <param name="trxName"></param>
+        public MRevenueRecognitionPlan(Ctx ctx, DataRow rs, Trx trxName)
+            : base(ctx, rs, trxName)
         {
 
         }
@@ -101,5 +116,77 @@ namespace VAdvantage.Model
             }
             return success;
         }	//	afterSave
+
+        /// <summary>
+        /// This function is used to set Values on Recognition Plan
+        /// </summary>
+        /// <param name="invoiceLine">invoice line object </param>
+        /// <param name="invoice">invoice object</param>
+        /// <param name="C_RevenueRecognition_ID">Recognition ID</param>
+        public void SetRecognitionPlan(MInvoiceLine invoiceLine, MInvoice invoice, int C_RevenueRecognition_ID)
+        {
+            SetAD_Client_ID(invoice.GetAD_Client_ID());
+            SetAD_Org_ID(invoice.GetAD_Org_ID());
+            SetC_Currency_ID(invoice.GetC_Currency_ID());
+            SetC_InvoiceLine_ID(invoiceLine.GetC_InvoiceLine_ID());
+            SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
+            // when tax include into price list, then reduce tax from Line Net Amount
+            bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
+            SetTotalAmt(invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0));
+            SetRecognizedAmt(Env.ZERO);
+        }
+
+        /// <summary>
+        /// This Function is used to gete Plan data record based on respective parameters
+        /// </summary>
+        /// <param name="RevenueRecognition">Revenue Recognition Reference</param>
+        /// <param name="InvoiceLine_ID">Invoice Line Reference</param>
+        /// <param name="OrgId">Org ID</param>
+        /// <returns>Array of MRevenueRecognitionPlan</returns>
+        public static MRevenueRecognitionPlan[] GetRecognitionPlans(MRevenueRecognition RevenueRecognition, int InvoiceLine_ID, int OrgId)
+        {
+            List<MRevenueRecognitionPlan> list = new List<MRevenueRecognitionPlan>();
+            string sql = "SELECT * FROM C_RevenueRecognition_Plan pl";
+            if (InvoiceLine_ID > 0)
+            {
+                sql += @" INNER  JOIN c_invoiceline invl ON invl.c_invoiceline_id = pl.c_invoiceline_id 
+                            WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() +
+                        " AND invl.c_invoiceLine_id=" + InvoiceLine_ID + " AND invl.ad_org_id=" + OrgId;
+            }
+            else
+            {
+                sql += " WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() + " AND pl.ad_org_id=" + OrgId;
+            }
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DB.ExecuteReader(sql, null, RevenueRecognition.Get_Trx());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(new MRevenueRecognitionPlan(RevenueRecognition.GetCtx(), dr, RevenueRecognition.Get_Trx()));
+                }
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                _log.Log(Level.SEVERE, sql, e);
+            }
+            finally
+            {
+                dt = null;
+            }
+
+            MRevenueRecognitionPlan[] retValue = new MRevenueRecognitionPlan[list.Count];
+            retValue = list.ToArray();
+            return retValue;
+        }
+
     }
 }
