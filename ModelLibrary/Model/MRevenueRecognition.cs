@@ -130,9 +130,6 @@ namespace VAdvantage.Model
 
 
                 MInvoiceLine invoiceLine = new MInvoiceLine(Invoice.GetCtx(), C_InvoiceLine_ID, Invoice.Get_Trx());
-               // MInvoice invoice = new MInvoice(Invoice.GetCtx(), invoiceLine.GetC_Invoice_ID(), Invoice.Get_Trx());
-
-               // string sql = "Select StartDate From C_InvoiceLine Where C_InvoiceLine_ID=" + invoiceLine.GetC_InvoiceLine_ID();
                 RecognizationDate = Util.GetValueOfDateTime(invoiceLine.Get_Value("StartDate"));
 
                 // precision to be handle based on std precision defined on acct schema
@@ -216,7 +213,7 @@ namespace VAdvantage.Model
                                     days = DateTime.DaysInMonth(startDate.Year, startDate.Month);
                                     lastdate = startDate.AddDays(days-1);
                                 }
-                                recognizedAmt = Math.Round(Convert.ToDecimal(days) * perdayAmt, stdPrecision);
+                                recognizedAmt = Math.Round(days * perdayAmt, stdPrecision);
                                 revenueRecognitionRun = new MRevenueRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
                                 revenueRecognitionRun.SetRecognitionRun(revenueRecognitionPlan);
                                 revenueRecognitionRun.SetRecognizedAmt(recognizedAmt);
@@ -316,7 +313,7 @@ namespace VAdvantage.Model
                                     days = Util.GetValueOfInt((lastdate.Value.Date - _startDate.Date).TotalDays);
                                     days += 1;
                                 }
-                                recognizedAmt = Math.Round(Convert.ToDecimal(days) * perdayAmt, stdPrecision);
+                                recognizedAmt = Math.Round(days * perdayAmt, stdPrecision);
                                 revenueRecognitionRun = new MRevenueRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
                                 revenueRecognitionRun.SetRecognitionRun(revenueRecognitionPlan);
                                 revenueRecognitionRun.SetRecognizedAmt(recognizedAmt);
