@@ -85,7 +85,7 @@ namespace ViennaAdvantage.Process
         protected override String DoIt()
         {
             StringBuilder invDocumentNo = new StringBuilder();
-            int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT  Count(*)  FROM M_Inout WHERE  ISSOTRX='Y' AND  M_Inout_ID=" + GetRecord_ID()));
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(M_Inout_ID) FROM M_Inout WHERE ISSOTRX='Y' AND M_Inout_ID=" + GetRecord_ID()));
             MInOut ship = null;
             bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
             if (count > 0)
@@ -100,16 +100,16 @@ namespace ViennaAdvantage.Process
                 {
                     throw new ArgumentException("Shipment not found");
                 }
-                if (!MInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
+                if (!MInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()) && !MInOut.DOCSTATUS_Closed.Equals(ship.GetDocStatus()))
                 {
                     // JID_0750: done by Bharat on 05 Feb 2019 if Customer Return document and status is not complete it should give message "Customer Return Not Completed".
                     if (ship.IsReturnTrx())
                     {
-                        throw new ArgumentException("Customer Return Not Completed");
+                        throw new ArgumentException(Msg.GetMsg(GetCtx(), "CustomerReturnNotCompleted"));
                     }
                     else
                     {
-                        throw new ArgumentException("Shipment Not Completed");
+                        throw new ArgumentException(Msg.GetMsg(GetCtx(), "ShipmentNotCompleted"));
                     }
                 }
             }
@@ -125,16 +125,16 @@ namespace ViennaAdvantage.Process
                 {
                     throw new ArgumentException("Material Receipt not found");
                 }
-                if (!MInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
+                if (!MInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()) && !MInOut.DOCSTATUS_Closed.Equals(ship.GetDocStatus()))
                 {
                     // JID_0750: done by Bharat on 05 Feb 2019 if Return to vendor document and status is not complete it should give message "Return To Vendor Not Completed".
                     if (ship.IsReturnTrx())
                     {
-                        throw new ArgumentException("Return To Vendor Not Completed");
+                        throw new ArgumentException(Msg.GetMsg(GetCtx(), "VendorReturnNotCompleted"));
                     }
                     else
                     {
-                        throw new ArgumentException("Material Receipt Not Completed");
+                        throw new ArgumentException(Msg.GetMsg(GetCtx(), "MRNotCompleted"));
                     }
                 }
             }

@@ -168,7 +168,7 @@ OR
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
-                              AND r.responsibletype !='H'
+                              AND r.responsibletype !='H' AND r.responsibletype !='C'
                               ) ) ";
 
             // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
@@ -320,7 +320,7 @@ OR
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
-                              AND r.responsibletype !='H'
+                              AND r.responsibletype !='H' AND r.responsibletype !='C'
                               ) )";
                     if (whereClause.Length > 7)
                     {
@@ -707,6 +707,9 @@ OR
                     chkUserTxt = "";
                     MWFActivity activity = new MWFActivity(ctx, Convert.ToInt32(activitiesID[i]), null);
                     MWFNode node = activity.GetNode();
+                    // Change done to set zoom window from Node
+                    if (node.GetZoomWindow_ID() > 0)
+                        activity.SetAD_Window_ID(node.GetZoomWindow_ID());
                     int approvalLevel = node.GetApprovalLeval();
                     int AD_User_ID = ctx.GetAD_User_ID();
                     MColumn column = node.GetColumn();
