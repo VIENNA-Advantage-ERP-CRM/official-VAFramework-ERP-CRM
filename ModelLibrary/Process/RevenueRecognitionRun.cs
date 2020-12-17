@@ -27,6 +27,11 @@ namespace VAdvantage.Process
         private ValueNamePair pp = null;
         private string errorMsg = "";
         private int[] journal_ID = null;
+        private string journalIDS = null;
+
+        /// <summary>
+        /// Prepare
+        /// </summary>
         protected override void Prepare()
         {
             ProcessInfoParameter[] para = GetParameter();
@@ -55,6 +60,11 @@ namespace VAdvantage.Process
                 }
             }
         }
+        
+        /// <summary>
+        /// Process
+        /// </summary>
+        /// <returns>info</returns>
         protected override string DoIt()
         {
             String msg = "";
@@ -63,7 +73,7 @@ namespace VAdvantage.Process
             if (_RevenueRecognition_ID > 0)
             {
                 mRevenueRecognition = new MRevenueRecognition(GetCtx(), _RevenueRecognition_ID, Get_TrxName());
-                msg = createJournals(mRevenueRecognition);
+                msg = CreateJournals(mRevenueRecognition);
             }
             else
             {
@@ -73,32 +83,34 @@ namespace VAdvantage.Process
                     for (int i = 0; i < RevenueRecognitions.Length; i++)
                     {
                         mRevenueRecognition = RevenueRecognitions[i];
-                        msg = createJournals(mRevenueRecognition);
+                        msg = CreateJournals(mRevenueRecognition);
                     }
                 }
             }
             return msg;
         }
 
-        public string createJournals(MRevenueRecognition mRevenueRecognition)
+        /// <summary>
+        /// Create GL Journal
+        /// </summary>
+        /// <param name="mRevenueRecognition">Revenue Recognition</param>
+        /// <returns>Message</returns>
+        public string CreateJournals(MRevenueRecognition mRevenueRecognition)
         {
 
             try
             {
-                //MRevenueRecognitionPlan[] revenueRecognitionPlans = MRevenueRecognitionPlan.GetRecognitionPlans(mRevenueRecognition, 0, GetCtx());
                 MRevenueRecognitionRun[] mRevenueRecognitionRuns = null;
-                //for (int i = 0; i < revenueRecognitionPlans.Length; i++)
-                //{
+
                 MRevenueRecognitionPlan revenueRecognitionPlan = null;
                 MInvoiceLine invoiceLine = null;
                 MInvoice invoice = null;
 
 
                 mRevenueRecognitionRuns = MRevenueRecognitionRun.GetRecognitionRuns(mRevenueRecognition, _RecognitionDate, _orgId, false);
-                   journal_ID = new int[(mRevenueRecognitionRuns.Length)];
+                journal_ID = new int[mRevenueRecognitionRuns.Length];
                 if (mRevenueRecognitionRuns.Length > 0)
                 {
-
                     for (int j = 0; j < mRevenueRecognitionRuns.Length; j++)
                     {
                         MRevenueRecognitionRun revenueRecognitionRun = mRevenueRecognitionRuns[j];
@@ -120,8 +132,6 @@ namespace VAdvantage.Process
                                     DocNo += "," + journal.GetDocumentNo();
 
                                 }
-                                //}
-
                                 journal_ID[j - 1] = journal.GetGL_Journal_ID();
 
                             }
@@ -142,8 +152,20 @@ namespace VAdvantage.Process
                             else
                             {
                                 pp = VLogger.RetrieveError();
-                                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
-                                    return pp.GetName();
+                                if (pp != null)
+                                {
+                                    errorMsg = pp.GetName();
+                                    if (errorMsg == "")
+                                    {
+                                        errorMsg = pp.GetValue();
+                                    }
+                                }
+                                if (errorMsg == "")
+                                {
+                                    errorMsg = Msg.GetMsg(GetCtx(), "GLJournalNotCreated");
+                                }
+                                Get_TrxName().Rollback();
+                                return errorMsg;
                             }
                         }
                         for (int k = 0; k < 2; k++)
@@ -166,8 +188,13 @@ namespace VAdvantage.Process
                                     {
                                         errorMsg = pp.GetValue();
                                     }
-                                    return errorMsg;
                                 }
+                                if (errorMsg == "")
+                                {
+                                    errorMsg = Msg.GetMsg(GetCtx(), "GLJournalNotCreated");
+                                }
+                                Get_TrxName().Rollback();
+                                return errorMsg;
                             }
                         }
                         revenueRecognitionPlan.SetRecognizedAmt(revenueRecognitionRun.GetRecognizedAmt() + revenueRecognitionPlan.GetRecognizedAmt());
@@ -181,34 +208,37 @@ namespace VAdvantage.Process
                                 {
                                     errorMsg = pp.GetValue();
                                 }
-                                return errorMsg;
                             }
+                            if (errorMsg == "")
+                            {
+                                errorMsg = Msg.GetMsg(GetCtx(), "GLJournalNotCreated");
+                            }
+                            Get_TrxName().Rollback();
+                            return errorMsg;
                         }
                     }
-                }
-                //}
-                if (journal != null)
-                {
-                   
-                    if (DocNo == null)
+                    if (journal != null)
                     {
-                        DocNo = journal.GetDocumentNo();
-                    }
-                    else
-                    {
-                        DocNo += "," + journal.GetDocumentNo();
+                        if (DocNo == null)
+                        {
+                            DocNo = journal.GetDocumentNo();
+                        }
+                        else
+                        {
+                            DocNo += "," + journal.GetDocumentNo();
+
+                        }
+
+                        journal_ID[journal_ID.Length - 1] = journal.GetGL_Journal_ID();
 
                     }
-                    // }
-                    journal_ID[journal_ID.Length - 1] = journal.GetGL_Journal_ID();
-
                 }
-
             }
             catch (Exception ex)
             {
-                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "GLJournalnotallocateddueto") + ex);
-                return ex.ToString();
+                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "GLJournalnotallocateddueto") + ex.Message);
+                Get_TrxName().Rollback();
+                return ex.Message;
             }
             if (DocNo == null)
             {
@@ -218,12 +248,27 @@ namespace VAdvantage.Process
             Get_TrxName().Commit();
             if (journal_ID != null)
             {
+
                 for (int i = 0; i < journal_ID.Length; i++)
                 {
-                    CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
+                    if (journal_ID[i] > 0)
+                    {
+                        string result = CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
+                        if (!String.IsNullOrEmpty(result))
+                        {
+                            journalIDS += "," + journal_ID[i];
+                        }
+                    }
                 }
             }
-            return Msg.GetMsg(GetCtx(), "GLJournalCreated = " + DocNo);
+            if (!String.IsNullOrEmpty(journalIDS))
+            {
+                return Msg.GetMsg(GetCtx(), "GLJournalCreated" + DocNo) +" "+ Msg.GetMsg(GetCtx(), "GLJournalNotCompleted" + journalIDS);
+            }
+            else
+            {
+                return Msg.GetMsg(GetCtx(), "GLJournalCreated" + DocNo);
+            }
         }
 
         /// <summary>
@@ -245,9 +290,7 @@ namespace VAdvantage.Process
                 int combination_ID = 0;
                 if (k == 0)
                 {
-                    //account bp, prod, charge, camp, activity,trxorg,opp/project,org, +ve
                     combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), journal.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt());
-                    // journalLine.SetC_ValidCombination_ID(combination_ID);
                     journalLine.SetLine(lineno);
                     if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
@@ -304,8 +347,7 @@ namespace VAdvantage.Process
                     invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID(), invoice.GetC_BPartner_ID(),
                     invoice.GetAD_Org_ID(), invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
 
-                    // journalLine.SetC_ValidCombination_ID(combination_ID);
-                    
+
                     if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
                         journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + revenueRecognitionRun.GetRecognizedAmt());
@@ -499,7 +541,7 @@ namespace VAdvantage.Process
                     idr.Close();
                 }
                 dt = null;
-            }          
+            }
             if (retValue == null)
                 retValue = CreateJournalLine(Journal, Line, M_Product_ID, C_Charge_ID, Campaign_ID, Account_ID, Opprtunity_ID, Activity_ID, BPartner_ID, trxOrg_ID);
 
