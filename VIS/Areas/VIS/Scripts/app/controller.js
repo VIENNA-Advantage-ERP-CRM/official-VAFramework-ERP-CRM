@@ -1190,6 +1190,8 @@
                 //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
 
+            this.mDataStatusEvent.AD_Table_ID = this.getAD_Table_ID();
+
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
         }
 
@@ -1209,6 +1211,7 @@
                 this.gridTable.getIsInserting(),		//	changed
                 //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
+            this.mDataStatusEvent.AD_Table_ID = this.getAD_Table_ID();
 
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
         }
