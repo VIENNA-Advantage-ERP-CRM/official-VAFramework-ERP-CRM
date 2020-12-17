@@ -35,6 +35,8 @@ namespace VAdvantage.DataBase
         /** Quote			*/
         private static char QUOTE = '\'';
 
+        private static char AMPERSAND = '&';
+
         /** Connection Descriptor           */
         private static VConnection s_cc = null;
         /**	Logger							*/
@@ -79,6 +81,10 @@ namespace VAdvantage.DataBase
                 char c = text[i];
                 if (c == QUOTE)
                     outt.Append("''");
+                else if (c == AMPERSAND)
+                {
+                    outt.Append("&'||'");
+                }
                 else
                     outt.Append(c);
             }
