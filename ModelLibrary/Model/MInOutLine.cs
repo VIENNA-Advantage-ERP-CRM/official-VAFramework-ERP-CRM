@@ -1134,6 +1134,12 @@ namespace VAdvantage.Model
             //    }
             //}
 
+            //	Qty Precision
+            if (newRecord || Is_ValueChanged("QtyEntered"))
+                SetQtyEntered(GetQtyEntered());
+            if (newRecord || Is_ValueChanged("MovementQty"))
+                SetMovementQty(GetMovementQty());
+
             // dont verify qty during completion
             // on Ship/Receipt, do not check qty in warehouse for Lines of Charge.
             if ((!inO.IsProcessing() || newRecord) && _Product != null && _Product.IsStocked())
@@ -1224,12 +1230,7 @@ namespace VAdvantage.Model
                     }
                 }
             }
-
-            //	Qty Precision
-            if (newRecord || Is_ValueChanged("QtyEntered"))
-                SetQtyEntered(GetQtyEntered());
-            if (newRecord || Is_ValueChanged("MovementQty"))
-                SetMovementQty(GetMovementQty());
+            
             //	Order Line
             if (GetC_OrderLine_ID() == 0)
             {
