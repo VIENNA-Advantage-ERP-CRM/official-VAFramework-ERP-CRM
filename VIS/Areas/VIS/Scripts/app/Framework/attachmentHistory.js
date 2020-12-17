@@ -2256,10 +2256,11 @@
             $bsyDiv[0].style.visibility = "hidden";
         };
 
-        /**/
+    /**/
+        //below line commented to resolve data hiding issue in history
         function createRightPanelforAppointment(IDS, location, description, label, startDate, endDate, allDay, detail, comment, zoomID, subject, category, contacts, recID, ContactNames) {
             if ($visattachhistoryrightcontentFormail != undefined) {
-                $visattachhistoryrightcontentFormail.hide();
+                //$visattachhistoryrightcontentFormail.hide();
             }
             if ($visattachhistoryrightcontentForCall != undefined) {
                 $visattachhistoryrightcontentForCall.hide();
@@ -2405,7 +2406,7 @@
                 $endDate.text(VIS.Utility.encodeText(new Date(endDate).toLocaleString()));
 
                 $allDay.text(VIS.Utility.encodeText(allDay));
-                $($visattachhistoryrightcontentForAppoint[0].children[0]).hide();
+                //$($visattachhistoryrightcontentForAppoint[0].children[0]).hide();
             }
 
             $('.vis-attachhistory-view-comments').off("click");
