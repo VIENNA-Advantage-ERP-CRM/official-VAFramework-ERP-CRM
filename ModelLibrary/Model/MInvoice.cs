@@ -134,7 +134,7 @@ namespace VAdvantage.Model
             else
             {
                 //set the description and invoice reference from original to counter
-                to.AddDescription(Msg.GetMsg(from.GetCtx(), "CounterDocument")+from.GetDocumentNo());
+                to.AddDescription(Msg.GetMsg(from.GetCtx(), "CounterDocument") + from.GetDocumentNo());
                 to.Set_Value("InvoiceReference", from.GetDocumentNo());
             }
             //
@@ -1344,9 +1344,9 @@ namespace VAdvantage.Model
             }
 
             //APInvoice Case: invoice Reference can't be same for same financial year and Business Partner and DoCTypeTarget and DateAcct      
-            if ((Is_ValueChanged("DateAcct")|| Is_ValueChanged("C_BPartner_ID") || Is_ValueChanged("C_DocTypeTarget_ID") || Is_ValueChanged("InvoiceReference")) && !IsSOTrx() && checkFinancialYear() > 0)
+            if ((Is_ValueChanged("DateAcct") || Is_ValueChanged("C_BPartner_ID") || Is_ValueChanged("C_DocTypeTarget_ID") || Is_ValueChanged("InvoiceReference")) && !IsSOTrx() && checkFinancialYear() > 0)
             {
-                log.SaveError("", Msg.GetMsg(GetCtx(),"InvoiceReferenceExist"));
+                log.SaveError("", Msg.GetMsg(GetCtx(), "InvoiceReferenceExist"));
                 return false;
             }
 
@@ -1681,7 +1681,7 @@ namespace VAdvantage.Model
                 }
                 string sql = "SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE DocStatus NOT IN('RE','VO') AND IsExpenseInvoice='N' AND IsSoTrx='N'" +
                   " AND C_BPartner_ID = " + GetC_BPartner_ID() + " AND InvoiceReference = '" + Get_Value("InvoiceReference") + "'" +
-                  " AND AD_Org_ID= " + GetAD_Org_ID() + " AND AD_Client_ID= " + GetAD_Client_ID() + " AND C_DocTypeTarget_ID= "+ GetC_DocTypeTarget_ID() +
+                  " AND AD_Org_ID= " + GetAD_Org_ID() + " AND AD_Client_ID= " + GetAD_Client_ID() + " AND C_DocTypeTarget_ID= " + GetC_DocTypeTarget_ID() +
                   " AND DateAcct BETWEEN " + GlobalVariable.TO_DATE(startDate, true) + " AND " + GlobalVariable.TO_DATE(endDate, true);
 
                 return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
@@ -2672,13 +2672,13 @@ namespace VAdvantage.Model
                 // for checking - costing calculate on completion or not
                 // IsCostImmediate = true - calculate cost on completion
                 MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
-
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MInvoiceLine line = lines[i];
                     MMatchInv inv = null;
                     //	Update Order Line
                     MOrderLine ol = null;
+
                     if (line.GetC_OrderLine_ID() != 0)
                     {
                         if (IsSOTrx()
@@ -3874,6 +3874,16 @@ namespace VAdvantage.Model
                         }
                     }
 
+                    //Create RecognoitionPlan and RecognitiontionRun
+                    if (Env.IsModuleInstalled("FRPT_") && line.Get_ColumnIndex("C_RevenueRecognition_ID") >= 0 && line.Get_Value("C_RevenueRecognition_ID") != null && !IsReversal())
+                    {
+                        if (!MRevenueRecognition.CreateRevenueRecognitionPlan(line.GetC_InvoiceLine_ID(), Util.GetValueOfInt(line.Get_Value("C_RevenueRecognition_ID")), this))
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "PlaRunNotCreated");
+                            return DocActionVariables.STATUS_INVALID;
+                        }
+                    }
+
                 }	//	for all lines
 
 
@@ -5036,6 +5046,16 @@ namespace VAdvantage.Model
             }
 
 
+            // if  Amount is Recoganized then invoice cant be reverse
+            string sqlrun = "SELECT COUNT(run.C_RevenueRecognition_RUN_ID) FROM C_RevenueRecognition_RUN run " +
+                "INNER JOIN c_revenuerecognition_plan plan on run.c_revenuerecognition_plan_id = plan.c_revenuerecognition_plan_id WHERE plan.C_InvoiceLine_ID IN " +
+                "(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND C_Invoice_ID= "+GetC_Invoice_ID()+") AND run.GL_Journal_ID IS not null";
+            if (Util.GetValueOfInt(DB.ExecuteScalar(sqlrun)) > 0)
+            {
+                _processMsg = Msg.GetMsg(GetCtx(), "Recoganized");
+                return false;
+            }
+
             //	Don't touch allocation for cash as that is handled in CashJournal
             bool isCash = PAYMENTRULE_Cash.Equals(GetPaymentRule());
 
@@ -5306,6 +5326,21 @@ namespace VAdvantage.Model
             }
             //End OF VA009..........................................................................................................
             #endregion
+
+
+            //delete revenuerecognition run and plan
+
+            DB.ExecuteQuery("DELETE FROM C_RevenueRecognition_Run WHERE C_RevenueRecognition_Run_ID IN (SELECT run.C_RevenueRecognition_RUN_ID FROM C_RevenueRecognition_RUN run "+
+                           "INNER JOIN c_revenuerecognition_plan plan on run.c_revenuerecognition_plan_id = plan.c_revenuerecognition_plan_ID "+
+                           "WHERE plan.C_InvoiceLine_ID IN(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND C_Invoice_ID ="+GetC_Invoice_ID()+"))");
+                      
+            DB.ExecuteQuery("DELETE FROM C_RevenueRecognition_Plan WHERE C_RevenueRecognition_Plan_ID IN (SELECT C_RevenueRecognition_plan_ID FROM " +
+                "c_revenuerecognition_plan WHERE C_InvoiceLine_ID IN(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND " +
+                "C_Invoice_ID= "+GetC_Invoice_ID()+"))");
+
+              
+
+
 
             // code commented for updating open amount against customer while reversing invoice, code already exist
             // Done by Vivek on 24/11/2017

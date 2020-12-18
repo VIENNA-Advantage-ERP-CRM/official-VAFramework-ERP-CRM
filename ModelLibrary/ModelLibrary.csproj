@@ -967,6 +967,7 @@
     <Compile Include="Model\MReturnPolicyLine.cs" />
     <Compile Include="Model\MRevenueRecognition.cs" />
     <Compile Include="Model\MRevenueRecognitionPlan.cs" />
+    <Compile Include="Model\MRevenueRecognitionRun.cs" />
     <Compile Include="Model\MRfQ.cs" />
     <Compile Include="Model\MRfQLine.cs" />
     <Compile Include="Model\MRfQLineQty.cs" />
@@ -1808,6 +1809,7 @@
     <Compile Include="Process\RequestInvoice.cs" />
     <Compile Include="Process\RequestReOpen.cs" />
     <Compile Include="Process\RequisitionPOCreate.cs" />
+    <Compile Include="Process\RevenueRecognitionRun.cs" />
     <Compile Include="Process\RfQClose.cs" />
     <Compile Include="Process\RfQCopyLines.cs" />
     <Compile Include="Process\RfQCreate.cs" />
