@@ -812,6 +812,13 @@ namespace VAdvantage.Model
                             return false;
                         }
 
+                        //Should be Select either Invoice and TR Load Application 
+                        if (GetC_Invoice_ID() > 0 && Get_ValueAsInt("VA026_TRLoanApplication_ID") > 0)
+                        {
+                            log.SaveError("", Msg.GetMsg(GetCtx(), "VA026_SelectEitherTRLoadORInvoice"));
+                            return false;
+                        }
+
                         if (GetVA026_LCDetail_ID() != 0)
                         {
                             if (string.IsNullOrEmpty(tenderType) || tenderType == "L")
@@ -2992,7 +2999,12 @@ namespace VAdvantage.Model
                               + Util.GetValueOfInt(GetC_ConversionType_ID()) + " , "
                               + Util.GetValueOfInt(GetAD_Client_ID()) + " , "
                               + Util.GetValueOfInt(GetAD_Org_ID()) + ")    ELSE "
-                              + Util.GetValueOfDecimal(conversionAmt) + "   END AS ConvertedAmt FROM DUAL ";
+                              + Util.GetValueOfDecimal(conversionAmt) + "   END AS ConvertedAmt";
+                        //handle in PostGreSQL
+                        if (DB.IsOracle())
+                        {
+                            sql += " FROM DUAL";
+                        }
                         conversionAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
                         po.Set_Value("VA026_LoanPaidAmount", Decimal.Add(Util.GetValueOfDecimal(po.Get_Value("VA026_LoanPaidAmount")), conversionAmt));
                         if (!po.Save(Get_Trx()))
@@ -5025,6 +5037,21 @@ namespace VAdvantage.Model
                 SetWriteOffAmt(Env.ZERO);
                 SetOverUnderAmt(Env.ZERO);
                 SetIsAllocated(false);
+
+                //If Payment have VA026_TRLoanApplication_ID is present at that time Update C_Payment_ID as null in 
+                //VA026_TRLoanApplication window.
+                if (Env.IsModuleInstalled("VA026_"))
+                {
+                    MDocType docType = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
+                    // de allocate link from TR Loan Application when TR Loan Application ID > 0
+                    //only for AR Receipt it will update the Payment_ID from TR Loan Application
+                    if (docType.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && Get_ValueAsInt("VA026_TRLoanApplication_ID") > 0)
+                    {
+                        DB.ExecuteQuery("UPDATE VA026_TRLoanApplication SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID() +
+                                        @" AND VA026_TRLoanApplication_ID = " + Get_ValueAsInt("VA026_TRLoanApplication_ID"), null, null);
+                    }
+                }
+
                 //	Unlink & De-Allocate
                 DeAllocate();
             }
@@ -5292,8 +5319,10 @@ namespace VAdvantage.Model
 
             if (Env.IsModuleInstalled("VA026_"))
             {
-                // de allocate link from TR Loan Application when TR Loan Application ID > 0
-                if (Get_ValueAsInt("VA026_TRLoanApplication_ID") > 0)
+                MDocType docType = new MDocType(GetCtx(), GetC_DocType_ID(), Get_Trx());
+                // de allocate link from TR Loan Application when TR Loan Application ID > 0 
+                //only for AR Receipt it will update the Payment_ID from TR Loan Application
+                if (docType.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && Get_ValueAsInt("VA026_TRLoanApplication_ID") > 0)
                 {
                     DB.ExecuteQuery("UPDATE VA026_TRLoanApplication SET  C_Payment_ID = null WHERE C_Payment_ID = " + GetC_Payment_ID() +
                                     @" AND VA026_TRLoanApplication_ID = " + Get_ValueAsInt("VA026_TRLoanApplication_ID"), null, null);

@@ -831,12 +831,12 @@ namespace VAdvantage.Model
 
                 if (GetDateFrom() != null && GetDateTo() != null)
                 {
-                    if (GetDateFrom().Value.Date > Convert.ToDateTime(eDate).ToLocalTime().Date || GetDateFrom() < Convert.ToDateTime(stDate).ToLocalTime().Date)
+                    if (GetDateFrom().Value.Date > Convert.ToDateTime(eDate).Date || GetDateFrom() < Convert.ToDateTime(stDate).Date)
                     {
                         log.SaveError(Msg.Translate(GetCtx(), "VIS_SelectedDateRangeDoesNotMatch"), "");
                         return false;
                     }
-                    if (GetDateTo().Value.Date > Convert.ToDateTime(eDate).ToLocalTime().Date || GetDateTo() < Convert.ToDateTime(stDate).ToLocalTime().Date)
+                    if (GetDateTo().Value.Date > Convert.ToDateTime(eDate).Date || GetDateTo() < Convert.ToDateTime(stDate).Date)
                     {
                         log.SaveError(Msg.Translate(GetCtx(), "VIS_SelectedDateRangeDoesNotMatch"), "");
                         return false;

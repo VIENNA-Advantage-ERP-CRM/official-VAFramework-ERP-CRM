@@ -2255,10 +2255,16 @@ namespace VAdvantage.Model
                 string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                 if (p_info.GetTableName() == "AD_ChangeLog")
                 {
-                    if (adLog.Length <= 0)
+                    if (adLog.Length <= 0 && DB.IsPostgreSQL())
+                        adLog = "BEGIN; ";
+                    else if(adLog.Length <= 0)
                         adLog = "BEGIN ";
-
-                    p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
+                    if (DB.IsPostgreSQL())
+                    {
+                        p_ctx.SetContext("AD_ChangeLogBatch", adLog + " SELECT ExecuteImmediate('" + strSqlInsert.Replace("'", "''") + "');");
+                    }
+                    else
+                        p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
                     //no = 1;
                     return true;
                 }
@@ -2629,6 +2635,8 @@ namespace VAdvantage.Model
                     if (adLog.Length > 6)
                     {
                         string adLogDB = adLog + " END; ";
+                        //if(DB.IsPostgreSQL())
+
                         p_ctx.SetContext("AD_ChangeLogBatch", "");
                         no = DB.ExecuteQuery(adLogDB, null, _trx);
                     }

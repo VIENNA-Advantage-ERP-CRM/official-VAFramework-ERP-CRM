@@ -3133,7 +3133,8 @@ namespace VIS.Models
                     VIS_PaymentData pData = new VIS_PaymentData();
                     pData.SelectRow = "false";
                     pData.PaymentRecord = countRecord;
-                    pData.Date1 = dr.Tables[0].Rows[i]["DATE1"].ToString();
+                    // Converted into DateTime to handle in Central America TimeZone.
+                    pData.Date1 = Util.GetValueOfDateTime(dr.Tables[0].Rows[i]["DATE1"]);
                     pData.Documentno = dr.Tables[0].Rows[i]["DOCUMENTNO"].ToString();
                     pData.CpaymentID = dr.Tables[0].Rows[i]["CPAYMENTID"].ToString();
                     pData.Isocode = dr.Tables[0].Rows[i]["ISOCODE"].ToString();
@@ -3706,7 +3707,8 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                     VIS_InvoiceData pData = new VIS_InvoiceData();
                     pData.SelectRow = "false";
                     pData.InvoiceRecord = countRecord;
-                    pData.Date1 = dr.Tables[0].Rows[i]["DATE1"].ToString();
+                    // Converted into DateTime to handle in Central America TimeZone.
+                    pData.Date1 = Util.GetValueOfDateTime(dr.Tables[0].Rows[i]["DATE1"]);
                     pData.Documentno = dr.Tables[0].Rows[i]["DOCUMENTNO"].ToString();
                     pData.CinvoiceID = dr.Tables[0].Rows[i]["CINVOICEID"].ToString();
                     pData.Isocode = dr.Tables[0].Rows[i]["ISO_CODE"].ToString();
@@ -3724,7 +3726,8 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                     pData.DocBaseType = dr.Tables[0].Rows[i]["docbasetype"].ToString();
                     pData.AppliedAmt = dr.Tables[0].Rows[i]["APPLIEDAMT"].ToString();
                     pData.C_InvoicePaySchedule_ID = dr.Tables[0].Rows[i]["C_InvoicePaySchedule_ID"].ToString();
-                    pData.InvoiceScheduleDate = dr.Tables[0].Rows[i]["Scheduledate"].ToString();
+                    // Converted into DateTime to handle in Central America TimeZone.
+                    pData.InvoiceScheduleDate = Util.GetValueOfDateTime(dr.Tables[0].Rows[i]["Scheduledate"]);
                     pData.C_ConversionType_ID = Util.GetValueOfInt(dr.Tables[0].Rows[i]["C_CONVERSIONTYPE_ID"]);
                     pData.ConversionName = Util.GetValueOfString(dr.Tables[0].Rows[i]["CONVERSIONNAME"]);
                     pData.DATEACCT = Util.GetValueOfDateTime(dr.Tables[0].Rows[i]["DATEACCT"]);
@@ -5874,7 +5877,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         public class VIS_InvoiceData
         {
             public string SelectRow { get; set; }
-            public string Date1 { get; set; }
+            public DateTime? Date1 { get; set; }
             public string Documentno { get; set; }
             public string CinvoiceID { get; set; }
             public string Isocode { get; set; }
@@ -5887,7 +5890,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
             public string Writeoff { get; set; }
             public string AppliedAmt { get; set; }
             public string C_InvoicePaySchedule_ID { get; set; }
-            public string InvoiceScheduleDate { get; set; }
+            public DateTime? InvoiceScheduleDate { get; set; }
             public int InvoiceRecord { get; set; }
             public int C_ConversionType_ID { get; set; }
             public string ConversionName { get; set; }
@@ -5899,7 +5902,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         public class VIS_PaymentData
         {
             public string SelectRow { get; set; }
-            public string Date1 { get; set; }
+            public DateTime? Date1 { get; set; }
             public string Documentno { get; set; }
             public string CpaymentID { get; set; }
             public string Isocode { get; set; }
