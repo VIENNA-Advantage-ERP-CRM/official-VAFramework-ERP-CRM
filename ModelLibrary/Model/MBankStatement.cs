@@ -466,13 +466,13 @@ namespace VAdvantage.Model
         public String CompleteIt()
         {
             //added by shubham (JID_1472) To check payment is complete or close
-                int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from c_bankstatementline WHERE c_bankstatement_id =" + GetC_BankStatement_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')",null, Get_Trx()));
-                if(docStatus != 0)
-                {
-                    m_processMsg = Msg.GetMsg(GetCtx(), "paymentnotcompleted");
-                    return DocActionVariables.STATUS_INVALID;
-                    
-                }              
+            int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from c_bankstatementline WHERE c_bankstatement_id =" + GetC_BankStatement_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')", null, Get_Trx()));
+            if (docStatus != 0)
+            {
+                m_processMsg = Msg.GetMsg(GetCtx(), "paymentnotcompleted");
+                return DocActionVariables.STATUS_INVALID;
+
+            }
             //shubham
             //	Re-Check
             if (!m_justPrepared)
@@ -499,7 +499,8 @@ namespace VAdvantage.Model
             foreach (MBankStatementLine line in lines)
             {
                 // if Transaction amount exist but no payment reference or Charge amount exist with no Charge then give message for Unmatched lines
-                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0) || (line.GetChargeAmt() != Env.ZERO && line.GetC_Charge_ID() == 0))
+                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0 && line.GetC_CashLine_ID() == 0)
+                    || (line.GetChargeAmt() != Env.ZERO && line.GetC_Charge_ID() == 0))
                 {
                     m_processMsg = Msg.GetMsg(Env.GetCtx(), "LinesNotMatchedYet");
                     return DocActionVariables.STATUS_INVALID;
