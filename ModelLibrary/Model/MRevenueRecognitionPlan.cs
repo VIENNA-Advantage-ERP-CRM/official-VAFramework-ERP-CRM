@@ -123,16 +123,23 @@ namespace VAdvantage.Model
         /// <param name="invoiceLine">invoice line object </param>
         /// <param name="invoice">invoice object</param>
         /// <param name="C_RevenueRecognition_ID">Recognition ID</param>
-        public void SetRecognitionPlan(MInvoiceLine invoiceLine, MInvoice invoice, int C_RevenueRecognition_ID)
+        /// <param name="ToCurrency">Currency</param>
+        public void SetRecognitionPlan(MInvoiceLine invoiceLine, MInvoice invoice, int C_RevenueRecognition_ID,int ToCurrency)
         {
+           
             SetAD_Client_ID(invoice.GetAD_Client_ID());
             SetAD_Org_ID(invoice.GetAD_Org_ID());
-            SetC_Currency_ID(invoice.GetC_Currency_ID());
+            SetC_Currency_ID(ToCurrency);
             SetC_InvoiceLine_ID(invoiceLine.GetC_InvoiceLine_ID());
             SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
             // when tax include into price list, then reduce tax from Line Net Amount
             bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
-            SetTotalAmt(invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0));
+            Decimal Amount = invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0);
+            if (invoice.GetC_Currency_ID() != ToCurrency)
+            {
+                Amount= MConversionRate.Convert(GetCtx(), Amount, invoice.GetC_Currency_ID(), ToCurrency, invoice.GetDateInvoiced(), invoice.GetC_ConversionType_ID(), invoice.GetAD_Org_ID(), invoice.GetAD_Client_ID());
+            }
+            SetTotalAmt(Amount);
             SetRecognizedAmt(Env.ZERO);
         }
 

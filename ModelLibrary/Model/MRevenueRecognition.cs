@@ -127,7 +127,7 @@ namespace VAdvantage.Model
                 int NoofMonths = 0;
                 MRevenueRecognition revenueRecognition = new MRevenueRecognition(Invoice.GetCtx(), C_RevenueRecognition_ID, Invoice.Get_Trx());
                 int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetAD_Client_ID(), Invoice.GetAD_Org_ID());
-
+                int ToCurrency = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID=" + defaultAccSchemaOrg_ID));
 
                 MInvoiceLine invoiceLine = new MInvoiceLine(Invoice.GetCtx(), C_InvoiceLine_ID, Invoice.Get_Trx());
                 RecognizationDate = Util.GetValueOfDateTime(invoiceLine.Get_Value("StartDate"));
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
                     NoofMonths = revenueRecognition.GetNoMonths();
                 }
                 MRevenueRecognitionPlan revenueRecognitionPlan = new MRevenueRecognitionPlan(Invoice.GetCtx(), 0, Invoice.Get_Trx());
-                revenueRecognitionPlan.SetRecognitionPlan(invoiceLine, Invoice, C_RevenueRecognition_ID);
+                revenueRecognitionPlan.SetRecognitionPlan(invoiceLine, Invoice, C_RevenueRecognition_ID, ToCurrency);
                 revenueRecognitionPlan.SetC_AcctSchema_ID(defaultAccSchemaOrg_ID);
                 revenueRecognitionPlan.SetRecognizedAmt(0);
                 if (!revenueRecognitionPlan.Save())
