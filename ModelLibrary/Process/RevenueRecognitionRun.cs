@@ -139,7 +139,7 @@ namespace VAdvantage.Process
                                 }
                                 else
                                 {
-                                    DocNo += "," + journal.GetDocumentNo();
+                                    DocNo += ", " + journal.GetDocumentNo();
 
                                 }
                                 journal_ID[j - 1] = journal.GetGL_Journal_ID();
@@ -235,7 +235,7 @@ namespace VAdvantage.Process
                         }
                         else
                         {
-                            DocNo += "," + journal.GetDocumentNo();
+                            DocNo += ", " + journal.GetDocumentNo();
 
                         }
 
@@ -252,13 +252,12 @@ namespace VAdvantage.Process
             }
             if (DocNo == null)
             {
-                DocNo = Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
+               return Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
             }
 
             Get_TrxName().Commit();
             if (journal_ID != null)
             {
-
                 for (int i = 0; i < journal_ID.Length; i++)
                 {
                     if (journal_ID[i] > 0)
@@ -266,18 +265,18 @@ namespace VAdvantage.Process
                         string result = CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
                         if (!String.IsNullOrEmpty(result))
                         {
-                            journalIDS += "," + journal_ID[i];
+                            journalIDS += ", " + journal_ID[i];
                         }
                     }
                 }
             }
             if (!String.IsNullOrEmpty(journalIDS))
             {
-                return Msg.GetMsg(GetCtx(), "GLJournalCreated" + DocNo) +" "+ Msg.GetMsg(GetCtx(), "GLJournalNotCompleted" + journalIDS);
+                return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo + " "+ Msg.GetMsg(GetCtx(), "GLJournalNotCompleted") + journalIDS;
             }
             else
             {
-                return Msg.GetMsg(GetCtx(), "GLJournalCreated" + DocNo);
+                return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo;
             }
         }
 
