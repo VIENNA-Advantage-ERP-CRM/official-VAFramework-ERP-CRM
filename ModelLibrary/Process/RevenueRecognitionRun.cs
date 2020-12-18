@@ -299,7 +299,7 @@ namespace VAdvantage.Process
                 int combination_ID = 0;
                 if (k == 0)
                 {
-                    combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), journal.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt());
+                    combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), journal.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(),revenueRecognitionPlan.GetC_RevenueRecognition_ID());
                     journalLine.SetLine(lineno);
                     if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
@@ -341,7 +341,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt());
+                    combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetC_RevenueRecognition_ID());
                     int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
 
                     journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(),
@@ -447,25 +447,26 @@ namespace VAdvantage.Process
         /// <param name="IsreturnTrx">Return Transaction</param>
         /// <param name="AcctSchema_ID">Accounting Schema</param>
         /// <returns>Combination_ID</returns>
-        public int GetCombinationID(int Product_ID, int Charge_ID, int AcctSchema_ID, bool IssoTrx, bool IsreturnTrx, decimal amount)
+        public int GetCombinationID(int Product_ID, int Charge_ID, int AcctSchema_ID, bool IssoTrx, bool IsreturnTrx, decimal amount, int RevenueRecognition_ID)
         {
-            string sql = "SELECT C_ValidCombination_ID FROM ";
             char isSoTrx = IssoTrx ? 'Y' : 'N';
             char isReturnTrx = IsreturnTrx ? 'Y' : 'N';
 
+            string sql = "SELECT C_ValidCombination_ID FROM ";
+            
             if (Product_ID > 0)
             {
-                sql += "FRPT_Product_Acct ";
+                sql += "FRPT_Product_Acct WHERE M_Product_ID= "+ Product_ID;
             }
             else if (Charge_ID > 0)
             {
-                sql += "FRPT_Charge_Acct ";
+                sql += "FRPT_Charge_Acct WHERE C_Charge_ID="+ Charge_ID;
             }
             else
             {
-                sql += "FRPT_RevenueRecognition_Acct ";
+                sql += "FRPT_RevenueRecognition_Acct WHERE C_RevenueRecognition_ID= "+ RevenueRecognition_ID;
             }
-            sql += "WHERE  C_AcctSchema_ID=" + AcctSchema_ID + " AND FRPT_AcctDefault_ID = (SELECT FRPT_AcctDefault_ID FROM FRPT_AcctDefault WHERE " +
+            sql += " AND  C_AcctSchema_ID=" + AcctSchema_ID + " AND FRPT_AcctDefault_ID = (SELECT FRPT_AcctDefault_ID FROM FRPT_AcctDefault WHERE " +
             "FRPT_RecognizeType= (CASE WHEN " + Product_ID + "> 0 AND " + amount + ">0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'IE' " + //Ap/ARC
             "WHEN " + Product_ID + "> 0 AND " + amount + "< 0 AND(('" + isSoTrx + "' = 'N' AND '" + isReturnTrx + "' = 'N') OR('" + isSoTrx + "' = 'Y' AND '" + isReturnTrx + "' = 'Y'))  THEN 'TR' " + //AR/APC
             "WHEN " + Charge_ID + ">0 AND " + amount + ">0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'CE' " +      //Ap/ARC
@@ -479,7 +480,7 @@ namespace VAdvantage.Process
             "WHEN " + Product_ID + "=0 AND " + Charge_ID + "=0 AND " + amount + "<0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND  '" + isReturnTrx + "'='Y'))   THEN 'UE' " +  //AR/APC
             "WHEN " + Product_ID + "=0 AND " + Charge_ID + "=0 AND " + amount + "<0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='Y') OR ('" + isSoTrx + "'='Y' AND  '" + isReturnTrx + "'='N'))   THEN 'PE' " +  //AP/ARC
 
-            "END) AND FRPT_RelatedTo=(CASE WHEN " + Product_ID + ">0 Then '35 ' WHEN  " + Charge_ID + ">0 Then '20 '  ELSE '80 ' END ))";
+            "END) AND FRPT_RelatedTo=(CASE WHEN " + Product_ID + ">0 Then '35' WHEN  " + Charge_ID + ">0 Then '20'  ELSE '80' END ))";
 
             return Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
