@@ -1,4 +1,4 @@
-﻿/*** version 1.0.27.0*/
+﻿/*** version 1.0.28.0*/
 /* Minification failed. Returning unminified contents.
 (36,33): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
 (37,22): run-time error CSS1039: Token not allowed after unary operator: '-v-c-on-secondary'
@@ -15988,8 +15988,8 @@ input.vis-group-search-icon {
 }
 
 .VIS_tree-container ul.nav-list {
-    /*padding-left: 20px;
-    flex-flow: column;*/
+    /*padding-left: 20px;*/
+    flex-flow: column;
     padding: 0;
 }
 
@@ -20833,6 +20833,3 @@ html[dir="rtl"] .k-button-icontext .k-sprite {
 
 
 /*rtl css End here*/
-
-
-
