@@ -235,7 +235,7 @@ namespace VAdvantage.Process
                         }
                         else
                         {
-                            DocNo += "," + journal.GetDocumentNo();
+                            DocNo += ", " + journal.GetDocumentNo();
 
                         }
 
@@ -265,7 +265,7 @@ namespace VAdvantage.Process
                         string result = CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
                         if (!String.IsNullOrEmpty(result))
                         {
-                            journalIDS += "," + journal_ID[i];
+                            journalIDS += ", " + journal_ID[i];
                         }
                     }
                 }
