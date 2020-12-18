@@ -252,13 +252,12 @@ namespace VAdvantage.Process
             }
             if (DocNo == null)
             {
-                DocNo = Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
+               return Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
             }
 
             Get_TrxName().Commit();
             if (journal_ID != null)
             {
-
                 for (int i = 0; i < journal_ID.Length; i++)
                 {
                     if (journal_ID[i] > 0)
@@ -273,11 +272,11 @@ namespace VAdvantage.Process
             }
             if (!String.IsNullOrEmpty(journalIDS))
             {
-                return Msg.GetMsg(GetCtx(), "GLJournalCreated" + DocNo) +" "+ Msg.GetMsg(GetCtx(), "GLJournalNotCompleted" + journalIDS);
+                return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo + " "+ Msg.GetMsg(GetCtx(), "GLJournalNotCompleted") + journalIDS;
             }
             else
             {
-                return Msg.GetMsg(GetCtx(), "GLJournalCreated" + DocNo);
+                return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo;
             }
         }
 
