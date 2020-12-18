@@ -2762,7 +2762,7 @@ namespace VAdvantage.Model
                             DataSet ds = DB.ExecuteDataset(@"SELECT o.C_Order_ID, o.IsSOTrx, pm.VA009_PaymentBaseType FROM C_OrderLine ol INNER JOIN C_Order o 
                                         ON ol.C_Order_ID=o.C_Order_ID INNER JOIN VA009_PaymentMethod pm ON pm.VA009_PaymentMethod_ID=o.VA009_PaymentMethod_ID
                                     WHERE o.IsActive = 'Y' AND DocStatus IN ('CL' , 'CO')  AND ol.C_OrderLine_ID =" + line.GetC_OrderLine_ID(), null, Get_Trx());
-                            if (ds != null)
+                            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                             {
                                 if (Util.GetValueOfString(ds.Tables[0].Rows[0]["VA009_PaymentBaseType"]).Equals(X_C_Invoice.PAYMENTMETHOD_LetterOfCredit))
                                 {
@@ -5049,7 +5049,7 @@ namespace VAdvantage.Model
             // if  Amount is Recoganized then invoice cant be reverse
             string sqlrun = "SELECT COUNT(run.C_RevenueRecognition_RUN_ID) FROM C_RevenueRecognition_RUN run " +
                 "INNER JOIN c_revenuerecognition_plan plan on run.c_revenuerecognition_plan_id = plan.c_revenuerecognition_plan_id WHERE plan.C_InvoiceLine_ID IN " +
-                "(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND C_Invoice_ID= "+GetC_Invoice_ID()+") AND run.GL_Journal_ID IS not null";
+                "(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND C_Invoice_ID= " + GetC_Invoice_ID() + ") AND run.GL_Journal_ID IS not null";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sqlrun)) > 0)
             {
                 _processMsg = Msg.GetMsg(GetCtx(), "Recoganized");
@@ -5330,15 +5330,15 @@ namespace VAdvantage.Model
 
             //delete revenuerecognition run and plan
 
-            DB.ExecuteQuery("DELETE FROM C_RevenueRecognition_Run WHERE C_RevenueRecognition_Run_ID IN (SELECT run.C_RevenueRecognition_RUN_ID FROM C_RevenueRecognition_RUN run "+
-                           "INNER JOIN c_revenuerecognition_plan plan on run.c_revenuerecognition_plan_id = plan.c_revenuerecognition_plan_ID "+
-                           "WHERE plan.C_InvoiceLine_ID IN(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND C_Invoice_ID ="+GetC_Invoice_ID()+"))");
-                      
+            DB.ExecuteQuery("DELETE FROM C_RevenueRecognition_Run WHERE C_RevenueRecognition_Run_ID IN (SELECT run.C_RevenueRecognition_RUN_ID FROM C_RevenueRecognition_RUN run " +
+                           "INNER JOIN c_revenuerecognition_plan plan on run.c_revenuerecognition_plan_id = plan.c_revenuerecognition_plan_ID " +
+                           "WHERE plan.C_InvoiceLine_ID IN(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND C_Invoice_ID =" + GetC_Invoice_ID() + "))");
+
             DB.ExecuteQuery("DELETE FROM C_RevenueRecognition_Plan WHERE C_RevenueRecognition_Plan_ID IN (SELECT C_RevenueRecognition_plan_ID FROM " +
                 "c_revenuerecognition_plan WHERE C_InvoiceLine_ID IN(SELECT C_InvoiceLine_ID FROM C_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND " +
-                "C_Invoice_ID= "+GetC_Invoice_ID()+"))");
+                "C_Invoice_ID= " + GetC_Invoice_ID() + "))");
 
-              
+
 
 
 
