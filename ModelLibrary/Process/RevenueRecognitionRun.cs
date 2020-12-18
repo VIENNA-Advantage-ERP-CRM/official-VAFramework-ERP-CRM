@@ -69,7 +69,7 @@ namespace VAdvantage.Process
         {
             String msg = "";
             MRevenueRecognition mRevenueRecognition = null;
-            if (_RecognitionDate < DateTime.Now)
+            if (_RecognitionDate <= DateTime.Now)
             {
                 if (_RevenueRecognition_ID > 0)
                 {
