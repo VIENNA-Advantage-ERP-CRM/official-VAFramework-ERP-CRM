@@ -327,14 +327,8 @@ namespace VAdvantage.Process
                     journalLine.Set_ValueNoCheck("C_Project_ID", invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : invoice.Get_Value("C_ProjectRef_ID"));
                     journalLine.Set_ValueNoCheck("C_Campaign_ID", invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID());
                     journalLine.Set_ValueNoCheck("C_Activity_ID", invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID());
-                    if (invoiceLine.GetM_Product_ID() > 0)
-                    {
-                        journalLine.Set_ValueNoCheck("M_Product_ID", invoiceLine.GetM_Product_ID());
-                    }
-                    else
-                    {
-                        journalLine.Set_ValueNoCheck("C_Charge_ID", invoiceLine.GetC_Charge_ID());
-                    }
+                    journalLine.Set_ValueNoCheck("M_Product_ID", invoiceLine.GetM_Product_ID());
+                                   
                 }
                 else
                 {
@@ -502,8 +496,7 @@ namespace VAdvantage.Process
             MJournalLine retValue = null;
             String sql = "SELECT * FROM GL_JournalLine " +
                          " WHERE  GL_Journal_ID = " + Journal.GetGL_Journal_ID() +
-                         " AND (NVL(M_Product_ID,0)=" + M_Product_ID +
-                         " OR NVL(C_Charge_ID,0)= " + C_Charge_ID + ")" +
+                         " AND NVL(M_Product_ID,0)=" + M_Product_ID +                        
                          " AND NVL(ACCOUNT_ID,0)=" + Account_ID +
                          " AND NVL(C_CAMPAIGN_ID,0)=" + Campaign_ID +
                          " AND NVL(C_PROJECT_ID,0)=" + Opprtunity_ID +
@@ -571,7 +564,7 @@ namespace VAdvantage.Process
             Line.Set_ValueNoCheck("C_BPartner_ID", BPartner_ID);
             Line.Set_ValueNoCheck("M_Product_ID", M_Product_ID);
             Line.SetAD_OrgTrx_ID(trxOrg_ID);
-            Line.Set_ValueNoCheck("C_Charge_ID", C_Charge_ID);
+            //Line.Set_ValueNoCheck("C_Charge_ID", C_Charge_ID);
             Line.Set_ValueNoCheck("C_Campaign_ID", Campaign_ID);
             Line.Set_ValueNoCheck("C_Project_ID", Opprtunity_ID);
             Line.Set_ValueNoCheck("C_Activity_ID", Activity_ID);

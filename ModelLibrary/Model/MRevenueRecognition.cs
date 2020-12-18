@@ -137,7 +137,7 @@ namespace VAdvantage.Model
                 int stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 
-                if (RecognizationDate.Value.Day != 1 && revenueRecognition.GetNoMonths()>0)
+                if (revenueRecognition.GetRecognitionFrequency().Equals(RECOGNITIONFREQUENCY_Month) && RecognizationDate.Value.Day != 1 && revenueRecognition.GetNoMonths()>0)
                 {
                     //if startdate is in between day of month
                     NoofMonths = revenueRecognition.GetNoMonths() + 1;
@@ -173,7 +173,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        if (revenueRecognition.GetRecognitionFrequency().Equals("M"))
+                        if (revenueRecognition.GetRecognitionFrequency().Equals(RECOGNITIONFREQUENCY_Month))
                         {
                           
                             decimal totaldays = Util.GetValueOfDecimal((RecognizationDate.Value.AddMonths(revenueRecognition.GetNoMonths()) - RecognizationDate.Value.Date).TotalDays);
@@ -235,7 +235,7 @@ namespace VAdvantage.Model
                                 recognizedAmt = 0;
                             }
                         }
-                        else if (revenueRecognition.GetRecognitionFrequency().Equals("D"))
+                        else if (revenueRecognition.GetRecognitionFrequency().Equals(RECOGNITIONFREQUENCY_Day))
                         {
                             Decimal recognizedAmt = Math.Round(revenueRecognitionPlan.GetTotalAmt() / revenueRecognition.GetNoMonths(), stdPrecision);
                             int days = 0;
@@ -262,7 +262,7 @@ namespace VAdvantage.Model
                                 }
                             }
                         }
-                        else if (revenueRecognition.GetRecognitionFrequency().Equals("Y"))
+                        else if (revenueRecognition.GetRecognitionFrequency().Equals(RECOGNITIONFREQUENCY_Year))
                         {
                             DateTime? fstartDate = null;
                             DateTime? fendDate = null;                           
@@ -276,12 +276,17 @@ namespace VAdvantage.Model
                             }
                             sql = "SELECT startdate , enddate FROM c_period WHERE " +
                                 "c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON c_year.c_year_id = C_period.c_year_id " +
-                                "WHERE  c_year.c_calendar_id ="+ calendar_ID + " AND "+GlobalVariable.TO_DATE(RecognizationDate,false)+" BETWEEN C_period.startdate AND C_period.enddate) AND periodno IN (1, 12)";
+                                "WHERE  c_year.c_calendar_id ="+ calendar_ID + " AND "+GlobalVariable.TO_DATE(RecognizationDate,true)+" BETWEEN C_period.startdate AND C_period.enddate) AND periodno IN (1, 12)";
                             ds = DB.ExecuteDataset(sql);
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
                             {
                                 fstartDate = Convert.ToDateTime(ds.Tables[0].Rows[0]["startdate"]);
                                 fendDate = Convert.ToDateTime(ds.Tables[0].Rows[1]["enddate"]);
+                            } 
+                            if(fstartDate!= RecognizationDate)
+                            {
+                                //RecognizationDate  is not same as financial year's start date
+                                NoofMonths += 1;
                             }
                             decimal totaldays = Util.GetValueOfDecimal((RecognizationDate.Value.AddYears(revenueRecognition.GetNoMonths()) - RecognizationDate.Value.Date).TotalDays);
 
@@ -298,8 +303,8 @@ namespace VAdvantage.Model
                                     days = Util.GetValueOfInt((lastdate.Value.Date - RecognizationDate.Value.Date).TotalDays);
                                     days += 1;
                                 }
-                                else if (i == (revenueRecognition.GetNoMonths()))
-                                {
+                                else if (i == revenueRecognition.GetNoMonths()) 
+                                { 
                                     //last date of the year would the day before the recoganizationdate
                                     lastdate = RecognizationDate.Value.AddYears(i).AddDays(-1);
                                     DateTime startDate = fstartDate.Value.AddYears(i);
