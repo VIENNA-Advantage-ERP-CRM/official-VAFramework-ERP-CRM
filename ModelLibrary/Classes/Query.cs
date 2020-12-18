@@ -68,30 +68,30 @@ namespace VAdvantage.Classes
 
         /**	Operators for Strings				*/
         public static ValueNamePair[] OPERATORS = new ValueNamePair[] {
-          new ValueNamePair (EQUAL,			" = "),		//	0
-          new ValueNamePair (NOT_EQUAL,		" != "),
-          new ValueNamePair (LIKE,			" ~ "),
-          new ValueNamePair (NOT_LIKE,		" !~ "),
-          new ValueNamePair (GREATER,			" > "),
-          new ValueNamePair (GREATER_EQUAL,	" >= "),	//	5
-          new ValueNamePair (LESS,			" < "),
-          new ValueNamePair (LESS_EQUAL,		" <= "),
-          new ValueNamePair (BETWEEN,			" >-< ")	//	8
+          new ValueNamePair (EQUAL,         " = "),		//	0
+          new ValueNamePair (NOT_EQUAL,     " != "),
+          new ValueNamePair (LIKE,          " ~ "),
+          new ValueNamePair (NOT_LIKE,      " !~ "),
+          new ValueNamePair (GREATER,           " > "),
+          new ValueNamePair (GREATER_EQUAL, " >= "),	//	5
+          new ValueNamePair (LESS,          " < "),
+          new ValueNamePair (LESS_EQUAL,        " <= "),
+          new ValueNamePair (BETWEEN,           " >-< ")	//	8
       //	,new ValueNamePair (IN,				" () "),
       //	new ValueNamePair (NOT_IN,			" !() ")			
       };
 
         /**	Operators for IDs					*/
         public static ValueNamePair[] OPERATORS_ID = new ValueNamePair[] {
-          new ValueNamePair (EQUAL,			" = "),		//	0
-          new ValueNamePair (NOT_EQUAL,		" != ")
+          new ValueNamePair (EQUAL,         " = "),		//	0
+          new ValueNamePair (NOT_EQUAL,     " != ")
       //	,new ValueNamePair (IN,				" IN "),			
       //	new ValueNamePair (NOT_IN,			" !() ")			
       };
 
         /**	Operators for Boolean					*/
         public static ValueNamePair[] OPERATORS_YN = new ValueNamePair[] {
-      new ValueNamePair (EQUAL,			" = ")
+      new ValueNamePair (EQUAL,         " = ")
         };
 
 
