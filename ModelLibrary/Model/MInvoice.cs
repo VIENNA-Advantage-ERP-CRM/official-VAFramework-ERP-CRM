@@ -3875,7 +3875,7 @@ namespace VAdvantage.Model
                     }
 
                     //Create RecognoitionPlan and RecognitiontionRun
-                    if (line.Get_ColumnIndex("C_RevenueRecognition_ID") >= 0 && line.Get_Value("C_RevenueRecognition_ID") != null && !IsReversal())
+                    if (Env.IsModuleInstalled("FRPT_") && line.Get_ColumnIndex("C_RevenueRecognition_ID") >= 0 && line.Get_Value("C_RevenueRecognition_ID") != null && !IsReversal())
                     {
                         if (!MRevenueRecognition.CreateRevenueRecognitionPlan(line.GetC_InvoiceLine_ID(), Util.GetValueOfInt(line.Get_Value("C_RevenueRecognition_ID")), this))
                         {
@@ -5044,6 +5044,7 @@ namespace VAdvantage.Model
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return false;
             }
+
 
             // if  Amount is Recoganized then invoice cant be reverse
             string sqlrun = "SELECT COUNT(run.C_RevenueRecognition_RUN_ID) FROM C_RevenueRecognition_RUN run " +

@@ -67,6 +67,10 @@ namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override string DoIt()
         {
+            if (!Env.IsModuleInstalled("FRPT_")) 
+            {
+                return Msg.GetMsg(GetCtx(), "InstallFinancialManagement");
+            }
             String msg = "";
             MRevenueRecognition mRevenueRecognition = null;
             if (_RecognitionDate <= DateTime.Now)
