@@ -12409,6 +12409,12 @@
                 }
             }
 
+            //set C_REVENUERECOGNITION_ID if InvoiceLine Tab Contains REVENUERECOGNITION field
+            if (mTab.findColumn("C_REVENUERECOGNITION_ID") > -1) {
+                var revReg_ID = VIS.dataContext.getJSONRecord("MProduct/GetRevenuRecognition", M_Product_ID);
+                mTab.setValue("C_REVENUERECOGNITION_ID", revReg_ID);
+            }
+
             /*****Amit done *******/
 
             //try
