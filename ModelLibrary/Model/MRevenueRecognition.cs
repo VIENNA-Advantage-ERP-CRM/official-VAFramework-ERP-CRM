@@ -69,6 +69,12 @@ namespace VAdvantage.Model
 
         }
 
+        /// <summary>
+        /// After Save Logic
+        /// </summary>
+        /// <param name="newRecord"></param>
+        /// <param name="success"></param>
+        /// <returns></returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
             // create default Account
