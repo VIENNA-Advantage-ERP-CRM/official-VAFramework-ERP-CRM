@@ -139,7 +139,7 @@ namespace VAdvantage.Process
                                 }
                                 else
                                 {
-                                    DocNo += "," + journal.GetDocumentNo();
+                                    DocNo += ", " + journal.GetDocumentNo();
 
                                 }
                                 journal_ID[j - 1] = journal.GetGL_Journal_ID();
