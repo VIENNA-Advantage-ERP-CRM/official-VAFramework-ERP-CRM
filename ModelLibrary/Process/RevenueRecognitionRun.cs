@@ -91,7 +91,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                msg = Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan"); 
+                msg = Msg.GetMsg(GetCtx(), "AccountDateGreater"); 
             }
             return msg;
         }
@@ -417,8 +417,8 @@ namespace VAdvantage.Process
             }
 
             string periodSql = "SELECT C_Period_ID From C_Period pr  INNER JOIN c_year yr ON (yr.c_year_id = pr.c_year_id AND yr.c_calendar_id= " +
-                "(CASE WHEN (SELECT C_Calendar_ID FROM AD_Orginfo WHERE NVL(AD_org_ID,0) =" + revenueRecognitionPlan.GetAD_Org_ID() + " ) =0 THEN (SELECT  C_Calendar_ID FROM AD_ClientInfo WHERE AD_Client_ID =" + revenueRecognitionPlan.GetAD_Client_ID() + ") Else " +
-                "(SELECT C_Calendar_ID FROM AD_Orginfo WHERE NVL(AD_org_ID,0) =" + revenueRecognitionPlan.GetAD_Org_ID() + ") END ) ) WHERE " + GlobalVariable.TO_DATE(revenurecognitionRun.GetRecognitionDate(), true) + " BETWEEN StartDate and EndDate";
+                "(CASE WHEN (SELECT NVL(C_Calendar_ID,0) FROM AD_Orginfo WHERE AD_org_ID =" + revenueRecognitionPlan.GetAD_Org_ID() + " ) =0 THEN (SELECT  NVL(C_Calendar_ID,0) FROM AD_ClientInfo WHERE AD_Client_ID =" + revenueRecognitionPlan.GetAD_Client_ID() + ") ELSE " +
+                "(SELECT NVL(C_Calendar_ID,0) FROM AD_Orginfo WHERE AD_org_ID =" + revenueRecognitionPlan.GetAD_Org_ID() + ") END ) ) WHERE " + GlobalVariable.TO_DATE(revenurecognitionRun.GetRecognitionDate(), true) + " BETWEEN StartDate and EndDate";
 
             C_Period_ID = Util.GetValueOfInt(DB.ExecuteScalar(periodSql));
 
