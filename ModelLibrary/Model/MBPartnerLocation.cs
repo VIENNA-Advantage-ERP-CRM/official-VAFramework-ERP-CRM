@@ -255,6 +255,9 @@ namespace VAdvantage.Model
         /// <returns>true/false</returns>
         protected override bool AfterSave(bool newRecord, bool success)
         {
+            if (!success)
+                return success;
+
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 string sql = "UPDATE C_BPartner SET VA077_CustLocNo = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(VA077_LocNo, ', '), 2) CSV FROM(SELECT VA077_LocNo, ROW_NUMBER() OVER(ORDER BY VA077_LocNo ASC) rn, COUNT(*) over() CNT FROM "
