@@ -1076,22 +1076,16 @@ namespace VAdvantage.Model
                         string sql = "";
                         try
                         {
-                            sql = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( PaidSchedule, ' , '),',') PaidSchedule FROM
-                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
-                                                (SELECT cs.duedate || '_' || cs.dueamt AS PaidSchedule FROM C_Cash c 
-                                                 INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
-                                                 INNER JOIN C_InvoicePaySchedule cs ON cs.C_InvoicePaySchedule_ID = cl.C_InvoicePaySchedule_ID 
-                                                 INNER JOIN C_Invoice inv ON inv.C_Invoice_ID = cl.C_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
-                                                 WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
-                                                 AND NVL(cl.C_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
-                                                 OR NVL(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.c_cash_id = " + GetC_Cash_ID() +
-                                                 @" AND ROWNUM <= 100 )  )
-                                                 WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1";
-                            schedule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
+                            //used DBFunctionCollection method to get the query which will execute SQL as well as PostGre.
+                            sql = DBFunctionCollection.CashLineRefInvScheduleDuePaidOrNot(GetC_Cash_ID());
+                            if (!string.IsNullOrEmpty(sql))
+                                schedule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                         }
                         catch (Exception ex)
                         {
-                            log.Log(Level.SEVERE, sql, ex);
+                            //ex to ex.Message to get Explanation about the Exception.
+                            //log.Log(Level.SEVERE, sql, ex);
+                            log.Log(Level.SEVERE, sql, ex.Message);
                         }
 
                         _processMsg = Msg.GetMsg(GetCtx(), "VIS_PayAlreadyDoneforInvoiceSchedule") + schedule;
