@@ -3319,7 +3319,8 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //_mAttachment.SetMailAddressBcc(bcctext.ToString());
             _mAttachment.SetMailAddress(toEMail);
 
-            _mAttachment.SetMailAddressCc(ccmailid);
+            ////for now it is not required
+            //_mAttachment.SetMailAddressCc(ccmailid);
             //_mAttachment.SetMailAddressFrom(userinfo.Email);
 
             _mAttachment.SetMailAddressFrom(frommailid);
