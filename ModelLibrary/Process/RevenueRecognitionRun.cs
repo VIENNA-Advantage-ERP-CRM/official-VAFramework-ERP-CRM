@@ -265,7 +265,7 @@ namespace VAdvantage.Process
                         string result = CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
                         if (!String.IsNullOrEmpty(result))
                         {
-                            journalIDS += ", " + journal_ID[i];
+                            journalIDS += ", " + journal_ID[i] +" "+result;
                         }
                     }
                 }
@@ -360,8 +360,8 @@ namespace VAdvantage.Process
                     }
                     else if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() < 0)
                     {
-                        journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                        journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
                         journalLine.SetAmtSourceCr(0);
                         journalLine.SetAmtAcctCr(0);
                     }
@@ -374,8 +374,8 @@ namespace VAdvantage.Process
                     }
                     else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() < 0)
                     {
-                        journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + revenueRecognitionRun.GetRecognizedAmt());
+                        journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                        journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
                         journalLine.SetAmtSourceDr(0);
                         journalLine.SetAmtAcctDr(0);
                     }
@@ -591,7 +591,7 @@ namespace VAdvantage.Process
         /// <param name="Process_ID">Process</param>
         /// <param name="DocAction">Document Action</param>
         /// <returns>result of completion or reversal in a string array</returns>
-        private string CompleteOrReverse(Ctx ctx, int Record_ID, int Process_ID, string DocAction)
+        public string CompleteOrReverse(Ctx ctx, int Record_ID, int Process_ID, string DocAction)
         {
             string result = "";
             MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
