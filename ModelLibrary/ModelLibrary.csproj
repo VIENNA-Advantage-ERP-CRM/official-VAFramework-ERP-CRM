@@ -219,6 +219,7 @@
     <Compile Include="Model\MAssetGroup.cs" />
     <Compile Include="Model\MAssignAcctSchema.cs" />
     <Compile Include="Model\MAssignmentSlot.cs" />
+    <Compile Include="Model\MRevenueRecognitionRun.cs" />
     <Compile Include="Model\MVAMProductFeature.cs" />
     <Compile Include="Model\MAttributeInstance.cs" />
     <Compile Include="Model\MAttributeSet.cs" />
@@ -649,6 +650,7 @@
     <Compile Include="Process\RequestInvoice.cs" />
     <Compile Include="Process\RequestReOpen.cs" />
     <Compile Include="Process\RequisitionPOCreate.cs" />
+    <Compile Include="Process\RevenueRecognitionRun.cs" />
     <Compile Include="Process\RfQClose.cs" />
     <Compile Include="Process\RfQCopyLines.cs" />
     <Compile Include="Process\RfQCreate.cs" />
