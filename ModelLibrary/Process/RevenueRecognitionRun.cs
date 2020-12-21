@@ -60,14 +60,14 @@ namespace VAdvantage.Process
                 }
             }
         }
-        
+
         /// <summary>
         /// Process
         /// </summary>
         /// <returns>info</returns>
         protected override string DoIt()
         {
-            if (!Env.IsModuleInstalled("FRPT_")) 
+            if (!Env.IsModuleInstalled("FRPT_"))
             {
                 return Msg.GetMsg(GetCtx(), "InstallFinancialManagement");
             }
@@ -95,7 +95,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                msg = Msg.GetMsg(GetCtx(), "AccountDateGreater"); 
+                msg = Msg.GetMsg(GetCtx(), "AccountDateGreater");
             }
             return msg;
         }
@@ -252,7 +252,7 @@ namespace VAdvantage.Process
             }
             if (DocNo == null)
             {
-               return Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
+                return Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
             }
 
             Get_TrxName().Commit();
@@ -265,14 +265,14 @@ namespace VAdvantage.Process
                         string result = CompleteOrReverse(GetCtx(), journal_ID[i], 169, "CO");
                         if (!String.IsNullOrEmpty(result))
                         {
-                            journalIDS += ", " + journal_ID[i] +" "+result;
+                            journalIDS += ", " + journal_ID[i] + " " + result;
                         }
                     }
                 }
             }
             if (!String.IsNullOrEmpty(journalIDS))
             {
-                return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo + " "+ Msg.GetMsg(GetCtx(), "GLJournalNotCompleted") + journalIDS;
+                return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo + " " + Msg.GetMsg(GetCtx(), "GLJournalNotCompleted") + journalIDS;
             }
             else
             {
@@ -294,97 +294,92 @@ namespace VAdvantage.Process
         public MJournalLine GenerateJounalLine(MJournal journal, MInvoice invoice, MInvoiceLine invoiceLine,
                                             MRevenueRecognitionPlan revenueRecognitionPlan, MRevenueRecognitionRun revenueRecognitionRun, string recognitionType, int k)
         {
-            try
+            int combination_ID = 0;
+            if (k == 0)
             {
-                int combination_ID = 0;
-                if (k == 0)
+                combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), journal.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetC_RevenueRecognition_ID());
+                journalLine.SetLine(lineno);
+                if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                 {
-                    combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(), journal.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(),revenueRecognitionPlan.GetC_RevenueRecognition_ID());
-                    journalLine.SetLine(lineno);
-                    if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
-                    {
-                        journalLine.SetAmtAcctDr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceDr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceCr(0);
-                        journalLine.SetAmtAcctCr(0);
-                    }
-                    else if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() < 0)
-                    {
-                        journalLine.SetAmtAcctCr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceCr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceDr(0);
-                        journalLine.SetAmtAcctDr(0);
-                    }
-                    else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() > 0)
-                    {
-                        journalLine.SetAmtAcctCr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceCr(revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceDr(0);
-                        journalLine.SetAmtAcctDr(0);
-                    }
-                    else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() < 0)
-                    {
-                        journalLine.SetAmtAcctDr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceDr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceCr(0);
-                        journalLine.SetAmtAcctCr(0);
-                    }
-                    int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
-                    journalLine.Set_ValueNoCheck("Account_ID", account_ID);
-                    journalLine.Set_ValueNoCheck("C_BPartner_ID", invoice.GetC_BPartner_ID());
-                    journalLine.SetAD_OrgTrx_ID(invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
-                    journalLine.Set_ValueNoCheck("C_Project_ID", invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : invoice.Get_Value("C_ProjectRef_ID"));
-                    journalLine.Set_ValueNoCheck("C_Campaign_ID", invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID());
-                    journalLine.Set_ValueNoCheck("C_Activity_ID", invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID());
-                    journalLine.Set_ValueNoCheck("M_Product_ID", invoiceLine.GetM_Product_ID());
-                                   
+                    journalLine.SetAmtAcctDr(revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceDr(revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceCr(0);
+                    journalLine.SetAmtAcctCr(0);
                 }
-                else
+                else if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() < 0)
                 {
-                    combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetC_RevenueRecognition_ID());
-                    int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
+                    journalLine.SetAmtAcctCr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceCr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceDr(0);
+                    journalLine.SetAmtAcctDr(0);
+                }
+                else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() > 0)
+                {
+                    journalLine.SetAmtAcctCr(revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceCr(revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceDr(0);
+                    journalLine.SetAmtAcctDr(0);
+                }
+                else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() < 0)
+                {
+                    journalLine.SetAmtAcctDr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceDr(Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceCr(0);
+                    journalLine.SetAmtAcctCr(0);
+                }
+                int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
+                journalLine.Set_ValueNoCheck("Account_ID", account_ID);
+                journalLine.Set_ValueNoCheck("C_BPartner_ID", invoice.GetC_BPartner_ID());
+                journalLine.SetAD_OrgTrx_ID(invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
+                journalLine.Set_ValueNoCheck("C_Project_ID", invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : invoice.Get_Value("C_ProjectRef_ID"));
+                journalLine.Set_ValueNoCheck("C_Campaign_ID", invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID());
+                journalLine.Set_ValueNoCheck("C_Activity_ID", invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID());
+                journalLine.Set_ValueNoCheck("M_Product_ID", invoiceLine.GetM_Product_ID());
 
-                    journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(),
-                        invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID(),
-                    account_ID, invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : Util.GetValueOfInt(invoice.Get_Value("C_ProjectRef_ID")),
-                    invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID(), invoice.GetC_BPartner_ID(),
-                    invoice.GetAD_Org_ID(), invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
+            }
+            else
+            {
+                combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetC_AcctSchema_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetC_RevenueRecognition_ID());
+                int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
+
+                journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetM_Product_ID(), invoiceLine.GetC_Charge_ID(),
+                    invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID(),
+                account_ID, invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : Util.GetValueOfInt(invoice.Get_Value("C_ProjectRef_ID")),
+                invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID(), invoice.GetC_BPartner_ID(),
+                invoice.GetAD_Org_ID(), invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
 
 
-                    if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
-                    {
-                        journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceDr(0);
-                        journalLine.SetAmtAcctDr(0);
-                    }
-                    else if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() < 0)
-                    {
-                        journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceCr(0);
-                        journalLine.SetAmtAcctCr(0);
-                    }
-                    else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() > 0)
-                    {
-                        journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + revenueRecognitionRun.GetRecognizedAmt());
-                        journalLine.SetAmtSourceCr(0);
-                        journalLine.SetAmtAcctCr(0);
-                    }
-                    else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() < 0)
-                    {
-                        journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
-                        journalLine.SetAmtSourceDr(0);
-                        journalLine.SetAmtAcctDr(0);
-                    }
+                if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
+                {
+                    journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceDr(0);
+                    journalLine.SetAmtAcctDr(0);
+                }
+                else if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() < 0)
+                {
+                    journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceCr(0);
+                    journalLine.SetAmtAcctCr(0);
+                }
+                else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() > 0)
+                {
+                    journalLine.SetAmtAcctDr(journalLine.GetAmtAcctDr() + revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceDr(journalLine.GetAmtSourceDr() + revenueRecognitionRun.GetRecognizedAmt());
+                    journalLine.SetAmtSourceCr(0);
+                    journalLine.SetAmtAcctCr(0);
+                }
+                else if (recognitionType.Equals("R") && revenueRecognitionRun.GetRecognizedAmt() < 0)
+                {
+                    journalLine.SetAmtAcctCr(journalLine.GetAmtAcctCr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceCr(journalLine.GetAmtSourceCr() + Decimal.Negate(revenueRecognitionRun.GetRecognizedAmt()));
+                    journalLine.SetAmtSourceDr(0);
+                    journalLine.SetAmtAcctDr(0);
                 }
             }
-            catch (Exception ex)
-            {
-                log.SaveError(null, ex);
-            }
+            return journalLine;
+
             return journalLine;
         }
 
@@ -453,18 +448,18 @@ namespace VAdvantage.Process
             char isReturnTrx = IsreturnTrx ? 'Y' : 'N';
 
             string sql = "SELECT C_ValidCombination_ID FROM ";
-            
+
             if (Product_ID > 0)
             {
-                sql += "FRPT_Product_Acct WHERE M_Product_ID= "+ Product_ID;
+                sql += "FRPT_Product_Acct WHERE M_Product_ID= " + Product_ID;
             }
             else if (Charge_ID > 0)
             {
-                sql += "FRPT_Charge_Acct WHERE C_Charge_ID="+ Charge_ID;
+                sql += "FRPT_Charge_Acct WHERE C_Charge_ID=" + Charge_ID;
             }
             else
             {
-                sql += "FRPT_RevenueRecognition_Acct WHERE C_RevenueRecognition_ID= "+ RevenueRecognition_ID;
+                sql += "FRPT_RevenueRecognition_Acct WHERE C_RevenueRecognition_ID= " + RevenueRecognition_ID;
             }
             sql += " AND  C_AcctSchema_ID=" + AcctSchema_ID + " AND FRPT_AcctDefault_ID = (SELECT FRPT_AcctDefault_ID FROM FRPT_AcctDefault WHERE " +
             "FRPT_RecognizeType= (CASE WHEN " + Product_ID + "> 0 AND " + amount + ">0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'IE' " + //Ap/ARC
@@ -506,7 +501,7 @@ namespace VAdvantage.Process
             MJournalLine retValue = null;
             String sql = "SELECT * FROM GL_JournalLine " +
                          " WHERE  GL_Journal_ID = " + Journal.GetGL_Journal_ID() +
-                         " AND NVL(M_Product_ID,0)=" + M_Product_ID +                        
+                         " AND NVL(M_Product_ID,0)=" + M_Product_ID +
                          " AND NVL(ACCOUNT_ID,0)=" + Account_ID +
                          " AND NVL(C_CAMPAIGN_ID,0)=" + Campaign_ID +
                          " AND NVL(C_PROJECT_ID,0)=" + Opprtunity_ID +
