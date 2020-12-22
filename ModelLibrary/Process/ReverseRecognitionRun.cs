@@ -320,6 +320,11 @@ namespace VAdvantage.Process
                             }
                         }
                     }
+
+                    if (DocNo == null)
+                    {
+                        return Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
+                    }
                 }
                 else
                 {
@@ -336,7 +341,7 @@ namespace VAdvantage.Process
             if (!String.IsNullOrEmpty(journalIDS))
             {
                 return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo + ", " + Msg.GetMsg(GetCtx(), "GLJournalNotCompleted") + journalIDS;
-            }
+            }         
             else
             {
                 return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo;
