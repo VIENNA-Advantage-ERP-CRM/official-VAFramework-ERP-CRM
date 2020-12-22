@@ -875,8 +875,8 @@ namespace VAdvantage.DataBase
             }
             else if (DB.IsPostgreSQL())
             {
-                sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT  string_agg(Name, ', ') AS Name 
-                             FROM (SELECT DISTINCT Name FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @") AS ABC), 
+                sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT  string_agg(VA077_LocNo, ', ') AS Name 
+                             FROM (SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @") AS ABC), 
                              VA077_SalesRep = (SELECT string_agg(Name, ', ') CSP FROM (SELECT us.Name FROM AD_User us 
                              JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
                              WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @") AS U) WHERE C_BPartner_ID = " + C_BPartner_ID);
