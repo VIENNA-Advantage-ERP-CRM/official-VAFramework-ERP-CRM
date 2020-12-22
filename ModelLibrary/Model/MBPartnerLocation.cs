@@ -28,8 +28,8 @@ namespace VAdvantage.Model
     {
         //	Cached Location			
         private MLocation _location = null;
-        //	Unique Name				
-        private String _uniqueName = null;
+        //	Unique Name			
+        private StringBuilder _uniqueName = new StringBuilder();
         private int _unique = 0;
         // Static Logger					
         private static VLogger _log = VLogger.GetVLogger(typeof(MBPartnerLocation).FullName);
@@ -157,6 +157,36 @@ namespace VAdvantage.Model
             if (GetC_Location_ID() == 0)
                 return false;
 
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                // Error if Customer Location No is not unique
+                if (GetVA077_LocNo() != null)
+                {
+                    string sql = @"SELECT C_BPartner_ID, VA077_IsMailAdd  FROM C_BPartner_Location 
+                                   WHERE VA077_LocNo = '" + GetVA077_LocNo() + "' AND C_BPartner_Location_ID !=" + GetC_BPartner_Location_ID();
+                    DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
+
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        if (ds.Tables[0].Rows.Count == 1)
+                        {
+                            int PartnerID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_BPartner_ID"]);
+                            bool value = Util.GetValueOfString(ds.Tables[0].Rows[0]["VA077_IsMailAdd"]).Equals("Y") ? true : false;
+                            if (value.Equals(IsVA077_IsMailAdd()) || PartnerID != GetC_BPartner_ID())
+                            {
+                                log.SaveError("VA077_UniqueLocNo", "");
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            log.SaveError("VA077_UniqueLocNo", "");
+                            return false;
+                        }
+                    }
+                }
+            }
+
             // change by amit 
             //	Set New Name
             //if (!newRecord)
@@ -169,9 +199,9 @@ namespace VAdvantage.Model
             }
 
             MLocation address = GetLocation(true);
-            _uniqueName = GetName();
+            _uniqueName.Append(GetName());
             //if (_uniqueName != null && _uniqueName.Equals("."))	//	default    change by amit
-            _uniqueName = null;
+            _uniqueName.Clear();
             _unique = 0;
             // Changes Done By Vivek on 10/12/2015
             //Set City Name at Name Field
@@ -213,9 +243,36 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            SetName(_uniqueName);
+            SetName(_uniqueName.ToString());
             return true;
         }
+
+        /// <summary>
+        /// After Save Logic
+        /// </summary>
+        /// <param name="newRecord">newRecord</param>
+        /// <param name="success">success</param>
+        /// <returns>true/false</returns>
+        protected override bool AfterSave(bool newRecord, bool success)
+        {
+            if (!success)
+                return success;
+
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                string sql = "UPDATE C_BPartner SET VA077_CustLocNo = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(VA077_LocNo, ', '), 2) CSV FROM(SELECT VA077_LocNo, ROW_NUMBER() OVER(ORDER BY VA077_LocNo ASC) rn, COUNT(*) over() CNT FROM "
+                 + "(SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + GetC_BPartner_ID() + ")) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1) , VA077_SalesRep = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2)"
+                 + "CSP FROM(SELECT Name, ROW_NUMBER() OVER(ORDER BY Name ASC) rn, COUNT(*) over() CNT FROM (SELECT us.Name FROM AD_User us JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID WHERE bp.C_BPartner_ID =" + GetC_BPartner_ID() + ")) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1)"
+                 + "WHERE C_BPartner_ID = " + GetC_BPartner_ID();
+                int _count = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
+                if (_count < 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
         /**
          * 	Make name Unique
@@ -226,8 +283,8 @@ namespace VAdvantage.Model
             //	_uniqueName = address.toString();
             //	return;
 
-            if (_uniqueName == null)
-                _uniqueName = "";
+            if (_uniqueName.Length == 0)
+                _uniqueName.Clear();
             _unique++;
 
             // 0 + Address1 
@@ -237,7 +294,32 @@ namespace VAdvantage.Model
                 String xx = address.GetAddress1();
                 if (xx != null && xx.Length > 0)
                 {
-                    _uniqueName = xx;
+                    _uniqueName.Append(xx);
+                }
+                // Set address2, address3 and address4 in case of VA077
+                if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+                {
+                    xx = address.GetAddress2();
+                    if (xx != null && xx.Length > 0)
+                    {
+                        if (_uniqueName.Length > 0)
+                            _uniqueName.Append(" ");
+                        _uniqueName.Append(xx);
+                    }
+                    xx = address.GetAddress3();
+                    if (xx != null && xx.Length > 0)
+                    {
+                        if (_uniqueName.Length > 0)
+                            _uniqueName.Append(" ");
+                        _uniqueName.Append(xx);
+                    }
+                    xx = address.GetAddress4();
+                    if (xx != null && xx.Length > 0)
+                    {
+                        if (_uniqueName.Length > 0)
+                            _uniqueName.Append(" ");
+                        _uniqueName.Append(xx);
+                    }
                 }
                 _unique = 0;
             }
@@ -250,8 +332,33 @@ namespace VAdvantage.Model
                 if (xx != null && xx.Length > 0)
                 {
                     if (_uniqueName.Length > 0)
-                        _uniqueName += " ";
-                    _uniqueName += xx;
+                        _uniqueName.Append(" ");
+                    _uniqueName.Append(xx);
+                }
+                // Copy region, postal code country name in case of VA077
+                if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+                {
+                    xx = address.GetRegionName(true);
+                    if (xx != null && xx.Length > 0)
+                    {
+                        if (_uniqueName.Length > 0)
+                            _uniqueName.Append(" ");
+                        _uniqueName.Append(xx);
+                    }
+                    xx = address.GetPostal();
+                    if (xx != null && xx.Length > 0)
+                    {
+                        if (_uniqueName.Length > 0)
+                            _uniqueName.Append(" ");
+                        _uniqueName.Append(xx);
+                    }
+                    xx = address.GetCountryName();
+                    if (xx != null && xx.Length > 0)
+                    {
+                        if (_uniqueName.Length > 0)
+                            _uniqueName.Append(" ");
+                        _uniqueName.Append(xx);
+                    }
                 }
                 _unique = 0;
             }
@@ -263,8 +370,8 @@ namespace VAdvantage.Model
                 if (xx != null && xx.Length > 0)
                 {
                     if (_uniqueName.Length > 0)
-                        _uniqueName += " ";
-                    _uniqueName += xx;
+                        _uniqueName.Append(" ");
+                    _uniqueName.Append(xx);
                 }
                 _unique = 1;
             }
@@ -275,8 +382,8 @@ namespace VAdvantage.Model
                 if (xx != null && xx.Length > 0)
                 {
                     if (_uniqueName.Length > 0)
-                        _uniqueName += " ";
-                    _uniqueName += xx;
+                        _uniqueName.Append(" ");
+                    _uniqueName.Append(xx);
                 }
                 _unique = 2;
             }
@@ -286,8 +393,8 @@ namespace VAdvantage.Model
                 String xx = address.GetRegionName(true);
                 {
                     if (_uniqueName.Length > 0)
-                        _uniqueName += " ";
-                    _uniqueName += xx;
+                        _uniqueName.Append(" ");
+                    _uniqueName.Append(xx);
                 }
                 _unique = 3;
             }
@@ -297,8 +404,8 @@ namespace VAdvantage.Model
                 String xx = address.GetCountryName();
                 {
                     if (_uniqueName.Length > 0)
-                        _uniqueName += " ";
-                    _uniqueName += xx;
+                        _uniqueName.Append(" ");
+                    _uniqueName.Append(xx);
                 }
                 _unique = 5;
             }
@@ -308,7 +415,7 @@ namespace VAdvantage.Model
                 int id = Get_ID();
                 if (id == 0)
                     id = address.Get_ID();
-                _uniqueName += "#" + id;
+                _uniqueName.Append("#" + id);
                 _unique = 4;
             }
         }
@@ -341,6 +448,30 @@ namespace VAdvantage.Model
                     SetSOCreditStatus(SOCREDITSTATUS_CreditOK);
             }
             log.Fine("SOCreditStatus=" + GetSOCreditStatus());
+        }
+
+        /// <summary>
+        /// After Delete Logic
+        /// </summary>
+        /// <param name="success">success</param>
+        /// <returns>result</returns>
+        protected override bool AfterDelete(bool success)
+        {
+            if (!success)
+                return success;
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                string sqlqry = "UPDATE C_BPartner SET VA077_CustLocNo = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(VA077_LocNo, ', '), 2) CSV FROM(SELECT VA077_LocNo, ROW_NUMBER() OVER(ORDER BY VA077_LocNo ASC) rn, COUNT(*) over() CNT FROM "
+                  + "(SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " AND C_BPartner_Location_ID !=" + GetC_BPartner_Location_ID() + ")) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1) , VA077_SalesRep = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2)"
+                  + "CSP FROM(SELECT Name, ROW_NUMBER() OVER(ORDER BY Name ASC) rn, COUNT(*) over() CNT FROM (SELECT us.Name FROM AD_User us JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID WHERE bp.C_BPartner_ID =" + GetC_BPartner_ID() + " AND bp.C_BPartner_Location_ID !=" + GetC_BPartner_Location_ID() + ")) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1)"
+                  + "WHERE C_BPartner_ID = " + GetC_BPartner_ID();
+                int _count = Util.GetValueOfInt(DB.ExecuteQuery(sqlqry.ToString(), null, null));
+                if (_count < 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
