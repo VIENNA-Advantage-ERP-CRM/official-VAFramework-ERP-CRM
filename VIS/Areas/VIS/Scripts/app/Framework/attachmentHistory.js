@@ -2406,7 +2406,7 @@
                 $endDate.text(VIS.Utility.encodeText(new Date(endDate).toLocaleString()));
 
                 $allDay.text(VIS.Utility.encodeText(allDay));
-                //$($visattachhistoryrightcontentForAppoint[0].children[0]).hide();
+                $($visattachhistoryrightcontentForAppoint[0].children[0]).hide();
             }
 
             $('.vis-attachhistory-view-comments').off("click");
