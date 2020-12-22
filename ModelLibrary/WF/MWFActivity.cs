@@ -27,7 +27,7 @@ using System.Reflection;
 namespace VAdvantage.WF
 {
     public class MWFActivity : X_AD_WF_Activity
-    {
+    {        
         /**	State Machine				*/
         private StateEngine _state = null;
         /**	Workflow Node				*/
@@ -73,6 +73,7 @@ namespace VAdvantage.WF
                 throw new ArgumentException("Cannot create new WF Activity directly");
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
+            
         }
 
         /// <summary>
@@ -86,6 +87,7 @@ namespace VAdvantage.WF
         {
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
+          
         }
 
         /// <summary>
@@ -3010,11 +3012,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 for (int i = 0; i < recipentUsers.Count; i++)
                 {
                     SendEMail(client, recipentUsers[i], null, subject, message, pdf, isHTML, tableID, RecID, action);
+                    
+
                 }
             }
+
+           
         }
-
-
 
         private String ParseVariable(String variable, PO po)
         {
@@ -3250,6 +3254,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 }
             }
         }
+        
 
         // Save email to database and call singleton call object to start its working, if node is set as run background otherwise run simply
         public bool SendEMailBack(MClient client, String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int AD_Table_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
@@ -3289,6 +3294,50 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     log.Severe("Email not saved to database");
                     return false;
                 }
+            }
+            //written by sandeep chopra to send attachment details into mailattachment table
+            VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
+            string frommailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT REQUESTEMAIL FROM AD_Client WHERE AD_CLIENT_ID=" + GetCtx().GetAD_Client_ID()));
+            //SELECT* FROM Customers WHERE Country IN(SELECT Country FROM Suppliers);
+            //SELECT SalesRep_ID, email, C_Lead_ID FROM c_lead WHERE C_Lead_ID = 1005593
+            string SalesRepId=Util.GetValueOfString(DB.ExecuteScalar("SELECT SALESREP_ID,EMAIL,C_LEAD_ID FROM C_LEAD WHERE C_Lead_ID=" + Record_ID));
+            string ccmailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT Email from AD_user WHERE AD_User_ID=" + SalesRepId));
+            //string ccmailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT Email from AD_user WHERE AD_User_ID in(SELECT SalesRep_ID from C_LEAD WHERE C_LEAD_ID = " + Record_ID))));
+
+            _mAttachment.SetIsMailSent(true);
+
+            int AD_Client_Id = GetCtx().GetAD_Client_ID();
+            int iOrgid = GetCtx().GetAD_Org_ID();
+            _mAttachment.SetAD_Client_ID(AD_Client_Id);
+            _mAttachment.SetAD_Org_ID(iOrgid);
+            _mAttachment.SetAD_Table_ID(AD_Table_ID);
+            _mAttachment.IsActive();
+            _mAttachment.SetAttachmentType("M");
+            _mAttachment.SetRecord_ID(Convert.ToInt32(Record_ID));
+            _mAttachment.SetTextMsg(message);
+            _mAttachment.SetTitle(subject);
+
+            //_mAttachment.SetMailAddressBcc(bcctext.ToString());
+            _mAttachment.SetMailAddress(toEMail);
+
+            ////for now it is not required
+            //_mAttachment.SetMailAddressCc(ccmailid);
+            //_mAttachment.SetMailAddressFrom(userinfo.Email);
+
+            _mAttachment.SetMailAddressFrom(frommailid);
+
+            if (_mAttachment.GetEntries().Length > 0)
+            {
+                _mAttachment.SetIsAttachment(true);
+            }
+            else
+            {
+                _mAttachment.SetIsAttachment(false);
+            }
+            //_mAttachment.NewRecord();
+            if (_mAttachment.Save())
+            {
+
             }
 
             return client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, AD_Table_ID, Record_ID, array, fileName);
