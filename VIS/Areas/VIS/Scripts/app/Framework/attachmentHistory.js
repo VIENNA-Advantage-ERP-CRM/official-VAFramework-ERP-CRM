@@ -2260,7 +2260,7 @@
         //below line commented to resolve data hiding issue in history
         function createRightPanelforAppointment(IDS, location, description, label, startDate, endDate, allDay, detail, comment, zoomID, subject, category, contacts, recID, ContactNames) {
             if ($visattachhistoryrightcontentFormail != undefined) {
-                //$visattachhistoryrightcontentFormail.hide();
+                $visattachhistoryrightcontentFormail.hide();
             }
             if ($visattachhistoryrightcontentForCall != undefined) {
                 $visattachhistoryrightcontentForCall.hide();

@@ -27,8 +27,7 @@ using System.Reflection;
 namespace VAdvantage.WF
 {
     public class MWFActivity : X_AD_WF_Activity
-    {
-        Ctx ctx = null;
+    {        
         /**	State Machine				*/
         private StateEngine _state = null;
         /**	Workflow Node				*/
@@ -74,7 +73,7 @@ namespace VAdvantage.WF
                 throw new ArgumentException("Cannot create new WF Activity directly");
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
-            this.ctx = ctx;
+            
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace VAdvantage.WF
         {
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
-            this.ctx = ctx;
+          
         }
 
         /// <summary>
@@ -3293,14 +3292,12 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             //written by sandeep chopra to send attachment details into mailattachment table
             VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
-            string frommailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT requestemail FROM AD_Client WHERE AD_client_ID=" + GetCtx().GetAD_Client_ID()));
+            string frommailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT REQUESTEMAIL FROM AD_Client WHERE AD_CLIENT_ID=" + GetCtx().GetAD_Client_ID()));
             //SELECT* FROM Customers WHERE Country IN(SELECT Country FROM Suppliers);
             //SELECT SalesRep_ID, email, C_Lead_ID FROM c_lead WHERE C_Lead_ID = 1005593
-            string SalesRepId=Util.GetValueOfString(DB.ExecuteScalar("SELECT SalesRep_ID,email,C_Lead_ID FROM c_lead WHERE C_Lead_ID=" + Record_ID));
+            string SalesRepId=Util.GetValueOfString(DB.ExecuteScalar("SELECT SALESREP_ID,EMAIL,C_LEAD_ID FROM C_LEAD WHERE C_Lead_ID=" + Record_ID));
             string ccmailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT Email from AD_user WHERE AD_User_ID=" + SalesRepId));
             //string ccmailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT Email from AD_user WHERE AD_User_ID in(SELECT SalesRep_ID from C_LEAD WHERE C_LEAD_ID = " + Record_ID))));
-
-
 
             _mAttachment.SetIsMailSent(true);
 
@@ -3312,7 +3309,6 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             _mAttachment.IsActive();
             _mAttachment.SetAttachmentType("M");
             _mAttachment.SetRecord_ID(Convert.ToInt32(Record_ID));
-
             _mAttachment.SetTextMsg(message);
             _mAttachment.SetTitle(subject);
 
