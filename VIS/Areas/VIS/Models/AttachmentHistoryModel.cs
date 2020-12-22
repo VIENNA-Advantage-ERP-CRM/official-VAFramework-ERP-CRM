@@ -132,7 +132,7 @@ and record_id = " + _Record_ID;
 
 
 
-            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "VA047_SentMail") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
+            " SELECT ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMailWorkflow") + "' AS TYPE, ai.TITLE AS Subject,au.name  FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby WHERE ai.record_id=" + _Record_ID;
             if (searchText != "undefined" && searchText != null && searchText != "")
             {
                 strApp += " AND ((upper(ai.title)  like upper('%" + searchText + "%')) OR (upper(ai.mailaddressfrom) like upper('%" + searchText + "%')) OR (upper(mailaddress) like upper('%" + searchText + "%')) OR (upper(mailaddressbcc) like upper('%" + searchText + "%')) OR (upper(mailaddresscc) like upper('%" + searchText + "%')))";
