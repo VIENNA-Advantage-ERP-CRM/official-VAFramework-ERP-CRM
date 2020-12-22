@@ -332,11 +332,11 @@ namespace VAdvantage.Process
                     if (pp != null)
                     {
                         message = pp.GetName();
-                    }
-                    //if GetName is Empty then it will check GetValue
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        message = Msg.GetMsg("", pp.GetValue());
+                        //if GetName is Empty then it will check GetValue
+                        if (string.IsNullOrEmpty(message))
+                        {
+                            message = Msg.GetMsg("", pp.GetValue());
+                        }
                     }
                     if (string.IsNullOrEmpty(message))
                     {
@@ -365,11 +365,11 @@ namespace VAdvantage.Process
                     if (pp != null)
                     {
                         message = pp.GetName();
-                    }
-                    //if GetName is Empty then it will check GetValue
-                    if (string.IsNullOrEmpty(message))
-                    {
-                        message = Msg.GetMsg("", pp.GetValue());
+                        //if GetName is Empty then it will check GetValue
+                        if (string.IsNullOrEmpty(message))
+                        {
+                            message = Msg.GetMsg("", pp.GetValue());
+                        }
                     }
                     //it will check message is null or not
                     if (string.IsNullOrEmpty(message))
@@ -437,11 +437,11 @@ namespace VAdvantage.Process
                 if (pp != null)
                 {
                     message = pp.GetName();
-                }
-                //if GetName is Empty then it will check GetValue
-                if (string.IsNullOrEmpty(message))
-                {
-                    message = Msg.GetMsg("", pp.GetValue());
+                    //if GetName is Empty then it will check GetValue
+                    if (string.IsNullOrEmpty(message))
+                    {
+                        message = Msg.GetMsg("", pp.GetValue());
+                    }
                 }
                 //it will check message is null or not
                 if (string.IsNullOrEmpty(message))
