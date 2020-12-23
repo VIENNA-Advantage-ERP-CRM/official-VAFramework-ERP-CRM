@@ -134,6 +134,11 @@ namespace VAdvantage.WF
             }
             //	Responsible
             SetResponsible(process);
+
+            // set zoom window ID if selected on node
+            if (node.GetZoomWindow_ID() > 0)
+                SetAD_Window_ID(node.GetZoomWindow_ID());
+
             Save();
             //
             _audit = new MWFEventAudit(this);
@@ -3290,6 +3295,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     return false;
                 }
             }
+
             //written to send attachment details into mailattachment table
             MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
             _mAttachment.SetIsMailSent(true);
@@ -3303,7 +3309,6 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             _mAttachment.SetTitle(subject);
             _mAttachment.SetMailAddress(toEMail);
             _mAttachment.SetMailAddressFrom(client.GetRequestEMail());
-
             if (_mAttachment.GetEntries().Length > 0)
             {
                 _mAttachment.SetIsAttachment(true);

@@ -1214,9 +1214,12 @@ namespace VIS.Helpers
             outt.RowData = rowData;
             try
             {
-                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF))
+                if (!inn.MaintainVersions)
+                    outt.LatestVersion = true;
+                if (inn.MaintainVersions && (!inn.ImmediateSave || hasDocValWF) && (hasDocValWF || !versionInfo.IsLatestVersion))
                 {
                     outt.RowData = inn.OldRowData;
+                    outt.LatestVersion = versionInfo.IsLatestVersion;
                     // if table has Workflow then return status as has WF (W)
                     if (hasDocValWF)
                         outt.Status = GridTable.SAVE_WFAPPROVAL;
@@ -1293,10 +1296,10 @@ namespace VIS.Helpers
 
         private bool CheckLatestVersion(SaveRecordIn inn)
         {
-            string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause                                
+            string sqlOldVer = @"SELECT COUNT(IsActive) FROM " + inn.TableName + @"_Ver WHERE " + inn.WhereClause
                                 + " AND IsVersionApproved = 'Y' AND "
                                 + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + @" < TRUNC(SysDate)
-                                AND (TRUNC(VersionValidFrom) > "+ GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) + 
+                                AND (TRUNC(VersionValidFrom) > " + GlobalVariable.TO_DATE(inn.ValidFrom.Value, true) +
                                 @" AND TRUNC(VersionValidFrom) <= TRUNC(Sysdate))
                                  ORDER BY VersionValidFrom DESC";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sqlOldVer)) > 0)

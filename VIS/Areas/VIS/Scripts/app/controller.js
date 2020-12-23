@@ -1190,6 +1190,8 @@
                 //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
 
+            this.mDataStatusEvent.AD_Table_ID = this.getAD_Table_ID();
+
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
         }
 
@@ -1209,6 +1211,7 @@
                 this.gridTable.getIsInserting(),		//	changed
                 //Env.getCtx().isAutoCommit(m_vo.WindowNo), m_mTable.isInserting());
                 false, this.gridTable.getIsInserting());
+            this.mDataStatusEvent.AD_Table_ID = this.getAD_Table_ID();
 
             this.mDataStatusEvent.setPageInfo(this.gridTable.currentPage, this.gridTable.rowCount, this.gridTable.pazeSize);
         }
@@ -4336,8 +4339,9 @@
                         VIS.ADialog.info(out.ErrorMsg);
                 }
                 else {
-                    // in case of sucess refresh UI
-                    slf.dataRefreshAll();
+                    // in case of sucess and if not saved for immediate refresh UI
+                    if (!immediate && !out.LatestVersion)
+                        slf.dataRefreshAll();
                     // if sent for WF Approval then display Message
                     if (out.Status == "W")
                         VIS.ADialog.info("SentForApproval");

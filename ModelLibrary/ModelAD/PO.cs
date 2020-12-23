@@ -2255,10 +2255,15 @@ namespace VAdvantage.Model
                 string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                 if (p_info.GetTableName() == "AD_ChangeLog")
                 {
-                    if (adLog.Length <= 0)
+                    if (adLog.Length <= 0 && !DB.IsPostgreSQL())
                         adLog = "BEGIN ";
 
-                    p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
+                    if (DB.IsPostgreSQL())
+                    {
+                        p_ctx.SetContext("AD_ChangeLogBatch", adLog + " SELECT ExecuteImmediate('" + strSqlInsert.Replace("'", "''") + "');");
+                    }
+                    else
+                        p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
                     //no = 1;
                     return true;
                 }
@@ -2266,7 +2271,15 @@ namespace VAdvantage.Model
                 {
                     if (adLog.Length > 6)
                     {
-                        string adLogDB = adLog + " END; ";
+                        string adLogDB = "";
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLogDB = adLog + " END; ";
+                        }
+                        else
+                        {
+                            adLogDB = adLog;
+                        }
                         p_ctx.SetContext("AD_ChangeLogBatch", "");
                         no = DB.ExecuteQuery(adLogDB, null, _trx);
                     }
@@ -2628,7 +2641,15 @@ namespace VAdvantage.Model
                     string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                     if (adLog.Length > 6)
                     {
-                        string adLogDB = adLog + " END; ";
+                        string adLogDB = "";
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLogDB = adLog + " END; ";
+                        }
+                        else
+                        {
+                            adLogDB = adLog;
+                        }
                         p_ctx.SetContext("AD_ChangeLogBatch", "");
                         no = DB.ExecuteQuery(adLogDB, null, _trx);
                     }
@@ -2694,7 +2715,7 @@ namespace VAdvantage.Model
                 // Get Master Data Properties
                 var MasterDetails = GetMasterDetails();
                 // check if Record has any Workflow (Value Type) linked, or Is Immediate save etc
-                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 && 
+                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 &&
                     (MasterDetails.ImmediateSave || MasterDetails.IsLatestVersion) && !MasterDetails.HasDocValWF)
                 {
                     // create object of parent table
@@ -3422,7 +3443,15 @@ namespace VAdvantage.Model
                 string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                 if (adLog.Length > 6)
                 {
-                    string adLogDB = adLog + " END; ";
+                    string adLogDB = "";
+                    if (!DB.IsPostgreSQL())
+                    {
+                        adLogDB = adLog + " END; ";
+                    }
+                    else
+                    {
+                        adLogDB = adLog;
+                    }
                     p_ctx.SetContext("AD_ChangeLogBatch", "");
                     no = DB.ExecuteQuery(adLogDB, null, null);
                 }
@@ -4402,7 +4431,15 @@ namespace VAdvantage.Model
                     string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
                     if (adLog.Length > 6)
                     {
-                        string adLogDB = adLog + " END; ";
+                        string adLogDB = "";
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLogDB = adLog + " END; ";
+                        }
+                        else
+                        {
+                            adLogDB = adLog;
+                        }
                         p_ctx.SetContext("AD_ChangeLogBatch", "");
                         DB.ExecuteQuery(adLogDB, null, null);
                     }

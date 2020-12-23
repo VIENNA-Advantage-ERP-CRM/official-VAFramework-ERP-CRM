@@ -1038,13 +1038,13 @@ namespace VIS.Controllers
                         d = Convert.ToDouble(model[i]["Quantity"]);
                     }
                     Decimal QtyEnt = Convert.ToDecimal(d);
-                    int precsn = 2;
-                    if (M_Product_ID != 0)
-                    {
-                        MProduct product = MProduct.Get(ctx, M_Product_ID);
-                        precsn = product.GetUOMPrecision();
-                    }
-                    QtyEnt = Decimal.Round(QtyEnt, precsn, MidpointRounding.AwayFromZero);
+                    //int precsn = 2;
+                    //if (M_Product_ID != 0)
+                    //{
+                    //    MProduct product = MProduct.Get(ctx, M_Product_ID);
+                    //    precsn = product.GetUOMPrecision();
+                    //}
+                    //QtyEnt = Decimal.Round(QtyEnt, precsn, MidpointRounding.AwayFromZero);
                     // when qty is ZERO -- thn not to update / create (Pallet task list point no : PT-114)
                     if (QtyEnt == 0)
                         continue;
@@ -1191,13 +1191,13 @@ namespace VIS.Controllers
                 }
                 bool isInvoiced = (C_InvoiceLine_ID != 0);
                 //	Precision of Qty UOM
-                int precision = 2;
-                if (M_Product_ID != 0)
-                {
-                    MProduct product = MProduct.Get(ctx, M_Product_ID);
-                    precision = product.GetUOMPrecision();
-                }
-                QtyEntered = Decimal.Round(QtyEntered, precision, MidpointRounding.AwayFromZero);
+                //int precision = 2;
+                //if (M_Product_ID != 0)
+                //{
+                //    MProduct product = MProduct.Get(ctx, M_Product_ID);
+                //    precision = product.GetUOMPrecision();
+                //}
+                //QtyEntered = Decimal.Round(QtyEntered, precision, MidpointRounding.AwayFromZero);
 
                 // when qty is ZERO -- thn not to update / create (Pallet task list point no : PT-114)
                 if (QtyEntered == 0)

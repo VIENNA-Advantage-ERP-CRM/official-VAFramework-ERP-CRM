@@ -3916,8 +3916,20 @@
                 mTab.setValue("M_AttributeSetInstance_ID", Util.getValueOfInt(Orig_InOutLine["M_AttributeSetInstance_ID"]));
                 mTab.setValue("C_UOM_ID", Util.getValueOfInt(Orig_InOutLine["C_UOM_ID"]));
 
-                // JID_1310: On Selection of Shipment line on Customer/Vendor RMA. System should check Total Delivred - Total Return Qty From Sales PO line and Balance  show in qty field
-                mTab.setValue("QtyEntered", Util.getValueOfDecimal(Orig_InOutLine["QtyEntered"]));
+                // Handled UOM conversion in case of Vendor RMA
+                var QtyEntered = Util.getValueOfDecimal(Orig_InOutLine["QtyEntered"]);
+                mTab.setValue("QtyEntered", QtyEntered);
+
+                var paramStr = Orig_InOutLine["M_Product_ID"].toString().concat(",", Orig_InOutLine["C_UOM_ID"].toString(), ",",
+                    QtyEntered.toString()); //3
+                var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+
+                var QtyOrdered = pc;//(Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
+                //C_UOM_To_ID, QtyEntered.Value);
+                if (QtyOrdered == null)
+                    QtyOrdered = QtyEntered;
+                mTab.setValue("QtyOrdered", QtyOrdered);
+
                 if (Util.getValueOfString(Orig_InOutLine["IsDropShip"]) == "Y") {
                     mTab.setValue("IsDropShip", true);
                     ctx.setContext(windowNo, "IsDropShip", Util.getValueOfString(Orig_InOutLine["IsDropShip"]));
@@ -3925,8 +3937,6 @@
                 else {
                     mTab.setValue("IsDropShip", false);
                 }
-
-
             }
         }
         catch (err) {
@@ -12399,6 +12409,12 @@
                 }
             }
 
+            //set C_REVENUERECOGNITION_ID if InvoiceLine Tab Contains REVENUERECOGNITION field
+            if (mTab.findColumn("C_REVENUERECOGNITION_ID") > -1) {
+                var revReg_ID = VIS.dataContext.getJSONRecord("MProduct/GetRevenuRecognition", M_Product_ID);
+                mTab.setValue("C_REVENUERECOGNITION_ID", revReg_ID);
+            }
+
             /*****Amit done *******/
 
             //try
@@ -15733,7 +15749,7 @@
         if (this.isCalloutActive() || value == null || value.toString() == "")
             return "";
         console.log("Before Charge Or Product");
-        if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0) {
+        if (Util.getValueOfInt(mTab.getValue("M_Product_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_Charge_ID")) == 0) {
             return "";
         }
         console.log("After Charge Or Product");
@@ -19133,6 +19149,24 @@
                     (Util.getValueOfInt(mTab.getValue("C_Order_ID")) == 0 && Util.getValueOfInt(mTab.getValue("VA009_OrderPaySchedule_ID")) == 0 &&
                         Util.getValueOfInt(mTab.getValue("C_Invoice_ID")) == 0 && Util.getValueOfInt(mTab.getValue("C_InvoicePaySchedule_ID")) == 0)) {
                     mTab.setValue("PayAmt", Util.getValueOfDecimal(mTab.getValue("PaymentAmount")));
+                }
+                //window --> Payment to set Loan Amount and Interest amount
+                var dataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA026_");
+                if (dataPrefix["VA026_"]) {
+                    if (mField.getColumnName() == "PaymentAmount") {
+                        //to check PaymentType using IsSOTrx
+                        var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", mTab.getValue("C_DocType_ID"));
+                        //for AP Payment
+                        if (!Util.getValueOfBoolean(dt.IsSOTrx)) {
+                            //get precision based on currency_ID
+                            var currency = VIS.dataContext.getJSONRecord("MCurrency/GetCurrency", cur);
+                            var precision = currency["StdPrecision"];
+
+                            var loanAmt = Util.getValueOfDecimal(mTab.getValue("PaymentAmount")) / Util.getValueOfDecimal((mTab.getValue("VA026_Interest") / 100) + 1).toString();
+                            mTab.setValue("VA026_InterestAmt", Util.getValueOfDecimal(loanAmt.toFixed(precision)));
+                            mTab.setValue("VA026_InterestAmount", Util.getValueOfDecimal((mTab.getValue("PaymentAmount") - mTab.getValue("VA026_InterestAmt")).toFixed(precision)));
+                        }
+                    }
                 }
                 this.setCalloutActive(false);
             }
