@@ -531,6 +531,18 @@ public int GetVATAX_TaxType_ID()
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }
-}
+        /**@param VA077_AutoDesAccNo Autodesk Account Number*/
+        public void SetVA077_AutoDesAccNo(String VA077_AutoDesAccNo) { if (VA077_AutoDesAccNo != null && VA077_AutoDesAccNo.Length > 255) { log.Warning("Length > 255 - truncated"); VA077_AutoDesAccNo = VA077_AutoDesAccNo.Substring(0, 255); } Set_Value("VA077_AutoDesAccNo", VA077_AutoDesAccNo); }/** Get Autodesk Account Number.
+@return Autodesk Account Number */
+        public String GetVA077_AutoDesAccNo() { return (String)Get_Value("VA077_AutoDesAccNo"); }/** Set Mailing Address.
+@param VA077_IsMailAdd Mailing Address */
+        public void SetVA077_IsMailAdd(Boolean VA077_IsMailAdd) { Set_Value("VA077_IsMailAdd", VA077_IsMailAdd); }/** Get Mailing Address.
+@return Mailing Address */
+        public Boolean IsVA077_IsMailAdd() { Object oo = Get_Value("VA077_IsMailAdd"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Customer Location Number.
+@param VA077_LocNo Identifies the Location Number for the customer address */
+        public void SetVA077_LocNo(String VA077_LocNo) { if (VA077_LocNo != null && VA077_LocNo.Length > 60) { log.Warning("Length > 60 - truncated"); VA077_LocNo = VA077_LocNo.Substring(0, 60); } Set_Value("VA077_LocNo", VA077_LocNo); }/** Get Customer Location Number.
+@return Identifies the Location Number for the customer address */
+        public String GetVA077_LocNo() { return (String)Get_Value("VA077_LocNo"); }
+    }
 
 }

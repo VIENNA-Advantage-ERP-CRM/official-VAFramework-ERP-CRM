@@ -472,6 +472,22 @@ namespace VAdvantage.Model
                 decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + projID));
                 prj.SetPlannedAmt(plnAmt);
                 prj.Save();
+
+                if (Env.IsModuleInstalled("VA077_"))
+                {
+                    sql = @"UPDATE C_Project SET VA077_TotalMarginAmt=(SELECT ROUND(Sum(VA077_MarginAmt),2) FROM C_ProjectLine 
+                            WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(Sum(VA077_PurchaseAmt),2) FROM C_ProjectLine 
+                            WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
+                            VA077_MarginPercent=(SELECT ROUND(Sum(VA077_MarginPercent),2) FROM C_ProjectLine 
+                            WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y') WHERE C_Project_ID=" + projID;
+
+                    int no = DB.ExecuteQuery(sql, null, Get_TrxName());
+                    if (no != 1)
+                    {
+                        log.Log(Level.SEVERE, "updateHeader - #" + no);
+                    }
+                }
             }
             else if (id != 0)
             {
