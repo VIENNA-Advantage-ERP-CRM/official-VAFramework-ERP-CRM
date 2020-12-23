@@ -105,13 +105,12 @@ namespace VAdvantage.Process
                             //get Sum of Amount Whose journal is not yet created 
                             sql = "SELECT SUM(run.Recognizedamt) AS TotalRecognizedAmt FROM C_RevenueRecognition_Run run WHERE " +
                                 "C_RevenueRecognition_Plan_ID = " + revenueRecognitionPlan.GetC_RevenueRecognition_Plan_ID() + " AND NVL(GL_Journal_ID,0) <= 0";
-                          
-                            DataSet ds = new DataSet();
-                            ds = DB.ExecuteDataset(sql);
-                            if (ds != null && ds.Tables[0].Rows.Count > 0 && Util.GetValueOfInt(ds.Tables[0].Rows[0]["TotalRecognizedAmt"]) != 0)
+                            
+                            totalAmt = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                            if (totalAmt != 0)
                             {
                                 //if totalAmount is not 0 then only create Journal 
-                                totalAmt = Util.GetValueOfInt(ds.Tables[0].Rows[0]["TotalRecognizedAmt"]);
+                                
                                 if (revenueRecognitionPlan.GetC_AcctSchema_ID() != _AcctSchema_ID || revenueRecognitionPlan.GetC_Currency_ID() != _Currency_ID)
                                 {
                                     if (journal != null)
@@ -321,6 +320,11 @@ namespace VAdvantage.Process
                             }
                         }
                     }
+
+                    if (DocNo == null)
+                    {
+                        return Msg.GetMsg(GetCtx(), "FoundNoRevenueRecognitionPlan");
+                    }
                 }
                 else
                 {
@@ -337,7 +341,7 @@ namespace VAdvantage.Process
             if (!String.IsNullOrEmpty(journalIDS))
             {
                 return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo + ", " + Msg.GetMsg(GetCtx(), "GLJournalNotCompleted") + journalIDS;
-            }
+            }         
             else
             {
                 return Msg.GetMsg(GetCtx(), "GLJournalCreated") + DocNo;
@@ -357,7 +361,7 @@ namespace VAdvantage.Process
             journal.SetPostingType(MJournal.POSTINGTYPE_Actual);
 
             int GL_Category_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT GL_Category_ID From GL_Category Where CategoryType='M' 
-            AND  AD_Client_ID= " + revenueRecognitionPlan.GetAD_Client_ID() + " Order by GL_Category_ID desc"));
+            AND  AD_Client_ID= " + revenueRecognitionPlan.GetAD_Client_ID() + " AND IsActive='Y' ORDER BY GL_Category_ID desc"));
             journal.SetGL_Category_ID(GL_Category_ID);
             journal.SetDateDoc(DateTime.Now);
             journal.SetDateAcct(DateTime.Now);
