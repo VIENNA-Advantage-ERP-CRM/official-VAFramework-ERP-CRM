@@ -3295,37 +3295,20 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     return false;
                 }
             }
-            //written by sandeep chopra to send attachment details into mailattachment table
-            VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
-            string frommailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT REQUESTEMAIL FROM AD_Client WHERE AD_CLIENT_ID=" + GetCtx().GetAD_Client_ID()));
-            //SELECT* FROM Customers WHERE Country IN(SELECT Country FROM Suppliers);
-            //SELECT SalesRep_ID, email, C_Lead_ID FROM c_lead WHERE C_Lead_ID = 1005593
-            string SalesRepId=Util.GetValueOfString(DB.ExecuteScalar("SELECT SALESREP_ID,EMAIL,C_LEAD_ID FROM C_LEAD WHERE C_Lead_ID=" + Record_ID));
-            string ccmailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT Email from AD_user WHERE AD_User_ID=" + SalesRepId));
-            //string ccmailid = Util.GetValueOfString(DB.ExecuteScalar("SELECT Email from AD_user WHERE AD_User_ID in(SELECT SalesRep_ID from C_LEAD WHERE C_LEAD_ID = " + Record_ID))));
 
+            //written to send attachment details into mailattachment table
+            MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
             _mAttachment.SetIsMailSent(true);
-
-            int AD_Client_Id = GetCtx().GetAD_Client_ID();
-            int iOrgid = GetCtx().GetAD_Org_ID();
-            _mAttachment.SetAD_Client_ID(AD_Client_Id);
-            _mAttachment.SetAD_Org_ID(iOrgid);
+            _mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+            _mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
             _mAttachment.SetAD_Table_ID(AD_Table_ID);
             _mAttachment.IsActive();
             _mAttachment.SetAttachmentType("M");
-            _mAttachment.SetRecord_ID(Convert.ToInt32(Record_ID));
+            _mAttachment.SetRecord_ID(Util.GetValueOfInt(Record_ID));
             _mAttachment.SetTextMsg(message);
             _mAttachment.SetTitle(subject);
-
-            //_mAttachment.SetMailAddressBcc(bcctext.ToString());
             _mAttachment.SetMailAddress(toEMail);
-
-            ////for now it is not required
-            //_mAttachment.SetMailAddressCc(ccmailid);
-            //_mAttachment.SetMailAddressFrom(userinfo.Email);
-
-            _mAttachment.SetMailAddressFrom(frommailid);
-
+            _mAttachment.SetMailAddressFrom(client.GetRequestEMail());
             if (_mAttachment.GetEntries().Length > 0)
             {
                 _mAttachment.SetIsAttachment(true);
@@ -3334,7 +3317,6 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 _mAttachment.SetIsAttachment(false);
             }
-            //_mAttachment.NewRecord();
             if (_mAttachment.Save())
             {
 
