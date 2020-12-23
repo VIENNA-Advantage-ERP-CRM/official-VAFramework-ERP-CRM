@@ -116,7 +116,7 @@ namespace VAdvantage.Model
                 + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
                 + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM C_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
                 + GetM_AttributeSetInstance_ID() + " UNION  SELECT COUNT(*) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + ")";
+                + GetM_AttributeSetInstance_ID() + ") t";
             int no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
             if (no > 0)
             {
