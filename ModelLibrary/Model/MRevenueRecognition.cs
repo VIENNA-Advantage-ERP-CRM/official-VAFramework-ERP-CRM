@@ -200,8 +200,15 @@ namespace VAdvantage.Model
                 int ToCurrency = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID=" + defaultAccSchemaOrg_ID));
 
                 MInvoiceLine invoiceLine = new MInvoiceLine(Invoice.GetCtx(), C_InvoiceLine_ID, Invoice.Get_Trx());
-                RecognizationDate = Util.GetValueOfDateTime(invoiceLine.Get_Value("RevenueStartDate"));
 
+                //if recoganization date is null recognition plan and run cant be generated
+                if (invoiceLine.Get_Value("RevenueStartDate") == null)
+                {
+                    _log.Log(Level.SEVERE, "DateIsInvlidOrNull");
+                    return false;
+                }
+                RecognizationDate = Util.GetValueOfDateTime(invoiceLine.Get_Value("RevenueStartDate"));
+              
                 // precision to be handle based on std precision defined on acct schema
                string sql = "SELECT C.StdPrecision FROM C_AcctSchema a INNER JOIN C_Currency c ON c.C_Currency_ID= a.C_Currency_ID WHERE a.C_AcctSchema_ID=" + defaultAccSchemaOrg_ID;
                 int stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
