@@ -11971,6 +11971,12 @@
                     mTab.setValue("TreatAsDiscount", false);
                 }
             }
+
+            //set isreturntrx
+            if (mTab.getField("IsReturnTrx") != null)
+            {              
+                mTab.setValue("IsReturnTrx", Util.getValueOfBoolean(dr["IsReturnTrx"]));               
+            }
         }
         catch (err) {
             this.setCalloutActive(false);
