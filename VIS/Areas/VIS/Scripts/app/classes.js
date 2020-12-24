@@ -948,7 +948,7 @@
 
         // opening parenthesis for case insensitive search
         //if (Code instanceof String)
-        if (typeof this.code == "string") {
+        if (typeof this.code == "string" && isNaN(this.code)) {
             sb += " UPPER( ";
         }
         if (tableName != null && tableName.length > 0) {
@@ -968,7 +968,7 @@
         }
 
         // closing parenthesis for case insensitive search
-        if (typeof this.code == "string") {
+        if (typeof this.code == "string" && isNaN(this.code)) {
             sb += " ) ";
         }
 
@@ -990,7 +990,7 @@
                 sb += VIS.DB.to_date(this.code, false);
             }
 
-            else if ("string" == typeof this.code) {
+            else if ("string" == typeof this.code && isNaN(this.code)) {
                 sb += " UPPER( ";
                 sb += VIS.DB.to_string(this.code.toString());
                 sb += " ) ";
@@ -1008,7 +1008,7 @@
                     sb += VIS.DB.to_date(this.code_to, false);
                 }
 
-                else if (typeof (this.code_to) == "string") {
+                else if (typeof (this.code_to) == "string" && isNaN(this.code)) {
                     sb += VIS.DB.to_string(this.code_to.toString());
                     //sb.Append("'" + Code_to.ToString() + "'");
                 }

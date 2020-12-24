@@ -185,8 +185,8 @@ namespace VAdvantage.SqlExec.PostgreSql
 
             PrepareCommand(cmd, connection, trx, commandType, commandText, commandParameters);
 
-            if (trx != null) // Save temporary Safe point 
-                trx.Save("tmpSavePoint"); // postgres abort all pending commands if excecption occured in this command
+            //if (trx != null) // Save temporary Safe point 
+            //    trx.Save("tmpSavePoint"); // postgres abort all pending commands if excecption occured in this command
 
             int retval = 0;
             try
@@ -200,8 +200,8 @@ namespace VAdvantage.SqlExec.PostgreSql
             {
                 log.SaveError("DBExecuteError", ex);
                 retval =  - 1;
-                if (trx != null)
-                    trx.Rollback("tmpSavePoint");
+                //if (trx != null)
+                //    trx.Rollback("tmpSavePoint");
             }
 
             // detach the NpgsqlParameters from the command object, so they can be used again.
