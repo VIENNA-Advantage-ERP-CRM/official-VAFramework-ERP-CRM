@@ -3921,6 +3921,46 @@ namespace VAdvantage.Model
             {
                 // MessageBox.Show("MInvoiceLine--AfterSave");
             }
+            //Develop by Deekshant For VA077 Module sales,purchase,margin
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                decimal totalsales = 0;
+                decimal totalpurchase = 0;
+                decimal totalmargin = 0;
+                decimal marginper = 0;
+                decimal marginpercent = 0;
+                decimal margin = GetPriceEntered() - Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"));
+                marginper = (margin / GetPriceEntered()) * 100;
+                string query = "Update C_InvoiceLine SET VA077_MarginAmt=" + margin + " , VA077_MarginPercent=" + marginper + "WHERE C_InvoiceLine_ID=" + GetC_InvoiceLine_ID();
+                int query1 = DB.ExecuteQuery(query, null, Get_Trx());
+
+                if (GetC_Invoice_ID() > 0)
+                {
+                    string str = "SELECT PriceEntered,VA077_PurchasePrice,VA077_MarginAmt,VA077_MarginPercent FROM C_InvoiceLine WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                    DataSet dt = DB.ExecuteDataset(str, null, Get_Trx());
+                    if (dt != null && dt.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt.Tables[0].Rows.Count; i++)
+                        {
+                            totalsales = totalsales + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["PriceEntered"]);
+                            totalpurchase = totalpurchase + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["VA077_PurchasePrice"]);
+                            totalmargin = totalmargin + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["VA077_MarginAmt"]);
+                            marginpercent = marginpercent + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["VA077_MarginPercent"]);
+                        }
+                    }
+                    MInvoice mInvoiceLine = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
+                    mInvoiceLine.Set_Value("VA077_TotalMarginAmt", totalmargin);
+                    mInvoiceLine.Set_Value("VA077_TotalPurchaseAmt", totalpurchase);
+                    mInvoiceLine.Set_Value("VA077_TotalSalesAmt", totalsales);
+                    mInvoiceLine.Set_Value("VA077_MarginPercent", marginpercent);
+                    if (!mInvoiceLine.Save())
+                    {
+                        Msg.GetMsg(GetCtx(), "InvoiceNotUpdated");
+                        Get_Trx().Rollback();
+                        return false;
+                    }
+                }
+            }
             return UpdateHeaderTax();
         }
 
@@ -4056,7 +4096,7 @@ namespace VAdvantage.Model
                 {
                     if (!invoice.SetWithholdingAmount(invoice))
                     {
-                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx() , "WrongBackupWithholding"));
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
                     }
                     else
                     {

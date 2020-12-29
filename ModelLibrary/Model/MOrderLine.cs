@@ -4587,7 +4587,49 @@ namespace VAdvantage.Model
                 if (!order.Save())
                     return false;
             }
+            //Develop by Deekshant For VA077 Module for calculating purchase,sales,margin
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                decimal totalsales = 0;
+                decimal totalpurchase = 0;
+                decimal totalmargin = 0;
+                decimal marginper = 0;
+                decimal marginpercen = 0;
+                decimal margin = GetPriceEntered() - Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"));
+                if(GetPriceEntered()!= 0)
+                {
+                    marginper = (margin / GetPriceEntered()) * 100;
+                }
+                string query = "Update C_OrderLine SET VA077_MarginAmt=" + margin + " , VA077_MarginPercent=" + marginper + "WHERE C_OrderLine_ID=" + GetC_OrderLine_ID();
+                int query1 = DB.ExecuteQuery(query, null, Get_Trx());
 
+                if (GetC_Order_ID() > 0)
+                {
+                    string str = "SELECT PriceEntered,VA077_PurchasePrice,VA077_MarginAmt,VA077_MarginPercent FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID();
+                    DataSet dt = DB.ExecuteDataset(str, null, Get_Trx());
+                    if (dt != null && dt.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt.Tables[0].Rows.Count; i++)
+                        {
+                            totalsales = totalsales + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["PriceEntered"]);
+                            totalpurchase = totalpurchase + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["VA077_PurchasePrice"]);
+                            totalmargin = totalmargin + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["VA077_MarginAmt"]);
+                            marginpercen = marginpercen + Util.GetValueOfDecimal(dt.Tables[0].Rows[i]["VA077_MarginPercent"]);
+                        }
+                    }
+                    MOrder mOrder = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                    mOrder.Set_Value("VA077_TotalMarginAmt", totalmargin);
+                    mOrder.Set_Value("VA077_TotalPurchaseAmt", totalpurchase);
+                    mOrder.Set_Value("VA077_TotalSalesAmt", totalsales);
+                    mOrder.Set_Value("VA077_MarginPercent", marginpercen);
+                    if (!mOrder.Save())
+                    {
+                        Msg.GetMsg(GetCtx(), "C_OrderNotUpdated");
+                        Get_Trx().Rollback();
+                        return false;
+                    }
+                }
+            }
             return true;
         }
 
