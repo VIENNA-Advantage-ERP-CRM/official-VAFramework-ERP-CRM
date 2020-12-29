@@ -11971,6 +11971,12 @@
                     mTab.setValue("TreatAsDiscount", false);
                 }
             }
+
+            //set isreturntrx
+            if (mTab.getField("IsReturnTrx") != null)
+            {              
+                mTab.setValue("IsReturnTrx", Util.getValueOfBoolean(dr["IsReturnTrx"]));               
+            }
         }
         catch (err) {
             this.setCalloutActive(false);
@@ -16567,6 +16573,9 @@
                 }
                 idr.close();
             }
+            //JID_1784_1 set UOM of the selected product
+            var UOM = VIS.dataContext.getJSONRecord("MProduct/GetProduct", M_Product_ID.toString());
+            mTab.setValue("C_UOM_ID", Util.getValueOfInt(UOM.C_UOM_ID));
         }
         catch (err) {
             if (idr != null) {
