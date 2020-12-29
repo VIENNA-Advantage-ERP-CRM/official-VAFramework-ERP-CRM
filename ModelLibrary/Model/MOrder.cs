@@ -1703,8 +1703,8 @@ namespace VAdvantage.Model
                         MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
                         ol.SetHeaderInfo(this);
                         //JID_1673 Quantity entered should not be zero
-                        if((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
-                             list.Add(ol);
+                        if ((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
+                            list.Add(ol);
                     }
                 }
             }
@@ -2203,6 +2203,24 @@ namespace VAdvantage.Model
                 //	New Record Doc Type - make sure DocType set to 0
                 if (newRecord && GetC_DocType_ID() == 0)
                     SetC_DocType_ID(0);
+
+                //in case of payment method is letter of credit and Check In POS Order Show message to change Payment Method
+                if (GetC_DocTypeTarget_ID() > 0)
+                {
+                    DataSet docDS = DB.ExecuteDataset(@"SELECT DocBaseType, DocSubTypeSO FROM C_DocType WHERE C_DocType_ID =" + GetC_DocTypeTarget_ID());
+                    if (docDS != null && docDS.Tables[0].Rows.Count > 0)
+                    {
+                        if ((docDS.Tables[0].Rows[0]["DocBaseType"].Equals("SOO")) && (docDS.Tables[0].Rows[0]["DocSubTypeSO"].Equals(DocSubTypeSO_POS)))
+                        {
+                            string paymentbaseType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID =" + GetVA009_PaymentMethod_ID()));
+                            if (paymentbaseType.Equals("L") || paymentbaseType.Equals("S"))
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod");
+                                return false;
+                            }
+                        }
+                    }
+                }
 
                 //	Default Warehouse
                 if (GetM_Warehouse_ID() == 0)
@@ -3093,7 +3111,7 @@ namespace VAdvantage.Model
                         }
 
                         //JID_1686,JID_1687 only Items are updated in storage tab
-                        if(product.IsStocked())
+                        if (product.IsStocked())
                         {
                             // Work done by Vivek on 13/11/2017 assigned by Mukesh sir
                             // Work done to update qtyordered at storage and qtyreserved at order line
@@ -3112,7 +3130,7 @@ namespace VAdvantage.Model
                                 if (!line.Save(Get_TrxName()))
                                     return false;
                             }
-                        }                        
+                        }
                         continue;
                     }
 
@@ -3567,7 +3585,7 @@ namespace VAdvantage.Model
                         #endregion
 
                     }
-                    
+
                     // Enabled Order History Tab
                     //if (dt.GetDocBaseType() == "BOO") ///dt.GetValue() == "BSO" || dt.GetValue() == "BPO")
                     //{
@@ -3750,6 +3768,7 @@ namespace VAdvantage.Model
                             Get_Trx().Rollback();
                             return DocActionVariables.STATUS_INVALID;
                         }
+                                                    
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
@@ -3758,6 +3777,23 @@ namespace VAdvantage.Model
                         String msg = invoice.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
                             Info.Append(" (").Append(msg).Append(")");
+
+                        // for POS Doctype we need to create payment with invoice
+                        if (invoice != null)
+                        {
+                            if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
+                            {
+                                int posDocType = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT c_doctype_id FROM c_doctype WHERE docbasetype = 'SOO' AND docsubtypeso  = 'WR' 
+                                      AND c_doctype_id=" + GetC_DocTypeTarget_ID(), null, Get_Trx()));
+                                if (posDocType > 0)
+                                {
+                                    if (!X_C_Invoice.PAYMENTRULE_Cash.Equals(invoice.GetPaymentRule()) && !X_C_Invoice.PAYMENTRULE_CashAndCredit.Equals(invoice.GetPaymentRule()))
+                                    {
+                                        CreatePaymentAgainstPOSDocType(Info, invoice);
+                                    }
+                                }
+                            }
+                        }
                     }
                     catch (NullReferenceException ex)
                     {
@@ -6056,6 +6092,63 @@ namespace VAdvantage.Model
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// To create payments when POS doc type 
+        /// </summary>
+        /// <param name="info">to save log or append msg</param>
+        /// <returns>msg</returns>
+        public string CreatePaymentAgainstPOSDocType(StringBuilder info, MInvoice inv)
+        {
+            DataSet invSch = DB.ExecuteDataset(@"SELECT ci.C_InvoicePaySchedule_ID, ci.VA009_OpnAmntInvce, d.C_BankAccount_ID,
+                                d.C_DocTypePayment_ID FROM c_invoicepayschedule ci 
+                                INNER JOIN c_invoice  i ON i.c_invoice_id = ci.c_invoice_id
+                                INNER JOIN C_order ord ON ord.C_Order_ID=i.c_order_id
+                                INNER JOIN c_doctype  d ON d.c_doctype_id = ord.c_doctype_id 
+                                WHERE i.C_Invoice_ID= " + GetC_Invoice_ID(), null, Get_Trx());
+            MPayment _payment = new MPayment(GetCtx(), 0, Get_Trx());
+            _payment.SetAD_Org_ID(inv.GetAD_Org_ID());
+            _payment.SetAD_Client_ID(inv.GetAD_Client_ID());
+            _payment.SetDateTrx(inv.GetDateAcct());
+            _payment.SetDateAcct(inv.GetDateAcct());
+            _payment.SetC_BPartner_ID(inv.GetC_BPartner_ID());
+            _payment.SetC_BPartner_Location_ID(inv.GetC_BPartner_Location_ID());
+            _payment.SetC_Invoice_ID(inv.GetC_Invoice_ID());
+            _payment.SetC_Currency_ID(inv.GetC_Currency_ID());
+            _payment.SetC_ConversionType_ID(inv.GetC_ConversionType_ID());
+            _payment.SetVA009_PaymentMethod_ID(inv.GetVA009_PaymentMethod_ID());
+            _payment.SetAD_OrgTrx_ID(inv.GetAD_OrgTrx_ID());
+            _payment.SetDocStatus(DOCSTATUS_Drafted);
+            if (invSch != null && invSch.Tables[0].Rows.Count > 0)
+            {
+                _payment.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(invSch.Tables[0].Rows[0]["C_InvoicePaySchedule_ID"]));
+                _payment.SetPayAmt(Util.GetValueOfDecimal(invSch.Tables[0].Rows[0]["VA009_OpnAmntInvce"]));
+                _payment.SetC_BankAccount_ID(Util.GetValueOfInt(invSch.Tables[0].Rows[0]["C_BankAccount_ID"]));
+                _payment.SetC_DocType_ID(Util.GetValueOfInt(invSch.Tables[0].Rows[0]["C_DocTypePayment_ID"]));
+            }
+            if (!_payment.Save())
+            {
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                {
+                    _processMsg = pp.GetName();
+                }
+                log.SaveError(_processMsg + " , " + "VIS_PaymentnotSaved", "");
+            }
+            else
+            {
+                if (_payment.CompleteIt() == "CO")
+                {
+                    _payment.SetProcessed(true);
+                    _payment.SetDocAction("CL");
+                    _payment.SetDocStatus("CO");
+                    _payment.Save();
+                }
+                _processMsg = "";
+            }
+            info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo());
+            return _processMsg;
         }
 
         #region DocAction Members
