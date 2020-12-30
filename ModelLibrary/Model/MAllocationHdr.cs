@@ -464,7 +464,7 @@ namespace VAdvantage.Model
                         //not getting DocType while creating payment from POS Order Tyepe because in get method transaction is not passed in parameter
                         if (doctype.GetC_DocType_ID() == 0)
                         {
-                            doctype = new MDocType(GetCtx(), invoice.GetC_DocTypeTarget_ID(), Get_Trx());
+                            doctype = MDocType.Get(GetCtx(), invoice.GetC_DocTypeTarget_ID());
                         }
                         StringBuilder _sql = new StringBuilder();
                         varianceAmount = 0;

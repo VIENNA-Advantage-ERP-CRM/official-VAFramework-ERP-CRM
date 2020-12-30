@@ -27,6 +27,7 @@ using VAdvantage.Logging;
 using VAdvantage.Print;
 using System.Reflection;
 using ModelLibrary.Classes;
+using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.Model
 {
@@ -2216,6 +2217,7 @@ namespace VAdvantage.Model
                             if (paymentbaseType.Equals("L") || paymentbaseType.Equals("S"))
                             {
                                 _processMsg = Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod");
+                                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod"));
                                 return false;
                             }
                         }
@@ -3768,7 +3770,7 @@ namespace VAdvantage.Model
                             Get_Trx().Rollback();
                             return DocActionVariables.STATUS_INVALID;
                         }
-                                                    
+
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
@@ -3783,14 +3785,9 @@ namespace VAdvantage.Model
                         {
                             if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                             {
-                                int posDocType = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT c_doctype_id FROM c_doctype WHERE docbasetype = 'SOO' AND docsubtypeso  = 'WR' 
-                                      AND c_doctype_id=" + GetC_DocTypeTarget_ID(), null, Get_Trx()));
-                                if (posDocType > 0)
+                                if (!X_C_Invoice.PAYMENTRULE_Cash.Equals(invoice.GetPaymentRule()) && !X_C_Invoice.PAYMENTRULE_CashAndCredit.Equals(invoice.GetPaymentRule()))
                                 {
-                                    if (!X_C_Invoice.PAYMENTRULE_Cash.Equals(invoice.GetPaymentRule()) && !X_C_Invoice.PAYMENTRULE_CashAndCredit.Equals(invoice.GetPaymentRule()))
-                                    {
-                                        CreatePaymentAgainstPOSDocType(Info, invoice);
-                                    }
+                                    CreatePaymentAgainstPOSDocType(Info, invoice);
                                 }
                             }
                         }
@@ -6130,25 +6127,128 @@ namespace VAdvantage.Model
             if (!_payment.Save())
             {
                 ValueNamePair pp = VLogger.RetrieveError();
-                if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
+                if (pp != null)
                 {
-                    _processMsg = pp.GetName();
+                    _processMsg = "Error occured while saving payment. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName(); ;
+                    log.Info(_processMsg);
                 }
                 log.SaveError(_processMsg + " , " + "VIS_PaymentnotSaved", "");
             }
             else
             {
-                if (_payment.CompleteIt() == "CO")
+                CompleteOrReverseWithWorkflow(GetCtx(), _payment.GetC_Payment_ID(), _payment.Get_Table_ID(), _payment.Get_TableName().ToLower(), DocActionVariables.ACTION_COMPLETE, Get_Trx());
+                if (_payment.Save())
                 {
-                    _payment.SetProcessed(true);
-                    _payment.SetDocAction("CL");
-                    _payment.SetDocStatus("CO");
-                    _payment.Save();
+                    info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo());
                 }
                 _processMsg = "";
             }
-            info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo());
             return _processMsg;
+        }
+
+        /// <summary>
+        /// To complete payment with workflow noddes have to fire
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="Record_ID">Recored ID</param>
+        /// <param name="Table_ID">Table ID</param>
+        /// <param name="TableName">Name of Table</param>
+        /// <param name="DocAction">Document Action</param>
+        /// <param name="trx">Trx</param>
+        /// <returns></returns>
+        private string[] CompleteOrReverseWithWorkflow(Ctx ctx, int Record_ID, int Table_ID, string TableName, string DocAction, Trx trx)
+        {
+            int AD_Process_ID = 0;
+            AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar("select ad_process_ID from ad_column where ad_table_id = " + Table_ID + " and lower(columnname)= 'docaction'", null, null));
+            string[] result = new string[2];
+            MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
+            if (Util.GetValueOfBool(role.GetProcessAccess(AD_Process_ID)))
+            {
+                string Sql = "";
+                if (TableName == "c_payment")
+                { //Payment
+                    Sql = "UPDATE C_Payment SET DocAction = '" + DocAction + "' WHERE C_Payment_ID = " + Record_ID;
+                }
+
+                if (DB.ExecuteQuery(Sql, null, trx) < 0)
+                {
+                    ValueNamePair vnp = VLogger.RetrieveError();
+                    string errorMsg = "";
+                    if (vnp != null)
+                    {
+                        errorMsg = vnp.GetName();
+                        if (errorMsg == "")
+                            errorMsg = vnp.GetValue();
+                    }
+                    if (errorMsg == "")
+                        errorMsg = Msg.GetMsg(ctx, "PaymentNotCompleted");
+                    result[0] = errorMsg;
+                    result[1] = "N";
+                    trx.Rollback();
+                    return result;
+                }
+
+                trx.Commit();
+                MProcess proc = new MProcess(ctx, AD_Process_ID, null);
+                MPInstance pin = new MPInstance(proc, Record_ID);
+                if (!pin.Save())
+                {
+                    ValueNamePair vnp = VLogger.RetrieveError();
+                    string errorMsg = "";
+                    if (vnp != null)
+                    {
+                        errorMsg = vnp.GetName();
+                        if (errorMsg == "")
+                            errorMsg = vnp.GetValue();
+                    }
+                    if (errorMsg == "")
+                        errorMsg = Msg.GetMsg(ctx, "PaymentNotCompleted");
+                    result[0] = errorMsg;
+                    result[1] = "N";
+                    return result;
+                }
+
+                VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo("WF", AD_Process_ID);
+                pi.SetAD_User_ID(ctx.GetAD_User_ID());
+                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                pi.SetAD_PInstance_ID(pin.GetAD_PInstance_ID());
+                pi.SetRecord_ID(Record_ID);
+                pi.SetTable_ID(Table_ID);
+                ProcessCtl worker = new ProcessCtl(ctx, null, pi, null);
+                worker.Run();
+
+                if (pi.IsError())
+                {
+                    ValueNamePair vnp = VLogger.RetrieveError();
+                    string errorMsg = "";
+                    if (vnp != null)
+                    {
+                        errorMsg = vnp.GetName();
+                        if (errorMsg == "")
+                            errorMsg = vnp.GetValue();
+                    }
+
+                    if (errorMsg == "")
+                        errorMsg = pi.GetSummary();
+
+                    if (errorMsg == "")
+                        errorMsg = Msg.GetMsg(ctx, "PaymentNotCompleted");
+                    result[0] = errorMsg;
+                    result[1] = "N";
+                    return result;
+                }
+                else
+                    Msg.GetMsg(ctx, "RecSaved");
+
+                result[0] = "";
+                result[1] = "Y";
+            }
+            else
+            {
+                result[0] = Msg.GetMsg(ctx, "ViewAccess");
+                return result;
+            }
+            return result;
         }
 
         #region DocAction Members
