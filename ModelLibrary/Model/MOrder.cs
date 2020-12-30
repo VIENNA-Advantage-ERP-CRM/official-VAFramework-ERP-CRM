@@ -3779,7 +3779,13 @@ namespace VAdvantage.Model
                             {
                                 if (!X_C_Invoice.PAYMENTRULE_Cash.Equals(invoice.GetPaymentRule()) && !X_C_Invoice.PAYMENTRULE_CashAndCredit.Equals(invoice.GetPaymentRule()))
                                 {
-                                    CreatePaymentAgainstPOSDocType(Info, invoice);
+                                    MPayment _pay = null;
+                                    _pay = CreatePaymentAgainstPOSDocType(Info, invoice);
+                                    if (_pay == null)
+                                    {
+                                        Get_Trx().Rollback();
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
                                 }
                             }
                         }
@@ -6087,8 +6093,8 @@ namespace VAdvantage.Model
         /// To create payments when POS doc type 
         /// </summary>
         /// <param name="info">to save log or append msg</param>
-        /// <returns>msg</returns>
-        public string CreatePaymentAgainstPOSDocType(StringBuilder info, MInvoice inv)
+        /// <returns>payment object or null</returns>
+        public MPayment CreatePaymentAgainstPOSDocType(StringBuilder info, MInvoice inv)
         {
             DataSet invSch = DB.ExecuteDataset(@"SELECT ci.C_InvoicePaySchedule_ID, ci.VA009_OpnAmntInvce, d.C_BankAccount_ID,
                                 d.C_DocTypePayment_ID FROM c_invoicepayschedule ci 
@@ -6124,6 +6130,7 @@ namespace VAdvantage.Model
                     log.Info("Error occured while saving payment. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
                 }
                 _processMsg = Msg.GetMsg(GetCtx(), "VIS_PaymentnotSaved");
+                return null;
             }
             else
             {
@@ -6139,7 +6146,7 @@ namespace VAdvantage.Model
                 }
                 _processMsg = "";
             }
-            return _processMsg;
+            return _payment;
         }
        
         #region DocAction Members
