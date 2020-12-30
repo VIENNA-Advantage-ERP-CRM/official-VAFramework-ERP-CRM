@@ -6124,12 +6124,22 @@ namespace VAdvantage.Model
             }
             if (!_payment.Save())
             {
+                string msg = string.Empty;
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (pp != null)
                 {
-                    log.Info("Error occured while saving payment. Error Value :  " + pp.GetValue() + " AND Error Name : " + pp.GetName());
+                    msg = pp.GetName();
+                    //if GetName is Empty then it will check GetValue
+                    if (string.IsNullOrEmpty(msg))
+                        msg = Msg.GetMsg("", pp.GetValue());
                 }
-                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PaymentnotSaved");
+                if (string.IsNullOrEmpty(msg))
+                    msg = Msg.GetMsg(GetCtx(), "VIS_PaymentnotSaved");
+                else
+                    msg = Msg.GetMsg(GetCtx(), "VIS_PaymentnotSaved") + "," + msg;
+
+                log.Info("Error occured while saving payment." + msg);
+                _processMsg = msg;
                 return null;
             }
             else
@@ -6148,7 +6158,7 @@ namespace VAdvantage.Model
             }
             return _payment;
         }
-       
+
         #region DocAction Members
 
 
