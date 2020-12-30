@@ -536,7 +536,8 @@ namespace VAdvantage.Model
                 {
                     if (GetC_Invoice_ID() > 0)
                     {
-                        invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), null);
+                        //in case of POS DocType the invoices which was created by prcess was not coming because of TRX not used
+                        invoice = new MInvoice(GetCtx(), GetC_Invoice_ID(), Get_Trx());
                         if (invoice.IsSOTrx() != dt1.IsSOTrx())
                         {
                             return false;
@@ -568,7 +569,8 @@ namespace VAdvantage.Model
                     }
                     else if (GetC_Order_ID() > 0)
                     {
-                        order = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                        //in case of POS DocType the order which was created by prcess was not coming because of TRX not used
+                        order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
                         if (order.IsSOTrx() != dt1.IsSOTrx())
                         {
                             return false;
