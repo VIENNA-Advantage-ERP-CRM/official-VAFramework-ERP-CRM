@@ -3018,12 +3018,18 @@ namespace VAdvantage.Model
                 // JID_0556 :: // Change by Lokesh Chauhan to validate watch % from BP Group, 
                 // if it is 0 on BP Group then default to 90 // 12 July 2019
                 MBPGroup bpg = new MBPGroup(GetCtx(), bp.GetC_BP_Group_ID(), Get_Trx());
-                Decimal? watchPer = bpg.GetCreditWatchPercent();
-                if (watchPer == 0)
-                    watchPer = 90;
+                Decimal? watchPerBP = bp.GetCreditWatchPercent();
+                //Preference check,checks the value for credit watch per on business partner header
+                if (watchPerBP == 0)
+                {
+                    Decimal? watchPer = bpg.GetCreditWatchPercent();
+                    if (watchPer == 0)
+                    {
+                        watchPer = 90;
+                    }
+                }
 
                 Decimal? newCreditAmt = 0;
-
                 Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
                 // If Amount is ZERO then no need to check currency conversion
                 if (!payAmt.Equals(Env.ZERO))
@@ -4556,10 +4562,10 @@ namespace VAdvantage.Model
                     Get_TrxName());
             alloc.SetAD_Org_ID(GetAD_Org_ID());
             // Update ConversionDate from payment to view allocation 
-            if (alloc.Get_ColumnIndex("DateAcct") > 0) 
+            if (alloc.Get_ColumnIndex("DateAcct") > 0)
             {
                 alloc.SetConversionDate(GetDateAcct());
-            }		 
+            }
             // Update conversion type from payment to view allocation (required for posting)
             if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
             {
@@ -5059,7 +5065,7 @@ namespace VAdvantage.Model
                 int count = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VA027_PostDatedCheck SET VA027_GeneratePayment ='N', VA027_PaymentGenerated ='N', C_Payment_ID = NULL, VA027_PaymentStatus= '0' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID(), null, Get_Trx()));
                 if (count > 0)
                 {
-                    DB.ExecuteQuery("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL, VA027_PaymentStatus= '0' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID() + "AND C_Payment_ID= "+GetC_Payment_ID(), null, Get_Trx());
+                    DB.ExecuteQuery("UPDATE VA027_ChequeDetails SET C_Payment_ID = NULL, VA027_PaymentStatus= '0' WHERE VA027_PostDatedCheck_ID= " + GetVA027_PostDatedCheck_ID() + "AND C_Payment_ID= " + GetC_Payment_ID(), null, Get_Trx());
 
                 }
             }
