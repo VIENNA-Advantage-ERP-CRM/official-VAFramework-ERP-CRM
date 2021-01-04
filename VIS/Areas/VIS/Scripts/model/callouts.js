@@ -21005,6 +21005,15 @@
                         mTab.setValue("M_Warehouse_ID", warehouse_ID);
                     }
                 }
+                else {
+                    //if get value < 0 then set as Zero.
+                    if (mTab.getTableName() == "M_Movement" && mTab.getField("DTD001_MWarehouseSource_ID") != null) {
+                        mTab.setValue("DTD001_MWarehouseSource_ID", 0);
+                    }
+                    else {
+                        mTab.setValue("M_Warehouse_ID", 0);
+                    }
+                }
             }
         }
         catch (err) {
