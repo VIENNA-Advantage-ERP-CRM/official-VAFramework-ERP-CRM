@@ -3859,18 +3859,18 @@ namespace VAdvantage.Model
 
                 // JID_0556 :: // Change by Lokesh Chauhan to validate watch % from BP Group, 
                 // if it is 0 on BP Group then default to 90 // 12 July 2019
-                MBPGroup bpg = new MBPGroup(GetCtx(), bp.GetC_BP_Group_ID(), Get_TrxName());
-                Decimal? watchPerBP = bp.GetCreditWatchPercent();
-                //if (watchPer == 0)
-                //    watchPer = 90;
-                if (watchPerBP == 0)
-                {
-                    Decimal? watchPer = bpg.GetCreditWatchPercent();
-                    if (watchPer == 0)
-                    {
-                        watchPer = 90;
-                    }
-                }
+               // MBPGroup bpg = new MBPGroup(GetCtx(), bp.GetC_BP_Group_ID(), Get_TrxName());
+                //Decimal? watchPerBP = bp.GetCreditWatchPercent();
+                ////if (watchPer == 0)
+                ////    watchPer = 90;
+                //if (watchPerBP == 0)
+                //{
+                //    Decimal? watchPer = bpg.GetCreditWatchPercent();
+                //    if (watchPer == 0)
+                //    {
+                //        watchPer = 90;
+                //    }
+                //}
 
                 Decimal newBalance = 0;
                 Decimal newCreditAmt = 0;
