@@ -41,6 +41,7 @@ namespace VAdvantage.Model
         {
             if (!success)
                 return success;
+            // Develop By Deekshant For margin amount and total amount
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 double amount = Util.GetValueOfDouble(Get_Value("VA077_PurchasePrice"));
