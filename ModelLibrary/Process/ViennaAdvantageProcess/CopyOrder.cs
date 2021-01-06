@@ -373,6 +373,7 @@ namespace ViennaAdvantage.Process
         {
             string str = null;
             VAdvantage.Model.MOrderLine orderLine = new VAdvantage.Model.MOrderLine(GetCtx(), 0, Get_Trx());
+            VAdvantage.Model.MOrderLine mOrderLine = null;
             if (destinationorg != 0)
             {
                 str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID + " AND VA077_DestinationOrg=" + destinationorg;
@@ -387,7 +388,7 @@ namespace ViennaAdvantage.Process
                 for (int i = 0; i < st.Tables[0].Rows.Count; i++)
                 {
                     int destinationorgid = Util.GetValueOfInt(st.Tables[0].Rows[i]["VA077_DestinationOrg"]);
-                    VAdvantage.Model.MOrderLine mOrderLine = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(st.Tables[0].Rows[i]["C_OrderLine_ID"]), Get_Trx());
+                    mOrderLine = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(st.Tables[0].Rows[i]["C_OrderLine_ID"]), Get_Trx());
                     if (destinationorg != 0)
                     {
                         orderLine.SetAD_Org_ID(destinationorg);
