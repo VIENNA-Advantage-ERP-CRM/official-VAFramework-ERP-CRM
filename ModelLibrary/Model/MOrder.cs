@@ -2383,7 +2383,7 @@ namespace VAdvantage.Model
                         if (paymentRule.Equals("L") || paymentRule.Equals("S")) // "L"-- Letter of credit, "S"-- Check
                         {
                             _processMsg = Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod");
-                            log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod"));
+                            log.SaveError("VIS_PleaseChangePaymentMethod", "");
                             return false;
                         }
                     }
@@ -2924,8 +2924,35 @@ namespace VAdvantage.Model
                         {
                             if (bp.ValidateCreditValidation("A,D,E", GetC_BPartner_Location_ID()))
                             {
+                                //to set credit fail and credit fail notice true in case of sales order
+                                if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
+                                {
+                                    if (Get_ColumnIndex("Iscreditfail") > 0)
+                                    {
+                                        SetIscreditfail(true);
+                                    }
+                                    if (Get_ColumnIndex("Iscreditfailnotice") > 0)
+                                    {
+                                        SetIscreditfailnotice(true);
+                                    }
+                                }
                                 _processMsg = retMsg;
                                 return DocActionVariables.STATUS_INVALID;
+                            }
+                        }
+                        else
+                        {
+                            //to set credit fail and credit fail notice false in case of sales order
+                            if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
+                            {
+                                if (Get_ColumnIndex("Iscreditfail") > 0)
+                                {
+                                    SetIscreditfail(false);
+                                }
+                                if (Get_ColumnIndex("Iscreditfailnotice") > 0)
+                                {
+                                    SetIscreditfailnotice(false);
+                                }
                             }
                         }
                     }
@@ -3414,6 +3441,34 @@ namespace VAdvantage.Model
                 MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
                 DocSubTypeSO = dt.GetDocSubTypeSO();
 
+                //to check document type if it is pos then we need to check the document type on selected document types
+                if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
+                {
+                    string paymentbaseType = Util.GetValueOfString(DB.ExecuteScalar("select va009_paymentbasetype from va009_paymentmethod where VA009_PaymentMethod_ID=" + GetVA009_PaymentMethod_ID(), null, Get_Trx()));
+                    if (!paymentbaseType.Equals(PAYMENTRULEPO_Check) && !paymentbaseType.Equals(PAYMENTRULEPO_LetterOfCredit) && !paymentbaseType.Equals(PAYMENTRULEPO_Cash) && !paymentbaseType.Equals(PAYMENTRULEPO_CashPlusCard))
+                    {
+                        if ((Get_ColumnIndex("C_DocTypePayment_ID") > 0) && (Get_ColumnIndex("C_BankAccount_ID") > 0))
+                        {
+                            if (dt.GetC_DocTypeShipment_ID() == 0 || dt.GetC_DocTypeInvoice_ID() == 0 || dt.GetC_DocTypePayment_ID() == 0 || dt.GetC_BankAccount_ID() == 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PosDocTypeConfig");
+                                return DOCSTATUS_Invalid;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (paymentbaseType.Equals(PAYMENTRULEPO_Cash) || paymentbaseType.Equals(PAYMENTRULEPO_CashPlusCard))
+                        {
+                            if (dt.GetC_DocTypeShipment_ID() == 0 || dt.GetC_DocTypeInvoice_ID() == 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PosDocTypeConfig");
+                                return DOCSTATUS_Invalid;
+                            }
+                        }
+                    }
+                }
+
                 //	Just prepare
                 if (DOCACTION_Prepare.Equals(GetDocAction()))
                 {
@@ -3782,10 +3837,13 @@ namespace VAdvantage.Model
                                     MPayment _pay = null;
                                     _pay = CreatePaymentAgainstPOSDocType(Info, invoice);
                                     if (_pay == null)
-                                    {
+                                    {                                        
+                                        if (_processMsg != null && _processMsg.Length > 0)
+                                            Info.Append(" (").Append(_processMsg).Append(")");
                                         Get_Trx().Rollback();
                                         return DocActionVariables.STATUS_INVALID;
                                     }
+
                                 }
                             }
                         }
@@ -6148,11 +6206,15 @@ namespace VAdvantage.Model
                 {
                     _payment.SetProcessed(true);
                     _payment.SetDocStatus(DOCSTATUS_Completed);
-                    _payment.SetDocAction(DOCACTION_Complete);
+                    _payment.SetDocAction(DOCACTION_Close);
                     if (_payment.Save())
                     {
                         info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo());
                     }
+                }
+                else
+                {
+                    info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo() + " (" + _payment.GetProcessMsg() + ")");
                 }
                 _processMsg = "";
             }

@@ -1345,16 +1345,19 @@ namespace VAdvantage.Model
 
         public static String PAYMENTRULE_ThirdPartyPayment = "O"; // Third Party Payment = O
 
-/**@param test testvalue
+        /**@param test testvalue
 @returns true if valid **/
-        public bool IsPaymentRuleValid(String test) { 
-            return test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("K") || test.Equals("L") || test.Equals("P") 
-                || test.Equals("S") || test.Equals("T") || test.Equals("W") || test.Equals("O"); }/** Set Payment Method.
+        public bool IsPaymentRuleValid(String test)
+        {
+            return test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("K") || test.Equals("L") || test.Equals("P")
+                || test.Equals("S") || test.Equals("T") || test.Equals("W") || test.Equals("O");
+        }/** Set Payment Method.
 @param PaymentRule How you pay the invoice */
         public void SetPaymentRule(String PaymentRule)
         {
             if (PaymentRule == null) throw new ArgumentException("PaymentRule is mandatory"); if (!IsPaymentRuleValid(PaymentRule))
-                throw new ArgumentException("PaymentRule Invalid value - " + PaymentRule + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W- O"); if (PaymentRule.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentRule = PaymentRule.Substring(0, 1); } Set_Value("PaymentRule", PaymentRule);
+                throw new ArgumentException("PaymentRule Invalid value - " + PaymentRule + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W- O"); if (PaymentRule.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentRule = PaymentRule.Substring(0, 1); }
+            Set_Value("PaymentRule", PaymentRule);
         }/** Get Payment Method.
 @return How you pay the invoice */
         public String GetPaymentRule() { return (String)Get_Value("PaymentRule"); }
@@ -1372,16 +1375,19 @@ namespace VAdvantage.Model
         public static String PAYMENTRULEPO_WireTransfer = "W";/** Is test a valid value. */
         public static String PAYMENTRULEPO_ThirdPartyPayment = "O"; // Third Party Payment = O
 
-/** @param test testvalue
+        /** @param test testvalue
 @returns true if valid **/
-        public bool IsPaymentRulePOValid(String test) { return test == null || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("K")
-            || test.Equals("L") || test.Equals("P") || test.Equals("S") || test.Equals("T") || test.Equals("W") || test.Equals("O");
+        public bool IsPaymentRulePOValid(String test)
+        {
+            return test == null || test.Equals("B") || test.Equals("C") || test.Equals("D") || test.Equals("K")
+|| test.Equals("L") || test.Equals("P") || test.Equals("S") || test.Equals("T") || test.Equals("W") || test.Equals("O");
         }/** Set Payment Rule.
 @param PaymentRulePO Purchase payment option */
         public void SetPaymentRulePO(String PaymentRulePO)
         {
             if (!IsPaymentRulePOValid(PaymentRulePO))
-                throw new ArgumentException("PaymentRulePO Invalid value - " + PaymentRulePO + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W - O"); if (PaymentRulePO != null && PaymentRulePO.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentRulePO = PaymentRulePO.Substring(0, 1); } Set_Value("PaymentRulePO", PaymentRulePO);
+                throw new ArgumentException("PaymentRulePO Invalid value - " + PaymentRulePO + " - Reference_ID=195 - B - C - D - K - L - P - S - T - W - O"); if (PaymentRulePO != null && PaymentRulePO.Length > 1) { log.Warning("Length > 1 - truncated"); PaymentRulePO = PaymentRulePO.Substring(0, 1); }
+            Set_Value("PaymentRulePO", PaymentRulePO);
         }/** Get Payment Rule .
 @return Purchase payment option */
         public String GetPaymentRulePO() { return (String)Get_Value("PaymentRulePO"); }
@@ -2844,15 +2850,15 @@ namespace VAdvantage.Model
             return (String)Get_Value("VAPOS_TPPInfo");
         }
 
-       /// <summary>
-       /// Set Total Third party payment amount
-       /// </summary>
-       /// <param name="VAPOS_CashPaid"></param>
+        /// <summary>
+        /// Set Total Third party payment amount
+        /// </summary>
+        /// <param name="VAPOS_CashPaid"></param>
         public void SetVAPOS_TPPAmt(Decimal? VAPOS_CashPaid)
         {
             Set_Value("VAPOS_TPPAmt", (Decimal?)VAPOS_CashPaid);
         }
-       
+
         /// <summary>
         /// Get Third party payment amount 
         /// </summary>
@@ -2890,21 +2896,23 @@ namespace VAdvantage.Model
 
         /** Set ReActivated.
 @param IsReActivated Re-Activate a record */
-        public void SetIsReActivated(Boolean IsReActivated) 
+        public void SetIsReActivated(Boolean IsReActivated)
         {
-            Set_Value("IsReActivated", IsReActivated); 
+            Set_Value("IsReActivated", IsReActivated);
         }
 
         /** Get ReActivated.
     @return Re-Activate a record */
-        public Boolean IsReActivated() { Object oo = Get_Value("IsReActivated"); 
-            if (oo != null) 
-            { 
+        public Boolean IsReActivated()
+        {
+            Object oo = Get_Value("IsReActivated");
+            if (oo != null)
+            {
                 if (oo.GetType() == typeof(bool))
-                    return Convert.ToBoolean(oo); 
-                return "Y".Equals(oo); 
-            } 
-            return false; 
+                    return Convert.ToBoolean(oo);
+                return "Y".Equals(oo);
+            }
+            return false;
         }
 
         /** Set Temp Document No.
@@ -2924,5 +2932,15 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("TempDocumentNo");
         }
+
+        /* @param Iscreditfail Credit Fail */
+        public void SetIscreditfail(Boolean Iscreditfail) { Set_Value("Iscreditfail", Iscreditfail); }/** Get Credit Fail.
+        @return Credit Fail */
+        public Boolean Iscreditfail() { Object oo = Get_Value("Iscreditfail"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Credit Fail Notice.
+         @param Iscreditfailnotice Credit Fail Notice */
+        public void SetIscreditfailnotice(Boolean Iscreditfailnotice) { Set_Value("Iscreditfailnotice", Iscreditfailnotice); }/** Get Credit Fail Notice.
+            @return Credit Fail Notice */
+        public Boolean Iscreditfailnotice() { Object oo = Get_Value("Iscreditfailnotice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+
     }
 }
