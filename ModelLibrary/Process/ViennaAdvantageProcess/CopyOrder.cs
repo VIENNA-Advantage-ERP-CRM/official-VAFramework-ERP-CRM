@@ -119,7 +119,7 @@ namespace ViennaAdvantage.Process
                     for (int i = 0; i < dts.Tables[0].Rows.Count; i++)
                     {
                         int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
-                       // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
+                        // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
                         AddHeader(destinationorg);
                         Addline(destinationorg, GetAD_Org_ID());
                     }
@@ -372,7 +372,7 @@ namespace ViennaAdvantage.Process
         public bool Addline(int destinationorg, int org)
         {
             string str = null;
-            VAdvantage.Model.MOrderLine orderLine = new VAdvantage.Model.MOrderLine(GetCtx(), 0, Get_Trx());
+            VAdvantage.Model.MOrderLine orderLine = null;
             VAdvantage.Model.MOrderLine mOrderLine = null;
             if (destinationorg != 0)
             {
@@ -388,6 +388,7 @@ namespace ViennaAdvantage.Process
                 for (int i = 0; i < st.Tables[0].Rows.Count; i++)
                 {
                     int destinationorgid = Util.GetValueOfInt(st.Tables[0].Rows[i]["VA077_DestinationOrg"]);
+                    orderLine = new VAdvantage.Model.MOrderLine(GetCtx(), 0, Get_Trx());
                     mOrderLine = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(st.Tables[0].Rows[i]["C_OrderLine_ID"]), Get_Trx());
                     if (destinationorg != 0)
                     {
