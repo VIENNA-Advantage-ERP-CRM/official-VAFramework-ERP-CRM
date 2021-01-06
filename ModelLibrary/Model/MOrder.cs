@@ -1316,10 +1316,10 @@ namespace VAdvantage.Model
                     }
 
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
-                    if (line.Get_ColumnIndex("C_Quotation_Line_ID") > 0)
+                    if (line.Get_ColumnIndex("C_Quotation_Line_ID") >= 0)
                         line.Set_Value("C_Quotation_Line_ID", fromLines[i].GetC_OrderLine_ID());
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
-                    if (line.Get_ColumnIndex("C_Order_Quotation") > 0)
+                    if (line.Get_ColumnIndex("C_Order_Quotation") >= 0)
                         line.Set_Value("C_Order_Quotation", fromLines[i].GetC_Order_ID());
 
                     line.SetQtyDelivered(Env.ZERO);
@@ -1339,7 +1339,7 @@ namespace VAdvantage.Model
                         line.SetTaxAmt();		//	recalculate Tax Amount
 
                     // ReCalculate Surcharge Amount
-                    if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                    if (line.Get_ColumnIndex("SurchargeAmt") >= 0)
                     {
                         line.SetSurchargeAmt(Env.ZERO);
                     }
@@ -2383,7 +2383,7 @@ namespace VAdvantage.Model
                         if (paymentRule.Equals("L") || paymentRule.Equals("S")) // "L"-- Letter of credit, "S"-- Check
                         {
                             _processMsg = Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod");
-                            log.SaveError("", Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod"));
+                            log.SaveError("VIS_PleaseChangePaymentMethod", "");
                             return false;
                         }
                     }
@@ -2924,8 +2924,35 @@ namespace VAdvantage.Model
                         {
                             if (bp.ValidateCreditValidation("A,D,E", GetC_BPartner_Location_ID()))
                             {
+                                //to set credit fail and credit fail notice true in case of sales order
+                                if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
+                                {
+                                    if (Get_ColumnIndex("Iscreditfail") >= 0)
+                                    {
+                                        SetIscreditfail(true);
+                                    }
+                                    if (Get_ColumnIndex("Iscreditfailnotice") >= 0)
+                                    {
+                                        SetIscreditfailnotice(true);
+                                    }
+                                }
                                 _processMsg = retMsg;
                                 return DocActionVariables.STATUS_INVALID;
+                            }
+                        }
+                        else
+                        {
+                            //to set credit fail and credit fail notice false in case of sales order
+                            if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
+                            {
+                                if (Get_ColumnIndex("Iscreditfail") >= 0)
+                                {
+                                    SetIscreditfail(false);
+                                }
+                                if (Get_ColumnIndex("Iscreditfailnotice") >= 0)
+                                {
+                                    SetIscreditfailnotice(false);
+                                }
                             }
                         }
                     }
@@ -3290,7 +3317,7 @@ namespace VAdvantage.Model
                         taxList.Add(taxID);
 
                         // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
-                        if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                        if (line.Get_ColumnIndex("SurchargeAmt") >= 0)
                         {
                             oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                             if (oTax != null)
@@ -3413,6 +3440,34 @@ namespace VAdvantage.Model
             {
                 MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
                 DocSubTypeSO = dt.GetDocSubTypeSO();
+
+                //to check document type if it is pos then we need to check the document type on selected document types
+                if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
+                {
+                    string paymentbaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID = " + GetVA009_PaymentMethod_ID(), null, Get_Trx()));
+                    if (!paymentbaseType.Equals(PAYMENTRULEPO_Check) && !paymentbaseType.Equals(PAYMENTRULEPO_LetterOfCredit) && !paymentbaseType.Equals(PAYMENTRULEPO_Cash) && !paymentbaseType.Equals(PAYMENTRULEPO_CashPlusCard))
+                    {
+                        if ((dt.Get_ColumnIndex("C_DocTypePayment_ID") >= 0) && (dt.Get_ColumnIndex("C_BankAccount_ID") >= 0))
+                        {
+                            if (dt.GetC_DocTypeShipment_ID() == 0 || dt.GetC_DocTypeInvoice_ID() == 0 || dt.GetC_DocTypePayment_ID() == 0 || dt.GetC_BankAccount_ID() == 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PosDocTypeConfig");
+                                return DOCSTATUS_Invalid;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (paymentbaseType.Equals(PAYMENTRULEPO_Cash) || paymentbaseType.Equals(PAYMENTRULEPO_CashPlusCard))
+                        {
+                            if (dt.GetC_DocTypeShipment_ID() == 0 || dt.GetC_DocTypeInvoice_ID() == 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PosDocTypeConfig");
+                                return DOCSTATUS_Invalid;
+                            }
+                        }
+                    }
+                }
 
                 //	Just prepare
                 if (DOCACTION_Prepare.Equals(GetDocAction()))
@@ -3782,10 +3837,13 @@ namespace VAdvantage.Model
                                     MPayment _pay = null;
                                     _pay = CreatePaymentAgainstPOSDocType(Info, invoice);
                                     if (_pay == null)
-                                    {
+                                    {                                        
+                                        if (_processMsg != null && _processMsg.Length > 0)
+                                            Info.Append(" (").Append(_processMsg).Append(")");
                                         Get_Trx().Rollback();
                                         return DocActionVariables.STATUS_INVALID;
                                     }
+
                                 }
                             }
                         }
@@ -4363,7 +4421,7 @@ namespace VAdvantage.Model
         protected void SetCompletedDocumentNo()
         {
             // if Re-Activated document then no need to get Document no from Completed sequence
-            if (Get_ColumnIndex("IsReActivated") > 0 && IsReActivated())
+            if (Get_ColumnIndex("IsReActivated") >= 0 && IsReActivated())
             {
                 return;
             }
@@ -4390,7 +4448,7 @@ namespace VAdvantage.Model
             if (dt.IsOverwriteSeqOnComplete())
             {
                 // Set Drafted Document No into Temp Document No.
-                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                if (Get_ColumnIndex("TempDocumentNo") >= 0)
                 {
                     SetTempDocumentNo(GetDocumentNo());
                 }
@@ -5959,7 +6017,7 @@ namespace VAdvantage.Model
                 }
 
                 // Set Value in Re-Activated when record is reactivated
-                if (Get_ColumnIndex("IsReActivated") > 0)
+                if (Get_ColumnIndex("IsReActivated") >= 0)
                 {
                     SetIsReActivated(true);
                 }
@@ -6170,11 +6228,15 @@ namespace VAdvantage.Model
                 {
                     _payment.SetProcessed(true);
                     _payment.SetDocStatus(DOCSTATUS_Completed);
-                    _payment.SetDocAction(DOCACTION_Complete);
+                    _payment.SetDocAction(DOCACTION_Close);
                     if (_payment.Save())
                     {
                         info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo());
                     }
+                }
+                else
+                {
+                    info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo() + " (" + _payment.GetProcessMsg() + ")");
                 }
                 _processMsg = "";
             }

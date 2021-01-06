@@ -189,6 +189,8 @@ namespace VAdvantage.Model
                 SetVSS_PAYMENTTYPE("R");
             }
             SetAmount(amt);
+            //Issue ID : JID_1938, to set converted amt issue coming while creating pos order
+            SetConvertedAmt(amt.ToString());
             //
             SetDiscountAmt(Env.ZERO);
             SetWriteOffAmt(Env.ZERO);
