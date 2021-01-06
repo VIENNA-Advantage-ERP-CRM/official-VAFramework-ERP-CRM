@@ -3444,10 +3444,10 @@ namespace VAdvantage.Model
                 //to check document type if it is pos then we need to check the document type on selected document types
                 if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
                 {
-                    string paymentbaseType = Util.GetValueOfString(DB.ExecuteScalar("select va009_paymentbasetype from va009_paymentmethod where VA009_PaymentMethod_ID=" + GetVA009_PaymentMethod_ID(), null, Get_Trx()));
+                    string paymentbaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID = " + GetVA009_PaymentMethod_ID(), null, Get_Trx()));
                     if (!paymentbaseType.Equals(PAYMENTRULEPO_Check) && !paymentbaseType.Equals(PAYMENTRULEPO_LetterOfCredit) && !paymentbaseType.Equals(PAYMENTRULEPO_Cash) && !paymentbaseType.Equals(PAYMENTRULEPO_CashPlusCard))
                     {
-                        if ((Get_ColumnIndex("C_DocTypePayment_ID") > 0) && (Get_ColumnIndex("C_BankAccount_ID") > 0))
+                        if ((dt.Get_ColumnIndex("C_DocTypePayment_ID") > 0) && (dt.Get_ColumnIndex("C_BankAccount_ID") > 0))
                         {
                             if (dt.GetC_DocTypeShipment_ID() == 0 || dt.GetC_DocTypeInvoice_ID() == 0 || dt.GetC_DocTypePayment_ID() == 0 || dt.GetC_BankAccount_ID() == 0)
                             {
