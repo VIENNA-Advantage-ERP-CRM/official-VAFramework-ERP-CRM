@@ -112,15 +112,15 @@ namespace ViennaAdvantage.Process
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 //Check Destination Organization in c_orderline
-                string str = "SELECT VA077_DestinationOrg FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID + " Order BY VA077_DestinationOrg";
+                string str = "SELECT DISTINCT(VA077_DestinationOrg) FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
                 DataSet dts = DB.ExecuteDataset(str, null, Get_Trx());
                 if (dts != null && dts.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < dts.Tables[0].Rows.Count; i++)
                     {
                         int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
-                        VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
-                        AddHeader(newOrder, destinationorg);
+                       // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
+                        AddHeader(destinationorg);
                         Addline(destinationorg, GetAD_Org_ID());
                     }
                 }
@@ -224,10 +224,10 @@ namespace ViennaAdvantage.Process
         /// <param name="newOrder">Moder Object</param>
         /// <param name="destinationorg">Destination Orgnaization id</param>
         /// <returns>bool</returns>
-        public bool AddHeader(VAdvantage.Model.MOrder newOrder, int destinationorg)
+        public bool AddHeader(int destinationorg)
         {
             VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _C_DocType_ID);
-            //newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
+            MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
             VAdvantage.Model.MOrder morder = new VAdvantage.Model.MOrder(GetCtx(), _C_Order_ID, Get_Trx());
             newOrder.SetAD_Client_ID(GetAD_Client_ID());
             if (destinationorg != 0)
