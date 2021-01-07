@@ -2933,14 +2933,14 @@ namespace VAdvantage.Model
             return (String)Get_Value("TempDocumentNo");
         }
 
-        /* @param Iscreditfail Credit Fail */
-        public void SetIscreditfail(Boolean Iscreditfail) { Set_Value("Iscreditfail", Iscreditfail); }/** Get Credit Fail.
+        /* @param IsCreditFail Credit Fail */
+        public void SetIsCreditFail(Boolean IsCreditFail) { Set_Value("IsCreditFail", IsCreditFail); }/** Get Credit Fail.
         @return Credit Fail */
-        public Boolean Iscreditfail() { Object oo = Get_Value("Iscreditfail"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Credit Fail Notice.
-         @param Iscreditfailnotice Credit Fail Notice */
-        public void SetIscreditfailnotice(Boolean Iscreditfailnotice) { Set_Value("Iscreditfailnotice", Iscreditfailnotice); }/** Get Credit Fail Notice.
+        public Boolean IsCreditFail() { Object oo = Get_Value("IsCreditFail"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Credit Fail Notice.
+         @param IsCreditFailNotice Credit Fail Notice */
+        public void SetIsCreditFailNotice(Boolean IsCreditFailNotice) { Set_Value("IsCreditFailNotice", IsCreditFailNotice); }/** Get Credit Fail Notice.
             @return Credit Fail Notice */
-        public Boolean Iscreditfailnotice() { Object oo = Get_Value("Iscreditfailnotice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
+        public Boolean IsCreditFailNotice() { Object oo = Get_Value("IsCreditFailNotice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
     }
 }
