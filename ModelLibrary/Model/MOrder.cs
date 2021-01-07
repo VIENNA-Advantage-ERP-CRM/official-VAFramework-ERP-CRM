@@ -2927,13 +2927,19 @@ namespace VAdvantage.Model
                                 //to set credit fail and credit fail notice true in case of sales order
                                 if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
                                 {
-                                    if (Get_ColumnIndex("Iscreditfail") >= 0)
+                                    if ((Get_ColumnIndex("IsCreditFail") >= 0) && (Get_ColumnIndex("IsCreditFailNotice") >= 0))
                                     {
-                                        SetIscreditfail(true);
-                                    }
-                                    if (Get_ColumnIndex("Iscreditfailnotice") >= 0)
-                                    {
-                                        SetIscreditfailnotice(true);
+                                        /* rolback transaction because we ned to set credit fail checkbox true if credit not alowded if we set status invalid 
+                                        then it wil rollback the update query as wel that's why we rollback before update query */
+                                        if (Get_Trx() != null)
+                                            Get_Trx().Rollback();
+                                        int res = DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='Y', IsCreditFailNotice='Y' WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_Trx());
+                                        if (res <= 0)
+                                        {
+                                            log.Info("Credit fail or notice  checkbox not updated ");
+                                        }
+                                        else
+                                            Get_Trx().Commit();
                                     }
                                 }
                                 _processMsg = retMsg;
@@ -2945,13 +2951,14 @@ namespace VAdvantage.Model
                             //to set credit fail and credit fail notice false in case of sales order
                             if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
                             {
-                                if (Get_ColumnIndex("Iscreditfail") >= 0)
+                                if ((Get_ColumnIndex("IsCreditFail") >= 0) && (Get_ColumnIndex("IsCreditFailNotice") >= 0))
                                 {
-                                    SetIscreditfail(false);
-                                }
-                                if (Get_ColumnIndex("Iscreditfailnotice") >= 0)
-                                {
-                                    SetIscreditfailnotice(false);
+
+                                    int res = Util.GetValueOfInt(DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='N', IsCreditFailNotice='N' WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_Trx()););
+                                    if (res <= 0)
+                                    {
+                                        log.Info("Credit fail or notice  checkbox not updated ");
+                                    }
                                 }
                             }
                         }
@@ -3837,7 +3844,7 @@ namespace VAdvantage.Model
                                     MPayment _pay = null;
                                     _pay = CreatePaymentAgainstPOSDocType(Info, invoice);
                                     if (_pay == null)
-                                    {                                        
+                                    {
                                         if (_processMsg != null && _processMsg.Length > 0)
                                             Info.Append(" (").Append(_processMsg).Append(")");
                                         Get_Trx().Rollback();
