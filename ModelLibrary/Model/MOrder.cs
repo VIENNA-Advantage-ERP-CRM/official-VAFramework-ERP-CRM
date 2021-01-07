@@ -2954,7 +2954,7 @@ namespace VAdvantage.Model
                                 if ((Get_ColumnIndex("IsCreditFail") >= 0) && (Get_ColumnIndex("IsCreditFailNotice") >= 0))
                                 {
 
-                                    int res = Util.GetValueOfInt(DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='N', IsCreditFailNotice='N' WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_Trx()););
+                                    int res = Util.GetValueOfInt(DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='N', IsCreditFailNotice='N' WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_Trx()));
                                     if (res <= 0)
                                     {
                                         log.Info("Credit fail or notice  checkbox not updated ");
