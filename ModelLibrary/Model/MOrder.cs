@@ -2938,7 +2938,8 @@ namespace VAdvantage.Model
                                         {
                                             log.Info("Credit fail or notice  checkbox not updated ");
                                         }
-                                        Get_Trx().Commit();
+                                        else
+                                            Get_Trx().Commit();
                                     }
                                 }
                                 _processMsg = retMsg;
