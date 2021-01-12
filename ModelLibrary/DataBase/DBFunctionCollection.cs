@@ -894,5 +894,35 @@ namespace VAdvantage.DataBase
             return listAggregation;
         }
 
+        /// <summary>Updates the loc and name on bp header.</summary>
+        /// <param name="C_BPartner_ID">C_BPartner_ID.</param>
+        /// <returns>
+        ///   Sql query
+        /// </returns>
+        public static string UpdateLocAndNameOnBPHeader(int C_BPartner_ID)
+        {
+            StringBuilder sql = new StringBuilder();
+            if (DB.IsOracle())
+            {
+                sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(VA077_LocNo, ', '), 2) CSV 
+                             FROM(SELECT VA077_LocNo, ROW_NUMBER() OVER(ORDER BY VA077_LocNo ASC) rn, COUNT(*) over() CNT 
+                             FROM (SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @"))
+                             WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1) , 
+                             VA077_SalesRep = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2)
+                             CSP FROM(SELECT Name, ROW_NUMBER() OVER(ORDER BY Name ASC) rn, COUNT(*) over() CNT 
+                             FROM (SELECT us.Name FROM AD_User us JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @")) WHERE rn = cnt START WITH RN = 1 
+                             CONNECT BY rn = PRIOR rn + 1) WHERE C_BPartner_ID = " + C_BPartner_ID);
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT  string_agg(VA077_LocNo, ', ') AS Name 
+                             FROM (SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @") AS ABC), 
+                             VA077_SalesRep = (SELECT string_agg(Name, ', ') CSP FROM (SELECT us.Name FROM AD_User us 
+                             JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @") AS U) WHERE C_BPartner_ID = " + C_BPartner_ID);
+            }
+            return sql.ToString();
+        }
     }
 }

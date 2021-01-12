@@ -6051,6 +6051,28 @@ namespace VAdvantage.Model
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
                           WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')) t";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+
+            //check order id exist on LCDetail or PODetail or SODetail. if exist then not able to reverse the current order 
+            if (_countOrder == 0 && Env.IsModuleInstalled("VA026_"))
+            {
+                sql = @"Select SUM(Result) From (                                                  
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_LCDetail lc INNER JOIN C_Order o ON lc.C_Order_ID=o.C_Order_ID WHERE 
+                                lc.DocStatus NOT IN ('RE' , 'VO') AND o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_LCDetail lc INNER JOIN C_Order o ON lc.VA026_Order_ID=o.C_Order_ID WHERE 
+                                lc.DocStatus NOT IN ('RE' , 'VO') AND o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_PODetail po INNER JOIN VA026_LCDetail lc ON po.VA026_LCDetail_ID=lc.VA026_LCDetail_ID
+                                INNER JOIN C_Order o ON po.C_Order_ID=o.C_Order_ID 
+                                WHERE lc.DocStatus NOT IN ('RE' , 'VO') AND  o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_SODetail so INNER JOIN VA026_LCDetail lc ON so.VA026_LCDetail_ID=lc.VA026_LCDetail_ID
+                                INNER JOIN C_Order o ON so.C_Order_ID=o.C_Order_ID 
+                                WHERE lc.DocStatus NOT IN ('RE' , 'VO') AND  o.C_Order_ID=" + C_Order_ID + @") t";
+
+                _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+            }
+
             if (_countOrder > 0)
             {
                 return false;

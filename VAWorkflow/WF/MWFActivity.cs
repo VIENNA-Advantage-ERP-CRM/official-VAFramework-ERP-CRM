@@ -3290,6 +3290,31 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 }
             }
 
+            MMailAttachment1 _mAttachment = new MMailAttachment1(GetCtx(), 0, null);
+            _mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
+            _mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+            _mAttachment.SetIsMailSent(true);
+            _mAttachment.SetAD_Table_ID(AD_Table_ID);
+            _mAttachment.IsActive();
+            _mAttachment.SetAttachmentType("M");
+            _mAttachment.SetRecord_ID(Util.GetValueOfInt(Record_ID));
+            _mAttachment.SetTextMsg(message);
+            _mAttachment.SetTitle(subject);
+            _mAttachment.SetMailAddress(toEMail);
+            _mAttachment.SetMailAddressFrom(client.GetRequestEMail());
+            if (_mAttachment.GetEntries().Length > 0)
+            {
+                _mAttachment.SetIsAttachment(true);
+            }
+            else
+            {
+                _mAttachment.SetIsAttachment(false);
+            }
+            if (_mAttachment.Save())
+            {
+
+            }
+
             return client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, AD_Table_ID, Record_ID, array, fileName);
         }
 
