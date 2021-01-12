@@ -334,7 +334,7 @@ namespace VAdvantage.Model
             else
             {
                 //	Above Watch Limit
-                // Decimal watchAmt = Decimal.Multiply(creditLimit, bp.GetCreditWatchRatio());
+                //Peference check if credit watch per is zero on header then gets the value from bpgroup 
                 Decimal watchAmt;
                 if (bp.Get_ColumnIndex("CreditWatchPercent") > 0)
                 {
