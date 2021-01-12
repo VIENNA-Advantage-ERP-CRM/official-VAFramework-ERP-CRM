@@ -18525,6 +18525,10 @@
                 }
                 mTab.setValue("PaymentAmount", grandTotal);
                 mTab.setValue("PayAmt", grandTotal);
+                //if Payment for PrepayOrder then set PaymentAmount as ReadOnly
+                if (dr["IsPrePayOrder"] == true) {
+                    mTab.getField("PaymentAmount").setReadOnly(true);
+                }
             }
         }
         catch (err) {
