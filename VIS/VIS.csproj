@@ -636,6 +636,7 @@
     <Content Include="Areas\VIS\Scripts\app\forms\vcreatefrominvoice.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vcreatefromshipment.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vcreatefromstatement.js" />
+    <Content Include="Areas\VIS\Scripts\app\forms\vcreaterelatedlines.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vinoutgen.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vinvoicegen.js" />
     <Content Include="Areas\VIS\Scripts\app\forms\vmatch.js" />
@@ -836,6 +837,7 @@
     <Compile Include="Areas\VIS\Controllers\ProductContainerController.cs" />
     <Compile Include="Areas\VIS\Controllers\ProductController.cs" />
     <Compile Include="Areas\VIS\Controllers\RecordAccessController.cs" />
+    <Compile Include="Areas\VIS\Controllers\RelatedProductController.cs" />
     <Compile Include="Areas\VIS\Controllers\ResourceController.cs" />
     <Compile Include="Areas\VIS\Controllers\SmsController.cs" />
     <Compile Include="Areas\VIS\Controllers\Subscribe\SubscribeController.cs" />
@@ -947,6 +949,7 @@
     <Compile Include="Areas\VIS\Models\PaymentModel.cs" />
     <Compile Include="Areas\VIS\Models\ProductContainerModel.cs" />
     <Compile Include="Areas\VIS\Models\RecordAccessModel.cs" />
+    <Compile Include="Areas\VIS\Models\RelatedProductModel.cs" />
     <Compile Include="Areas\VIS\Models\ShortcutModel.cs" />
     <Compile Include="Areas\VIS\Models\SmsModel.cs" />
     <Compile Include="Areas\VIS\Models\Subscribe\SubscribeModel.cs" />
