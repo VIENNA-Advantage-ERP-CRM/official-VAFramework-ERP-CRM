@@ -39,6 +39,8 @@ namespace ViennaAdvantage.Process
         private DateTime? _DateDoc = null;
         //Close/Process Old Order		
         private bool _IsCloseDocument = false;
+        int newid = 0;
+        int neworg_id = 0;
         #endregion
 
         /// <summary>
@@ -105,9 +107,172 @@ namespace ViennaAdvantage.Process
             {
                 throw new Exception("Order Closed");
             }
-            //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
-            VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetC_DocType_ID(), false, true, null,
-                dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);		//	copy ASI 
+
+            //Develop by Deekshant For check VA077 Module For spilt the Sales Order
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                //Check Destination Organization in c_orderline
+                string str = "SELECT DISTINCT(VA077_DestinationOrg) FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
+                DataSet dts = DB.ExecuteDataset(str, null, Get_Trx());
+                if (dts != null && dts.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < dts.Tables[0].Rows.Count; i++)
+                    {
+                        int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
+                        // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
+                        AddHeader(destinationorg);
+                        Addline(destinationorg, GetAD_Org_ID());
+                    }
+                }
+            }
+            else
+            {
+                //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
+                VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetC_DocType_ID(), false, true, null,
+                dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);     //	copy ASI 
+                newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
+                int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
+                newOrder.Set_Value("IsSalesQuotation", false);
+
+                // Added by Bharat on 05 Jan 2018 to set Values on Blanket Sales Order from Sales Quotation.
+                if (dt.GetDocBaseType() == "BOO")
+                {
+                    newOrder.Set_Value("IsBlanketTrx", true);
+                }
+                else   // Added by Bharat on 29 March 2018 to set Blanket Order zero in case of Sales order Creation.
+                {
+                    newOrder.SetC_Order_Blanket(0);
+                }
+                if (newOrder.Get_ColumnIndex("C_Order_Quotation") > 0)
+                    newOrder.SetC_Order_Quotation(_C_Order_ID);
+
+                //Update New Order Refrence From Sales Qutation in Sales order
+                newOrder.SetPOReference(Util.GetValueOfString(from.GetDocumentNo()));
+
+                // Added by Bharat on 31 Jan 2018 to set Inco Term from Quotation
+
+                if (newOrder.Get_ColumnIndex("C_IncoTerm_ID") > 0)
+                {
+                    newOrder.SetC_IncoTerm_ID(from.GetC_IncoTerm_ID());
+                }
+
+                String sqlbp = "update c_project set c_bpartner_id=" + C_Bpartner_ID + "  where ref_order_id=" + _C_Order_ID + "";
+                int value = DB.ExecuteQuery(sqlbp, null, Get_Trx());
+                bool OK = newOrder.Save();
+                if (!OK)
+                {
+                    //return GetReterivedError( newOrder,  "Could not create new Order"); 
+                    throw new Exception("Could not create new Order");
+                }
+                if (OK)
+                {
+                    string sql = "select C_Project_id from c_project where c_order_id = " + from.GetC_Order_ID();
+                    int C_Project_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+                    if (C_Project_ID != 0)
+                    {
+                        VAdvantage.Model.X_C_Project project = new VAdvantage.Model.X_C_Project(GetCtx(), C_Project_ID, Get_Trx());
+                        project.SetC_BPartner_ID(project.GetC_BPartnerSR_ID());
+                        project.SetC_BPartnerSR_ID(0);
+                        if (!project.Save())
+                        {
+                            log.SaveError("Error on " + project.Get_TableName(), "");
+                        }
+                    }
+                    if (dt.GetDocBaseType() == "BOO")
+                    {
+                        from.SetC_Order_Blanket(newOrder.GetC_Order_ID());
+                    }
+                    else
+                    {
+                        from.SetRef_Order_ID(newOrder.GetC_Order_ID());
+                    }
+                    from.Save();
+                    int bp = newOrder.GetC_BPartner_ID();
+                    VAdvantage.Model.X_C_BPartner prosp = new VAdvantage.Model.X_C_BPartner(GetCtx(), bp, Get_Trx());
+                    prosp.SetIsCustomer(true);
+                    prosp.SetIsProspect(false);
+                    if (!prosp.Save())
+                    {
+
+                        log.SaveError("Error on " + prosp.Get_TableName(), "");
+                    }
+                }
+
+                //
+                if (_IsCloseDocument)
+                {
+                    VAdvantage.Model.MOrder original = new VAdvantage.Model.MOrder(GetCtx(), _C_Order_ID, Get_Trx());
+                    //Edited by Arpit Rai on 8th of Nov,2017
+                    if (original.GetDocStatus() != "CO") //to check if document is already completed
+                    {
+                        original.SetDocAction(VAdvantage.Model.MOrder.DOCACTION_Complete);
+                        original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Complete);
+                        original.Save();
+                    }
+                    //Arpit
+                    original.SetDocAction(VAdvantage.Model.MOrder.DOCACTION_Close);
+                    original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Close);
+                    original.Save();
+                }
+            }
+            //+ ": " + newOrder.GetDocumentNo()
+            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName();
+        }
+        /// <summary>
+        /// Add Sales Order Header for VA077 Module
+        /// </summary>
+        /// <param name="newOrder">Moder Object</param>
+        /// <param name="destinationorg">Destination Orgnaization id</param>
+        /// <returns>bool</returns>
+        public bool AddHeader(int destinationorg)
+        {
+            VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _C_DocType_ID);
+            MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
+            VAdvantage.Model.MOrder morder = new VAdvantage.Model.MOrder(GetCtx(), _C_Order_ID, Get_Trx());
+            newOrder.SetAD_Client_ID(GetAD_Client_ID());
+            if (destinationorg != 0)
+            {
+                newOrder.SetAD_Org_ID(destinationorg);
+            }
+            else
+            {
+                newOrder.SetAD_Org_ID(GetAD_Org_ID());
+            }
+            newOrder.SetC_BPartner_ID(morder.GetC_BPartner_ID());
+            newOrder.SetC_BPartner_Location_ID(morder.GetC_BPartner_Location_ID());
+            newOrder.SetAD_User_ID(morder.GetAD_User_ID());
+            newOrder.SetBill_BPartner_ID(morder.GetBill_BPartner_ID());
+            newOrder.SetAD_OrgTrx_ID(morder.GetAD_OrgTrx_ID());
+            newOrder.SetBill_Location_ID(morder.GetBill_Location_ID());
+            newOrder.SetBill_User_ID(morder.GetBill_User_ID());
+            newOrder.SetM_PriceList_ID(morder.GetM_PriceList_ID());
+            newOrder.SetC_Currency_ID(morder.GetC_Currency_ID());
+            newOrder.SetSalesRep_ID(morder.GetSalesRep_ID());
+            newOrder.SetDescription(morder.GetDescription());
+            //newOrder.SetM_Warehouse_ID(morder.GetM_Warehouse_ID());
+            newOrder.SetC_PaymentTerm_ID(morder.GetC_PaymentTerm_ID());
+            newOrder.SetC_Payment_ID(morder.GetC_Payment_ID());
+            newOrder.SetC_IncoTerm_ID(morder.GetC_IncoTerm_ID());
+            newOrder.SetC_Campaign_ID(morder.GetC_Campaign_ID());
+            newOrder.SetC_ProjectRef_ID(morder.GetC_Campaign_ID());
+            newOrder.SetGrandTotal(morder.GetGrandTotal());
+            newOrder.SetTotalLines(morder.GetTotalLines());
+            newOrder.Set_Value("VA077_HistoricContractDate", morder.Get_Value("VA077_HistoricContractDate"));
+            newOrder.Set_Value("VA077_ChangeStartDate", morder.Get_Value("VA077_ChangeStartDate"));
+            newOrder.Set_Value("VA077_ContractCPStartDate", morder.Get_Value("VA077_ContractCPStartDate"));
+            newOrder.Set_Value("VA077_ContractCPEndDate", morder.Get_Value("VA077_ContractCPEndDate"));
+            newOrder.Set_Value("VA077_PartialAmtCatchUp", morder.Get_Value("VA077_PartialAmtCatchUp"));
+            newOrder.Set_Value("VA077_PartialAmtCatchUp", morder.Get_Value("VA077_PartialAmtCatchUp"));
+            newOrder.Set_Value("VA077_OldAnnualContractTotal", morder.Get_Value("VA077_OldAnnualContractTotal"));
+            newOrder.Set_Value("VA077_AdditionalAnnualCharge", morder.Get_Value("VA077_AdditionalAnnualCharge"));
+            newOrder.Set_Value("VA077_NewAnnualContractTotal", morder.Get_Value("VA077_NewAnnualContractTotal"));
+            newOrder.Set_Value("VA077_OrderRef", morder.Get_Value("VA077_OrderRef"));
+            newOrder.Set_Value("VA077_SalesCoWorkerPer", morder.Get_Value("VA077_SalesCoWorkerPer"));
+            newOrder.Set_Value("VA077_TotalMarginAmt", morder.Get_Value("VA077_TotalMarginAmt"));
+            newOrder.Set_Value("VA077_SalesCoWorker", morder.Get_Value("VA077_SalesCoWorker"));
+            newOrder.Set_Value("VA077_TotalPurchaseAmt", morder.Get_Value("VA077_TotalPurchaseAmt"));
+            newOrder.Set_Value("VA077_TotalSalesAmt", morder.Get_Value("VA077_TotalSalesAmt"));
+            newOrder.Set_Value("VA077_MarginPercent", morder.Get_Value("VA077_MarginPercent"));
             newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
             int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
             newOrder.Set_Value("IsSalesQuotation", false);
@@ -125,13 +290,13 @@ namespace ViennaAdvantage.Process
                 newOrder.SetC_Order_Quotation(_C_Order_ID);
 
             //Update New Order Refrence From Sales Qutation in Sales order
-            newOrder.SetPOReference(Util.GetValueOfString(from.GetDocumentNo()));
+            newOrder.SetPOReference(Util.GetValueOfString(morder.GetDocumentNo()));
 
             // Added by Bharat on 31 Jan 2018 to set Inco Term from Quotation
 
             if (newOrder.Get_ColumnIndex("C_IncoTerm_ID") > 0)
             {
-                newOrder.SetC_IncoTerm_ID(from.GetC_IncoTerm_ID());
+                newOrder.SetC_IncoTerm_ID(morder.GetC_IncoTerm_ID());
             }
 
             String sqlbp = "update c_project set c_bpartner_id=" + C_Bpartner_ID + "  where ref_order_id=" + _C_Order_ID + "";
@@ -144,7 +309,7 @@ namespace ViennaAdvantage.Process
             }
             if (OK)
             {
-                string sql = "select C_Project_id from c_project where c_order_id = " + from.GetC_Order_ID();
+                string sql = "select C_Project_id from c_project where c_order_id = " + morder.GetC_Order_ID();
                 int C_Project_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (C_Project_ID != 0)
                 {
@@ -153,24 +318,28 @@ namespace ViennaAdvantage.Process
                     project.SetC_BPartnerSR_ID(0);
                     if (!project.Save())
                     {
-                        log.SaveError("Error on " + project.Get_TableName(),"");
+                        Get_Trx().Rollback();
+                        log.SaveError("Error on " + project.Get_TableName(), "");
                     }
                 }
                 if (dt.GetDocBaseType() == "BOO")
                 {
-                    from.SetC_Order_Blanket(newOrder.GetC_Order_ID());
+                    morder.SetC_Order_Blanket(newOrder.GetC_Order_ID());
                 }
                 else
                 {
-                    from.SetRef_Order_ID(newOrder.GetC_Order_ID());                    
+                    morder.SetRef_Order_ID(newOrder.GetC_Order_ID());
                 }
-                from.Save();
+                newid = newOrder.GetC_Order_ID();
+                neworg_id = newOrder.GetAD_Org_ID();
+                morder.Save();
                 int bp = newOrder.GetC_BPartner_ID();
                 VAdvantage.Model.X_C_BPartner prosp = new VAdvantage.Model.X_C_BPartner(GetCtx(), bp, Get_Trx());
                 prosp.SetIsCustomer(true);
                 prosp.SetIsProspect(false);
-                if (!prosp.Save()) {
-
+                if (!prosp.Save())
+                {
+                    Get_Trx().Rollback();
                     log.SaveError("Error on " + prosp.Get_TableName(), "");
                 }
             }
@@ -191,8 +360,93 @@ namespace ViennaAdvantage.Process
                 original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Close);
                 original.Save();
             }
-            //
-            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName() + ": " + newOrder.GetDocumentNo();
+
+            return true;
+        }
+        /// <summary>
+        /// Add  Order Line for sales order
+        /// </summary>
+        /// <param name="destinationorg">Destination Organization id</param>
+        /// <param name="org">Organization</param>
+        /// <returns>bool</returns>
+        public bool Addline(int destinationorg, int org)
+        {
+            string str = null;
+            VAdvantage.Model.MOrderLine orderLine = null;
+            VAdvantage.Model.MOrderLine mOrderLine = null;
+            if (destinationorg != 0)
+            {
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID + " AND VA077_DestinationOrg=" + destinationorg;
+            }
+            else
+            {
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND VA077_DestinationOrg IS null AND AD_Org_ID=" + org;
+            }
+            DataSet st = DB.ExecuteDataset(str, null, Get_Trx());
+            if (st != null && st.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < st.Tables[0].Rows.Count; i++)
+                {
+                    int destinationorgid = Util.GetValueOfInt(st.Tables[0].Rows[i]["VA077_DestinationOrg"]);
+                    orderLine = new VAdvantage.Model.MOrderLine(GetCtx(), 0, Get_Trx());
+                    mOrderLine = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(st.Tables[0].Rows[i]["C_OrderLine_ID"]), Get_Trx());
+                    if (destinationorg != 0)
+                    {
+                        orderLine.SetAD_Org_ID(destinationorg);
+                    }
+                    else
+                    {
+                        orderLine.SetAD_Org_ID(GetAD_Org_ID());
+                    }
+                    orderLine.SetAD_Client_ID(GetAD_Client_ID());
+                    orderLine.SetC_Order_ID(newid);
+                    orderLine.SetDescription(mOrderLine.GetDescription());
+                    orderLine.SetM_Product_ID(mOrderLine.GetM_Product_ID());
+                    orderLine.SetM_AttributeSetInstance_ID(mOrderLine.GetM_AttributeSetInstance_ID());
+                    orderLine.SetC_Charge_ID(mOrderLine.GetC_Charge_ID());
+                    orderLine.SetQtyEntered(mOrderLine.GetQtyEntered());
+                    orderLine.SetC_UOM_ID(mOrderLine.GetC_UOM_ID());
+                    orderLine.SetQtyOrdered(mOrderLine.GetQtyOrdered());
+                    orderLine.SetPriceEntered(mOrderLine.GetPriceEntered());
+                    orderLine.SetPriceActual(mOrderLine.GetPriceActual());
+                    orderLine.SetPriceList(mOrderLine.GetPriceList());
+                    orderLine.SetDiscount(mOrderLine.GetDiscount());
+                    orderLine.SetC_Tax_ID(mOrderLine.GetC_Tax_ID());
+                    orderLine.SetTaxAmt(mOrderLine.GetTaxAmt());
+                    orderLine.SetSurchargeAmt(mOrderLine.GetSurchargeAmt());
+                    orderLine.SetC_ProjectTask_ID(mOrderLine.GetC_ProjectTask_ID());
+                    orderLine.SetC_Campaign_ID(mOrderLine.GetC_Campaign_ID());
+                    orderLine.SetLineNetAmt(mOrderLine.GetLineNetAmt());
+                    orderLine.SetLineTotalAmt(mOrderLine.GetLineTotalAmt());
+                    orderLine.Set_Value("VA077_SNErweiterbar", mOrderLine.Get_Value("VA077_SNErweiterbar"));
+                    orderLine.Set_Value("VA077_SerialNo", mOrderLine.Get_Value("VA077_SerialNo"));
+                    orderLine.Set_Value("VA077_ShowOldSN", mOrderLine.Get_Value("VA077_ShowOldSN"));
+                    orderLine.Set_Value("VA077_OldSN", mOrderLine.Get_Value("VA077_OldSN"));
+                    orderLine.Set_Value("VA077_ContractProduct", mOrderLine.Get_Value("VA077_ContractProduct"));
+                    orderLine.Set_Value("VA077_UserRef_ID", mOrderLine.Get_Value("VA077_UserRef_ID"));
+                    orderLine.Set_Value("StartDate", mOrderLine.Get_Value("StartDate"));
+                    orderLine.Set_Value("EndDate", mOrderLine.Get_Value("EndDate"));
+                    orderLine.Set_Value("VA077_Duration", mOrderLine.Get_Value("VA077_Duration"));
+                    orderLine.Set_Value("VA077_ShowWISYCN", mOrderLine.Get_Value("VA077_ShowWISYCN"));
+                    orderLine.Set_Value("VA077_IsOfferApproved", mOrderLine.Get_Value("VA077_IsOfferApproved"));
+                    orderLine.Set_Value("VA077_OfferApprovedOn", mOrderLine.Get_Value("VA077_OfferApprovedOn"));
+                    orderLine.Set_Value("AD_User_ID", mOrderLine.Get_Value("AD_User_ID"));
+                    orderLine.Set_Value("VA077_ShowCNAutodesk", mOrderLine.Get_Value("VA077_ShowCNAutodesk"));
+                    orderLine.Set_Value("VA077_CNAutodesk", mOrderLine.Get_Value("VA077_CNAutodesk"));
+                    orderLine.Set_Value("VA077_UpdateFromVersn", mOrderLine.Get_Value("VA077_UpdateFromVersn"));
+                    orderLine.Set_Value("VA077_Contract", mOrderLine.Get_Value("VA077_Contract"));
+                    orderLine.Set_Value("VA077_MarginPercent", mOrderLine.Get_Value("VA077_MarginPercent"));
+                    orderLine.Set_Value("VA077_MarginAmt", mOrderLine.Get_Value("VA077_MarginAmt"));
+                    orderLine.Set_Value("VA077_PurchasePrice", mOrderLine.Get_Value("VA077_PurchasePrice"));
+                    orderLine.Set_Value("VA077_RegEmail", mOrderLine.Get_Value("VA077_RegEmail"));
+                    if (!orderLine.Save())
+                    {
+                        Get_Trx().Rollback();
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

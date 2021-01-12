@@ -8,7 +8,7 @@ using System.Data;
 using VIS.Models;
 using System.Text;
 using VIS.DataContracts;
-
+using System.Text.RegularExpressions;
 using System.Globalization;
 using System.IO;
 using System.Web.Hosting;
@@ -917,8 +917,15 @@ namespace VIS.Helpers
                         Alrt.AD_Window_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["AD_Window_ID"].ToString());
                         Alrt.Record_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["Record_ID"].ToString());
                         Alrt.MsgType = dsData.Tables[0].Rows[i]["MsgType"].ToString();
+                        //below code is to  remove HTML tags from Title
+                        string patternTitle = "(</?([^>/]*)/?>)";
                         Alrt.Title = dsData.Tables[0].Rows[i]["Title"].ToString();
-                        Alrt.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
+                        MatchCollection matchesTitle = Regex.Matches(Alrt.Title, patternTitle);
+                        if (matchesTitle.Count > 0)
+                        {
+                            Alrt.Title = Regex.Replace(Alrt.Title, patternTitle, string.Empty);
+                        }
+                            Alrt.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
                         if (PResultTableID == Alrt.AD_Table_ID)
                         {
                             Alrt.ProcessWindowID = Util.GetValueOfInt(windowID);
@@ -929,8 +936,18 @@ namespace VIS.Helpers
                         {
                             Alrt.SpecialTable = false;
                         }
+
+                        //below code is to  remove HTML tags from Description
+                        string patternDesc = "(</?([^>/]*)/?>)";
                         Alrt.Description = dsData.Tables[0].Rows[i]["Description"].ToString();
-                        DateTime _createdDate = new DateTime();
+                        MatchCollection matchesDesc = Regex.Matches(Alrt.Description, patternDesc);
+                        if (matchesDesc.Count > 0)
+                        {
+                            Alrt.Description = Regex.Replace(Alrt.Description, patternDesc, string.Empty);
+                         }
+
+
+                            DateTime _createdDate = new DateTime();
                         if (dsData.Tables[0].Rows[i]["dbDate"].ToString() != null && dsData.Tables[0].Rows[i]["dbDate"].ToString() != "")
                         {
                             _createdDate = Convert.ToDateTime(dsData.Tables[0].Rows[i]["dbDate"].ToString());

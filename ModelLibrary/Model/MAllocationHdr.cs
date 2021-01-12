@@ -461,6 +461,11 @@ namespace VAdvantage.Model
                         MInvoice invoice = new MInvoice(GetCtx(), line.GetC_Invoice_ID(), Get_Trx());
                         MCurrency currency = MCurrency.Get(GetCtx(), invoice.GetC_Currency_ID());
                         MDocType doctype = MDocType.Get(GetCtx(), invoice.GetC_DocType_ID());
+                        //not getting DocType while creating payment from POS Order Tyepe because in get method transaction is not passed in parameter
+                        if (doctype.GetC_DocType_ID() == 0)
+                        {
+                            doctype = MDocType.Get(GetCtx(), invoice.GetC_DocTypeTarget_ID());
+                        }
                         StringBuilder _sql = new StringBuilder();
                         varianceAmount = 0;
 
@@ -1069,7 +1074,7 @@ namespace VAdvantage.Model
             MCash cash = null; MJournal journal = null;
             int currencyTo_ID = 0, C_ConversionType_ID = 0, AD_Client_ID = 0, AD_Org_ID = 0;
             DateTime? DateAcct = null;
-			DateTime? conversionDate = Get_ColumnIndex("ConversionDate") >= 0 && GetConversionDate() != null ? GetConversionDate() : GetDateAcct();																																	   
+            DateTime? conversionDate = Get_ColumnIndex("ConversionDate") >= 0 && GetConversionDate() != null ? GetConversionDate() : GetDateAcct();
             if (GetC_Currency_ID() != invoice.GetC_Currency_ID())
             {
                 // when we allocate invoice with invoice 

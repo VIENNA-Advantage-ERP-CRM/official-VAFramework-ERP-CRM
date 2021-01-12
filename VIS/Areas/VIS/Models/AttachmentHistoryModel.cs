@@ -434,7 +434,7 @@ and ai.record_id = " + _Record_ID;
 
 
             // For Letter, sent Mail, Inbox mail
-
+            
             finalsql.Append(" SELECT attachmenttype, ai.MAILATTACHMENT1_ID AS ID, ai.record_ID,ai.created,'" + Msg.GetMsg(ctx, "SentMail") + "' AS TYPE, ai.TITLE AS Subject,adt.Name  as TableName,ai.AD_Table_ID   FROM mailattachment1 ai JOIN AD_User au on au.AD_User_ID=ai.createdby  JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID  ");
             finalSqlCount.Append(" SELECT ai.created FROM mailattachment1  ai JOIN AD_User au on au.AD_User_ID=ai.createdby JOIN AD_Table adt on adt.AD_Table_ID =ai.AD_Table_ID ");
             if (whereMAtt.Length > 0)

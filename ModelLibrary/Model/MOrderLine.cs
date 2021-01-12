@@ -4428,7 +4428,19 @@ namespace VAdvantage.Model
                 }
                 resetTotalAmtDim = true;
             }
-
+            // Develop By Deekshant For Calculation
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                decimal marginper = 0;
+                decimal margin = 0;
+                if (GetPriceEntered() != 0)
+                {
+                    margin = GetPriceEntered() - Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"));
+                    marginper = (margin / GetPriceEntered()) * 100;
+                }
+                Set_Value("VA077_MarginAmt", margin);
+                Set_Value("VA077_MarginPercent", marginper);
+            }
             return true;
         }
 
@@ -4587,8 +4599,28 @@ namespace VAdvantage.Model
                 if (!order.Save())
                     return false;
             }
+            //Develop by Deekshant For VA077 Module for calculating purchase,sales,margin
+            if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+            {
+                if (GetC_Order_ID() > 0)
+                {
+                    string sql = "UPDATE C_Order  p SET " +
+        "VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
+        ",VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
+        ",VA077_MarginPercent=(SELECT COALESCE(SUM(pl.VA077_MarginPercent),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
+        ",VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
 
+        " WHERE p.C_Order_ID=" + GetC_Order_ID();
+                    int no = DB.ExecuteQuery(sql, null, Get_TrxName());
+                    if (no <= 0)
+                    {
+                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
+                        return false;
+                    }
+                }
+            }
             return true;
+
         }
 
         /// <summary>
