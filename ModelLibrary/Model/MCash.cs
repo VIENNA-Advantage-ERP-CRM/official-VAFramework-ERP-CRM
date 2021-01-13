@@ -1376,8 +1376,18 @@ namespace VAdvantage.Model
             // Vikas View  Allocation Header Created only When Any Cashline CashType is "Invoice"
             if (CashTyp_Invc > 0)
             {
-                alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
-                alloc.Save();
+                //AllocationHdr have Lines then it will processit otherwise it will Delete the AllocationHdr.
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_AllocationLine_ID) FROM C_AllocationLine " +
+                    "WHERE C_AllocationHdr_ID=" + alloc.GetC_AllocationHdr_ID(), null, Get_Trx()));
+                if (count > 0)
+                {
+                    alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
+                    alloc.Save();
+                }
+                else
+                {
+                    alloc.Delete(true, Get_Trx());
+                }
             }
             // Vikas End
             //Added By Bharat 07/11/2015 (to Update Open Balance of Business Partner)
