@@ -4842,7 +4842,10 @@ namespace VAdvantage.Model
             return true;
         }
 
-        //Allocation for Payment incase of PrePay Order
+        /// <summary>
+        /// Generate Allocation for Payment incase of PrePay Order
+        /// </summary>
+        /// <returns>if allocation generated it returns true else false</returns>
         private bool AllocateOrder()
         {
             try
@@ -4914,12 +4917,10 @@ namespace VAdvantage.Model
                     return false;
                 }
                 alloc.Save(Get_Trx());
-                //_processMsg = "@C_AllocationHdr_ID@: " + alloc.GetDocumentNo();
-                //" View @C_AllocationHdr_ID@ created successfully with doc no: "
                 _processMsg = Msg.GetMsg(GetCtx(), "SucessflyCrtAlloc") + alloc.GetDocumentNo();
-                //	Get Project from Invoice
+                //	Get Project from Order
                 int C_Project_ID = DataBase.DB.GetSQLValue(Get_Trx(),
-                    "SELECT MAX(C_Project_ID) FROM C_Order WHERE C_Order_ID=@param1", GetC_Order_ID());
+                    "SELECT C_Project_ID FROM C_Order WHERE C_Order_ID=@param1", GetC_Order_ID());
                 if (C_Project_ID > 0 && GetC_Project_ID() == 0)
                 {
                     SetC_Project_ID(C_Project_ID);
@@ -4932,8 +4933,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("MPayment-Error in AllocateInvoice");
-                log.Severe(ex.ToString());
+                log.Severe(ex.Message);
             }
             return true;
         }
