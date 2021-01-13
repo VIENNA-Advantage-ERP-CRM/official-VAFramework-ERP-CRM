@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VIS</RootNamespace>
     <AssemblyName>VIS</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -608,9 +608,6 @@
     <Content Include="Areas\VIS\Images\zoom.png" />
     <Content Include="Areas\VIS\Images\Zoom16.png" />
     <Content Include="Areas\VIS\Images\zoomfav.png" />
-    <Content Include="Areas\VIS\ReportViewer\js\kendo.subset.2015.3.930.min.js" />
-    <Content Include="Areas\VIS\ReportViewer\js\telerikReportViewer-10.0.16.204.js" />
-    <Content Include="Areas\VIS\ReportViewer\js\telerikReportViewer-10.0.16.204.min.js" />
     <Content Include="Areas\VIS\ReportViewer\styles\kendo.blueopal.min.css" />
     <Content Include="Areas\VIS\ReportViewer\styles\kendo.common.min.css" />
     <Content Include="Areas\VIS\ReportViewer\styles\telerikReportViewer.css" />
@@ -733,7 +730,6 @@
     <Content Include="Areas\VIS\Scripts\processengine\processctl.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processinfo.js" />
     <Content Include="Areas\VIS\Scripts\processengine\processparameter.js" />
-    <Content Include="Areas\VIS\Scripts\processengine\telerikContainer.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\bipanel.js" />
     <Content Include="Areas\VIS\Scripts\tabpanels\verinfo.js" />
     <Content Include="Areas\VIS\Scripts\TestPanel.js" />
@@ -894,6 +890,7 @@
     <Content Include="Areas\VIS\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\VIS\ReportViewer\js\" />
     <Folder Include="Areas\VIS\Scripts\app\processengine\" />
     <Folder Include="Areas\VIS\Views\AmountDivision\" />
     <Folder Include="Areas\VIS\Views\GenerateXModel\" />
