@@ -236,9 +236,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3971</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/VAdvantageHtml55</IISUrl>
+          <IISUrl>http://localhost/VAdvantageHtml19</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/VAdvantageHtml55</IISAppRootUrl>
+          <IISAppRootUrl>http://localhost/VAdvantageHtml19</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -866,7 +866,6 @@
     <None Include="Areas\VIS\Views\Theme\ThemeCnfgtr.cshtml" />
     <Content Include="Areas\VIS\WebPages\CreateUser.aspx" />
     <Content Include="Areas\VIS\WebPages\CrystalReprotViewer.aspx" />
-    <Content Include="packages.config" />
     <Content Include="Areas\VIS\Views\AccountForm\Index.cshtml" />
     <Content Include="Areas\VIS\Views\ASearch\Index.cshtml" />
     <Content Include="Areas\VIS\Views\Chat\LoadChat.cshtml" />
@@ -915,16 +914,7 @@
     <Content Include="Areas\VIS\Views\Shared\View.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_Template.cshtml" />
     <Content Include="Areas\VIS\Views\Shared\_UserSettingsOld.cshtml" />
-    <Content Include="web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Areas\VIS\Views\BiPanel\GetUserBILogin.cshtml" />
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
