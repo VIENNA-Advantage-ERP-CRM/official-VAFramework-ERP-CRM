@@ -509,7 +509,7 @@ namespace VIS.Classes
 
             queryList.VIS_135 = "SELECT PaymentRule FROM C_PaySelectionCheck WHERE C_PaySelection_ID = @pSelectID";
 
-            queryList.VIS_136 = "select ad_process_id from ad_process where ad_printformat_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = @check_ID)) and c_bankaccountdoc.isactive = 'Y' and rownum =1)";
+            queryList.VIS_136 = "select ad_process_id from ad_process where ad_printformat_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = @check_ID)) and c_bankaccountdoc.isactive = 'Y' AND rownum =1)";
 
             queryList.VIS_137 = "select ad_table_id from ad_table where tablename = 'C_PaySelectionCheck'";
 
@@ -534,7 +534,7 @@ namespace VIS.Classes
             queryList.VIS_145 = "SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'";
 
             queryList.VIS_146 = "SELECT adt.TableName, adt.AD_Window_ID, adt.PO_Window_ID, " +
-            "case when adwfa.AD_Window_ID is null then (select AD_WINDOW_ID from AD_WF_Activity where AD_WF_Process_ID = (select AD_WF_Process_ID from AD_WF_Activity where AD_WF_Activity_ID = adwfa.AD_WF_Activity_ID) and AD_WINDOW_ID is not null and rownum = 1) else adwfa.AD_Window_ID end as ActivityWindow " +
+            "case when adwfa.AD_Window_ID is null then (select AD_WINDOW_ID from AD_WF_Activity where AD_WF_Process_ID = (select AD_WF_Process_ID from AD_WF_Activity where AD_WF_Activity_ID = adwfa.AD_WF_Activity_ID) and AD_WINDOW_ID is not null AND rownum = 1) else adwfa.AD_Window_ID end as ActivityWindow " +
             "FROM AD_Table adt " +
             "LEFT JOIN AD_WF_Activity adwfa on adt.AD_Table_ID = adwfa.AD_Table_ID " +
             "WHERE adt.AD_Table_ID = @AD_Table_ID and adwfa.AD_WF_Activity_ID = @AD_WF_Activity_ID";
