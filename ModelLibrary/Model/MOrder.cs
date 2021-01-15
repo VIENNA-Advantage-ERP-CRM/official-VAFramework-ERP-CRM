@@ -6231,6 +6231,12 @@ namespace VAdvantage.Model
             }
             else
             {
+                //to save the payment which is created by POS DocType Order because we need to save the payment in Drafted stage.
+                if (Get_Trx() != null)
+                {
+                    Get_Trx().Commit();
+                }
+
                 if (_payment.CompleteIt().Equals(DOCACTION_Complete))
                 {
                     _payment.SetProcessed(true);
@@ -6244,6 +6250,8 @@ namespace VAdvantage.Model
                 else
                 {
                     info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo() + " (" + _payment.GetProcessMsg() + ")");
+                    //TO reverse the eftects of completion  of payment because Alocation is generating always if we don't rolback it will set invoice as Paid
+                    Get_Trx().Rollback();
                 }
                 _processMsg = "";
             }
