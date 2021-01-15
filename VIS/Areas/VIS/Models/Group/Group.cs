@@ -706,6 +706,7 @@ namespace VIS.Models
                             {
                                 sql = "UPDATE AD_Process_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Process_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
                             }
+                            DB.ExecuteQuery(sql, null, null);
                         }
                     }
                     else
@@ -780,6 +781,7 @@ namespace VIS.Models
                             {
                                 sql = "UPDATE AD_Workflow_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Workflow_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
                             }
+                            DB.ExecuteQuery(sql, null, null);
                         }
                     }
                     else

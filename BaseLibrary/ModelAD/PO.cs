@@ -74,6 +74,8 @@ namespace VAdvantage.Model
         /** Document Value Workflow Manager		*/
         private static DocWorkflowMgr s_docWFMgr = null;
 
+        private static Dictionary<int, StringBuilder> logbatch = new Dictionary<int, StringBuilder>();
+
         private int parent_ID = 0;
 
         #endregion
@@ -2261,23 +2263,52 @@ namespace VAdvantage.Model
             bool ok;
             try
             {
-                string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                StringBuilder adLog = null;
+                //string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
+                {
+                    adLog = logbatch[session.GetAD_Session_ID()];
+                }
+                else if (session != null)
+                {
+                    adLog = new StringBuilder();
+                    logbatch[session.GetAD_Session_ID()] = adLog;
+                }
+
+
+
+
                 if (p_info.GetTableName() == "AD_ChangeLog")
                 {
-                    if (adLog.Length <= 0)
-                        adLog = "BEGIN ";
+                    if ((adLog == null || adLog.Length <= 0) && !DB.IsPostgreSQL())
+                    {
+                        adLog.Append("BEGIN ");
+                    }
 
-                    p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
+                    if (DB.IsPostgreSQL())
+                    {
+                        //p_ctx.SetContext("AD_ChangeLogBatch", adLog + " SELECT ExecuteImmediate('" + strSqlInsert.Replace("'", "''") + "');");
+                        adLog.Append(" SELECT ExecuteImmediate('" + strSqlInsert.Replace("'", "''") + "');");
+                    }
+                    else
+                        //p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
+                        adLog.Append("execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
                     //no = 1;
                     return true;
                 }
                 else
                 {
-                    if (adLog.Length > 6)
+                    if (adLog != null && adLog.Length > 6)
                     {
-                        string adLogDB = adLog + " END; ";
-                        p_ctx.SetContext("AD_ChangeLogBatch", "");
-                        no = DB.ExecuteQuery(adLogDB, null, _trx);
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLog.Append(" END; ");
+                        }
+
+                        //p_ctx.SetContext("AD_ChangeLogBatch", "");
+
+                        no = DB.ExecuteQuery(adLog.ToString(), null, _trx);
+                        adLog.Clear();
                     }
                     else
                     {
@@ -2631,12 +2662,23 @@ namespace VAdvantage.Model
                 bool ok;
                 try
                 {
-                    string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
-                    if (adLog.Length > 6)
+                    StringBuilder adLog = null;
+                    if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
                     {
-                        string adLogDB = adLog + " END; ";
-                        p_ctx.SetContext("AD_ChangeLogBatch", "");
-                        no = DB.ExecuteQuery(adLogDB, null, _trx);
+                        adLog = logbatch[session.GetAD_Session_ID()];
+                    }
+
+                    if (adLog != null && adLog.Length > 6)
+                    {
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLog.Append(" END; ");
+                        }
+
+                        //p_ctx.SetContext("AD_ChangeLogBatch", "");
+                        //logbatch[session.GetAD_Session_ID()].Clear();
+                        no = DB.ExecuteQuery(adLog.ToString(), null, _trx);
+                        adLog.Clear();
                     }
                     else
                     {
@@ -3315,16 +3357,30 @@ namespace VAdvantage.Model
                     }	//   for all fields
                 }
 
-                string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
-                if (adLog.Length > 6)
+                //string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                //if (adLog.Length > 6)
+                //{
+                //    string adLogDB = adLog + " END; ";
+                //    p_ctx.SetContext("AD_ChangeLogBatch", "");
+                //    no = DB.ExecuteQuery(adLogDB, null, null);
+                //}
+                StringBuilder adLog = null;
+                if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
                 {
-                    string adLogDB = adLog + " END; ";
-                    p_ctx.SetContext("AD_ChangeLogBatch", "");
-                    no = DB.ExecuteQuery(adLogDB, null, null);
+                    adLog = logbatch[session.GetAD_Session_ID()];
                 }
+                if (adLog != null && adLog.Length > 6)
+                {
+                    if (!DB.IsPostgreSQL())
+                    {
+                        adLog.Append(" END; ");
+                    }
 
-                //	Housekeeping
-                _mIDs[0] = I_ZERO;
+                    no = DB.ExecuteQuery(adLog.ToString(), null, null);
+                    adLog.Clear();
+                }
+                    //	Housekeeping
+                    _mIDs[0] = I_ZERO;
                 if (_trx == null)
                 {
                     log.Fine("complete");
