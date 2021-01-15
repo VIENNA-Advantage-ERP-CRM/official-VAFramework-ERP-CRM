@@ -869,7 +869,23 @@ namespace VAdvantage.Model
             else
             {
                 //	Above Watch Limit
-                Decimal watchAmt = Decimal.Multiply(creditLimit, GetCreditWatchRatio());
+                //Peference check if credit watch per is zero on header then gets the value from bpgroup 
+                Decimal watchAmt;
+                if (Get_ColumnIndex("CreditWatchPercent") > 0)
+                {
+                    if (GetCreditWatchPercent() == 0)
+                    {
+                        watchAmt = Decimal.Multiply(creditLimit, GetCreditWatchRatio());
+
+                    }
+                    else
+                        watchAmt = Decimal.Multiply(creditLimit, GetCustomerCreditWatch());
+                }
+                else
+                {
+                    watchAmt = Decimal.Multiply(creditLimit, GetCreditWatchRatio());
+                }
+
                 if (watchAmt.CompareTo(GetTotalOpenBalance()) < 0)
                     SetSOCreditStatus(SOCREDITSTATUS_CreditWatch);
                 else	//	is OK
@@ -900,13 +916,37 @@ namespace VAdvantage.Model
                 return SOCREDITSTATUS_CreditHold;
 
             //	Above Watch Limit
-            Decimal watchAmt = Decimal.Multiply(creditLimit, GetCreditWatchRatio());
+            Decimal watchAmt;
+            if (Get_ColumnIndex("CreditWatchPercent") > 0)
+            {
+                if (GetCreditWatchPercent() == 0)
+                {
+                    watchAmt = Decimal.Multiply(creditLimit, GetCreditWatchRatio());
+
+                }
+                else
+                    watchAmt = Decimal.Multiply(creditLimit, GetCustomerCreditWatch());
+            }
+            else
+            {
+                watchAmt = Decimal.Multiply(creditLimit, GetCreditWatchRatio());
+            }
+
             if (watchAmt.CompareTo(GetTotalOpenBalance()) < 0)
                 return SOCREDITSTATUS_CreditWatch;
             //	is OK
             return SOCREDITSTATUS_CreditOK;
         }
+        /// <summary>
+        /// Get Credit Watch Ratio on group
+        /// </summary>
+        /// <returns>credit watch ratio</returns>
+        public Decimal GetCustomerCreditWatch()
+        {
+            Object bd = GetCreditWatchPercent();
+            return Decimal.Round(Decimal.Divide(Util.GetValueOfDecimal(bd), Env.ONEHUNDRED), 2, MidpointRounding.AwayFromZero);
 
+        }
         /// <summary>
         /// Get Credit Watch Ratio
         /// </summary>

@@ -1253,11 +1253,13 @@
         };
 
         function BindGridSavedProducts() {
-            dGrid = null;
+            if (dGrid != null) {
+                dGrid.destroy();
+                dGrid = null;
+            }
             var grdRows = [];
             for (var j = 0; j < savedProduct.length; j++) {
-                var row = {};
-                //grdCol[item] = { field: dynData[item].ColumnName, sortable: true, attr: 'align=center' };
+                var row = {};                
                 row["Product"] = savedProduct[j].Product;
                 row["Value"] = savedProduct[j].Value;
                 row["QtyEntered"] = savedProduct[j].QtyEntered;
@@ -1353,7 +1355,7 @@
                         bsyDiv[0].style.visibility = "visible";
                         infoLines.splice(event.recid - 1, 1);
                         savedProduct.splice(event.recid - 1, 1);
-                        BindGridSavedProducts();
+                        BindDataSavedProduct();
                     }
                     else if (event.column == 6 && dGrid.records.length > 0) {
                         bsyDiv[0].style.visibility = "visible";
@@ -1387,7 +1389,7 @@
                             _IsLotSerial: "N",
                             _countID: 0
                         };
-                        BindGridSavedProducts();
+                        BindDataSavedProduct();
                     }
                     else if (event.column == 4 && dGrid.records.length > 0) {
                         //debugger;
@@ -1415,6 +1417,30 @@
             //}
             bsyDiv[0].style.visibility = "hidden";
         };
+
+        // Bind data into Saved Product Grid
+        function BindDataSavedProduct() {
+            dGrid.clear();
+            var grdRows = [];
+            for (var j = 0; j < savedProduct.length; j++) {
+                var row = {};
+                //grdCol[item] = { field: dynData[item].ColumnName, sortable: true, attr: 'align=center' };
+                row["Product"] = savedProduct[j].Product;
+                row["Value"] = savedProduct[j].Value;
+                row["QtyEntered"] = savedProduct[j].QtyEntered;
+                row["UOM"] = savedProduct[j].UOM;
+                row["Attribute"] = savedProduct[j].Attribute;
+                row["ProdID"] = savedProduct[j].M_Product_ID1;
+                row['recid'] = j + 1;
+                grdRows[j] = row;
+            }
+
+            if (grdRows.length > 0) {
+                w2utils.encodeTags(grdRows);
+                dGrid.add(grdRows);
+            }
+            bsyDiv[0].style.visibility = "hidden";
+        }
 
         var btnOKClick = function () {
             //debugger;
@@ -2041,7 +2067,7 @@
                         upcSearch = true;
                         //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
                         whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(p.UPC) LIKE " + srchValue.toUpperCase()
-                            + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase()+ " OR UPPER(uc.UPC) LIKE " + srchValue.toUpperCase() + ")"
+                            + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(uc.UPC) LIKE " + srchValue.toUpperCase() + ")"
                     }
 
                     else if (srchCtrls[i].Ctrl.colName == "SKU") {

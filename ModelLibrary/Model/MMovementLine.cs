@@ -367,8 +367,14 @@ namespace VAdvantage.Model
                                                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
                                     " AND t.AD_Client_ID = " + GetAD_Client_ID() +
                                     @" AND t.M_Locator_ID = " + GetM_Locator_ID() +
-                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
-                                    " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID();
+                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID();
+
+                        // In Case of Attribute Number do not check qty with attribute from storage
+                        if (GetDTD001_AttributeNumber() == null || GetM_AttributeSetInstance_ID() > 0)
+                        {
+                            qry += " AND NVL(M_AttributeSetInstance_ID , 0) =" + GetM_AttributeSetInstance_ID();
+                        }
+                           
                         containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, null));  // dont use Transaction here - otherwise impact goes wrong on completion
 
                         qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS CurrentQty FROM m_transaction t 

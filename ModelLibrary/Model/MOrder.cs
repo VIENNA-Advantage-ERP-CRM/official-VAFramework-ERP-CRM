@@ -27,6 +27,7 @@ using VAdvantage.Logging;
 using VAdvantage.Print;
 using System.Reflection;
 using ModelLibrary.Classes;
+using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.Model
 {
@@ -1315,10 +1316,10 @@ namespace VAdvantage.Model
                     }
 
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
-                    if (line.Get_ColumnIndex("C_Quotation_Line_ID") > 0)
+                    if (line.Get_ColumnIndex("C_Quotation_Line_ID") >= 0)
                         line.Set_Value("C_Quotation_Line_ID", fromLines[i].GetC_OrderLine_ID());
                     // Added by Bharat on 06 Jan 2018 to set Values on Sales Order from Sales Quotation.
-                    if (line.Get_ColumnIndex("C_Order_Quotation") > 0)
+                    if (line.Get_ColumnIndex("C_Order_Quotation") >= 0)
                         line.Set_Value("C_Order_Quotation", fromLines[i].GetC_Order_ID());
 
                     line.SetQtyDelivered(Env.ZERO);
@@ -1338,7 +1339,7 @@ namespace VAdvantage.Model
                         line.SetTaxAmt();		//	recalculate Tax Amount
 
                     // ReCalculate Surcharge Amount
-                    if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                    if (line.Get_ColumnIndex("SurchargeAmt") >= 0)
                     {
                         line.SetSurchargeAmt(Env.ZERO);
                     }
@@ -1703,8 +1704,8 @@ namespace VAdvantage.Model
                         MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
                         ol.SetHeaderInfo(this);
                         //JID_1673 Quantity entered should not be zero
-                        if((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
-                             list.Add(ol);
+                        if ((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
+                            list.Add(ol);
                     }
                 }
             }
@@ -2376,6 +2377,17 @@ namespace VAdvantage.Model
                 {
                     string paymentRule = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_PAYMENTBASETYPE FROM VA009_PAYMENTMETHOD 
                                                                                    WHERE VA009_PAYMENTMETHOD_ID=" + GetVA009_PaymentMethod_ID(), null, Get_Trx()));
+                    //if Docbase is Sales Order and Sub Type SO Is POS Order then check the payment method must not be letter of credit and check.
+                    if ((dt.GetDocBaseType().Equals("SOO")) && (dt.GetDocSubTypeSO().Equals(DocSubTypeSO_POS)))
+                    {
+                        if (paymentRule.Equals("L") || paymentRule.Equals("S")) // "L"-- Letter of credit, "S"-- Check
+                        {
+                            _processMsg = Msg.GetMsg(GetCtx(), "VIS_PleaseChangePaymentMethod");
+                            log.SaveError("VIS_PleaseChangePaymentMethod", "");
+                            return false;
+                        }
+                    }
+
                     if (!String.IsNullOrEmpty(paymentRule))
                     {
                         SetPaymentMethod(paymentRule);
@@ -2912,8 +2924,42 @@ namespace VAdvantage.Model
                         {
                             if (bp.ValidateCreditValidation("A,D,E", GetC_BPartner_Location_ID()))
                             {
+                                //to set credit fail and credit fail notice true in case of sales order
+                                if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
+                                {
+                                    if ((Get_ColumnIndex("IsCreditFail") >= 0) && (Get_ColumnIndex("IsCreditFailNotice") >= 0))
+                                    {
+                                        /* rolback transaction because we ned to set credit fail checkbox true if credit not alowded if we set status invalid 
+                                        then it wil rollback the update query as wel that's why we rollback before update query */
+                                        if (Get_Trx() != null)
+                                            Get_Trx().Rollback();
+                                        int res = DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='Y', IsCreditFailNotice='Y' WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_Trx());
+                                        if (res <= 0)
+                                        {
+                                            log.Info("Credit fail or notice  checkbox not updated ");
+                                        }
+                                        else
+                                            Get_Trx().Commit();
+                                    }
+                                }
                                 _processMsg = retMsg;
                                 return DocActionVariables.STATUS_INVALID;
+                            }
+                        }
+                        else
+                        {
+                            //to set credit fail and credit fail notice false in case of sales order
+                            if ((IsSOTrx() && !IsReturnTrx() && !IsSalesQuotation() && !Util.GetValueOfBool(Get_Value("IsBlanketTrx"))))
+                            {
+                                if ((Get_ColumnIndex("IsCreditFail") >= 0) && (Get_ColumnIndex("IsCreditFailNotice") >= 0))
+                                {
+
+                                    int res = Util.GetValueOfInt(DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='N', IsCreditFailNotice='N' WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_Trx()));
+                                    if (res <= 0)
+                                    {
+                                        log.Info("Credit fail or notice  checkbox not updated ");
+                                    }
+                                }
                             }
                         }
                     }
@@ -3093,7 +3139,7 @@ namespace VAdvantage.Model
                         }
 
                         //JID_1686,JID_1687 only Items are updated in storage tab
-                        if(product.IsStocked())
+                        if (product.IsStocked())
                         {
                             // Work done by Vivek on 13/11/2017 assigned by Mukesh sir
                             // Work done to update qtyordered at storage and qtyreserved at order line
@@ -3112,7 +3158,7 @@ namespace VAdvantage.Model
                                 if (!line.Save(Get_TrxName()))
                                     return false;
                             }
-                        }                        
+                        }
                         continue;
                     }
 
@@ -3278,7 +3324,7 @@ namespace VAdvantage.Model
                         taxList.Add(taxID);
 
                         // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
-                        if (line.Get_ColumnIndex("SurchargeAmt") > 0)
+                        if (line.Get_ColumnIndex("SurchargeAmt") >= 0)
                         {
                             oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                             if (oTax != null)
@@ -3401,6 +3447,34 @@ namespace VAdvantage.Model
             {
                 MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
                 DocSubTypeSO = dt.GetDocSubTypeSO();
+
+                //to check document type if it is pos then we need to check the document type on selected document types
+                if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
+                {
+                    string paymentbaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID = " + GetVA009_PaymentMethod_ID(), null, Get_Trx()));
+                    if (!paymentbaseType.Equals(PAYMENTRULEPO_Check) && !paymentbaseType.Equals(PAYMENTRULEPO_LetterOfCredit) && !paymentbaseType.Equals(PAYMENTRULEPO_Cash) && !paymentbaseType.Equals(PAYMENTRULEPO_CashPlusCard))
+                    {
+                        if ((dt.Get_ColumnIndex("C_DocTypePayment_ID") >= 0) && (dt.Get_ColumnIndex("C_BankAccount_ID") >= 0))
+                        {
+                            if (dt.GetC_DocTypeShipment_ID() == 0 || dt.GetC_DocTypeInvoice_ID() == 0 || dt.GetC_DocTypePayment_ID() == 0 || dt.GetC_BankAccount_ID() == 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PosDocTypeConfig");
+                                return DOCSTATUS_Invalid;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (paymentbaseType.Equals(PAYMENTRULEPO_Cash) || paymentbaseType.Equals(PAYMENTRULEPO_CashPlusCard))
+                        {
+                            if (dt.GetC_DocTypeShipment_ID() == 0 || dt.GetC_DocTypeInvoice_ID() == 0)
+                            {
+                                _processMsg = Msg.GetMsg(GetCtx(), "VIS_PosDocTypeConfig");
+                                return DOCSTATUS_Invalid;
+                            }
+                        }
+                    }
+                }
 
                 //	Just prepare
                 if (DOCACTION_Prepare.Equals(GetDocAction()))
@@ -3567,7 +3641,7 @@ namespace VAdvantage.Model
                         #endregion
 
                     }
-                    
+
                     // Enabled Order History Tab
                     //if (dt.GetDocBaseType() == "BOO") ///dt.GetValue() == "BSO" || dt.GetValue() == "BPO")
                     //{
@@ -3750,6 +3824,7 @@ namespace VAdvantage.Model
                             Get_Trx().Rollback();
                             return DocActionVariables.STATUS_INVALID;
                         }
+
                         //Info.Append(" - @C_Invoice_ID@: ").Append(invoice.GetDocumentNo());
                         //Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo()).Append(" generated successfully");
                         Info.Append(" & @C_Invoice_ID@ No: ").Append(invoice.GetDocumentNo());
@@ -3758,6 +3833,27 @@ namespace VAdvantage.Model
                         String msg = invoice.GetProcessMsg();
                         if (msg != null && msg.Length > 0)
                             Info.Append(" (").Append(msg).Append(")");
+
+                        // for POS Doctype we need to create payment with invoice
+                        if (invoice != null)
+                        {
+                            if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
+                            {
+                                if (!X_C_Invoice.PAYMENTRULE_Cash.Equals(invoice.GetPaymentRule()) && !X_C_Invoice.PAYMENTRULE_CashAndCredit.Equals(invoice.GetPaymentRule()))
+                                {
+                                    MPayment _pay = null;
+                                    _pay = CreatePaymentAgainstPOSDocType(Info, invoice);
+                                    if (_pay == null)
+                                    {
+                                        if (_processMsg != null && _processMsg.Length > 0)
+                                            Info.Append(" (").Append(_processMsg).Append(")");
+                                        Get_Trx().Rollback();
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
+
+                                }
+                            }
+                        }
                     }
                     catch (NullReferenceException ex)
                     {
@@ -4332,7 +4428,7 @@ namespace VAdvantage.Model
         protected void SetCompletedDocumentNo()
         {
             // if Re-Activated document then no need to get Document no from Completed sequence
-            if (Get_ColumnIndex("IsReActivated") > 0 && IsReActivated())
+            if (Get_ColumnIndex("IsReActivated") >= 0 && IsReActivated())
             {
                 return;
             }
@@ -4359,7 +4455,7 @@ namespace VAdvantage.Model
             if (dt.IsOverwriteSeqOnComplete())
             {
                 // Set Drafted Document No into Temp Document No.
-                if (Get_ColumnIndex("TempDocumentNo") > 0)
+                if (Get_ColumnIndex("TempDocumentNo") >= 0)
                 {
                     SetTempDocumentNo(GetDocumentNo());
                 }
@@ -5928,7 +6024,7 @@ namespace VAdvantage.Model
                 }
 
                 // Set Value in Re-Activated when record is reactivated
-                if (Get_ColumnIndex("IsReActivated") > 0)
+                if (Get_ColumnIndex("IsReActivated") >= 0)
                 {
                     SetIsReActivated(true);
                 }
@@ -6051,11 +6147,115 @@ namespace VAdvantage.Model
                           INNER JOIN c_orderline ol ON ol.c_orderline_id = il.c_orderline_id
                           WHERE ol.C_Order_ID  = " + C_Order_ID + @" AND i.DocStatus NOT IN ('RE' , 'VO')) t";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+
+            //check order id exist on LCDetail or PODetail or SODetail. if exist then not able to reverse the current order 
+            if (_countOrder == 0 && Env.IsModuleInstalled("VA026_"))
+            {
+                sql = @"Select SUM(Result) From (                                                  
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_LCDetail lc INNER JOIN C_Order o ON lc.C_Order_ID=o.C_Order_ID WHERE 
+                                lc.DocStatus NOT IN ('RE' , 'VO') AND o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_LCDetail lc INNER JOIN C_Order o ON lc.VA026_Order_ID=o.C_Order_ID WHERE 
+                                lc.DocStatus NOT IN ('RE' , 'VO') AND o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_PODetail po INNER JOIN VA026_LCDetail lc ON po.VA026_LCDetail_ID=lc.VA026_LCDetail_ID
+                                INNER JOIN C_Order o ON po.C_Order_ID=o.C_Order_ID 
+                                WHERE lc.DocStatus NOT IN ('RE' , 'VO') AND  o.C_Order_ID=" + C_Order_ID + @"
+                                UNION ALL
+                                SELECT COUNT(o.C_Order_ID) AS Result FROM VA026_SODetail so INNER JOIN VA026_LCDetail lc ON so.VA026_LCDetail_ID=lc.VA026_LCDetail_ID
+                                INNER JOIN C_Order o ON so.C_Order_ID=o.C_Order_ID 
+                                WHERE lc.DocStatus NOT IN ('RE' , 'VO') AND  o.C_Order_ID=" + C_Order_ID + @") t";
+
+                _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+            }
+
             if (_countOrder > 0)
             {
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// To create payments when POS doc type 
+        /// </summary>
+        /// <param name="info">to save log or append msg</param>
+        /// <returns>payment object or null</returns>
+        public MPayment CreatePaymentAgainstPOSDocType(StringBuilder info, MInvoice inv)
+        {
+            DataSet invSch = DB.ExecuteDataset(@"SELECT ci.C_InvoicePaySchedule_ID, ci.VA009_OpnAmntInvce, d.C_BankAccount_ID,
+                                d.C_DocTypePayment_ID FROM c_invoicepayschedule ci 
+                                INNER JOIN c_invoice  i ON i.c_invoice_id = ci.c_invoice_id
+                                INNER JOIN C_order ord ON ord.C_Order_ID=i.c_order_id
+                                INNER JOIN c_doctype  d ON d.c_doctype_id = ord.c_doctype_id 
+                                WHERE i.C_Invoice_ID= " + GetC_Invoice_ID(), null, Get_Trx());
+            MPayment _payment = new MPayment(GetCtx(), 0, Get_Trx());
+            _payment.SetAD_Org_ID(inv.GetAD_Org_ID());
+            _payment.SetAD_Client_ID(inv.GetAD_Client_ID());
+            _payment.SetDateTrx(inv.GetDateAcct());
+            _payment.SetDateAcct(inv.GetDateAcct());
+            _payment.SetC_BPartner_ID(inv.GetC_BPartner_ID());
+            _payment.SetC_BPartner_Location_ID(inv.GetC_BPartner_Location_ID());
+            _payment.SetC_Invoice_ID(inv.GetC_Invoice_ID());
+            _payment.SetC_Currency_ID(inv.GetC_Currency_ID());
+            _payment.SetC_ConversionType_ID(inv.GetC_ConversionType_ID());
+            _payment.SetVA009_PaymentMethod_ID(inv.GetVA009_PaymentMethod_ID());
+            _payment.SetAD_OrgTrx_ID(inv.GetAD_OrgTrx_ID());
+            _payment.SetDocStatus(DOCSTATUS_Drafted);
+            if (invSch != null && invSch.Tables[0].Rows.Count > 0)
+            {
+                _payment.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(invSch.Tables[0].Rows[0]["C_InvoicePaySchedule_ID"]));
+                _payment.SetPayAmt(Util.GetValueOfDecimal(invSch.Tables[0].Rows[0]["VA009_OpnAmntInvce"]));
+                _payment.SetC_BankAccount_ID(Util.GetValueOfInt(invSch.Tables[0].Rows[0]["C_BankAccount_ID"]));
+                _payment.SetC_DocType_ID(Util.GetValueOfInt(invSch.Tables[0].Rows[0]["C_DocTypePayment_ID"]));
+            }
+            if (!_payment.Save())
+            {
+                string msg = string.Empty;
+                ValueNamePair pp = VLogger.RetrieveError();
+                if (pp != null)
+                {
+                    msg = pp.GetName();
+                    //if GetName is Empty then it will check GetValue
+                    if (string.IsNullOrEmpty(msg))
+                        msg = Msg.GetMsg("", pp.GetValue());
+                }
+                if (string.IsNullOrEmpty(msg))
+                    msg = Msg.GetMsg(GetCtx(), "VIS_PaymentnotSaved");
+                else
+                    msg = Msg.GetMsg(GetCtx(), "VIS_PaymentnotSaved") + "," + msg;
+
+                log.Info("Error occured while saving payment." + msg);
+                _processMsg = msg;
+                return null;
+            }
+            else
+            {
+                //to save the payment which is created by POS DocType Order because we need to save the payment in Drafted stage.
+                if (Get_Trx() != null)
+                {
+                    Get_Trx().Commit();
+                }
+
+                if (_payment.CompleteIt().Equals(DOCACTION_Complete))
+                {
+                    _payment.SetProcessed(true);
+                    _payment.SetDocStatus(DOCSTATUS_Completed);
+                    _payment.SetDocAction(DOCACTION_Close);
+                    if (_payment.Save())
+                    {
+                        info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo());
+                    }
+                }
+                else
+                {
+                    info.Append(" & @C_Payment_ID@: " + _payment.GetDocumentNo() + " (" + _payment.GetProcessMsg() + ")");
+                    //TO reverse the eftects of completion  of payment because Alocation is generating always if we don't rolback it will set invoice as Paid
+                    Get_Trx().Rollback();
+                }
+                _processMsg = "";
+            }
+            return _payment;
         }
 
         #region DocAction Members

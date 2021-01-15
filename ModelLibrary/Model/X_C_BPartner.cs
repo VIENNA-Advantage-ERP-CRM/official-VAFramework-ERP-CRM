@@ -1055,6 +1055,11 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
+        /** Set Credit Watch %.
+@param CreditWatchPercent Credit Watch - Percent of Credit Limit when OK switches to Watch */
+        public void SetCreditWatchPercent(Decimal? CreditWatchPercent) { Set_Value("CreditWatchPercent", (Decimal?)CreditWatchPercent); }/** Get Credit Watch %.
+@return Credit Watch - Percent of Credit Limit when OK switches to Watch */
+        public Decimal GetCreditWatchPercent() { Object bd = Get_Value("CreditWatchPercent"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
         /** Set Customer.
         @param IsCustomer Indicates if this Business Partner is a Customer */
         public void SetIsCustomer(Boolean IsCustomer)
@@ -1553,7 +1558,7 @@ namespace VAdvantage.Model
         public void SetPaymentRule(String PaymentRule)
         {
             //if (!IsPaymentRuleValid(PaymentRule))
-             //   throw new ArgumentException("PaymentRule Invalid value - " + PaymentRule + " - Reference_ID=195 - B - D - K - L - P - S - T");
+            //   throw new ArgumentException("PaymentRule Invalid value - " + PaymentRule + " - Reference_ID=195 - B - D - K - L - P - S - T");
             if (PaymentRule != null && PaymentRule.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");
@@ -1596,7 +1601,7 @@ namespace VAdvantage.Model
         public void SetPaymentRulePO(String PaymentRulePO)
         {
             //if (!IsPaymentRulePOValid(PaymentRulePO))
-             //   throw new ArgumentException("PaymentRulePO Invalid value - " + PaymentRulePO + " - Reference_ID=195 - B - D - K - L - P - S - T");
+            //   throw new ArgumentException("PaymentRulePO Invalid value - " + PaymentRulePO + " - Reference_ID=195 - B - D - K - L - P - S - T");
             if (PaymentRulePO != null && PaymentRulePO.Length > 1)
             {
                 log.Warning("Length > 1 - truncated");
@@ -2869,7 +2874,8 @@ namespace VAdvantage.Model
         public void SetVA025_DiscountCalculation(String VA025_DiscountCalculation)
         {
             if (!IsVA025_DiscountCalculationValid(VA025_DiscountCalculation))
-                throw new ArgumentException("VA025_DiscountCalculation Invalid value - " + VA025_DiscountCalculation + " - Reference_ID=1000487 - C1 - C2 - C3"); if (VA025_DiscountCalculation != null && VA025_DiscountCalculation.Length > 2) { log.Warning("Length > 2 - truncated"); VA025_DiscountCalculation = VA025_DiscountCalculation.Substring(0, 2); } Set_Value("VA025_DiscountCalculation", VA025_DiscountCalculation);
+                throw new ArgumentException("VA025_DiscountCalculation Invalid value - " + VA025_DiscountCalculation + " - Reference_ID=1000487 - C1 - C2 - C3"); if (VA025_DiscountCalculation != null && VA025_DiscountCalculation.Length > 2) { log.Warning("Length > 2 - truncated"); VA025_DiscountCalculation = VA025_DiscountCalculation.Substring(0, 2); }
+            Set_Value("VA025_DiscountCalculation", VA025_DiscountCalculation);
         } /** Get Apply Discount Calculation.
         @return Apply Discount Calculation */
         public String GetVA025_DiscountCalculation() { return (String)Get_Value("VA025_DiscountCalculation"); }/** Set Apply Discount Per Unit.

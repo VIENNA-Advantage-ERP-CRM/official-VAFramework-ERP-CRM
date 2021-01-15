@@ -320,6 +320,46 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
+        /// <summary>
+        /// based on Cash_ID it will check the reference Invoice Schedule's 
+        /// are paid or not in the CashLines and returns those if it is paid.
+        /// </summary>
+        /// <param name="cash_ID">C_Cash_ID</param>
+        /// <returns>string query</returns>
+        public static string CashLineRefInvScheduleDuePaidOrNot(int cash_ID)
+        {
+            string sql = null;
+            if (DB.IsOracle())
+            {
+                sql = @"SELECT LTRIM(SYS_CONNECT_BY_PATH( PaidSchedule, ' , '),',') PaidSchedule FROM
+                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
+                                                (SELECT cs.duedate || '_' || cs.dueamt AS PaidSchedule FROM C_Cash c 
+                                                 INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
+                                                 INNER JOIN C_InvoicePaySchedule cs ON cs.C_InvoicePaySchedule_ID = cl.C_InvoicePaySchedule_ID 
+                                                 INNER JOIN C_Invoice inv ON inv.C_Invoice_ID = cl.C_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
+                                                 WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
+                                                 AND NVL(cl.C_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 OR NVL(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.c_cash_id = " + cash_ID +
+                                                 @" AND ROWNUM <= 100 )  )
+                                                 WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1";
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                sql = @"SELECT string_agg(PaidSchedule, ', ') PaidSchedule FROM
+                                              (SELECT PaidSchedule, ROW_NUMBER () OVER (ORDER BY PaidSchedule ) RN, COUNT (*) OVER () CNT FROM 
+                                                (SELECT cs.duedate || '_' || cs.dueamt AS PaidSchedule FROM C_Cash c 
+                                                 INNER JOIN C_CashLine cl ON c.c_cash_id = cl.c_cash_id 
+                                                 INNER JOIN C_InvoicePaySchedule cs ON cs.C_InvoicePaySchedule_ID = cl.C_InvoicePaySchedule_ID 
+                                                 INNER JOIN C_Invoice inv ON inv.C_Invoice_ID = cl.C_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
+                                                 WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
+                                                 AND NVL(cl.C_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 OR NVL(cs.c_cashline_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.c_cash_id = " + cash_ID +
+                                                 @") t ORDER BY PaidSchedule LIMIT 100) tb
+                                                 WHERE PaidSchedule IS NOT NULL";
+            }
+            return sql;
+        }
+
         public static string MInOutContainerNotAvailable(int M_InOut_ID)
         {
             StringBuilder sql = new StringBuilder();
@@ -840,7 +880,7 @@ namespace VAdvantage.DataBase
         /// </summary>
         /// <param name="listAggregation">aggregated to</param>
         /// <returns>aggregation syntax</returns>
-        public static string ListAggregationAmountDimesnionLine (string listAggregation)
+        public static string ListAggregationAmountDimesnionLine(string listAggregation)
         {
             if (DB.IsOracle())
             {
@@ -851,6 +891,37 @@ namespace VAdvantage.DataBase
                 return "STRING_AGG('ac.'||main.Colname,'||''_''||' order by main.ColId)";
             }
             return listAggregation;
+        }
+
+        /// <summary>Updates the loc and name on bp header.</summary>
+        /// <param name="C_BPartner_ID">C_BPartner_ID.</param>
+        /// <returns>
+        ///   Sql query
+        /// </returns>
+        public static string UpdateLocAndNameOnBPHeader(int C_BPartner_ID)
+        {
+            StringBuilder sql = new StringBuilder();
+            if (DB.IsOracle())
+            {
+                sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(VA077_LocNo, ', '), 2) CSV 
+                             FROM(SELECT VA077_LocNo, ROW_NUMBER() OVER(ORDER BY VA077_LocNo ASC) rn, COUNT(*) over() CNT 
+                             FROM (SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @"))
+                             WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1) , 
+                             VA077_SalesRep = (SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2)
+                             CSP FROM(SELECT Name, ROW_NUMBER() OVER(ORDER BY Name ASC) rn, COUNT(*) over() CNT 
+                             FROM (SELECT us.Name FROM AD_User us JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @")) WHERE rn = cnt START WITH RN = 1 
+                             CONNECT BY rn = PRIOR rn + 1) WHERE C_BPartner_ID = " + C_BPartner_ID);
+            }
+            else if (DB.IsPostgreSQL())
+            {
+                sql.Append(@"UPDATE C_BPartner SET VA077_CustLocNo = (SELECT  string_agg(VA077_LocNo, ', ') AS Name 
+                             FROM (SELECT DISTINCT VA077_LocNo FROM C_BPartner_Location WHERE C_BPartner_ID =" + C_BPartner_ID + @") AS ABC), 
+                             VA077_SalesRep = (SELECT string_agg(Name, ', ') CSP FROM (SELECT us.Name FROM AD_User us 
+                             JOIN C_BPartner_Location bp ON bp.AD_User_ID = us.AD_User_ID 
+                             WHERE bp.C_BPartner_ID =" + C_BPartner_ID + @") AS U) WHERE C_BPartner_ID = " + C_BPartner_ID);
+            }
+            return sql.ToString();
         }
 
     }

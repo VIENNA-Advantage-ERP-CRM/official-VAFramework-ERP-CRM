@@ -433,7 +433,12 @@ namespace VAdvantage.Model
                 {
                     SetPrice();
                 }
-                SetLineNetAmt();
+
+                // Set Line Net Amount if not calculated
+                if (GetLineNetAmt().CompareTo(Env.ZERO) == 0)
+                {
+                    SetLineNetAmt();
+                }
             }
             catch
             {

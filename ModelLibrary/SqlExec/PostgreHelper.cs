@@ -88,7 +88,7 @@ namespace VAdvantage.SqlExec.PostgreSql
         /// <param name="commandType">the CommandType (stored procedure, text, etc.)</param>
         /// <param name="commandText">the stored procedure name or T-SQL command</param>
         /// <param name="commandParameters">an array of NpgsqlParameters to be associated with the command or 'null' if no parameters are required</param>
-        private static void PrepareCommand(NpgsqlCommand command, NpgsqlConnection connection,  NpgsqlTransaction    transaction, CommandType commandType, string commandText, NpgsqlParameter[] commandParameters)
+        private static void PrepareCommand(NpgsqlCommand command, NpgsqlConnection connection, NpgsqlTransaction transaction, CommandType commandType, string commandText, NpgsqlParameter[] commandParameters)
         {
             //if the provided connection is not open, we will open it
             if (connection.State != ConnectionState.Open)
@@ -199,7 +199,7 @@ namespace VAdvantage.SqlExec.PostgreSql
             catch (Exception ex)
             {
                 log.SaveError("DBExecuteError", ex);
-                retval =  - 1;
+                retval = -1;
                 if (trx != null)
                     trx.Rollback("tmpSavePoint");
             }
@@ -266,7 +266,7 @@ namespace VAdvantage.SqlExec.PostgreSql
         public static int ExecuteNonQuery(NpgsqlTransaction transaction, CommandType commandType, string commandText)
         {
             //pass through the call providing null for the set of NpgsqlParameters
-            return ExecuteNonQuery(transaction.Connection, commandType, commandText,transaction, (NpgsqlParameter[])null);
+            return ExecuteNonQuery(transaction.Connection, commandType, commandText, transaction, (NpgsqlParameter[])null);
         }
 
         //private static int ExecuteNonQuery(NpgsqlTransaction transaction, CommandType commandType, string commandText, params NpgsqlParameter[] commandParameters)
@@ -1291,7 +1291,7 @@ namespace VAdvantage.SqlExec.PostgreSql
         public static object ExecuteScalar(NpgsqlTransaction transaction, CommandType commandType, string commandText)
         {
             //pass through the call providing null for the set of NpgsqlParameters
-            return ExecuteScalar(transaction.Connection, commandType, commandText,transaction, (NpgsqlParameter[])null);
+            return ExecuteScalar(transaction.Connection, commandType, commandText, transaction, (NpgsqlParameter[])null);
         }
 
         /// <summary>
