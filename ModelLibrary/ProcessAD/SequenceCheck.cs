@@ -20,7 +20,8 @@ using System.Data.SqlClient;
 using VAdvantage.Logging;
 using VAdvantage.Utility;
 
-using VAdvantage.ProcessEngine;namespace VAdvantage.Process
+using VAdvantage.ProcessEngine;
+namespace VAdvantage.Process
 {
     public class SequenceCheck : ProcessEngine.SvrProcess
     {
@@ -155,7 +156,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             try
             {
                 //pstmt = DataBase.prepareStatement (sql, null);
-                idr = DataBase.DB.ExecuteReader(sql, null, null);
+                idr = DataBase.DB.ExecuteReader(sql, null, trxName);
                 while (idr.Read())
                 {
                     String TableName = Utility.Util.GetValueOfString(idr[0]);// rs.getString(1);
@@ -195,7 +196,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE IsTableID='Y' "
                 + "ORDER BY Name";
             int counter = 0;
-            IDataReader idr = null;
+            //IDataReader idr = null;
+            DataSet ds = null;
             Trx trxName = null;
             if (sp != null)
             {
@@ -204,10 +206,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, trxName);
-                idr = DataBase.DB.ExecuteReader(sql, null, trxName);
-                while (idr.Read())
+                //idr = DataBase.DB.ExecuteReader(sql, null, trxName);
+                ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
+
+                //while (idr.Read())
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    MSequence seq = new MSequence(ctx, idr, trxName);
+                    MSequence seq = new MSequence(ctx, ds.Tables[0].Rows[i], trxName);
                     int old = seq.GetCurrentNext();
                     int oldSys = seq.GetCurrentNextSys();
                     if (seq.ValidateTableIDValue())
@@ -250,14 +255,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	else if (CLogMgt.isLevel(6)) 
                     //		log.fine("OK - " + tableName);
                 }
-                idr.Close();
+                // idr.Close();
             }
             catch (Exception e)
             {
-                if (idr != null)
-                {
-                    idr.Close();
-                }
+                //if (idr != null)
+                //{
+                //    idr.Close();
+                //}
                 _log.Log(Level.SEVERE, sql, e);
             }
 
