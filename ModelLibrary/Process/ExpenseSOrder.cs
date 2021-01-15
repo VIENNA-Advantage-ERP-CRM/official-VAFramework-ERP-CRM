@@ -247,7 +247,16 @@ namespace VAdvantage.Process
                 // to check for if payment term is null
                 if (bp.GetC_PaymentTerm_ID() == 0) {
                     // set the default payment method as check
-                    _order.SetC_PaymentTerm_ID(GetPaymentTerm());
+                    int payTerm = GetPaymentTerm();
+                    if (payTerm <= 0)
+                    {
+                        message = Msg.GetMsg(GetCtx(), "IsActivePaymentTerm");
+                        return;
+                    }
+                    else
+                    {
+                        _order.SetC_PaymentTerm_ID(payTerm);
+                    }
                 }
                 else {
                     //check weather paymentterm is active or not
@@ -265,7 +274,16 @@ namespace VAdvantage.Process
                 // Added by mohit - to set payment method and sales rep id.
                 if(bp.GetVA009_PaymentMethod_ID()==0){
                     // set the default payment method as check
-                    _order.SetVA009_PaymentMethod_ID(GetPaymentMethod());
+                   int paymethod = GetPaymentMethod();
+                    if (paymethod <= 0)
+                    {
+                        message = Msg.GetMsg(GetCtx(), "IsActivePaymentMethod");
+                        return;
+                    }
+                    else
+                    {
+                        _order.SetVA009_PaymentMethod_ID(paymethod);
+                    }
                 }
                 else
                 {
@@ -491,7 +509,7 @@ namespace VAdvantage.Process
         public int GetPaymentMethod(){
             //get organisation default 
             //added IsActive condition to check weather the paymentmethod is active or not
-            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) AND AD_Client_ID="+tel.GetAD_Client_ID()+"  AND IsActive='Y' ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
             dynamic pri = DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
@@ -503,7 +521,7 @@ namespace VAdvantage.Process
         /// <returns> returns payment term ID</returns>
         public int GetPaymentTerm(){
             //added IsActive condition to check weather the term is active or not
-            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY AD_ORG_ID DESC, C_PaymentTerm_ID DESC";
+            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) AND IsActive='Y' AND AD_Client_ID=" + tel.GetAD_Client_ID() + " ORDER BY AD_ORG_ID DESC, C_PaymentTerm_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
             dynamic pri= DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
