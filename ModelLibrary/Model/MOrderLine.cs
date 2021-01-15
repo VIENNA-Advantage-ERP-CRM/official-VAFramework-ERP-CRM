@@ -4604,13 +4604,59 @@ namespace VAdvantage.Model
             {
                 if (GetC_Order_ID() > 0)
                 {
-                    string sql = "UPDATE C_Order  p SET " +
-        "VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
-        ",VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
-        ",VA077_MarginPercent=(SELECT COALESCE(SUM(pl.VA077_MarginPercent),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
-        ",VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0)  FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + ")" +
+                    DataSet contDS = null;
 
-        " WHERE p.C_Order_ID=" + GetC_Order_ID();
+                    string sql = @"SELECT VA077_ServiceContract_ID, VA077_HistoricContractDate, VA077_ContractCPStartDate, DocumentNo,
+                                   C_Frequency_ID, VA077_ContractCPEndDate, VA077_AnnualValue from VA077_ServiceContract 
+                                   WHERE VA077_ServiceContract_ID IN(SELECT MAX(VA077_Contract) FROM C_OrderLine 
+                                   WHERE C_Order_ID =" + GetC_Order_ID() + " AND VA077_Contract IS NOT NULL)";
+                    contDS = DB.ExecuteDataset(sql);
+                    DateTime? HCDate = null;
+                    DateTime? StartDate = null;
+                    DateTime? EndDate = null;
+                    Decimal AnnualValue = 0.00m;
+                    if (contDS != null && contDS.Tables[0].Rows.Count > 0)
+                    {
+                        HCDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_HistoricContractDate"]);
+                        StartDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPStartDate"]);
+                        EndDate = Util.GetValueOfDateTime(contDS.Tables[0].Rows[0]["VA077_ContractCPEndDate"]);
+                        AnnualValue = Util.GetValueOfDecimal(contDS.Tables[0].Rows[0]["VA077_AnnualValue"]);
+
+                        sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_MarginPercent=(SELECT ROUND(COALESCE(SUM(pl.VA077_MarginPercent),0),2) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @",
+                            VA077_ContractCPStartDate = " + GlobalVariable.TO_DATE(StartDate, true) + @", 
+                            VA077_ContractCPEndDate= " + GlobalVariable.TO_DATE(EndDate, true) + @",
+                            VA077_OldAnnualContractTotal= " + AnnualValue + @",
+                            VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(GetStartDate(), true) + @",
+                            VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_Contract IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_AdditionalAnnualCharge =(SELECT COALESCE(SUM(pl.PriceActual),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_Contract IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_Contract IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @")
+                            WHERE p.C_Order_ID=" + GetC_Order_ID();
+                    }
+                    else
+                    {
+                        sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_MarginPercent=(SELECT ROUND(COALESCE(SUM(pl.VA077_MarginPercent),0),2) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0) FROM C_OrderLine pl 
+                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(GetStartDate(), true) + @"
+                            WHERE p.C_Order_ID=" + GetC_Order_ID();
+                    }
+
                     int no = DB.ExecuteQuery(sql, null, Get_TrxName());
                     if (no <= 0)
                     {

@@ -3913,6 +3913,19 @@ namespace VAdvantage.Model
 
                             }
                         }
+
+                        //Set VA077_IsContract check if VA077 module installed and VA077_IsContract selected on order line
+                        if (Env.IsModuleInstalled("VA077_"))
+                        {
+                            Char IsSCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["VA077_IsContract"]);
+                            if (IsSCont == 'Y')
+                            {
+                                MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), null);
+                                mo.Set_Value("VA077_IsContract", true);
+                                mo.Set_Value("VA077_CreateServiceContract", "N");
+                                mo.Save();
+                            }
+                        }
                     }
                 }
 
