@@ -212,7 +212,7 @@ namespace VAdvantage.Process
                                 }
                                 else
                                 {
-                                     return Msg.GetMsg(GetCtx(), "IsActivePaymentMethod"); ;
+                                     return Msg.GetMsg(GetCtx(), "IsActivePaymentMethodInv"); ;
                                 }
                             }
 
