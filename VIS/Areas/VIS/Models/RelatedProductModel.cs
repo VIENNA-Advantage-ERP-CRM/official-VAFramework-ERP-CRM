@@ -30,8 +30,8 @@ namespace VIS.Models
 
             if (MOrder.Table_ID.Equals(Table_ID))
             {
-                MOrder ord = new MOrder(ctx, Record_ID, null);
-                validFrom = ord.GetDateOrdered();
+
+                validFrom = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT DateOrdered FROM C_Order WHERE C_Order_ID = " + Record_ID));
             }
 
             if (validFrom == null)
@@ -85,8 +85,8 @@ namespace VIS.Models
 
             if (MOrder.Table_ID.Equals(Table_ID))
             {
-                MOrder ord = new MOrder(ctx, Record_ID, null);
-                validFrom = ord.GetDateOrdered();
+
+                validFrom = Util.GetValueOfDateTime(DB.ExecuteScalar("SELECT DateOrdered FROM C_Order WHERE C_Order_ID = " + Record_ID));
             }
 
             if (validFrom == null)
@@ -151,6 +151,11 @@ namespace VIS.Models
                 _msg = CreateSQLines(ctx, ReqLines, Record_ID);
             }
 
+            else if (MProject.Table_ID.Equals(Table_ID))
+            {
+                _msg = CreateOppLines(ctx, ReqLines, Record_ID);
+            }
+
             return _msg;
         }
 
@@ -185,6 +190,63 @@ namespace VIS.Models
                 POLine.SetDateOrdered(DateTime.Now);
                 POLine.SetPriceEntered(ReqLines[i].PriceStd);
                 POLine.SetPriceActual(ReqLines[i].PriceStd);
+                POLine.SetPriceList(ReqLines[i].PriceList);
+                if (POLine.Save())
+                {
+                    SavedCount++;
+                }
+            }
+            if (TotalCount == SavedCount)
+            {
+                msg = Msg.GetMsg(ctx, "VIS_SuccessFullyInserted");
+            }
+            else
+            {
+                msg = SavedCount + Msg.GetMsg(ctx, "VIS_NoOfLineSaved") + TotalCount + ".";
+            }
+            return msg;
+        }
+
+        /// <summary>
+        /// Create Opportunity Lines
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="ReqLines">Related Product data</param>
+        /// <param name="Record_ID">Record ID</param>
+        /// <returns>Message as string</returns>
+        public string CreateOppLines(Ctx ctx, List<RelatedProductData> ReqLines, int Record_ID)
+        {
+            int TotalCount, SavedCount = 0;
+            int LineNo;
+            Decimal Discount;
+            string msg;
+            MProjectLine POLine;
+
+            LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(Line) FROM C_ProjectLine WHERE C_Project_ID=" + Record_ID));
+            MProject PO = new MProject(ctx, Record_ID, null);
+            TotalCount = ReqLines.Count;
+            for (int i = 0; i < ReqLines.Count; i++)
+            {
+                LineNo += 10;
+                POLine = new MProjectLine(PO);
+                POLine.SetM_Product_ID(ReqLines[i].Product_ID);
+                if (POLine.Get_ColumnIndex("M_AttributeSetInstance_ID") >= 0)
+                {
+                    POLine.SetM_AttributeSetInstance_ID(ReqLines[i].AttributeSetInstance_ID);
+                }
+                POLine.SetPlannedQty(ReqLines[i].QtyEntered);
+                POLine.SetLine(LineNo);
+
+                if (Math.Sign(ReqLines[i].PriceList) == 0)
+                    Discount = Env.ZERO;
+                else
+                {                    
+                    Decimal multiplier = Decimal.Round(Decimal.Divide(Decimal.Multiply(ReqLines[i].PriceStd, Env.ONEHUNDRED)
+                        , ReqLines[i].PriceList), 2, MidpointRounding.AwayFromZero);
+                    Discount = Decimal.Subtract(Env.ONEHUNDRED, multiplier);
+                }
+                POLine.SetDiscount(Discount);
+                POLine.SetPlannedPrice(ReqLines[i].PriceStd);
                 POLine.SetPriceList(ReqLines[i].PriceList);
                 if (POLine.Save())
                 {
