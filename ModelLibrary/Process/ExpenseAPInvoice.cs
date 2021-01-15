@@ -257,7 +257,7 @@ namespace VAdvantage.Process
                                 }
                                 else
                                 {
-                                    return Msg.GetMsg(GetCtx(), "IsActivePaymentTerm"); ;
+                                    return Msg.GetMsg(GetCtx(), "IsActivePaymentTermInv");
                                 }
                             }
 
