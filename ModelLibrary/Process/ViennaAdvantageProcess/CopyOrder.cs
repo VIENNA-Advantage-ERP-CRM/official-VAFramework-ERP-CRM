@@ -434,7 +434,7 @@ namespace ViennaAdvantage.Process
                     orderLine.Set_Value("VA077_ShowCNAutodesk", mOrderLine.Get_Value("VA077_ShowCNAutodesk"));
                     orderLine.Set_Value("VA077_CNAutodesk", mOrderLine.Get_Value("VA077_CNAutodesk"));
                     orderLine.Set_Value("VA077_UpdateFromVersn", mOrderLine.Get_Value("VA077_UpdateFromVersn"));
-                    orderLine.Set_Value("VA077_Contract", mOrderLine.Get_Value("VA077_Contract"));
+                    orderLine.Set_Value("VA077_ServiceContract_ID", mOrderLine.Get_Value("VA077_ServiceContract_ID"));
                     orderLine.Set_Value("VA077_MarginPercent", mOrderLine.Get_Value("VA077_MarginPercent"));
                     orderLine.Set_Value("VA077_MarginAmt", mOrderLine.Get_Value("VA077_MarginAmt"));
                     orderLine.Set_Value("VA077_PurchasePrice", mOrderLine.Get_Value("VA077_PurchasePrice"));

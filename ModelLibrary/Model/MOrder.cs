@@ -3913,17 +3913,22 @@ namespace VAdvantage.Model
 
                             }
                         }
+                    }
 
-                        //Set VA077_IsContract check if VA077 module installed and VA077_IsContract selected on order line
-                        if (Env.IsModuleInstalled("VA077_"))
+                    //Set VA077_IsContract check if VA077 module installed and VA077_IsContract selected on order line
+                    if (Env.IsModuleInstalled("VA077_"))
+                    {
+                        if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(VA077_IsContract) FROM 
+                                                                  C_OrderLine WHERE C_Order_ID = " + GetC_Order_ID() + @" AND 
+                                                                  VA077_IsContract = 'Y' AND IsActive = 'Y' ")) > 0)
                         {
-                            Char IsSCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["VA077_IsContract"]);
-                            if (IsSCont == 'Y')
+
+                            Qry = @"UPDATE C_Order SET VA077_IsContract='Y', VA077_CreateServiceContract='N'                            
+                                    WHERE C_Order_ID=" + GetC_Order_ID();
+                            int no = DB.ExecuteQuery(Qry, null, Get_TrxName());
+                            if (no <= 0)
                             {
-                                MOrder mo = new MOrder(GetCtx(), GetC_Order_ID(), null);
-                                mo.Set_Value("VA077_IsContract", true);
-                                mo.Set_Value("VA077_CreateServiceContract", "N");
-                                mo.Save();
+                                log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
                             }
                         }
                     }

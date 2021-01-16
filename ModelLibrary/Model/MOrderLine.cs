@@ -4607,9 +4607,9 @@ namespace VAdvantage.Model
                     DataSet contDS = null;
 
                     string sql = @"SELECT VA077_ServiceContract_ID, VA077_HistoricContractDate, VA077_ContractCPStartDate, DocumentNo,
-                                   C_Frequency_ID, VA077_ContractCPEndDate, VA077_AnnualValue from VA077_ServiceContract 
-                                   WHERE VA077_ServiceContract_ID IN(SELECT MAX(VA077_Contract) FROM C_OrderLine 
-                                   WHERE C_Order_ID =" + GetC_Order_ID() + " AND VA077_Contract IS NOT NULL)";
+                                   C_Frequency_ID, VA077_ContractCPEndDate, VA077_AnnualValue FROM VA077_ServiceContract 
+                                   WHERE VA077_ServiceContract_ID IN(SELECT MAX(VA077_ServiceContract_ID) FROM C_OrderLine 
+                                   WHERE C_Order_ID =" + GetC_Order_ID() + " AND VA077_ServiceContract_ID IS NOT NULL)";
                     contDS = DB.ExecuteDataset(sql);
                     DateTime? HCDate = null;
                     DateTime? StartDate = null;
@@ -4636,11 +4636,11 @@ namespace VAdvantage.Model
                             VA077_OldAnnualContractTotal= " + AnnualValue + @",
                             VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(GetStartDate(), true) + @",
                             VA077_PartialAmtCatchUp =(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_Contract IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_AdditionalAnnualCharge =(SELECT COALESCE(SUM(pl.PriceActual),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_Contract IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_NewAnnualContractTotal=(SELECT " + AnnualValue + @" + COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.VA077_Contract IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @")
+                            WHERE pl.IsActive = 'Y' AND pl.VA077_ServiceContract_ID IS NOT NULL AND pl.C_Order_ID = " + GetC_Order_ID() + @")
                             WHERE p.C_Order_ID=" + GetC_Order_ID();
                     }
                     else
