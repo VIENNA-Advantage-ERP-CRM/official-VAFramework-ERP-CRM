@@ -14217,6 +14217,7 @@
         return "";
     };
 
+    /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
     CalloutInvoice.prototype.CheckDueDate = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
         if (value == null || value.toString() == "") {

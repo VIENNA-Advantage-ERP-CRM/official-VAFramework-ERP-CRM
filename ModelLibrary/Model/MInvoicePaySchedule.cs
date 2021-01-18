@@ -161,7 +161,8 @@ namespace VAdvantage.Model
                 SetDiscountAmt(discount);
                 SetIsValid(true);
             }
-
+                        
+            /** Adhoc Payment - Setting DueDate for an InvoicePaySchedule ** Dt: 18/01/2021 ** Modified By: Kumar **/
             //	Dates            
             DateTime? dueDate = (invoice.GetDueDate() >= invoice.GetDateInvoiced()) ? invoice.GetDueDate() : TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetNetDays());
             SetDueDate(dueDate);
@@ -317,16 +318,20 @@ namespace VAdvantage.Model
                 SetBackupWithholdingAmount(0);
                 SetWithholdingAmt(0);
             }
-
-            MInvoice inv = new MInvoice(GetCtx(), this.GetC_Invoice_ID(), Get_Trx());
-
-            if (Util.GetValueOfDateTime(inv.GetDueDate()) >= Util.GetValueOfDateTime(inv.GetDateInvoiced()))
+                        
+            /** Adhoc Payment - Creating an InvoicePaySchedule based on DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (Util.GetValueOfInt(this.GetC_Invoice_ID()) > 0)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND C_Invoice_ID=" + GetC_Invoice_ID())) < 1)
+                MInvoice inv = new MInvoice(GetCtx(), this.GetC_Invoice_ID(), Get_Trx());
+
+                if (Util.GetValueOfDateTime(inv.GetDueDate()) >= Util.GetValueOfDateTime(inv.GetDateInvoiced()))
                 {
-                    inv.CreatePayScheduleOnDueDate();
-                }                
-                return false;
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND C_Invoice_ID=" + GetC_Invoice_ID())) < 1)
+                    {
+                        inv.CreatePayScheduleOnDueDate();
+                    }
+                    return false;
+                }
             }
 
             return true;

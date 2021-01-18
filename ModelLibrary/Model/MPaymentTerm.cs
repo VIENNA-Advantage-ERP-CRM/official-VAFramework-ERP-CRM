@@ -65,7 +65,8 @@ namespace VAdvantage.Model
         /// Get Payment Schedule
         /// </summary>
         /// <param name="requery">requery if true re-query</param>
-        /// <returns>array of schedule</returns>
+        /// <param name="invoice">invoice</param>
+        /// <returns></returns>
         public MPaySchedule[] GetSchedule(bool requery, MInvoice invoice)
         {
             if (_schedule != null && !requery)
@@ -87,7 +88,8 @@ namespace VAdvantage.Model
                 if (ds.Tables.Count > 0)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
-                    {
+                    {                        
+                        /** Adhoc Payment - Validation when DueDate is entered ** Dt: 18/01/2021 ** Modified By: Kumar **/
                         if ((invoice == null) || !((invoice != null && invoice.GetDueDate() >= invoice.GetDateInvoiced()) && list.Count == 1))
                         {                           
                             MPaySchedule ps = new MPaySchedule(GetCtx(), dr, Get_Trx());
@@ -113,6 +115,7 @@ namespace VAdvantage.Model
          */
         public String Validate()
         {
+            /** Adhoc Payment - Added invoice for DueDate validation ** Dt: 18/01/2021 ** Modified By: Kumar **/
             GetSchedule(true, null);
             if (_schedule.Length == 0)
             {
@@ -179,6 +182,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
+            /** Adhoc Payment - Added invoice for DueDate validation ** Dt: 18/01/2021 ** Modified By: Kumar **/
             GetSchedule(true, invoice);
 
             if (invoice.GetC_Order_ID() != 0)

@@ -148,8 +148,7 @@ namespace VAdvantage.Model
             to.SetDateAcct(dateDoc);
             to.SetDatePrinted(null);
             to.SetIsPrinted(false);
-
-            //to.SetDueDate(from.GetDueDate());
+                        
             //    
             to.SetIsApproved(false);
             to.SetC_Payment_ID(0);
@@ -1267,7 +1266,8 @@ namespace VAdvantage.Model
         /// <param name="newRecord">newRecord new</param>
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
-        {
+        {            
+            /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
             if (GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
             {
                 log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@Invalid@ @DueDate@"));
@@ -2509,7 +2509,8 @@ namespace VAdvantage.Model
          *	@return true if valid schedule
          */
         private bool CreatePaySchedule()
-        {
+        {            
+            /** Adhoc Payment - Creating an InvoicePaySchedule based on DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
             if (Util.GetValueOfDateTime(GetDueDate()) >= Util.GetValueOfDateTime(GetDateInvoiced()))
             {
                 String sql = "DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + GetC_Invoice_ID();
@@ -4909,8 +4910,9 @@ namespace VAdvantage.Model
                 C_DocTypeTarget_ID, true, Get_TrxName(), true);
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
-
-            if(GetDueDate() != null)
+                        
+            /** Adhoc Payment - Setting DueDate for Counter Doc ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (GetDueDate() != null)
                 counter.SetDueDate(GetDueDate());
             //
             counter.SetProcessing(false);
@@ -6171,7 +6173,8 @@ namespace VAdvantage.Model
         }
 
         #endregion
-
+               
+        /** Adhoc Payment - Creating an InvoicePaySchedule based on DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
         public bool CreatePayScheduleOnDueDate()
         {
             if (GetDueDate() == null)
