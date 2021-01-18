@@ -3002,7 +3002,8 @@ namespace VAdvantage.Model
                             //                                _processMsg = "Asset Cost Not Found";
                             //                                return DocActionVariables.STATUS_INVALID;
                             //                            }
-                            Decimal lineAmt = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                            //Ned to get conversion based on selected conversion type on Invoice.
+                            Decimal lineAmt = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                             //Pratap: Added check to update asset cost only in case of Capital/Expense=Capital
                             if (Util.GetValueOfString(line.Get_Value("VAFAM_CapitalExpense")) == "C")
                             {
@@ -3031,8 +3032,9 @@ namespace VAdvantage.Model
                                 po.Set_Value("Qty", line.GetQtyEntered());
                                 po.Set_Value("VAFAM_CapitalExpense", line.Get_Value("VAFAM_CapitalExpense"));
 
-                                Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-                                Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), line.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                                //Ned to get conversion based on selected conversion type on Invoice.
+                                Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                                Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), line.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                 po.Set_Value("Amount", LineTotalAmt_);
                                 po.Set_Value("Price", PriceActual_);
 
@@ -3051,7 +3053,8 @@ namespace VAdvantage.Model
                                         //Update Asset Gross Value in Case of Capital Expense
                                         if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
                                         {
-                                            Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                                            //Ned to get conversion based on selected conversion type on Invoice.
+                                            Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), line.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                                             asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Add(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), LineNetAmt_));
                                             if (!asst.Save(Get_TrxName()))
                                             {
@@ -3908,8 +3911,9 @@ namespace VAdvantage.Model
                 //	Update BP Statistics
                 bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_TrxName());
                 //	Update total revenue and balance / credit limit (reversed on AllocationLine.processIt)
+                //Ned to get conversion based on selected conversion type on Invoice.
                 Decimal invAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(true),	//	CM adjusted 
-                    GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
 
                 //Added by Vivek for Credit Limit on 24/08/2016
 
@@ -5409,7 +5413,8 @@ namespace VAdvantage.Model
                 //Update Asset Gross Value in Case of Capital Expense
                 if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
                 {
-                    Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    //Ned to get conversion based on selected conversion type on Invoice.
+                    Decimal LineNetAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineNetAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
                     asst.Set_Value("VAFAM_AssetGrossValue", Decimal.Add(Util.GetValueOfDecimal(asst.Get_Value("VAFAM_AssetGrossValue")), LineNetAmt_));
                     if (!asst.Save(Get_TrxName()))
                     {
@@ -5437,8 +5442,9 @@ namespace VAdvantage.Model
             po.Set_Value("Qty", rLine.GetQtyEntered());
             po.Set_Value("VAFAM_CapitalExpense", rLine.Get_Value("VAFAM_CapitalExpense"));
 
-            Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
-            Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+            //Ned to get conversion based on selected conversion type on Invoice.
+            Decimal LineTotalAmt_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetLineTotalAmt(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+            Decimal PriceActual_ = MConversionRate.ConvertBase(GetCtx(), rLine.GetPriceActual(), GetC_Currency_ID(), GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
             po.Set_Value("Amount", LineTotalAmt_);
             po.Set_Value("Price", PriceActual_);
 

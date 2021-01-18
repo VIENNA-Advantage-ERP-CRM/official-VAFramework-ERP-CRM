@@ -2731,6 +2731,24 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
+            // GNZ_1027: if conversion not found system will give message Message: Could not convert currency to base currency - Conversion type: XXXX
+            Decimal ordAmt = GetGrandTotal();
+            // If Amount is ZERO then no need to check currency conversion
+            if (!ordAmt.Equals(Env.ZERO))
+            {
+                ordAmt = MConversionRate.ConvertBase(GetCtx(), GetGrandTotal(), //	CM adjusted 
+             GetC_Currency_ID(), GetDateOrdered(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+
+                if (ordAmt == 0)
+                {
+                    MConversionType conv = new MConversionType(GetCtx(), GetC_ConversionType_ID(), Get_TrxName());
+                    _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetC_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                        + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetC_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
+
             //	Convert DocType to Target
             if (GetC_DocType_ID() != GetC_DocTypeTarget_ID())
             {
