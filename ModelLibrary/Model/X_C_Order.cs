@@ -2942,5 +2942,89 @@ namespace VAdvantage.Model
             @return Credit Fail Notice */
         public Boolean IsCreditFailNotice() { Object oo = Get_Value("IsCreditFailNotice"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
+        /** Set Additional Annual Charge.
+@param VA077_AdditionalAnnualCharge Additional Annual Charge */
+        public void SetVA077_AdditionalAnnualCharge(Decimal? VA077_AdditionalAnnualCharge) { Set_Value("VA077_AdditionalAnnualCharge", (Decimal?)VA077_AdditionalAnnualCharge); }/** Get Additional Annual Charge.
+@return Additional Annual Charge */
+        public Decimal GetVA077_AdditionalAnnualCharge() { Object bd = Get_Value("VA077_AdditionalAnnualCharge"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Change Start Date.
+@param VA077_ChangeStartDate Change Start Date */
+        public void SetVA077_ChangeStartDate(DateTime? VA077_ChangeStartDate) { Set_Value("VA077_ChangeStartDate", (DateTime?)VA077_ChangeStartDate); }/** Get Change Start Date.
+@return Change Start Date */
+        public DateTime? GetVA077_ChangeStartDate() { return (DateTime?)Get_Value("VA077_ChangeStartDate"); }/** Set Contract Current Period End Date.
+@param VA077_ContractCPEndDate Contract Current Period End Date */
+        public void SetVA077_ContractCPEndDate(DateTime? VA077_ContractCPEndDate) { Set_Value("VA077_ContractCPEndDate", (DateTime?)VA077_ContractCPEndDate); }/** Get Contract Current Period End Date.
+@return Contract Current Period End Date */
+        public DateTime? GetVA077_ContractCPEndDate() { return (DateTime?)Get_Value("VA077_ContractCPEndDate"); }/** Set Contract Current Period Start Date.
+@param VA077_ContractCPStartDate Contract Current Period Start Date */
+        public void SetVA077_ContractCPStartDate(DateTime? VA077_ContractCPStartDate) { Set_Value("VA077_ContractCPStartDate", (DateTime?)VA077_ContractCPStartDate); }/** Get Contract Current Period Start Date.
+@return Contract Current Period Start Date */
+        public DateTime? GetVA077_ContractCPStartDate() { return (DateTime?)Get_Value("VA077_ContractCPStartDate"); }/** Set Create Service Contract.
+@param VA077_CreateServiceContract Create Service Contract */
+        public void SetVA077_CreateServiceContract(String VA077_CreateServiceContract) { if (VA077_CreateServiceContract != null && VA077_CreateServiceContract.Length > 1) { log.Warning("Length > 1 - truncated"); VA077_CreateServiceContract = VA077_CreateServiceContract.Substring(0, 1); } Set_Value("VA077_CreateServiceContract", VA077_CreateServiceContract); }/** Get Create Service Contract.
+@return Create Service Contract */
+        public String GetVA077_CreateServiceContract() { return (String)Get_Value("VA077_CreateServiceContract"); }/** Set Historic Contract Date .
+@param VA077_HistoricContractDate Historic Contract Date  */
+        public void SetVA077_HistoricContractDate(DateTime? VA077_HistoricContractDate) { Set_Value("VA077_HistoricContractDate", (DateTime?)VA077_HistoricContractDate); }/** Get Historic Contract Date .
+@return Historic Contract Date  */
+        public DateTime? GetVA077_HistoricContractDate() { return (DateTime?)Get_Value("VA077_HistoricContractDate"); }/** Set Service Contract.
+@param VA077_IsContract Service Contract */
+        public void SetVA077_IsContract(Boolean VA077_IsContract) { Set_Value("VA077_IsContract", VA077_IsContract); }/** Get Service Contract.
+@return Service Contract */
+        public Boolean IsVA077_IsContract() { Object oo = Get_Value("VA077_IsContract"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Legal Entity.
+@param VA077_IsLegalEntity Legal Entity */
+        public void SetVA077_IsLegalEntity(Boolean VA077_IsLegalEntity) { Set_Value("VA077_IsLegalEntity", VA077_IsLegalEntity); }/** Get Legal Entity.
+@return Legal Entity */
+        public Boolean IsVA077_IsLegalEntity() { Object oo = Get_Value("VA077_IsLegalEntity"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Margin %.
+@param VA077_MarginPercent It’s margin amount in percentage */
+        public void SetVA077_MarginPercent(Decimal? VA077_MarginPercent) { Set_Value("VA077_MarginPercent", (Decimal?)VA077_MarginPercent); }/** Get Margin %.
+@return It’s margin amount in percentage */
+        public Decimal GetVA077_MarginPercent() { Object bd = Get_Value("VA077_MarginPercent"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set New Annual Contract Total.
+@param VA077_NewAnnualContractTotal New Annual Contract Total */
+        public void SetVA077_NewAnnualContractTotal(Decimal? VA077_NewAnnualContractTotal) { Set_Value("VA077_NewAnnualContractTotal", (Decimal?)VA077_NewAnnualContractTotal); }/** Get New Annual Contract Total.
+@return New Annual Contract Total */
+        public Decimal GetVA077_NewAnnualContractTotal() { Object bd = Get_Value("VA077_NewAnnualContractTotal"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Old Annual Contract Total.
+@param VA077_OldAnnualContractTotal Old Annual Contract Total */
+        public void SetVA077_OldAnnualContractTotal(Decimal? VA077_OldAnnualContractTotal) { Set_Value("VA077_OldAnnualContractTotal", (Decimal?)VA077_OldAnnualContractTotal); }/** Get Old Annual Contract Total.
+@return Old Annual Contract Total */
+        public Decimal GetVA077_OldAnnualContractTotal() { Object bd = Get_Value("VA077_OldAnnualContractTotal"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Order Reference .
+@param VA077_OrderRef It’s a customer reference number */
+        public void SetVA077_OrderRef(String VA077_OrderRef) { if (VA077_OrderRef != null && VA077_OrderRef.Length > 100) { log.Warning("Length > 100 - truncated"); VA077_OrderRef = VA077_OrderRef.Substring(0, 100); } Set_Value("VA077_OrderRef", VA077_OrderRef); }/** Get Order Reference .
+@return It’s a customer reference number */
+        public String GetVA077_OrderRef() { return (String)Get_Value("VA077_OrderRef"); }/** Set Partial Amount For Catch Up.
+@param VA077_PartialAmtCatchUp Partial Amount For Catch Up */
+        public void SetVA077_PartialAmtCatchUp(Decimal? VA077_PartialAmtCatchUp) { Set_Value("VA077_PartialAmtCatchUp", (Decimal?)VA077_PartialAmtCatchUp); }/** Get Partial Amount For Catch Up.
+@return Partial Amount For Catch Up */
+        public Decimal GetVA077_PartialAmtCatchUp() { Object bd = Get_Value("VA077_PartialAmtCatchUp"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
+        /** VA077_SalesCoWorker AD_Reference_ID=1001025 */
+        public static int VA077_SALESCOWORKER_AD_Reference_ID = 1001025;/** Set Sales co-worker.
+@param VA077_SalesCoWorker Sales co-worker */
+        public void SetVA077_SalesCoWorker(int VA077_SalesCoWorker) { Set_Value("VA077_SalesCoWorker", VA077_SalesCoWorker); }/** Get Sales co-worker.
+@return Sales co-worker */
+        public int GetVA077_SalesCoWorker() { Object ii = Get_Value("VA077_SalesCoWorker"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Co-worker %.
+@param VA077_SalesCoWorkerPer Identify the share of second sales person  */
+        public void SetVA077_SalesCoWorkerPer(Decimal? VA077_SalesCoWorkerPer) { Set_Value("VA077_SalesCoWorkerPer", (Decimal?)VA077_SalesCoWorkerPer); }/** Get Sales Co-worker %.
+@return Identify the share of second sales person  */
+        public Decimal GetVA077_SalesCoWorkerPer() { Object bd = Get_Value("VA077_SalesCoWorkerPer"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set VA077_ServiceContract_ID.
+@param VA077_ServiceContract_ID VA077_ServiceContract_ID */
+        public void SetVA077_ServiceContract_ID(int VA077_ServiceContract_ID)
+        {
+            if (VA077_ServiceContract_ID <= 0) Set_Value("VA077_ServiceContract_ID", null);
+            else
+                Set_Value("VA077_ServiceContract_ID", VA077_ServiceContract_ID);
+        }/** Get VA077_ServiceContract_ID.
+@return VA077_ServiceContract_ID */
+        public int GetVA077_ServiceContract_ID() { Object ii = Get_Value("VA077_ServiceContract_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Total Margin Amount.
+@param VA077_TotalMarginAmt Indicate the total margin amount */
+        public void SetVA077_TotalMarginAmt(Decimal? VA077_TotalMarginAmt) { Set_Value("VA077_TotalMarginAmt", (Decimal?)VA077_TotalMarginAmt); }/** Get Total Margin Amount.
+@return Indicate the total margin amount */
+        public Decimal GetVA077_TotalMarginAmt() { Object bd = Get_Value("VA077_TotalMarginAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Total Purchase Amount.
+@param VA077_TotalPurchaseAmt Total Purchase Amount */
+        public void SetVA077_TotalPurchaseAmt(Decimal? VA077_TotalPurchaseAmt) { Set_Value("VA077_TotalPurchaseAmt", (Decimal?)VA077_TotalPurchaseAmt); }/** Get Total Purchase Amount.
+@return Total Purchase Amount */
+        public Decimal GetVA077_TotalPurchaseAmt() { Object bd = Get_Value("VA077_TotalPurchaseAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Total Sales Amount.
+@param VA077_TotalSalesAmt Total Sales Amount */
+        public void SetVA077_TotalSalesAmt(Decimal? VA077_TotalSalesAmt) { Set_Value("VA077_TotalSalesAmt", (Decimal?)VA077_TotalSalesAmt); }/** Get Total Sales Amount.
+@return Total Sales Amount */
+        public Decimal GetVA077_TotalSalesAmt() { Object bd = Get_Value("VA077_TotalSalesAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
     }
 }
