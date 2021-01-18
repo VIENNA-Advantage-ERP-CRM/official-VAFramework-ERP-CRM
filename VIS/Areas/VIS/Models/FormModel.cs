@@ -426,7 +426,9 @@ namespace VIS.Models
                                 KeyNamePair pp = new KeyNamePair(windowList[i].AD_Window_ID, windowList[i].windowName);
                                 zoomList.Add(pp);
                                 // Use first window found. Ideally there should be just one matching
-                                break;
+
+                                //this break is remove by karan on 18 jan 2021, to show a record which can exist in more than one window.
+                               //break;
                             }
                         }
                     }
