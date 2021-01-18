@@ -14217,6 +14217,37 @@
         return "";
     };
 
+    CalloutInvoice.prototype.CheckDueDate = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (value == null || value.toString() == "") {
+            return "";
+        }
+
+        if (mTab.getValue("DateInvoiced") == null || mTab.getValue("DateInvoiced") == "") {
+            this.setCalloutActive(false);
+            return "";
+        }
+        else {
+            try {
+                this.setCalloutActive(true);
+
+                var invDate = new Date(mTab.getValue("DateInvoiced"));
+                var dueDate = new Date(value);
+                if (dueDate < invDate) {
+                    VIS.ADialog.error("DueDateLessThanInvoiceDate");                    
+                }
+                ctx = windowNo = mTab = mField = value = oldValue = null;
+                this.setCalloutActive(false);
+                //---------------------End---------------------------------------
+            }
+            catch (err) {
+                this.setCalloutActive(false);
+                return err;
+            }
+        }
+        return "";
+    };
+
     VIS.Model.CalloutInvoice = CalloutInvoice;
     //**************CalloutInvoice End*********
 
@@ -16665,20 +16696,14 @@
         var M_Product_ID = value;
         if (M_Product_ID == null || M_Product_ID == 0)
             return "";
-
-        var M_Product_ID = ctx.getContextAsInt(windowNo, "M_Product_ID");
-        if (M_Product_ID == null || M_Product_ID == 0)
-            return "";
-
         var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
-        var M_Attribute_ID = ctx.getContextAsInt(windowNo, "M_AttributeSetInstance_ID");
         if (M_PriceList_ID != 0) {
-            var query = "Select M_PriceList_Version_ID from M_ProductPrice where M_Product_id=" + Util.getValueOfInt(M_Product_ID) +
+            var query = "Select M_PriceList_Version_ID from M_ProductPrice where M_Product_id=" + Util.getValueOfInt(value) +
                 " and M_PriceList_Version_ID in (select m_pricelist_version_id from m_pricelist_version" +
                 " where m_pricelist_id = " + M_PriceList_ID + " and isactive='Y')";
             var M_PriceList_Version_ID = Util.getValueOfInt(VIS.DB.executeScalar(query, null, null));
             if (M_PriceList_Version_ID != 0) {
-                query = "Select PriceStd from M_ProductPrice where M_PriceList_Version_ID=" + M_PriceList_Version_ID + " and M_Product_id=" + Util.getValueOfInt(M_Product_ID) + " and M_AttributeSetInstance_ID=" + Util.getValueOfInt(M_Attribute_ID);
+                query = "Select PriceStd from M_ProductPrice where M_PriceList_Version_ID=" + M_PriceList_Version_ID + " and M_Product_id=" + Util.getValueOfInt(value);
                 var PriceStd = Util.getValueOfDecimal(VIS.DB.executeScalar(query, null, null));
                 //ForcastLine.SetPriceStd(PriceStd);
                 mTab.setValue("PriceStd", PriceStd);
@@ -20636,7 +20661,8 @@
             }
         }
         else if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "R" ||
-            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A") { /*Payment Return and Receipt*/
+            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A") 
+        { /*Payment Return and Receipt*/
             if (Util.getValueOfDecimal(mTab.getValue("amount")) < 0) {
                 mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
             }
@@ -20679,7 +20705,7 @@
                 mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
                 mTab.setValue("ConvertedAmount", (0 - Util.getValueOfDecimal(mTab.getValue("ConvertedAmount"))));
             }
-        }
+        }		 
         this.setCalloutActive(false);
         return "";
     }
@@ -22438,7 +22464,7 @@
         var _endDate = new Date(mTab.getValue("DateWorkComplete"));
         if (mField.getColumnName() == "DateWorkStart") {
             if (_startDate >= _endDate && mTab.getValue("DateWorkComplete") != null) {
-                mTab.setValue("DateWorkStart", "");
+                mTab.setValue("DateWorkStart", "");                
                 this.setCalloutActive(false);
                 return VIS.ADialog.info("DateWorkGreater");
             }
@@ -22446,7 +22472,7 @@
         else {
             if (_startDate >= _endDate && mTab.getValue("DateWorkStart") != null) {
                 mTab.setValue("DateWorkComplete", "");
-                this.setCalloutActive(false);
+                this.setCalloutActive(false);                
                 return VIS.ADialog.info("DateWorkGreater");
             }
         }

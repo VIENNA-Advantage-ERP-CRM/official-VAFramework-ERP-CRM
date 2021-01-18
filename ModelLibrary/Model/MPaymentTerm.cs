@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery if true re-query</param>
         /// <returns>array of schedule</returns>
-        public MPaySchedule[] GetSchedule(bool requery)
+        public MPaySchedule[] GetSchedule(bool requery, MInvoice invoice)
         {
             if (_schedule != null && !requery)
                 return _schedule;
@@ -82,15 +82,18 @@ namespace VAdvantage.Model
             }
             List<MPaySchedule> list = new List<MPaySchedule>();
             try
-            {
+            {  
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds.Tables.Count > 0)
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MPaySchedule ps = new MPaySchedule(GetCtx(), dr, Get_Trx());
-                        ps.SetParent(this);
-                        list.Add(ps);
+                        if ((invoice == null) || !((invoice != null && invoice.GetDueDate() >= invoice.GetDateInvoiced()) && list.Count == 1))
+                        {                           
+                            MPaySchedule ps = new MPaySchedule(GetCtx(), dr, Get_Trx());
+                            ps.SetParent(this);
+                            list.Add(ps);
+                        }
                     }
                 }
             }
@@ -110,7 +113,7 @@ namespace VAdvantage.Model
          */
         public String Validate()
         {
-            GetSchedule(true);
+            GetSchedule(true, null);
             if (_schedule.Length == 0)
             {
                 SetIsValid(true);
@@ -176,7 +179,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            GetSchedule(true);
+            GetSchedule(true, invoice);
 
             if (invoice.GetC_Order_ID() != 0)
             {

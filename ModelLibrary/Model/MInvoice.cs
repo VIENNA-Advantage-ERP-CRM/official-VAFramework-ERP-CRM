@@ -148,6 +148,8 @@ namespace VAdvantage.Model
             to.SetDateAcct(dateDoc);
             to.SetDatePrinted(null);
             to.SetIsPrinted(false);
+
+            //to.SetDueDate(from.GetDueDate());
             //    
             to.SetIsApproved(false);
             to.SetC_Payment_ID(0);
@@ -1217,7 +1219,7 @@ namespace VAdvantage.Model
          *	@return pay schedule is valid
          */
         public bool ValidatePaySchedule()
-        {
+        {            
             MInvoicePaySchedule[] schedule = MInvoicePaySchedule.GetInvoicePaySchedule
                 (GetCtx(), GetC_Invoice_ID(), 0, Get_Trx());
             log.Fine("#" + schedule.Length);
@@ -1266,6 +1268,12 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
+            if (GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
+            {
+                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@Invalid@ @DueDate@"));
+                return false;
+            }
+
             //	No Partner Info - set Template
             if (GetC_BPartner_ID() == 0)
                 SetBPartner(MBPartner.GetTemplate(GetCtx(), GetAD_Client_ID()));
@@ -2176,10 +2184,10 @@ namespace VAdvantage.Model
             {
                 SetWithholdingAmount(this);
             }
-
-            // not crating schedule in prepare stage, to be created in completed stage
-            // Create Invoice schedule
-            if (!CreatePaySchedule())
+            
+                // not crating schedule in prepare stage, to be created in completed stage
+                // Create Invoice schedule
+                if (!CreatePaySchedule())
             {
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
@@ -2502,6 +2510,15 @@ namespace VAdvantage.Model
          */
         private bool CreatePaySchedule()
         {
+            if (Util.GetValueOfDateTime(GetDueDate()) >= Util.GetValueOfDateTime(GetDateInvoiced()))
+            {
+                String sql = "DELETE FROM C_InvoicePaySchedule WHERE C_Invoice_ID=" + GetC_Invoice_ID();
+                int no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
+                log.Fine("C_Invoice_ID=" + GetC_Invoice_ID() + " - #" + no);
+
+                return CreatePayScheduleOnDueDate();                
+            }
+
             if (GetC_PaymentTerm_ID() == 0)
                 return false;
             MPaymentTerm pt = new MPaymentTerm(GetCtx(), GetC_PaymentTerm_ID(), Get_TrxName());
@@ -4892,6 +4909,9 @@ namespace VAdvantage.Model
                 C_DocTypeTarget_ID, true, Get_TrxName(), true);
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
+
+            if(GetDueDate() != null)
+                counter.SetDueDate(GetDueDate());
             //
             counter.SetProcessing(false);
             counter.Save(Get_TrxName());
@@ -6152,5 +6172,68 @@ namespace VAdvantage.Model
 
         #endregion
 
+        public bool CreatePayScheduleOnDueDate()
+        {
+            if (GetDueDate() == null)
+                return false;
+
+            decimal? dueAmt;
+            string paymentMode = string.Empty;
+            string paymentType = string.Empty;
+            string paymentTrigger = string.Empty;
+
+            if (Get_ColumnIndex("GrandTotalAfterWithholding") > 0 && GetGrandTotalAfterWithholding() != 0)
+                dueAmt= GetGrandTotalAfterWithholding();
+            else
+                dueAmt= GetGrandTotal();
+
+            string _sqlPaymentMthd = "SELECT VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID="
+                + GetVA009_PaymentMethod_ID() + " AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID();
+            DataSet dsPayMthd = new DataSet();
+            dsPayMthd = DB.ExecuteDataset(_sqlPaymentMthd);
+            if (dsPayMthd != null && dsPayMthd.Tables != null && dsPayMthd.Tables.Count > 0 && dsPayMthd.Tables[0].Rows.Count > 0)
+            {
+                paymentMode = Util.GetValueOfString(dsPayMthd.Tables[0].Rows[0]["VA009_PaymentMode"]);
+
+                if (!String.IsNullOrEmpty(Convert.ToString(dsPayMthd.Tables[0].Rows[0]["VA009_PaymentType"])))
+                {
+                    paymentType= Util.GetValueOfString(dsPayMthd.Tables[0].Rows[0]["VA009_PaymentType"]);
+                }
+                paymentTrigger= Util.GetValueOfString(dsPayMthd.Tables[0].Rows[0]["VA009_PaymentTrigger"]);
+                
+            }
+
+            Decimal? baseCurencyAmt = dueAmt;
+            if (GetC_Currency_ID() != GetCtx().GetContextAsInt("$C_Currency_ID")) //(invoice currency != base Currency)
+            {
+                baseCurencyAmt = MConversionRate.Convert(GetCtx(), Convert.ToDecimal(baseCurencyAmt), GetC_Currency_ID(),
+                    GetCtx().GetContextAsInt("$C_Currency_ID"), GetDateAcct(), GetC_ConversionType_ID(),
+                    GetAD_Client_ID(), GetAD_Org_ID());
+            }
+
+            if (Util.GetValueOfDateTime(GetDueDate()) >= Util.GetValueOfDateTime(GetDateInvoiced()))
+            {
+                int ipsID = MSequence.GetNextID(GetAD_Client_ID(), "C_InvoicePaySchedule", Get_Trx());
+                StringBuilder _sql = new StringBuilder("INSERT INTO C_InvoicePaySchedule");                
+                _sql.Append(" (AD_Client_ID,AD_Org_ID,BackupWithholdingAmount,C_Currency_ID,C_DocType_ID,C_InvoicePaySchedule_ID,C_Invoice_ID,C_BPARTNER_ID,C_PAYMENTTERM_ID,VA009_PAYMENTMETHOD_ID,Created,CreatedBy,DiscountDate,DiscountDays2,DueAmt,DueDate,VA009_PLANNEDDUEDATE,VA009_FOLLOWUPDATE,IsActive,IsHoldPayment,IsValid,Processed,Processing,Updated,UpdatedBy,VA009_ExecutionStatus,WithholdingAmt,VA009_BSECURRNCY,VA009_OPENAMNT,VA009_PAIDAMNT,VA009_PAIDAMNTINVCE,VA009_OPNAMNTINVCE,VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger) VALUES (");
+                _sql.Append(GetAD_Client_ID()).Append(",").Append(GetAD_Org_ID()).Append(",").Append(GetBackupWithholdingAmount()).Append(",").Append(GetC_Currency_ID()).Append(",").Append(GetC_DocType_ID()).Append(",").Append(ipsID).Append(",").Append(GetC_Invoice_ID()).Append(",").Append(GetC_BPartner_ID()).Append(",").Append(GetC_PaymentTerm_ID()).Append(",").Append(GetVA009_PaymentMethod_ID()).Append(",").Append(GlobalVariable.TO_DATE(GetCreated(), true)).Append(",").Append(GetCreatedBy());
+                _sql.Append(",").Append(GlobalVariable.TO_DATE(GetDueDate(), true)).Append(",").Append(GlobalVariable.TO_DATE(GetDueDate(), true)).Append(",").Append(dueAmt).Append(",").Append(GlobalVariable.TO_DATE(GetDueDate(), true)).Append(",").Append(GlobalVariable.TO_DATE(GetDueDate(), true)).Append(",").Append(GlobalVariable.TO_DATE(GetDueDate(), true)).Append(",").Append("'Y'").Append(",").Append("'N'").Append(",").Append("'Y'").Append(",").Append("'Y'").Append(",").Append("'N'").Append(",").Append(GlobalVariable.TO_DATE(GetUpdated(), true)).Append(",").Append(GetUpdatedBy()).Append(",").Append("'A'").Append(",").Append("0");
+                _sql.Append(",").Append(MClientInfo.Get(GetCtx(), GetAD_Client_ID()).GetC_Currency_ID()).Append(",").Append(baseCurencyAmt).Append(",").Append(baseCurencyAmt).Append(",").Append(dueAmt).Append(",").Append(dueAmt).Append(",'").Append(paymentMode).Append("','").Append(paymentType).Append("','").Append(paymentTrigger);
+                _sql.Append("')");
+              
+                int no = DataBase.DB.ExecuteQuery(_sql.ToString(), null, Get_Trx());
+                
+                if (no > 0)
+                {
+                    log.Fine("CreatePayScheduleOnDueDate " + no + " - Saved");
+                }
+                else
+                {
+                    log.Warning("CreatePayScheduleOnDueDate " + no + " - Not Saved");
+                    return false;
+                }
+            }           
+            return true;
+        }
     }
 }
