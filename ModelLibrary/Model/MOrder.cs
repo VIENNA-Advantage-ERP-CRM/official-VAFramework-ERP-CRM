@@ -2924,43 +2924,58 @@ namespace VAdvantage.Model
                         string retMsg = "";
                         bool crdAll=false;
                         //written by sandeep
-                        DataSet _dCvalidt =new DataSet();
-                        DataSet _dsreccount = new DataSet();
-                        DateTime validate = new DateTime();
+                       
                         if (Env.IsModuleInstalled("VA077_"))
                         {
-                            string sqlCreditStatusSettingOn = "SELECT CreditStatusSettingOn FROM C_Bpartner WHERE C_BPartner_ID =" + GetC_BPartner_ID() + "";
-                            DataSet _dCreditStatusSettingOn = DB.ExecuteDataset(sqlCreditStatusSettingOn, null, null);
-                            if (_dCreditStatusSettingOn.Tables.Count > 0 && _dCreditStatusSettingOn.Tables[0].Rows[0][0].ToString() == "CL")
+                           
+                            DateTime validate = new DateTime();
+                            string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
+                            if (CreditStatusSettingOn.Contains("CL"))
                             {
-                                string validt = "SELECT VA077_ValidityDate From C_Bpartner_Location WHERE C_BPartner_ID=" + GetC_BPartner_ID() + "";
-                                _dCvalidt = DB.ExecuteDataset(validt, null, null);
-                                if (_dCvalidt.Tables.Count > 0)
-                                {
-                                    validate = Convert.ToDateTime(_dCvalidt.Tables[0].Rows[0][0]);
-                                }
+                                validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
                             }
                             else
                             {
-                                string validt = "SELECT VA077_ValidityDate FROM C_Bpartner WHERE C_BPartner_ID=" + GetC_BPartner_ID() + "";
-                                _dCvalidt = DB.ExecuteDataset(validt, null, null);
-                                if (_dCvalidt.Tables.Count > 0)
+                                validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+
+                            }
+
+                                if (validate.Date < DateTime.Now.Date)
+
                                 {
-                                    validate = Convert.ToDateTime(_dCvalidt.Tables[0].Rows[0][0]);
+
+                                string sysCreditDate = "trunc(sysdate)"; // used in case of oracle
+                                if (DB.IsPostgreSQL())
+                                {
+                                    sysCreditDate = "current_timestamp";
                                 }
-                            }
 
-                            if (_dCvalidt.Tables.Count > 0 && validate.Date < DateTime.Now.Date)
+                                int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateoOdered BETWEEN " + sysCreditDate + " - (730) and " + sysCreditDate + ""));
 
-                            {
+                                if (RecCount > 0)
+                                    {
 
-                                string sqlnew = "SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateoOdered BETWEEN SYSDATE -730 and SYSDATE ";
-                                _dsreccount = DB.ExecuteDataset(sqlnew, null, null);
-                            }
-                            if (Convert.ToInt32(_dsreccount.Tables[0].Rows[0][0]) > 0)
-                            {
-                                 crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-                            }
+                                        crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                                    }
+                                    else
+                                    {
+                                        _processMsg = "Credit Limit is expired.";
+                                        return DocActionVariables.STATUS_INVALID;
+                                    }
+                                }
+
+                                else
+                                {
+                                    crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+
+
+                                }
+                        }
+
+                        else
+                        {
+                            crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+
                         }
                         if (!crdAll)
                         {
