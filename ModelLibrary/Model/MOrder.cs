@@ -2555,13 +2555,16 @@ namespace VAdvantage.Model
 
                         MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
                         string retMsg = "";
-                        bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-                        if (!crdAll)
-                            log.SaveWarning("Warning", retMsg);
-                        else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
-                        {
-                            log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
-                        }
+                           
+                                bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                                if (!crdAll)
+                                    log.SaveWarning("Warning", retMsg);
+                                else if (bp.IsCreditWatch(GetC_BPartner_Location_ID()))
+                                {
+                                    log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VIS_BPCreditWatch"));
+                                }
+                            
+                       
                     }
                 }
             }
@@ -2919,7 +2922,46 @@ namespace VAdvantage.Model
                         //}
 
                         string retMsg = "";
-                        bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                        bool crdAll=false;
+                        //written by sandeep
+                        DataSet _dCvalidt =new DataSet();
+                        DataSet _dsreccount = new DataSet();
+                        DateTime validate = new DateTime();
+                        if (Env.IsModuleInstalled("VA077_"))
+                        {
+                            string sqlCreditStatusSettingOn = "SELECT CreditStatusSettingOn FROM C_Bpartner WHERE C_BPartner_ID =" + GetC_BPartner_ID() + "";
+                            DataSet _dCreditStatusSettingOn = DB.ExecuteDataset(sqlCreditStatusSettingOn, null, null);
+                            if (_dCreditStatusSettingOn.Tables.Count > 0 && _dCreditStatusSettingOn.Tables[0].Rows[0][0].ToString() == "CL")
+                            {
+                                string validt = "SELECT VA077_ValidityDate From C_Bpartner_Location WHERE C_BPartner_ID=" + GetC_BPartner_ID() + "";
+                                _dCvalidt = DB.ExecuteDataset(validt, null, null);
+                                if (_dCvalidt.Tables.Count > 0)
+                                {
+                                    validate = Convert.ToDateTime(_dCvalidt.Tables[0].Rows[0][0]);
+                                }
+                            }
+                            else
+                            {
+                                string validt = "SELECT VA077_ValidityDate FROM C_Bpartner WHERE C_BPartner_ID=" + GetC_BPartner_ID() + "";
+                                _dCvalidt = DB.ExecuteDataset(validt, null, null);
+                                if (_dCvalidt.Tables.Count > 0)
+                                {
+                                    validate = Convert.ToDateTime(_dCvalidt.Tables[0].Rows[0][0]);
+                                }
+                            }
+
+                            if (_dCvalidt.Tables.Count > 0 && validate.Date < DateTime.Now.Date)
+
+                            {
+
+                                string sqlnew = "SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateoOdered BETWEEN SYSDATE -730 and SYSDATE ";
+                                _dsreccount = DB.ExecuteDataset(sqlnew, null, null);
+                            }
+                            if (Convert.ToInt32(_dsreccount.Tables[0].Rows[0][0]) > 0)
+                            {
+                                 crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                            }
+                        }
                         if (!crdAll)
                         {
                             if (bp.ValidateCreditValidation("A,D,E", GetC_BPartner_Location_ID()))

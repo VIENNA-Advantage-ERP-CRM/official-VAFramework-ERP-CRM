@@ -2233,16 +2233,66 @@ namespace VAdvantage.Model
                     //    invAmt = Decimal.Subtract(0, invAmt);
 
                     MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), null);
-
-                    string retMsg = "";
-                    bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
-                    if (!crdAll)
+                    //written by sandeep
+                    DataSet _dCvalidt = new DataSet();
+                    DataSet _dsreccount = new DataSet();
+                    DateTime validate= new DateTime();
+                    if (Env.IsModuleInstalled("VA077_"))
                     {
-                        if (bp.ValidateCreditValidation("C,D,F", GetC_BPartner_Location_ID()))
+
+
+                        //string sqltransdt = "SELECT DateInvoiced FROM C_Invoice where c_bpartner_id =" + GetC_BPartner_ID() + " and "+getdate  and c_invoice_id="+ GetC_Invoice_ID()+ " and  c_bpartner_id=" + GetC_BPartner_ID() +"";
+                        //DataSet _dstransdt = DB.ExecuteDataset(sqltransdt, null, null);
+                        //if (_dCvalidt.Tables.Count > 0 && validate.Date > DateTime.Now.Date)
+                        //{
+
+
+                        string sqlCreditStatusSettingOn = "SELECT CreditStatusSettingOn FROM c_bpartner WHERE C_BPartner_ID =" + GetC_BPartner_ID() + "";
+                        DataSet _dCreditStatusSettingOn = DB.ExecuteDataset(sqlCreditStatusSettingOn, null, null);
+
+                        if (_dCreditStatusSettingOn.Tables.Count>0 && _dCreditStatusSettingOn.Tables[0].Rows[0][0].ToString() == "CL")
                         {
-                            _processMsg = retMsg;
-                            return DocActionVariables.STATUS_INVALID;
+                            string validt = "SELECT VA077_ValidityDate FROM C_Bpartner_Location WHERE C_BPartner_ID=" + GetC_BPartner_ID() + "";
+                            _dCvalidt = DB.ExecuteDataset(validt, null, null);
+                            if (_dCvalidt.Tables.Count > 0)
+                            {
+                                validate = Convert.ToDateTime(_dCvalidt.Tables[0].Rows[0][0]);
+                            }
                         }
+                        else
+                        {
+                            string validt = "SELECT VA077_ValidityDate from C_Bpartner WHERE C_BPartner_ID=" + GetC_BPartner_ID() + "";
+                            _dCvalidt = DB.ExecuteDataset(validt, null, null);
+                            if (_dCvalidt.Tables.Count > 0)
+                            {
+                                validate = Convert.ToDateTime(_dCvalidt.Tables[0].Rows[0][0]);
+                            }
+                        }
+
+                        if (_dCvalidt.Tables.Count>0 && validate.Date<DateTime.Now.Date)
+                      
+                        {
+
+                            string sqlnew = "SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN SYSDATE -730 and SYSDATE ";
+                            _dsreccount = DB.ExecuteDataset(sqlnew, null, null);
+                        }
+
+                        if (Convert.ToInt32(_dsreccount.Tables[0].Rows[0][0]) > 0)
+                        {
+                            string retMsg = "";
+                            bool crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), invAmt, out retMsg);
+                            if (!crdAll)
+                            {
+                                if (bp.ValidateCreditValidation("C,D,F", GetC_BPartner_Location_ID()))
+                                {
+                                    _processMsg = retMsg;
+                                    return DocActionVariables.STATUS_INVALID;
+                                }
+                            }
+                        }
+                        _processMsg = "There is no record found";
+                        return DocActionVariables.STATUS_INVALID;
+
                     }
                 }
             }
