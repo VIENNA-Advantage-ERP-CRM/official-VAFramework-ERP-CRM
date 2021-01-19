@@ -326,7 +326,7 @@ namespace VAdvantage.Model
 
                 if (Util.GetValueOfDateTime(inv.GetDueDate()) >= Util.GetValueOfDateTime(inv.GetDateInvoiced()))
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule WHERE IsActive = 'Y' AND C_Invoice_ID=" + GetC_Invoice_ID())) < 1)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(ips.C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule ips WHERE ips.IsActive = 'Y' AND ips.C_Invoice_ID=" + GetC_Invoice_ID())) < 1)
                     {
                         inv.CreatePayScheduleOnDueDate();
                     }

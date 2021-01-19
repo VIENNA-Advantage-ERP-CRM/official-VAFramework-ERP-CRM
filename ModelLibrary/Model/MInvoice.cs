@@ -6190,8 +6190,8 @@ namespace VAdvantage.Model
             else
                 dueAmt= GetGrandTotal();
 
-            string _sqlPaymentMthd = "SELECT VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger FROM VA009_PaymentMethod WHERE VA009_PaymentMethod_ID="
-                + GetVA009_PaymentMethod_ID() + " AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID();
+            string _sqlPaymentMthd = "SELECT pm.VA009_PaymentMode, pm.VA009_PaymentType, pm.VA009_PaymentTrigger FROM VA009_PaymentMethod pm WHERE pm.VA009_PaymentMethod_ID="
+                + GetVA009_PaymentMethod_ID() + " AND pm.IsActive = 'Y' AND pm.AD_Client_ID = " + GetAD_Client_ID();
             DataSet dsPayMthd = new DataSet();
             dsPayMthd = DB.ExecuteDataset(_sqlPaymentMthd);
             if (dsPayMthd != null && dsPayMthd.Tables != null && dsPayMthd.Tables.Count > 0 && dsPayMthd.Tables[0].Rows.Count > 0)
