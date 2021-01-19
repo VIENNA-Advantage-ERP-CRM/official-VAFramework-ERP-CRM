@@ -2930,9 +2930,11 @@ namespace VAdvantage.Model
                            
                             DateTime validate = new DateTime();
                             string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
+                            MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
                             if (CreditStatusSettingOn.Contains("CL"))
                             {
-                                validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+                              
+                                validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
                             }
                             else
                             {

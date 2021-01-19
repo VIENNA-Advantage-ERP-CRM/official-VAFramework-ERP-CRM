@@ -2233,6 +2233,7 @@ namespace VAdvantage.Model
                     //    invAmt = Decimal.Subtract(0, invAmt);
 
                     MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
+                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), GetC_BPartner_Location_ID(), null);
                     string retMsg = "";
                     bool crdAll = false;
                     
@@ -2244,9 +2245,9 @@ namespace VAdvantage.Model
                        
                         if (CreditStatusSettingOn.Contains("CL"))
                         {
-                            
-                            validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
-                            
+                          
+                            validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
+
                         }
                         else
                         {                           
