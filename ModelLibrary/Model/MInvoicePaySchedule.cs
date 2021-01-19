@@ -318,22 +318,7 @@ namespace VAdvantage.Model
                 SetBackupWithholdingAmount(0);
                 SetWithholdingAmt(0);
             }
-                        
-            /** Adhoc Payment - Creating an InvoicePaySchedule based on DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (Util.GetValueOfInt(this.GetC_Invoice_ID()) > 0)
-            {
-                MInvoice inv = new MInvoice(GetCtx(), this.GetC_Invoice_ID(), Get_Trx());
-
-                if (Util.GetValueOfDateTime(inv.GetDueDate()) >= Util.GetValueOfDateTime(inv.GetDateInvoiced()))
-                {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(ips.C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule ips WHERE ips.IsActive = 'Y' AND ips.C_Invoice_ID=" + GetC_Invoice_ID())) < 1)
-                    {
-                        inv.CreatePayScheduleOnDueDate();
-                    }
-                    return false;
-                }
-            }
-
+                 
             return true;
         }
 
