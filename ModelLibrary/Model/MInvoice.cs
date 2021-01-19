@@ -2232,12 +2232,10 @@ namespace VAdvantage.Model
                     //else
                     //    invAmt = Decimal.Subtract(0, invAmt);
 
-                   // MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(),null);
                     MBPartner bp = MBPartner.Get(GetCtx(), GetC_BPartner_ID());
                     string retMsg = "";
                     bool crdAll = false;
-                    //written by sandeep
-
+                    
                     if (Env.IsModuleInstalled("VA077_"))
                     {
                        
@@ -2260,14 +2258,8 @@ namespace VAdvantage.Model
                        if (validate.Date < DateTime.Now.Date)
 
                         {
-                           
-                            string sysCreditDate = "trunc(sysdate)"; // used in case of oracle
-                            if (DB.IsPostgreSQL())
-                            {
-                                sysCreditDate = "current_timestamp";
-                            }
-
-                            int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN "+ sysCreditDate +" - (730) and "+ sysCreditDate+""));
+                                                                                   
+                            int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date,true) +""));
 
                             if (RecCount > 0)
                             {
@@ -2285,7 +2277,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                _processMsg = "Credit Limit is expired.";
+                                _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
                                 return DocActionVariables.STATUS_INVALID;
                             }
 
