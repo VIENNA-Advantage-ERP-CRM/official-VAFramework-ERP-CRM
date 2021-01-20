@@ -164,7 +164,7 @@ namespace VAdvantage.Model
                         
             /** Adhoc Payment - Setting DueDate for an InvoicePaySchedule ** Dt: 18/01/2021 ** Modified By: Kumar **/
             //	Dates            
-            DateTime? dueDate = (invoice.GetDueDate() >= invoice.GetDateInvoiced()) ? invoice.GetDueDate() : TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetNetDays());
+            DateTime? dueDate = (invoice.Get_ColumnIndex("DueDate") >= 0 && invoice.GetDueDate() >= invoice.GetDateInvoiced()) ? invoice.GetDueDate() : TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetNetDays());
             SetDueDate(dueDate);
             DateTime discountDate = TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetDiscountDays());
             SetDiscountDate(discountDate);

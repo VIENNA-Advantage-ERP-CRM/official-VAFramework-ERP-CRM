@@ -1268,7 +1268,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {            
             /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
+            if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
             {
                 log.SaveError("Error", Msg.GetMsg(GetCtx(), "DueDateLessThanInvoiceDate"));
                 return false;
@@ -4902,7 +4902,7 @@ namespace VAdvantage.Model
             counter.SetSalesRep_ID(GetSalesRep_ID());
                         
             /** Adhoc Payment - Setting DueDate for Counter Doc ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (GetDueDate() != null)
+            if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null)
                 counter.SetDueDate(GetDueDate());
             //
             counter.SetProcessing(false);
