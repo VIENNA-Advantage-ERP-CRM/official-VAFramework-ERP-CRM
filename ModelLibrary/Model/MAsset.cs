@@ -273,8 +273,7 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA077_"))
             {
                 Set_Value("VA077_SerialNo", shipLine.Get_Value("VA077_SerialNo"));
-                Set_Value("VA077_AutodeskContractNumber", shipLine.Get_Value("VA077_CNAutodesk"));                
-                Set_Value("VA077_SerialNo", shipLine.Get_Value("VA077_SerialNo"));
+                Set_Value("VA077_AutodeskContractNumber", shipLine.Get_Value("VA077_CNAutodesk"));                   
                 Set_Value("VA077_RegEmail", shipLine.Get_Value("VA077_RegEmail"));
                 Set_Value("VA077_IsCustAsset", "Y");
             }

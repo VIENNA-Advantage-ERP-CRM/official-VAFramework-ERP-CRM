@@ -2267,14 +2267,10 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
+                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0 && !Env.IsModuleInstalled("VA077_"))
                             {
-                                //Check if the Software Industry module is not installed, then only validtion will work.
-                                if (!Env.IsModuleInstalled("VA077_"))
-                                {
-                                    _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
-                                    return DocActionVariables.STATUS_INPROGRESS;
-                                }
+                                _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
+                                return DocActionVariables.STATUS_INPROGRESS;
                             }
                         }
                     }
@@ -3535,8 +3531,10 @@ namespace VAdvantage.Model
                 {
                     //	Create Asset during receiving
                     // JID_1251:On Material receipt system will generate the asset for Items type product for which asset group linked with Product Category.
-                    if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
-                       && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0)
+                    if ((product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0) ||
+                       (Env.IsModuleInstalled("VA077_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0))
                     {
                         log.Fine("Asset");
                         Info.Append("@A_Asset_ID@: ");
@@ -3589,58 +3587,58 @@ namespace VAdvantage.Model
                         //Create Asset Delivery
                     }
                     //Check if the Software Industry module installed and is SO Transation then Create Asset
-                    else if (Env.IsModuleInstalled("VA077_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
-                       && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0)
-                    {
-                        log.Fine("Asset");
-                        Info.Append("@A_Asset_ID@: ");
-                        int noAssets = (int)sLine.GetMovementQty();
+                    //else if (Env.IsModuleInstalled("VA077_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                    //   && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0)
+                    //{
+                    //    log.Fine("Asset");
+                    //    Info.Append("@A_Asset_ID@: ");
+                    //    int noAssets = (int)sLine.GetMovementQty();
 
-                        // Check Added only run when Product is one Asset Per UOM
-                        if (product.IsOneAssetPerUOM())
-                        {
-                            for (int i = 0; i < noAssets; i++)
-                            {
-                                if (i > 0)
-                                    Info.Append(" - ");
-                                int deliveryCount = i + 1;
-                                if (product.IsOneAssetPerUOM())
-                                    deliveryCount = 0;
-                                MAsset asset = new MAsset(this, sLine, deliveryCount);
-                                if (!asset.Save(Get_TrxName()))
-                                {
-                                    _processMsg = "Could not create Asset";
-                                    return DocActionVariables.STATUS_INVALID;
-                                }
-                                else
-                                {
-                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
-                                    asset.Save(Get_TrxName());
-                                }
-                                Info.Append(asset.GetValue());
-                            }
-                        }
-                        else
-                        {
-                            
-                            if (noAssets > 0)
-                            {
-                                MAsset asset = new MAsset(this, sLine, noAssets);
-                                if (!asset.Save(Get_TrxName()))
-                                {
-                                    _processMsg = "Could not create Asset";
-                                    return DocActionVariables.STATUS_INVALID;
-                                }
-                                else
-                                {
-                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
-                                    asset.Save(Get_TrxName());
-                                }
-                                Info.Append(asset.GetValue());
-                            }                           
-                        }
-                        //Create Asset Delivery
-                    }
+                    //    // Check Added only run when Product is one Asset Per UOM
+                    //    if (product.IsOneAssetPerUOM())
+                    //    {
+                    //        for (int i = 0; i < noAssets; i++)
+                    //        {
+                    //            if (i > 0)
+                    //                Info.Append(" - ");
+                    //            int deliveryCount = i + 1;
+                    //            if (product.IsOneAssetPerUOM())
+                    //                deliveryCount = 0;
+                    //            MAsset asset = new MAsset(this, sLine, deliveryCount);
+                    //            if (!asset.Save(Get_TrxName()))
+                    //            {
+                    //                _processMsg = "Could not create Asset";
+                    //                return DocActionVariables.STATUS_INVALID;
+                    //            }
+                    //            else
+                    //            {
+                    //                asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                    //                asset.Save(Get_TrxName());
+                    //            }
+                    //            Info.Append(asset.GetValue());
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+
+                    //        if (noAssets > 0)
+                    //        {
+                    //            MAsset asset = new MAsset(this, sLine, noAssets);
+                    //            if (!asset.Save(Get_TrxName()))
+                    //            {
+                    //                _processMsg = "Could not create Asset";
+                    //                return DocActionVariables.STATUS_INVALID;
+                    //            }
+                    //            else
+                    //            {
+                    //                asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                    //                asset.Save(Get_TrxName());
+                    //            }
+                    //            Info.Append(asset.GetValue());
+                    //        }
+                    //    }
+                    //    //Create Asset Delivery
+                    //}
                 }
 
                 #region For Obsolete Inventory (16-05-2016)
@@ -3871,14 +3869,14 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-            _processMsg = Info.ToString();           
+            _processMsg = Info.ToString();
 
 
             #region Added by vikas 29 August 2016 cost sheet
             try
             {
                 if (Env.IsModuleInstalled("VA033_"))
-                {                    
+                {
                     if (GetVA033_CostSheet_ID() > 0 && IsSOTrx() == false && IsReturnTrx() == false)
                     {
                         if (IsReversal())
@@ -3942,7 +3940,7 @@ namespace VAdvantage.Model
             SetDateReceived(GetMovementDate());
             SetPickDate(DateTime.Now);
             SetProcessed(true);
-            SetDocAction(DOCACTION_Close);            
+            SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }
 
