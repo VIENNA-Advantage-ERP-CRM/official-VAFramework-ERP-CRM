@@ -1195,7 +1195,7 @@
         }
 
         this.mDataStatusEvent.setCurrentRow(this.currentRow);
-        var status = this.mDataStatusEvent.getAD_Message();
+        var status = this.mDataStatusEvent.getVAF_Msg_Lable();
         if (status == null || status.length == 0)
             this.mDataStatusEvent.setInfo("NavigateOrUpdate", null, false, false);
         this.fireDataStatusChanged(this.mDataStatusEvent);
@@ -1216,7 +1216,7 @@
         }
 
         this.mDataStatusEvent.setCurrentRow(this.currentRow);
-        var status = this.mDataStatusEvent.getAD_Message();
+        var status = this.mDataStatusEvent.getVAF_Msg_Lable();
         if (status == null || status.length == 0)
             this.mDataStatusEvent.setInfo("NavigateOrUpdate", null, false, false);
         this.fireDataStatusChanged(this.mDataStatusEvent);
@@ -2036,7 +2036,7 @@
         var oldCurrentRow = e.getCurrentRow();
         //  save it
         //  when sorted set current row to 0
-        var msg = e.getAD_Message();
+        var msg = e.getVAF_Msg_Lable();
         //if (msg != null && msg.equals("Sorted"))
         //  setCurrentRow(0, true);
         //  set current row
@@ -5097,9 +5097,9 @@
         }
     };
 
-    GridTable.prototype.fireDataStatusIEvent = function (AD_Message, info) {
+    GridTable.prototype.fireDataStatusIEvent = function (VAF_Msg_Lable, info) {
         var e = this.createDSE();
-        e.setInfo(AD_Message, info, false, false);
+        e.setInfo(VAF_Msg_Lable, info, false, false);
         this.fireDataStatusChanged(e);
     };
 
@@ -5110,18 +5110,18 @@
         args = null;
     };
 
-    //AD_Message, info, isError
+    //VAF_Msg_Lable, info, isError
     //errorLog
-    GridTable.prototype.fireDataStatusEEvent = function (AD_Message, info, isError) {
+    GridTable.prototype.fireDataStatusEEvent = function (VAF_Msg_Lable, info, isError) {
 
         if (arguments.length === 1) {
             this.fireDataStatusEEvent(arguments[0].value, arguments[0].name, true);
         }
         else {
             var e = this.createDSE();
-            e.setInfo(AD_Message, info, isError, !isError);
+            e.setInfo(VAF_Msg_Lable, info, isError, !isError);
             //if (isError)
-            //    log.saveWarning(AD_Message, info);
+            //    log.saveWarning(VAF_Msg_Lable, info);
             this.fireDataStatusChanged(e);
         }
     };
@@ -5609,7 +5609,7 @@
             if ("EntityType".equals(keyColumn))
                 keyColumn = "VAF_RecrodType_ID";
             if (!keyColumn.toUpperCase().endsWith("_ID"))
-                keyColumn += "_ID";			//	AD_Language_ID
+                keyColumn += "_ID";			//	VAF_Language_ID
             var Record_ID = ctx.getWindowTabContext(_vo.windowNo, _vo.tabNo, keyColumn);
             if (Record_ID == "")
                 Record_ID = 0;
@@ -6821,7 +6821,7 @@
         this.m_autoSave = autoSave;
         this.m_inserting = inserting;
         //
-        this.m_AD_Message
+        this.m_VAF_Msg_Lable
         this.m_info = null;
         this.m_isError = false;
         this.m_isWarning = false;
@@ -6903,8 +6903,8 @@
         return this.mPageSize;
     }
 
-    DataStatusEvent.prototype.setInfo = function (AD_Message, info, isError, isWarning) {
-        this.m_AD_Message = AD_Message;
+    DataStatusEvent.prototype.setInfo = function (VAF_Msg_Lable, info, isError, isWarning) {
+        this.m_VAF_Msg_Lable = VAF_Msg_Lable;
         this.m_info = info;
         this.m_isError = isError;
         this.m_isWarning = isWarning;
@@ -6937,8 +6937,8 @@
         return this.m_inserting;
     };
 
-    DataStatusEvent.prototype.getAD_Message = function () {
-        return this.m_AD_Message;
+    DataStatusEvent.prototype.getVAF_Msg_Lable = function () {
+        return this.m_VAF_Msg_Lable;
     };
 
     DataStatusEvent.prototype.getInfo = function () {

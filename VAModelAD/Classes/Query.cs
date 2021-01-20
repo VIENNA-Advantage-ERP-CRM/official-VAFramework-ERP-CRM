@@ -220,7 +220,7 @@ namespace VAdvantage.Classes
                     + " AND pp.ColumnName=ip.ParameterName"
                     + " AND pp.AD_Process_Para_ID=ppt.AD_Process_Para_ID"
                     + " AND ip.AD_PInstance_ID='" + AD_PInstance_ID + "'"
-                    + " AND ppt.AD_Language='" + Utility.Env.GetAD_Language(ctx) + "'";
+                    + " AND ppt.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "'";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);
@@ -499,7 +499,7 @@ namespace VAdvantage.Classes
                 {
                     _PA_Hierarchy_ID = Util.GetValueOfInt(ID);
                 }
-                Language _language = Language.GetLanguage(_ctx.GetAD_Language());
+                Language _language = Language.GetLanguage(_ctx.GetVAF_Language());
 
                 //Get Query to fetch identifier value from table based on column selected. it will be used to display identifires on for parameter in report.
                 eSql = VLookUpFactory.GetLookup_TableDirEmbed(_language, columnName, columnName.Substring(0, columnName.Length - 3));

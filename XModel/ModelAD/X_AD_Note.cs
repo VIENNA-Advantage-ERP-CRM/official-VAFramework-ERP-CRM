@@ -20,7 +20,7 @@ public X_AD_Note (Context ctx, int AD_Note_ID, Trx trxName) : base (ctx, AD_Note
 {
 /** if (AD_Note_ID == 0)
 {
-SetAD_Message_ID (0);
+SetVAF_Msg_Lable_ID (0);
 SetAD_Note_ID (0);
 }
  */
@@ -29,7 +29,7 @@ public X_AD_Note (Ctx ctx, int AD_Note_ID, Trx trxName) : base (ctx, AD_Note_ID,
 {
 /** if (AD_Note_ID == 0)
 {
-SetAD_Message_ID (0);
+SetVAF_Msg_Lable_ID (0);
 SetAD_Note_ID (0);
 }
  */
@@ -113,20 +113,20 @@ StringBuilder sb = new StringBuilder ("X_AD_Note[").Append(Get_ID()).Append("]")
 return sb.ToString();
 }
 
-/** AD_Message_ID AD_Reference_ID=102 */
-public static int AD_MESSAGE_ID_AD_Reference_ID=102;
+/** VAF_Msg_Lable_ID AD_Reference_ID=102 */
+public static int VAF_MSG_LABLE_ID_AD_Reference_ID=102;
 /** Set Message.
-@param AD_Message_ID System Message */
-public void SetAD_Message_ID (int AD_Message_ID)
+@param VAF_Msg_Lable_ID System Message */
+public void SetVAF_Msg_Lable_ID (int VAF_Msg_Lable_ID)
 {
-if (AD_Message_ID < 1) throw new ArgumentException ("AD_Message_ID is mandatory.");
-Set_ValueNoCheck ("AD_Message_ID", AD_Message_ID);
+if (VAF_Msg_Lable_ID < 1) throw new ArgumentException ("VAF_Msg_Lable_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Msg_Lable_ID", VAF_Msg_Lable_ID);
 }
 /** Get Message.
 @return System Message */
-public int GetAD_Message_ID() 
+public int GetVAF_Msg_Lable_ID() 
 {
-Object ii = Get_Value("AD_Message_ID");
+Object ii = Get_Value("VAF_Msg_Lable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -134,7 +134,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Message_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Msg_Lable_ID().ToString());
 }
 /** Set Notice.
 @param AD_Note_ID System Notice */

@@ -113,24 +113,24 @@ StringBuilder sb = new StringBuilder ("X_C_AccountSubGroup_Trl[").Append(Get_ID(
 return sb.ToString();
 }
 
-/** AD_Language AD_Reference_ID=106 */
-public static int AD_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language AD_Reference_ID=106 */
+public static int VAF_LANGUAGE_AD_Reference_ID=106;
 /** Set Language.
-@param AD_Language Language for this entity */
-public void SetAD_Language (String AD_Language)
+@param VAF_Language Language for this entity */
+public void SetVAF_Language (String VAF_Language)
 {
-if (AD_Language != null && AD_Language.Length > 10)
+if (VAF_Language != null && VAF_Language.Length > 10)
 {
 log.Warning("Length > 10 - truncated");
-AD_Language = AD_Language.Substring(0,10);
+VAF_Language = VAF_Language.Substring(0,10);
 }
-Set_Value ("AD_Language", AD_Language);
+Set_Value ("VAF_Language", VAF_Language);
 }
 /** Get Language.
 @return Language for this entity */
-public String GetAD_Language() 
+public String GetVAF_Language() 
 {
-return (String)Get_Value("AD_Language");
+return (String)Get_Value("VAF_Language");
 }
 /** Set C_AccountSubGroup_ID.
 @param C_AccountSubGroup_ID C_AccountSubGroup_ID */

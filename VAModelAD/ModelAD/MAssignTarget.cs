@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         {
             if (m_criteria != null && !reload)
                 return m_criteria;
-            String sql = "SELECT * FROM AD_AssignCriteria "
+            String sql = "SELECT * FROM VAF_AllotCriteria "
                 + "WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID ORDER BY SeqNo";
             List<MAssignCriteria> list = new List<MAssignCriteria>();
             try

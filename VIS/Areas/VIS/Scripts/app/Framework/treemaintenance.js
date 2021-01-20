@@ -3789,7 +3789,7 @@
 
             bindornot = "true";
 
-            if (tablename == "AD_Menu") {
+            if (tablename == "VAF_MenuConfig") {
                 var rolCheck = "SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + $treeID;
                 var checkCount = executeScalar(rolCheck);
                 if (checkCount > 0) {
@@ -3806,9 +3806,9 @@
 
             //if(bindornot == false)
             //{
-            var getIdes = "SELECT ad_menu_id FROM AD_Menu WHERE ad_window_id IN (SELECT ad_window_id FROM ad_window WHERE name IN ('Role','Tenant','Tree'))";
+            var getIdes = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE ad_window_id IN (SELECT ad_window_id FROM ad_window WHERE name IN ('Role','Tenant','Tree'))";
 
-            var formID = "SELECT ad_menu_id FROM AD_Menu WHERE ad_form_id IN (SELECT ad_form_id FROM ad_form WHERE name IN ('Tree Maintenance'))";
+            var formID = "SELECT VAF_MenuConfig_id FROM VAF_MenuConfig WHERE ad_form_id IN (SELECT ad_form_id FROM ad_form WHERE name IN ('Tree Maintenance'))";
 
 
 
@@ -3817,7 +3817,7 @@
 
             if (ds1 != null && ds1.tables[0].rows.length > 0) {
                 for (var i = 0; i < ds1.tables[0].rows.length; i++) {
-                    menuArray.push(ds1.tables[0].rows[i].cells["ad_menu_id"]);
+                    menuArray.push(ds1.tables[0].rows[i].cells["VAF_MenuConfig_id"]);
                 }
             }
 
@@ -3827,14 +3827,14 @@
 
             if (ds != null && ds.tables[0].rows.length > 0) {
                 for (var i = 0; i < ds.tables[0].rows.length; i++) {
-                    menuArray.push(ds.tables[0].rows[i].cells["ad_menu_id"]);
+                    menuArray.push(ds.tables[0].rows[i].cells["VAF_MenuConfig_id"]);
                 }
             }
             // }
             convertmenuArray = menuArray;
             menuArray = menuArray.toString();
 
-            var getnamebyID = "SELECT name FROM ad_menu WHERE ad_menu_id IN(" + menuArray + ") ORDER BY upper(name)";
+            var getnamebyID = "SELECT name FROM VAF_MenuConfig WHERE VAF_MenuConfig_id IN(" + menuArray + ") ORDER BY upper(name)";
             var dss = executeDataSet(getnamebyID, null, null);
 
             var messagess = "";

@@ -302,7 +302,7 @@ namespace VAdvantage.Model
                 }
                 if (billFromC_Location_ID == 0)
                 {
-                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetAD_Language(ctx), variable)
+                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetVAF_Language(ctx), variable)
                       + (found ? "" : " (Info/Org=" + VAF_Org_ID + " not found)"));
                     return 0;
                 }
@@ -322,7 +322,7 @@ namespace VAdvantage.Model
                 }
                 if (billToC_Location_ID == 0)
                 {
-                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetAD_Language(ctx), variable)
+                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetVAF_Language(ctx), variable)
                         + (found ? "" : " (BPLocation=" + billC_BPartner_Location_ID + " not found)"));
                     return 0;
                 }
@@ -355,7 +355,7 @@ namespace VAdvantage.Model
                 }
                 if (shipFromC_Location_ID == 0)
                 {
-                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetAD_Language(ctx), variable)
+                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetVAF_Language(ctx), variable)
                         + (found ? "" : " (Warehouse=" + M_Warehouse_ID + " not found)"));
                     return 0;
                 }
@@ -374,7 +374,7 @@ namespace VAdvantage.Model
                 }
                 if (shipToC_Location_ID == 0)
                 {
-                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetAD_Language(ctx), variable)
+                    log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetVAF_Language(ctx), variable)
                         + (found ? "" : " (BPLocation=" + shipC_BPartner_Location_ID + " not found)"));
                     return 0;
                 }

@@ -176,17 +176,17 @@ return Convert.ToInt32(ii);
 }
 /** Set Table.
 @param VAF_TableView_ID Database Table information */
-public void SetAD_ModuleInfo_ID(int AD_ModuleInfo_ID)
+public void SetVAF_ModuleInfo_ID(int VAF_ModuleInfo_ID)
 {
-    if (AD_ModuleInfo_ID <= 0) Set_Value("AD_ModuleInfo_ID", null);
+    if (VAF_ModuleInfo_ID <= 0) Set_Value("VAF_ModuleInfo_ID", null);
     else
-        Set_Value("AD_ModuleInfo_ID", AD_ModuleInfo_ID);
+        Set_Value("VAF_ModuleInfo_ID", VAF_ModuleInfo_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_ModuleInfo_ID()
+public int GetVAF_ModuleInfo_ID()
 {
-    Object ii = Get_Value("AD_ModuleInfo_ID");
+    Object ii = Get_Value("VAF_ModuleInfo_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

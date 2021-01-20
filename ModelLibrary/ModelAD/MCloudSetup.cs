@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         {
             log = VLogger.GetVLogger(this.GetType().FullName);
             m_ctx = ctx;	//	copy
-            m_lang = Env.GetAD_Language(m_ctx);
+            m_lang = Env.GetVAF_Language(m_ctx);
             m_WindowNo = WindowNo;
         }   //  MSetup
 
@@ -1105,9 +1105,9 @@ namespace VAdvantage.Model
                                                         acctTrl = new MAccountGroupTrl(m_ctx, 0, m_trx);
                                                         acctTrl.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                                         acctTrl.SetVAF_Org_ID(0);
-                                                        if (dstrl.Tables[0].Rows[j]["AD_Language"] != null && dstrl.Tables[0].Rows[j]["AD_Language"] != DBNull.Value)
+                                                        if (dstrl.Tables[0].Rows[j]["VAF_Language"] != null && dstrl.Tables[0].Rows[j]["VAF_Language"] != DBNull.Value)
                                                         {
-                                                            acctTrl.SetAD_Language(dstrl.Tables[0].Rows[i]["AD_Language"].ToString());
+                                                            acctTrl.SetVAF_Language(dstrl.Tables[0].Rows[i]["VAF_Language"].ToString());
                                                         }
                                                         acctTrl.SetC_AccountGroup_ID(acct.Get_ID());
                                                         if (dstrl.Tables[0].Rows[j]["Name"] != null && dstrl.Tables[0].Rows[j]["Name"] != DBNull.Value)
@@ -1184,9 +1184,9 @@ namespace VAdvantage.Model
                                                                 {
                                                                     acctStrl.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                                                     acctStrl.SetVAF_Org_ID(0);
-                                                                    if (dsSubTrl.Tables[0].Rows[k]["AD_Language"] != null && dsSubTrl.Tables[0].Rows[k]["AD_Language"] != DBNull.Value)
+                                                                    if (dsSubTrl.Tables[0].Rows[k]["VAF_Language"] != null && dsSubTrl.Tables[0].Rows[k]["VAF_Language"] != DBNull.Value)
                                                                     {
-                                                                        acctStrl.SetAD_Language(dsSubTrl.Tables[0].Rows[k]["AD_Language"].ToString());
+                                                                        acctStrl.SetVAF_Language(dsSubTrl.Tables[0].Rows[k]["VAF_Language"].ToString());
                                                                     }
                                                                     acctStrl.SetC_AccountSubGroup_ID(acctS.Get_ID());
                                                                     if (dsSubTrl.Tables[0].Rows[k]["Name"] != null && dsSubTrl.Tables[0].Rows[k]["Name"] != DBNull.Value)
@@ -1743,17 +1743,17 @@ namespace VAdvantage.Model
         }
         private void CreateTopMenu(int role_ID)
         {
-            DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_Module WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
+            DataSet ds = DB.ExecuteDataset("SELECT * FROM VAF_Module WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
             if (ds != null)
             {
-                X_AD_Module mod = null;
-                X_AD_ModuleRole role = null;
-                X_AD_ModuleFavourite fav = null;
+                X_VAF_Module mod = null;
+                X_VAF_ModuleRole role = null;
+                X_VAF_ModuleFavourite fav = null;
                 DataSet dsRole = null;
                 DataSet dsFav = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    mod = new X_AD_Module(m_ctx, 0, m_trx);
+                    mod = new X_VAF_Module(m_ctx, 0, m_trx);
                     mod.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                     mod.SetVAF_Org_ID(0);
                     mod.SetIsActive(true);
@@ -1779,16 +1779,16 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        dsRole = DB.ExecuteDataset("SELECT AD_ModuleRole_ID,AD_Role_ID FROM AD_ModuleRole WHERE AD_Module_ID=" + ds.Tables[0].Rows[i]["AD_Module_ID"]);
+                        dsRole = DB.ExecuteDataset("SELECT VAF_ModuleRole_ID,AD_Role_ID FROM VAF_ModuleRole WHERE VAF_Module_ID=" + ds.Tables[0].Rows[i]["VAF_Module_ID"]);
                         if (dsRole != null)
                         {
                             for (int j = 0; j < dsRole.Tables[0].Rows.Count; j++)
                             {
-                                role = new X_AD_ModuleRole(m_ctx, 0, m_trx);
+                                role = new X_VAF_ModuleRole(m_ctx, 0, m_trx);
                                 role.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 role.SetVAF_Org_ID(0);
                                 role.SetIsActive(true);
-                                role.SetAD_Module_ID(mod.Get_ID());
+                                role.SetVAF_Module_ID(mod.Get_ID());
                                 //if (dsRole.Tables[0].Rows[j]["AD_Role_ID"] != null && dsRole.Tables[0].Rows[j]["AD_Role_ID"] != DBNull.Value)
                                 //{
                                 //    role.SetAD_Role_ID(Util.GetValueOfInt(dsRole.Tables[0].Rows[j]["AD_Role_ID"]));
@@ -1800,19 +1800,19 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    dsFav = DB.ExecuteDataset("SELECT AD_Menu_ID,SeqNo FROM AD_ModuleFavourite WHERE AD_ModuleRole_ID=" + dsRole.Tables[0].Rows[j]["AD_ModuleRole_ID"]);
+                                    dsFav = DB.ExecuteDataset("SELECT VAF_MenuConfig_ID,SeqNo FROM VAF_ModuleFavourite WHERE VAF_ModuleRole_ID=" + dsRole.Tables[0].Rows[j]["VAF_ModuleRole_ID"]);
                                     if (dsFav != null)
                                     {
                                         for (int k = 0; k < dsFav.Tables[0].Rows.Count; k++)
                                         {
-                                            fav = new X_AD_ModuleFavourite(m_ctx, 0, m_trx);
+                                            fav = new X_VAF_ModuleFavourite(m_ctx, 0, m_trx);
                                             fav.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                             fav.SetVAF_Org_ID(0);
                                             fav.SetIsActive(true);
-                                            fav.SetAD_ModuleRole_ID(role.Get_ID());
-                                            if (dsFav.Tables[0].Rows[k]["AD_Menu_ID"] != null && dsFav.Tables[0].Rows[k]["AD_Menu_ID"] != DBNull.Value)
+                                            fav.SetVAF_ModuleRole_ID(role.Get_ID());
+                                            if (dsFav.Tables[0].Rows[k]["VAF_MenuConfig_ID"] != null && dsFav.Tables[0].Rows[k]["VAF_MenuConfig_ID"] != DBNull.Value)
                                             {
-                                                fav.SetAD_Menu_ID(Util.GetValueOfInt(dsFav.Tables[0].Rows[k]["AD_Menu_ID"]));
+                                                fav.SetVAF_MenuConfig_ID(Util.GetValueOfInt(dsFav.Tables[0].Rows[k]["VAF_MenuConfig_ID"]));
                                             }
                                             if (dsFav.Tables[0].Rows[k]["SeqNo"] != null && dsFav.Tables[0].Rows[k]["SeqNo"] != DBNull.Value)
                                             {
@@ -1820,7 +1820,7 @@ namespace VAdvantage.Model
                                             }
                                             if (!fav.Save(m_trx))
                                             {
-                                                log.Info(fav.GetAD_ModuleRole_ID() + " TopMenuRoleFavNotSaved");
+                                                log.Info(fav.GetVAF_ModuleRole_ID() + " TopMenuRoleFavNotSaved");
                                             }
                                         }
                                     }
@@ -3337,7 +3337,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                CoreLibrary.DataBase.DB.ExecuteQuery("UPDATE AD_LoginSetting SET M_Warehouse_ID=" + wh.GetM_Warehouse_ID() + " WHERE VAF_Client_ID=" + m_client.GetVAF_Client_ID(), null, m_trx);
+                CoreLibrary.DataBase.DB.ExecuteQuery("UPDATE VAF_LoginSetting SET M_Warehouse_ID=" + wh.GetM_Warehouse_ID() + " WHERE VAF_Client_ID=" + m_client.GetVAF_Client_ID(), null, m_trx);
             }
 
             //   Locator
@@ -3719,10 +3719,10 @@ namespace VAdvantage.Model
 
         private string SetupDefaultLogin(Trx trx, int VAF_Client_ID, int AD_Role_ID, int VAF_Org_ID, int AD_User_ID, int M_Warehouse_ID)
         {
-            int AD_LoginSetting_ID = MSequence.GetNextID(m_ctx.GetVAF_Client_ID(), "AD_LoginSetting", trx);
+            int VAF_LoginSetting_ID = MSequence.GetNextID(m_ctx.GetVAF_Client_ID(), "VAF_LoginSetting", trx);
             StringBuilder sql = new StringBuilder("");
-            sql.Append("INSERT INTO AD_LoginSetting (VAF_CLIENT_ID,AD_LOGINSETTING_ID,VAF_ORG_ID,AD_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
-            sql.Append(" VALUES (" + VAF_Client_ID + "," + AD_LoginSetting_ID + "," + VAF_Org_ID + "," + AD_Role_ID + "," + AD_User_ID + ",");
+            sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,AD_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
+            sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + AD_Role_ID + "," + AD_User_ID + ",");
             sql.Append(GlobalVariable.TO_DATE(DateTime.Now, false) + "," + m_ctx.GetAD_User_ID() + ",NULL,");
             if (M_Warehouse_ID == 0)
                 sql.Append("NULL");

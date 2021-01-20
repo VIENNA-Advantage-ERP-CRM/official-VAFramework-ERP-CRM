@@ -116,14 +116,14 @@ namespace VAdvantage.Process
                 _log.Info("Cost Calculation Start on " + DateTime.Now);
 
                 // check Manufacturing Modeule exist or not
-                //int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
+                //int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
                 int count = Env.IsModuleInstalled("VAMFG_") ? 1 : 0;
 
                 // check VAFAM Modeule exist or not
                 int countVAFAM = Env.IsModuleInstalled("VAFAM_") ? 1 : 0;
 
                 // check Manufacturing Modeule exist or not
-                //int countGOM01 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='GOM01_' AND Isactive = 'Y' "));
+                //int countGOM01 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='GOM01_' AND Isactive = 'Y' "));
                 int countGOM01 = Env.IsModuleInstalled("GOM01_") ? 1 : 0;
 
                 // check IsCostAdjustmentOnLost exist on product 

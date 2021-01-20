@@ -484,9 +484,9 @@ namespace VIS.Helpers
                 // To get the Folloups details
                 StringBuilder SqlQuery = new StringBuilder();
                 SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.cm_chatentry_id,");
-                if (ctx.GetAD_Language() != Env.GetBaseAD_Language())
+                if (ctx.GetVAF_Language() != Env.GetBaseVAF_Language())
                 {
-                    SqlQuery.Append("(Select name from AD_Window_Trl where AD_Window_ID= Aw.AD_Window_ID and AD_Language='" + ctx.GetAD_Language() + "') as WINNAME,");
+                    SqlQuery.Append("(Select name from AD_Window_Trl where AD_Window_ID= Aw.AD_Window_ID and VAF_Language='" + ctx.GetVAF_Language() + "') as WINNAME,");
                 }
                 else
                 {
@@ -622,9 +622,9 @@ namespace VIS.Helpers
                 // To get the Folloups details
                 StringBuilder SqlQuery = new StringBuilder();
                 SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.cm_chatentry_id,");
-                if (ctx.GetAD_Language() != Env.GetBaseAD_Language())
+                if (ctx.GetVAF_Language() != Env.GetBaseVAF_Language())
                 {
-                    SqlQuery.Append("(Select name from AD_Window_Trl where AD_Window_ID= Aw.AD_Window_ID and AD_Language='" + ctx.GetAD_Language() + "') as WINNAME,");
+                    SqlQuery.Append("(Select name from AD_Window_Trl where AD_Window_ID= Aw.AD_Window_ID and VAF_Language='" + ctx.GetVAF_Language() + "') as WINNAME,");
                 }
                 else
                 {
@@ -721,9 +721,9 @@ namespace VIS.Helpers
                 // To get the Folloups details
                 StringBuilder SqlQuery = new StringBuilder();
                 SqlQuery.Append("select inn.ChatID, inn.EntryID,  CH.characterdata, ch.cm_chatentry_id,");
-                if (ctx.GetAD_Language() != Env.GetBaseAD_Language())
+                if (ctx.GetVAF_Language() != Env.GetBaseVAF_Language())
                 {
-                    SqlQuery.Append("(Select name from AD_Window_Trl where AD_Window_ID= Aw.AD_Window_ID and AD_Language='" + ctx.GetAD_Language() + "') as WINNAME,");
+                    SqlQuery.Append("(Select name from AD_Window_Trl where AD_Window_ID= Aw.AD_Window_ID and VAF_Language='" + ctx.GetVAF_Language() + "') as WINNAME,");
                 }
                 else
                 {
@@ -872,17 +872,17 @@ namespace VIS.Helpers
                 //                strQuery = @"SELECT SUBSTR(AD_Note.textmsg,0,100) AS Title,
                 //                            AD_Note.textmsg    AS Description ,
                 //                            AD_Note.Created    AS dbDate,
-                //                            AD_Message.msgtext as MsgType,
+                //                            VAF_Msg_Lable.msgtext as MsgType,
                 //                            AD_Note.VAF_TableView_ID , 
                 //                            AD_Note.Record_ID,
                 //                            (SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='AD_Note') TableName,
                 //                            (SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='AD_Note') AD_Window_ID,
                 //                            AD_Note.AD_Note_ID
-                //                            FROM AD_Note INNER JOIN AD_Message ON AD_Message.AD_Message_ID=AD_Note.AD_Message_ID";
+                //                            FROM AD_Note INNER JOIN VAF_Msg_Lable ON VAF_Msg_Lable.VAF_Msg_Lable_ID=AD_Note.VAF_Msg_Lable_ID";
                 strQuery = @"SELECT SUBSTR(AD_Note.textmsg,0,100) AS Title,
                               AD_Note.textmsg                    AS Description ,
                               AD_Note.Created                    AS dbDate,
-                              AD_Message.msgtext                 AS MsgType,
+                              VAF_Msg_Lable.msgtext                 AS MsgType,
                               AD_Note.VAF_TableView_ID ,
                               AD_Note.Record_ID,
                               (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='AD_Note'
@@ -893,8 +893,8 @@ namespace VIS.Helpers
                               ) AD_Window_ID,
                               AD_Note.AD_Note_ID
                             FROM AD_Note
-                            INNER JOIN AD_Message
-                            ON AD_Message.AD_Message_ID         =AD_Note.AD_Message_ID";
+                            INNER JOIN VAF_Msg_Lable
+                            ON VAF_Msg_Lable.VAF_Msg_Lable_ID         =AD_Note.VAF_Msg_Lable_ID";
                 strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AD_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
                 strQuery += "  AND AD_Note.AD_User_ID IN (0," + ctx.GetAD_User_ID() + ")"

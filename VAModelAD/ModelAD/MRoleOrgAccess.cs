@@ -285,7 +285,7 @@ namespace VAdvantage.Model
             MRole role = new MRole(GetCtx(), GetAD_Role_ID(), null);
             if (!role.IsUseUserOrgAccess())
             {
-                DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID());
+                DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID());
             }
             else
             {
@@ -301,7 +301,7 @@ namespace VAdvantage.Model
 
                 }
 
-                string sql = "SELECT AD_User_ID FROM ad_loginsetting   WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID();
+                string sql = "SELECT AD_User_ID FROM VAF_Loginsetting   WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID();
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -309,13 +309,13 @@ namespace VAdvantage.Model
                     {
                         if (UIDs.IndexOf(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"])) == -1)
                         {
-                            DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
+                            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE AD_User_ID=" + ds.Tables[0].Rows[i]["AD_User_ID"].ToString());
                         }
                     }
                 }
                 else
                 {
-                    DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID());
+                    DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID());
                 }
             }
         }

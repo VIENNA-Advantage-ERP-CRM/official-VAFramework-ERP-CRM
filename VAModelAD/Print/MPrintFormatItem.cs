@@ -108,8 +108,8 @@ namespace VAdvantage.Print
             LoadTranslations();
 
             String retValue = "";
-            if (_translationLabel.ContainsKey(language.GetAD_Language()))
-                retValue = (String)_translationLabel[language.GetAD_Language()];
+            if (_translationLabel.ContainsKey(language.GetVAF_Language()))
+                retValue = (String)_translationLabel[language.GetVAF_Language()];
             if (string.IsNullOrEmpty(retValue))
                 return GetPrintName();
             return retValue;
@@ -125,8 +125,8 @@ namespace VAdvantage.Print
             if (language == null || Env.IsBaseLanguage(language, "AD_PrintFormatItem"))// GlobalVariable.IsBaseLanguage())
                 return GetPrintNameSuffix();
             LoadTranslations();
-            // String retValue = (String)_translationSuffix[language.GetAD_Language()];
-            String retValue = Utility.Util.GetValueOfString(_translationSuffix[language.GetAD_Language()]);
+            // String retValue = (String)_translationSuffix[language.GetVAF_Language()];
+            String retValue = Utility.Util.GetValueOfString(_translationSuffix[language.GetVAF_Language()]);
             if (retValue == null || retValue.Length == 0)
                 return GetPrintNameSuffix();
             return retValue;
@@ -142,7 +142,7 @@ namespace VAdvantage.Print
             {
                 _translationLabel = new Dictionary<String, String>();
                 _translationSuffix = new Dictionary<String, String>();
-                String sql = "SELECT AD_Language, PrintName, PrintNameSuffix FROM AD_PrintFormatItem_Trl WHERE AD_PrintFormatItem_ID=@formatitem";
+                String sql = "SELECT VAF_Language, PrintName, PrintNameSuffix FROM AD_PrintFormatItem_Trl WHERE AD_PrintFormatItem_ID=@formatitem";
                 IDataReader dr = null;
                 try
                 {
@@ -407,14 +407,14 @@ namespace VAdvantage.Print
             //	translate base entry if single language - trigger copies to trl tables
 
             //Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !GlobalVariable.IsBaseLanguage();
-            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
+            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseVAF_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
                     + "c.AD_Reference_ID,c.IsKey,c.SeqNo "				//	4..6
                     + "FROM VAF_Column c, VAF_ColumnDic_TL e "
                     + "WHERE c.VAF_Column_ID='" + VAF_Column_ID + "'"
                     + " AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID"
-                    + " AND e.AD_Language='" + Common.Common.GetLanguageCode() + "'";
+                    + " AND e.VAF_Language='" + Common.Common.GetLanguageCode() + "'";
             IDataReader dr = null;
             try
             {
@@ -499,14 +499,14 @@ namespace VAdvantage.Print
             //	translate base entry if single language - trigger copies to trl tables
 
             //Boolean trl = !Env.IsMultiLingualDocument(format.GetCtx()) && !GlobalVariable.IsBaseLanguage();
-            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseAD_Language());
+            Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseVAF_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
                     + "c.AD_Reference_ID,c.IsKey,c.SeqNo , f.MRSeqNo,  f.MRIsDisplayed,f.IsDisplayed "				//	4..6
                     + "FROM VAF_Column c, VAF_ColumnDic_TL e ,VAF_Field f"
                     + "WHERE c.VAF_Column_ID=" + VAF_Column_ID + "  AND f.VAF_Field_ID=" + VAF_Field_ID + ""
                     + " AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID"
-                    + " AND e.AD_Language='" + Common.Common.GetLanguageCode() + "'";
+                    + " AND e.VAF_Language='" + Common.Common.GetLanguageCode() + "'";
             IDataReader dr = null;
             try
             {
@@ -646,13 +646,13 @@ namespace VAdvantage.Print
                 String sql = "UPDATE AD_PrintFormatItem_Trl "
                     + "SET PrintName = (SELECT e.PrintName "
                         + "FROM VAF_ColumnDic_TL e, VAF_Column c "
-                        + "WHERE e.AD_Language=AD_PrintFormatItem_Trl.AD_Language"
+                        + "WHERE e.VAF_Language=AD_PrintFormatItem_Trl.VAF_Language"
                         + " AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID"
                         + " AND c.VAF_Column_ID=" + GetVAF_Column_ID() + ") "
                     + "WHERE AD_PrintFormatItem_ID = " + Get_ID()
                     + " AND EXISTS (SELECT * "
                         + "FROM VAF_ColumnDic_TL e, VAF_Column c "
-                        + "WHERE e.AD_Language=AD_PrintFormatItem_Trl.AD_Language"
+                        + "WHERE e.VAF_Language=AD_PrintFormatItem_Trl.VAF_Language"
                         + " AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID"
                         + " AND c.VAF_Column_ID=" + GetVAF_Column_ID()
                         + " AND AD_PrintFormatItem_Trl.AD_PrintFormatItem_ID = " + Get_ID() + ")"

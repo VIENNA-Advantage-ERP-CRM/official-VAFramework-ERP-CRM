@@ -408,7 +408,7 @@ namespace VAdvantage.Tool
                 AD_Reference_ID = 0;
             }
             //	String Key
-            else if (columnName.Equals("AD_Language", StringComparison.InvariantCultureIgnoreCase)
+            else if (columnName.Equals("VAF_Language", StringComparison.InvariantCultureIgnoreCase)
                 || columnName.Equals("EntityType", StringComparison.InvariantCultureIgnoreCase)
                 || columnName.Equals("DocBaseType", StringComparison.InvariantCultureIgnoreCase))
             {

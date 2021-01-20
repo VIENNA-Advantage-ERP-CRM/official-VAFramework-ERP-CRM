@@ -957,7 +957,7 @@ namespace VAdvantage.Print
             String sql = null;
             if (type == CHECK)
                 sql = "SELECT bad.Check_PrintFormat_ID,"								//	1
-                    + "	c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.DocumentNo "		//	2..5
+                    + "	c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.DocumentNo "		//	2..5
                     + "FROM C_PaySelectionCheck d"
                     + " INNER JOIN C_PaySelection ps ON (d.C_PaySelection_ID=ps.C_PaySelection_ID)"
                     + " INNER JOIN C_BankAccountDoc bad ON (ps.C_BankAccount_ID=bad.C_BankAccount_ID AND d.PaymentRule=bad.PaymentRule)"
@@ -966,7 +966,7 @@ namespace VAdvantage.Print
                     + "WHERE d.C_PaySelectionCheck_ID=@recordid";		//	info from BankAccount
             else if (type == DUNNING)
                 sql = "SELECT dl.Dunning_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,dr.DunningDate "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,dr.DunningDate "
                     + "FROM C_DunningRunEntry d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN C_BPartner bp ON (d.C_BPartner_ID=bp.C_BPartner_ID)"
@@ -975,7 +975,7 @@ namespace VAdvantage.Print
                     + "WHERE d.C_DunningRunEntry_ID=@recordid";			//	info from Dunning
             else if (type == REMITTANCE)
                 sql = "SELECT pf.Remittance_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.DocumentNo "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.DocumentNo "
                     + "FROM C_PaySelectionCheck d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN AD_PrintForm pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
@@ -984,7 +984,7 @@ namespace VAdvantage.Print
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == PROJECT)
                 sql = "SELECT pf.Project_PrintFormat_ID,"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,d.Value "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,d.Value "
                     + "FROM C_Project d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN AD_PrintForm pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
@@ -993,7 +993,7 @@ namespace VAdvantage.Print
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == RFQ)
                 sql = "SELECT COALESCE(t.AD_PrintFormat_ID, pf.AD_PrintFormat_ID),"
-                    + " c.IsMultiLingualDocument,bp.AD_Language,bp.C_BPartner_ID,rr.Name "
+                    + " c.IsMultiLingualDocument,bp.VAF_Language,bp.C_BPartner_ID,rr.Name "
                     + "FROM C_RfQResponse rr"
                     + " INNER JOIN C_RfQ r ON (rr.C_RfQ_ID=r.C_RfQ_ID)"
                     + " INNER JOIN C_RfQ_Topic t ON (r.C_RfQ_Topic_ID=t.C_RfQ_Topic_ID)"
@@ -1087,7 +1087,7 @@ namespace VAdvantage.Print
                     //	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see InvoicePrint
                     + " COALESCE (bp.Invoice_PrintFormat_ID,dt.AD_PrintFormat_ID,pf.Invoice_PrintFormat_ID)," // 3
                     + " pf.Project_PrintFormat_ID, pf.Remittance_PrintFormat_ID,"		//	4..5
-                    + " c.IsMultiLingualDocument, bp.AD_Language,"						//	6..7
+                    + " c.IsMultiLingualDocument, bp.VAF_Language,"						//	6..7
                     + " COALESCE(dt.DocumentCopies,0)+COALESCE(bp.DocumentCopies,1), " 	// 	8
                     + " dt.AD_PrintFormat_ID,bp.C_BPartner_ID,d.DocumentNo "			//	9..11
                     + "FROM " + DOC_BASETABLES[type] + " d"
@@ -1114,9 +1114,9 @@ namespace VAdvantage.Print
                         AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[0]);// rs.getInt(1);
                         copies = 1;
                         //	Set Language when enabled
-                        String AD_Language = Utility.Util.GetValueOfString(dr[2]);// rs.getString(3);
-                        if (AD_Language != null)// && "Y".equals(rs.getString(2)))	//	IsMultiLingualDocument
-                            language = Language.GetLanguage(AD_Language);
+                        String VAF_Language = Utility.Util.GetValueOfString(dr[2]);// rs.getString(3);
+                        if (VAF_Language != null)// && "Y".equals(rs.getString(2)))	//	IsMultiLingualDocument
+                            language = Language.GetLanguage(VAF_Language);
                         C_BPartner_ID = Utility.Util.GetValueOfInt(dr[3]);// rs.getInt(4);
                         if (type == DUNNING)
                         {
@@ -1144,17 +1144,17 @@ namespace VAdvantage.Print
                         copies = Utility.Util.GetValueOfInt(dr[2]);
                         if (copies == 0)
                             copies = 1;
-                        String AD_Language = Utility.Util.GetValueOfString(dr[1]);
-                        if (AD_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
-                            language = Language.GetLanguage(AD_Language);
+                        String VAF_Language = Utility.Util.GetValueOfString(dr[1]);
+                        if (VAF_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
+                            language = Language.GetLanguage(VAF_Language);
                     }
                     else if (type == STANDARDOPERATION || type == ROUTING)
                     {
                         AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[0]);
                         copies = 1;
-                        /*String AD_Language = rs.getString(2);
-                        if (AD_Language != null) // && "Y".equals(rs.getString(6))) // IsMultiLingualDocument
-                        language = Language.getLanguage(AD_Language);*/
+                        /*String VAF_Language = rs.getString(2);
+                        if (VAF_Language != null) // && "Y".equals(rs.getString(6))) // IsMultiLingualDocument
+                        language = Language.getLanguage(VAF_Language);*/
                     }
                     else if (type == TASKLIST)
                     {
@@ -1201,9 +1201,9 @@ namespace VAdvantage.Print
                             AD_PrintFormat_ID = Utility.Util.GetValueOfInt(dr[8].ToString());// rs.getInt(9);
                         copies = Utility.Util.GetValueOfInt(dr[7].ToString());// rs.getInt(8);
                         //	Set Language when enabled
-                        String AD_Language = Utility.Util.GetValueOfString(dr[6].ToString());// rs.getString(7);
-                        if (AD_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
-                            language = Language.GetLanguage(AD_Language);
+                        String VAF_Language = Utility.Util.GetValueOfString(dr[6].ToString());// rs.getString(7);
+                        if (VAF_Language != null) // && "Y".equals(rs.getString(6)))	//	IsMultiLingualDocument
+                            language = Language.GetLanguage(VAF_Language);
                         C_BPartner_ID = Utility.Util.GetValueOfInt(dr[9]);// rs.getInt(10);
                         DocumentNo = Utility.Util.GetValueOfString(dr[10]);// rs.getString(11);
                     }
@@ -1233,7 +1233,7 @@ namespace VAdvantage.Print
 
             /*   Set Culture according to BPartner Language */
 
-            System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(language.GetAD_Language().Replace('_','-'));
+            System.Globalization.CultureInfo cInfo = new System.Globalization.CultureInfo(language.GetVAF_Language().Replace('_','-'));
 
             
 
@@ -1247,7 +1247,7 @@ namespace VAdvantage.Print
             //	query
             Query query = new Query(DOC_TABLES[type]);
             query.AddRestriction(DOC_IDS[type], Query.EQUAL, Utility.Util.GetValueOfInt(Record_ID));
-            //	log.config( "ReportCtrl.startDocumentPrint - " + format, query + " - " + language.getAD_Language());
+            //	log.config( "ReportCtrl.startDocumentPrint - " + format, query + " - " + language.getVAF_Language());
             //
             if (DocumentNo == null || DocumentNo.Length == 0)
                 DocumentNo = "DocPrint";

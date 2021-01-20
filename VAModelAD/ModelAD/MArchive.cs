@@ -12,12 +12,12 @@ using VAdvantage.Print;
 
 namespace VAdvantage.Model
 {
-    public class MArchive : X_AD_Archive
+    public class MArchive : X_VAF_Archive
     {
         public static MArchive[] Get(Ctx ctx, String whereClause)
         {
             List<MArchive> list = new List<MArchive>();
-            String sql = "SELECT * FROM AD_Archive WHERE VAF_Client_ID=@param1";
+            String sql = "SELECT * FROM VAF_Archive WHERE VAF_Client_ID=@param1";
             if (whereClause != null && whereClause.Length > 0)
                 sql += whereClause;
             sql += " ORDER BY Created";
@@ -58,8 +58,8 @@ namespace VAdvantage.Model
 
         }	//	MArchive
 
-        public MArchive(Ctx ctx, int AD_Archive_ID, Trx trx)
-            : base(ctx, AD_Archive_ID, trx)
+        public MArchive(Ctx ctx, int VAF_Archive_ID, Trx trx)
+            : base(ctx, VAF_Archive_ID, trx)
         {
 
         }	//	MArchive

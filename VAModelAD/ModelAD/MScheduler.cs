@@ -476,7 +476,7 @@ namespace VAdvantage.Model
 
             else if (m_process.GetAD_ReportFormat_ID() > 0)
             {
-                string lang = p_ctx.GetContext("#AD_Language");
+                string lang = p_ctx.GetContext("#VAF_Language");
                 lang = lang.Replace("_", "-");
 
                 if ((m_process.GetAD_ReportFormat_ID() > 0) && (lang == "ar-IQ"))
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
             }
 
             //	Notice
-            int AD_Message_ID = 884;		//	HARDCODED SchedulerResult
+            int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
             int[] userIDs = GetRecipientAD_User_IDs();
             byte[] report = null;
             bool success = false;
@@ -587,7 +587,7 @@ namespace VAdvantage.Model
                 _emails = new List<String>();
                 for (int i = 0; i < userIDs.Length; i++)
                 {
-                    MNote note = new MNote(GetCtx(), AD_Message_ID, userIDs[i], trx);
+                    MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, userIDs[i], trx);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
                     //note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
                     note.SetClientOrg(GetVAF_Client_ID(), 0);
@@ -1101,7 +1101,7 @@ namespace VAdvantage.Model
         }
 
         /** Scheduler Result		*/
-        private static int AD_Message_ID = 884;		//	HARDCODED SchedulerResult
+        private static int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
 
         private bool NotifySupervisor(bool success, String message, byte[] report)
         {
@@ -1118,7 +1118,7 @@ namespace VAdvantage.Model
             // return true;
             // }
             //	Create Notice
-            MNote note = new MNote(GetCtx(), AD_Message_ID, GetSupervisor_ID(), null);
+            MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetSupervisor_ID(), null);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
             //note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
             note.SetClientOrg(GetVAF_Client_ID(), 0);
@@ -1161,10 +1161,10 @@ namespace VAdvantage.Model
 
         //    System.Globalization.CultureInfo systemCulture = Thread.CurrentThread.CurrentCulture;
 
-        //    if (!string.IsNullOrEmpty(GetCtx().GetAD_Language().Replace('_', '-')))
+        //    if (!string.IsNullOrEmpty(GetCtx().GetVAF_Language().Replace('_', '-')))
         //    {
-        //        Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(GetCtx().GetAD_Language().Replace('_', '-'));
-        //        Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GetCtx().GetAD_Language().Replace('_', '-'));
+        //        Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(GetCtx().GetVAF_Language().Replace('_', '-'));
+        //        Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GetCtx().GetVAF_Language().Replace('_', '-'));
         //    }
 
         //    MForm form = new MForm(GetCtx(), GetVAF_Page_ID(), Get_TrxName());
@@ -1371,7 +1371,7 @@ namespace VAdvantage.Model
         //            int VAF_TableView_ID = 0;
         //            int Record_ID = 0;
 
-        //            int AD_Message_ID = 884;		//	HARDCODED SchedulerResult
+        //            int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
         //            int[] userIDs = GetRecipientAD_User_IDs();
 
         //            bool success = false;
@@ -1380,7 +1380,7 @@ namespace VAdvantage.Model
         //                _emails = new List<String>();
         //                for (int i = 0; i < userIDs.Length; i++)
         //                {
-        //                    MNote note = new MNote(GetCtx(), AD_Message_ID, userIDs[i], Get_TrxName());
+        //                    MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, userIDs[i], Get_TrxName());
         //                    note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
         //                    note.SetTextMsg(GetName());
         //                    note.SetDescription(GetDescription());

@@ -58,7 +58,7 @@ namespace VIS.Controllers
 
                 SecureEngine.Encrypt("a");
 
-                CCache<string, string> msgs = Msg.Get().GetMsgMap(ctx.GetAD_Language());
+                CCache<string, string> msgs = Msg.Get().GetMsgMap(ctx.GetVAF_Language());
 
                 sb.Append("; var VIS = {");
                 sb.Append("Application: {contextUrl:'").Append(@Url.Content("~/")).Append("',").Append(" contextFullUrl:'").Append(fullUrl).Append("',")

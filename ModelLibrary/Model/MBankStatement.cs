@@ -490,7 +490,7 @@ namespace VAdvantage.Model
             }
             log.Info("completeIt - " + ToString());
 
-            int _CountVA034 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA034_'  AND IsActive = 'Y'"));
+            int _CountVA034 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA034_'  AND IsActive = 'Y'"));
 
             //	Set Payment reconciled
             MBankStatementLine[] lines = GetLines(false);
@@ -522,7 +522,7 @@ namespace VAdvantage.Model
 
                 //Pratap 1-2-16
                 /////	Set Cash Line reconciled
-                int _CountVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA012_'  AND IsActive = 'Y'"));
+                int _CountVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA012_'  AND IsActive = 'Y'"));
                 if (_CountVA012 > 0)
                 {
                     if (line.GetC_CashLine_ID() != 0)
@@ -543,7 +543,7 @@ namespace VAdvantage.Model
 
 
             //VA009----------------------------------Anuj----------------------
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 MBankStatementLine[] STlines = GetLines(false);
@@ -677,7 +677,7 @@ namespace VAdvantage.Model
             SetStatementDifference(Env.ZERO);
 
             //VA009----------------------------------Anuj----------------------
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 MBankStatementLine[] STlines = GetLines(false);

@@ -1969,7 +1969,7 @@
 
                 //  date, number
                 if (VIS.DisplayType.IsDate(ldc.DisplayType) || VIS.DisplayType.IsNumeric(ldc.DisplayType)) {
-                    embedSQL = embedSQL.concat(VIS.DB.to_char(tableName + "." + ldc.ColumnName, ldc.DisplayType, VIS.Env.getAD_Language(VIS.Env.getCtx())));
+                    embedSQL = embedSQL.concat(VIS.DB.to_char(tableName + "." + ldc.ColumnName, ldc.DisplayType, VIS.Env.getVAF_Language(VIS.Env.getCtx())));
                 }
                 //  TableDir
                 else if ((ldc.DisplayType == VIS.DisplayType.TableDir || ldc.DisplayType == VIS.DisplayType.Search) && ldc.ColumnName.endsWith("_ID")) {

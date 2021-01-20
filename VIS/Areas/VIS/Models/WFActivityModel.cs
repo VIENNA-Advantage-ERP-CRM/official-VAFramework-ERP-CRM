@@ -1040,7 +1040,7 @@ OR
                         JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
                         WHERE AD_Window.IsActive     ='Y'
                         AND Ad_Wf_Activity.Processed = 'N'
-                        AND Ad_Wf_Activity.WFState   ='OS' AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
+                        AND Ad_Wf_Activity.WFState   ='OS' AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
                 sql += " AND Ad_Wf_Activity.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
                             AND  ((Ad_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
                             OR Ad_Wf_Activity.AD_User_ID   IN

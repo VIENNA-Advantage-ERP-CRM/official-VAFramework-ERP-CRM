@@ -26,7 +26,7 @@ namespace VAdvantage.Model
         /**
 	     *  Is this a valid Credit Card Exp Date?
 	     *	@param mmyy Exp in form of mmyy
-	     *  @return "" or Error AD_Message
+	     *  @return "" or Error VAF_Msg_Lable
 	     */
         public static String ValidateCreditCardExp(String mmyy)
         {
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
          *  Is this a valid Credit Card Exp Date?
          *  @param mm month
          *  @param yy year
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateCreditCardExp(int mm, int yy)
         {
@@ -127,7 +127,7 @@ namespace VAdvantage.Model
          *  Validate Credit Card Number.
          *  - Based on LUHN formula
          *  @param creditCardNumber credit card number
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateCreditCardNumber(String creditCardNumber)
         {
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
          *  - Check Card Type and Length
          *  @param creditCardNumber CC Number
          *  @param creditCardType CC Type
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateCreditCardNumber(String creditCardNumber, String creditCardType)
         {
@@ -298,7 +298,7 @@ namespace VAdvantage.Model
         /**
          *  Validate Validation Code
          *  @param creditCardVV CC Verification Code
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateCreditCardVV(String creditCardVV)
         {
@@ -324,7 +324,7 @@ namespace VAdvantage.Model
          *  Validate Validation Code
          *  @param creditCardVV CC Verification Code
          *  @param creditCardType CC Type see CC_
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateCreditCardVV(String creditCardVV, String creditCardType)
         {
@@ -381,7 +381,7 @@ namespace VAdvantage.Model
         /**************************************************************************
          *  Validate Routing Number
          *  @param routingNo Routing No
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateRoutingNo(String routingNo)
         {
@@ -399,7 +399,7 @@ namespace VAdvantage.Model
         /**
          *  Validate Account No
          *  @param AccountNo AccountNo
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateAccountNo(String accountNo)
         {
@@ -412,7 +412,7 @@ namespace VAdvantage.Model
         /**
          *  Validate Check No
          *  @param CheckNo CheckNo
-         *  @return "" or Error AD_Message
+         *  @return "" or Error VAF_Msg_Lable
          */
         public static String ValidateCheckNo(String checkNo)
         {

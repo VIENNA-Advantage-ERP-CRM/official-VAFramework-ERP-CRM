@@ -260,24 +260,24 @@ namespace VIS.Models
             try
             {
                 //LoginSettings
-                int AD_LoginSetting_ID = Util.GetValueOfInt(VAdvantage.DataBase.DB.ExecuteScalar("SELECT AD_LoginSetting_ID FROM AD_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID, null, null));
+                int VAF_LoginSetting_ID = Util.GetValueOfInt(VAdvantage.DataBase.DB.ExecuteScalar("SELECT VAF_LoginSetting_ID FROM VAF_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID, null, null));
                 StringBuilder sql = new StringBuilder("");
-                if (AD_LoginSetting_ID > 0)//UPdate
+                if (VAF_LoginSetting_ID > 0)//UPdate
                 {
-                    sql.Append("UPDATE AD_LoginSetting SET AD_Role_ID=" + AD_Role_ID + ",VAF_Client_ID=" + VAF_Client_ID + ",VAF_Org_ID=" + VAF_Org_ID + " ,M_Warehouse_ID=");
+                    sql.Append("UPDATE VAF_LoginSetting SET AD_Role_ID=" + AD_Role_ID + ",VAF_Client_ID=" + VAF_Client_ID + ",VAF_Org_ID=" + VAF_Org_ID + " ,M_Warehouse_ID=");
                     if (M_Warehouse_ID == 0)
                         sql.Append("NULL");
                     else
                         sql.Append(M_Warehouse_ID);
 
-                    sql.Append(" WHERE AD_LoginSetting_ID=" + AD_LoginSetting_ID);
+                    sql.Append(" WHERE VAF_LoginSetting_ID=" + VAF_LoginSetting_ID);
 
                 }
                 else//Insert
                 {
-                    AD_LoginSetting_ID = MSequence.GetNextID(ctx.GetVAF_Client_ID(), "AD_LoginSetting", null);
-                    sql.Append("INSERT INTO AD_LoginSetting (VAF_CLIENT_ID,AD_LOGINSETTING_ID,VAF_ORG_ID,AD_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
-                    sql.Append(" VALUES (" + VAF_Client_ID + "," + AD_LoginSetting_ID + "," + VAF_Org_ID + "," + AD_Role_ID + "," + AD_User_ID + ",");
+                    VAF_LoginSetting_ID = MSequence.GetNextID(ctx.GetVAF_Client_ID(), "VAF_LoginSetting", null);
+                    sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,AD_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
+                    sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + AD_Role_ID + "," + AD_User_ID + ",");
                     sql.Append(GlobalVariable.TO_DATE(DateTime.Now, false) + "," + ctx.GetAD_User_ID() + ",NULL,");
                     if (M_Warehouse_ID == 0)
                         sql.Append("NULL");
@@ -458,7 +458,7 @@ namespace VIS.Models
 
         public DefaultLoginData GetDefaultLogin(int AD_User_ID)
         {
-            string sql = "SELECT AD_Role_ID,VAF_Client_ID,VAF_Org_ID,M_Warehouse_ID FROM AD_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID;
+            string sql = "SELECT AD_Role_ID,VAF_Client_ID,VAF_Org_ID,M_Warehouse_ID FROM VAF_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             DefaultLoginData dfd = null;
             if (ds != null && ds.Tables[0].Rows.Count > 0)

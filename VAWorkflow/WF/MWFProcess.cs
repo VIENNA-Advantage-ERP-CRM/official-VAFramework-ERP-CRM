@@ -347,8 +347,8 @@ namespace VAdvantage.WF
                 activity.SetLastActivity(last.GetAD_WF_Activity_ID());
                 // new Thread(activity).Start();
                 //thred = new Thread(new ThreadStart(activity.Run));
-                //thred.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
-                //thred.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
+                //thred.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
+                //thred.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
                 activity.Run();
                // thred.Start();
 
@@ -478,11 +478,11 @@ namespace VAdvantage.WF
                 //MWFActivity activity = new MWFActivity(this, AD_WF_Node_ID);
                 ////new Thread(activity).Start();
                 //thred = new Thread(new ThreadStart(activity.Run));
-                ////System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
-                ////System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
+                ////System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
+                ////System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
 
-                //thred.CurrentCulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseAD_Language());
-                //thred.CurrentUICulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseAD_Language());
+                //thred.CurrentCulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseVAF_Language());
+                //thred.CurrentUICulture = Utility.Env.GetLanguage(p_ctx).GetCulture(Utility.Env.GetBaseVAF_Language());
                 //thred.Start();
 
                 //Update By --Raghu

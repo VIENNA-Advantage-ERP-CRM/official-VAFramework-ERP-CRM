@@ -70,18 +70,18 @@ StringBuilder sb = new StringBuilder ("X_employee[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Language.
-@param AD_Language_ID System Language */
-public void SetAD_Language_ID (int AD_Language_ID)
+@param VAF_Language_ID System Language */
+public void SetVAF_Language_ID (int VAF_Language_ID)
 {
-if (AD_Language_ID <= 0) Set_Value ("AD_Language_ID", null);
+if (VAF_Language_ID <= 0) Set_Value ("VAF_Language_ID", null);
 else
-Set_Value ("AD_Language_ID", AD_Language_ID);
+Set_Value ("VAF_Language_ID", VAF_Language_ID);
 }
 /** Get Language.
 @return System Language */
-public int GetAD_Language_ID() 
+public int GetVAF_Language_ID() 
 {
-int? ii = (int?)Get_Value("AD_Language_ID");
+int? ii = (int?)Get_Value("VAF_Language_ID");
 if (ii == null) return 0;
 return (int)ii;
 }

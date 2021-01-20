@@ -146,7 +146,7 @@ namespace VAdvantage.Model
             else if (displayType == DisplayType.List)
             {
 
-                Language language = Language.GetLanguage(Env.GetAD_Language(ctx));
+                Language language = Language.GetLanguage(Env.GetVAF_Language(ctx));
                 _colSQL = "(" + VLookUpFactory.GetLookup_ListEmbed(
                     language, AD_Reference_Value_ID, columnName) + ")";
                 _colClass = typeof(String);// String.class;
@@ -155,7 +155,7 @@ namespace VAdvantage.Model
             /**  Table
             else if (displayType == DisplayType.Table)
             {
-                Language language = Language.getLanguage(Env.getAD_Language(ctx));
+                Language language = Language.getLanguage(Env.getVAF_Language(ctx));
                 _colSQL += ",(" + MLookupFactory.getLookup_TableEmbed(
                     language, columnName, RModel.TABLE_ALIAS, AD_Reference_Value_ID) + ")";
                 _colClass = String.class;
@@ -165,7 +165,7 @@ namespace VAdvantage.Model
             else
             {
                 _colClass = typeof(String);// String.class;
-                Language language = Language.GetLanguage(Env.GetAD_Language(ctx));
+                Language language = Language.GetLanguage(Env.GetVAF_Language(ctx));
                 if (columnName.Equals("Account_ID")
                     || columnName.Equals("User1_ID") || columnName.Equals("User2_ID"))
                 {

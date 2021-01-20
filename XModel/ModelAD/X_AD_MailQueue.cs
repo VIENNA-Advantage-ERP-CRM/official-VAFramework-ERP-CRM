@@ -9,20 +9,20 @@ namespace ViennaAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for AD_MailQueue
+    using System.Data;/** Generated Model for VAF_MailQueue
  *  @author Vienna Solutions 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_MailQueue : PO
+    public class X_VAF_MailQueue : PO
     {
-        public X_AD_MailQueue(Context ctx, int AD_MailQueue_ID, Trx trxName)
-            : base(ctx, AD_MailQueue_ID, trxName)
+        public X_VAF_MailQueue(Context ctx, int VAF_MailQueue_ID, Trx trxName)
+            : base(ctx, VAF_MailQueue_ID, trxName)
         {
-            /** if (AD_MailQueue_ID == 0){SetAD_MailQueue_ID (0);SetToEMail (null);} */
+            /** if (VAF_MailQueue_ID == 0){SetVAF_MailQueue_ID (0);SetToEMail (null);} */
         }
-        public X_AD_MailQueue(Ctx ctx, int AD_MailQueue_ID, Trx trxName)
-            : base(ctx, AD_MailQueue_ID, trxName)
+        public X_VAF_MailQueue(Ctx ctx, int VAF_MailQueue_ID, Trx trxName)
+            : base(ctx, VAF_MailQueue_ID, trxName)
         {
-            /** if (AD_MailQueue_ID == 0){SetAD_MailQueue_ID (0);SetToEMail (null);} */
+            /** if (VAF_MailQueue_ID == 0){SetVAF_MailQueue_ID (0);SetToEMail (null);} */
         }
 
         ///<summary>
@@ -31,7 +31,7 @@ namespace ViennaAdvantage.Model
         ///<param name="ctx"> Context </param>
         ///<param name="rs"> Result Set </param>
         ///<param name="trxName"> Transaction </param>
-        public X_AD_MailQueue(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_MailQueue(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -42,7 +42,7 @@ namespace ViennaAdvantage.Model
         ///<param name="ctx"> Context </param>
         ///<param name="rs"> Result Set </param>
         ///<param name="trxName"> Transaction </param>
-        public X_AD_MailQueue(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_MailQueue(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -53,7 +53,7 @@ namespace ViennaAdvantage.Model
         ///<param name="ctx"> Context </param>
         ///<param name="rs"> Result Set </param>
         ///<param name="trxName"> Transaction </param>
-        public X_AD_MailQueue(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_MailQueue(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -62,7 +62,7 @@ namespace ViennaAdvantage.Model
         /// Static Constructor 
         /// Set Table ID By Table Name
         ///</summary>
-        static X_AD_MailQueue()
+        static X_VAF_MailQueue()
         {
             Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name);
         }
@@ -83,9 +83,9 @@ namespace ViennaAdvantage.Model
         public static int Table_ID; // =1000668;
 
         ///<summary>
-        /// TableName=AD_MailQueue
+        /// TableName=VAF_MailQueue
         ///</summary>
-        public static String Table_Name = "AD_MailQueue";
+        public static String Table_Name = "VAF_MailQueue";
         protected static KeyNamePair model;
 
         protected Decimal accessLevel = new Decimal(7);
@@ -126,26 +126,26 @@ namespace ViennaAdvantage.Model
 
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_MailQueue[").Append(Get_ID()).Append("]"); return sb.ToString();
+            StringBuilder sb = new StringBuilder("X_VAF_MailQueue[").Append(Get_ID()).Append("]"); return sb.ToString();
         }
 
         ///<summary>
-        /// SetAD_MailQueue_ID
+        /// SetVAF_MailQueue_ID
         ///</summary>
-        ///<param name="AD_MailQueue_ID">AD_MailQueue_ID</param>
-        public void SetAD_MailQueue_ID(int AD_MailQueue_ID)
+        ///<param name="VAF_MailQueue_ID">VAF_MailQueue_ID</param>
+        public void SetVAF_MailQueue_ID(int VAF_MailQueue_ID)
         {
-            if (AD_MailQueue_ID < 1) throw new ArgumentException("AD_MailQueue_ID is mandatory.");
-            Set_ValueNoCheck("AD_MailQueue_ID", AD_MailQueue_ID);
+            if (VAF_MailQueue_ID < 1) throw new ArgumentException("VAF_MailQueue_ID is mandatory.");
+            Set_ValueNoCheck("VAF_MailQueue_ID", VAF_MailQueue_ID);
         }
 
         ///<summary>
-        /// GetAD_MailQueue_ID
+        /// GetVAF_MailQueue_ID
         ///</summary>
-        ///<returns> AD_MailQueue_ID</returns>
-        public int GetAD_MailQueue_ID()
+        ///<returns> VAF_MailQueue_ID</returns>
+        public int GetVAF_MailQueue_ID()
         {
-            Object ii = Get_Value("AD_MailQueue_ID");
+            Object ii = Get_Value("VAF_MailQueue_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 

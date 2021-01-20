@@ -179,13 +179,13 @@ namespace VIS.Models
 
 
 
-            X_AD_InviteUser iuser = new X_AD_InviteUser(ctx, 0, null);
+            X_VAF_InviteUser iuser = new X_VAF_InviteUser(ctx, 0, null);
             if (iuser.Save())
             {
                 for (int i = 0; i < infos.Count; i++)
                 {
-                    X_AD_InviteUser_Role userRole = new X_AD_InviteUser_Role(ctx, 0, null);
-                    userRole.SetAD_InviteUser_ID(iuser.GetAD_InviteUser_ID());
+                    X_VAF_InviteUser_Role userRole = new X_VAF_InviteUser_Role(ctx, 0, null);
+                    userRole.SetVAF_InviteUser_ID(iuser.GetVAF_InviteUser_ID());
                     userRole.SetAD_Role_ID(infos[i].AD_Role_ID);
                     userRole.Save();
                 }
@@ -213,7 +213,7 @@ namespace VIS.Models
             {
                 url = url.Substring(0, url.LastIndexOf("/")) + "/Areas/VIS/WebPages/CreateUser.aspx";
             }
-            string queryString = "?inviteID=" + SecureEngine.Encrypt(iuser.GetAD_InviteUser_ID().ToString()) + "&URL=" + hostUrl + "&lang=" + ctx.GetAD_Language();
+            string queryString = "?inviteID=" + SecureEngine.Encrypt(iuser.GetVAF_InviteUser_ID().ToString()) + "&URL=" + hostUrl + "&lang=" + ctx.GetVAF_Language();
             if (emails.Length == 1)
             {
                 queryString += "&mailID=" + SecureEngine.Encrypt(emails[0].ToString());

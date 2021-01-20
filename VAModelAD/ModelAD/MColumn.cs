@@ -429,7 +429,7 @@ namespace VAdvantage.Model
                             || DisplayType.YesNo == dt
                             || (DisplayType.Button == dt && !columnName.EndsWith("_ID"))
                             || columnName.Equals("EntityType")
-                            || columnName.Equals("AD_Language")
+                            || columnName.Equals("VAF_Language")
                             || columnName.Equals("DocBaseType")
                             )
                         {
@@ -723,11 +723,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Label Name
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <returns>name</returns>
-        public String GetName(String AD_Language)
+        public String GetName(String VAF_Language)
         {
-            return Get_Translation(GetColumnName(), AD_Language);
+            return Get_Translation(GetColumnName(), VAF_Language);
         }
 
         /// <summary>

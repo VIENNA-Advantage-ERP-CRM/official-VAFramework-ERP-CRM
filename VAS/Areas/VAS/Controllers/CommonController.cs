@@ -935,7 +935,7 @@ namespace VIS.Controllers
                     item.C_Currency_ID_K = Util.GetValueOfInt(data.Tables[0].Rows[i]["C_Currency_ID"]);
 
 
-                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA034_' AND IsActive='Y'"));
+                    int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA034_' AND IsActive='Y'"));
                     if (count > 0)
                         item.VA034_DepositSlipNo = Util.GetValueOfString(data.Tables[0].Rows[i]["VA034_DepositSlipNo"]);
                     else
@@ -993,7 +993,7 @@ namespace VIS.Controllers
              *  ShipmentLine    - 5
              *  InvoiceLine     - 6
              */
-            int countVA010 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA010_' AND IsActive = 'Y'"));
+            int countVA010 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA010_' AND IsActive = 'Y'"));
             //  Lines
             for (int i = 0; i < model.Count; i++)
             {
@@ -1655,7 +1655,7 @@ namespace VIS.Controllers
                         inoutLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
 
                         // Change By mohit Amortization proces
-                        //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+                        //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
                         //if (countVA038 > 0)
                         //{
 
@@ -1756,7 +1756,7 @@ namespace VIS.Controllers
                         orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
                     }
                     // Change By mohit Amortization proces
-                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
                     //if (countVA038 > 0)
                     //{
                     //    if (Util.GetValueOfInt(orderLine.GetM_Product_ID()) > 0)
@@ -1847,7 +1847,7 @@ namespace VIS.Controllers
                     invoiceLine.SetPrice();
                     invoiceLine.SetTax();
                     // Change By mohit Amortization proces
-                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+                    //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
                     //if (countVA038 > 0)
                     //{
                     //    if (Util.GetValueOfInt(inoutLine.GetM_Product_ID()) > 0)
@@ -1982,7 +1982,7 @@ namespace VIS.Controllers
                 bsl.SetStmtAmt(TrxAmt);
                 bsl.SetDescription(pmt.GetDescription());
                 bsl.Set_Value("TrxNo", Util.GetValueOfString(model[i]["AuthCode"]).Trim());
-                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA034_' AND IsActive='Y'"));
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA034_' AND IsActive='Y'"));
                 if (count > 0)
                     bsl.SetVA012_VoucherNo(Util.GetValueOfString(model[i]["VA034_DepositSlipNo"]));
 
@@ -3077,7 +3077,7 @@ namespace VIS.Controllers
         //            obj["HELP"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["HELP"]);
         //            obj["CREATEDBY"] = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_User WHERE AD_User_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["CREATEDBY"])));
         //            obj["CREATED"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[i]["CREATED"]);
-        //            obj["AD_ARCHIVE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_ARCHIVE_ID"]);
+        //            obj["VAF_ARCHIVE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_ARCHIVE_ID"]);
         //            retDic.Add(obj);
         //        }
         //    }

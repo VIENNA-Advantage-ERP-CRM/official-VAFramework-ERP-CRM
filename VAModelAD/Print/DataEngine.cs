@@ -401,7 +401,7 @@ namespace VAdvantage.Print
                             orderName = _synonym + "Name";
 
                             //	LEFT OUTER JOIN AD_Ref_List XA ON (VAF_TableView.EntityType=XA.Value AND XA.AD_Reference_ID=245)
-                            //	LEFT OUTER JOIN AD_Ref_List_Trl A ON (XA.AD_Ref_List_ID=A.AD_Ref_List_ID AND A.AD_Language='de_DE')
+                            //	LEFT OUTER JOIN AD_Ref_List_Trl A ON (XA.AD_Ref_List_ID=A.AD_Ref_List_ID AND A.VAF_Language='de_DE')
                             if (IsMandatory)
                                 sqlFROM.Append(" INNER JOIN ");
                             else
@@ -416,7 +416,7 @@ namespace VAdvantage.Print
                                 sqlFROM.Append(" LEFT OUTER JOIN ");
                             sqlFROM.Append(" AD_Ref_List_Trl ").Append(_synonym).Append(" ON (X")
                                 .Append(_synonym).Append(".AD_Ref_List_ID=").Append(_synonym).Append(".AD_Ref_List_ID")
-                                .Append(" AND ").Append(_synonym).Append(".AD_Language='").Append(_language.GetAD_Language()).Append("')");
+                                .Append(" AND ").Append(_synonym).Append(".VAF_Language='").Append(_language.GetVAF_Language()).Append("')");
                         }
                         // 	TableName.ColumnName,
                         sqlSELECT.Append(tableName).Append(".").Append(ColumnName).Append(",");
@@ -468,7 +468,7 @@ namespace VAdvantage.Print
                             display = "Description";
                             //if (CLogMgt.IsLevelFinest())
                             //jz display += "||'{'||" + _synonym + "._AttributeSetInstance_ID||'}'";
-                            //display += "||'{'||" + DataBase.DB.TO_CHAR(_synonym + "._AttributeSetInstance_ID", DisplayType.Number, Env.GetAD_Language(Env.GetContext())) + "||'}'";
+                            //display += "||'{'||" + DataBase.DB.TO_CHAR(_synonym + "._AttributeSetInstance_ID", DisplayType.Number, Env.GetVAF_Language(Env.GetContext())) + "||'}'";
                             synonym = "Description";
                         }
                         if (synonym == null)
@@ -1171,7 +1171,7 @@ namespace VAdvantage.Print
                                         {
                                             object toSting = obj;
 
-                                            if (!Env.IsBaseLanguage(pd.GetCtx().GetContext("#AD_Language"), "") && DisplayType.IsNumeric(pdc.GetDisplayType()) && !pdc.GetColumnName().Equals("AmtInWords")) // Convert to native Digits
+                                            if (!Env.IsBaseLanguage(pd.GetCtx().GetContext("#VAF_Language"), "") && DisplayType.IsNumeric(pdc.GetDisplayType()) && !pdc.GetColumnName().Equals("AmtInWords")) // Convert to native Digits
                                             {
                                                 toSting = NativeDigitConverter.ConvertToNativeNumerals(toSting.ToString(), pd.GetCtx());
                                             }
@@ -1458,7 +1458,7 @@ namespace VAdvantage.Print
                 //                        {
                 //                            object toSting = obj;
 
-                //                            if (!Env.IsBaseLanguage(pd.GetCtx().GetContext("#AD_Language"), "") && DisplayType.IsNumeric(pdc.GetDisplayType()) && !pdc.GetColumnName().Equals("AmtInWords")) // Convert to native Digits
+                //                            if (!Env.IsBaseLanguage(pd.GetCtx().GetContext("#VAF_Language"), "") && DisplayType.IsNumeric(pdc.GetDisplayType()) && !pdc.GetColumnName().Equals("AmtInWords")) // Convert to native Digits
                 //                            {
                 //                                toSting = NativeDigitConverter.ConvertToNativeNumerals(toSting.ToString(), pd.GetCtx());
                 //                            }

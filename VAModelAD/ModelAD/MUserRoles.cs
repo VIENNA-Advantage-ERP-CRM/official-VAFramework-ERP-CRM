@@ -183,7 +183,7 @@ namespace VAdvantage.Model
 
         private void deleteRoleForLogin()
         {
-            DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE AD_User_ID=" + GetAD_User_ID() + " AND AD_Role_ID = " + GetAD_Role_ID());
+            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE AD_User_ID=" + GetAD_User_ID() + " AND AD_Role_ID = " + GetAD_Role_ID());
         }
     }
 }

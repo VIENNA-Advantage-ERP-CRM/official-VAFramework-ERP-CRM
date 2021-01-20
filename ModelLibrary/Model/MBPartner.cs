@@ -1119,7 +1119,7 @@ namespace VAdvantage.Model
             // change done by mohit to handle the free seats and filled seats on creation and deletion of employee from employee master window.- asked by ravikant.- 22/01/2018
             if (IsEmployee())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VAHRUAE_' AND isactive='Y'")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VAHRUAE_' AND isactive='Y'")) > 0)
                 {
                     if (newRecord)
                     {
@@ -1376,7 +1376,7 @@ namespace VAdvantage.Model
             //Added by Neha Thakur--05 Jan 2018--Set "Report To" (from Header tab) as Supervisor in Login User tab--Asked by Ravikant
             if (IsEmployee())
             {
-                int ModuleId = Util.GetValueOfInt(DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VAHRUAE_' and isactive='Y'"));
+                int ModuleId = Util.GetValueOfInt(DB.ExecuteScalar("select VAF_ModuleInfo_id from VAF_ModuleInfo where prefix='VAHRUAE_' and isactive='Y'"));
                 if (ModuleId > 0)
                 {
                     int _Emp_ID = Util.GetValueOfInt(Get_Value("VAHRUAE_HR_Employee"));

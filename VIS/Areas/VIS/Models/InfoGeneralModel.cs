@@ -13,14 +13,14 @@ namespace VIS.Models
     public class InfoGeneralModel
     {
 
-        public List<InfoGenral> GetSchema(string tableName, string ad_Language, bool isBaseLangage)
+        public List<InfoGenral> GetSchema(string tableName, string VAF_Language, bool isBaseLangage)
         {
             try
             {
                 
 
                 //Change by mohit-to handle translation in general info.
-                //Added 2 new parametere- string ad_Language, bool isBaseLangage.
+                //Added 2 new parametere- string VAF_Language, bool isBaseLangage.
                 //Asked by mukesh sir- 09/03/2018
                 string sql = string.Empty;
                 if (isBaseLangage)
@@ -55,7 +55,7 @@ namespace VIS.Models
                         ON (c.VAF_Column_ID=trl.VAF_Column_ID)
                         WHERE c.AD_Reference_ID=10
                         AND t.TableName        ='" + tableName + @"'
-                        AND trl.AD_Language='" + ad_Language + @"'
+                        AND trl.VAF_Language='" + VAF_Language + @"'
                         AND EXISTS(SELECT * FROM VAF_Field f
                           WHERE f.VAF_Column_ID=c.VAF_Column_ID
                           AND f.IsDisplayed   ='Y' AND f.IsEncrypted   ='N' AND f.ObscureType  IS NULL)
@@ -94,7 +94,7 @@ namespace VIS.Models
             }
         }
 
-        public List<InfoColumn> GetDisplayCol(int VAF_TableView_ID, string AD_Language, bool IsBaseLangage,string _tableName)
+        public List<InfoColumn> GetDisplayCol(int VAF_TableView_ID, string VAF_Language, bool IsBaseLangage,string _tableName)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace VIS.Models
                 }
 
                 //Change by mohit-to handle translation in general info.
-                //Added 2 new parametere- string AD_Language, bool IsBaseLangage.
+                //Added 2 new parametere- string VAF_Language, bool IsBaseLangage.
                 //Asked by mukesh sir - 09/03/2018
 
                 string sql = string.Empty;
@@ -159,7 +159,7 @@ namespace VIS.Models
                             ON (tab.VAF_Tab_ID  =f.VAF_Tab_ID
                             AND f.VAF_Column_ID =c.VAF_Column_ID)
                             WHERE t.VAF_TableView_ID=" + VAF_TableView_ID + @"
-                            AND trl.AD_Language='" + AD_Language + @"'
+                            AND trl.VAF_Language='" + VAF_Language + @"'
                             AND (c.IsKey       ='Y'
                             OR (f.IsEncrypted  ='N'
                             AND f.ObscureType IS NULL))                            

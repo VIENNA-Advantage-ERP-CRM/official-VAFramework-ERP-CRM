@@ -64,12 +64,12 @@ namespace VAdvantage.Install
 	/// </summary>
 	/// <param name="directory">file Directory</param>
 	/// <param name="VAF_Client_ID">only certain client if id >= 0</param>
-	/// <param name="AD_Language">language</param>
+	/// <param name="VAF_Language">language</param>
 	/// <param name="Trl_Table">table</param>
 	/// <returns>status Message</returns>
-	public String ImportTrl (String directory, int VAF_Client_ID, String AD_Language, String Trl_Table)
+	public String ImportTrl (String directory, int VAF_Client_ID, String VAF_Language, String Trl_Table)
 	{		
-        String fileName = directory + "\\" + Trl_Table + "_" + AD_Language + ".xml";
+        String fileName = directory + "\\" + Trl_Table + "_" + VAF_Language + ".xml";
 		log.Info(fileName);	
         FileInfo inn=new FileInfo(fileName);
 		if (!inn.Exists)
@@ -145,16 +145,16 @@ namespace VAdvantage.Install
 	/// </summary>
 	/// <param name="directory">file directory</param>
 	/// <param name="VAF_Client_ID">only certain client if id >= 0</param>
-	/// <param name="AD_Language">language</param>
+	/// <param name="VAF_Language">language</param>
 	/// <param name="Trl_Table">table</param>
 	/// <returns>stauts Message </returns>
-    public String ExportTrl(String directory, int VAF_Client_ID, String AD_Language, String Trl_Table)
+    public String ExportTrl(String directory, int VAF_Client_ID, String VAF_Language, String Trl_Table)
     {
-        String fileName = directory + "\\" + Trl_Table + "_" + AD_Language + ".xml";
+        String fileName = directory + "\\" + Trl_Table + "_" + VAF_Language + ".xml";
         log.Info(fileName);
         FileInfo ut = new FileInfo(fileName);
 
-        bool isBaseLanguage = Language.IsBaseLanguage(AD_Language);
+        bool isBaseLanguage = Language.IsBaseLanguage(VAF_Language);
         String tableName = Trl_Table;
         int pos = tableName.IndexOf("_Trl");
         String Base_Table = Trl_Table.Substring(0, pos);
@@ -173,7 +173,7 @@ namespace VAdvantage.Install
             XmlComment xmlcmnt = xmlDoc.CreateComment(DTD);
             xmlDoc.AppendChild(xmlcmnt);   
             XmlElement document = xmlDoc.CreateElement(XML_TAG_Vienna);
-            document.SetAttribute(XML_ATTRIBUTE_LANGUAGE, AD_Language);
+            document.SetAttribute(XML_ATTRIBUTE_LANGUAGE, VAF_Language);
             document.SetAttribute(XML_ATTRIBUTE_TABLE, Base_Table);
             xmlDoc.AppendChild(document);
            // xmlDoc.CreateComment(DTD);
@@ -196,7 +196,7 @@ namespace VAdvantage.Install
             bool haveWhere = false;
             if (!isBaseLanguage)
             {
-                sql.Append(" WHERE t.AD_Language=@param");
+                sql.Append(" WHERE t.VAF_Language=@param");
                 haveWhere = true;
             }
             if (_IsCentrallyMaintained)
@@ -213,7 +213,7 @@ namespace VAdvantage.Install
             if (!isBaseLanguage)
             {
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param", AD_Language);
+                param[0] = new SqlParameter("@param", VAF_Language);
             }
             idr = DataBase.DB.ExecuteReader(sql.ToString(), param, null);
             int rows = 0;
@@ -315,22 +315,22 @@ namespace VAdvantage.Install
 	
 	/// <summary>
 	/// Validate Language.	 * 	
-	 //  - Check if AD_Language record exists
+	 //  - Check if VAF_Language record exists
 	 // - Check Trl table records	 
 	/// </summary>
-	/// <param name="AD_Language">language</param>
+	/// <param name="VAF_Language">language</param>
 	/// <returns>if validated - or error message</returns>
-	public String ValidateLanguage (String AD_Language)
+	public String ValidateLanguage (String VAF_Language)
 	{
 		String sql = "SELECT * "
-			+ "FROM AD_Language "
-			+ "WHERE AD_Language=@param";
+			+ "FROM VAF_Language "
+			+ "WHERE VAF_Language=@param";
 		MLanguage language = null;
         IDataReader idr = null;
         SqlParameter[] param = new SqlParameter[1];
 		try
 		{
-            param[0] = new SqlParameter("@param", AD_Language);
+            param[0] = new SqlParameter("@param", VAF_Language);
             idr = DataBase.DB.ExecuteReader(sql, param, null);
 			
 			if (idr.Read())
@@ -344,11 +344,11 @@ namespace VAdvantage.Install
 			return e.ToString();
 		}
 
-		//	No AD_Language Record
+		//	No VAF_Language Record
 		if (language == null)
 		{
-			log.Log(Level.SEVERE, "Language does not exist: " + AD_Language);
-			return "Language does not exist: " + AD_Language;
+			log.Log(Level.SEVERE, "Language does not exist: " + VAF_Language);
+			return "Language does not exist: " + VAF_Language;
 		}
 		//	Language exists
 		if (language.IsActive())
@@ -358,8 +358,8 @@ namespace VAdvantage.Install
 		}
 		else
 		{
-			log.Log(Level.SEVERE, "Language not active or not system language: " + AD_Language);
-			return "Language not active or not system language: " + AD_Language;
+			log.Log(Level.SEVERE, "Language not active or not system language: " + VAF_Language);
+			return "Language not active or not system language: " + VAF_Language;
 		}
 		
 		//	Validate Translation
@@ -373,9 +373,9 @@ namespace VAdvantage.Install
 	///process
 	 /// </summary>
 	/// <param name="directory">directory</param>
-	/// <param name="AD_Language">language</param>
+	/// <param name="VAF_Language">language</param>
 	/// <param name="mode">mode</param>
-	private void Process (String directory, String AD_Language, String mode)
+	private void Process (String directory, String VAF_Language, String mode)
 	{
 		DirectoryInfo dir=new DirectoryInfo(directory);	
         if(!dir.Exists)
@@ -410,10 +410,10 @@ namespace VAdvantage.Install
 		{
             String table = (String)trlTables[i];
             if (mode.StartsWith("i"))
-                ImportTrl(directory, -1, AD_Language, table);
+                ImportTrl(directory, -1, VAF_Language, table);
             else
             { }
-				//ExportTrl(directory, -1, AD_Language, table);
+				//ExportTrl(directory, -1, VAF_Language, table);
 		}
 	}		
 	}	

@@ -65,8 +65,8 @@ namespace VAdvantage.Process
             MCommissionRun comRun = new MCommissionRun(m_com);
             SetStartEndDate();
             comRun.SetStartDate(p_StartDate);
-            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetVAF_Language());
             //	01-Jan-2000 - 31-Jan-2001 - USD
             Classes.SimpleDateFormat format = Classes.DisplayType.GetDateFormat(Classes.DisplayType.Date);
             String description = format.Format(p_StartDate)
@@ -78,8 +78,8 @@ namespace VAdvantage.Process
             //    + " - " + MCurrency.GetISO_Code(GetCtx(), m_com.GetC_Currency_ID());
 
             comRun.SetDescription(description);
-            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
 
             if (!comRun.Save())
                 throw new Exception("Could not save Commission Run please check Organization");

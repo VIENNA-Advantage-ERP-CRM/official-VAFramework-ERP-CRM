@@ -161,12 +161,12 @@ namespace VAdvantage.DataBase
             get { return _DBTYPE_NODE; }
         }
 
-        private static string _AD_MESSAGE;
+        private static string _VAF_MSG_LABLE;
 
-        public static string AD_MESSAGE
+        public static string VAF_MSG_LABLE
         {
-            get { return _AD_MESSAGE; }
-            set { _AD_MESSAGE = value; }
+            get { return _VAF_MSG_LABLE; }
+            set { _VAF_MSG_LABLE = value; }
         }
         #endregion
 
@@ -455,9 +455,9 @@ namespace VAdvantage.DataBase
         public static string GetLanguageCode()
         {
             return "en_US";
-            //return Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language();
-            //if (AD_LANGUAGE != "")
-            //    return    AD_LANGUAGE.Replace("-", "_");
+            //return Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language();
+            //if (VAF_LANGUAGE != "")
+            //    return    VAF_LANGUAGE.Replace("-", "_");
             //else
             //    return "";
         }

@@ -5213,7 +5213,7 @@ namespace VAdvantage.Model
                 //    CopyLandedCostAllocation(rLine.GetC_InvoiceLine_ID());
                 //}
                 //Amortization Schedule change
-                //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+                //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
                 //if (countVA038 > 0)
                 //{
                 //    if (rLine.GetM_InOutLine_ID() > 0)
@@ -5317,7 +5317,7 @@ namespace VAdvantage.Model
             #region Commented by Manjot Suggested by Amit/Mukesh/Surya Sir on 30/04/2018, As discussed that we don't need to delete the schedules in case of reversal and Mark all the schedules as Paid
 
             //Modeule Prefix VA009--- For Deletion Of Payment Schedules
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 //TODO Verify why schedules are deleted and , why transaction is not used here
@@ -5692,7 +5692,7 @@ namespace VAdvantage.Model
             if (C_BPartner_ID == 0)
                 return;
 
-            String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
@@ -5951,8 +5951,8 @@ namespace VAdvantage.Model
         public string CreateUpdateCash(MOrder order, int C_CashBook_ID, Decimal amtVal, int C_Currency_ID)
         {
             //voucher return
-            //int _CountVA018 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA018_'  AND ISActive='Y'  "));
-            // int _CountVA205 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA205_'  AND ISActive='Y'  "));
+            //int _CountVA018 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA018_'  AND ISActive='Y'  "));
+            // int _CountVA205 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA205_'  AND ISActive='Y'  "));
 
             MCash cash;
             if (GetGrandTotal() < 0 && amtVal > 0)

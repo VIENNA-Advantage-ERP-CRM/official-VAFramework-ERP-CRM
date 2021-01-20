@@ -131,20 +131,20 @@ namespace VAdvantage.Controller
         /// <param name="ctx"></param>
         /// <param name="WindowNo"></param>
         /// <param name="AD_Window_ID"></param>
-        /// <param name="AD_Menu_ID"></param>
+        /// <param name="VAF_MenuConfig_ID"></param>
         /// <returns></returns>
-        public static GridWindowVO Create(Ctx ctx, int windowNo, int AD_Window_ID, int AD_Menu_ID)
+        public static GridWindowVO Create(Ctx ctx, int windowNo, int AD_Window_ID, int VAF_MenuConfig_ID)
         {
             VLogger.Get().Config("#" + windowNo
-                + " - AD_Window_ID=" + AD_Window_ID + "; AD_Menu_ID=" + AD_Menu_ID);
+                + " - AD_Window_ID=" + AD_Window_ID + "; VAF_MenuConfig_ID=" + VAF_MenuConfig_ID);
             GridWindowVO vo = new GridWindowVO(ctx, windowNo);
             vo.AD_Window_ID = AD_Window_ID;
             IDataReader dr = null;
             //  Get Window_ID if required	- (used by HTML UI)
-            if (vo.AD_Window_ID == 0 && AD_Menu_ID != 0)
+            if (vo.AD_Window_ID == 0 && VAF_MenuConfig_ID != 0)
             {
-                String sql0 = "SELECT AD_Window_ID, IsSOTrx, IsReadOnly FROM AD_Menu "
-                    + "WHERE AD_Menu_ID=" + AD_Menu_ID.ToString() + " AND Action='W'";
+                String sql0 = "SELECT AD_Window_ID, IsSOTrx, IsReadOnly FROM VAF_MenuConfig "
+                    + "WHERE VAF_MenuConfig_ID=" + VAF_MenuConfig_ID.ToString() + " AND Action='W'";
                 try
                 {
                     dr = DataBase.DB.ExecuteReader(sql0, null);
@@ -198,8 +198,8 @@ namespace VAdvantage.Controller
             {
                 sql01.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
                 sql01.Append(" AND AD_Role_ID=" + AD_Role_ID);
-                sql01.Append(" AND AD_Language='")
-                .Append(Utility.Env.GetAD_Language(vo.ctx)).Append("'");
+                sql01.Append(" AND VAF_Language='")
+                .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             }
 
 
@@ -220,8 +220,8 @@ namespace VAdvantage.Controller
             //{
             //    sql.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
             //    sql.Append(" AND AD_Role_ID=" + AD_Role_ID);
-            //    sql.Append(" AND AD_Language='")
-            //    .Append(Utility.Env.GetAD_Language(vo.ctx)).Append("'");
+            //    sql.Append(" AND VAF_Language='")
+            //    .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             //}
 
             ////Without Name2 Field
@@ -239,8 +239,8 @@ namespace VAdvantage.Controller
             //{
             //    sql2.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
             //    sql2.Append(" AND AD_Role_ID=" + AD_Role_ID);
-            //    sql2.Append(" AND AD_Language='")
-            //    .Append(Utility.Env.GetAD_Language(vo.ctx)).Append("'");
+            //    sql2.Append(" AND VAF_Language='")
+            //    .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             //}
 
 
@@ -259,8 +259,8 @@ namespace VAdvantage.Controller
             //{
             //    sql3.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
             //    sql3.Append(" AND AD_Role_ID=" + AD_Role_ID);
-            //    sql3.Append(" AND AD_Language='")
-            //    .Append(Utility.Env.GetAD_Language(vo.ctx)).Append("'");
+            //    sql3.Append(" AND VAF_Language='")
+            //    .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             //}
 
             //int VAF_Client_ID = vo.ctx.getVAF_Client_ID();
@@ -408,7 +408,7 @@ namespace VAdvantage.Controller
         /// <param name="ctx"></param>
         /// <param name="WindowNo"></param>
         /// <param name="AD_Window_ID"></param>
-        /// <param name="AD_Menu_ID"></param>
+        /// <param name="VAF_MenuConfig_ID"></param>
         /// <returns></returns>
         public static GridWindowVO Create(Ctx ctx, int windowNo, int AD_Window_ID)
         {
@@ -485,8 +485,8 @@ namespace VAdvantage.Controller
 
             if (!isBase)
             {
-                sql.Append(" AND trl.AD_Language='")
-             .Append(Utility.Env.GetAD_Language(vo.ctx)).Append("'");
+                sql.Append(" AND trl.VAF_Language='")
+             .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             }
 
 
@@ -658,7 +658,7 @@ namespace VAdvantage.Controller
             if (!isBase)
             {
 
-                sql.Append(" AND  trl.AD_Language='" + Env.GetAD_Language(mWindowVO.ctx) + "'");
+                sql.Append(" AND  trl.VAF_Language='" + Env.GetVAF_Language(mWindowVO.ctx) + "'");
             }
 
             if (AD_UserDef_Win_ID != 0)

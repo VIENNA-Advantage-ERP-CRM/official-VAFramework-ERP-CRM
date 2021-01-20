@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MLdapProcessor
  * Purpose        : MLdap Processor Model
- * Class Used     : X_AD_LdapProcessor, ViennaProcessor
+ * Class Used     : X_VAF_LdapHandler, ViennaProcessor
  * Chronological    Development
  * Deepak           03-Feb-2010
   ******************************************************/
@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MLdapProcessor : X_AD_LdapProcessor, ViennaProcessor
+    public class MLdapProcessor : X_VAF_LdapHandler, ViennaProcessor
     {
         /// <summary>
         ///	Get Active LDAP Server
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         public static MLdapProcessor[] GetActive(Ctx ctx)
         {
             List<MLdapProcessor> list = new List<MLdapProcessor>();
-            String sql = "SELECT * FROM AD_LdapProcessor WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAF_LdapHandler WHERE IsActive='Y'";
             IDataReader idr = null;
             DataTable dt = null;
             try
@@ -73,10 +73,10 @@ namespace VAdvantage.Model
         /// Ldap Processor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_LdapProcessor_ID">id</param>
+        /// <param name="VAF_LdapHandler_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLdapProcessor(Ctx ctx, int AD_LdapProcessor_ID, Trx trxName)
-            : base(ctx, AD_LdapProcessor_ID, trxName)
+        public MLdapProcessor(Ctx ctx, int VAF_LdapHandler_ID, Trx trxName)
+            : base(ctx, VAF_LdapHandler_ID, trxName)
         {
 
         }	//	MLdapProcessor
@@ -143,16 +143,16 @@ namespace VAdvantage.Model
         {
             List<MLdapProcessorLog> list = new List<MLdapProcessorLog>();
             String sql = "SELECT * "
-                + "FROM AD_LdapProcessorLog "
-                + "WHERE AD_LdapProcessor_ID=@param "
+                + "FROM VAF_LdapHandlerLog "
+                + "WHERE VAF_LdapHandler_ID=@param "
                 + "ORDER BY Created DESC";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             try
             {
                 //pstmt = DataBase.prepareStatement (sql, get_TrxName());
-                //pstmt.setInt (1, getAD_LdapProcessor_ID());
-                param[0] = new SqlParameter("@Param", GetAD_LdapProcessor_ID());
+                //pstmt.setInt (1, getVAF_LdapHandler_ID());
+                param[0] = new SqlParameter("@Param", GetVAF_LdapHandler_ID());
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 while (idr.Read())
                 {
@@ -182,8 +182,8 @@ namespace VAdvantage.Model
         {
             if (GetKeepLogDays() < 1)
                 return 0;
-            String sql = "DELETE FROM AD_LdapProcessorLog "
-                + "WHERE AD_LdapProcessor_ID=" + GetAD_LdapProcessor_ID()
+            String sql = "DELETE FROM VAF_LdapHandlerLog "
+                + "WHERE VAF_LdapHandler_ID=" + GetVAF_LdapHandler_ID()
                 //jz + " AND (Created+" + getKeepLogDays() + ") < SysDate";
                 + " AND addDays(Created," + GetKeepLogDays() + ") < SysDate";
             int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -701,7 +701,7 @@ namespace VAdvantage.Model
             MLdapAccess access = new MLdapAccess(GetCtx(), 0, null);
             access.SetVAF_Client_ID(VAF_Client_ID);
             access.SetVAF_Org_ID(0);
-            access.SetAD_LdapProcessor_ID(GetAD_LdapProcessor_ID());
+            access.SetVAF_LdapHandler_ID(GetVAF_LdapHandler_ID());
             access.SetAD_User_ID(AD_User_ID);
             access.SetR_InterestArea_ID(R_InterestArea_ID);
             access.SetA_Asset_ID(A_Asset_ID);

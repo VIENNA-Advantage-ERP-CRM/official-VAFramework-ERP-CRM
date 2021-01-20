@@ -745,7 +745,7 @@ namespace VAdvantage.Model
                     }
                 }
                 // Change by mohit amortization process
-                //int _CountVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_'  AND IsActive = 'Y'"));
+                //int _CountVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_'  AND IsActive = 'Y'"));
                 //if (_CountVA038 > 0)
                 //{
                 //    if (GetProductType() == "E" || GetProductType() == "S")
@@ -839,7 +839,7 @@ namespace VAdvantage.Model
             //}
             //20-12-2016
             //By Vivek Chauhan saving Nutrition value against product...........
-            object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VA019_' and isactive='Y'");
+            object ModuleId = DB.ExecuteScalar("select VAF_ModuleInfo_id from VAF_ModuleInfo where prefix='VA019_' and isactive='Y'");
             if (ModuleId != null && ModuleId != DBNull.Value)
             {
                 object objNDBNo = DB.ExecuteScalar("select va019_ndbno from M_Product where m_product_ID=" + GetM_Product_ID() + "");

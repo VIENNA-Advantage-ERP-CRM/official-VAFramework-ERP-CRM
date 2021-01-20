@@ -69,8 +69,8 @@ namespace VIS.Helpers
             sql.Append(" FROM AD_Shortcut o ");
             if (!isBaseLang)
             {
-                sql.Append(" INNER JOIN AD_Shortcut_Trl trl ON o.AD_Shortcut_ID = trl.AD_Shortcut_ID AND trl.AD_Language =")
-                .Append("'").Append(Env.GetAD_Language(ctx)).Append("'");
+                sql.Append(" INNER JOIN AD_Shortcut_Trl trl ON o.AD_Shortcut_ID = trl.AD_Shortcut_ID AND trl.VAF_Language =")
+                .Append("'").Append(Env.GetVAF_Language(ctx)).Append("'");
             }
 
             sql.Append(" WHERE o.VAF_Client_ID = 0 AND o.IsActive ='Y' AND o.IsChild = 'N' ");
@@ -306,7 +306,7 @@ namespace VIS.Helpers
             else
             {
                 sql += " trl.Name as Name2 FROM AD_Shortcut o INNER JOIN AD_Shortcut_Trl trl ON o.AD_Shortcut_ID = trl.AD_Shortcut_ID "
-                         + " AND trl.AD_Language =  '" + Env.GetAD_Language(ctx) + "' ";
+                         + " AND trl.VAF_Language =  '" + Env.GetVAF_Language(ctx) + "' ";
             }
             sql += @" WHERE o.VAF_Client_ID = 0
                                   AND o.IsActive         ='Y'

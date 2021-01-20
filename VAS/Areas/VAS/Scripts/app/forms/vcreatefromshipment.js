@@ -61,8 +61,8 @@
             //var pairs = [];
 
             var display = ("i.DocumentNo||' - '||").concat(
-                    VIS.DB.to_char("DateInvoiced", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("|| ' - ' ||")
-                    .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+                    VIS.DB.to_char("DateInvoiced", VIS.DisplayType.Date, VIS.Env.getVAF_Language(ctx))).concat("|| ' - ' ||")
+                    .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getVAF_Language(ctx)));
             // New column added to fill invoice which drop ship is true
             // Added by Vivek on 09/10/2017 advised by Pradeep
             var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(selfChild.windowNo, "IsDropShip"));
@@ -111,8 +111,8 @@
         //    var pairs = [];
 
         //    var display = ("i.DocumentNo||' - '||").concat(
-        //            VIS.DB.to_char("DateInvoiced", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("|| ' - ' ||")
-        //            .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+        //            VIS.DB.to_char("DateInvoiced", VIS.DisplayType.Date, VIS.Env.getVAF_Language(ctx))).concat("|| ' - ' ||")
+        //            .concat(VIS.DB.to_char("GrandTotal", VIS.DisplayType.Amount, VIS.Env.getVAF_Language(ctx)));
 
         //    //var sql = ("SELECT i.C_Invoice_ID,").concat(display).concat(
         //    //        " FROM C_Invoice i INNER JOIN C_DocType d ON (i.C_DocType_ID = d.C_DocType_ID) "
@@ -260,8 +260,8 @@
             isBaseLangs = "FROM C_UOM uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID) ";
         }
         else {
-            isBaseLangs = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID) INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='"
-               + VIS.Env.getAD_Language(ctx) + "') ";
+            isBaseLangs = "FROM C_UOM_Trl uom Left join C_UOM uom1 on (uom1.C_UOM_ID=uom.C_UOM_ID) INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='"
+               + VIS.Env.getVAF_Language(ctx) + "') ";
         }
         if (M_Product_ID != null) {
             mProductID = " AND l.M_Product_ID = " + M_Product_ID;
@@ -346,8 +346,8 @@
     //    }
     //    else {
     //        sql = sql.concat("FROM C_UOM_Trl uom ")
-    //           .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='")
-    //           .concat(VIS.Env.getAD_Language(ctx)).concat("') ");
+    //           .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='")
+    //           .concat(VIS.Env.getVAF_Language(ctx)).concat("') ");
     //    }
     //    sql = sql.concat("INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) ")
     //        .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ")
@@ -473,8 +473,8 @@
         }
         else {
             sql = sql.concat("FROM C_UOM_Trl uom ")
-               .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='")
-               .concat(VIS.Env.getAD_Language(ctx)).concat("') ");
+               .concat("INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='")
+               .concat(VIS.Env.getVAF_Language(ctx)).concat("') ");
         }
         sql = sql.concat("INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) ")
            .concat("LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) ")

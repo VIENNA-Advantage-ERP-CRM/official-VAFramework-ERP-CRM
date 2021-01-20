@@ -335,13 +335,13 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Print Name
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <returns>print Name if available translated</returns>
-        public string GetPrintName(string AD_Language)
+        public string GetPrintName(string VAF_Language)
         {
-            if (AD_Language == null || AD_Language.Length == 0)
+            if (VAF_Language == null || VAF_Language.Length == 0)
                 return base.GetPrintName();
-            string retValue = Get_Translation("PrintName", AD_Language);
+            string retValue = Get_Translation("PrintName", VAF_Language);
             if (retValue != null)
                 return retValue;
             return base.GetPrintName();

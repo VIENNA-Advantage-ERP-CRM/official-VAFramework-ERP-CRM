@@ -137,8 +137,8 @@ namespace VAdvantage.Model
 
             //_loader = new System.Threading.Thread(new System.Threading.ThreadStart(Load));
             //_loader.IsBackground = true;
-            //_loader.CurrentCulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetAD_Language());
-            //_loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetAD_Language());
+            //_loader.CurrentCulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetVAF_Language());
+            //_loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Envs.GetContext()).GetVAF_Language());
 
             //_loader.Start();
 

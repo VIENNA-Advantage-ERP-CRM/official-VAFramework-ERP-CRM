@@ -122,10 +122,10 @@ namespace VIS.Models
                                                             ON(IW.VAF_QuickSearchWindow_ID =VAF_QuickSearchColumn.VAF_QuickSearchWindow_ID)
                                                             INNER JOIN VAF_QuickSearchColumn_TL
                                                             ON (VAF_QuickSearchColumn_TL.VAF_QuickSearchColumn_ID=VAF_QuickSearchColumn.VAF_QuickSearchColumn_ID
-                                                            AND VAF_QuickSearchColumn_TL.AD_language     ='" + ctx.GetAD_Language() + @"')
+                                                            AND VAF_QuickSearchColumn_TL.VAF_Language     ='" + ctx.GetVAF_Language() + @"')
                                                             INNER JOIN VAF_QuickSearchWindow_TL IWT
                                                             ON (IWT.VAF_QuickSearchWindow_ID          =IW.VAF_QuickSearchWindow_ID
-                                                            AND IWT.AD_language               ='" + ctx.GetAD_Language() + @"')
+                                                            AND IWT.VAF_Language               ='" + ctx.GetVAF_Language() + @"')
                                                            INNER JOIN VAF_TableView infotable
                                                             ON(infotable.VAF_TableView_ID=IW.VAF_TableView_ID)                        
                                                             WHERE VAF_QuickSearchColumn.IsActive      ='Y'

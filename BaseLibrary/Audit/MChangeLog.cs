@@ -103,7 +103,7 @@ namespace VAdvantage.Model
             if (VAF_TableView_ID == X_VAF_AlterLog.Table_ID
                    || VAF_TableView_ID == X_AD_WindowLog.Table_ID
                    || VAF_TableView_ID == X_AD_QueryLog.Table_ID
-                   || VAF_TableView_ID == X_AD_Issue.Table_ID
+                   || VAF_TableView_ID == X_VAF_Issue.Table_ID
                    || VAF_Column_ID == 6652 // AD_Process.Statistics_Count
                    || VAF_Column_ID == 6653) // AD_Process.Statistics_Seconds
                 return true;

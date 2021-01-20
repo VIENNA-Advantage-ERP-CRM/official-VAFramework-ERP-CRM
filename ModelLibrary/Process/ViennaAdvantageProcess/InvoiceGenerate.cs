@@ -619,23 +619,23 @@ namespace ViennaAdvantage.Process
 
             //    //	Reference: Delivery: 12345 - 12.12.12
             //    MClient client = MClient.Get(GetCtx(), order.GetVAF_Client_ID());
-            //    String AD_Language = client.GetAD_Language();
-            //    if (client.IsMultiLingualDocument() && _bp.GetAD_Language() != null)
+            //    String VAF_Language = client.GetVAF_Language();
+            //    if (client.IsMultiLingualDocument() && _bp.GetVAF_Language() != null)
             //    {
-            //        AD_Language = _bp.GetAD_Language();
+            //        VAF_Language = _bp.GetVAF_Language();
             //    }
-            //    if (AD_Language == null)
+            //    if (VAF_Language == null)
             //    {
             //        // MessageBox.Show("Set base Language");
-            //        //AD_Language = Language.getBaseAD_Language();
+            //        //VAF_Language = Language.getBaseVAF_Language();
             //    }
             //    //java.text.SimpleDateFormat format = DisplayType.getDateFormat
-            //    //    (DisplayType.Date, Language.getLanguage(AD_Language));
+            //    //    (DisplayType.Date, Language.getLanguage(VAF_Language));
 
-            //    //String reference = dt.GetPrintName(_bp.GetAD_Language())
+            //    //String reference = dt.GetPrintName(_bp.GetVAF_Language())
             //    //    + ": " + ship.GetDocumentNo()
             //    //    + " - " + format.format(ship.GetMovementDate());
-            //    String reference = dt.GetPrintName(_bp.GetAD_Language())
+            //    String reference = dt.GetPrintName(_bp.GetVAF_Language())
             //        + ": " + ship.GetDocumentNo()
             //        + " - " + ship.GetMovementDate();
             //    _ship = ship;

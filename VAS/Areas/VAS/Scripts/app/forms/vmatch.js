@@ -102,9 +102,9 @@
         var isProcess = false;
         //Match Options  
         var _matchOptions = [];
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getAD_Language(VIS.Env.getCtx()), "C_Invoice_ID", false));
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getAD_Language(VIS.Env.getCtx()), "M_InOut_ID", false));
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getAD_Language(VIS.Env.getCtx()), "C_Order_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "C_Invoice_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "M_InOut_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "C_Order_ID", false));
 
         // Match Mode 
         var _matchMode = [];

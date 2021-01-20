@@ -110,7 +110,7 @@ namespace VAdvantage.Model
 			xmlCode.Append ("  <description><![CDATA["
 				+ this.GetDescription () + "]]></description>");
 			xmlCode.Append ("  <language>"
-				+ this.GetAD_Language () + "</language>");
+				+ this.GetVAF_Language () + "</language>");
 			xmlCode.Append ("  <copyright>" + "" + "</copyright>");
 			xmlCode.Append ("  <pubDate>"
 				+ this.GetCreated () + "</pubDate>");

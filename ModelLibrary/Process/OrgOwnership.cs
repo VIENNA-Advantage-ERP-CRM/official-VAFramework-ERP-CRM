@@ -215,7 +215,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Trl
             sql = "UPDATE M_Product_Trl x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "AD_Language"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAF_Language"));
 
             //Added by Pratap 30-12-15 M_Replenish,M_Substitute,C_BPartner_Product - Mantis Issue ID - 0000441
             //	M_Replenish 

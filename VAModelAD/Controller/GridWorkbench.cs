@@ -82,7 +82,7 @@ namespace VAdvantage.Model
                     + "WHERE w.AD_Workbench_ID=" + AD_Workbench_ID.ToString()                   //  #1
                     + " AND w.IsActive='Y'"
                     + " AND w.AD_Workbench_ID=t.AD_Workbench_ID"
-                    + " AND t.AD_Language='" + Env.GetAD_Language(_ctx) + "'"
+                    + " AND t.VAF_Language='" + Env.GetVAF_Language(_ctx) + "'"
                     + " AND w.VAF_Column_ID=c.VAF_Column_ID";
 
             IDataReader dr = null;

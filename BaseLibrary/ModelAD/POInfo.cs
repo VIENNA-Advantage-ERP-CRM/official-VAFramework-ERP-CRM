@@ -119,7 +119,7 @@ namespace VAdvantage.Model
                 + "WHERE t.VAF_TableView_ID=" + _VAF_TableView_ID + " "
                 + " AND c.IsActive='Y'");
             if (!baseLanguage)
-                sql.Append(" AND e.AD_Language='").Append(Env.GetAD_Language(m_ctx)).Append("'");
+                sql.Append(" AND e.VAF_Language='").Append(Env.GetVAF_Language(m_ctx)).Append("'");
 
             IDataReader dr = null;
             try
@@ -838,7 +838,7 @@ namespace VAdvantage.Model
                 ColumnSQL = columnSQL;
                 DisplayType = displayType;
 
-                if (columnName.Equals("AD_Language")
+                if (columnName.Equals("VAF_Language")
                 || columnName.Equals("EntityType")
                 || columnName.Equals("DocBaseType"))
                 {

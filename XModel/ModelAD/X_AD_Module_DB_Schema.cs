@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Module_DB_Schema
+/** Generated Model for VAF_Module_DB_Schema
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Module_DB_Schema : PO
+public class X_VAF_Module_DB_Schema : PO
 {
-public X_AD_Module_DB_Schema (Context ctx, int AD_Module_DB_Schema_ID, Trx trxName) : base (ctx, AD_Module_DB_Schema_ID, trxName)
+public X_VAF_Module_DB_Schema (Context ctx, int VAF_Module_DB_Schema_ID, Trx trxName) : base (ctx, VAF_Module_DB_Schema_ID, trxName)
 {
-/** if (AD_Module_DB_Schema_ID == 0)
+/** if (VAF_Module_DB_Schema_ID == 0)
 {
-SetAD_ModuleInfo_ID (0);
-SetAD_Module_DB_Schema_ID (0);
+SetVAF_ModuleInfo_ID (0);
+SetVAF_Module_DB_Schema_ID (0);
 }
  */
 }
-public X_AD_Module_DB_Schema (Ctx ctx, int AD_Module_DB_Schema_ID, Trx trxName) : base (ctx, AD_Module_DB_Schema_ID, trxName)
+public X_VAF_Module_DB_Schema (Ctx ctx, int VAF_Module_DB_Schema_ID, Trx trxName) : base (ctx, VAF_Module_DB_Schema_ID, trxName)
 {
-/** if (AD_Module_DB_Schema_ID == 0)
+/** if (VAF_Module_DB_Schema_ID == 0)
 {
-SetAD_ModuleInfo_ID (0);
-SetAD_Module_DB_Schema_ID (0);
+SetVAF_ModuleInfo_ID (0);
+SetVAF_Module_DB_Schema_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Module_DB_Schema_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Module_DB_Schema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Module_DB_Schema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_Module_DB_Schema (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Module_DB_Schema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Module_DB_Schema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_Module_DB_Schema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Module_DB_Schema (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Module_DB_Schema (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Module_DB_Schema()
+static X_VAF_Module_DB_Schema()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1340686966876L;
 public static int Table_ID;
  // =1000060;
 
-/** TableName=AD_Module_DB_Schema */
-public static String Table_Name="AD_Module_DB_Schema";
+/** TableName=VAF_Module_DB_Schema */
+public static String Table_Name="VAF_Module_DB_Schema";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,36 +109,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Module_DB_Schema[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Module_DB_Schema[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Module.
-@param AD_ModuleInfo_ID Module */
-public void SetAD_ModuleInfo_ID (int AD_ModuleInfo_ID)
+@param VAF_ModuleInfo_ID Module */
+public void SetVAF_ModuleInfo_ID (int VAF_ModuleInfo_ID)
 {
-if (AD_ModuleInfo_ID < 1) throw new ArgumentException ("AD_ModuleInfo_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleInfo_ID", AD_ModuleInfo_ID);
+if (VAF_ModuleInfo_ID < 1) throw new ArgumentException ("VAF_ModuleInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleInfo_ID", VAF_ModuleInfo_ID);
 }
 /** Get Module.
 @return Module */
-public int GetAD_ModuleInfo_ID() 
+public int GetVAF_ModuleInfo_ID() 
 {
-Object ii = Get_Value("AD_ModuleInfo_ID");
+Object ii = Get_Value("VAF_ModuleInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_Module_DB_Schema_ID.
-@param AD_Module_DB_Schema_ID AD_Module_DB_Schema_ID */
-public void SetAD_Module_DB_Schema_ID (int AD_Module_DB_Schema_ID)
+/** Set VAF_Module_DB_Schema_ID.
+@param VAF_Module_DB_Schema_ID VAF_Module_DB_Schema_ID */
+public void SetVAF_Module_DB_Schema_ID (int VAF_Module_DB_Schema_ID)
 {
-if (AD_Module_DB_Schema_ID < 1) throw new ArgumentException ("AD_Module_DB_Schema_ID is mandatory.");
-Set_ValueNoCheck ("AD_Module_DB_Schema_ID", AD_Module_DB_Schema_ID);
+if (VAF_Module_DB_Schema_ID < 1) throw new ArgumentException ("VAF_Module_DB_Schema_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Module_DB_Schema_ID", VAF_Module_DB_Schema_ID);
 }
-/** Get AD_Module_DB_Schema_ID.
-@return AD_Module_DB_Schema_ID */
-public int GetAD_Module_DB_Schema_ID() 
+/** Get VAF_Module_DB_Schema_ID.
+@return VAF_Module_DB_Schema_ID */
+public int GetVAF_Module_DB_Schema_ID() 
 {
-Object ii = Get_Value("AD_Module_DB_Schema_ID");
+Object ii = Get_Value("VAF_Module_DB_Schema_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

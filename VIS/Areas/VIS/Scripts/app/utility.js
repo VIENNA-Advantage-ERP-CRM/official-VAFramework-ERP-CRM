@@ -724,29 +724,29 @@
 
             var lang = "";
             if (typeof (ctx) != "string") {
-                lang = getAD_Language(ctx);
+                lang = getVAF_Language(ctx);
             }
             else {
                 lang = ctx; //string 
             }
-            return getBaseAD_Language() == lang;
+            return getBaseVAF_Language() == lang;
         };	//	isBaseLanguage
 
         /**
-             *  Get System AD_Language
+             *  Get System VAF_Language
              *  @param ctx context
-             *	@return AD_Language eg. en_US
+             *	@return VAF_Language eg. en_US
              */
-        function getAD_Language(ctx) {
+        function getVAF_Language(ctx) {
             if (ctx != null) {
-                var lang = ctx.getContext("#AD_Language");
+                var lang = ctx.getContext("#VAF_Language");
                 if (lang != null && lang.length > 0)
                     return lang;
             }
-            return getBaseAD_Language();
+            return getBaseVAF_Language();
         };	//	getAD
 
-        function getBaseAD_Language() {
+        function getBaseVAF_Language() {
             return "en_US";
         };
 
@@ -802,8 +802,8 @@
             numberCultureValueFormat: numberCultureValueFormat,
             numberDisplay: numberDisplay,
             isBaseLanguage: isBaseLanguage,
-            getAD_Language: getAD_Language,
-            getBaseAD_Language: getBaseAD_Language,
+            getVAF_Language: getVAF_Language,
+            getBaseVAF_Language: getBaseVAF_Language,
             currentTimeMillis: currentTimeMillis,
             signum: signum,
             startBrowser: startBrowser,
@@ -1503,7 +1503,7 @@
             //return date;
         },
 
-        to_char: function (columnName, displayType, AD_Language) {
+        to_char: function (columnName, displayType, VAF_Language) {
             var retValue = "TRIM(TO_CHAR(";
             retValue = retValue.concat(columnName);
             //  Numbers

@@ -11,26 +11,26 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_ImportedData
+    /** Generated Model for VAF_ImportedData
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ImportedData : PO
+    public class X_VAF_ImportedData : PO
     {
-        public X_AD_ImportedData(Context ctx, int AD_ImportedData_ID, Trx trxName)
-            : base(ctx, AD_ImportedData_ID, trxName)
+        public X_VAF_ImportedData(Context ctx, int VAF_ImportedData_ID, Trx trxName)
+            : base(ctx, VAF_ImportedData_ID, trxName)
         {
-            /** if (AD_ImportedData_ID == 0)
+            /** if (VAF_ImportedData_ID == 0)
             {
-            SetAD_ImportedData_ID (0);
+            SetVAF_ImportedData_ID (0);
             }
              */
         }
-        public X_AD_ImportedData(Ctx ctx, int AD_ImportedData_ID, Trx trxName)
-            : base(ctx, AD_ImportedData_ID, trxName)
+        public X_VAF_ImportedData(Ctx ctx, int VAF_ImportedData_ID, Trx trxName)
+            : base(ctx, VAF_ImportedData_ID, trxName)
         {
-            /** if (AD_ImportedData_ID == 0)
+            /** if (VAF_ImportedData_ID == 0)
             {
-            SetAD_ImportedData_ID (0);
+            SetVAF_ImportedData_ID (0);
             }
              */
         }
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ImportedData(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_ImportedData(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ImportedData(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_ImportedData(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -57,14 +57,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ImportedData(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_ImportedData(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_ImportedData()
+        static X_VAF_ImportedData()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -77,8 +77,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000057;
 
-        /** TableName=AD_ImportedData */
-        public static String Table_Name = "AD_ImportedData";
+        /** TableName=VAF_ImportedData */
+        public static String Table_Name = "VAF_ImportedData";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -112,21 +112,21 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_ImportedData[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_ImportedData[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
-        /** Set AD_ImportedData_ID.
-        @param AD_ImportedData_ID AD_ImportedData_ID */
-        public void SetAD_ImportedData_ID(int AD_ImportedData_ID)
+        /** Set VAF_ImportedData_ID.
+        @param VAF_ImportedData_ID VAF_ImportedData_ID */
+        public void SetVAF_ImportedData_ID(int VAF_ImportedData_ID)
         {
-            if (AD_ImportedData_ID < 1) throw new ArgumentException("AD_ImportedData_ID is mandatory.");
-            Set_ValueNoCheck("AD_ImportedData_ID", AD_ImportedData_ID);
+            if (VAF_ImportedData_ID < 1) throw new ArgumentException("VAF_ImportedData_ID is mandatory.");
+            Set_ValueNoCheck("VAF_ImportedData_ID", VAF_ImportedData_ID);
         }
-        /** Get AD_ImportedData_ID.
-        @return AD_ImportedData_ID */
-        public int GetAD_ImportedData_ID()
+        /** Get VAF_ImportedData_ID.
+        @return VAF_ImportedData_ID */
+        public int GetVAF_ImportedData_ID()
         {
-            Object ii = Get_Value("AD_ImportedData_ID");
+            Object ii = Get_Value("VAF_ImportedData_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

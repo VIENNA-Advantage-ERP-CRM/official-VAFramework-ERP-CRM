@@ -725,8 +725,8 @@ namespace VAdvantage.Model
             //    loader = new Thread(new ThreadStart(FillData));
             //    //loader.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
             //    //loader.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentUICulture;
-            //    loader.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetAD_Language());
-            //    loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetAD_Language());
+            //    loader.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetVAF_Language());
+            //    loader.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(Utility.GetCtx()).GetVAF_Language());
 
             //}
             _rowCount = CountRecords(maxRows);
@@ -1311,8 +1311,8 @@ namespace VAdvantage.Model
                 int size1 = m_fields.Count;
                 int colRs = 1;
 
-                //System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
-                //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseAD_Language());
+                //System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
+                //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.GetCtx()).GetCulture(Utility.Env.GetBaseVAF_Language());
 
 
                 for (int col = 0; col < size1; col++)
@@ -1581,7 +1581,7 @@ namespace VAdvantage.Model
                                         //	rs.updateInt (colRs, iii.intValue()); 		// 	***
                                     }
                                 }
-                                catch  //  could also be a String (AD_Language, AD_Message)
+                                catch  //  could also be a String (VAF_Language, VAF_Msg_Lable)
                                 {
                                     if (manualUpdate)
                                         CreateUpdateSql(columnName, DataBase.GlobalVariable.TO_STRING(colNewValue.ToString()));
@@ -1748,8 +1748,8 @@ namespace VAdvantage.Model
 			 *	Save to Database
 			 */
                 //
-                System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
-                System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetAD_Language());
+                System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
+                System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Utility.Env.GetLoginLanguage(Utility.Env.GetContext()).GetVAF_Language());
 
                 String whereClause = singleRowWHERE.ToString();
                 if (whereClause.Length == 0)
@@ -3144,16 +3144,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Create and fire Data Status Error Event
         /// </summary>
-        /// <param name="AD_Message"></param>
+        /// <param name="VAF_Msg_Lable"></param>
         /// <param name="info"></param>
         /// <param name="isError"></param>
-        protected void FireDataStatusEEvent(String AD_Message, String info, bool isError)
+        protected void FireDataStatusEEvent(String VAF_Msg_Lable, String info, bool isError)
         {
             DataStatusEvent e = CreateDSE();
-            e.SetInfo(AD_Message, info, isError, !isError);
+            e.SetInfo(VAF_Msg_Lable, info, isError, !isError);
             if (isError)
             {
-                log.SaveWarning(AD_Message, info);
+                log.SaveWarning(VAF_Msg_Lable, info);
             }
             if (FireDataStatusEvent != null)
             {
@@ -3164,12 +3164,12 @@ namespace VAdvantage.Model
         /// <summary>
         ///  Create and fire Data Status Info Event
         /// </summary>
-        /// <param name="AD_Message"></param>
+        /// <param name="VAF_Msg_Lable"></param>
         /// <param name="info"></param>
-        protected void FireDataStatusIEvent(String AD_Message, String info)
+        protected void FireDataStatusIEvent(String VAF_Msg_Lable, String info)
         {
             DataStatusEvent e = CreateDSE();
-            e.SetInfo(AD_Message, info, false, false);
+            e.SetInfo(VAF_Msg_Lable, info, false, false);
             //e.SetCurrentRow(_currentRow);
             if (FireDataStatusEvent != null)
             {
@@ -3506,7 +3506,7 @@ namespace VAdvantage.Model
         private bool _autoSave;
         private bool _inserting;
         //
-        private String _AD_Message = null;
+        private String _VAF_Msg_Lable = null;
         private String _info = null;
         public bool _isError = false;
         private bool _isWarning = false;
@@ -3553,7 +3553,7 @@ namespace VAdvantage.Model
 
         public DataStatusEvent(string msg, string information)
         {
-            _AD_Message = msg;
+            _VAF_Msg_Lable = msg;
             _info = information;
         }
 
@@ -3583,13 +3583,13 @@ namespace VAdvantage.Model
         /// <summary>
         ///Set Message Info
         /// </summary>
-        /// <param name="AD_Message"></param>
+        /// <param name="VAF_Msg_Lable"></param>
         /// <param name="info"></param>
         /// <param name="isError"></param>
         /// <param name="isWarning"></param>
-        public void SetInfo(String AD_Message, String info, bool isError, bool isWarning)
+        public void SetInfo(String VAF_Msg_Lable, String info, bool isError, bool isWarning)
         {
-            _AD_Message = AD_Message;
+            _VAF_Msg_Lable = VAF_Msg_Lable;
             _info = info;
             _isError = isError;
             _isWarning = isWarning;
@@ -3599,9 +3599,9 @@ namespace VAdvantage.Model
         ///Get Message Info
         /// </summary>
         /// <returns></returns>
-        public String GetAD_Message()
+        public String GetVAF_Msg_Lable()
         {
-            return _AD_Message;
+            return _VAF_Msg_Lable;
         }
 
         public bool IsChanged()
@@ -3623,9 +3623,9 @@ namespace VAdvantage.Model
         ///Get Message Info
         /// </summary>
         /// <returns></returns>
-        public void SetAD_Message()
+        public void SetVAF_Msg_Lable()
         {
-            _AD_Message = null;
+            _VAF_Msg_Lable = null;
         }
 
         /// <summary>

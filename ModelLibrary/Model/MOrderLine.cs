@@ -330,7 +330,7 @@ namespace VAdvantage.Model
                 GetM_Product_ID(), GetC_BPartner_ID(), GetQtyOrdered(), _IsSOTrx);
             _productPrice.SetM_PriceList_ID(M_PriceList_ID);
             //Amit 24-nov-2014
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'")) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'")) > 0)
             {
                 _productPrice.SetC_UOM_ID(GetC_UOM_ID());
             }
@@ -354,7 +354,7 @@ namespace VAdvantage.Model
             MOrder inv = new MOrder(Env.GetCtx(), Util.GetValueOfInt(Get_Value("C_Order_ID")), Get_TrxName());
             //11-nov-2014 Amit
             string taxRule = string.Empty;
-            int _CountED002 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('ED002_' , 'VATAX_' )"));
+            int _CountED002 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('ED002_' , 'VATAX_' )"));
 
             string sql = "SELECT VATAX_TaxRule FROM VAF_OrgInfo WHERE VAF_Org_ID=" + inv.GetVAF_Org_ID() + " AND IsActive ='Y' AND VAF_Client_ID =" + GetCtx().GetVAF_Client_ID();
             if (_CountED002 > 0)

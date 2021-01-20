@@ -147,7 +147,7 @@ namespace VAdvantage.Process
         /// <returns>Info</returns>
         private String ValidateProduct(MProduct product)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
 
             if (!product.IsBOM())
             {
@@ -198,7 +198,7 @@ namespace VAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateOldProduct(MProduct product)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             if (!product.IsBOM())
             {
                 return true;
@@ -241,7 +241,7 @@ namespace VAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateBOM(MBOM bom)
         {
-            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             MBOMProduct[] BOMproducts = MBOMProduct.GetOfBOM(bom);
             // if manufacturing module  exist and  BOM Componet not contain any record against this BOM then not to verify Product
             if (count > 0 && BOMproducts.Length == 0)

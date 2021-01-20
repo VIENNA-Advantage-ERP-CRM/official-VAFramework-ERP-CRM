@@ -208,8 +208,8 @@ VIS.context.getVAF_Org_ID = function () {
     return VIS.context.getContext("#VAF_Org_ID");
 };
 
-VIS.context.getAD_Language = function () {
-    return VIS.context.getContext('#AD_Language');
+VIS.context.getVAF_Language = function () {
+    return VIS.context.getContext('#VAF_Language');
 };
 
 VIS.context.setAutoCommit = function (windowNo, autoCommit) {

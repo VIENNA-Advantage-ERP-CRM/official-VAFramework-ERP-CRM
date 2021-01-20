@@ -1253,7 +1253,7 @@ namespace VIS.Models
             object otput = "";
 
             string tableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
-            string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetAD_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
+            string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetVAF_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
 
             otput = DB.ExecuteScalar(sql, null, null);
 
@@ -1362,7 +1362,7 @@ namespace VIS.Models
             string _result = "";
             
              bindornot = "true";            
-            if (TableName == "AD_Menu")
+            if (TableName == "VAF_MenuConfig")
             {
                 string rolCheck = @"SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
@@ -1754,7 +1754,7 @@ namespace VIS.Models
 
              bindornot = "true";
             string menu_id = "";
-            if (TableName == "AD_Menu")
+            if (TableName == "VAF_MenuConfig")
             {
                 string rolCheck = @"SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
@@ -1915,7 +1915,7 @@ namespace VIS.Models
             string menu_id = "";
 
 
-            if (TableName == "AD_Menu")
+            if (TableName == "VAF_MenuConfig")
             {
                 string rolCheck = @"SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));

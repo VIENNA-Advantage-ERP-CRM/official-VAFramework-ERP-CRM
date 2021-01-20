@@ -8,7 +8,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MModuleForm : X_AD_ModuleForm
+    public class MModuleForm : X_VAF_ModuleForm
     {
         public MModuleForm(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 // check if same record is inserting again
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleForm WHERE VAF_Page_ID=" + GetVAF_Page_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleForm WHERE VAF_Page_ID=" + GetVAF_Page_ID() + " AND VAF_ModuleInfo_ID=" + GetVAF_ModuleInfo_ID())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "FormExist"));
                     return false;
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
                 if (Is_ValueChanged("VAF_Page_ID"))
                 {
                     // check if same record is inserting again
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleForm WHERE VAF_Page_ID=" + GetVAF_Page_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleForm WHERE VAF_Page_ID=" + GetVAF_Page_ID() + " AND VAF_ModuleInfo_ID=" + GetVAF_ModuleInfo_ID())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "FormExist"));
                         return false;

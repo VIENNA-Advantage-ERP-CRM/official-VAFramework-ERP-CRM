@@ -322,9 +322,9 @@ namespace VIS.Models
             }
             else
             {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language='" + Env.GetAD_Language(ctx) + "')";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language='" + Env.GetAD_Language(ctx) + "')"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language='" + Env.GetAD_Language(ctx) + "')";
+                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
+                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language='" + Env.GetVAF_Language(ctx) + "')"
+                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language='" + Env.GetVAF_Language(ctx) + "')";
             }
             sql += "WHERE t.TableName ='" + targetTableName
                 + "' AND w.AD_Window_ID <>" + curWindow_ID
@@ -489,9 +489,9 @@ namespace VIS.Models
             }
             else
             {
-                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language=@para1)";
-                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language=@para2)"
-                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language=@para3)";
+                sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language=@para1)";
+                sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language=@para2)"
+                    + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language=@para3)";
             }
             sql += "WHERE t.TableName = @para4"
                 + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
@@ -503,9 +503,9 @@ namespace VIS.Models
             List<SqlParams> param = new List<SqlParams>();
             if (!baseLanguage)
             {
-                param.Add(new SqlParams() { name = "@para1", value = Env.GetAD_Language(Env.GetCtx()) });
-                param.Add(new SqlParams() { name = "@para2", value = Env.GetAD_Language(Env.GetCtx()) });
-                param.Add(new SqlParams() { name = "@para3", value = Env.GetAD_Language(Env.GetCtx()) });
+                param.Add(new SqlParams() { name = "@para1", value = Env.GetVAF_Language(Env.GetCtx()) });
+                param.Add(new SqlParams() { name = "@para2", value = Env.GetVAF_Language(Env.GetCtx()) });
+                param.Add(new SqlParams() { name = "@para3", value = Env.GetVAF_Language(Env.GetCtx()) });
             }
             param.Add(new SqlParams() { name = "@para4", value = targetTableName });
             param.Add(new SqlParams() { name = "@para5", value = curWindow_ID });
@@ -1101,7 +1101,7 @@ namespace VIS.Models
                + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
                    //	Voided Bank Statements have 0 StmtAmt
                    + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
-            var countVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+            var countVA012 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
             if (countVA012 > 0)
             {
 
@@ -1144,9 +1144,9 @@ namespace VIS.Models
         /// </summary>
         /// <param name="_ctx"></param>
         /// <param name="Columns"></param>
-        /// <param name="AD_Language"></param>
+        /// <param name="VAF_Language"></param>
         /// <returns></returns>
-        public Dictionary<string, object> GetTranslatedText(Ctx _ctx, List<string> Cols, string AD_Language)
+        public Dictionary<string, object> GetTranslatedText(Ctx _ctx, List<string> Cols, string VAF_Language)
         {
             Dictionary<string, object> translations = new Dictionary<string, object>();
             if (Cols.Count > 0)
@@ -1167,19 +1167,19 @@ namespace VIS.Models
                     {
                         sqlElements = @"SELECT e.ColumnName, NVL(e.Name, '') AS Name FROM VAF_ColumnDic e WHERE e.ColumnName IN (" + Columns + ")";
 
-                        sqlMsgs = @"SELECT m.Value, COALESCE(m.MsgText, m.Value) AS Name  FROM AD_Message m WHERE m.Value NOT  IN
+                        sqlMsgs = @"SELECT m.Value, COALESCE(m.MsgText, m.Value) AS Name  FROM VAF_Msg_Lable m WHERE m.Value NOT  IN
                                 (SELECT ColumnName FROM VAF_ColumnDic WHERE ColumnName IN (" + Columns + @")) AND m.Value IN (" + Columns + ")";
                     }
                     else
                     {
                         param = new System.Data.SqlClient.SqlParameter[1];
-                        param[0] = new System.Data.SqlClient.SqlParameter("@AD_Language", AD_Language);
+                        param[0] = new System.Data.SqlClient.SqlParameter("@VAF_Language", VAF_Language);
 
                         sqlElements = @"SELECT e.ColumnName, COALESCE(t.Name, e.Name) AS Name FROM VAF_ColumnDic e INNER JOIN VAF_ColumnDic_TL t ON (e.VAF_ColumnDic_ID = t.VAF_ColumnDic_ID)
-                        WHERE  t.AD_Language = @AD_Language AND e.ColumnName IN (" + Columns + ")";
+                        WHERE  t.VAF_Language = @VAF_Language AND e.ColumnName IN (" + Columns + ")";
 
-                        sqlMsgs = @"SELECT m.Value, COALESCE(t.MsgText, m.MsgText) AS Name  FROM AD_Message m LEFT JOIN AD_Message_Trl t ON (m.AD_Message_ID = t.AD_Message_ID) WHERE m.Value NOT  IN
-                            (SELECT ColumnName FROM VAF_ColumnDic WHERE ColumnName IN (" + Columns + ")) AND m.Value IN (" + Columns + ") AND t.AD_Language = @AD_Language";
+                        sqlMsgs = @"SELECT m.Value, COALESCE(t.MsgText, m.MsgText) AS Name  FROM VAF_Msg_Lable m LEFT JOIN VAF_Msg_Lable_TL t ON (m.VAF_Msg_Lable_ID = t.VAF_Msg_Lable_ID) WHERE m.Value NOT  IN
+                            (SELECT ColumnName FROM VAF_ColumnDic WHERE ColumnName IN (" + Columns + ")) AND m.Value IN (" + Columns + ") AND t.VAF_Language = @VAF_Language";
                     }
 
                     dsTrl = DB.ExecuteDataset(sqlElements, param, null);

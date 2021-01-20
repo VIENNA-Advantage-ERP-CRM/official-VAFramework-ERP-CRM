@@ -473,7 +473,7 @@ namespace VAdvantage.Model
             if (IsReturnTrx())
                 return;
 
-            String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
@@ -662,7 +662,7 @@ namespace VAdvantage.Model
             if (IsReturnTrx())
                 return;
 
-            String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
@@ -3840,7 +3840,7 @@ namespace VAdvantage.Model
                 //Changes by abhishek suggested by lokesh on 7/1/2016
                 //try
                 //{
-                //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from AD_ModuleInfo Where Prefix='VAPOS_'"));
+                //    int countVAPOS = Util.GetValueOfInt(DB.ExecuteScalar("Select count(*) from VAF_ModuleInfo Where Prefix='VAPOS_'"));
                 //    if (countVAPOS > 0)
                 //    {
                 //        MPriceList priceLst = new MPriceList(GetCtx(), GetM_PriceList_ID(), null);

@@ -2975,11 +2975,11 @@ namespace VAdvantage.Model
                 MessageFormat mf = null;
                 try
                 {
-                    mf = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "InvoiceBatchSummary"));
+                    mf = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "InvoiceBatchSummary"));
                 }
                 catch (Exception e)
                 {
-                    log.Log(Level.SEVERE, "InvoiceBatchSummary=" + Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "InvoiceBatchSummary"), e);
+                    log.Log(Level.SEVERE, "InvoiceBatchSummary=" + Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "InvoiceBatchSummary"), e);
                 }
                 if (mf == null)
                     return " ";
@@ -3067,8 +3067,8 @@ namespace VAdvantage.Model
                 MessageFormat mfMC = null;
                 try
                 {
-                    mf = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "OrderSummary"));
-                    mfMC = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "OrderSummaryMC"));
+                    mf = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "OrderSummary"));
+                    mfMC = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "OrderSummaryMC"));
                 }
                 catch (Exception e)
                 {
@@ -3149,11 +3149,11 @@ namespace VAdvantage.Model
                 MessageFormat mf = null;
                 try
                 {
-                    mf = new MessageFormat(Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "ExpenseSummary"));
+                    mf = new MessageFormat(Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "ExpenseSummary"));
                 }
                 catch (Exception e)
                 {
-                    log.Log(Level.SEVERE, "ExpenseSummary=" + Msg.GetMsg(Env.GetAD_Language(_vo.GetCtx()), "ExpenseSummary"), e);
+                    log.Log(Level.SEVERE, "ExpenseSummary=" + Msg.GetMsg(Env.GetVAF_Language(_vo.GetCtx()), "ExpenseSummary"), e);
                 }
                 if (mf == null)
                     return " ";
@@ -3271,7 +3271,7 @@ namespace VAdvantage.Model
             }
             //
             _DataStatusEvent.SetCurrentRow(_currentRow);
-            String status = _DataStatusEvent.GetAD_Message();
+            String status = _DataStatusEvent.GetVAF_Msg_Lable();
             if (status == null || status.Length == 0)
             {
                 _DataStatusEvent.SetInfo("NavigateOrUpdate", null, false, false);

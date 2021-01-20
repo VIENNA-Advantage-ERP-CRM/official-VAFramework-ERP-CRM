@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_IndexColumn
+/** Generated Model for VAF_IndexColumn
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_IndexColumn : PO
+public class X_VAF_IndexColumn : PO
 {
-public X_AD_IndexColumn (Context ctx, int AD_IndexColumn_ID, Trx trxName) : base (ctx, AD_IndexColumn_ID, trxName)
+public X_VAF_IndexColumn (Context ctx, int VAF_IndexColumn_ID, Trx trxName) : base (ctx, VAF_IndexColumn_ID, trxName)
 {
-/** if (AD_IndexColumn_ID == 0)
+/** if (VAF_IndexColumn_ID == 0)
 {
 SetVAF_Column_ID (0);
-SetAD_IndexColumn_ID (0);
+SetVAF_IndexColumn_ID (0);
 SetVAF_TableViewIndex_ID (0);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_IndexColumn WHERE VAF_TableViewIndex_ID=@VAF_TableViewIndex_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_IndexColumn WHERE VAF_TableViewIndex_ID=@VAF_TableViewIndex_ID@
 }
  */
 }
-public X_AD_IndexColumn (Ctx ctx, int AD_IndexColumn_ID, Trx trxName) : base (ctx, AD_IndexColumn_ID, trxName)
+public X_VAF_IndexColumn (Ctx ctx, int VAF_IndexColumn_ID, Trx trxName) : base (ctx, VAF_IndexColumn_ID, trxName)
 {
-/** if (AD_IndexColumn_ID == 0)
+/** if (VAF_IndexColumn_ID == 0)
 {
 SetVAF_Column_ID (0);
-SetAD_IndexColumn_ID (0);
+SetVAF_IndexColumn_ID (0);
 SetVAF_TableViewIndex_ID (0);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_IndexColumn WHERE VAF_TableViewIndex_ID=@VAF_TableViewIndex_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_IndexColumn WHERE VAF_TableViewIndex_ID=@VAF_TableViewIndex_ID@
 }
  */
 }
@@ -43,7 +43,7 @@ SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_I
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_IndexColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_IndexColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_IndexColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_IndexColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_IndexColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_IndexColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_IndexColumn (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_IndexColumn (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_IndexColumn()
+static X_VAF_IndexColumn()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389044945L;
 public static int Table_ID;
  // =910;
 
-/** TableName=AD_IndexColumn */
-public static String Table_Name="AD_IndexColumn";
+/** TableName=VAF_IndexColumn */
+public static String Table_Name="VAF_IndexColumn";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_IndexColumn[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_IndexColumn[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
@@ -132,17 +132,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Index Column.
-@param AD_IndexColumn_ID Index Column */
-public void SetAD_IndexColumn_ID (int AD_IndexColumn_ID)
+@param VAF_IndexColumn_ID Index Column */
+public void SetVAF_IndexColumn_ID (int VAF_IndexColumn_ID)
 {
-if (AD_IndexColumn_ID < 1) throw new ArgumentException ("AD_IndexColumn_ID is mandatory.");
-Set_ValueNoCheck ("AD_IndexColumn_ID", AD_IndexColumn_ID);
+if (VAF_IndexColumn_ID < 1) throw new ArgumentException ("VAF_IndexColumn_ID is mandatory.");
+Set_ValueNoCheck ("VAF_IndexColumn_ID", VAF_IndexColumn_ID);
 }
 /** Get Index Column.
 @return Index Column */
-public int GetAD_IndexColumn_ID() 
+public int GetVAF_IndexColumn_ID() 
 {
-Object ii = Get_Value("AD_IndexColumn_ID");
+Object ii = Get_Value("VAF_IndexColumn_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

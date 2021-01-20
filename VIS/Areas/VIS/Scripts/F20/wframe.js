@@ -1764,14 +1764,14 @@
             //    + " AND (c.VAF_Column_ID=" + VAF_ColumnSortOrder_ID + " OR VAF_Column_ID=" + VAF_ColumnSortYesNo_ID	//	#2..3
             //    + "	OR c.IsParent='Y' OR c.IsKey='Y' OR c.IsIdentifier='Y')"
             //    + " AND c.VAF_ColumnDic_ID=et.VAF_ColumnDic_ID"
-            //    + " AND et.AD_Language='" + VIS.Env.getAD_Language(VIS.Env.getCtx()) + "'";                   //	#4
+            //    + " AND et.VAF_Language='" + VIS.Env.getVAF_Language(VIS.Env.getCtx()) + "'";                   //	#4
 
             sql = "VIS_123";
             param = [];
             param[0] = new VIS.DB.SqlParam("@VAF_TableView_ID", VAF_TableView_ID);
             param[1] = new VIS.DB.SqlParam("@VAF_ColumnSortOrder_ID", VAF_ColumnSortOrder_ID);
             param[2] = new VIS.DB.SqlParam("@VAF_ColumnSortYesNo_ID", VAF_ColumnSortYesNo_ID);
-            param[3] = new VIS.DB.SqlParam("@AD_Language", VIS.Env.getAD_Language(VIS.Env.getCtx()));
+            param[3] = new VIS.DB.SqlParam("@VAF_Language", VIS.Env.getVAF_Language(VIS.Env.getCtx()));
 
         }
 
@@ -1858,7 +1858,7 @@
         sql += " WHERE t." + this.parentColumnName + "=@ID";
         if (this.identifierTranslated)
             sql += " AND t." + this.keyColumnName + "=tt." + this.keyColumnName
-                + " AND tt.AD_Language='" + VIS.context.getAD_Language() + "'";
+                + " AND tt.VAF_Language='" + VIS.context.getVAF_Language() + "'";
         //	Order
         sql += " ORDER BY ";
         if (this.columnYesNoName != null)

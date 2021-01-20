@@ -118,7 +118,7 @@ namespace VAdvantage.Model
                 cLine.Save(move.Get_TrxName());
             }
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
             {
                 CreateConfirmParameters(move, confirm.GetM_MovementConfirm_ID(), confirm.GetCtx());
             }

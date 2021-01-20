@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MIssue
  * Purpose        : Issue Report Model
- * Class Used     : X_AD_Issue
+ * Class Used     : X_VAF_Issue
  * Chronological    Development
  * Deepak           27-Jan-2010
   ******************************************************/
@@ -26,7 +26,7 @@ using VAdvantage.Print;
 using SecureEngineUtility;
 namespace VAdvantage.Model
 {
-    public class MIssue : X_AD_Issue
+    public class MIssue : X_VAF_Issue
     { 
        
     /// <summary>
@@ -94,12 +94,12 @@ namespace VAdvantage.Model
 	/// standard constructor
 	/// </summary>
 	/// <param name="ctx">context</param>
-	/// <param name="AD_Issue_ID">id</param>
+	/// <param name="VAF_Issue_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MIssue (Ctx ctx, int AD_Issue_ID, Trx trxName):base(ctx, AD_Issue_ID, trxName)
+	public MIssue (Ctx ctx, int VAF_Issue_ID, Trx trxName):base(ctx, VAF_Issue_ID, trxName)
 	{
 		
-		if (AD_Issue_ID == 0)
+		if (VAF_Issue_ID == 0)
 		{
 			SetProcessed (false);	// N
 			SetSystemStatus(SYSTEMSTATUS_Evaluation);

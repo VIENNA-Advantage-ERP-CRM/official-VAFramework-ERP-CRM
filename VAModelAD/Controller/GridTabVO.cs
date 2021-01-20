@@ -768,7 +768,7 @@ namespace VAdvantage.Controller
             }
             else
             {
-                sql.Append(" VAF_FieldSection_Tl fgt ON (f.VAF_FieldSection_ID = fgt.VAF_FieldSection_ID  AND trl.AD_Language  =fgt.AD_Language) ");
+                sql.Append(" VAF_FieldSection_Tl fgt ON (f.VAF_FieldSection_ID = fgt.VAF_FieldSection_ID  AND trl.VAF_Language  =fgt.VAF_Language) ");
             }
             sql.Append(" LEFT OUTER JOIN VAF_Column c  ON (f.VAF_Column_ID = c.VAF_Column_ID) INNER JOIN VAF_TableView tbl ON (c.VAF_TableView_ID = tbl.VAF_TableView_ID) ")
                .Append(" INNER JOIN AD_Reference r ON (c.AD_Reference_ID = r.AD_Reference_ID) LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) ")
@@ -779,7 +779,7 @@ namespace VAdvantage.Controller
 
             if (!isBase)
             {
-                sql.Append(" AND trl.AD_Language='" + Env.GetAD_Language(mTabVO.ctx) + "'");
+                sql.Append(" AND trl.VAF_Language='" + Env.GetVAF_Language(mTabVO.ctx) + "'");
             }
             if (AD_UserDef_Win_ID != 0)
                 sql.Append(" AND u.AD_UserDef_Win_ID=" + AD_UserDef_Win_ID);
@@ -834,7 +834,7 @@ namespace VAdvantage.Controller
             String sql = "SELECT * FROM VAF_Tab_v WHERE AD_Window_ID=@windowID";
             if (!Env.IsBaseLanguage(ctx, "AD_Window"))
                 sql = "SELECT * FROM VAF_Tab_vt WHERE AD_Window_ID=@windowID"
-                    + " AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
+                    + " AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
             if (AD_UserDef_Win_ID != 0)
                 sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;
             sql += " ORDER BY SeqNo";

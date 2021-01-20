@@ -473,7 +473,7 @@ namespace VAdvantage.WF
 //                                                                INNER JOIN AD_WF_NodeNext NN ON (NN.AD_WF_Node_ID=NODE.AD_WF_Node_ID)
 //                                                                INNER JOIN AD_WF_NextCondition NC ON (NC.AD_WF_NodeNext_ID=NN.AD_WF_NodeNext_ID)
 //                                                                WHERE NC.AD_WF_NextCondition_ID=" + GetAD_WF_NextCondition_ID(), null, Get_TrxName()));
-//                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetAD_Language(), docID };
+//                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetVAF_Language(), docID };
 //                                    result = methodInfo.Invoke(classInstance, parametersArray);
 //                                }
 //                                if (result == null)
@@ -585,7 +585,7 @@ namespace VAdvantage.WF
                     //                                                                INNER JOIN AD_WF_NodeNext NN ON (NN.AD_WF_Node_ID=NODE.AD_WF_Node_ID)
                     //                                                                INNER JOIN AD_WF_NextCondition NC ON (NC.AD_WF_NodeNext_ID=NN.AD_WF_NodeNext_ID)
                     //                                                                WHERE NC.AD_WF_NextCondition_ID=" + GetAD_WF_NextCondition_ID(), null, Get_TrxName()));
-                    //                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetAD_Language(), docID };
+                    //                                    object[] parametersArray = new object[] { value1S, Env.GetCtx().GetVAF_Language(), docID };
                     //                                    result = methodInfo.Invoke(classInstance, parametersArray);
                     //                                }
                     //                                if (result == null)
@@ -628,7 +628,7 @@ namespace VAdvantage.WF
                     string res = string.Empty;
                     //GetPO(Get_TrxName());
                     DocumentAction docAction = new DocumentAction();
-                    return docAction.IsDocumentContainsText(docID, value1S, GetCtx().GetAD_Language(), out res);
+                    return docAction.IsDocumentContainsText(docID, value1S, GetCtx().GetVAF_Language(), out res);
 
                     //return ok;
                 }

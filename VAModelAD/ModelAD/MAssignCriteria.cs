@@ -22,16 +22,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAssignCriteria : X_AD_AssignCriteria
+    public class MAssignCriteria : X_VAF_AllotCriteria
     {
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param AD_AssignCriteria_ID id
+         *	@param VAF_AllotCriteria_ID id
          *	@param trxName trx
          */
-        public MAssignCriteria(Ctx ctx, int AD_AssignCriteria_ID, Trx trxName)
-            : base(ctx, AD_AssignCriteria_ID, trxName)
+        public MAssignCriteria(Ctx ctx, int VAF_AllotCriteria_ID, Trx trxName)
+            : base(ctx, VAF_AllotCriteria_ID, trxName)
         {
 
         }	//	MAssignCriteria

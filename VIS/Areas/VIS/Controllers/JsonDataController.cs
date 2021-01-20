@@ -891,13 +891,13 @@ namespace VIS.Controllers
 
         }
 
-        public JsonResult GetTranslatedText(List<string> Columns, string AD_Language)
+        public JsonResult GetTranslatedText(List<string> Columns, string VAF_Language)
         {
             if (Session["ctx"] != null)
             {
                 Ctx _ctx = Session["ctx"] as Ctx;
                 FormModel fm = new FormModel(_ctx);
-                var res = fm.GetTranslatedText(_ctx, Columns, AD_Language);
+                var res = fm.GetTranslatedText(_ctx, Columns, VAF_Language);
                 return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
             }
             else

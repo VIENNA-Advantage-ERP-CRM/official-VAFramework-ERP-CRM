@@ -216,17 +216,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //  We support Payment Rule being input in the login language 
             //Language language = Language.getLoginLanguage();		//	Base Language
             VAdvantage.Login.Language language = VAdvantage.Login.Language.GetLoginLanguage(GetCtx());
-            String AD_Language = language.GetAD_Language();
+            String VAF_Language = language.GetVAF_Language();
             sql = new StringBuilder("UPDATE I_Order O " +
                     "SET PaymentRule= " +
                     "(SELECT R.value " +
                     "  FROM AD_Ref_List R " +
                     "  left outer join AD_Ref_List_Trl RT " +
-                    "  on RT.AD_Ref_List_ID = R.AD_Ref_List_ID and RT.AD_Language = @param " +
+                    "  on RT.AD_Ref_List_ID = R.AD_Ref_List_ID and RT.VAF_Language = @param " +
                     "  WHERE R.AD_Reference_ID = 195 and coalesce( RT.Name, R.Name ) = O.PaymentRuleName ) " +
                     "WHERE PaymentRule is null AND PaymentRuleName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@param", AD_Language);
+            param[0] = new SqlParameter("@param", VAF_Language);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), param, Get_TrxName());
             log.Fine("Set PaymentRule=" + no);
             // do not set a default; if null, the import logic will derive from the business partner

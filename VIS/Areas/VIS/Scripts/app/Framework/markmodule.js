@@ -71,11 +71,11 @@
 
             lstModules = [];
             var module = null;
-            //var dr = VIS.DB.executeReader("SELECT AD_ModuleInfo_ID, Name FROM AD_Moduleinfo WHERE isActive='Y' ORDER BY Upper(Name) ");
+            //var dr = VIS.DB.executeReader("SELECT VAF_ModuleInfo_ID, Name FROM VAF_ModuleInfo WHERE isActive='Y' ORDER BY Upper(Name) ");
             var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "MarkModule/LoadModules", null, null);
             //while (dr.read()) {
             //    module = {};
-            //    module.AD_ModuleInfo_ID = dr.getInt(0);
+            //    module.VAF_ModuleInfo_ID = dr.getInt(0);
             //    module.Name = dr.getString(1);
             //    lstModules.push(module);
             //}
@@ -84,13 +84,13 @@
             if (dr != null) {
                 for (var i in dr) {
                     module = {};
-                    module.AD_ModuleInfo_ID = dr[i]["AD_ModuleInfo_ID"];
+                    module.VAF_ModuleInfo_ID = dr[i]["VAF_ModuleInfo_ID"];
                     module.Name = dr[i]["Name"];
                     lstModules.push(module);
                 }
             }
             if (_recordID.length == 1) {
-                //dr = VIS.DB.executeReader("select AD_moduleinfo_id  from VAF_ExportData e  where e.record_id=" + _recordID[0] + " and e.vaf_tableview_id=" + _tableID);
+                //dr = VIS.DB.executeReader("select VAF_ModuleInfo_id  from VAF_ExportData e  where e.record_id=" + _recordID[0] + " and e.vaf_tableview_id=" + _tableID);
                 //while (dr.read()) {
                 //    lstExistingRec.push(dr.getInt(0));
                 //}
@@ -126,7 +126,7 @@
                     table.append(tr);
                     var ctrlItem = {};
                     ctrlItem.Ctrl = chkbox;
-                    ctrlItem.AD_ModuleInfo_ID = lstModules[i].AD_ModuleInfo_ID;
+                    ctrlItem.VAF_ModuleInfo_ID = lstModules[i].VAF_ModuleInfo_ID;
                     lstCtrl.push(ctrlItem);
                     //htmlstr += "<tr><td><label class='vis-gc-vpanel-table-label-checkbox' style='display: inline-block; opacity: 1;'><input type='checkbox'>" + lstModules[i].Name + "</label></td></tr>";
                 }
@@ -140,7 +140,7 @@
                     tr = $('<tr>');
                     td = $('<td>');
                     lbl = $('<label class="vis-gc-vpanel-table-label-checkbox" style="display: inline-block; opacity: 1;">');
-                    if (lstExistingRec.indexOf(lstModules[j].AD_ModuleInfo_ID)>-1) {
+                    if (lstExistingRec.indexOf(lstModules[j].VAF_ModuleInfo_ID)>-1) {
                         chkbox = $("<input type='checkbox' checked>");
                         // htmlstr += "<tr><td><label class='vis-gc-vpanel-table-label-checkbox' style='display: inline-block; opacity: 1;'><input type='checkbox' checked>" + lstModules[j].Name + "</label></td></tr>";
                     }
@@ -155,7 +155,7 @@
                     table.append(tr);
                     var ctrlItem = {};
                     ctrlItem.Ctrl = chkbox;
-                    ctrlItem.AD_ModuleInfo_ID = lstModules[j].AD_ModuleInfo_ID;
+                    ctrlItem.VAF_ModuleInfo_ID = lstModules[j].VAF_ModuleInfo_ID;
                     lstCtrl.push(ctrlItem);
                     //}
                 }
@@ -175,8 +175,8 @@
             for (var i = 0; i < lstCtrl.length; i++) {
                 var chkbox = lstCtrl[i].Ctrl;
                 if (chkbox.prop('checked')) {
-                    lstselectedID.push(lstCtrl[i].AD_ModuleInfo_ID);
-                    // selectedID += lstCtrl[i].AD_ModuleInfo_ID + ',';
+                    lstselectedID.push(lstCtrl[i].VAF_ModuleInfo_ID);
+                    // selectedID += lstCtrl[i].VAF_ModuleInfo_ID + ',';
                 }
             }
            

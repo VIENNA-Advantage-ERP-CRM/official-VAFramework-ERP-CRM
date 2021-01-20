@@ -310,8 +310,8 @@ namespace VAdvantage.Classes
                 displayCol = "trl.Name";
                 realSQL.Append(displayCol + ", AD_Ref_List.IsActive "
                     + "FROM AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
-                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
-                        .Append(language.GetAD_Language()).Append("')");
+                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.VAF_Language='")
+                        .Append(language.GetVAF_Language()).Append("')");
             }
             realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID);
             realSQL.Append(" ORDER BY 2");
@@ -339,8 +339,8 @@ namespace VAdvantage.Classes
             else
                 realSQL.Append("trl.Name "
                     + "FROM AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
-                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.AD_Language='")
-                        .Append(language.GetAD_Language()).Append("')");
+                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.VAF_Language='")
+                        .Append(language.GetVAF_Language()).Append("')");
             realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID)
                 .Append(" AND AD_Ref_List.Value=").Append(linkColumnName);
             //
@@ -424,8 +424,8 @@ namespace VAdvantage.Classes
                     .Append(" INNER JOIN ").Append(tableName).Append("_TRL ON (")
                     .Append(tableName).Append(".").Append(keyColumn)
                     .Append("=").Append(tableName).Append("_Trl.").Append(keyColumn)
-                    .Append(" AND ").Append(tableName).Append("_Trl.AD_Language='")
-                    .Append(language.GetAD_Language()).Append("')");
+                    .Append(" AND ").Append(tableName).Append("_Trl.VAF_Language='")
+                    .Append(language.GetVAF_Language()).Append("')");
             }
             else	//	no translation
             {
@@ -574,7 +574,7 @@ namespace VAdvantage.Classes
                 //  date, number
                 if (DisplayType.IsDate(ldc.DisplayType) || DisplayType.IsNumeric(ldc.DisplayType))
                 {
-                    embedSQL.Append("NVL(" + DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()) + ",'')");
+                    embedSQL.Append("NVL(" + DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetVAF_Language()) + ",'')");
                 }
                 //  TableDir
                 else if ((ldc.DisplayType == DisplayType.TableDir || ldc.DisplayType == DisplayType.Search)
@@ -720,7 +720,7 @@ namespace VAdvantage.Classes
                 //  date
                 else if (DisplayType.IsDate(ldc.DisplayType))
                 {
-                    displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
+                    displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetVAF_Language()));
                 }
                 //Search with ref key
                 else if (ldc.DisplayType == DisplayType.Search && ldc.AD_Ref_Val_ID > 0)
@@ -749,7 +749,7 @@ namespace VAdvantage.Classes
                 //  number
                 else if (DisplayType.IsNumeric(ldc.DisplayType))
                 {
-                    displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetAD_Language()));
+                    displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetVAF_Language()));
                 }
                 //  String
                 else
@@ -888,8 +888,8 @@ namespace VAdvantage.Classes
                     .Append(" INNER JOIN ").Append(tableName).Append("_TRL ON (")
                     .Append(tableName).Append(".").Append(keyColumn)
                     .Append("=").Append(tableName).Append("_Trl.").Append(keyColumn)
-                    .Append(" AND ").Append(tableName).Append("_Trl.AD_Language='")
-                    .Append(language.GetAD_Language()).Append("')");
+                    .Append(" AND ").Append(tableName).Append("_Trl.VAF_Language='")
+                    .Append(language.GetVAF_Language()).Append("')");
             }
             //	Not Translated
             else
@@ -1038,8 +1038,8 @@ namespace VAdvantage.Classes
                     .Append(" INNER JOIN ").Append(tableName).Append("_TRL ON (")
                     .Append(tableName).Append(".").Append(keyColumn)
                     .Append("=").Append(tableName).Append("_Trl.").Append(keyColumn)
-                    .Append(" AND ").Append(tableName).Append("_Trl.AD_Language='")
-                    .Append(language.GetAD_Language()).Append("')");
+                    .Append(" AND ").Append(tableName).Append("_Trl.VAF_Language='")
+                    .Append(language.GetVAF_Language()).Append("')");
             }
             //	Not Translated
             else

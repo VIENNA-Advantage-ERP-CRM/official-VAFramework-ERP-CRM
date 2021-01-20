@@ -130,18 +130,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Message.
-        @param AD_Message_ID System Message */
-        public void SetAD_Message_ID(int AD_Message_ID)
+        @param VAF_Msg_Lable_ID System Message */
+        public void SetVAF_Msg_Lable_ID(int VAF_Msg_Lable_ID)
         {
-            if (AD_Message_ID <= 0) Set_Value("AD_Message_ID", null);
+            if (VAF_Msg_Lable_ID <= 0) Set_Value("VAF_Msg_Lable_ID", null);
             else
-                Set_Value("AD_Message_ID", AD_Message_ID);
+                Set_Value("VAF_Msg_Lable_ID", VAF_Msg_Lable_ID);
         }
         /** Get Message.
         @return System Message */
-        public int GetAD_Message_ID()
+        public int GetVAF_Msg_Lable_ID()
         {
-            Object ii = Get_Value("AD_Message_ID");
+            Object ii = Get_Value("VAF_Msg_Lable_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -282,7 +282,7 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
-            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
+            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
             if (Env.IsModuleInstalled("VA203_"))
             {
                 if (GetM_RequisitionLine_ID() > 0)

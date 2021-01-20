@@ -147,7 +147,7 @@ namespace ViennaAdvantage.Process
         /// <returns>Info</returns>
         private String ValidateProduct(VAdvantage.Model.MProduct product)
         {
-            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             // JID_0690: If manufaturing Module is not downloaded validate BOM Process was not working.
             if (!product.IsBOM())
             {
@@ -214,7 +214,7 @@ namespace ViennaAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateOldProduct(VAdvantage.Model.MProduct product)
         {
-            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             if (!product.IsBOM())
             {
                 return true;
@@ -258,7 +258,7 @@ namespace ViennaAdvantage.Process
         /// <returns>true if valid</returns>
         private bool ValidateBOM(VAdvantage.Model.MBOM bom)
         {
-            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
+            //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
             VAdvantage.Model.MBOMProduct[] BOMproducts = VAdvantage.Model.MBOMProduct.GetOfBOM(bom);
             // if manufacturing module  exist and  BOM Componet not contain any record against this BOM then not to verify Product
             //if (count > 0 && BOMproducts.Length == 0)

@@ -19,7 +19,7 @@ namespace VAdvantage.Install
         /**	Client							*/
         private int _VAF_Client_ID = -1;
         /** Language						*/
-        private String _AD_Language = null;
+        private String _VAF_Language = null;
         /** Is Base Language				*/
         private bool _isBaseLanguage = false;
         /** Table							*/
@@ -67,14 +67,14 @@ namespace VAdvantage.Install
         {
             if (qName.Equals(Translation.XML_TAG) || qName.Equals(Translation.XML_TAG_Vienna) || qName.Equals(Translation.XML_TAG_Adam))
             {
-                _AD_Language = attributes[0]; //attributes[Translation.XML_ATTRIBUTE_LANGUAGE].Value;
-                _isBaseLanguage = Language.IsBaseLanguage(_AD_Language);
+                _VAF_Language = attributes[0]; //attributes[Translation.XML_ATTRIBUTE_LANGUAGE].Value;
+                _isBaseLanguage = Language.IsBaseLanguage(_VAF_Language);
                 _TableName = attributes[1];  //attributes[Translation.XML_ATTRIBUTE_TABLE].Value;
                 _updateSQL = "UPDATE " + _TableName;
                 if (!_isBaseLanguage)
                     _updateSQL += "_Trl";
                 _updateSQL += " SET ";
-                log.Fine("AD_Language=" + _AD_Language + ", Base=" + _isBaseLanguage + ", TableName=" + _TableName);
+                log.Fine("VAF_Language=" + _VAF_Language + ", Base=" + _isBaseLanguage + ", TableName=" + _TableName);
             }
             else if (qName.Equals(Translation.XML_ROW_TAG))
             {
@@ -161,7 +161,7 @@ namespace VAdvantage.Install
                 }
 
                 if (!_isBaseLanguage)
-                    _sql.Append(" AND AD_Language='").Append(_AD_Language).Append("'");
+                    _sql.Append(" AND VAF_Language='").Append(_VAF_Language).Append("'");
                 if (_VAF_Client_ID >= 0)
                     _sql.Append(" AND VAF_Client_ID=").Append(_VAF_Client_ID);
                 //	Update section

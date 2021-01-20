@@ -41,7 +41,7 @@ namespace VIS.Helpers
                     + "LEFT OUTER JOIN VAF_ContextScope ca ON (p.VAF_ContextScope_ID=ca.VAF_ContextScope_ID) "
                     + " INNER JOIN AD_Process_Trl t ON (p.AD_Process_ID=t.AD_Process_ID) "
                     + " Left Outer Join VAF_Image Img On  p.VAF_Image_ID=img.VAF_Image_ID "
-                    + "WHERE p.AD_Process_ID=" + AD_Process_ID + " AND t.AD_Language='" + Env.GetAD_Language(ctx) + "'";
+                    + "WHERE p.AD_Process_ID=" + AD_Process_ID + " AND t.VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
 
             IDataReader dr = null;
 
@@ -176,7 +176,7 @@ namespace VIS.Helpers
                         // Get Message for Notice window from Cache or DB.
                         if (msgID == 0)
                         {
-                            object messageID = DB.ExecuteScalar("SELECT AD_Message_ID FROM AD_Message WHERE Value='ProcessResult'");
+                            object messageID = DB.ExecuteScalar("SELECT VAF_Msg_Lable_ID FROM VAF_Msg_Lable WHERE Value='ProcessResult'");
                             if (messageID != null && messageID != DBNull.Value)
                             {
                                 msgID = Convert.ToInt32(messageID);
@@ -354,7 +354,7 @@ namespace VIS.Helpers
                 }
             }
 
-            string lang = ctx.GetAD_Language().Replace("_", "-");
+            string lang = ctx.GetVAF_Language().Replace("_", "-");
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
@@ -626,7 +626,7 @@ namespace VIS.Helpers
             }
             //Context _ctx = new Context(ctxDic);
             //Env.SetContext(_ctx);
-            string lang = _ctx.GetAD_Language().Replace("_", "-");
+            string lang = _ctx.GetVAF_Language().Replace("_", "-");
 
 
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
@@ -776,7 +776,7 @@ namespace VIS.Helpers
 
             //ReportEngine_N re = null;
 
-            string lang = ctx.GetAD_Language().Replace("_", "-");
+            string lang = ctx.GetVAF_Language().Replace("_", "-");
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);
@@ -1016,7 +1016,7 @@ namespace VIS.Helpers
             {
                 sql = @"SELECT r.Value, rt.Name FROM AD_Ref_List r
                       inner join ad_ref_list_trl rt on (r.AD_Ref_List_ID=rt.AD_Ref_List_ID)
-                      WHERE r.AD_Reference_ID=" + refListID + " AND r.IsActive='Y' AND rt.AD_language='" + ctx.GetAD_Language() + "' ORDER BY 1";
+                      WHERE r.AD_Reference_ID=" + refListID + " AND r.IsActive='Y' AND rt.VAF_Language='" + ctx.GetVAF_Language() + "' ORDER BY 1";
             }
             DataSet ds = null;
             try
@@ -1106,7 +1106,7 @@ namespace VIS.Helpers
                 {
                     _PA_Hierarchy_ID = Util.GetValueOfInt(ID);
                 }
-                Language _language = Language.GetLanguage(_ctx.GetAD_Language());
+                Language _language = Language.GetLanguage(_ctx.GetVAF_Language());
 
                 //Get Query to fetch identifier value from table based on column selected. it will be used to display identifires on for parameter in report.
                 eSql = VLookUpFactory.GetLookup_TableDirEmbed(_language, columnName, columnName.Substring(0, columnName.Length - 3));

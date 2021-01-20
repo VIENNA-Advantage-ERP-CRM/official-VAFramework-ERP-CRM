@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ModuleFavourite
+/** Generated Model for VAF_ModuleFavourite
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ModuleFavourite : PO
+public class X_VAF_ModuleFavourite : PO
 {
-public X_AD_ModuleFavourite (Context ctx, int AD_ModuleFavourite_ID, Trx trxName) : base (ctx, AD_ModuleFavourite_ID, trxName)
+public X_VAF_ModuleFavourite (Context ctx, int VAF_ModuleFavourite_ID, Trx trxName) : base (ctx, VAF_ModuleFavourite_ID, trxName)
 {
-/** if (AD_ModuleFavourite_ID == 0)
+/** if (VAF_ModuleFavourite_ID == 0)
 {
-SetAD_ModuleFavourite_ID (0);
-SetAD_ModuleRole_ID (0);
+SetVAF_ModuleFavourite_ID (0);
+SetVAF_ModuleRole_ID (0);
 }
  */
 }
-public X_AD_ModuleFavourite (Ctx ctx, int AD_ModuleFavourite_ID, Trx trxName) : base (ctx, AD_ModuleFavourite_ID, trxName)
+public X_VAF_ModuleFavourite (Ctx ctx, int VAF_ModuleFavourite_ID, Trx trxName) : base (ctx, VAF_ModuleFavourite_ID, trxName)
 {
-/** if (AD_ModuleFavourite_ID == 0)
+/** if (VAF_ModuleFavourite_ID == 0)
 {
-SetAD_ModuleFavourite_ID (0);
-SetAD_ModuleRole_ID (0);
+SetVAF_ModuleFavourite_ID (0);
+SetVAF_ModuleRole_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_ModuleRole_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleFavourite (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleFavourite (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_ModuleFavourite (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleFavourite (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ModuleFavourite (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_ModuleFavourite (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ModuleFavourite (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ModuleFavourite (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ModuleFavourite()
+static X_VAF_ModuleFavourite()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1352264584428L;
 public static int Table_ID;
  // =1000014;
 
-/** TableName=AD_ModuleFavourite */
-public static String Table_Name="AD_ModuleFavourite";
+/** TableName=VAF_ModuleFavourite */
+public static String Table_Name="VAF_ModuleFavourite";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,52 +109,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ModuleFavourite[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ModuleFavourite[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Menu.
-@param AD_Menu_ID Identifies a Menu */
-public void SetAD_Menu_ID (int AD_Menu_ID)
+@param VAF_MenuConfig_ID Identifies a Menu */
+public void SetVAF_MenuConfig_ID (int VAF_MenuConfig_ID)
 {
-if (AD_Menu_ID <= 0) Set_Value ("AD_Menu_ID", null);
+if (VAF_MenuConfig_ID <= 0) Set_Value ("VAF_MenuConfig_ID", null);
 else
-Set_Value ("AD_Menu_ID", AD_Menu_ID);
+Set_Value ("VAF_MenuConfig_ID", VAF_MenuConfig_ID);
 }
 /** Get Menu.
 @return Identifies a Menu */
-public int GetAD_Menu_ID() 
+public int GetVAF_MenuConfig_ID() 
 {
-Object ii = Get_Value("AD_Menu_ID");
+Object ii = Get_Value("VAF_MenuConfig_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_ModuleFavourite_ID.
-@param AD_ModuleFavourite_ID AD_ModuleFavourite_ID */
-public void SetAD_ModuleFavourite_ID (int AD_ModuleFavourite_ID)
+/** Set VAF_ModuleFavourite_ID.
+@param VAF_ModuleFavourite_ID VAF_ModuleFavourite_ID */
+public void SetVAF_ModuleFavourite_ID (int VAF_ModuleFavourite_ID)
 {
-if (AD_ModuleFavourite_ID < 1) throw new ArgumentException ("AD_ModuleFavourite_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleFavourite_ID", AD_ModuleFavourite_ID);
+if (VAF_ModuleFavourite_ID < 1) throw new ArgumentException ("VAF_ModuleFavourite_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleFavourite_ID", VAF_ModuleFavourite_ID);
 }
-/** Get AD_ModuleFavourite_ID.
-@return AD_ModuleFavourite_ID */
-public int GetAD_ModuleFavourite_ID() 
+/** Get VAF_ModuleFavourite_ID.
+@return VAF_ModuleFavourite_ID */
+public int GetVAF_ModuleFavourite_ID() 
 {
-Object ii = Get_Value("AD_ModuleFavourite_ID");
+Object ii = Get_Value("VAF_ModuleFavourite_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_ModuleRole_ID.
-@param AD_ModuleRole_ID AD_ModuleRole_ID */
-public void SetAD_ModuleRole_ID (int AD_ModuleRole_ID)
+/** Set VAF_ModuleRole_ID.
+@param VAF_ModuleRole_ID VAF_ModuleRole_ID */
+public void SetVAF_ModuleRole_ID (int VAF_ModuleRole_ID)
 {
-if (AD_ModuleRole_ID < 1) throw new ArgumentException ("AD_ModuleRole_ID is mandatory.");
-Set_ValueNoCheck ("AD_ModuleRole_ID", AD_ModuleRole_ID);
+if (VAF_ModuleRole_ID < 1) throw new ArgumentException ("VAF_ModuleRole_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ModuleRole_ID", VAF_ModuleRole_ID);
 }
-/** Get AD_ModuleRole_ID.
-@return AD_ModuleRole_ID */
-public int GetAD_ModuleRole_ID() 
+/** Get VAF_ModuleRole_ID.
+@return VAF_ModuleRole_ID */
+public int GetVAF_ModuleRole_ID() 
 {
-Object ii = Get_Value("AD_ModuleRole_ID");
+Object ii = Get_Value("VAF_ModuleRole_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

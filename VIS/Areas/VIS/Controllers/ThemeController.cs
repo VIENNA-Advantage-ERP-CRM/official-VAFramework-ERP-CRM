@@ -15,7 +15,7 @@ namespace VIS.Controllers
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                ViewBag.lang = ctx.GetAD_Language();
+                ViewBag.lang = ctx.GetVAF_Language();
             }
             return PartialView();
         }

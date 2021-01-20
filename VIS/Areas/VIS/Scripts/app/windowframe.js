@@ -3089,8 +3089,8 @@
         //	Record_ID
         var record_ID = this.curTab.getRecord_ID();
         //	Record_ID - Language Handling
-        if (record_ID == -1 && this.curTab.getKeyColumnName().equals("AD_Language"))
-            record_ID = ctx.getContextAsInt(this.curWindowNo, "AD_Language_ID");
+        if (record_ID == -1 && this.curTab.getKeyColumnName().equals("VAF_Language"))
+            record_ID = ctx.getContextAsInt(this.curWindowNo, "VAF_Language_ID");
         //	Record_ID - Change Log ID
         if (record_ID == -1
             && (vButton.getProcess_ID() == 306 || vButton.getProcess_ID() == 307)) {
@@ -3895,11 +3895,11 @@
         this.statusBar.setStatusDB(dbInfo, e);
 
         //	Set Message / Info
-        if (e.getAD_Message() != null || e.getInfo() != null) {
+        if (e.getVAF_Msg_Lable() != null || e.getInfo() != null) {
             var sb = new StringBuilder();
             var msg = e.getMessage();
             if (msg != null && msg.length > 0)
-                sb.append(VIS.Msg.getMsg(e.getAD_Message()));
+                sb.append(VIS.Msg.getMsg(e.getVAF_Msg_Lable()));
             var info = e.getInfo();
             if (info != null && info.length > 0) {
                 if (sb.length() > 0 && !sb.endsWith(":"))
@@ -3916,13 +3916,13 @@
 
         //  Confirm Error
         if (e.getIsError() && !e.getIsConfirmed()) {
-            VIS.ADialog.error(e.getAD_Message(), true, e.getInfo());
+            VIS.ADialog.error(e.getVAF_Msg_Lable(), true, e.getInfo());
             e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
             this.errorDisplayed = true;
         }
         //  Confirm Warning
         else if (e.getIsWarning() && !e.getIsConfirmed()) {
-            VIS.ADialog.warn(e.getAD_Message(), true, e.getInfo());
+            VIS.ADialog.warn(e.getVAF_Msg_Lable(), true, e.getInfo());
             e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
         }
 
@@ -8198,14 +8198,14 @@
             //    + " AND (c.VAF_Column_ID=" + VAF_ColumnSortOrder_ID + " OR VAF_Column_ID=" + VAF_ColumnSortYesNo_ID	//	#2..3
             //    + "	OR c.IsParent='Y' OR c.IsKey='Y' OR c.IsIdentifier='Y')"
             //    + " AND c.VAF_ColumnDic_ID=et.VAF_ColumnDic_ID"
-            //    + " AND et.AD_Language='" + VIS.Env.getAD_Language(VIS.Env.getCtx()) + "'";                   //	#4
+            //    + " AND et.VAF_Language='" + VIS.Env.getVAF_Language(VIS.Env.getCtx()) + "'";                   //	#4
 
             sql = "VIS_123";
             param = [];
             param[0] = new VIS.DB.SqlParam("@VAF_TableView_ID", VAF_TableView_ID);
             param[1] = new VIS.DB.SqlParam("@VAF_ColumnSortOrder_ID", VAF_ColumnSortOrder_ID);
             param[2] = new VIS.DB.SqlParam("@VAF_ColumnSortYesNo_ID", VAF_ColumnSortYesNo_ID);
-            param[3] = new VIS.DB.SqlParam("@AD_Language", VIS.Env.getAD_Language(VIS.Env.getCtx()));
+            param[3] = new VIS.DB.SqlParam("@VAF_Language", VIS.Env.getVAF_Language(VIS.Env.getCtx()));
 
         }
 
@@ -8292,7 +8292,7 @@
         sql += " WHERE t." + this.parentColumnName + "=@ID";
         if (this.identifierTranslated)
             sql += " AND t." + this.keyColumnName + "=tt." + this.keyColumnName
-                + " AND tt.AD_Language='" + VIS.context.getAD_Language() + "'";
+                + " AND tt.VAF_Language='" + VIS.context.getVAF_Language() + "'";
         //	Order
         sql += " ORDER BY ";
         if (this.columnYesNoName != null)

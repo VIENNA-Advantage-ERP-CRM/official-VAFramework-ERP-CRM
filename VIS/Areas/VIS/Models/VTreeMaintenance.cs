@@ -68,10 +68,10 @@ namespace VAdvantage.Classes
             //if tree is of menu type
             if(TreeType=="MM")
             {
-                //sqlCmd = "select ad_menu.Name +' ('+ad_menu.Description +')' as Name,ad_menu.ad_menu_id as pkid from ad_menu where " +
-                  //            "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by ad_menu.Name" ;
-                sqlCmd = "select ad_menu.Name ||' ('|| ad_menu.Description ||')' as Name,ad_menu.ad_menu_id as pkid from ad_menu where " +
-                              "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by ad_menu.Name";
+                //sqlCmd = "select VAF_MenuConfig.Name +' ('+VAF_MenuConfig.Description +')' as Name,VAF_MenuConfig.VAF_MenuConfig_id as pkid from VAF_MenuConfig where " +
+                  //            "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by VAF_MenuConfig.Name" ;
+                sqlCmd = "select VAF_MenuConfig.Name ||' ('|| VAF_MenuConfig.Description ||')' as Name,VAF_MenuConfig.VAF_MenuConfig_id as pkid from VAF_MenuConfig where " +
+                              "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by VAF_MenuConfig.Name";
             }
             else if (TreeType == "OO")
             {
@@ -105,10 +105,10 @@ namespace VAdvantage.Classes
                  sqlCmd = new StringBuilder("insert into " + tableName + " (VAF_CLIENT_ID,VAF_ORG_ID,AD_TREE_ID,CREATEDBY," +
                              "NODE_ID,SEQNO,PARENT_ID,UPDATEDBY) select " + ctx.GetVAF_Client_ID() + ",0," + _AD_Tree_Id + ",100,");
 
-            //if tree type MM then select from table AD_Menu else from VAF_Org
+            //if tree type MM then select from table VAF_MenuConfig else from VAF_Org
                      if (TreeType == "MM")
                      {
-                         sqlCmd.Append("AD_Menu_ID,9999,0,100 from AD_Menu where VAF_CLIENT_ID in(0," + ctx.GetVAF_Client_ID() + ") and  AD_Menu_Id");
+                         sqlCmd.Append("VAF_MenuConfig_ID,9999,0,100 from VAF_MenuConfig where VAF_CLIENT_ID in(0," + ctx.GetVAF_Client_ID() + ") and  VAF_MenuConfig_Id");
                      }
                      else if (TreeType == "OO")
                      {
@@ -124,7 +124,7 @@ namespace VAdvantage.Classes
                      {
                          if (TreeType == "MM")
                          {
-                             sqlCmd.Append(" and ad_menu_id=" + nodeId);
+                             sqlCmd.Append(" and VAF_MenuConfig_id=" + nodeId);
                          }
                          else if (TreeType == "OO")
                          {
@@ -160,7 +160,7 @@ namespace VAdvantage.Classes
             if (_TreeType == "MM")
             {
                 sqlCmd.Append(" and Node_Id not in " +
-                    "(select AD_Menu_Id from AD_Menu where VAF_Page_Id in " +
+                    "(select VAF_MenuConfig_Id from VAF_MenuConfig where VAF_Page_Id in " +
                     "(select VAF_Page_Id from VAF_Page where ClassName='VAdvantage.Apps.Form.VTreeMaintenance'))");
             }
             //if request is to delete a particular row
@@ -179,8 +179,8 @@ namespace VAdvantage.Classes
         /// <returns></returns>
         public int CheckMaintenenceNode(int Node_Id)
         {
-            string sqlCmd="select count(AD_Menu_Id) from AD_Menu where VAF_Page_Id in " +
-                    "(select VAF_Page_Id from VAF_Page where ClassName='VAdvantage.Apps.Form.VTreeMaintenance') and AD_Menu_id="+Node_Id;
+            string sqlCmd="select count(VAF_MenuConfig_Id) from VAF_MenuConfig where VAF_Page_Id in " +
+                    "(select VAF_Page_Id from VAF_Page where ClassName='VAdvantage.Apps.Form.VTreeMaintenance') and VAF_MenuConfig_id="+Node_Id;
             return int.Parse(ExecuteQuery.ExecuteScalar(sqlCmd));
 
         }
@@ -194,7 +194,7 @@ namespace VAdvantage.Classes
             string sqlCmd = "Select Name from ";
             if (_TreeType == "MM")
             {
-                sqlCmd += "AD_Menu where AD_Menu_Id=" + nodeId;
+                sqlCmd += "VAF_MenuConfig where VAF_MenuConfig_Id=" + nodeId;
             }
             else if (_TreeType == "OO")
             {

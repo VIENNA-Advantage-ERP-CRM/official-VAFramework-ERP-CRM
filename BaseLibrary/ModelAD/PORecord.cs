@@ -79,7 +79,7 @@ namespace VAdvantage.Model
         //	Cascade Table ID
         //private static int[] _cascades = new int[]{
         //X_VAF_Attachment.Table_ID,
-        //X_AD_Archive.Table_ID,
+        //X_VAF_Archive.Table_ID,
         //X_AD_Note.Table_ID,
         //X_MailAttachment1.Table_ID,
         //X_AppointmentsInfo.Table_ID,
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
         //	Cascade Table Names
         //private static string[] _cascadeNames = new string[]{
         //X_VAF_Attachment.Table_Name,
-        //X_AD_Archive.Table_Name,
+        //X_VAF_Archive.Table_Name,
         //X_AD_Note.Table_Name,
         //X_MailAttachment1.Table_Name,
         //X_AppointmentsInfo.Table_Name,

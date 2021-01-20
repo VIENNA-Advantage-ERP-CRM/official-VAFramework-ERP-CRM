@@ -34,7 +34,7 @@ namespace VIS.Controllers
             {
                 var ctx = Session["ctx"] as Ctx;
                 obj = obj.GetUserSettings(ctx, Convert.ToInt32(adUserId));
-                ViewBag.lang = ctx.GetAD_Language();
+                ViewBag.lang = ctx.GetVAF_Language();
                 ViewBag.IsAdmin = ctx.GetAD_Role_ID() == 0 && (ctx.GetAD_User_ID() == 100 || ctx.GetAD_User_ID() == 0)
                     && Util.GetValueOfInt(ctx.GetContext("#FRAMEWORK_VERSION")) > 1;
             }

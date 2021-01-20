@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class LanguageMaintenance : ProcessEngine.SvrProcess
     {
         #region Private variable
-        private int _AD_Language_ID = 0;//The Language ID			
+        private int _VAF_Language_ID = 0;//The Language ID			
         private String _MaintenanceMode = null;// Maintenance Mode
         public static String MAINTENANCEMODE_Add = "A";//Add
         public static String MAINTENANCEMODE_Delete = "D";// Delete
@@ -53,7 +53,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _AD_Language_ID = GetRecord_ID();
+            _VAF_Language_ID = GetRecord_ID();
         }	//	prepare
 
         /// <summary>
@@ -64,9 +64,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         override protected String DoIt()
         {
             //IDbTransaction trx = ExecuteQuery.GerServerTransaction();
-            //_language = MLanguage.Get(GetCtx(), _AD_Language_ID, trx.ToString());
-            _language = MLanguage.Get(GetCtx(), _AD_Language_ID, Get_TrxName());
-            log.Info("Mode=" + _MaintenanceMode + ", ID=" + _AD_Language_ID + " - " + _language);
+            //_language = MLanguage.Get(GetCtx(), _VAF_Language_ID, trx.ToString());
+            _language = MLanguage.Get(GetCtx(), _VAF_Language_ID, Get_TrxName());
+            log.Info("Mode=" + _MaintenanceMode + ", ID=" + _VAF_Language_ID + " - " + _language);
 
             if (_language.IsBaseLanguage())
             {

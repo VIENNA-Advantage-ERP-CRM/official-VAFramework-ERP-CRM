@@ -107,7 +107,7 @@ namespace VIS.Models
         {
             List<PaymentSelection> objPSelection = new List<PaymentSelection>();
             StringBuilder sql = new StringBuilder("SELECT C_PaySelection_ID, Name || ' - ' || " + DB.TO_CHAR("TotalAmt",
-                      DisplayType.Number, ctx.GetAD_Language()) + " AS NAME FROM C_PaySelection "
+                      DisplayType.Number, ctx.GetVAF_Language()) + " AS NAME FROM C_PaySelection "
                       + "WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND Processed='Y' AND IsActive='Y'");
             if (!_printCheck)
             {

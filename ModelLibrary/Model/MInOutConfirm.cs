@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 cLine.Save(ship.Get_TrxName());
             }
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
             {
                 if (confirmType == MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm)
                 {
@@ -1429,7 +1429,7 @@ namespace VAdvantage.Model
         //Arpit to freeze quality control Lines
         public void FreezeQualityControlLines()
         {
-            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM AD_ModuleInfo WHERE Prefix='VA010_'", null, Get_TrxName())) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA010_'", null, Get_TrxName())) > 0)
             {
                 String sql = "Select VA010_ShipConfParameters_ID from VA010_ShipConfParameters Where M_InOutLineConfirm_ID IN ("
                     + " SELECT M_InOutLineConfirm_ID FROM M_InOutLineConfirm Where M_InOutConfirm_ID=" + Get_ID() + ")";

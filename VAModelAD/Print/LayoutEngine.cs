@@ -165,7 +165,7 @@ namespace VAdvantage.Print
             //	Print Context
             m_printCtx.SetContext(Page.CONTEXT_REPORTNAME, m_format.GetName());
             m_printCtx.SetContext(Page.CONTEXT_HEADER, Env.GetHeader(GetCtx(), 0));
-            m_printCtx.SetContext(Env.LANGUAGE, m_format.GetLanguage().GetAD_Language());
+            m_printCtx.SetContext(Env.LANGUAGE, m_format.GetLanguage().GetVAF_Language());
 
             if (m_hasLayout && doLayout)
                 Layout();			//	re-calculate

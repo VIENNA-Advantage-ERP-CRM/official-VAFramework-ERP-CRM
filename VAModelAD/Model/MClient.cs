@@ -54,7 +54,7 @@ namespace VAModelAD.Model
         {
             if (_language == null)
             {
-                _language = VAdvantage.Login.Language.GetLanguage(GetAD_Language());
+                _language = VAdvantage.Login.Language.GetLanguage(GetVAF_Language());
                 _language = Env.VerifyLanguage(GetCtx(), _language);
             }
             return _language;

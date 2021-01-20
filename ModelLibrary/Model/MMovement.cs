@@ -692,7 +692,7 @@ namespace VAdvantage.Model
             // IsCostImmediate = true - calculate cost on completion
             MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
 
-            //int countVA024 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA024_'"));
+            //int countVA024 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA024_'"));
             //int tableId = 0;
             //try
             //{
@@ -701,7 +701,7 @@ namespace VAdvantage.Model
             //}
             //catch { }
 
-            //query = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'";
+            //query = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'";
             int countKarminati = Env.IsModuleInstalled("VA203_") ? 1 : 0;
 
             if (isContainerApplicable)

@@ -141,23 +141,23 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Translation
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <returns>trl</returns>
-        private MMailTextTrl GetTranslation(String AD_Language)
+        private MMailTextTrl GetTranslation(String VAF_Language)
         {
             MMailTextTrl trl = null;
-            String sql = "SELECT * FROM R_MailText_Trl WHERE R_MailText_ID=@textid AND AD_Language=@lang";
+            String sql = "SELECT * FROM R_MailText_Trl WHERE R_MailText_ID=@textid AND VAF_Language=@lang";
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
                 param[0] = new SqlParameter("@textid", GetR_MailText_ID());
-                param[1] = new SqlParameter("@lang", AD_Language);
+                param[1] = new SqlParameter("@lang", VAF_Language);
                 dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param);
                 if (dr.Read())
                 {
                     trl = new MMailTextTrl();
-                    trl.AD_Language = dr["AD_Language"].ToString();
+                    trl.VAF_Language = dr["VAF_Language"].ToString();
                     trl.mailHeader = dr["MailHeader"].ToString();
                     trl.mailText = dr["MailText"].ToString();
                     trl.mailText2 = dr["MailText2"].ToString();
@@ -445,13 +445,13 @@ namespace VAdvantage.Model
         private void Translate()
         {
             string language = "";
-            if (_bpartner != null && _bpartner.GetAD_Language() != null)
+            if (_bpartner != null && _bpartner.GetVAF_Language() != null)
             {
-                language = _bpartner.GetAD_Language();
+                language = _bpartner.GetVAF_Language();
             }
-            else if (!Env.IsBaseLanguage(GetCtx().GetAD_Language(), ""))
+            else if (!Env.IsBaseLanguage(GetCtx().GetVAF_Language(), ""))
             {
-                language = GetCtx().GetAD_Language();
+                language = GetCtx().GetVAF_Language();
             }
 
             if (!string.IsNullOrEmpty(language) && language.Length > 0)
@@ -486,7 +486,7 @@ namespace VAdvantage.Model
     class MMailTextTrl
     {
         /** Language			*/
-        public String AD_Language = null;
+        public String VAF_Language = null;
         /** Translated Header	*/
         public String mailHeader = null;
         /** Translated Text		*/

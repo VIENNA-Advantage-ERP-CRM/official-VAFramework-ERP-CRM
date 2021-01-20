@@ -249,7 +249,7 @@ namespace VIS.Classes
             queryList.VIS_73 = "SELECT Name, PO_Name FROM VAF_ColumnDic WHERE UPPER(ColumnName)=@ColumnName";
             queryList.VIS_74 = "SELECT t.Name, t.PO_Name FROM VAF_ColumnDic_TL t, VAF_ColumnDic e "
                 + "WHERE t.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND UPPER(e.ColumnName)=@ColumnName "
-                + "AND t.AD_Language=@AD_Language";
+                + "AND t.VAF_Language=@VAF_Language";
 
             queryList.VIS_75 = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=@tableID";
 
@@ -429,7 +429,7 @@ namespace VIS.Classes
 
             queryList.VIS_118 = "select ad_reportformat_id FROM AD_Process WHERE AD_Process_ID=@AD_Process_ID";
 
-            queryList.VIS_119 = "select versionno FROM AD_ModuleINfo where Prefix='VAREPH_'";
+            queryList.VIS_119 = "select versionno FROM VAF_ModuleInfo where Prefix='VAREPH_'";
 
             queryList.VIS_120 = "SELECT AD_Tree_ID FROM AD_Tree "
             + "WHERE VAF_Client_ID=@VAF_Client_ID AND VAF_TableView_ID=@VAF_TableView_ID AND IsActive='Y' AND IsAllNodes='Y' "
@@ -457,7 +457,7 @@ namespace VIS.Classes
                 + " AND (c.VAF_Column_ID=@VAF_ColumnSortOrder_ID OR VAF_Column_ID=@VAF_ColumnSortYesNo_ID" //	#2..3
                 + "	OR c.IsParent='Y' OR c.IsKey='Y' OR c.IsIdentifier='Y')"
                 + " AND c.VAF_ColumnDic_ID=et.VAF_ColumnDic_ID"
-                + " AND et.AD_Language=@AD_Language";
+                + " AND et.VAF_Language=@VAF_Language";
 
 
             queryList.VIS_124 = "SELECT * FROM C_ValidCombination WHERE C_ValidCombination_ID=@C_ValidCombination_ID AND C_AcctSchema_ID=@C_AcctSchema_ID";
@@ -474,7 +474,7 @@ namespace VIS.Classes
 
             queryList.VIS_130 = "select VAF_RecrodType_id, entitytype, name from VAF_RecrodType";
 
-            queryList.VIS_131 = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'";
+            queryList.VIS_131 = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'";
 
 
             queryList.VIS_132 = "SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID =@M_Product_ID";
@@ -501,7 +501,7 @@ namespace VIS.Classes
             + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),2) as QTYENTER,"	//	2
             + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"			//  3..4
             + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,"      //  5..8
-            + " l.C_OrderLine_ID FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language=@AD_Language) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
+            + " l.C_OrderLine_ID FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language=@VAF_Language) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
            + " LEFT OUTER JOIN M_MatchInv mi ON (l.C_InvoiceLine_ID=mi.C_InvoiceLine_ID) WHERE l.C_Invoice_ID=@C_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered,"
             + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
                 + " l.M_Product_ID,p.Name, l.C_InvoiceLine_ID,l.Line,l.C_OrderLine_ID  ORDER BY l.Line";
@@ -531,7 +531,7 @@ namespace VIS.Classes
                 + "WHERE AD_PInstance_ID=@AD_PInstance_ID "
                 + " ORDER BY Log_ID";
 
-            queryList.VIS_145 = "SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'";
+            queryList.VIS_145 = "SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'";
 
             queryList.VIS_146 = "SELECT adt.TableName, adt.AD_Window_ID, adt.PO_Window_ID, " +
             "case when adwfa.AD_Window_ID is null then (select AD_WINDOW_ID from AD_WF_Activity where AD_WF_Process_ID = (select AD_WF_Process_ID from AD_WF_Activity where AD_WF_Activity_ID = adwfa.AD_WF_Activity_ID) and AD_WINDOW_ID is not null AND rownum = 1) else adwfa.AD_Window_ID end as ActivityWindow " +
@@ -543,7 +543,7 @@ namespace VIS.Classes
 
             queryList.VIS_148 = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
                    + "WHERE l.AD_Ref_List_ID=t.AD_Ref_List_ID"
-                   + " AND t.AD_Language='" + Env.GetAD_Language(ctx) + "'"
+                   + " AND t.VAF_Language='" + Env.GetVAF_Language(ctx) + "'"
                    + " AND l.AD_Reference_ID=@AD_Reference_ID AND l.IsActive='Y'";
 
             queryList.VIS_149 = "SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID=@AD_Process_ID";

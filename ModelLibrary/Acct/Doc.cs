@@ -641,15 +641,15 @@ namespace VAdvantage.Acct
             if (!_status.Equals(STATUS_Posted))
             {
                 //  Insert Note
-                String AD_MessageValue = "PostingError-" + _status;
+                String VAF_Msg_LableValue = "PostingError-" + _status;
                 int AD_User_ID = _po.GetUpdatedBy();
-                MNote note = new MNote(GetCtx(), AD_MessageValue, AD_User_ID,
+                MNote note = new MNote(GetCtx(), VAF_Msg_LableValue, AD_User_ID,
                     GetVAF_Client_ID(), GetVAF_Org_ID(), null);
                 note.SetRecord(_po.Get_Table_ID(), _po.Get_ID());
                 //  Reference
                 note.SetReference(ToString());	//	Document
                 //	Text
-                StringBuilder Text = new StringBuilder(Msg.GetMsg(GetCtx(), AD_MessageValue));
+                StringBuilder Text = new StringBuilder(Msg.GetMsg(GetCtx(), VAF_Msg_LableValue));
                 if (_error != null)
                 {
                     Text.Append(" (").Append(_error).Append(")");

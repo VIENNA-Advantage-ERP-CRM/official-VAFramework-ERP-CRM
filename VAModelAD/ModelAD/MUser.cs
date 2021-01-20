@@ -646,7 +646,7 @@ namespace VAdvantage.Model
             {
                 log.Info("Aftersave success");
                 // For Saving YellowFin user.......................
-                object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where IsActive='Y' AND prefix='VA037_'");
+                object ModuleId = DB.ExecuteScalar("select VAF_ModuleInfo_id from VAF_ModuleInfo where IsActive='Y' AND prefix='VA037_'");
                 if (ModuleId != null && ModuleId != DBNull.Value)
                 {
                     //Update/Save in Case user change following value........Password,FirstName,LastName,YellowfinRole,Email,
@@ -697,7 +697,7 @@ namespace VAdvantage.Model
 
         public bool createJasperUser()
         {
-            object ModuleId = DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VA039_'");
+            object ModuleId = DB.ExecuteScalar("select VAF_ModuleInfo_id from VAF_ModuleInfo where prefix='VA039_'");
             if (ModuleId != null && ModuleId != DBNull.Value)
             {
 

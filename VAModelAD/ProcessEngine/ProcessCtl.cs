@@ -414,8 +414,8 @@ namespace VAdvantage.ProcessEngine
             if (_parent != null)
             {
                 Thread t = new Thread(delegate () { _parent.UnlockUI(_pi); });
-                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
-                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
+                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
+                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
                 t.Start();
             }
         }
@@ -1376,8 +1376,8 @@ namespace VAdvantage.ProcessEngine
             else
             {
                 Thread t = new Thread(delegate () { _parent.LockUI(_pi); });
-                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
-                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetAD_Language());
+                t.CurrentCulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
+                t.CurrentUICulture = Utility.Env.GetLanguage(_ctx).GetCulture(Utility.Env.GetLoginLanguage(_ctx).GetVAF_Language());
                 t.Start();
             }
 
@@ -1412,7 +1412,7 @@ namespace VAdvantage.ProcessEngine
                     + "FROM AD_Process p"
                     + " INNER JOIN AD_PInstance i ON (p.AD_Process_ID=i.AD_Process_ID) "
                     + " INNER JOIN AD_Process_Trl t ON (p.AD_Process_ID=t.AD_Process_ID"
-                        + " AND t.AD_Language='" + Utility.Env.GetAD_Language(_ctx) + "') "
+                        + " AND t.VAF_Language='" + Utility.Env.GetVAF_Language(_ctx) + "') "
                     + "WHERE p.IsActive='Y'"
                     + " AND i.AD_PInstance_ID=@pinstanceid";
             //

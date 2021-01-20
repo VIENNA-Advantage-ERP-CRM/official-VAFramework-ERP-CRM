@@ -997,10 +997,10 @@
                 }
             }
 
-            //sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID, "
+            //sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID, "
             //    + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             //    + " p.SO_Description, p.salesrep_id, ";
-            //var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             //if (_CountVA009 > 0) {
             //    sql += " p.VA009_PaymentMethod_ID, ";
             //}
@@ -1070,7 +1070,7 @@
 
             ////payment method ID set to Column----Anuj- 04-09-2015-------------------------------------------------------------------------------------------
 
-            //var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             //if (_CountVA009 > 0) {
             //    var _PaymentMethod_ID = Util.getValueOfInt(dr.get("VA009_PaymentMethod_ID"))
             //    if (_PaymentMethod_ID == 0)
@@ -1155,7 +1155,7 @@
             //var OrderType = ctx.getContext("OrderType");
             //mTab.setValue("InvoiceRule", XC_INVOICERULE_AfterDelivery);
             //mTab.setValue("DeliveryRule", XC_DELIVERYRULE_Availability);
-            //var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             //if (_CountVA009 > 0) {                    
             //    if (PaymentBasetype != "W" && PaymentBasetype != null) {
             //        mTab.setValue("PaymentRule", PaymentBasetype);
@@ -1174,7 +1174,7 @@
             //}
             //else if (OrderType == DocSubTypeSO_POS)	//  for POS
             //{
-            //    var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //    var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             //    if (_CountVA009 > 0) {                        
             //        if (PaymentBasetype != "W" && PaymentBasetype != null) {
             //            mTab.setValue("PaymentRule", PaymentBasetype);
@@ -1188,7 +1188,7 @@
             //        mTab.setValue("PaymentRule", XC_PAYMENTRULE_Cash);
             //}
             //else {
-            //    var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            //    var _CountVA009 = Util.getValueOfInt(CalloutDB.executeCalloutScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             //    if (_CountVA009 > 0) {                        
             //        if (PaymentBasetype != "W" && PaymentBasetype != null) {
             //            mTab.setValue("PaymentRule", PaymentBasetype);
@@ -1421,7 +1421,7 @@
                 this.setCalloutActive(false);
                 return "";
             }
-            var sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            var sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
@@ -2061,7 +2061,7 @@
             var recDic = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
             //end 
 
-            //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
+            //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
             var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
@@ -2287,7 +2287,7 @@
             this.log.fine("PriceList=" + PriceList + ", Limit=" + PriceLimit + ", Precision=" + StdPrecision);
             this.log.fine("PriceEntered=" + PriceEntered + ", Actual=" + PriceActual + ", Discount=" + Discount);
 
-            //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'"));
+            //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
 
             var C_BPartner_ID1 = ctx.getContextAsInt(windowNo, "C_BPartner_ID", false);
             var params = M_Product_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("C_Order_ID")) +
@@ -2300,7 +2300,7 @@
             var countVAPRC = Util.getValueOfInt(prices["countVAPRC"]);
 
             // start vikas dec/8/2014
-            //if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO  WHERE PREFIX IN('VAPRC_','ED011_')")) >= 1) {
+            //if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO  WHERE PREFIX IN('VAPRC_','ED011_')")) >= 1) {
             if (countEd011 >= 1 || countVAPRC >= 1) {
                 PriceActual = PriceEntered;
             }
@@ -2456,7 +2456,7 @@
                 //C_UOM_To_ID, PriceEntered);
 
                 // vikas dec/8/2014
-                if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO  WHERE PREFIX IN('VAPRC_','ED011_')")) > 1) {
+                if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO  WHERE PREFIX IN('VAPRC_','ED011_')")) > 1) {
                     PriceActual = PriceEntered;
                 }
                 //
@@ -3367,8 +3367,8 @@
                         }
                     }
                 }
-                //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'"));
-                //var _countVAPRC = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAPRC_'"));
+                //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
+                //var _countVAPRC = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VAPRC_'"));
 
                 //paramString = (mTab.getValue("C_Order_ID")).toString();
                 //var M_PriceList_ID = VIS.dataContext.getJSONRecord("MOrder/GetM_PriceList", paramString);
@@ -3751,7 +3751,7 @@
             mTab.setValue("FreightCostRule", order["FreightCostRule"]);
 
             //-------------Anuj 04-09-2015-------------------------
-            var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (_CountVA009 > 0) {
                 var paymthd_id = VIS.DB.executeScalar("SELECT VA009_PaymentMethod_ID FROM C_Order WHERE C_Order_ID=" + C_Order_ID);
                 if (paymthd_id > 0) {
@@ -12015,7 +12015,7 @@
             }
             var isvendor = 'N';
             var isCustomer = 'N';
-            //var sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            //var sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
             //    + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             //    + " p.SO_Description,p.IsDiscountPrinted,"
             //    + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
@@ -12028,11 +12028,11 @@
             //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID + " AND p.IsActive='Y'";		//	#1
 
             //-----------------ANuj----Code----------
-            var sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            var sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,";
 
-            var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (_CountVA009 > 0) {
                 //VA009_PO_PaymentMethod_ID added new column for enhancement.. Google Sheet ID-- SI_0036
                 sql += " p.VA009_PaymentMethod_ID, p.VA009_PO_PaymentMethod_ID, ";
@@ -12085,7 +12085,7 @@
                         mTab.setValue("PaymentRule", s);
                     }
 
-                    var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+                    var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
                     if (_CountVA009 > 0) {
                         var _PaymentMethod_ID = Util.getValueOfInt(dr.get("VA009_PaymentMethod_ID"));
                         ////VA009_PO_PaymentMethod_ID added new column for enhancement.. Google Sheet ID-- SI_0036
@@ -12390,7 +12390,7 @@
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
             /***** Amit ****/
-            sql = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'";
+            sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
             countEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
             var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", mTab.getValue("C_Invoice_ID").toString());
 
@@ -12607,7 +12607,7 @@
             //End UOM
 
             // Change Done By Mohit Aortization Process 02/11/2016
-            //var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+            //var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
             //if (countVA038 > 0 && !isSOTrx) {
             //    var StartDate = new Date();
             //    var EndDate = new Date();
@@ -12871,7 +12871,7 @@
 
             // Change Done By Mohit Aortization Process 02/11/2016
             //var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
-            //var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+            //var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
             //if (countVA038 > 0 && !isSOTrx) {
             //    var ds1 = VIS.DB.executeDataSet("SELECT VA038_AmortizationTemplate_ID FROM C_Charge where IsActive='Y' AND C_Charge_ID=" + Util.getValueOfInt(value));
             //    if (ds1.getTables().length > 0) {
@@ -12925,7 +12925,7 @@
                 "," + Util.getValueOfString(mTab.getValue("C_Charge_ID")));
             var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
 
-            //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
+            //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
             var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
 
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
@@ -13306,7 +13306,7 @@
                 //Added By Amit
                 var date = mTab.getValue("DateInvoiced");
 
-                countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'"));
+                countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
 
                 var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("C_Invoice_ID")).toString());
 
@@ -13846,7 +13846,7 @@
                     }
                 }
 
-                //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'"));
+                //countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
                 //if (countEd011 > 0) {
                 //    //Get priceList From SO/PO
                 //    paramString = Util.getValueOfInt(mTab.getValue("C_Invoice_ID")).toString();
@@ -14268,7 +14268,7 @@
         if (C_BPartner_ID == null || C_BPartner_ID == 0) {
             return "";
         }
-        var sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+        var sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
             + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             + " p.SO_Description,p.IsDiscountPrinted,"
             + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
@@ -15563,7 +15563,7 @@
             // pp.SetPriceDate(orderDate);
 
             //Added by Amit 24-09-2015
-            var sql = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'";
+            var sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
             var existEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
             var paramString;
             var C_UOM_ID = VIS.dataContext.getJSONRecord("MProduct/GetC_UOM_ID", M_Product_ID);
@@ -17195,14 +17195,14 @@
             //	sraval: source forge bug # 1503219
             var order = mTab.getValue("C_Order_ID");
 
-            //sql = "SELECT p.AD_Language, p.POReference,"
+            //sql = "SELECT p.VAF_Language, p.POReference,"
             //    + "SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
             //    + "l.C_BPartner_Location_ID, c.AD_User_ID "
             //    + "FROM C_BPartner p"
             //    + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
             //    + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
             //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
-            sql = "SELECT p.AD_Language, p.POReference,"
+            sql = "SELECT p.VAF_Language, p.POReference,"
                 + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
                 + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus "
                 + "FROM C_BPartner p"
@@ -18714,7 +18714,7 @@
                 changed by Bharat on 06 April 2017 for PDC Payable and PDC Receivable cases
                  To set PDC amount in outstanding balance in PDC window & Payment window */
                 sql = "";
-                sql = "Select COUNT(AD_ModuleInfo_ID) From AD_ModuleInfo Where Prefix='VA027_' AND IsActive='Y'";
+                sql = "Select COUNT(VAF_ModuleInfo_ID) From VAF_ModuleInfo Where Prefix='VA027_' AND IsActive='Y'";
                 var count = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 if (count > 0) {
                     sql = "";
@@ -19572,7 +19572,7 @@
 
             this.setCalloutActive(true);
 
-            sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
@@ -19807,7 +19807,7 @@
             //}
 
             /***** Bharat ****/
-            var sql = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'";
+            var sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
             countEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
             var purchasingUom = 0;
             if (countEd011 > 0) {
@@ -20026,7 +20026,7 @@
                 //}
 
                 /***** Bharat ****/
-                var sql = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'";
+                var sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
                 countEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
                 var purchasingUom = 0;
                 if (countEd011 > 0) {
@@ -21318,7 +21318,7 @@
             mTab.setValue("M_AttributeSetInstance_ID", null);
         }
         try {
-            if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_' ")) > 0) {
+            if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_' ")) > 0) {
                 var _M_Product_ID = Util.getValueOfInt(value);
                 var _C_UOM_ID = Util.getValueOfInt(VIS.DB.executeScalar("SELECT C_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_PRoduct_ID = " + _M_Product_ID));
                 mTab.setValue("C_UOM_ID", _C_UOM_ID);
@@ -21640,10 +21640,10 @@
         try {
             var Sql = "SELECT IsActive "
             // Change By Mohit Amortization process 02/11/2016
-            var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+            var countVA038 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
             //var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
             // End Change Amortization
-            var countVA005 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_' "));
+            var countVA005 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' "));
             if (countVA005 > 0) {
                 Sql += " , producttype ";
             }
@@ -21655,7 +21655,7 @@
             if (result != null) {
                 if (result.tables[0].rows.length > 0) {
 
-                    if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_' ")) > 0) {
+                    if (Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' ")) > 0) {
                         if (result.tables[0].rows[0].cells.producttype != null || Util.getValueOfString(result.tables[0].rows[0].cells.producttype) != "") {
                             mTab.setValue("PRODUCTTYPE", result.tables[0].rows[0].cells.producttype);
                         }

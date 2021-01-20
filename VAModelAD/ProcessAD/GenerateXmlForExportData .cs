@@ -31,7 +31,7 @@ namespace VAdvantage.Process
         //string Database_Schema = "DataBaseSchema";
 
 
-        private int _AD_ModuleInfo_ID = 0;
+        private int _VAF_ModuleInfo_ID = 0;
 
         private String _FilePath = "";
 
@@ -58,11 +58,11 @@ namespace VAdvantage.Process
         protected override void Prepare()
         {
             //            int _VAF_ExportData_ID = GetRecord_ID();
-            //            IDataReader dr = DB.ExecuteReader(@" SELECT AD_ModuleInfo_ID from VAF_ExportData 
+            //            IDataReader dr = DB.ExecuteReader(@" SELECT VAF_ModuleInfo_ID from VAF_ExportData 
             //                                                  WHERE VAF_ExportData_ID =" + _VAF_ExportData_ID);
 
             //            if (dr.Read())
-            //                _AD_ModuleInfo_ID = Convert.ToInt32(dr[0].ToString());
+            //                _VAF_ModuleInfo_ID = Convert.ToInt32(dr[0].ToString());
             //            dr.Close();
 
             ProcessInfoParameter[] para = GetParameter();
@@ -73,9 +73,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_ModuleInfo_ID"))
+                else if (name.Equals("VAF_ModuleInfo_ID"))
                 {
-                    _AD_ModuleInfo_ID = Util.GetValueOfInt(para[i].GetParameter());
+                    _VAF_ModuleInfo_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace VAdvantage.Process
                 }
 
                 if (module == null)
-                    module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                    module = new X_VAF_ModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
                 prefix = module.GetPrefix();
                 Module_Name = module.GetName();
                 versionNo = module.GetVersionNo();
@@ -211,7 +211,7 @@ namespace VAdvantage.Process
         }
 
         String ModulePath = String.Empty;
-        X_AD_ModuleInfo module = null;
+        X_VAF_ModuleInfo module = null;
 
         private String ManageExportID(int PrimaryKey, String tableName, String refTable)
         {
@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                     refTable = tableName;
 
                 if (module == null)
-                    module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                    module = new X_VAF_ModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
@@ -252,7 +252,7 @@ namespace VAdvantage.Process
                 //    refTable = tableName;
 
                 if (module == null)
-                    module = new X_AD_ModuleInfo(GetCtx(), _AD_ModuleInfo_ID, null);
+                    module = new X_VAF_ModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
@@ -434,7 +434,7 @@ namespace VAdvantage.Process
                                     //sql = sql.Substring(sql.IndexOf("WHERE"));
                                     if (tmpDS != null)
                                     {
-                                        deleteSqlExp.Add("delete from VAF_ExportData Where record_ID = " + exportdata.Record_ID + " and vaf_tableview_id = " + exportdata.VAF_TableView_ID + " and ad_Moduleinfo_id = " + _AD_ModuleInfo_ID);
+                                        deleteSqlExp.Add("delete from VAF_ExportData Where record_ID = " + exportdata.Record_ID + " and vaf_tableview_id = " + exportdata.VAF_TableView_ID + " and VAF_ModuleInfo_id = " + _VAF_ModuleInfo_ID);
                                     }
                                     return "";
                                 }
@@ -536,7 +536,7 @@ namespace VAdvantage.Process
                                     //sql = sql.Substring(sql.IndexOf("WHERE"));
                                     if (tmpDS != null)
                                     {
-                                        deleteSqlExp.Add("delete from VAF_ExportData Where record_ID = " + exportdata.Record_ID + " and vaf_tableview_id = " + exportdata.VAF_TableView_ID + " and ad_Moduleinfo_id = " + _AD_ModuleInfo_ID);
+                                        deleteSqlExp.Add("delete from VAF_ExportData Where record_ID = " + exportdata.Record_ID + " and vaf_tableview_id = " + exportdata.VAF_TableView_ID + " and VAF_ModuleInfo_id = " + _VAF_ModuleInfo_ID);
                                     }
                                     return "";
                                 }
@@ -681,10 +681,10 @@ namespace VAdvantage.Process
         {
             List<ExportDataRecords> list = new List<ExportDataRecords>();
 
-            String _sql = "SELECT VAF_TableView_ID, Record_ID,AD_ColOne_ID FROM VAF_ExportData WHERE IsActive = 'Y' AND AD_ModuleInfo_ID = @AD_ModuleInfo_ID ";
+            String _sql = "SELECT VAF_TableView_ID, Record_ID,AD_ColOne_ID FROM VAF_ExportData WHERE IsActive = 'Y' AND VAF_ModuleInfo_ID = @VAF_ModuleInfo_ID ";
 
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@AD_ModuleInfo_ID", _AD_ModuleInfo_ID);
+            param[0] = new SqlParameter("@VAF_ModuleInfo_ID", _VAF_ModuleInfo_ID);
 
             IDataReader dr = DB.ExecuteReader(_sql, param);
 

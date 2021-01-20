@@ -100,7 +100,7 @@ namespace VAdvantage.Model
 		    X_CM_Template.Table_ID,
 		    X_C_ElementValue.Table_ID,
 		    X_C_Campaign.Table_ID,
-		    X_AD_Menu.Table_ID,
+		    X_VAF_MenuConfig.Table_ID,
 		    X_VAF_Org.Table_ID,
 		    X_M_Product_Category.Table_ID,
 		    X_C_Project.Table_ID,
@@ -428,7 +428,7 @@ namespace VAdvantage.Model
         static public String GetNodeTableName(int VAF_TableView_ID, Ctx ctx)
         {
             String nodeTableName = "AD_TreeNode";
-            if (X_AD_Menu.Table_ID == VAF_TableView_ID)
+            if (X_VAF_MenuConfig.Table_ID == VAF_TableView_ID)
                 nodeTableName += "MM";
             else if (X_C_BPartner.Table_ID == VAF_TableView_ID)
                 nodeTableName += "BP";
@@ -772,21 +772,21 @@ namespace VAdvantage.Model
             if (GetTreeType().Equals(TREETYPE_Menu))
             {
                 bool baseLang = Utility.Env.IsBaseLanguage(GetCtx(), "");// DataBase.GlobalVariable.IsBaseLanguage();
-                sourceTable = "AD_Menu";
+                sourceTable = "VAF_MenuConfig";
                 if (baseLang)
-                    sqlNode.Append("SELECT AD_Menu.AD_Menu_ID, AD_Menu.Name,AD_Menu.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.VAF_Page_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu");
+                    sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID, VAF_MenuConfig.Name,VAF_MenuConfig.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
+                        + "VAF_MenuConfig.AD_Window_ID, VAF_MenuConfig.AD_Process_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "FROM VAF_MenuConfig VAF_MenuConfig");
                 else
-                    sqlNode.Append("SELECT AD_Menu.AD_Menu_ID,  t.Name,t.Description,AD_Menu.IsSummary,AD_Menu.Action, "
-                        + "AD_Menu.AD_Window_ID, AD_Menu.AD_Process_ID, AD_Menu.VAF_Page_ID, AD_Menu.AD_Workflow_ID, AD_Menu.AD_Task_ID, AD_Menu.AD_Workbench_ID "
-                        + "FROM AD_Menu AD_Menu JOIN  AD_Menu_Trl t ON AD_Menu.AD_Menu_ID=t.AD_Menu_ID ");
+                    sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID,  t.Name,t.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
+                        + "VAF_MenuConfig.AD_Window_ID, VAF_MenuConfig.AD_Process_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.AD_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "FROM VAF_MenuConfig VAF_MenuConfig JOIN  VAF_MenuConfig_TL t ON VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID ");
                 if (!baseLang)
                 {
-                    sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
+                    sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=VAF_MenuConfig." + columnNameX + "_ID ");
 
-                    sqlNode.Append(" WHERE AD_Menu.AD_Menu_ID=t.AD_Menu_ID AND t.AD_Language='")
-                        .Append(Utility.Env.GetAD_Language(GetCtx())).Append("'");
+                    sqlNode.Append(" WHERE VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='")
+                        .Append(Utility.Env.GetVAF_Language(GetCtx())).Append("'");
 
                     if (onDemand)
                     {
@@ -801,7 +801,7 @@ namespace VAdvantage.Model
                 {
                     if (onDemand)
                     {
-                        sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=AD_Menu." + columnNameX + "_ID ");
+                        sqlNode.Append(" JOIN " + GetNodeTableName() + " pr on pr.NODE_ID=VAF_MenuConfig." + columnNameX + "_ID ");
                         //  sqlNode.Append(" OR ( m." + columnNameX + "_ID IN (SELECT NODE_ID FROM " + GetNodeTableName() + " WHERE Parent_ID=0 AND AD_Tree_ID=" + GetAD_Tree_ID() + " AND m.IsSummary='N' AND IsActive='Y')) ");
                         sqlNode.Append("AND pr.AD_Tree_ID=" + GetAD_Tree_ID() + "  AND (IsSummary='Y')");
 
@@ -811,23 +811,23 @@ namespace VAdvantage.Model
                 if (!m_editable)
                 {
                     bool hasWhere = sqlNode.ToString().IndexOf(" WHERE ") != -1;
-                    sqlNode.Append(hasWhere ? " AND " : " WHERE ").Append("AD_Menu.IsActive='Y' ");
+                    sqlNode.Append(hasWhere ? " AND " : " WHERE ").Append("VAF_MenuConfig.IsActive='Y' ");
                 }
                 //	Do not show Beta
                 if (!GetCtx().GetIsUseBetaFunctions())
                 {
                     bool hasWhere = sqlNode.ToString().IndexOf(" WHERE ") != -1;
                     sqlNode.Append(hasWhere ? " AND " : " WHERE ");
-                    sqlNode.Append("(AD_Menu.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window w WHERE AD_Menu.AD_Window_ID=w.AD_Window_ID AND w.IsBetaFunctionality='N'))")
-                        .Append(" AND (AD_Menu.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM AD_Process p WHERE AD_Menu.AD_Process_ID=p.AD_Process_ID AND p.IsBetaFunctionality='N'))")
-                        .Append(" AND (AD_Menu.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE AD_Menu.VAF_Page_ID=f.VAF_Page_ID AND f.IsBetaFunctionality='N'))");
+                    sqlNode.Append("(VAF_MenuConfig.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window w WHERE VAF_MenuConfig.AD_Window_ID=w.AD_Window_ID AND w.IsBetaFunctionality='N'))")
+                        .Append(" AND (VAF_MenuConfig.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM AD_Process p WHERE VAF_MenuConfig.AD_Process_ID=p.AD_Process_ID AND p.IsBetaFunctionality='N'))")
+                        .Append(" AND (VAF_MenuConfig.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE VAF_MenuConfig.VAF_Page_ID=f.VAF_Page_ID AND f.IsBetaFunctionality='N'))");
                 }
                 //	In R/O Menu - Show only defined Forms
                 if (!m_editable)
                 {
                     bool hasWhere = sqlNode.ToString().IndexOf(" WHERE ") != -1;
                     sqlNode.Append(hasWhere ? " AND " : " WHERE ");
-                    sqlNode.Append("(AD_Menu.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE AD_Menu.VAF_Page_ID=f.VAF_Page_ID AND ");
+                    sqlNode.Append("(VAF_MenuConfig.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE VAF_MenuConfig.VAF_Page_ID=f.VAF_Page_ID AND ");
                     if (m_clientTree)
                         sqlNode.Append("f.Classname");
                     else
@@ -1326,16 +1326,16 @@ namespace VAdvantage.Model
                         bool? blnAccess = false;
 
 
-                        if (X_AD_Menu.ACTION_Window.Equals(actionColor))
+                        if (X_VAF_MenuConfig.ACTION_Window.Equals(actionColor))
                             blnAccess = role.GetWindowAccess(AD_Window_ID);
-                        else if (X_AD_Menu.ACTION_Process.Equals(actionColor)
-                        || X_AD_Menu.ACTION_Report.Equals(actionColor))
+                        else if (X_VAF_MenuConfig.ACTION_Process.Equals(actionColor)
+                        || X_VAF_MenuConfig.ACTION_Report.Equals(actionColor))
                             blnAccess = role.GetProcessAccess(AD_Process_ID);
-                        else if (X_AD_Menu.ACTION_Form.Equals(actionColor))
+                        else if (X_VAF_MenuConfig.ACTION_Form.Equals(actionColor))
                             blnAccess = role.GetFormAccess(VAF_Page_ID);
-                        else if (X_AD_Menu.ACTION_WorkFlow.Equals(actionColor))
+                        else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
                             blnAccess = role.GetWorkflowAccess(AD_Workflow_ID);
-                        else if (X_AD_Menu.ACTION_Task.Equals(actionColor))
+                        else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
                             blnAccess = role.GetTaskAccess(AD_Task_ID);
 
                         if (blnAccess != null || m_editable)		//	rw or ro for Role 
@@ -1526,7 +1526,7 @@ namespace VAdvantage.Model
             int VAF_TableView_ID = GetVAF_TableView_ID();
             String tableName = MTable.GetTableName(GetCtx(), VAF_TableView_ID);
             //
-            if ("AD_Menu".Equals(tableName))
+            if ("VAF_MenuConfig".Equals(tableName))
                 return "t.Action";
             if ("M_Product".Equals(tableName) || "C_BPartner".Equals(tableName)
                 || "VAF_Org".Equals(tableName) || "C_Campaign".Equals(tableName))
@@ -1862,16 +1862,16 @@ namespace VAdvantage.Model
         //                bool? blnAccess = false;
 
 
-        //                if (X_AD_Menu.ACTION_Window.Equals(actionColor))
+        //                if (X_VAF_MenuConfig.ACTION_Window.Equals(actionColor))
         //                    blnAccess = role.GetWindowAccess(AD_Window_ID);
-        //                else if (X_AD_Menu.ACTION_Process.Equals(actionColor)
-        //                || X_AD_Menu.ACTION_Report.Equals(actionColor))
+        //                else if (X_VAF_MenuConfig.ACTION_Process.Equals(actionColor)
+        //                || X_VAF_MenuConfig.ACTION_Report.Equals(actionColor))
         //                    blnAccess = role.GetProcessAccess(AD_Process_ID);
-        //                else if (X_AD_Menu.ACTION_Form.Equals(actionColor))
+        //                else if (X_VAF_MenuConfig.ACTION_Form.Equals(actionColor))
         //                    blnAccess = role.GetFormAccess(VAF_Page_ID);
-        //                else if (X_AD_Menu.ACTION_WorkFlow.Equals(actionColor))
+        //                else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
         //                    blnAccess = role.GetWorkflowAccess(AD_Workflow_ID);
-        //                else if (X_AD_Menu.ACTION_Task.Equals(actionColor))
+        //                else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
         //                    blnAccess = role.GetTaskAccess(AD_Task_ID);
 
         //                if (blnAccess != null || m_editable)		//	rw or ro for Role 

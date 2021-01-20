@@ -261,7 +261,7 @@ namespace VAdvantage.Common
             {
                 try
                 {
-                    string lang = p_ctx.GetAD_Language().Replace("_", "-");
+                    string lang = p_ctx.GetVAF_Language().Replace("_", "-");
 
                     if ((AD_ReportFormat_ID > 0) && (lang == "ar-IQ"))
                     {
@@ -367,7 +367,7 @@ namespace VAdvantage.Common
             }
 
             // Culture.
-            string lang = ctx.GetAD_Language().Replace("_", "-");
+            string lang = ctx.GetVAF_Language().Replace("_", "-");
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(lang);

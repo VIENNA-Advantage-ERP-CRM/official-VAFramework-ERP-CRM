@@ -241,7 +241,7 @@ namespace VAdvantage.Process
             MBPartner partner = new MBPartner(GetCtx(), request.GetC_BPartner_ID(), Get_TrxName());
             _m_invoice.SetBPartner(partner);
             _m_invoice.SetM_PriceList_ID(partner.GetM_PriceList_ID());
-            int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+            int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (_CountVA009 > 0)
             {
                 _m_invoice.SetVA009_PaymentMethod_ID(partner.GetVA009_PaymentMethod_ID());

@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_LdapAccess
+/** Generated Model for VAF_LdapRights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_LdapAccess : PO
+public class X_VAF_LdapRights : PO
 {
-public X_AD_LdapAccess (Context ctx, int AD_LdapAccess_ID, Trx trxName) : base (ctx, AD_LdapAccess_ID, trxName)
+public X_VAF_LdapRights (Context ctx, int VAF_LdapRights_ID, Trx trxName) : base (ctx, VAF_LdapRights_ID, trxName)
 {
-/** if (AD_LdapAccess_ID == 0)
+/** if (VAF_LdapRights_ID == 0)
 {
-SetAD_LdapAccess_ID (0);
-SetAD_LdapProcessor_ID (0);
+SetVAF_LdapRights_ID (0);
+SetVAF_LdapHandler_ID (0);
 SetIsError (false);
 }
  */
 }
-public X_AD_LdapAccess (Ctx ctx, int AD_LdapAccess_ID, Trx trxName) : base (ctx, AD_LdapAccess_ID, trxName)
+public X_VAF_LdapRights (Ctx ctx, int VAF_LdapRights_ID, Trx trxName) : base (ctx, VAF_LdapRights_ID, trxName)
 {
-/** if (AD_LdapAccess_ID == 0)
+/** if (VAF_LdapRights_ID == 0)
 {
-SetAD_LdapAccess_ID (0);
-SetAD_LdapProcessor_ID (0);
+SetVAF_LdapRights_ID (0);
+SetVAF_LdapHandler_ID (0);
 SetIsError (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsError (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_LdapAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_LdapRights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_LdapAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_LdapAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_LdapRights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_LdapAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_LdapAccess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_LdapRights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_LdapAccess()
+static X_VAF_LdapRights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389045274L;
 public static int Table_ID;
  // =904;
 
-/** TableName=AD_LdapAccess */
-public static String Table_Name="AD_LdapAccess";
+/** TableName=VAF_LdapRights */
+public static String Table_Name="VAF_LdapRights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_LdapAccess[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_LdapRights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Ldap Access.
-@param AD_LdapAccess_ID Ldap Access Log */
-public void SetAD_LdapAccess_ID (int AD_LdapAccess_ID)
+@param VAF_LdapRights_ID Ldap Access Log */
+public void SetVAF_LdapRights_ID (int VAF_LdapRights_ID)
 {
-if (AD_LdapAccess_ID < 1) throw new ArgumentException ("AD_LdapAccess_ID is mandatory.");
-Set_ValueNoCheck ("AD_LdapAccess_ID", AD_LdapAccess_ID);
+if (VAF_LdapRights_ID < 1) throw new ArgumentException ("VAF_LdapRights_ID is mandatory.");
+Set_ValueNoCheck ("VAF_LdapRights_ID", VAF_LdapRights_ID);
 }
 /** Get Ldap Access.
 @return Ldap Access Log */
-public int GetAD_LdapAccess_ID() 
+public int GetVAF_LdapRights_ID() 
 {
-Object ii = Get_Value("AD_LdapAccess_ID");
+Object ii = Get_Value("VAF_LdapRights_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Ldap Processor.
-@param AD_LdapProcessor_ID LDAP Server to authenticate and authorize external systems based on Vienna */
-public void SetAD_LdapProcessor_ID (int AD_LdapProcessor_ID)
+@param VAF_LdapHandler_ID LDAP Server to authenticate and authorize external systems based on Vienna */
+public void SetVAF_LdapHandler_ID (int VAF_LdapHandler_ID)
 {
-if (AD_LdapProcessor_ID < 1) throw new ArgumentException ("AD_LdapProcessor_ID is mandatory.");
-Set_ValueNoCheck ("AD_LdapProcessor_ID", AD_LdapProcessor_ID);
+if (VAF_LdapHandler_ID < 1) throw new ArgumentException ("VAF_LdapHandler_ID is mandatory.");
+Set_ValueNoCheck ("VAF_LdapHandler_ID", VAF_LdapHandler_ID);
 }
 /** Get Ldap Processor.
 @return LDAP Server to authenticate and authorize external systems based on Vienna */
-public int GetAD_LdapProcessor_ID() 
+public int GetVAF_LdapHandler_ID() 
 {
-Object ii = Get_Value("AD_LdapProcessor_ID");
+Object ii = Get_Value("VAF_LdapHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

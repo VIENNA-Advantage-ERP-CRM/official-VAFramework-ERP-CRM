@@ -24,7 +24,7 @@ namespace VIS.Helpers
             {
                 sql = " SELECT f.Name, t.Description, f.Classname, t.Help ,f.IsReport,t.Name " //jz
                     + " FROM VAF_Page f INNER JOIN VAF_Page_TL t"
-                    + " ON (f.VAF_Page_ID=t.VAF_Page_ID AND AD_Language='" + Env.GetAD_Language(ctx) + "')"
+                    + " ON (f.VAF_Page_ID=t.VAF_Page_ID AND VAF_Language='" + Env.GetVAF_Language(ctx) + "')"
                     + " WHERE f.VAF_Page_ID=" + VAF_Page_ID;
             }
 

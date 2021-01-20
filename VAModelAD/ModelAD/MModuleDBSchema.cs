@@ -8,7 +8,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MModuleDBSchema:X_AD_Module_DB_Schema
+    public class MModuleDBSchema:X_VAF_Module_DB_Schema
     {
        
 

@@ -1802,7 +1802,7 @@ namespace VIS.Models
             string productType = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
             retDic["productType"] = Convert.ToString(productType);
 
-            sql = "SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='ED011_'";
+            sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
             int countEd011 = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             retDic["countEd011"] = Convert.ToString(countEd011);
 
@@ -2002,7 +2002,7 @@ namespace VIS.Models
             int _c_Bill_Location_Id = 0;
             int _CountVATAX = 0;
 
-            _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
+            _CountVATAX = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )", null, null));
             retDic["_CountVATAX"] = _CountVATAX.ToString();
 
             MOrderModel objOrder = new MOrderModel();

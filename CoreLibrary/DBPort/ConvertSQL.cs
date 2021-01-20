@@ -335,8 +335,8 @@ namespace VAdvantage.DBPort
                 "VAF_RIGHTSLOG",
                 "VAF_AlertHandlerLOG",
                 "VAF_ALTERLOG",
-                "AD_ISSUE",
-                "AD_LDAPPROCESSORLOG",
+                "VAF_ISSUE",
+                "VAF_LDAPHANDLERLOG",
                 "AD_PACKAGE_IMP",
                 "AD_PACKAGE_IMP_BACKUP",
                 "AD_PACKAGE_IMP_DETAIL",
@@ -397,7 +397,7 @@ namespace VAdvantage.DBPort
                     return true;
             }
 
-            // don't log selects or insert/update for exception tables (i.e. AD_Issue, VAF_AlterLog)
+            // don't log selects or insert/update for exception tables (i.e. VAF_Issue, VAF_AlterLog)
             return false;
         }
     }

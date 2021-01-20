@@ -2103,8 +2103,8 @@
         var curWindowNo = this.curWindowNo;
 
         //	Record_ID - Language Handling
-        if (record_ID == -1 && curTab.getKeyColumnName().equals("AD_Language"))
-            record_ID = ctx.getContextAsInt(curWindowNo, "AD_Language_ID");
+        if (record_ID == -1 && curTab.getKeyColumnName().equals("VAF_Language"))
+            record_ID = ctx.getContextAsInt(curWindowNo, "VAF_Language_ID");
         //	Record_ID - Change Log ID
         if (record_ID == -1
             && (vButton.getProcess_ID() == 306 || vButton.getProcess_ID() == 307)) {
@@ -2904,11 +2904,11 @@
         this.statusBar.setStatusDB(dbInfo, e);
 
         //	Set Message / Info
-        if (e.getAD_Message() != null || e.getInfo() != null) {
+        if (e.getVAF_Msg_Lable() != null || e.getInfo() != null) {
             var sb = new StringBuilder();
             var msg = e.getMessage();
             if (msg != null && msg.length > 0)
-                sb.append(VIS.Msg.getMsg(e.getAD_Message()));
+                sb.append(VIS.Msg.getMsg(e.getVAF_Msg_Lable()));
             var info = e.getInfo();
             if (info != null && info.length > 0) {
                 if (sb.length() > 0 && !sb.endsWith(":"))
@@ -2925,13 +2925,13 @@
 
         //  Confirm Error
         if (e.getIsError() && !e.getIsConfirmed()) {
-            VIS.ADialog.error(e.getAD_Message(), true, e.getInfo());
+            VIS.ADialog.error(e.getVAF_Msg_Lable(), true, e.getInfo());
             e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
             this.errorDisplayed = true;
         }
         //  Confirm Warning
         else if (e.getIsWarning() && !e.getIsConfirmed()) {
-            VIS.ADialog.warn(e.getAD_Message(), true, e.getInfo());
+            VIS.ADialog.warn(e.getVAF_Msg_Lable(), true, e.getInfo());
             e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
         }
 

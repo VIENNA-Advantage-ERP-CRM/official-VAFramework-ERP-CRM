@@ -283,7 +283,7 @@ namespace VAdvantage.DataBase
             return dateString.ToString();
         }   //  TO_DATE
 
-        public string TO_CHAR(string columnName, int displayType, string AD_Language)
+        public string TO_CHAR(string columnName, int displayType, string VAF_Language)
         {
             StringBuilder retValue = new StringBuilder("CAST (");
             retValue.Append(columnName);
@@ -297,13 +297,13 @@ namespace VAdvantage.DataBase
                     retValue.append(" AS TEXT");
                 else
                     retValue.append(" AS TEXT");			
-                //if (!Language.isDecimalPoint(AD_Language))      //  reversed
+                //if (!Language.isDecimalPoint(VAF_Language))      //  reversed
                 //retValue.append(",'NLS_NUMERIC_CHARACTERS='',.'''");
             }
             else if (DisplayType.isDate(displayType))
             {
                 retValue.append(",'")
-                    .append(Language.getLanguage(AD_Language).getDBdatePattern())
+                    .append(Language.getLanguage(VAF_Language).getDBdatePattern())
                     .append("'");
             }
             retValue.append(")");

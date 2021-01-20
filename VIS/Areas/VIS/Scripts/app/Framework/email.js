@@ -281,7 +281,7 @@
         function loadView() {
             var datainit = {
                 windowNo: self.windowNo,
-                language: VIS.Env.getAD_Language(VIS.Env.getCtx())
+                language: VIS.Env.getVAF_Language(VIS.Env.getCtx())
             };
 
             $.ajax({

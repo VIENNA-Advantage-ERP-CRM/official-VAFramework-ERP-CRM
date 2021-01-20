@@ -41,7 +41,7 @@ namespace VAdvantage.Process
             {
                 return Msg.GetMsg(GetCtx(), "VIS_FieldsNotFound" + " " + tab.GetName());
             }
-            string sql = "select VAF_Field_ID, AD_MOduleField_ID FROM AD_MOduleField where IsActive='Y'  AND ad_moduletab_id=" + mTab.GetAD_ModuleTab_ID();
+            string sql = "select VAF_Field_ID, VAF_ModuleField_ID FROM VAF_ModuleField where IsActive='Y'  AND VAF_ModuleTab_id=" + mTab.GetVAF_ModuleTab_ID();
             IDataReader idr = DB.ExecuteReader(sql);
             DataTable dt = new DataTable();
             dt.Load(idr);
@@ -51,7 +51,7 @@ namespace VAdvantage.Process
 
             foreach (DataRow dr in dt.Rows)
             {
-                existingFields[Convert.ToInt32(dr["VAF_Field_ID"])] = Convert.ToInt32(dr["AD_MOduleField_ID"]);
+                existingFields[Convert.ToInt32(dr["VAF_Field_ID"])] = Convert.ToInt32(dr["VAF_ModuleField_ID"]);
             }
 
             for (int i = 0; i < fields.Length; i++)
@@ -69,7 +69,7 @@ namespace VAdvantage.Process
                 {
                     mField = new MModuleField(GetCtx(), 0, null);
                     mField.SetVAF_Field_ID(fields[i].GetVAF_Field_ID());
-                    mField.SetAD_ModuleTab_ID(mTab.GetAD_ModuleTab_ID());
+                    mField.SetVAF_ModuleTab_ID(mTab.GetVAF_ModuleTab_ID());
                 }
 
                 mField.SetName(fields[i].GetName());

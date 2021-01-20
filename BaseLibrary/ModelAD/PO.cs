@@ -696,18 +696,18 @@ namespace VAdvantage.Model
         ///Get Translation of column
         /// </summary>
         /// <param name="columnName">columnName</param>
-        /// <param name="AD_Language">AD_Language</param>
+        /// <param name="VAF_Language">VAF_Language</param>
         /// <returns>translation or null if not found</returns>
         ///<author>raghu</author>
-        protected String Get_Translation(string columnName, string AD_Language)
+        protected String Get_Translation(string columnName, string VAF_Language)
         {
-            if (columnName == null || AD_Language == null
+            if (columnName == null || VAF_Language == null
                 || _mIDs.Length > 1 || _mIDs[0].Equals(I_ZERO)
                 //|| !(_mIDs[0] is Integer))
                 || !(_mIDs[0] is int))
             {
                 log.Severe("Invalid Argument: ColumnName" + columnName
-                    + ", AD_Language=" + AD_Language
+                    + ", VAF_Language=" + VAF_Language
                     + ", ID.length=" + _mIDs.Length + ", ID=" + _mIDs[0]);
                 return null;
             }
@@ -716,7 +716,7 @@ namespace VAdvantage.Model
             StringBuilder sql = new StringBuilder("SELECT ").Append(columnName)
                 .Append(" FROM ").Append(p_info.GetTableName()).Append("_Trl WHERE ")
                 .Append(_mKeyColumns[0]).Append("=" + ID)
-                .Append(" AND AD_Language=" + AD_Language);
+                .Append(" AND VAF_Language=" + VAF_Language);
             DataSet pstmt = null;
             try
             {
@@ -2110,8 +2110,8 @@ namespace VAdvantage.Model
 
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
 
 
             for (int i = 0; i <= iSize; i++)
@@ -2212,8 +2212,8 @@ namespace VAdvantage.Model
 
             }
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = original;// Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = original;// Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = original;// Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = original;// Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
             //custom columns
 
             int index;
@@ -2364,7 +2364,7 @@ namespace VAdvantage.Model
         {
             //trans = DB.GerServerTransaction();
 
-            if (_mIDs.Length == 1 && p_info.hasKeyColumn() && _mKeyColumns[0].EndsWith("_ID"))	//	AD_Language, EntityType
+            if (_mIDs.Length == 1 && p_info.hasKeyColumn() && _mKeyColumns[0].EndsWith("_ID"))	//	VAF_Language, EntityType
             {
                 int no = SaveNew_GetID();
                 if (no <= 0)
@@ -2492,8 +2492,8 @@ namespace VAdvantage.Model
 
             System.Globalization.CultureInfo original = System.Threading.Thread.CurrentThread.CurrentCulture;
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
 
             int iSize = Get_ColumnCount();
             for (int i = 0; i < iSize; i++)
@@ -2617,8 +2617,8 @@ namespace VAdvantage.Model
                         if (cLog != null)
                             VAF_AlterLog_ID = cLog.GetVAF_AlterLog_ID();
                     }
-                    // System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
-                    //  System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
+                    // System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
+                    //  System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
                 }
             }
 
@@ -2628,8 +2628,8 @@ namespace VAdvantage.Model
                 //to do 
             }
 
-            // System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
-            // System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
+            // System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
+            // System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(GetCtx()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
 
             System.Threading.Thread.CurrentThread.CurrentCulture = original;
             System.Threading.Thread.CurrentThread.CurrentUICulture = original;
@@ -2988,23 +2988,23 @@ namespace VAdvantage.Model
             String tableName = p_info.GetTableName();
             String keyColumn = _mKeyColumns[0];
             StringBuilder sql = new StringBuilder("INSERT INTO ")
-                .Append(tableName).Append("_Trl (AD_Language,")
+                .Append(tableName).Append("_Trl (VAF_Language,")
                 .Append(keyColumn).Append(", ")
                 .Append(iColumns)
                 .Append(" IsTranslated,VAF_Client_ID,VAF_Org_ID,Created,CreatedBy,Updated,UpdatedBy) ")
-                .Append("SELECT l.AD_Language,t.")
+                .Append("SELECT l.VAF_Language,t.")
                 .Append(keyColumn).Append(", ")
                 .Append(sColumns)
                 .Append(" 'N',t.VAF_Client_ID,t.VAF_Org_ID,t.Created,t.CreatedBy,t.Updated,t.UpdatedBy ")
-                .Append("FROM AD_Language l, ").Append(tableName).Append(" t ")
+                .Append("FROM VAF_Language l, ").Append(tableName).Append(" t ")
                 .Append("WHERE l.IsActive='Y' AND l.IsSystemLanguage='Y' AND l.IsBaseLanguage='N' AND t.")
                 .Append(keyColumn).Append("=").Append(Get_ID())
                 .Append(" AND NOT EXISTS (SELECT * FROM ").Append(tableName)
-                .Append("_Trl tt WHERE tt.AD_Language=l.AD_Language AND tt.")
+                .Append("_Trl tt WHERE tt.VAF_Language=l.VAF_Language AND tt.")
                 .Append(keyColumn).Append("=t.").Append(keyColumn).Append(")");
             /* 	Alternative *
             .append(" AND EXISTS (SELECT * FROM ").append(tableName)
-            .append("_Trl tt WHERE tt.AD_Language!=l.AD_Language OR tt.")
+            .append("_Trl tt WHERE tt.VAF_Language!=l.VAF_Language OR tt.")
             .append(keyColumn).append("!=t.").append(keyColumn).append(")");
             /** */
             int no = DB.ExecuteQuery(sql.ToString(), null, _trx);
@@ -3470,8 +3470,8 @@ namespace VAdvantage.Model
             log.saveError("Error", Msg.parseTranslation(getCtx(), "@C_Currency_ID@ = @C_Currency_ID@"));
             log.saveError("FillMandatory", Msg.getElement(getCtx(), "PriceEntered"));
             /** Issues message
-            log.saveWarning(AD_Message, message);
-            log.saveInfo (AD_Message, message);
+            log.saveWarning(VAF_Msg_Lable, message);
+            log.saveInfo (VAF_Msg_Lable, message);
             **/
             return true;
         }
@@ -4349,7 +4349,7 @@ namespace VAdvantage.Model
             String[] keyColumns = Get_KeyColumns();
             //  Set ID for single key - Multi-Key values need explicitly be set previously
             if (_mIDs.Length == 1 && p_info.hasKeyColumn()
-                    && keyColumns[0].ToUpper().EndsWith("_ID"))	//	AD_Language, EntityType
+                    && keyColumns[0].ToUpper().EndsWith("_ID"))	//	VAF_Language, EntityType
             {
                 int no = SaveNew_GetID();
                 if (no <= 0)

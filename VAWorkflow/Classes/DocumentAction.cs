@@ -195,7 +195,7 @@ namespace VAdvantage.Classes
             return false;
         }
 
-        public bool IsDocumentContainsText(int docID, string value, string AD_Language, out string retVal)
+        public bool IsDocumentContainsText(int docID, string value, string VAF_Language, out string retVal)
         {
             try
             {
@@ -217,7 +217,7 @@ namespace VAdvantage.Classes
                         else
                         {
 
-                            object[] parametersArray = new object[] { value, AD_Language, docID };
+                            object[] parametersArray = new object[] { value, VAF_Language, docID };
                             result = methodInfo.Invoke(classInstance, parametersArray);
                         }
                         if (result == null)

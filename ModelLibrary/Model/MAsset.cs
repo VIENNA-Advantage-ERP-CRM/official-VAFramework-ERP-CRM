@@ -228,8 +228,8 @@ namespace VAdvantage.Model
             }
 
             //Change by Sukhwinder for setting Asset type and amortization template on Asset window, MANTIS ID:1762
-            int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-            int countVAFAM = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAFAM_' "));
+            int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
+            int countVAFAM = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VAFAM_' "));
             if (countVA038 > 0)
             {
                 Set_Value("VA038_AmortizationTemplate_ID", Utility.Util.GetValueOfInt(_assetGroup.Get_Value("VA038_AmortizationTemplate_ID")));
@@ -378,8 +378,8 @@ namespace VAdvantage.Model
             }
             ////////////////////////////////////
             //Change by Sukhwinder for setting Asset type and amortization template on Asset window, MANTIS ID:1762
-            int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
-            int countVAFAM = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAFAM_' "));
+            int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
+            int countVAFAM = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VAFAM_' "));
 
             if (countVA038 > 0)
             {
@@ -738,7 +738,7 @@ namespace VAdvantage.Model
             }
             #region Fixed Asset Management
             /*to Set Written Down Value on Asset i.e. Gross value of Asset-Depreciated/ Amortized Value Arpit*/
-            if (Util.GetValueOfInt(DB.ExecuteScalar("select ad_moduleinfo_id from ad_moduleinfo where prefix='VAFAM_' and isactive='Y'")) > 0)
+            if (Util.GetValueOfInt(DB.ExecuteScalar("select VAF_ModuleInfo_id from VAF_ModuleInfo where prefix='VAFAM_' and isactive='Y'")) > 0)
             {
                 if (Get_ColumnIndex("VAFAM_WrittenDownValue") > 0 &&
                     Get_ColumnIndex("VAFAM_AssetGrossValue") > 0 && Get_ColumnIndex("VAFAM_SLMDepreciation") > 0)

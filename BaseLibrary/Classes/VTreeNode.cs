@@ -538,7 +538,7 @@ namespace VAdvantage.Classes
 
         // imageIndicator image indicator (W/X/R/P/F/T/B)
         //  Get Node ID
-        //  @return node id (e.g. AD_Menu_ID)
+        //  @return node id (e.g. VAF_MenuConfig_ID)
 
         public int GetNode_ID()
         {

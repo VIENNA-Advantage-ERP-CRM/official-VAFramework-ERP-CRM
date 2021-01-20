@@ -11,38 +11,38 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ImpFormat_Row
+/** Generated Model for VAF_ImportFormat_Row
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ImpFormat_Row : PO
+public class X_VAF_ImportFormat_Row : PO
 {
-public X_AD_ImpFormat_Row (Context ctx, int AD_ImpFormat_Row_ID, Trx trxName) : base (ctx, AD_ImpFormat_Row_ID, trxName)
+public X_VAF_ImportFormat_Row (Context ctx, int VAF_ImportFormat_Row_ID, Trx trxName) : base (ctx, VAF_ImportFormat_Row_ID, trxName)
 {
-/** if (AD_ImpFormat_Row_ID == 0)
+/** if (VAF_ImportFormat_Row_ID == 0)
 {
 SetVAF_Column_ID (0);
-SetAD_ImpFormat_ID (0);
-SetAD_ImpFormat_Row_ID (0);
+SetVAF_ImportFormat_ID (0);
+SetVAF_ImportFormat_Row_ID (0);
 SetDataType (null);
 SetDecimalPoint (null);	// .
 SetDivideBy100 (false);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_ImpFormat_Row WHERE AD_ImpFormat_ID=@AD_ImpFormat_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_ImportFormat_Row WHERE VAF_ImportFormat_ID=@VAF_ImportFormat_ID@
 }
  */
 }
-public X_AD_ImpFormat_Row (Ctx ctx, int AD_ImpFormat_Row_ID, Trx trxName) : base (ctx, AD_ImpFormat_Row_ID, trxName)
+public X_VAF_ImportFormat_Row (Ctx ctx, int VAF_ImportFormat_Row_ID, Trx trxName) : base (ctx, VAF_ImportFormat_Row_ID, trxName)
 {
-/** if (AD_ImpFormat_Row_ID == 0)
+/** if (VAF_ImportFormat_Row_ID == 0)
 {
 SetVAF_Column_ID (0);
-SetAD_ImpFormat_ID (0);
-SetAD_ImpFormat_Row_ID (0);
+SetVAF_ImportFormat_ID (0);
+SetVAF_ImportFormat_Row_ID (0);
 SetDataType (null);
 SetDecimalPoint (null);	// .
 SetDivideBy100 (false);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_ImpFormat_Row WHERE AD_ImpFormat_ID=@AD_ImpFormat_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_ImportFormat_Row WHERE VAF_ImportFormat_ID=@VAF_ImportFormat_ID@
 }
  */
 }
@@ -51,7 +51,7 @@ SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_ImpFor
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ImpFormat_Row (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ImportFormat_Row (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_AD_ImpFormat_Row (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ImpFormat_Row (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ImportFormat_Row (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_AD_ImpFormat_Row (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ImpFormat_Row (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ImportFormat_Row (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ImpFormat_Row()
+static X_VAF_ImportFormat_Row()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389044851L;
 public static int Table_ID;
  // =382;
 
-/** TableName=AD_ImpFormat_Row */
-public static String Table_Name="AD_ImpFormat_Row";
+/** TableName=VAF_ImportFormat_Row */
+public static String Table_Name="VAF_ImportFormat_Row";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ImpFormat_Row[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ImportFormat_Row[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
@@ -140,32 +140,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Import Format.
-@param AD_ImpFormat_ID Import Format */
-public void SetAD_ImpFormat_ID (int AD_ImpFormat_ID)
+@param VAF_ImportFormat_ID Import Format */
+public void SetVAF_ImportFormat_ID (int VAF_ImportFormat_ID)
 {
-if (AD_ImpFormat_ID < 1) throw new ArgumentException ("AD_ImpFormat_ID is mandatory.");
-Set_ValueNoCheck ("AD_ImpFormat_ID", AD_ImpFormat_ID);
+if (VAF_ImportFormat_ID < 1) throw new ArgumentException ("VAF_ImportFormat_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ImportFormat_ID", VAF_ImportFormat_ID);
 }
 /** Get Import Format.
 @return Import Format */
-public int GetAD_ImpFormat_ID() 
+public int GetVAF_ImportFormat_ID() 
 {
-Object ii = Get_Value("AD_ImpFormat_ID");
+Object ii = Get_Value("VAF_ImportFormat_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Format Field.
-@param AD_ImpFormat_Row_ID Format Field */
-public void SetAD_ImpFormat_Row_ID (int AD_ImpFormat_Row_ID)
+@param VAF_ImportFormat_Row_ID Format Field */
+public void SetVAF_ImportFormat_Row_ID (int VAF_ImportFormat_Row_ID)
 {
-if (AD_ImpFormat_Row_ID < 1) throw new ArgumentException ("AD_ImpFormat_Row_ID is mandatory.");
-Set_ValueNoCheck ("AD_ImpFormat_Row_ID", AD_ImpFormat_Row_ID);
+if (VAF_ImportFormat_Row_ID < 1) throw new ArgumentException ("VAF_ImportFormat_Row_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ImportFormat_Row_ID", VAF_ImportFormat_Row_ID);
 }
 /** Get Format Field.
 @return Format Field */
-public int GetAD_ImpFormat_Row_ID() 
+public int GetVAF_ImportFormat_Row_ID() 
 {
-Object ii = Get_Value("AD_ImpFormat_Row_ID");
+Object ii = Get_Value("VAF_ImportFormat_Row_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

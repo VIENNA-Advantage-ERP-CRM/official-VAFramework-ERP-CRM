@@ -20,7 +20,7 @@ public X_M_Product_Category_Trl (Context ctx, int M_Product_Category_Trl_ID, Trx
 {
 /** if (M_Product_Category_Trl_ID == 0)
 {
-SetAD_Language (null);
+SetVAF_Language (null);
 SetM_Product_Category_ID (0);
 SetName (null);
 }
@@ -30,7 +30,7 @@ public X_M_Product_Category_Trl (Ctx ctx, int M_Product_Category_Trl_ID, Trx trx
 {
 /** if (M_Product_Category_Trl_ID == 0)
 {
-SetAD_Language (null);
+SetVAF_Language (null);
 SetM_Product_Category_ID (0);
 SetName (null);
 }
@@ -115,24 +115,24 @@ StringBuilder sb = new StringBuilder ("X_M_Product_Category_Trl[").Append(Get_ID
 return sb.ToString();
 }
 
-/** AD_Language AD_Reference_ID=106 */
-public static int AD_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language AD_Reference_ID=106 */
+public static int VAF_LANGUAGE_AD_Reference_ID=106;
 /** Set Language.
-@param AD_Language Language for this entity */
-public void SetAD_Language (String AD_Language)
+@param VAF_Language Language for this entity */
+public void SetVAF_Language (String VAF_Language)
 {
-if (AD_Language.Length > 5)
+if (VAF_Language.Length > 5)
 {
 log.Warning("Length > 5 - truncated");
-AD_Language = AD_Language.Substring(0,5);
+VAF_Language = VAF_Language.Substring(0,5);
 }
-Set_ValueNoCheck ("AD_Language", AD_Language);
+Set_ValueNoCheck ("VAF_Language", VAF_Language);
 }
 /** Get Language.
 @return Language for this entity */
-public String GetAD_Language() 
+public String GetVAF_Language() 
 {
-return (String)Get_Value("AD_Language");
+return (String)Get_Value("VAF_Language");
 }
 /** Set Export.
 @param Export_ID Export */

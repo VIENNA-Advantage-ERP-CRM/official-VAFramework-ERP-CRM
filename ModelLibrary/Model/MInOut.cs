@@ -1285,7 +1285,7 @@ namespace VAdvantage.Model
             int C_BPartner_ID = int.Parse(newC_BPartner_ID);
             if (C_BPartner_ID == 0)
                 return;
-            String sql = "SELECT p.AD_Language, p.POReference,"
+            String sql = "SELECT p.VAF_Language, p.POReference,"
                 + "SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
                 + "l.C_BPartner_Location_ID, c.AD_User_ID "
                 + "FROM C_BPartner p"
@@ -3682,7 +3682,7 @@ namespace VAdvantage.Model
                     try
                     {
                         string PaymentBaseType = "";
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE IsActive = 'Y' AND PREFIX IN ('VA009_' , 'VA026_' ) ")) >= 2)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX IN ('VA009_' , 'VA026_' ) ")) >= 2)
                         {
                             MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
                             MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
@@ -5031,7 +5031,7 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public virtual bool VoidIt()
         {
-            // int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
+            // int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA038_' "));
             int Asset_ID = 0;
             log.Info(ToString());
 

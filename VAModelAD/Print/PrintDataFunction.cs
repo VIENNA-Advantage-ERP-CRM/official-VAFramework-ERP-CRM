@@ -53,7 +53,7 @@ namespace VAdvantage.Print
         static private char[] FUNCTIONS = new char[] { F_SUM, F_MEAN, F_COUNT, F_MIN, F_MAX, F_VARIANCE, F_DEVIATION };
         /** Symbols									*/
         static private String[] FUNCTION_SYMBOLS = new String[] { " \u03A3", " \u03BC", " \u2116", " \u2193", " \u2191", " \u03C3\u00B2", " \u03C3" };
-        /**	AD_Message Names of Functions			*/
+        /**	VAF_Msg_Lable Names of Functions			*/
         static private String[] FUNCTION_NAMES = new String[] { "Sum", "Mean", "Count", "Min", "Max", "Variance", "Deviation" };
 
 

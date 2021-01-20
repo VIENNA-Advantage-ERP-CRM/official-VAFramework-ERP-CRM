@@ -177,7 +177,7 @@ namespace VAdvantage.Model
             String s = base.GetStatisticsInfo();
             if (s == null || recalc)
             {
-                String count = DataBase.DB.TO_CHAR("COUNT(*)", DisplayType.Number, Env.GetAD_Language(GetCtx()));
+                String count = DataBase.DB.TO_CHAR("COUNT(*)", DisplayType.Number, Env.GetVAF_Language(GetCtx()));
                 String sql = "SELECT 'C'||(SELECT " + count + " FROM VAF_Client)"
                     + " ||'U'||(SELECT " + count + " FROM AD_User)"
                     + " ||'B'||(SELECT " + count + " FROM C_BPartner)"

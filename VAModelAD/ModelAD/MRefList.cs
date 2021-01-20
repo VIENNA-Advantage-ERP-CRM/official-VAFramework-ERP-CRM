@@ -71,21 +71,21 @@ namespace VAdvantage.Model
         /// <returns>List or null</returns>
         public static String GetListName(Ctx ctx, int AD_Reference_ID, String value)
         {
-            //String AD_Language = Env.getAD_Language(ctx);
-            string AD_Language = ctx.GetAD_Language();
-            string key = AD_Language + "_" + AD_Reference_ID + "_" + value;
+            //String VAF_Language = Env.getVAF_Language(ctx);
+            string VAF_Language = ctx.GetVAF_Language();
+            string key = VAF_Language + "_" + AD_Reference_ID + "_" + value;
             string retValue = s_cache[key];
             if (retValue != null)
                 return retValue;
 
-            //bool isBaseLanguage = GlobalVariable.IsBaseLanguage(AD_Language, "AD_Ref_List");
+            //bool isBaseLanguage = GlobalVariable.IsBaseLanguage(VAF_Language, "AD_Ref_List");
             bool isBaseLanguage = Utility.Env.IsBaseLanguage(ctx, "AD_Ref_List");// GlobalVariable.IsBaseLanguage();
             String sql = isBaseLanguage ?
                 "SELECT Name FROM AD_Ref_List "
                 + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND Value='" + value + "'" :
                 "SELECT t.Name FROM AD_Ref_List_Trl t"
                 + " INNER JOIN AD_Ref_List r ON (r.AD_Ref_List_ID=t.AD_Ref_List_ID) "
-                + "WHERE r.AD_Reference_ID=" + AD_Reference_ID + " AND r.Value='" + value + "' AND t.AD_Language=" + AD_Language;
+                + "WHERE r.AD_Reference_ID=" + AD_Reference_ID + " AND r.Value='" + value + "' AND t.VAF_Language=" + VAF_Language;
             DataSet ds = null;
             try
             {
@@ -175,7 +175,7 @@ namespace VAdvantage.Model
                         FROM AD_Ref_List rl
                         INNER JOIN AD_Ref_List_trl rlt
                         ON (rlt.ad_ref_list_id  =rl.ad_ref_list_id
-                        AND rlt.ad_language     ='" + ctx.GetAD_Language() + @"')
+                        AND rlt.VAF_Language     ='" + ctx.GetVAF_Language() + @"')
                         WHERE rl.AD_Reference_ID=" + AD_Reference_ID + @"
                         AND rl.IsActive         ='Y'
                         ORDER BY 1";

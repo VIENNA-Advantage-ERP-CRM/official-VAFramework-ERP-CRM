@@ -710,7 +710,7 @@ namespace VAdvantage.Model
                 if ("EntityType".Equals(keyColumn))
                     keyColumn = "VAF_RecrodType_ID";
                 if (!keyColumn.EndsWith("_ID"))
-                    keyColumn += "_ID";			//	AD_Language_ID
+                    keyColumn += "_ID";			//	VAF_Language_ID
                 int Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, keyColumn);
                 int VAF_TableView_ID = _vo.VAF_TableView_ID;
                 if (!MRole.GetDefault((Context)_vo.GetCtx(), false).CanUpdate(

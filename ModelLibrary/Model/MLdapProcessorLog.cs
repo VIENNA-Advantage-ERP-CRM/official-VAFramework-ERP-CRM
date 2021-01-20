@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MLdapProcessorLog
  * Purpose        : MLdap ProcessorLog Model
- * Class Used     : X_AD_LdapProcessorLog, ViennaProcessorLog
+ * Class Used     : X_VAF_LdapHandlerLog, ViennaProcessorLog
  * Chronological    Development
  * Deepak           03-Feb-2010
   ******************************************************/
@@ -22,24 +22,24 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MLdapProcessorLog : X_AD_LdapProcessorLog, ViennaProcessorLog
+    public class MLdapProcessorLog : X_VAF_LdapHandlerLog, ViennaProcessorLog
     {
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_LdapProcessorLog_ID">id</param>
+        /// <param name="VAF_LdapHandlerLog_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MLdapProcessorLog(Ctx ctx, int AD_LdapProcessorLog_ID,
+        public MLdapProcessorLog(Ctx ctx, int VAF_LdapHandlerLog_ID,
             Trx trxName)
-            : base(ctx, AD_LdapProcessorLog_ID, trxName)
+            : base(ctx, VAF_LdapHandlerLog_ID, trxName)
         {
 
-            if (AD_LdapProcessorLog_ID == 0)
+            if (VAF_LdapHandlerLog_ID == 0)
             {
-                //	setAD_LdapProcessorLog_ID (0);
-                //	setAD_LdapProcessor_ID (0);
+                //	setVAF_LdapHandlerLog_ID (0);
+                //	setVAF_LdapHandler_ID (0);
                 SetIsError(false);
             }
         }	//	MLdapProcessorLog
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
         {
 
             SetClientOrg(parent);
-            SetAD_LdapProcessor_ID(parent.GetAD_LdapProcessor_ID());
+            SetVAF_LdapHandler_ID(parent.GetVAF_LdapHandler_ID());
             SetSummary(summary);
         }	//	MLdapProcessorLog
 

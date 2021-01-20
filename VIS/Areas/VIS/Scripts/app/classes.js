@@ -1638,9 +1638,9 @@
             //        + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
             //}
             //else {
-            //    sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language=@para1)";
-            //    sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language=@para2)"
-            //        + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language=@para3)";
+            //    sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language=@para1)";
+            //    sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language=@para2)"
+            //        + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language=@para3)";
             //}
             //sql += "WHERE t.TableName = @para4"
             //    + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
@@ -1653,9 +1653,9 @@
                 //var params = [];
                 //index = 1;
                 //if (!baseLanguage) {
-                //    params.push(new VIS.SqlParam("@para1", VIS.Env.getAD_Language(VIS.Env.getCtx())));
-                //    params.push(new VIS.SqlParam("@para2", VIS.Env.getAD_Language(VIS.Env.getCtx())));
-                //    params.push(new VIS.SqlParam("@para3", VIS.Env.getAD_Language(VIS.Env.getCtx())));
+                //    params.push(new VIS.SqlParam("@para1", VIS.Env.getVAF_Language(VIS.Env.getCtx())));
+                //    params.push(new VIS.SqlParam("@para2", VIS.Env.getVAF_Language(VIS.Env.getCtx())));
+                //    params.push(new VIS.SqlParam("@para3", VIS.Env.getVAF_Language(VIS.Env.getCtx())));
                 //}
 
                 //params.push(new VIS.DB.SqlParam("@para4", targetTableName));

@@ -271,7 +271,7 @@
     //    if (ts == null) {
     //        ts = DateTime.Today.Date;
     //    }
-    //    var countVA034 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
+    //    var countVA034 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
     //    var date = VIS.DB.to_date(ts, true);
     //    var sql = "SELECT  p.DateTrx,p.C_Payment_ID, p.DocumentNo, ba.C_Currency_ID,c.ISO_Code,p.PayAmt,"
     //        + "currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID," + date + ",null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
@@ -304,7 +304,7 @@
     //    }
     //    sql += " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "        //	Voided Bank Statements have 0 StmtAmt
     //        + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
-    //    var countVA012 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+    //    var countVA012 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
     //    if (countVA012 > 0) {
 
     //        sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.C_CashLine_ID AS C_Payment_ID,  cs.DocumentNo, ba.C_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
@@ -439,7 +439,7 @@
         //    + " AND NOT EXISTS (SELECT * FROM C_BankStatementLine l "
         //    //	Voided Bank Statements have 0 StmtAmt
         //        + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
-        //var countVA012 = VIS.Utility.Util.getValueOfInt(executeScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+        //var countVA012 = VIS.Utility.Util.getValueOfInt(executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
         //if (countVA012 > 0) {
 
         //    sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.C_CashLine_ID AS C_Payment_ID,cs.DocumentNo, ba.C_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"

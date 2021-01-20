@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_LdapProcessorLog
+/** Generated Model for VAF_LdapHandlerLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_LdapProcessorLog : PO
+public class X_VAF_LdapHandlerLog : PO
 {
-public X_AD_LdapProcessorLog (Context ctx, int AD_LdapProcessorLog_ID, Trx trxName) : base (ctx, AD_LdapProcessorLog_ID, trxName)
+public X_VAF_LdapHandlerLog (Context ctx, int VAF_LdapHandlerLog_ID, Trx trxName) : base (ctx, VAF_LdapHandlerLog_ID, trxName)
 {
-/** if (AD_LdapProcessorLog_ID == 0)
+/** if (VAF_LdapHandlerLog_ID == 0)
 {
-SetAD_LdapProcessorLog_ID (0);
-SetAD_LdapProcessor_ID (0);
+SetVAF_LdapHandlerLog_ID (0);
+SetVAF_LdapHandler_ID (0);
 SetIsError (false);
 }
  */
 }
-public X_AD_LdapProcessorLog (Ctx ctx, int AD_LdapProcessorLog_ID, Trx trxName) : base (ctx, AD_LdapProcessorLog_ID, trxName)
+public X_VAF_LdapHandlerLog (Ctx ctx, int VAF_LdapHandlerLog_ID, Trx trxName) : base (ctx, VAF_LdapHandlerLog_ID, trxName)
 {
-/** if (AD_LdapProcessorLog_ID == 0)
+/** if (VAF_LdapHandlerLog_ID == 0)
 {
-SetAD_LdapProcessorLog_ID (0);
-SetAD_LdapProcessor_ID (0);
+SetVAF_LdapHandlerLog_ID (0);
+SetVAF_LdapHandler_ID (0);
 SetIsError (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsError (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_LdapProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_LdapHandlerLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_LdapProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_LdapProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_LdapHandlerLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_LdapProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_LdapProcessorLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_LdapHandlerLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_LdapProcessorLog()
+static X_VAF_LdapHandlerLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389045336L;
 public static int Table_ID;
  // =903;
 
-/** TableName=AD_LdapProcessorLog */
-public static String Table_Name="AD_LdapProcessorLog";
+/** TableName=VAF_LdapHandlerLog */
+public static String Table_Name="VAF_LdapHandlerLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_LdapProcessorLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_LdapHandlerLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Ldap Processor Log.
-@param AD_LdapProcessorLog_ID LDAP Server Log */
-public void SetAD_LdapProcessorLog_ID (int AD_LdapProcessorLog_ID)
+@param VAF_LdapHandlerLog_ID LDAP Server Log */
+public void SetVAF_LdapHandlerLog_ID (int VAF_LdapHandlerLog_ID)
 {
-if (AD_LdapProcessorLog_ID < 1) throw new ArgumentException ("AD_LdapProcessorLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_LdapProcessorLog_ID", AD_LdapProcessorLog_ID);
+if (VAF_LdapHandlerLog_ID < 1) throw new ArgumentException ("VAF_LdapHandlerLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_LdapHandlerLog_ID", VAF_LdapHandlerLog_ID);
 }
 /** Get Ldap Processor Log.
 @return LDAP Server Log */
-public int GetAD_LdapProcessorLog_ID() 
+public int GetVAF_LdapHandlerLog_ID() 
 {
-Object ii = Get_Value("AD_LdapProcessorLog_ID");
+Object ii = Get_Value("VAF_LdapHandlerLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Ldap Processor.
-@param AD_LdapProcessor_ID LDAP Server to authenticate and authorize external systems based on Vienna */
-public void SetAD_LdapProcessor_ID (int AD_LdapProcessor_ID)
+@param VAF_LdapHandler_ID LDAP Server to authenticate and authorize external systems based on Vienna */
+public void SetVAF_LdapHandler_ID (int VAF_LdapHandler_ID)
 {
-if (AD_LdapProcessor_ID < 1) throw new ArgumentException ("AD_LdapProcessor_ID is mandatory.");
-Set_ValueNoCheck ("AD_LdapProcessor_ID", AD_LdapProcessor_ID);
+if (VAF_LdapHandler_ID < 1) throw new ArgumentException ("VAF_LdapHandler_ID is mandatory.");
+Set_ValueNoCheck ("VAF_LdapHandler_ID", VAF_LdapHandler_ID);
 }
 /** Get Ldap Processor.
 @return LDAP Server to authenticate and authorize external systems based on Vienna */
-public int GetAD_LdapProcessor_ID() 
+public int GetVAF_LdapHandler_ID() 
 {
-Object ii = Get_Value("AD_LdapProcessor_ID");
+Object ii = Get_Value("VAF_LdapHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

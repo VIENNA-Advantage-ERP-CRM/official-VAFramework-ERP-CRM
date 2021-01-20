@@ -21,7 +21,7 @@ namespace VIS.Models
             Dictionary<String, Boolean> _ModulePrifix = new Dictionary<String, Boolean>();
             for (int i = 0; i < paramValue.Length; i++)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='" + paramValue[i] + "'  AND IsActive = 'Y'", null, null)) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='" + paramValue[i] + "'  AND IsActive = 'Y'", null, null)) > 0)
                 {
                     _ModulePrifix[paramValue[i]] = true;
                 }

@@ -1450,7 +1450,7 @@ namespace VAdvantage.Model
         }
         /**
          *  Check the ability to send email.
-         *  @return AD_Message or null if no error
+         *  @return VAF_Msg_Lable or null if no error
          */
         private String CheckEMail()
         {
@@ -1833,8 +1833,8 @@ namespace VAdvantage.Model
                     finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
                 }
 
-                int AD_Message_ID = 834;
-                MNote note = new MNote(GetCtx(), AD_Message_ID, GetCtx().GetAD_User_ID(),
+                int VAF_Msg_Lable_ID = 834;
+                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetCtx().GetAD_User_ID(),
                     X_R_Request.Table_ID, GetR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
@@ -1925,8 +1925,8 @@ namespace VAdvantage.Model
             if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
                 || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
             {
-                int AD_Message_ID = 834;
-                MNote note = new MNote(GetCtx(), AD_Message_ID, AD_User_ID,
+                int VAF_Msg_Lable_ID = 834;
+                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, AD_User_ID,
                     X_R_Request.Table_ID, GetR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())

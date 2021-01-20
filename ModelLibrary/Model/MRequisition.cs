@@ -473,7 +473,7 @@ namespace VAdvantage.Model
                                 return DocActionVariables.STATUS_INVALID;
                             }
                         }
-                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
+                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
                         // SI_0686_2 :  storage should not update in case of product is other than item type.
                         if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
                         {
@@ -935,7 +935,7 @@ namespace VAdvantage.Model
                         int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM VAF_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
                         //Update storage requisition reserved qty
-                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
+                        //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
                         if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
                         {
                             if (GetDocAction() != "VO" && GetDocStatus() != "DR")

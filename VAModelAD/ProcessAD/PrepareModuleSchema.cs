@@ -29,9 +29,9 @@ namespace VAdvantage.Process
 
 
         //String nameSpace = "";
-        int AD_ModuleInfo_ID = 0;
+        int VAF_ModuleInfo_ID = 0;
 
-        const String MODULE_DB_SCHEMA = "AD_Module_DB_Schema";
+        const String MODULE_DB_SCHEMA = "VAF_Module_DB_Schema";
         private List<String> prefixList = new List<string>();
         List<String> usedPrefixesList = new List<string>();
 
@@ -43,9 +43,9 @@ namespace VAdvantage.Process
         protected override void Prepare()
         {
             _ctx = GetCtx();
-            AD_ModuleInfo_ID = GetRecord_ID();
-            //prefix = DataBase.DB.ExecuteScalar("SELECT Prefix FROM AD_ModuleInfo WHERE AD_ModuleInfo_ID =" + AD_ModuleInfo_ID).ToString();
-            IDataReader dr = DB.ExecuteReader("SELECT Prefix,AD_ModuleInfo_ID FROM AD_ModuleInfo");
+            VAF_ModuleInfo_ID = GetRecord_ID();
+            //prefix = DataBase.DB.ExecuteScalar("SELECT Prefix FROM VAF_ModuleInfo WHERE VAF_ModuleInfo_ID =" + VAF_ModuleInfo_ID).ToString();
+            IDataReader dr = DB.ExecuteReader("SELECT Prefix,VAF_ModuleInfo_ID FROM VAF_ModuleInfo");
             while (dr.Read())
             {
                 string prefix = dr[0].ToString();
@@ -54,7 +54,7 @@ namespace VAdvantage.Process
                     continue;
                 }
                 prefixList.Add(prefix);
-                if (AD_ModuleInfo_ID == Convert.ToInt32(dr[1]))
+                if (VAF_ModuleInfo_ID == Convert.ToInt32(dr[1]))
                 {
                     /* Initially both same */
                     currentPrefix = prefix;
@@ -75,7 +75,7 @@ namespace VAdvantage.Process
                 if (string.IsNullOrEmpty(currentPrefix))
                     return "Could not find valid prefix";
 
-                if (!DeleteOldSchema(AD_ModuleInfo_ID))
+                if (!DeleteOldSchema(VAF_ModuleInfo_ID))
                     return "could not delete old schema";
 
                 running = true;
@@ -83,7 +83,7 @@ namespace VAdvantage.Process
 
             try
             {
-                GenerateSchema(AD_ModuleInfo_ID);
+                GenerateSchema(VAF_ModuleInfo_ID);
             }
             finally
             {
@@ -94,9 +94,9 @@ namespace VAdvantage.Process
             //throw new NotImplementedException();
         }
 
-        private bool DeleteOldSchema(int AD_ModuleInfo_ID)
+        private bool DeleteOldSchema(int VAF_ModuleInfo_ID)
         {
-            int count = DB.ExecuteQuery("DELETE FROM AD_Module_DB_Schema WHERE AD_ModuleInfo_ID = " + AD_ModuleInfo_ID, null, Get_TrxName());
+            int count = DB.ExecuteQuery("DELETE FROM VAF_Module_DB_Schema WHERE VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID, null, Get_TrxName());
             if (count < 0)
             {
                 return false;
@@ -111,7 +111,7 @@ namespace VAdvantage.Process
         private bool IsRecordExistInDBSchema(int VAF_TableView_ID, int Record_ID)
         {
             int count = Convert.ToInt32(DB.ExecuteScalar("SELECT Count(*) FROM " + MODULE_DB_SCHEMA + " WHERE VAF_TableView_ID =" + VAF_TableView_ID
-                                          + " AND Record_ID = " + Record_ID + " AND AD_ModuleInfo_ID = " + AD_ModuleInfo_ID, null, Get_TrxName()));
+                                          + " AND Record_ID = " + Record_ID + " AND VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID, null, Get_TrxName()));
             if (count > 0)
             {
                 return true;
@@ -124,7 +124,7 @@ namespace VAdvantage.Process
             //Check Existence
 
             int count = Convert.ToInt32(DB.ExecuteScalar("SELECT Count(*) FROM " + MODULE_DB_SCHEMA + " WHERE VAF_TableView_ID =" + VAF_TableView_ID
-                                          + " AND Record_ID = " + Record_ID + " AND AD_ModuleInfo_ID = " + AD_ModuleInfo_ID, null, Get_TrxName()));
+                                          + " AND Record_ID = " + Record_ID + " AND VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID, null, Get_TrxName()));
 
             if (count == 0)
             {
@@ -134,7 +134,7 @@ namespace VAdvantage.Process
                 schema.SetName(RName);
                 schema.SetTableName(TableName);
                 schema.SetIsActive(true);
-                schema.SetAD_ModuleInfo_ID(AD_ModuleInfo_ID);
+                schema.SetVAF_ModuleInfo_ID(VAF_ModuleInfo_ID);
 
                 try
                 {
@@ -254,54 +254,54 @@ namespace VAdvantage.Process
 
         #endregion
 
-        private void GenerateSchema(int AD_ModuleInfo_ID)
+        private void GenerateSchema(int VAF_ModuleInfo_ID)
         {
-            GetModuleInfo(AD_ModuleInfo_ID);
-            GetModuleMenus(AD_ModuleInfo_ID);
-            GetForms(AD_ModuleInfo_ID);
-            GetWindowTabField(AD_ModuleInfo_ID);
-            GetProcesses(AD_ModuleInfo_ID);
-            GetTables(AD_ModuleInfo_ID);
+            GetModuleInfo(VAF_ModuleInfo_ID);
+            GetModuleMenus(VAF_ModuleInfo_ID);
+            GetForms(VAF_ModuleInfo_ID);
+            GetWindowTabField(VAF_ModuleInfo_ID);
+            GetProcesses(VAF_ModuleInfo_ID);
+            GetTables(VAF_ModuleInfo_ID);
         }
 
         /// <summary>
         ///Insert Module Info Folder menu ids in DB Schema
         /// </summary>
-        /// <param name="AD_ModuleInfo_ID"></param>
-        private void GetModuleMenus(int AD_ModuleInfo_ID)
+        /// <param name="VAF_ModuleInfo_ID"></param>
+        private void GetModuleMenus(int VAF_ModuleInfo_ID)
         {
-            List<Int32> ids = GetIDs("AD_ModuleMenuFolder", "AD_ModuleMenuFolder_ID", " AD_ModuleInfo_Id = " + AD_ModuleInfo_ID);
+            List<Int32> ids = GetIDs("VAF_ModuleMenuFolder", "VAF_ModuleMenuFolder_ID", " VAF_ModuleInfo_Id = " + VAF_ModuleInfo_ID);
             for (int i = 0; i < ids.Count; i++)
             {
-                InsertIntoDBSchema(X_AD_ModuleMenuFolder.Table_ID, ids[i], X_AD_ModuleMenuFolder.Table_Name, "_MenuFolder" + i, "AD_ModuleMenuFolder_ID = " + ids[i]);
+                InsertIntoDBSchema(X_VAF_ModuleMenuFolder.Table_ID, ids[i], X_VAF_ModuleMenuFolder.Table_Name, "_MenuFolder" + i, "VAF_ModuleMenuFolder_ID = " + ids[i]);
             }
         }
 
         /// <summary>
-        /// Insert AD_Module_Info table entry
+        /// Insert VAF_Module_Info table entry
         /// </summary>
-        /// <param name="AD_ModuleInfo_ID"></param>
-        private void GetModuleInfo(int AD_ModuleInfo_ID)
+        /// <param name="VAF_ModuleInfo_ID"></param>
+        private void GetModuleInfo(int VAF_ModuleInfo_ID)
         {
             string name;
-            HasModulePrefix("Name", "AD_ModuleInfo", "AD_ModuleInfo_ID =" + AD_ModuleInfo_ID, out name);
+            HasModulePrefix("Name", "VAF_ModuleInfo", "VAF_ModuleInfo_ID =" + VAF_ModuleInfo_ID, out name);
             // {
-            InsertIntoDBSchema(X_AD_ModuleInfo.Table_ID, AD_ModuleInfo_ID, X_AD_ModuleInfo.Table_Name, name, "AD_ModuleInfo_ID =" + AD_ModuleInfo_ID);
+            InsertIntoDBSchema(X_VAF_ModuleInfo.Table_ID, VAF_ModuleInfo_ID, X_VAF_ModuleInfo.Table_Name, name, "VAF_ModuleInfo_ID =" + VAF_ModuleInfo_ID);
             //}
         }
 
         /// <summary>
         /// Mark Module Process
         /// </summary>
-        /// <param name="AD_ModuleInfo_ID">ModuleInfo ID</param>
-        private void GetProcesses(int AD_ModuleInfo_ID)
+        /// <param name="VAF_ModuleInfo_ID">ModuleInfo ID</param>
+        private void GetProcesses(int VAF_ModuleInfo_ID)
         {
-            List<int> lstProcessIds = GetIDs("AD_ModuleProcess", "AD_ModuleProcess_ID", "AD_ModuleInfo_ID = " + AD_ModuleInfo_ID);
+            List<int> lstProcessIds = GetIDs("VAF_ModuleProcess", "VAF_ModuleProcess_ID", "VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID);
             for (int p = 0; p < lstProcessIds.Count; p++)
             {
-                int id = GetID("AD_ModuleProcess", "AD_Process_ID", "AD_ModuleProcess_ID = " + lstProcessIds[p]);
+                int id = GetID("VAF_ModuleProcess", "AD_Process_ID", "VAF_ModuleProcess_ID = " + lstProcessIds[p]);
                 GetProcess(id);
-                InsertIntoDBSchema(X_AD_ModuleProcess.Table_ID, lstProcessIds[p], X_AD_ModuleProcess.Table_Name, "_ModuleProcess" + p, "AD_ModuleProcess_ID =" + lstProcessIds[p]);
+                InsertIntoDBSchema(X_VAF_ModuleProcess.Table_ID, lstProcessIds[p], X_VAF_ModuleProcess.Table_Name, "_ModuleProcess" + p, "VAF_ModuleProcess_ID =" + lstProcessIds[p]);
             }
         }
 
@@ -311,14 +311,14 @@ namespace VAdvantage.Process
         /// <summary>
         /// Market Tables of Module
         /// </summary>
-        /// <param name="AD_ModuleInfo_ID">id of module</param>
-        private void GetTables(int AD_ModuleInfo_ID)
+        /// <param name="VAF_ModuleInfo_ID">id of module</param>
+        private void GetTables(int VAF_ModuleInfo_ID)
         {
-            List<int> tableIds = GetIDs("AD_ModuleTable", "AD_ModuleTable_ID", "AD_ModuleInfo_ID = " + AD_ModuleInfo_ID);
+            List<int> tableIds = GetIDs("VAF_ModuleTable", "VAF_ModuleTable_ID", "VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID);
             //string name;
             for (int t = 0; t < tableIds.Count; t++)
             {
-                int VAF_TableView_ID = GetID("AD_ModuleTable", "VAF_TableView_ID", "AD_ModuleTable_ID = " + tableIds[t]);
+                int VAF_TableView_ID = GetID("VAF_ModuleTable", "VAF_TableView_ID", "VAF_ModuleTable_ID = " + tableIds[t]);
                 if (GetTable(VAF_TableView_ID))
                 {
                     List<int> columnIds = GetIDs("VAF_Column", "VAF_Column_ID", "VAF_TableView_ID=" + VAF_TableView_ID);
@@ -327,7 +327,7 @@ namespace VAdvantage.Process
                         GetColumn(columnIds[c], true, false);
                     }
                 }
-                InsertIntoDBSchema(X_AD_ModuleTable.Table_ID, tableIds[t], X_AD_ModuleTable.Table_Name, "ModuleTable_" + t, "AD_ModuleTable_ID=" + tableIds[t]);
+                InsertIntoDBSchema(X_VAF_ModuleTable.Table_ID, tableIds[t], X_VAF_ModuleTable.Table_Name, "ModuleTable_" + t, "VAF_ModuleTable_ID=" + tableIds[t]);
             }
         }
 
@@ -338,16 +338,16 @@ namespace VAdvantage.Process
         /// <summary>
         /// Insert Module Forms
         /// </summary>
-        /// <param name="AD_ModuleInfo_ID"></param>
-        private void GetForms(int AD_ModuleInfo_ID)
+        /// <param name="VAF_ModuleInfo_ID"></param>
+        private void GetForms(int VAF_ModuleInfo_ID)
         {
-            List<int> lstModuleFormIds = GetIDs("AD_ModuleForm", "AD_ModuleForm_ID", "AD_ModuleInfo_ID = " + AD_ModuleInfo_ID);
+            List<int> lstModuleFormIds = GetIDs("VAF_ModuleForm", "VAF_ModuleForm_ID", "VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID);
 
             for (int i = 0; i < lstModuleFormIds.Count; i++)
             {
-                int id = GetID("AD_ModuleForm", "VAF_Page_ID", "AD_ModuleForm_ID = " + lstModuleFormIds[i]);
+                int id = GetID("VAF_ModuleForm", "VAF_Page_ID", "VAF_ModuleForm_ID = " + lstModuleFormIds[i]);
                 GetForm(id);
-                InsertIntoDBSchema(X_AD_ModuleForm.Table_ID, lstModuleFormIds[i], X_AD_ModuleForm.Table_Name, "_ModuleFrom" + i, "AD_ModuleForm_ID =" + lstModuleFormIds[i]);
+                InsertIntoDBSchema(X_VAF_ModuleForm.Table_ID, lstModuleFormIds[i], X_VAF_ModuleForm.Table_Name, "_ModuleFrom" + i, "VAF_ModuleForm_ID =" + lstModuleFormIds[i]);
             }
         }
 
@@ -556,22 +556,22 @@ namespace VAdvantage.Process
 
         #region Window Tab Field
 
-        private void GetWindowTabField(int AD_ModuleInfo_ID)
+        private void GetWindowTabField(int VAF_ModuleInfo_ID)
         {
-            List<int> windowIds = GetIDs("AD_ModuleWindow", " AD_ModuleWindow_ID ", "AD_ModuleInfo_ID = " + AD_ModuleInfo_ID);
+            List<int> windowIds = GetIDs("VAF_ModuleWindow", " VAF_ModuleWindow_ID ", "VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID);
 
             for (int i = 0; i < windowIds.Count; i++)
             {
-                int sAD_Window_ID = GetID("AD_ModuleWindow", "AD_Window_ID", "AD_ModuleWindow_ID = " + windowIds[i]);
+                int sAD_Window_ID = GetID("VAF_ModuleWindow", "AD_Window_ID", "VAF_ModuleWindow_ID = " + windowIds[i]);
                 GetWindow(sAD_Window_ID, windowIds[i]);
 
-                //int Id = GetID("AD_ModuleWindow", "AD_ModuleWindow_ID", "AD_ModuleInfo_ID = " + AD_ModuleInfo_ID + " AND  AD_Window_ID =" + sAD_Window_ID);
-                //InsertIntoDBSchema(X_AD_ModuleWindow.Table_ID, windowIds[i], X_AD_ModuleWindow.Table_Name, "ModuleWindow" + i, "AD_ModuleWindow_ID =" + windowIds[i]);
+                //int Id = GetID("VAF_ModuleWindow", "VAF_ModuleWindow_ID", "VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID + " AND  AD_Window_ID =" + sAD_Window_ID);
+                //InsertIntoDBSchema(X_VAF_ModuleWindow.Table_ID, windowIds[i], X_VAF_ModuleWindow.Table_Name, "ModuleWindow" + i, "VAF_ModuleWindow_ID =" + windowIds[i]);
 
             }
         }
 
-        void GetWindow(int sAD_Window_ID, int sAD_ModuleWindow_ID)
+        void GetWindow(int sAD_Window_ID, int sVAF_ModuleWindow_ID)
         {
             // if (IsRecordExistInDBSchema(X_AD_Window.Table_ID, sAD_Window_ID))
             //  return;
@@ -582,7 +582,7 @@ namespace VAdvantage.Process
             }
 
 
-            if (sAD_ModuleWindow_ID > 0)
+            if (sVAF_ModuleWindow_ID > 0)
             {
 
                 IDataReader dr = DB.ExecuteReader("SELECT AD_WindowAction_ID FROM AD_WindowAction WHERE AD_Window_ID =" + sAD_Window_ID);
@@ -600,9 +600,9 @@ namespace VAdvantage.Process
                     dr.Close();
                 }
 
-                InsertIntoDBSchema(X_AD_ModuleWindow.Table_ID, sAD_ModuleWindow_ID, X_AD_ModuleWindow.Table_Name, "_ModuleWindow" + sAD_ModuleWindow_ID, "AD_ModuleWindow_ID =" + sAD_ModuleWindow_ID);
+                InsertIntoDBSchema(X_VAF_ModuleWindow.Table_ID, sVAF_ModuleWindow_ID, X_VAF_ModuleWindow.Table_Name, "_ModuleWindow" + sVAF_ModuleWindow_ID, "VAF_ModuleWindow_ID =" + sVAF_ModuleWindow_ID);
 
-                List<int> lstModuleTab = GetIDs("AD_ModuleTab", "AD_ModuleTab_ID", "AD_ModuleWindow_ID = " + sAD_ModuleWindow_ID);//+ " ORDER BY SeqNo");
+                List<int> lstModuleTab = GetIDs("VAF_ModuleTab", "VAF_ModuleTab_ID", "VAF_ModuleWindow_ID = " + sVAF_ModuleWindow_ID);//+ " ORDER BY SeqNo");
                 GetTabsFields(sAD_Window_ID, lstModuleTab);
             }
         }
@@ -614,7 +614,7 @@ namespace VAdvantage.Process
             int sVAF_Tab_ID = 0;
             for (int i = 0; i < lstModuleTab.Count; i++)
             {
-                sVAF_Tab_ID = GetID("AD_ModuleTab", "VAF_Tab_ID", "AD_ModuleTab_ID = " + lstModuleTab[i]);
+                sVAF_Tab_ID = GetID("VAF_ModuleTab", "VAF_Tab_ID", "VAF_ModuleTab_ID = " + lstModuleTab[i]);
 
                 bool newTable = false;
                 sTab = new MTab(GetCtx(), sVAF_Tab_ID, null);
@@ -708,27 +708,27 @@ namespace VAdvantage.Process
                 GetTabPanel(sVAF_Tab_ID);
 
 
-                //Insert AD_ModuleTab Info
+                //Insert VAF_ModuleTab Info
 
-                //int Id = GetID("AD_ModuleTab", "AD_ModuleTab_ID", "AD_ModuleInfo_ID = " + AD_ModuleInfo_ID + " AND  AD_Window_ID =" + windowIds[i]);
-                InsertIntoDBSchema(X_AD_ModuleTab.Table_ID, lstModuleTab[i], X_AD_ModuleTab.Table_Name, "_ModuleTab" + i, "AD_ModuleTab_ID =" + lstModuleTab[i]);
+                //int Id = GetID("VAF_ModuleTab", "VAF_ModuleTab_ID", "VAF_ModuleInfo_ID = " + VAF_ModuleInfo_ID + " AND  AD_Window_ID =" + windowIds[i]);
+                InsertIntoDBSchema(X_VAF_ModuleTab.Table_ID, lstModuleTab[i], X_VAF_ModuleTab.Table_Name, "_ModuleTab" + i, "VAF_ModuleTab_ID =" + lstModuleTab[i]);
 
 
-                List<int> lstModuleField = GetIDs("AD_ModuleField", "AD_ModuleField_ID", "AD_ModuleTab_ID = " + lstModuleTab[i], " ORDER BY SeqNo");
+                List<int> lstModuleField = GetIDs("VAF_ModuleField", "VAF_ModuleField_ID", "VAF_ModuleTab_ID = " + lstModuleTab[i], " ORDER BY SeqNo");
 
                 int sVAF_Field_ID = 0;
                 List<int> fields = new List<int>();
                 for (int f = 0; f < lstModuleField.Count; f++)
                 {
 
-                    sVAF_Field_ID = GetID("AD_ModuleField", "VAF_Field_ID", "AD_ModuleField_ID =" + lstModuleField[f]);
+                    sVAF_Field_ID = GetID("VAF_ModuleField", "VAF_Field_ID", "VAF_ModuleField_ID =" + lstModuleField[f]);
 
 
                     name = InsertField(newTable, name, sVAF_Field_ID);
 
                     fields.Add(sVAF_Field_ID);
 
-                    InsertIntoDBSchema(X_AD_ModuleField.Table_ID, lstModuleField[f], X_AD_ModuleField.Table_Name, "_ModuleField" + i, "AD_ModuleField_ID =" + lstModuleField[f]);
+                    InsertIntoDBSchema(X_VAF_ModuleField.Table_ID, lstModuleField[f], X_VAF_ModuleField.Table_Name, "_ModuleField" + i, "VAF_ModuleField_ID =" + lstModuleField[f]);
                 }
 
                 ///Insert default Field

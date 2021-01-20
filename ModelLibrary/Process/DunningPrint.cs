@@ -166,10 +166,10 @@ namespace VAdvantage.Process
                 if (client.IsMultiLingualDocument())
                 {
                     tableName += "t";
-                    String AD_Language = bp.GetAD_Language();
-                    if (AD_Language != null)
+                    String VAF_Language = bp.GetVAF_Language();
+                    if (VAF_Language != null)
                     {
-                        //language =language.getLanguage(AD_Language);
+                        //language =language.getLanguage(VAF_Language);
                     }
                 }
                // format.SetLanguage(language);

@@ -149,7 +149,7 @@ namespace VAdvantage.Process
 		
 		//	Get Info
 		StringBuilder sql = new StringBuilder (
-			"SELECT i.C_Invoice_ID,bp.AD_Language,c.IsMultiLingualDocument,"		//	1..3
+			"SELECT i.C_Invoice_ID,bp.VAF_Language,c.IsMultiLingualDocument,"		//	1..3
 			//	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see ReportCtl+MInvoice
 			+ " COALESCE(bp.Invoice_PrintFormat_ID, dt.AD_PrintFormat_ID, pf.Invoice_PrintFormat_ID),"	//	4 
 			+ " dt.DocumentCopies+bp.DocumentCopies,"								//	5
@@ -254,13 +254,13 @@ namespace VAdvantage.Process
                 //Language language = Language.getLoginLanguage();
                 Language language = Env.GetLoginLanguage(GetCtx());
                 //	Base Language
-                //    String AD_Language = rs.getString(2);
-                String AD_Language = Utility.Util.GetValueOfString(idr[1]);
-                //    if (AD_Language != null && "Y".equals(rs.getString(3)))
-                if (AD_Language != null && "Y".Equals(idr[2]))
+                //    String VAF_Language = rs.getString(2);
+                String VAF_Language = Utility.Util.GetValueOfString(idr[1]);
+                //    if (VAF_Language != null && "Y".equals(rs.getString(3)))
+                if (VAF_Language != null && "Y".Equals(idr[2]))
                 {
-                    //language = Language.getLanguage(AD_Language);
-                    language = Language.GetLanguage(AD_Language);
+                    //language = Language.getLanguage(VAF_Language);
+                    language = Language.GetLanguage(VAF_Language);
                 }
 
 

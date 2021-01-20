@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Language
+/** Generated Model for VAF_Language
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Language : PO
+public class X_VAF_Language : PO
 {
-public X_AD_Language (Context ctx, int AD_Language_ID, Trx trxName) : base (ctx, AD_Language_ID, trxName)
+public X_VAF_Language (Context ctx, int VAF_Language_ID, Trx trxName) : base (ctx, VAF_Language_ID, trxName)
 {
-/** if (AD_Language_ID == 0)
+/** if (VAF_Language_ID == 0)
 {
-SetAD_Language (null);
-SetAD_Language_ID (0);	// @SQL=SELECT NVL(MAX(AD_Language_ID),999999)+1 FROM AD_Language WHERE AD_Language_ID > 1000
+SetVAF_Language (null);
+SetVAF_Language_ID (0);	// @SQL=SELECT NVL(MAX(VAF_Language_ID),999999)+1 FROM VAF_Language WHERE VAF_Language_ID > 1000
 SetCountryCode (null);
 SetIsBaseLanguage (false);	// N
 SetIsDecimalPoint (false);
@@ -31,12 +31,12 @@ SetName (null);
 }
  */
 }
-public X_AD_Language (Ctx ctx, int AD_Language_ID, Trx trxName) : base (ctx, AD_Language_ID, trxName)
+public X_VAF_Language (Ctx ctx, int VAF_Language_ID, Trx trxName) : base (ctx, VAF_Language_ID, trxName)
 {
-/** if (AD_Language_ID == 0)
+/** if (VAF_Language_ID == 0)
 {
-SetAD_Language (null);
-SetAD_Language_ID (0);	// @SQL=SELECT NVL(MAX(AD_Language_ID),999999)+1 FROM AD_Language WHERE AD_Language_ID > 1000
+SetVAF_Language (null);
+SetVAF_Language_ID (0);	// @SQL=SELECT NVL(MAX(VAF_Language_ID),999999)+1 FROM VAF_Language WHERE VAF_Language_ID > 1000
 SetCountryCode (null);
 SetIsBaseLanguage (false);	// N
 SetIsDecimalPoint (false);
@@ -51,7 +51,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Language (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Language (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_AD_Language (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Language (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Language (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_AD_Language (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Language (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Language (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Language()
+static X_VAF_Language()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389045242L;
 public static int Table_ID;
  // =111;
 
-/** TableName=AD_Language */
-public static String Table_Name="AD_Language";
+/** TableName=VAF_Language */
+public static String Table_Name="VAF_Language";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -121,39 +121,39 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Language[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Language[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Language.
-@param AD_Language Language for this entity */
-public void SetAD_Language (String AD_Language)
+@param VAF_Language Language for this entity */
+public void SetVAF_Language (String VAF_Language)
 {
-if (AD_Language == null) throw new ArgumentException ("AD_Language is mandatory.");
-if (AD_Language.Length > 5)
+if (VAF_Language == null) throw new ArgumentException ("VAF_Language is mandatory.");
+if (VAF_Language.Length > 5)
 {
 log.Warning("Length > 5 - truncated");
-AD_Language = AD_Language.Substring(0,5);
+VAF_Language = VAF_Language.Substring(0,5);
 }
-Set_ValueNoCheck ("AD_Language", AD_Language);
+Set_ValueNoCheck ("VAF_Language", VAF_Language);
 }
 /** Get Language.
 @return Language for this entity */
-public String GetAD_Language() 
+public String GetVAF_Language() 
 {
-return (String)Get_Value("AD_Language");
+return (String)Get_Value("VAF_Language");
 }
 /** Set Language ID.
-@param AD_Language_ID Language ID */
-public void SetAD_Language_ID (int AD_Language_ID)
+@param VAF_Language_ID Language ID */
+public void SetVAF_Language_ID (int VAF_Language_ID)
 {
-if (AD_Language_ID < 1) throw new ArgumentException ("AD_Language_ID is mandatory.");
-Set_ValueNoCheck ("AD_Language_ID", AD_Language_ID);
+if (VAF_Language_ID < 1) throw new ArgumentException ("VAF_Language_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Language_ID", VAF_Language_ID);
 }
 /** Get Language ID.
 @return Language ID */
-public int GetAD_Language_ID() 
+public int GetVAF_Language_ID() 
 {
-Object ii = Get_Value("AD_Language_ID");
+Object ii = Get_Value("VAF_Language_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -1716,7 +1716,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //{
             //    try
             //    {
-            //        string lang = p_ctx.GetAD_Language().Replace("_", "-");
+            //        string lang = p_ctx.GetVAF_Language().Replace("_", "-");
 
             //        if ((AD_ReportFormat_ID > 0) && (lang == "ar-IQ"))
             //        {
@@ -1779,7 +1779,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         private void SendNoticeEMail(Trx trx)
         {
             //	Notice
-            int AD_Message_ID = 753;		//	HARDCODED WorkflowResul
+            int VAF_Msg_Lable_ID = 753;		//	HARDCODED WorkflowResul
             List<int> userIds = new List<int>();
             StringBuilder sbLog = new StringBuilder("");
             DocAction doc = null;
@@ -1944,7 +1944,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 {
                     if (user.IsNotificationNote() || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusNotice)
                     {
-                        MNote note = new MNote(GetCtx(), AD_Message_ID, userIds[i], trx);
+                        MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, userIds[i], trx);
                         note.SetTextMsg(_node.GetName(true));
                         note.SetDescription(_node.GetDescription(true));
                         note.SetRecord(GetVAF_TableView_ID(), GetRecord_ID());
@@ -3258,8 +3258,8 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 // Ctx
                 Ctx _ctxClient = client.GetCtx();
 
-                //Save to AD_MailQueue table
-                ViennaAdvantage.Model.X_AD_MailQueue mailQueue = new ViennaAdvantage.Model.X_AD_MailQueue(_ctxClient, 0, _trx);
+                //Save to VAF_MailQueue table
+                ViennaAdvantage.Model.X_VAF_MailQueue mailQueue = new ViennaAdvantage.Model.X_VAF_MailQueue(_ctxClient, 0, _trx);
                 mailQueue.SetAD_Role_ID(_ctxClient.GetAD_Role_ID());
                 mailQueue.SetToEMail(toEMail);
                 mailQueue.SetToName(toName);
@@ -3329,7 +3329,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             note.SetTextMsg(subject + " - " + message);
             note.SetDescription("");
             note.SetRecord(Table_ID, Get_ID());		//	point to this
-            note.SetAD_Message_ID(859);//Workflow
+            note.SetVAF_Msg_Lable_ID(859);//Workflow
             if (note.Save(Get_TrxName()))
             {
                 // add user ID to the Notice User list to whom notices are sent

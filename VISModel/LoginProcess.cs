@@ -168,7 +168,7 @@ namespace VAdvantage.Login
         /// <param name="warehouse">optional warehouse information</param>
         /// <param name="timestamp">optional date</param>
         /// <param name="printerName">optional printer info</param>
-        /// <returns>AD_Message of error (NoValidAcctInfo) or ""</returns>
+        /// <returns>VAF_Msg_Lable of error (NoValidAcctInfo) or ""</returns>
         public String LoadPreferences(KeyNamePair org,
             KeyNamePair warehouse, DateTime timestamp, String printerName)
         {
@@ -863,7 +863,7 @@ namespace VAdvantage.Login
         /// <param name="warehouse">optional warehouse information</param>
         /// <param name="timestamp">optional date</param>
         /// <param name="printerName">optional printer info</param>
-        /// <returns>AD_Message of error (NoValidAcctInfo) or ""</returns>
+        /// <returns>VAF_Msg_Lable of error (NoValidAcctInfo) or ""</returns>
         public String LoadPreferences(string date, String printerName)
         {
             if (m_ctx.GetContext("#VAF_Client_ID").Length == 0)

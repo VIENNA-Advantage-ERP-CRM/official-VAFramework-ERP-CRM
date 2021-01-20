@@ -211,9 +211,9 @@
         //    //        + " LEFT OUTER JOIN AD_Window wp ON (t.PO_Window_ID=wp.AD_Window_ID)";
         //    //}
         //    //else {
-        //    //    sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.AD_Language='" + VIS.Env.getAD_Language() + "')";
-        //    //    sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.AD_Language='" + VIS.Env.getAD_Language() + "')"
-        //    //        + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.AD_Language='" + VIS.Env.getAD_Language() + "')";
+        //    //    sql += "INNER JOIN AD_Window_Trl w ON (tt.AD_Window_ID=w.AD_Window_ID AND w.VAF_Language='" + VIS.Env.getVAF_Language() + "')";
+        //    //    sql += " LEFT OUTER JOIN AD_Window_Trl ws ON (t.AD_Window_ID=ws.AD_Window_ID AND ws.VAF_Language='" + VIS.Env.getVAF_Language() + "')"
+        //    //        + " LEFT OUTER JOIN AD_Window_Trl wp ON (t.PO_Window_ID=wp.AD_Window_ID AND wp.VAF_Language='" + VIS.Env.getVAF_Language() + "')";
         //    //}
         //    //sql += "WHERE t.TableName ='" + targetTableName
         //    //    + "' AND w.AD_Window_ID <>" + curWindow_ID

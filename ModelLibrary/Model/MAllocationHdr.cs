@@ -437,7 +437,7 @@ namespace VAdvantage.Model
                 bps.Add(line.ProcessIt(false));	//	not reverse
 
                 // change by Amit for Payment Management 5-11-2015
-                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
+                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
                 if (Env.IsModuleInstalled("VA009_"))
                 {
                     if (line.GetC_Invoice_ID() > 0 && line.GetC_InvoicePaySchedule_ID() > 0)

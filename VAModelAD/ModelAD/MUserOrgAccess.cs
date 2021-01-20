@@ -243,7 +243,7 @@ namespace VAdvantage.Model
         private void UpdateLoginSettings()
         {
             DataSet ds = DB.ExecuteDataset(@"SELECT AD_Role_ID,ISUSEUSERORGACCESS From AD_Role WHERE AD_Role_ID IN 
-                        (SELECT AD_Role_ID FROM ad_loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID() + ")");
+                        (SELECT AD_Role_ID FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID() + ")");
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -268,7 +268,7 @@ namespace VAdvantage.Model
 
         private void deleteLoginDetails(int AD_Role_ID)
         {
-            DB.ExecuteQuery(@"DELETE FROM ad_loginsetting WHERE AD_Role_ID=" + AD_Role_ID +
+            DB.ExecuteQuery(@"DELETE FROM VAF_Loginsetting WHERE AD_Role_ID=" + AD_Role_ID +
                                                              " AND VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID());
         }
 

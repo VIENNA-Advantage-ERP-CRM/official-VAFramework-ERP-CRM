@@ -67,7 +67,7 @@ namespace VIS.Areas.VIS.WebPages
             int VAF_Org_ID = 0;
 
             int inviteID = Convert.ToInt32(SecureEngine.Decrypt(q.QueryString["inviteID"]));
-            String sql = "SELECT * FROM AD_InviteUser WHERE AD_InviteUser_ID=" + inviteID;
+            String sql = "SELECT * FROM VAF_InviteUser WHERE VAF_InviteUser_ID=" + inviteID;
             DataSet dsIUser = DB.ExecuteDataset(sql);
             if (dsIUser != null && dsIUser.Tables[0].Rows.Count > 0)
             {
@@ -75,7 +75,7 @@ namespace VIS.Areas.VIS.WebPages
                 VAF_Client_ID = Convert.ToInt32(dsIUser.Tables[0].Rows[0]["VAF_Client_ID"]);
             }
 
-            sql = "SELECT AD_Role_ID FROM ad_inviteuser_role WHERE AD_InviteUser_ID= " + inviteID;
+            sql = "SELECT AD_Role_ID FROM VAF_InviteUser_role WHERE VAF_InviteUser_ID= " + inviteID;
             DataSet ds = DB.ExecuteDataset(sql);
 
 

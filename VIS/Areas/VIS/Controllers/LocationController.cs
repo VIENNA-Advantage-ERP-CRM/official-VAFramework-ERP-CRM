@@ -16,14 +16,14 @@ namespace VIS.Controllers
     public class LocationController : Controller
     {
         [HttpGet]
-        public ActionResult Locations(string windowno, string locationId,string AD_Language)
+        public ActionResult Locations(string windowno, string locationId,string VAF_Language)
         {
             ViewBag.WindowNumber = windowno;
             Ctx ctx=new Ctx();
             if (Session["Ctx"] != null)
             {
                  ctx = Session["ctx"] as Ctx;
-                ViewBag.lang = ctx.GetAD_Language();
+                ViewBag.lang = ctx.GetVAF_Language();
             }
             LocationModel obj = new LocationModel();
             if (Util.GetValueOfInt(locationId) > 0)
@@ -33,9 +33,9 @@ namespace VIS.Controllers
                 // Change By Mohit - To get country from login langauge on location form.
             else
             {
-                if (!string.IsNullOrEmpty(AD_Language))
+                if (!string.IsNullOrEmpty(VAF_Language))
                 {
-                    DefaultCountry result = obj.GetCountryName(AD_Language, ctx);
+                    DefaultCountry result = obj.GetCountryName(VAF_Language, ctx);
                     obj.Country = result.CountryName;
                     obj.C_Country_ID = result.CountryID;
                 }

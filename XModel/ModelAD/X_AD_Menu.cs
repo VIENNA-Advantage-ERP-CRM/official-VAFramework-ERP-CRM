@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Menu
+    /** Generated Model for VAF_MenuConfig
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Menu : PO
+    public class X_VAF_MenuConfig : PO
     {
-        public X_AD_Menu(Context ctx, int AD_Menu_ID, Trx trxName)
-            : base(ctx, AD_Menu_ID, trxName)
+        public X_VAF_MenuConfig(Context ctx, int VAF_MenuConfig_ID, Trx trxName)
+            : base(ctx, VAF_MenuConfig_ID, trxName)
         {
-            /** if (AD_Menu_ID == 0)
+            /** if (VAF_MenuConfig_ID == 0)
             {
-            SetAD_Menu_ID (0);
+            SetVAF_MenuConfig_ID (0);
             SetEntityType (null);	// U
             SetIsReadOnly (false);	// N
             SetIsSummary (false);
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_Menu(Ctx ctx, int AD_Menu_ID, Trx trxName)
-            : base(ctx, AD_Menu_ID, trxName)
+        public X_VAF_MenuConfig(Ctx ctx, int VAF_MenuConfig_ID, Trx trxName)
+            : base(ctx, VAF_MenuConfig_ID, trxName)
         {
-            /** if (AD_Menu_ID == 0)
+            /** if (VAF_MenuConfig_ID == 0)
             {
-            SetAD_Menu_ID (0);
+            SetVAF_MenuConfig_ID (0);
             SetEntityType (null);	// U
             SetIsReadOnly (false);	// N
             SetIsSummary (false);
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Menu(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_MenuConfig(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Menu(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_MenuConfig(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Menu(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_MenuConfig(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Menu()
+        static X_VAF_MenuConfig()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =116;
 
-        /** TableName=AD_Menu */
-        public static String Table_Name = "AD_Menu";
+        /** TableName=VAF_MenuConfig */
+        public static String Table_Name = "VAF_MenuConfig";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Menu[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_MenuConfig[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Special Form.
@@ -140,17 +140,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Menu.
-        @param AD_Menu_ID Identifies a Menu */
-        public void SetAD_Menu_ID(int AD_Menu_ID)
+        @param VAF_MenuConfig_ID Identifies a Menu */
+        public void SetVAF_MenuConfig_ID(int VAF_MenuConfig_ID)
         {
-            if (AD_Menu_ID < 1) throw new ArgumentException("AD_Menu_ID is mandatory.");
-            Set_ValueNoCheck("AD_Menu_ID", AD_Menu_ID);
+            if (VAF_MenuConfig_ID < 1) throw new ArgumentException("VAF_MenuConfig_ID is mandatory.");
+            Set_ValueNoCheck("VAF_MenuConfig_ID", VAF_MenuConfig_ID);
         }
         /** Get Menu.
         @return Identifies a Menu */
-        public int GetAD_Menu_ID()
+        public int GetVAF_MenuConfig_ID()
         {
-            Object ii = Get_Value("AD_Menu_ID");
+            Object ii = Get_Value("VAF_MenuConfig_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

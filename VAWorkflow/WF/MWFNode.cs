@@ -176,7 +176,7 @@ namespace VAdvantage.WF
         {
             if (Utility.Env.IsBaseLanguage(GetCtx(),"AD_Workflow") || Get_ID() == 0)
                 return;
-            String sql = "SELECT Name, Description, Help FROM AD_WF_Node_Trl WHERE AD_WF_Node_ID=" + Get_ID() + " AND AD_Language='" + Utility.Env.GetAD_Language(GetCtx()) + "'";
+            String sql = "SELECT Name, Description, Help FROM AD_WF_Node_Trl WHERE AD_WF_Node_ID=" + Get_ID() + " AND VAF_Language='" + Utility.Env.GetVAF_Language(GetCtx()) + "'";
             IDataReader idr = null;
             try
             {

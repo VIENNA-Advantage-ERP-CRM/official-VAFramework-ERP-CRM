@@ -8,7 +8,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MModuleField : X_AD_ModuleField
+    public class MModuleField : X_VAF_ModuleField
     {
         public MModuleField(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 // check if same record is inserting again
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleField WHERE VAF_Field_ID=" + GetVAF_Field_ID() + " AND AD_ModuleTab_ID=" + GetAD_ModuleTab_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleField WHERE VAF_Field_ID=" + GetVAF_Field_ID() + " AND VAF_ModuleTab_ID=" + GetVAF_ModuleTab_ID())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "FieldExist"));
                     return false;
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
                 if (Is_ValueChanged("VAF_Field_ID"))
                 {
                     // check if same record is inserting again
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleField WHERE VAF_Field_ID=" + GetVAF_Field_ID() + " AND AD_ModuleTab_ID=" + GetAD_ModuleTab_ID())) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleField WHERE VAF_Field_ID=" + GetVAF_Field_ID() + " AND VAF_ModuleTab_ID=" + GetVAF_ModuleTab_ID())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "FieldExist"));
                         return false;

@@ -157,8 +157,8 @@ namespace VIS.Helpers
 
             CultureInfo currentCultureInfo = System.Threading.Thread.CurrentThread.CurrentCulture;
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");// Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseAD_Language());
-            //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");// Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseVAF_Language());
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = Utility.Envs.GetLanguage(Utility.Envs.GetContext()).GetCulture(Utility.Envs.GetBaseVAF_Language());
 
 
 
@@ -524,7 +524,7 @@ namespace VIS.Helpers
                                         //	rs.updateInt (colRs, iii.intValue()); 		// 	***
                                     }
                                 }
-                                catch (Exception) //  could also be a String (AD_Language, AD_Message)
+                                catch (Exception) //  could also be a String (VAF_Language, VAF_Msg_Lable)
                                 {
                                     if (manualUpdate)
                                         CreateUpdateSql(columnName, GlobalVariable.TO_STRING((string)newVal));
@@ -2856,7 +2856,7 @@ namespace VIS.Helpers
         //    OracleParameter pNodeID = new OracleParameter("nodeID", node_ID);
         //    cmd.Parameters.Add(pNodeID);
 
-        //    OracleParameter pAdLanguage = new OracleParameter("adlanguage", ctx.GetAD_Language());
+        //    OracleParameter pAdLanguage = new OracleParameter("adlanguage", ctx.GetVAF_Language());
         //    cmd.Parameters.Add(pAdLanguage);
 
         //    OracleParameter pNodeTableName = new OracleParameter("nodeTableName", tree.GetNodeTableName());
@@ -2932,7 +2932,7 @@ namespace VIS.Helpers
             object otput = "";
 
             string tableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
-            string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetAD_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
+            string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetVAF_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
 
             otput = DB.ExecuteScalar(sql, null, null);
 

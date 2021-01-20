@@ -93,16 +93,16 @@ namespace VAdvantage.Model
         /// Get MProcess from Menu
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Menu_ID">menu id</param>
+        /// <param name="VAF_MenuConfig_ID">menu id</param>
         /// <returns>MProcess</returns>
-        public static MProcess GetFromMenu(Ctx ctx, int AD_Menu_ID)
+        public static MProcess GetFromMenu(Ctx ctx, int VAF_MenuConfig_ID)
         {
             MProcess retValue = null;
             String sql = "SELECT * FROM AD_Process p "
-                + "WHERE EXISTS (SELECT * FROM AD_Menu m "
-                    + "WHERE m.AD_Process_ID=p.AD_Process_ID AND m.AD_Menu_ID=@menuid)";
+                + "WHERE EXISTS (SELECT * FROM VAF_MenuConfig m "
+                    + "WHERE m.AD_Process_ID=p.AD_Process_ID AND m.VAF_MenuConfig_ID=@menuid)";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@menuid", AD_Menu_ID.ToString());
+            param[0] = new SqlParameter("@menuid", VAF_MenuConfig_ID.ToString());
             DataTable dt=null;
             IDataReader idr=null; 
             try

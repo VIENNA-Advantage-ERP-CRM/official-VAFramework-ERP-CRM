@@ -52,7 +52,7 @@ namespace VAWorkflow.Classes
                 while (true)
                 {
                     // Get records from mail queue table to send them one by one as email
-                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, AD_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, AD_WF_Activity_ID, AD_WF_EventAudit_ID, AD_MailQueue_ID, AD_WF_Process_ID FROM AD_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY AD_MailQueue_ID");
+                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, AD_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, AD_WF_Activity_ID, AD_WF_EventAudit_ID, VAF_MailQueue_ID, AD_WF_Process_ID FROM VAF_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY VAF_MailQueue_ID");
 
                     if (mailds != null && mailds.Tables.Count > 0 && mailds.Tables[0].Rows.Count > 0)
                     {
@@ -76,7 +76,7 @@ namespace VAWorkflow.Classes
                             int AD_WF_Activity_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_WF_Activity_ID"]);
                             int AD_WF_EventAudit_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_WF_EventAudit_ID"]);
                             int AD_WF_Process_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_WF_Process_ID"]);
-                            int AD_MailQueue_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_MailQueue_ID"]);
+                            int VAF_MailQueue_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_MailQueue_ID"]);
 
 
                             // Create context
@@ -131,7 +131,7 @@ namespace VAWorkflow.Classes
                             MClient client = MClient.Get(_ctx, VAF_Client_ID);
                             bool mailsent = client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, VAF_TableView_ID, Record_ID, array, fileName);
 
-                            ViennaAdvantage.Model.X_AD_MailQueue mailQueue = new ViennaAdvantage.Model.X_AD_MailQueue(_ctx, AD_MailQueue_ID, null);
+                            ViennaAdvantage.Model.X_VAF_MailQueue mailQueue = new ViennaAdvantage.Model.X_VAF_MailQueue(_ctx, VAF_MailQueue_ID, null);
 
                             if (mailsent)
                             {
@@ -154,7 +154,7 @@ namespace VAWorkflow.Classes
                             // For testing thread abort problem 
                             //thread.Abort();
                         }
-                        int deleteoldmails = DB.ExecuteQuery("DELETE FROM AD_MailQueue WHERE (MailStatus = 'S' OR MailStatus = 'F') AND Created <=" + GlobalVariable.TO_DATE(DateTime.Now, false) + " - 7");
+                        int deleteoldmails = DB.ExecuteQuery("DELETE FROM VAF_MailQueue WHERE (MailStatus = 'S' OR MailStatus = 'F') AND Created <=" + GlobalVariable.TO_DATE(DateTime.Now, false) + " - 7");
                     }
                     else
                     {

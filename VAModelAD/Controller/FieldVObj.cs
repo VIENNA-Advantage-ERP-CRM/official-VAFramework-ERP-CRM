@@ -369,7 +369,7 @@ namespace VAdvantage.Controller
             //		if ("EntityType".Equals(keyColumn))
             //			keyColumn = "VAF_RecrodType_ID";
             //		if (!keyColumn.endsWith("_ID"))
-            //			keyColumn += "_ID";			//	AD_Language_ID
+            //			keyColumn += "_ID";			//	VAF_Language_ID
             //		int Record_ID = ctx.getContextAsInt(keyColumn);
             //	MRole role = MRole.getDefault(ctx, false); 
             //if (!role.canUpdate(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID, Record_ID, false))

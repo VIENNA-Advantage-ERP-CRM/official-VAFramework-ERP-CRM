@@ -77,7 +77,7 @@ p.IsEncrypted
                 //    + " INNER JOIN AD_Process_Para_Trl t ON (p.AD_Process_Para_ID=t.AD_Process_Para_ID)"
                 //    + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (p.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) "
                 //    + "WHERE p.AD_Process_ID=@processid"		//	1
-                //    + " AND t.AD_Language='" + Utility.Env.GetAD_Language(ctx) + "'"
+                //    + " AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "'"
                 //    + " AND p.IsActive='Y' "
                 //    + "ORDER BY SeqNo";
 
@@ -108,7 +108,7 @@ p.IsEncrypted
                                 LEFT OUTER JOIN VAF_DataVal_Rule vr
                                 ON (p.VAF_DataVal_Rule_ID =vr.VAF_DataVal_Rule_ID)
                                 WHERE p.AD_Process_ID=@processid
-                                AND t.AD_Language    ='" + Utility.Env.GetAD_Language(ctx) + @"'
+                                AND t.VAF_Language    ='" + Utility.Env.GetVAF_Language(ctx) + @"'
                                 AND p.IsActive       ='Y'
                                 ORDER BY SeqNo";
             }

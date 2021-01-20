@@ -58,13 +58,13 @@ namespace VAdvantage.Model
         ///New Mandatory Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Message_ID">message</param>
+        /// <param name="VAF_Msg_Lable_ID">message</param>
         /// <param name="AD_User_ID">targeted user</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, int AD_Message_ID, int AD_User_ID, Trx trxName)
+        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int AD_User_ID, Trx trxName)
             : this(ctx, 0, trxName)
         {
-            SetAD_Message_ID(AD_Message_ID);
+            SetVAF_Msg_Lable_ID(VAF_Msg_Lable_ID);
             SetAD_User_ID(AD_User_ID);
         }
 
@@ -72,11 +72,11 @@ namespace VAdvantage.Model
         /// New Mandatory Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_MessageValue">message</param>
+        /// <param name="VAF_Msg_LableValue">message</param>
         /// <param name="AD_User_ID">targeted user</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, string AD_MessageValue, int AD_User_ID, Trx trxName)
-            : this(ctx, MMessage.GetAD_Message_ID(ctx, AD_MessageValue), AD_User_ID, trxName)
+        public MNote(Ctx ctx, string VAF_Msg_LableValue, int AD_User_ID, Trx trxName)
+            : this(ctx, MMessage.GetVAF_Msg_Lable_ID(ctx, VAF_Msg_LableValue), AD_User_ID, trxName)
         {
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
             SetVAF_Org_ID(0);
@@ -86,16 +86,16 @@ namespace VAdvantage.Model
         /// Create Note
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Message_ID">message</param>
+        /// <param name="VAF_Msg_Lable_ID">message</param>
         /// <param name="AD_User_ID">user</param>
         /// <param name="VAF_TableView_ID">table</param>
         /// <param name="Record_ID">record</param>
         /// <param name="Reference">reference</param>
         /// <param name="TextMsg">text message</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, int AD_Message_ID, int AD_User_ID,
+        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int AD_User_ID,
             int VAF_TableView_ID, int Record_ID, String Reference, String TextMsg, Trx trxName)
-            : this(ctx, AD_Message_ID, AD_User_ID, trxName)
+            : this(ctx, VAF_Msg_Lable_ID, AD_User_ID, trxName)
         {
             SetRecord(VAF_TableView_ID, Record_ID);
             SetReference(Reference);
@@ -109,15 +109,15 @@ namespace VAdvantage.Model
         /// Create Note (Added by Jagmohan Bhatt)
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Message_ID"></param>
+        /// <param name="VAF_Msg_Lable_ID"></param>
         /// <param name="AD_User_ID"></param>
         /// <param name="VAF_Client_ID"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="Reference"></param>
         /// <param name="trxName"></param>
-        public MNote(Ctx ctx, int AD_Message_ID, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int VAF_TableView_ID, int Record_ID, String Reference, Trx trxName)
-            : this(ctx,AD_Message_ID, AD_User_ID, trxName)
+        public MNote(Ctx ctx, int VAF_Msg_Lable_ID, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int VAF_TableView_ID, int Record_ID, String Reference, Trx trxName)
+            : this(ctx,VAF_Msg_Lable_ID, AD_User_ID, trxName)
         {
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             SetRecord(VAF_TableView_ID, Record_ID);
@@ -130,14 +130,14 @@ namespace VAdvantage.Model
         /// New Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_MessageValue">message</param>
+        /// <param name="VAF_Msg_LableValue">message</param>
         /// <param name="AD_User_ID">targeteduser</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, string AD_MessageValue, int AD_User_ID,
+        public MNote(Ctx ctx, string VAF_Msg_LableValue, int AD_User_ID,
             int VAF_Client_ID, int VAF_Org_ID, Trx trxName)
-            : this(ctx, MMessage.GetAD_Message_ID(ctx, AD_MessageValue), AD_User_ID, trxName)
+            : this(ctx, MMessage.GetVAF_Msg_Lable_ID(ctx, VAF_Msg_LableValue), AD_User_ID, trxName)
         {
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
@@ -148,35 +148,35 @@ namespace VAdvantage.Model
         ///Set Record.
         ///(Ss Button and defaults to String)
         /// </summary>
-        /// <param name="AD_Message">AD_Message</param>
-        public void SetAD_Message_ID(string AD_Message)
+        /// <param name="VAF_Msg_Lable">VAF_Msg_Lable</param>
+        public void SetVAF_Msg_Lable_ID(string VAF_Msg_Lable)
         {
-            int AD_Message_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, "SELECT AD_Message_ID FROM AD_Message WHERE Value=" + AD_Message);
-            if (AD_Message_ID != -1)
+            int VAF_Msg_Lable_ID = CoreLibrary.DataBase.DB.GetSQLValue(null, "SELECT VAF_Msg_Lable_ID FROM VAF_Msg_Lable WHERE Value=" + VAF_Msg_Lable);
+            if (VAF_Msg_Lable_ID != -1)
             {
-                base.SetAD_Message_ID(AD_Message_ID);
+                base.SetVAF_Msg_Lable_ID(VAF_Msg_Lable_ID);
             }
             else
             {
-                base.SetAD_Message_ID(240); //	Error
-                log.Log(Level.SEVERE, "setAD_Message_ID - ID not found for '" + AD_Message + "'");
+                base.SetVAF_Msg_Lable_ID(240); //	Error
+                log.Log(Level.SEVERE, "setVAF_Msg_Lable_ID - ID not found for '" + VAF_Msg_Lable + "'");
             }
         }
 
         /// <summary>
-        ///	Set AD_Message_ID.
+        ///	Set VAF_Msg_Lable_ID.
         ///	Looks up No Message Found if 0
         /// </summary>
-        /// <param name="AD_Message_ID">id</param>
-        public new void SetAD_Message_ID(int AD_Message_ID)
+        /// <param name="VAF_Msg_Lable_ID">id</param>
+        public new void SetVAF_Msg_Lable_ID(int VAF_Msg_Lable_ID)
         {
-            if (AD_Message_ID == 0)
+            if (VAF_Msg_Lable_ID == 0)
             {
-                base.SetAD_Message_ID(MMessage.GetAD_Message_ID(GetCtx(), "NoMessageFound"));
+                base.SetVAF_Msg_Lable_ID(MMessage.GetVAF_Msg_Lable_ID(GetCtx(), "NoMessageFound"));
             }
             else
             {
-                base.SetAD_Message_ID(AD_Message_ID);
+                base.SetVAF_Msg_Lable_ID(VAF_Msg_Lable_ID);
             }
         }
 
@@ -186,8 +186,8 @@ namespace VAdvantage.Model
         /// <returns>message</returns>
         public string GetMessage()
         {
-            int AD_Message_ID = GetAD_Message_ID();
-            MMessage msg = MMessage.Get(GetCtx(), AD_Message_ID);
+            int VAF_Msg_Lable_ID = GetVAF_Msg_Lable_ID();
+            MMessage msg = MMessage.Get(GetCtx(), VAF_Msg_Lable_ID);
             return msg.GetMsgText();
         }
 
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder("MNote[")
-                .Append(Get_ID()).Append(",AD_Message_ID=").Append(GetAD_Message_ID())
+                .Append(Get_ID()).Append(",VAF_Msg_Lable_ID=").Append(GetVAF_Msg_Lable_ID())
                 .Append(",").Append(GetReference())
                 .Append(",Processed=").Append(IsProcessed())
                 .Append("]");

@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Archive
+/** Generated Model for VAF_Archive
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Archive : PO
+public class X_VAF_Archive : PO
 {
-public X_AD_Archive (Context ctx, int AD_Archive_ID, Trx trxName) : base (ctx, AD_Archive_ID, trxName)
+public X_VAF_Archive (Context ctx, int VAF_Archive_ID, Trx trxName) : base (ctx, VAF_Archive_ID, trxName)
 {
-/** if (AD_Archive_ID == 0)
+/** if (VAF_Archive_ID == 0)
 {
-SetAD_Archive_ID (0);
+SetVAF_Archive_ID (0);
 SetIsReport (false);
 SetName (null);
 }
  */
 }
-public X_AD_Archive (Ctx ctx, int AD_Archive_ID, Trx trxName) : base (ctx, AD_Archive_ID, trxName)
+public X_VAF_Archive (Ctx ctx, int VAF_Archive_ID, Trx trxName) : base (ctx, VAF_Archive_ID, trxName)
 {
-/** if (AD_Archive_ID == 0)
+/** if (VAF_Archive_ID == 0)
 {
-SetAD_Archive_ID (0);
+SetVAF_Archive_ID (0);
 SetIsReport (false);
 SetName (null);
 }
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Archive (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Archive (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Archive (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Archive (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Archive (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Archive (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Archive (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Archive (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Archive()
+static X_VAF_Archive()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389043628L;
 public static int Table_ID;
  // =754;
 
-/** TableName=AD_Archive */
-public static String Table_Name="AD_Archive";
+/** TableName=VAF_Archive */
+public static String Table_Name="VAF_Archive";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Archive[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Archive[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Archive.
-@param AD_Archive_ID Document and Report Archive */
-public void SetAD_Archive_ID (int AD_Archive_ID)
+@param VAF_Archive_ID Document and Report Archive */
+public void SetVAF_Archive_ID (int VAF_Archive_ID)
 {
-if (AD_Archive_ID < 1) throw new ArgumentException ("AD_Archive_ID is mandatory.");
-Set_ValueNoCheck ("AD_Archive_ID", AD_Archive_ID);
+if (VAF_Archive_ID < 1) throw new ArgumentException ("VAF_Archive_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Archive_ID", VAF_Archive_ID);
 }
 /** Get Archive.
 @return Document and Report Archive */
-public int GetAD_Archive_ID() 
+public int GetVAF_Archive_ID() 
 {
-Object ii = Get_Value("AD_Archive_ID");
+Object ii = Get_Value("VAF_Archive_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

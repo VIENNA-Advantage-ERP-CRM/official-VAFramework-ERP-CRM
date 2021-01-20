@@ -1366,7 +1366,7 @@ namespace VAdvantage.Model
         }
 
 
-        //static String AD_MessageValue = "DashBoardAlerts";
+        //static String VAF_Msg_LableValue = "DashBoardAlerts";
 
 
         /// <summary>
@@ -1456,7 +1456,7 @@ namespace VAdvantage.Model
                                 match = series.MatchCondition(int.Parse(series.GetWhereCondition()), dr["ColX"].ToString(), series.GetAlertValue_X(), dr["ColY"].ToString(), series.GetAlertValue(), series.GetValueTo());
                             if (match)
                             {
-                                //MNote notes = new MNote(GetCtx(), MMessage.GetAD_Message_ID(VAdvantage.Utility.GetCtx(), AD_MessageValue), Env.GetContext().GetAD_User_ID(), series.GetVAF_Client_ID(), series.GetVAF_Org_ID(), series.Get_Table_ID(), series.Get_ID(), dr[0].ToString(), null);
+                                //MNote notes = new MNote(GetCtx(), MMessage.GetVAF_Msg_Lable_ID(VAdvantage.Utility.GetCtx(), VAF_Msg_LableValue), Env.GetContext().GetAD_User_ID(), series.GetVAF_Client_ID(), series.GetVAF_Org_ID(), series.Get_Table_ID(), series.Get_ID(), dr[0].ToString(), null);
                                 //if (series.IsIdentifier_X() || series.IsString_X())
                                 //    notes.SetReference(dr[0].ToString());
                                 //else

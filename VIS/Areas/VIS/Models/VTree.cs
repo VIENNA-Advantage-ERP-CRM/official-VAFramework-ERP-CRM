@@ -246,7 +246,7 @@ namespace VAdvantage.Classes
             string strColumnName = "";
             if (treeType == TreeType.MM)
             {
-                strColumnName = "Ad_Menu_Id";
+                strColumnName = "VAF_MenuConfig_Id";
             }
             else
             {
@@ -401,18 +401,18 @@ namespace VAdvantage.Classes
              else if (treeType == TreeType.MM)
              {
                  //Check Base langugae
-                 bool isBase = Utility.Env.IsBaseLanguage(ctx, "AD_MENU");
+                 bool isBase = Utility.Env.IsBaseLanguage(ctx, "VAF_MENUCONFIG");
                  if (isBase)
                  {
-                     strSql = @"SELECT m.AD_Menu_ID, m.Name,m.Description,m.IsSummary,m.Action, m.AD_Window_ID,
+                     strSql = @"SELECT m.VAF_MenuConfig_ID, m.Name,m.Description,m.IsSummary,m.Action, m.AD_Window_ID,
                        m.AD_Process_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
-                       FROM AD_Menu m WHERE";
+                       FROM VAF_MenuConfig m WHERE";
                  }
                  else
                  {
-                     strSql = @"SELECT m.AD_Menu_ID, t.Name,t.Description,m.IsSummary,m.Action, m.AD_Window_ID,
+                     strSql = @"SELECT m.VAF_MenuConfig_ID, t.Name,t.Description,m.IsSummary,m.Action, m.AD_Window_ID,
                         m.AD_Process_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
-                      FROM AD_Menu m, AD_menu_Trl t WHERE m.AD_Menu_ID=t.AD_Menu_ID AND t.AD_Language='" + Utility.Env.GetAD_Language(ctx) + "' And";
+                      FROM VAF_MenuConfig m, VAF_MenuConfig_TL t WHERE m.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "' And";
                  }
                  if (!_editable)
                  {
@@ -562,7 +562,7 @@ namespace VAdvantage.Classes
             string strAction = "";
             //Get row Info From Table Using LINQ agianst Node_ID
             var rowInfo = from en in dt.AsEnumerable()
-                         where en.Field<decimal>("AD_Menu_ID") == Node_ID
+                         where en.Field<decimal>("VAF_MenuConfig_ID") == Node_ID
                          select en;
             
             foreach (DataRow dr in rowInfo)
@@ -584,7 +584,7 @@ namespace VAdvantage.Classes
             string strColumnId = "";
             if (treeType == "MM")
             {
-                strColumnId = "AD_Menu_Id";
+                strColumnId = "VAF_MenuConfig_Id";
             }
             else
             {

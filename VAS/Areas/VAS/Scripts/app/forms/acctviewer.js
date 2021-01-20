@@ -484,7 +484,7 @@
     // Get the value from the info window.
     AcctViewerData.prototype.getButtonText = function (tableName, columnName, selectSQL) {
 
-        var language = VIS.Env.getAD_Language(VIS.Env.getCtx());
+        var language = VIS.Env.getVAF_Language(VIS.Env.getCtx());
         var lookupDirEmbed = VIS.MLookupFactory.getLookup_TableDirEmbed(language, columnName, "avd", columnName);
         var retValue = "<" + selectSQL + ">";
         $.ajax({
@@ -513,7 +513,7 @@
 
     //AcctViewerData.prototype.getButtonText = function (tableName, columnName, selectSQL) {
     //    var sql = "SELECT (";
-    //    var language = VIS.Env.getAD_Language(VIS.Env.getCtx());
+    //    var language = VIS.Env.getVAF_Language(VIS.Env.getCtx());
 
     //    sql = sql.concat(VIS.MLookupFactory.getLookup_TableDirEmbed(language, columnName, "avd", columnName))
     //        .concat(") FROM ").concat(tableName).concat(" avd WHERE avd.").concat(selectSQL);

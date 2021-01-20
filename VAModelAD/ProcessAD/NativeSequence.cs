@@ -69,14 +69,14 @@ namespace VAdvantage.Process
             try
             {
                 CreateSequence("AD_Sequence", null);
-                CreateSequence("AD_Issue", null);
+                CreateSequence("VAF_Issue", null);
                 CreateSequence("VAF_AlterLog", null);
                 //
-                String whereClause = "TableName NOT IN ('AD_Sequence', 'AD_Issue', 'VAF_AlterLog')";
+                String whereClause = "TableName NOT IN ('AD_Sequence', 'VAF_Issue', 'VAF_AlterLog')";
                 //List<MTable> tables = new Query(GetCtx(),X_VAF_TableView.Table_Name, whereClause, Get_TrxName().GetTrxName())
                 //    .SetOrderBy("TableName")
                 //    .list();
-                 sql = "SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'VAF_AlterLog') AND IsActive='Y'";
+                 sql = "SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName NOT IN ('AD_Sequence', 'VAF_Issue', 'VAF_AlterLog') AND IsActive='Y'";
                 DataSet ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {

@@ -712,8 +712,8 @@
 
             var whereClause = sql;
 
-            var sqlMain = "SELECT AD_ARCHIVE_ID,VAF_CLIENT_ID,VAF_ORG_ID,AD_PROCESS_ID,VAF_TABLEVIEW_ID,C_BPARTNER_ID,CREATED,CREATEDBY,DESCRIPTION,HELP," +
-                " ISACTIVE,ISREPORT,NAME,RECORD_ID,UPDATED,UPDATEDBY,EXPORT_ID FROM AD_Archive WHERE VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID();
+            var sqlMain = "SELECT VAF_ARCHIVE_ID,VAF_CLIENT_ID,VAF_ORG_ID,AD_PROCESS_ID,VAF_TABLEVIEW_ID,C_BPARTNER_ID,CREATED,CREATEDBY,DESCRIPTION,HELP," +
+                " ISACTIVE,ISREPORT,NAME,RECORD_ID,UPDATED,UPDATEDBY,EXPORT_ID FROM VAF_Archive WHERE VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID();
             if (whereClause != null && whereClause.length > 0)
                 sqlMain += whereClause;
             sqlMain += " ORDER BY Created desc";
@@ -757,7 +757,7 @@
                 update = true;
             }
 
-            archiveId = dGrid.get(recid).AD_ARCHIVE_ID;
+            archiveId = dGrid.get(recid).VAF_ARCHIVE_ID;
 
             //Aject Request
             if (update) {
@@ -798,7 +798,7 @@
                     render: function () { return '<div><i class="vis vis-download" title="View record" style="opacity: 1; font-size: 1rem"></i></div>'; }
                 });
 
-                arrListColumns.push({ field: "AD_ARCHIVE_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "AD_ARCHIVE_ID"), hidden: true });
+                arrListColumns.push({ field: "VAF_ARCHIVE_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_ARCHIVE_ID"), hidden: true });
                 //arrListColumns.push({ field: "AD_PROCESS_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "AD_PROCESS_ID"), hidden: true });
                 //arrListColumns.push({ field: "VAF_TABLEVIEW_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_TABLEVIEW_ID"), hidden: true });
                 //arrListColumns.push({ field: "C_BPARTNER_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_BPARTNER_ID"), hidden: true });
@@ -822,7 +822,7 @@
         }
 
         function downloadPdf(recid) {
-            archiveId = dGrid.get(recid).AD_ARCHIVE_ID;
+            archiveId = dGrid.get(recid).VAF_ARCHIVE_ID;
 
             $.ajax({
                 url: VIS.Application.contextUrl + "Common/DownloadPdf",
@@ -854,7 +854,7 @@
                 dtpCreatedOn.val(dGrid.get(recid).CREATED)
             }
 
-            archiveId = dGrid.get(recid).AD_ARCHIVE_ID;
+            archiveId = dGrid.get(recid).VAF_ARCHIVE_ID;
         }
 
         function getCreatedByName(createdby) {
@@ -892,7 +892,7 @@
                     CreatedOn = d.toLocaleDateString();
 
                     line['CREATED'] = CreatedOn;
-                    line['AD_ARCHIVE_ID'] = dr.getInt('AD_ARCHIVE_ID');
+                    line['VAF_ARCHIVE_ID'] = dr.getInt('VAF_ARCHIVE_ID');
                     //line['AD_PROCESS_ID'] = dr.getInt('AD_PROCESS_ID');
                     //line['VAF_TABLEVIEW_ID'] = dr.getInt('VAF_TABLEVIEW_ID');
                     //line['C_BPARTNER_ID'] = dr.getInt('C_BPARTNER_ID');

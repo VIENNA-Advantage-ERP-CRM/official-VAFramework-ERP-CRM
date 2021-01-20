@@ -660,8 +660,8 @@
     // Get Orders
     VCreateFrom.prototype.getOrders = function (ctx, C_BPartner_ID, isReturnTrx, forInvoice) {
 
-        var display = "o.DocumentNo||' - ' ||".concat(VIS.DB.to_char("o.DateOrdered", VIS.DisplayType.Date, VIS.Env.getAD_Language(ctx))).concat("||' - '||").concat(
-            VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getAD_Language(ctx)));
+        var display = "o.DocumentNo||' - ' ||".concat(VIS.DB.to_char("o.DateOrdered", VIS.DisplayType.Date, VIS.Env.getVAF_Language(ctx))).concat("||' - '||").concat(
+            VIS.DB.to_char("o.GrandTotal", VIS.DisplayType.Amount, VIS.Env.getVAF_Language(ctx)));
 
         var column = "m.M_InOutLine_ID";
         if (forInvoice) {
@@ -2045,7 +2045,7 @@
                 isBaseLanges = " LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)";
             }
             else {
-                isBaseLanges = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx).concat("')");
+                isBaseLanges = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx).concat("')");
             }
             if (M_Product_ID != null) {
                 MProductIDs = " AND l.M_Product_ID=" + M_Product_ID;
@@ -2105,7 +2105,7 @@
             }
             else {
                 // JID_1720
-                isBaseLanges = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "') INNER JOIN C_UOM uom1 ON uom1.C_UOM_ID = uom.C_UOM_ID ";
+                isBaseLanges = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "') INNER JOIN C_UOM uom1 ON uom1.C_UOM_ID = uom.C_UOM_ID ";
             }
             if (M_Product_ID > 0) {
                 MProductIDs = " AND l.M_Product_ID=" + M_Product_ID;
@@ -2209,7 +2209,7 @@
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
     //        }
     //        else {
-    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='").concat(VIS.Env.getAD_Language(ctx)).concat("')");
+    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='").concat(VIS.Env.getVAF_Language(ctx)).concat("')");
     //        }
 
     //        sql = sql.concat(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ");
@@ -2250,7 +2250,7 @@
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
     //        }
     //        else {
-    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='").concat(VIS.Env.getAD_Language(ctx)).concat("')");
+    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='").concat(VIS.Env.getVAF_Language(ctx)).concat("')");
     //        }
 
     //        sql = sql.concat(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ");
@@ -2288,7 +2288,7 @@
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
     //        }
     //        else {
-    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='").concat(VIS.Env.getAD_Language(ctx)).concat("')");
+    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='").concat(VIS.Env.getVAF_Language(ctx)).concat("')");
     //        }
 
     //        sql = sql.concat(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ");
@@ -2426,10 +2426,10 @@
                 isBaseLang = " LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)";
             }
             else {
-                isBaseLang = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "')";
+                isBaseLang = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "')";
             }
             var orggetVal = $self.mTab.getValue($self.windowNo, "VAF_Org_ID");
-            var lang = VIS.Env.getAD_Language(ctx);
+            var lang = VIS.Env.getVAF_Language(ctx);
             $.ajax({
                 url: VIS.Application.contextUrl + "VCreateFrom/GetOrderDataCommons",
                 dataType: "json",
@@ -2489,9 +2489,9 @@
                 isBaseLang = " LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)";
             }
             else {
-                isBaseLang = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "')";
+                isBaseLang = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "')";
             }
-            var lang = VIS.Env.getAD_Language(ctx);
+            var lang = VIS.Env.getVAF_Language(ctx);
 
             $.ajax({
                 url: VIS.Application.contextUrl + "VCreateFrom/GetOrderDataCommonsNotOrg",
@@ -2591,7 +2591,7 @@
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
     //        }
     //        else {
-    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='").concat(VIS.Env.getAD_Language(ctx)).concat("')");
+    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='").concat(VIS.Env.getVAF_Language(ctx)).concat("')");
     //        }
 
     //        sql = sql.concat(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ");
@@ -2623,7 +2623,7 @@
     //            sql = sql.concat(" LEFT OUTER JOIN C_UOM uom ON (l.C_UOM_ID=uom.C_UOM_ID)");
     //        }
     //        else {
-    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='").concat(VIS.Env.getAD_Language(ctx)).concat("')");
+    //            sql = sql.concat(" LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='").concat(VIS.Env.getVAF_Language(ctx)).concat("')");
     //        }
 
     //        sql = sql.concat(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ");

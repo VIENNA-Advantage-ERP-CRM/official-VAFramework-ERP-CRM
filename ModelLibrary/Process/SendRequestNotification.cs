@@ -305,8 +305,8 @@ namespace VAdvantage.Process
                     finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + _req.GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
                 }
 
-                int AD_Message_ID = 834;
-                MNote note = new MNote(GetCtx(), AD_Message_ID, GetCtx().GetAD_User_ID(),
+                int VAF_Msg_Lable_ID = 834;
+                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetCtx().GetAD_User_ID(),
                     X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
@@ -496,8 +496,8 @@ namespace VAdvantage.Process
             if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
                 || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
             {
-                int AD_Message_ID = 834;
-                MNote note = new MNote(GetCtx(), AD_Message_ID, AD_User_ID,
+                int VAF_Msg_Lable_ID = 834;
+                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, AD_User_ID,
                     X_R_Request.Table_ID, _req.GetR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())

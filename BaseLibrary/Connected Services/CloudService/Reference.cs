@@ -136,7 +136,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ModuleInstallationRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string ModuleInstallationRequest(int AD_User_ID, int AD_ModuleInfo_ID, string ipAddress, int[] clients, string[] languages, string versionNo, string accessKey);
+        string ModuleInstallationRequest(int AD_User_ID, int VAF_ModuleInfo_ID, string ipAddress, int[] clients, string[] languages, string versionNo, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetRequestToInstallModule", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -6387,8 +6387,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetCurrentRunningTenant(zoneCode, accessKey);
         }
         
-        public string ModuleInstallationRequest(int AD_User_ID, int AD_ModuleInfo_ID, string ipAddress, int[] clients, string[] languages, string versionNo, string accessKey) {
-            return base.Channel.ModuleInstallationRequest(AD_User_ID, AD_ModuleInfo_ID, ipAddress, clients, languages, versionNo, accessKey);
+        public string ModuleInstallationRequest(int AD_User_ID, int VAF_ModuleInfo_ID, string ipAddress, int[] clients, string[] languages, string versionNo, string accessKey) {
+            return base.Channel.ModuleInstallationRequest(AD_User_ID, VAF_ModuleInfo_ID, ipAddress, clients, languages, versionNo, accessKey);
         }
         
         public BaseLibrary.CloudService.RequestedModuleInfo[] GetRequestToInstallModule(string ZoneCode, string accessKey) {

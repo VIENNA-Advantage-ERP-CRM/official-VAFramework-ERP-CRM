@@ -581,7 +581,7 @@ namespace VAdvantage.Process
                     note.SetTextMsg(message);
                     note.SetDescription(Msg.GetMsg(ctx, "AttachEmailNotification"));
                     note.SetRecord(tableid, recordID);  // point to this
-                    note.SetAD_Message_ID(859);//Workflow
+                    note.SetVAF_Msg_Lable_ID(859);//Workflow
                     if (!note.Save())
                     {
                         // CreateMessage(strBuilder, Convert.ToString(recordID));
@@ -617,7 +617,7 @@ namespace VAdvantage.Process
                     note.SetTextMsg(message);
                     note.SetDescription(Msg.GetMsg(ctx, "AttachEmailNotification"));
                     note.SetRecord(tableid, recordID);  // point to this
-                    note.SetAD_Message_ID(859);//Workflow
+                    note.SetVAF_Msg_Lable_ID(859);//Workflow
                     if (!note.Save())
                     {
                         // CreateMessage(strBuilder, Convert.ToString(recordID));

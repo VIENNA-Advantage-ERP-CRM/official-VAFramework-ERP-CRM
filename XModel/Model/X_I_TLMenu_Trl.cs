@@ -20,7 +20,7 @@ public X_I_TLMenu_Trl (Context ctx, int I_TLMenu_Trl_ID, Trx trxName) : base (ct
 {
 /** if (I_TLMenu_Trl_ID == 0)
 {
-SetAD_Menu_ID (0);
+SetVAF_MenuConfig_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -31,7 +31,7 @@ public X_I_TLMenu_Trl (Ctx ctx, int I_TLMenu_Trl_ID, Trx trxName) : base (ctx, I
 {
 /** if (I_TLMenu_Trl_ID == 0)
 {
-SetAD_Menu_ID (0);
+SetVAF_MenuConfig_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLMenu_Trl[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set Menu.
-@param AD_Menu_ID Identifies a Menu */
-public void SetAD_Menu_ID (int AD_Menu_ID)
+@param VAF_MenuConfig_ID Identifies a Menu */
+public void SetVAF_MenuConfig_ID (int VAF_MenuConfig_ID)
 {
-if (AD_Menu_ID < 1) throw new ArgumentException ("AD_Menu_ID is mandatory.");
-Set_ValueNoCheck ("AD_Menu_ID", AD_Menu_ID);
+if (VAF_MenuConfig_ID < 1) throw new ArgumentException ("VAF_MenuConfig_ID is mandatory.");
+Set_ValueNoCheck ("VAF_MenuConfig_ID", VAF_MenuConfig_ID);
 }
 /** Get Menu.
 @return Identifies a Menu */
-public int GetAD_Menu_ID() 
+public int GetVAF_MenuConfig_ID() 
 {
-Object ii = Get_Value("AD_Menu_ID");
+Object ii = Get_Value("VAF_MenuConfig_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

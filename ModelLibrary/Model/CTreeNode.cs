@@ -130,7 +130,7 @@ namespace VAdvantage.Model
 
 	/**************************************************************************
 	 *  Get Node ID
-	 *  @return node id (e.g. AD_Menu_ID)
+	 *  @return node id (e.g. VAF_MenuConfig_ID)
 	 */
 	public int GetNode_ID()
 	{
@@ -276,7 +276,7 @@ namespace VAdvantage.Model
 
 	/**
 	 *	Return parent
-	 *  @return Parent_ID (e.g. AD_Menu_ID)
+	 *  @return Parent_ID (e.g. VAF_MenuConfig_ID)
 	 */
 	public int GetParent_ID()
 	{
@@ -445,7 +445,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isProcess()
 	{
-		return X_AD_Menu.ACTION_Process.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Process.Equals(m_imageIndicator);
 	}	//	isProcess
 
 	/**
@@ -454,7 +454,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isReport()
 	{
-		return X_AD_Menu.ACTION_Report.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Report.Equals(m_imageIndicator);
 	}	//	isReport
 	
 	/**
@@ -463,7 +463,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isWindow()
 	{
-		return X_AD_Menu.ACTION_Window.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Window.Equals(m_imageIndicator);
 	}	//	isWindow
 	
 	/**
@@ -472,7 +472,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isWorkbench()
 	{
-		return X_AD_Menu.ACTION_Workbench.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Workbench.Equals(m_imageIndicator);
 	}	//	isWorkbench
 	
 	/**
@@ -481,7 +481,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isWorkFlow()
 	{
-		return X_AD_Menu.ACTION_WorkFlow.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_WorkFlow.Equals(m_imageIndicator);
 	}	//	isWorkFlow
 
 	/**
@@ -490,7 +490,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isForm()
 	{
-		return X_AD_Menu.ACTION_Form.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Form.Equals(m_imageIndicator);
 	}	//	isForm
 
 	/**
@@ -499,7 +499,7 @@ namespace VAdvantage.Model
 	 */
 	public Boolean isTask()
 	{
-		return X_AD_Menu.ACTION_Task.Equals(m_imageIndicator);
+		return X_VAF_MenuConfig.ACTION_Task.Equals(m_imageIndicator);
 	}	//	isTask
 
 	/**

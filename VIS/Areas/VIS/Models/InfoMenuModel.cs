@@ -36,8 +36,8 @@ namespace VIS.Models
             }
             else
             {
-                sql = @" SELECT WT.Name, W.VAF_QuickSearchWindow_ID FROM VAF_QuickSearchWindow W
-                            INNER JOIN VAF_QuickSearchWindow_TL WT ON (W.VAF_QuickSearchWindow_ID=WT.VAF_QuickSearchWindow_ID AND WT.ad_language='" + ctx.GetAD_Language() + @"')
+                sql = @" SELECT WT.Name, W.VAF_QuickSearchWindow_ID FROM VAF_QuickSearchWindow WVAF_InviteUser
+                            INNER JOIN VAF_QuickSearchWindow_TL WT ON (W.VAF_QuickSearchWindow_ID=WT.VAF_QuickSearchWindow_ID AND WT.VAF_Language='" + ctx.GetVAF_Language() + @"')
                             WHERE W.IsActive='Y' ORDER BY WT.Name ASC";
             }
 

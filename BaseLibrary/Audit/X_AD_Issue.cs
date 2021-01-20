@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Issue
+/** Generated Model for VAF_Issue
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Issue : PO
+public class X_VAF_Issue : PO
 {
-public X_AD_Issue (Context ctx, int AD_Issue_ID, Trx trxName) : base (ctx, AD_Issue_ID, trxName)
+public X_VAF_Issue (Context ctx, int VAF_Issue_ID, Trx trxName) : base (ctx, VAF_Issue_ID, trxName)
 {
-/** if (AD_Issue_ID == 0)
+/** if (VAF_Issue_ID == 0)
 {
-SetAD_Issue_ID (0);
+SetVAF_Issue_ID (0);
 SetIssueSummary (null);
 SetName (null);	// .
 SetProcessed (false);	// N
@@ -31,11 +31,11 @@ SetVersion (null);	// .
 }
  */
 }
-public X_AD_Issue (Ctx ctx, int AD_Issue_ID, Trx trxName) : base (ctx, AD_Issue_ID, trxName)
+public X_VAF_Issue (Ctx ctx, int VAF_Issue_ID, Trx trxName) : base (ctx, VAF_Issue_ID, trxName)
 {
-/** if (AD_Issue_ID == 0)
+/** if (VAF_Issue_ID == 0)
 {
-SetAD_Issue_ID (0);
+SetVAF_Issue_ID (0);
 SetIssueSummary (null);
 SetName (null);	// .
 SetProcessed (false);	// N
@@ -51,7 +51,7 @@ SetVersion (null);	// .
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Issue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Issue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_AD_Issue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Issue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Issue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_AD_Issue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Issue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Issue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Issue()
+static X_VAF_Issue()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389045070L;
 public static int Table_ID;
  // =828;
 
-/** TableName=AD_Issue */
-public static String Table_Name="AD_Issue";
+/** TableName=VAF_Issue */
+public static String Table_Name="VAF_Issue";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Issue[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Issue[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Special Form.
@@ -141,17 +141,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set System Issue.
-@param AD_Issue_ID Automatically created or manually entered System Issue */
-public void SetAD_Issue_ID (int AD_Issue_ID)
+@param VAF_Issue_ID Automatically created or manually entered System Issue */
+public void SetVAF_Issue_ID (int VAF_Issue_ID)
 {
-if (AD_Issue_ID < 1) throw new ArgumentException ("AD_Issue_ID is mandatory.");
-Set_ValueNoCheck ("AD_Issue_ID", AD_Issue_ID);
+if (VAF_Issue_ID < 1) throw new ArgumentException ("VAF_Issue_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Issue_ID", VAF_Issue_ID);
 }
 /** Get System Issue.
 @return Automatically created or manually entered System Issue */
-public int GetAD_Issue_ID() 
+public int GetVAF_Issue_ID() 
 {
-Object ii = Get_Value("AD_Issue_ID");
+Object ii = Get_Value("VAF_Issue_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

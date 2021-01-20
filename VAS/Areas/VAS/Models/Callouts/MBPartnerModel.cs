@@ -54,7 +54,7 @@ namespace VIS.Models
             }
             //30-4-2016
             //VA025
-            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA025_'")) > 0)
+            //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA025_'")) > 0)
             //{ 
             //    if (bpartner.GetVA025_DiscountCalculation() != null)
             //    {
@@ -151,7 +151,7 @@ namespace VIS.Models
             bool countVA009 = Util.GetValueOfBool(paramValue[0]);
             int C_BPartner_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT p.AD_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
+            string sql = "SELECT p.VAF_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
                 + "p.PaymentRule, p.POReference, p.SO_Description, p.IsDiscountPrinted, ";
             if (countVA009)
             {
@@ -220,7 +220,7 @@ namespace VIS.Models
             bool countVA009 = Util.GetValueOfBool(paramValue[0]);
             int C_BPartner_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT p.AD_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
+            string sql = "SELECT p.VAF_Language, p.C_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
                 + "p.PaymentRule, p.POReference, p.SO_Description, p.SalesRep_ID, ";
             if (countVA009)
             {
@@ -282,7 +282,7 @@ namespace VIS.Models
         {
             int bill_BPartner_ID = Util.GetValueOfInt(fields);
             Dictionary<string, object> retDic = null;
-            string sql = sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            string sql = sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
                 + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"

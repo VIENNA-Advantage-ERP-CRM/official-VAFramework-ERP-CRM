@@ -538,7 +538,7 @@ namespace VAdvantage.Process
                     requisition.SetC_DocType_ID(_C_DocType_ID);
                     requisition.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH
-                    int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_'"));
+                    int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_'"));
                     if (_CountDTD001 > 0)
                     {
                         requisition.SetDTD001_MWarehouseSource_ID(wh.GetM_WarehouseSource_ID());

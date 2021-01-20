@@ -637,7 +637,7 @@ namespace VIS.Controllers
             //}
             //else
             //{
-            //    sql += "FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + Env.GetAD_Language(ctx) + "') ";
+            //    sql += "FROM C_UOM_Trl uom INNER JOIN C_InvoiceLine l ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.VAF_Language='" + Env.GetVAF_Language(ctx) + "') ";
             //}
 
             //sql += "INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
@@ -840,7 +840,7 @@ namespace VIS.Controllers
         private string GetBankAccountsDataSql(string dates, string trxDatess, string trxDatesUnions, string cBPartnerIDs, string DocumentNos, string DocumentNoUnions, string DepositSlips,
             string AuthCodes, string CheckNos, string Amounts, int cBankAccountId)
         {
-            bool countVA034 = Env.IsModuleInstalled("VA034_"); //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
+            bool countVA034 = Env.IsModuleInstalled("VA034_"); //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
             StringBuilder sql = new StringBuilder();
             // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on payment.
             sql.Append("SELECT p.DateAcct AS DateTrx, p.C_Payment_ID, p.DocumentNo, ba.C_Currency_ID, c.ISO_Code, p.PayAmt,"
@@ -890,7 +890,7 @@ namespace VIS.Controllers
             }
             sql.Append(" AND NOT EXISTS (SELECT * FROM C_BankStatementLine l WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)");         //	Voided Bank Statements have 0 StmtAmt
 
-            bool countVA012 = Env.IsModuleInstalled("VA012_");    //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(AD_ModuleInfo_ID) FROM AD_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
+            bool countVA012 = Env.IsModuleInstalled("VA012_");    //Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
             if (countVA012)
             {
                 // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on Cash Journal.

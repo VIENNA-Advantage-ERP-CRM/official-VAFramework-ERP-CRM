@@ -161,17 +161,17 @@ namespace VIS.Controllers
                     Session["ctx"] = ctx;
 
                     //get login Language object on server
-                    var loginLang = ctx.GetAD_Language();
+                    var loginLang = ctx.GetVAF_Language();
 
-                    Language l = Language.GetLanguage(ctx.GetAD_Language()); //Language.GetLoginLanguage();
+                    Language l = Language.GetLanguage(ctx.GetVAF_Language()); //Language.GetLoginLanguage();
                     l = VAdvantage.Utility.Env.VerifyLanguage(ctx, l);
 
-                    ctx.SetContext(VAdvantage.Utility.Env.LANGUAGE, l.GetAD_Language());
+                    ctx.SetContext(VAdvantage.Utility.Env.LANGUAGE, l.GetVAF_Language());
                     ctx.SetContext(VAdvantage.Utility.Env.ISRIGHTTOLEFT, VAdvantage.Utility.Env.IsRightToLeft(loginLang) ? "Y" : "N");
                     new VAdvantage.Login.LoginProcess(ctx).LoadSysConfig();
                     LoginHelper.SetSysConfigInContext(ctx);
 
-                    ViewBag.culture = ctx.GetAD_Language();
+                    ViewBag.culture = ctx.GetVAF_Language();
                     ViewBag.direction = ctx.GetIsRightToLeft() ? "rtl" : "ltr";
 
                     //Change Authentication
@@ -180,7 +180,7 @@ namespace VIS.Controllers
                     model.Login2Model = new Login2Model();
                     model.Login1Model.UserValue = ctx.GetContext("##AD_User_Value");
                     model.Login1Model.DisplayName = ctx.GetContext("##AD_User_Name");
-                    model.Login1Model.LoginLanguage = ctx.GetAD_Language();
+                    model.Login1Model.LoginLanguage = ctx.GetVAF_Language();
 
                     model.Login2Model.Role = ctx.GetAD_Role_ID().ToString();
                     model.Login2Model.Client = ctx.GetVAF_Client_ID().ToString();
@@ -452,14 +452,14 @@ namespace VIS.Controllers
 
 
             Ctx ct = Session["ctx"] as Ctx;
-            ViewBag.Current_Ad_Lang = ct.GetAD_Language();
+            ViewBag.Current_Ad_Lang = ct.GetVAF_Language();
             objHomeHelp = new HomeHelper();
             HomeModels HM = objHomeHelp.getHomeAlrtCount(ct);
 
             objHomeHelp = new HomeHelper();
             HomeFolloUpsInfo fllInfo = objHomeHelp.getFolloUps(ct, 10, 1);
             HM.HomeFolloUpsInfo = fllInfo;
-            ViewBag.lang = ct.GetAD_Language();
+            ViewBag.lang = ct.GetVAF_Language();
             ViewBag.User_ID = ct.GetAD_User_ID();
             ViewBag.isRTL = ct.GetIsRightToLeft();
 

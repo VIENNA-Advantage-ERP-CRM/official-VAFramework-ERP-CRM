@@ -329,7 +329,7 @@ namespace VAdvantage.ProcessEngine
                 {
                     _PA_Hierarchy_ID = Util.GetValueOfInt(ID);
                 }
-                Language _language = Language.GetLanguage(_ctx.GetAD_Language());
+                Language _language = Language.GetLanguage(_ctx.GetVAF_Language());
 
                 //Get Query to fetch identifier value from table based on column selected. it will be used to display identifires on for parameter in report.
                 eSql = VLookUpFactory.GetLookup_TableDirEmbed(_language, columnName, columnName.Substring(0, columnName.Length - 3));
@@ -776,8 +776,8 @@ namespace VAdvantage.ProcessEngine
                 return;
             }
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = Env.GetLanguage(p_ctx).GetCulture(Env.GetBaseVAF_Language());
 
             for (int i = 0; i < logs.Length; i++)
             {
@@ -814,8 +814,8 @@ namespace VAdvantage.ProcessEngine
                 SqlExec.ExecuteQuery.ExecuteNonQuery(sql.ToString());
             }
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
-            System.Threading.Thread.CurrentThread.CurrentUICulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetAD_Language());
+            System.Threading.Thread.CurrentThread.CurrentCulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
+            System.Threading.Thread.CurrentThread.CurrentUICulture = org;// Utility.Env.GetLanguage(Utility.Env.GetContext()).GetCulture(Env.GetLoginLanguage(p_ctx).GetVAF_Language());
             pi.SetLogList(null);	//	otherwise log entries are twice
         }
 

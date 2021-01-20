@@ -997,15 +997,15 @@ namespace VAdvantage.DataBase
         /// </summary>
         /// <param name="columnName">the column name in the SQL</param>
         /// <param name="displayType">displayType Display Type</param>
-        /// <param name="AD_Language"></param>
+        /// <param name="VAF_Language"></param>
         /// <returns>TRIM(TO_CHAR(columnName,'999G999G999G990D00','NLS_NUMERIC_CHARACTERS='',.'''))
         ///     or TRIM(TO_CHAR(columnName,'TM9')) depending on DisplayType and Language</returns>
-        public static String TO_CHAR(String columnName, int displayType, String AD_Language)
+        public static String TO_CHAR(String columnName, int displayType, String VAF_Language)
         {
-            return CoreLibrary.DataBase.DB.TO_CHAR(columnName, displayType, AD_Language);
+            return CoreLibrary.DataBase.DB.TO_CHAR(columnName, displayType, VAF_Language);
             //if (columnName == null || columnName.Length == 0)
             //    throw new ArgumentException("Required parameter missing");
-            //return s_cc.GetDatabase().TO_CHAR(columnName, displayType, AD_Language);
+            //return s_cc.GetDatabase().TO_CHAR(columnName, displayType, VAF_Language);
         }   //  TO
 
         public static String NULL(String sqlClause, String dataType)

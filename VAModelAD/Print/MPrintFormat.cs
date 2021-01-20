@@ -54,7 +54,7 @@ namespace VAdvantage.Print
             : base(ctx, AD_PrintFormat_ID, trxName)
         {
             _ctx = ctx;
-            //	Language=[Deutsch,Locale=de_DE,AD_Language=en_US,DatePattern=DD.MM.YYYY,DecimalPoint=false]
+            //	Language=[Deutsch,Locale=de_DE,VAF_Language=en_US,DatePattern=DD.MM.YYYY,DecimalPoint=false]
             _language = Env.GetLanguage(ctx);
             if (AD_PrintFormat_ID == 0)
             {
@@ -331,11 +331,11 @@ namespace VAdvantage.Print
 
                 StringBuilder sql = new StringBuilder("UPDATE AD_PrintFormatItem_Trl ne ")
                 .Append("SET ")
-.Append("PrintName=(SELECT PrintName FROM AD_PrintFormatItem_Trl ol WHERE ol.AD_Language=ne.AD_Language AND AD_PrintFormatItem_ID =").Append(fromID).Append("),")
-.Append("PrintNameSuffix=(SELECT PrintNameSuffix FROM AD_PrintFormatItem_Trl ol WHERE ol.AD_Language=ne.AD_Language AND AD_PrintFormatItem_ID =").Append(toID).Append("),")
-.Append("IsTranslated=(SELECT IsTranslated FROM AD_PrintFormatItem_Trl ol WHERE ol.AD_Language=ne.AD_Language AND AD_PrintFormatItem_ID=").Append(fromID)
+.Append("PrintName=(SELECT PrintName FROM AD_PrintFormatItem_Trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID =").Append(fromID).Append("),")
+.Append("PrintNameSuffix=(SELECT PrintNameSuffix FROM AD_PrintFormatItem_Trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID =").Append(toID).Append("),")
+.Append("IsTranslated=(SELECT IsTranslated FROM AD_PrintFormatItem_Trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID=").Append(fromID)
 .Append(") WHERE AD_PrintFormatItem_ID=").Append(toID).Append(" AND EXISTS").Append("(")
-                .Append("SELECT AD_PrintFormatItem_ID").Append(" FROM AD_PrintFormatItem_trl ol WHERE ol.AD_Language=ne.AD_Language AND AD_PrintFormatItem_ID=").Append(fromID).Append(")");// = 5087); 
+                .Append("SELECT AD_PrintFormatItem_ID").Append(" FROM AD_PrintFormatItem_trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID=").Append(fromID).Append(")");// = 5087); 
 
 
 
@@ -344,14 +344,14 @@ namespace VAdvantage.Print
                 //.Append("(")
                 //.Append("SELECT PrintName, PrintNameSuffix, IsTranslated ")
                 //.Append("FROM AD_PrintFormatItem_Trl old ")
-                //.Append("WHERE old.AD_Language=new.AD_Language")
+                //.Append("WHERE old.VAF_Language=new.VAF_Language")
                 //.Append(" AND AD_PrintFormatItem_ID =").Append(fromID)
                 //.Append(") ")
                 ////	WHERE
                 //.Append("WHERE  AD_PrintFormatItem_ID=").Append(toID)
                 //.Append(" AND EXISTS (SELECT AD_PrintFormatItem_ID ")
                 //    .Append(" FROM AD_PrintFormatItem_trl old")
-                //    .Append(" WHERE old.AD_Language=new.AD_Language")
+                //    .Append(" WHERE old.VAF_Language=new.VAF_Language")
                 //    .Append(" AND AD_PrintFormatItem_ID =").Append(fromID)
                 //    .Append(") ");
                 int no = DataBase.DB.ExecuteQuery(sql.ToString(), null);
@@ -636,7 +636,7 @@ namespace VAdvantage.Print
                 + "WHERE t.VAF_TableView_ID='" + VAF_TableView_ID + "' AND c.VAF_Client_ID='" + VAF_Client_ID + "'"		//	#1/2
                 + " AND pc.IsDefault='Y' AND pf.IsDefault='Y' AND pp.IsDefault='Y'";
 
-            string AD_Language = Utility.Env.GetAD_Language(ctx);
+            string VAF_Language = Utility.Env.GetVAF_Language(ctx);
 
             bool error = true;
             IDataReader dr = null;
@@ -732,10 +732,10 @@ namespace VAdvantage.Print
                 + " AND pc.IsDefault='Y' AND pf.IsDefault='Y' AND pp.IsDefault='Y'";
 
             string sql1 = "SELECT ";
-            string AD_Language = Utility.Env.GetAD_Language(ctx);
+            string VAF_Language = Utility.Env.GetVAF_Language(ctx);
 
 
-            if (AD_Language == null || AD_Language.Length == 0 || Env.IsBaseLanguage(AD_Language, "VAF_ColumnDic"))
+            if (VAF_Language == null || VAF_Language.Length == 0 || Env.IsBaseLanguage(VAF_Language, "VAF_ColumnDic"))
             {
                 sql1 = sql1 + " t.Name,  (SELECT COUNT(*)  FROM AD_PrintFormat x  WHERE x.VAF_Tab_ID =t.VAF_Tab_ID  "
                 + "AND x.VAF_Client_ID=c.VAF_Client_ID  ) AS COUNT FROM VAF_Tab t ,VAF_Client c "
@@ -745,7 +745,7 @@ namespace VAdvantage.Print
             {
                 sql1 = sql1 + " Distinct tt.Name, (SELECT COUNT(*) FROM AD_PrintFormat x WHERE x.VAF_Tab_ID =t.VAF_Tab_ID  AND x.VAF_Client_ID=c.VAF_Client_ID ) AS COUNT"
                             + " FROM VAF_Client c, VAF_Tab t JOIN VAF_Tab_Trl tt ON (tt.VAF_Tab_ID=t.vaf_tab_id)"
-                            + " WHERE t.VAF_Tab_ID ='" + VAF_Tab_ID + "'  AND tt.AD_Language='" + AD_Language + "'"
+                            + " WHERE t.VAF_Tab_ID ='" + VAF_Tab_ID + "'  AND tt.VAF_Language='" + VAF_Language + "'"
                             + " AND c.VAF_Client_ID='" + VAF_Client_ID + "'";
             }
 
@@ -1026,7 +1026,7 @@ namespace VAdvantage.Print
             }
             else
             {
-                _translationViewLanguage = language.GetAD_Language();
+                _translationViewLanguage = language.GetVAF_Language();
                 _language = language;
             }
         }	//	setTranslationLanguage
@@ -1051,7 +1051,7 @@ namespace VAdvantage.Print
             if (_translationViewLanguage != null && query != null && query.GetTableName().ToUpper().EndsWith("_V"))
             {
                 query.SetTableName(query.GetTableName() + "t");
-                query.AddRestriction("AD_Language", Query.EQUAL, _translationViewLanguage);
+                query.AddRestriction("VAF_Language", Query.EQUAL, _translationViewLanguage);
             }
         }	//	setTranslationViewQuery
 

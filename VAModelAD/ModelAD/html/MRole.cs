@@ -1364,7 +1364,7 @@ namespace VAdvantage.Model
             //  Notification
             log.SaveWarning("AccessTableNoView",
                 "Required=" + strAccesLevel + "("
-                + GetTableLevelString(Env.GetAD_Language(ctx), strAccesLevel)
+                + GetTableLevelString(Env.GetVAF_Language(ctx), strAccesLevel)
                 + ") != UserLevel=" + userLevel);
             log.Info(ToString());
             return retValue;
@@ -1373,10 +1373,10 @@ namespace VAdvantage.Model
         /// <summary>
         /// Returns clear text String of TableLevel
         /// </summary>
-        /// <param name="AD_Language">language</param>
+        /// <param name="VAF_Language">language</param>
         /// <param name="TableLevel">level</param>
         /// <returns>info</returns>
-        private String GetTableLevelString(String AD_Language, String TableLevel)
+        private String GetTableLevelString(String VAF_Language, String TableLevel)
         {
             String level = TableLevel + "??";
             if (TableLevel.Equals("1"))
@@ -1403,7 +1403,7 @@ namespace VAdvantage.Model
             {
                 level = "AccessShared";
             }
-            return Msg.GetMsg(AD_Language, level);
+            return Msg.GetMsg(VAF_Language, level);
         }
 
         /// <summary>
@@ -2719,31 +2719,31 @@ namespace VAdvantage.Model
         {
             if (!IsActive())
             {
-                DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
+                DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
                 return;
             }
 
             if (!IsUseUserOrgAccess())
             {
-                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,vaf_org_ID From ad_loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,vaf_org_ID From VAF_Loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM AD_Role_OrgAccess WHERE IsActive='Y' AND AD_Role_ID = " + GetAD_Role_ID() + " AND vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), null, null)) == 0)
                     {
-                        DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND AD_Role_ID = " + GetAD_Role_ID());
+                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND AD_Role_ID = " + GetAD_Role_ID());
                     }
                 }
             }
             else
             {
-                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,vaf_org_ID From ad_loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT AD_User_ID,vaf_org_ID From VAF_Loginsetting WHERE AD_Role_ID = " + GetAD_Role_ID());
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     if (Convert.ToInt32(DB.ExecuteScalar("SELECT count(1) FROM AD_User_OrgAccess WHERE IsActive='Y' AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), null, null)) == 0)
                     {
-                        DB.ExecuteQuery("DELETE FROM ad_loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND AD_Role_ID = " + GetAD_Role_ID());
+                        DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE vaf_org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + " AND AD_User_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_User_ID"]) + " AND AD_Role_ID = " + GetAD_Role_ID());
                     }
                 }
             }

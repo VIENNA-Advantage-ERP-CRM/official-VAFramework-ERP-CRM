@@ -105,7 +105,7 @@ namespace VAdvantage.Model
                     SetIsSmtpAuthorization(false);
                     SetIsUseBetaFunctions(false);
                     SetIsServerEMail(false);
-                    SetAD_Language(GlobalVariable.GetLanguageCode());
+                    SetVAF_Language(GlobalVariable.GetLanguageCode());
                     SetAutoArchive(AUTOARCHIVE_None);
                     SetMMPolicy(MMPOLICY_FiFo);	// F
                     SetIsPostImmediate(false);
@@ -268,26 +268,26 @@ namespace VAdvantage.Model
         //{
         //    if (_language == null)
         //    {
-        //        _language = VAdvantage.Login.Language.GetLanguages(GetAD_Language());
+        //        _language = VAdvantage.Login.Language.GetLanguages(GetVAF_Language());
         //        _language = Env.VerifyLanguage(GetCtx(), _language);
         //    }
         //    return _language;
         //}	//	getLanguage
 
-        //public void SetAD_Language(String AD_Language)
+        //public void SetVAF_Language(String VAF_Language)
         //{
         //    _language = null;
-        //    base.SetAD_Language(AD_Language);
-        //}	//	setAD_Language
+        //    base.SetVAF_Language(VAF_Language);
+        //}	//	setVAF_Language
 
 
-        public new String GetAD_Language()
+        public new String GetVAF_Language()
         {
-            String s = base.GetAD_Language();
+            String s = base.GetVAF_Language();
             if (s == null)
-                return VAdvantage.Login.Language.GetBaseAD_Language();
+                return VAdvantage.Login.Language.GetBaseVAF_Language();
             return s;
-        }	//	getAD_Language
+        }	//	getVAF_Language
 
 
       
@@ -308,7 +308,7 @@ namespace VAdvantage.Model
                 sql = "SELECT Value, Name FROM AD_Ref_List WHERE AD_Reference_ID=120 AND IsActive='Y'";
             else
                 sql = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                    + "WHERE l.AD_Reference_ID=120 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID AND l.IsActive='Y' AND t.AD_Language='" + language + "'";
+                    + "WHERE l.AD_Reference_ID=120 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID AND l.IsActive='Y' AND t.VAF_Language='" + language + "'";
 
             //  Tree IDs
             int AD_Tree_Org_ID = 0, AD_Tree_BPartner_ID = 0, AD_Tree_Project_ID = 0,
@@ -461,7 +461,7 @@ namespace VAdvantage.Model
                     vaf_tableview_id = ( SELECT vaf_tableview_id FROM vaf_tableview WHERE tablename LIKE 'M_Inventory' ) AND columnname LIKE 'IsCostCalculated'", null, null)) > 0)
                 {
                     // check module exist or not
-                    count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
+                    count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
 
                     // check how many records in system whose costing not calculated based on client
                     sql = @"SELECT SUM(record) FROM (

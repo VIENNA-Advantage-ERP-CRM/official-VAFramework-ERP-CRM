@@ -9,16 +9,16 @@ using VAdvantage.Classes;
 
 namespace VAdvantage.Model
 {
-    class MModuleTable : X_AD_ModuleTable
+    class MModuleTable : X_VAF_ModuleTable
     {
 
-        public MModuleTable(Context ctx, int AD_ModuleTable_ID, Trx trxName)
-            : base(ctx, AD_ModuleTable_ID, trxName)
+        public MModuleTable(Context ctx, int VAF_ModuleTable_ID, Trx trxName)
+            : base(ctx, VAF_ModuleTable_ID, trxName)
         {
 
         }
-        public MModuleTable(Ctx ctx, int AD_ModuleTable_ID, Trx trxName)
-            : base(ctx, AD_ModuleTable_ID, trxName)
+        public MModuleTable(Ctx ctx, int VAF_ModuleTable_ID, Trx trxName)
+            : base(ctx, VAF_ModuleTable_ID, trxName)
         {
 
         }
@@ -28,7 +28,7 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 // check if same record is inserting again
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleTable WHERE VAF_TableView_ID=" + GetVAF_TableView_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleTable WHERE VAF_TableView_ID=" + GetVAF_TableView_ID() + " AND VAF_ModuleInfo_ID=" + GetVAF_ModuleInfo_ID())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "TableExist"));
                     return false;
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
                 if (Is_ValueChanged("VAF_TableView_ID"))
                 {
                     // check if same record is inserting again
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleTable WHERE VAF_TableView_ID=" + GetVAF_TableView_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_ModuleTable WHERE VAF_TableView_ID=" + GetVAF_TableView_ID() + " AND VAF_ModuleInfo_ID=" + GetVAF_ModuleInfo_ID())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "TableExist"));
                         return false;

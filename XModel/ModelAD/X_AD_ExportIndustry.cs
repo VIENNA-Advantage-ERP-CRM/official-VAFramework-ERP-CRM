@@ -126,18 +126,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Language ID.
-@param AD_Language_ID Language ID */
-public void SetAD_Language_ID (int AD_Language_ID)
+@param VAF_Language_ID Language ID */
+public void SetVAF_Language_ID (int VAF_Language_ID)
 {
-if (AD_Language_ID <= 0) Set_Value ("AD_Language_ID", null);
+if (VAF_Language_ID <= 0) Set_Value ("VAF_Language_ID", null);
 else
-Set_Value ("AD_Language_ID", AD_Language_ID);
+Set_Value ("VAF_Language_ID", VAF_Language_ID);
 }
 /** Get Language ID.
 @return Language ID */
-public int GetAD_Language_ID() 
+public int GetVAF_Language_ID() 
 {
-Object ii = Get_Value("AD_Language_ID");
+Object ii = Get_Value("VAF_Language_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -55,7 +55,7 @@ namespace VAdvantage.DataBase
             return "";
         }
 
-        public string TO_CHAR(string columnName, int displayType, string AD_Language)
+        public string TO_CHAR(string columnName, int displayType, string VAF_Language)
         {
             throw new NotImplementedException();
         }

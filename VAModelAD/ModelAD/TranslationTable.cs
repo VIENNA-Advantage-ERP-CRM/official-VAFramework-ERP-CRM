@@ -74,7 +74,7 @@ namespace VAdvantage.Model
             if (_activeLanguages != null && !requery)
                 //return _activeLanguages.intValue();
                 return (int)_activeLanguages;
-            int no = int.Parse(ExecuteQuery.ExecuteScalar("SELECT COUNT(*) FROM AD_Language WHERE IsActive='Y' AND IsSystemLanguage='Y'"));
+            int no = int.Parse(ExecuteQuery.ExecuteScalar("SELECT COUNT(*) FROM VAF_Language WHERE IsActive='Y' AND IsSystemLanguage='Y'"));
             _activeLanguages = no;
             return (int)_activeLanguages;
         }
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
                     continue;
                 String columnName = column.GetColumnName();
                 if (columnName.EndsWith("_ID")
-                    || columnName.StartsWith("AD_Language")
+                    || columnName.StartsWith("VAF_Language")
                     || columnName.Equals("IsTranslated"))
                     continue;
                 //
@@ -154,8 +154,8 @@ namespace VAdvantage.Model
             sql2.Append(") SELECT ");
 
             //	Key Columns
-            sql1.Append(_baseTableName).Append("_ID,AD_Language");
-            sql2.Append("b.").Append(_baseTableName).Append("_ID,l.AD_Language");
+            sql1.Append(_baseTableName).Append("_ID,VAF_Language");
+            sql2.Append("b.").Append(_baseTableName).Append("_ID,l.VAF_Language");
 
             //	Base Columns
             sql1.Append(", VAF_Client_ID,VAF_Org_ID,IsActive, Created,CreatedBy,Updated,UpdatedBy, IsTranslated");
@@ -174,7 +174,7 @@ namespace VAdvantage.Model
             //
             StringBuilder sql = new StringBuilder();
             sql.Append(sql1).Append(sql2)
-                .Append(" FROM AD_Language l, " + _baseTableName
+                .Append(" FROM VAF_Language l, " + _baseTableName
                     + " b WHERE l.IsActive = 'Y' AND l.IsSystemLanguage = 'Y' AND b."
                     + _baseTableName + "_ID=").Append(po.Get_ID());
             //int no = DataBase.executeUpdate(sql.toString(), po.get_TrxName());

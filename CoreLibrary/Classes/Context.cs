@@ -339,9 +339,9 @@ namespace VAdvantage.Classes
         /// Get Language from List
         /// </summary>
         /// <returns></returns>
-        public string GetAD_Language()
+        public string GetVAF_Language()
         {
-            return GetContext("#AD_Language");
+            return GetContext("#VAF_Language");
         }
 
         /// <summary>

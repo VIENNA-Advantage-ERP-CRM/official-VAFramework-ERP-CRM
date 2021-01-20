@@ -237,7 +237,7 @@ namespace VIS.Helpers
                                                " (SELECT c.Name FROM VAF_Client c WHERE c.VAF_Client_ID=l.VAF_Client_ID) as ClientName," +
                                                " l.M_Warehouse_ID," +
                                                " (SELECT m.Name FROM M_Warehouse m WHERE m.M_Warehouse_Id = l.M_Warehouse_ID) as WarehouseName" +
-                                               " FROM AD_LoginSetting l WHERE l.IsActive = 'Y' AND l.AD_User_ID=" + AD_User_ID);
+                                               " FROM VAF_LoginSetting l WHERE l.IsActive = 'Y' AND l.AD_User_ID=" + AD_User_ID);
                     if (drLogin.Read())
                     {
 
@@ -247,7 +247,7 @@ namespace VIS.Helpers
                         //Delete Login Setting 
                         if (deleteRecord)
                         {
-                            DB.ExecuteQuery("DELETE FROM AD_LoginSetting WHERE AD_User_ID = " + AD_User_ID);
+                            DB.ExecuteQuery("DELETE FROM VAF_LoginSetting WHERE AD_User_ID = " + AD_User_ID);
                         }
                         else
                         {
@@ -616,7 +616,7 @@ namespace VIS.Helpers
             ctx.SetContext("##AD_User_ID", model.Login1Model.AD_User_ID.ToString());
             ctx.SetContext("##AD_User_Value", model.Login1Model.UserValue);
             ctx.SetContext("##AD_User_Name", model.Login1Model.DisplayName);
-            ctx.SetContext("#AD_Language", model.Login1Model.LoginLanguage);
+            ctx.SetContext("#VAF_Language", model.Login1Model.LoginLanguage);
 
             ctx.SetContext("#AD_Role_ID", model.Login2Model.Role);
             ctx.SetContext("#AD_Role_Name", model.Login2Model.RoleName);
@@ -636,7 +636,7 @@ namespace VIS.Helpers
             //{
             //    ____AD_User_ID = model.Login1Model.AD_User_ID.ToString(),
             //    ____AD_User_Name = model.Login1Model.UserName,
-            //    __AD_Language = model.Login1Model.LoginLanguage,
+            //    __VAF_Language = model.Login1Model.LoginLanguage,
 
             //    __AD_Role_ID = model.Login2Model.Role,
             //    __AD_Role_Name = model.Login2Model.RoleName,
@@ -665,8 +665,8 @@ namespace VIS.Helpers
 
             ctx.SetContext("##AD_User_Value", ctxLogIn.GetContext("##AD_User_Value"));
 
-            //ctx.SetContext("#AD_Language", ctxLogIn.GetContext("#AD_Language"));
-            ctx.SetContext("#AD_Language", model.Login2Model.LoginLanguage);
+            //ctx.SetContext("#VAF_Language", ctxLogIn.GetContext("#VAF_Language"));
+            ctx.SetContext("#VAF_Language", model.Login2Model.LoginLanguage);
 
             ctx.SetContext("#AD_Role_ID", model.Login2Model.Role);
             ctx.SetContext("#AD_Role_Name", model.Login2Model.RoleName);
@@ -688,11 +688,11 @@ namespace VIS.Helpers
         {
             try
             {
-                int id = MSequence.GetNextID(Convert.ToInt32(model.Login2Model.Client), "AD_LoginSetting", (Trx)null);
+                int id = MSequence.GetNextID(Convert.ToInt32(model.Login2Model.Client), "VAF_LoginSetting", (Trx)null);
                 if (id > 0)
                 {
-                    string sql = "INSERT INTO AD_LoginSetting " +
-                                 "(VAF_Client_ID,AD_LoginSetting_ID,VAF_Org_ID,AD_Role_ID,AD_User_ID,Created,CreatedBy,IsActive,M_WareHouse_ID,Updated,UpdatedBy) " +
+                    string sql = "INSERT INTO VAF_LoginSetting " +
+                                 "(VAF_Client_ID,VAF_LoginSetting_ID,VAF_Org_ID,AD_Role_ID,AD_User_ID,Created,CreatedBy,IsActive,M_WareHouse_ID,Updated,UpdatedBy) " +
                           " VALUES (" + model.Login2Model.Client + "," + id + "," + model.Login2Model.Org + "," + model.Login2Model.Role + "," + model.Login1Model.AD_User_ID + ",sysdate," + model.Login1Model.AD_User_ID + ",'Y',";
                     if (!String.IsNullOrEmpty(model.Login2Model.Warehouse) && model.Login2Model.Warehouse != "-1")
                     {

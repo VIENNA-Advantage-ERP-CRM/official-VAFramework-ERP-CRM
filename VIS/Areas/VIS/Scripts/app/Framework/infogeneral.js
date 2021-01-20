@@ -215,13 +215,13 @@
 
         this.show = function () {
             // debugger;
-            //Change by mohit-to handle translation in general info. Added 2 new parametere- ad_Language, isBaseLangage. Asked by mukesh sir - 09/03/2018
+            //Change by mohit-to handle translation in general info. Added 2 new parametere- VAF_Language, isBaseLangage. Asked by mukesh sir - 09/03/2018
             $.ajax({
                 url: VIS.Application.contextUrl + "InfoGeneral/GetSearchColumns",
                 dataType: "json",
                 data: {
                     tableName: tableName,
-                    ad_Language: VIS.context.getAD_Language(),
+                    VAF_Language: VIS.context.getVAF_Language(),
                     isBaseLangage: VIS.Env.isBaseLanguage(VIS.context)
                 },
                 error: function () {
@@ -246,8 +246,8 @@
 
         var displaySearchCol = function () {
 
-            //Change by mohit-to handle translation in general info. Added 2 new parametere- AD_Language, IsBaseLangage. Asked by mukesh sir - 09/03/2018
-            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "VAF_TableView_ID": schema[0].VAF_TableView_ID, "AD_Language": VIS.context.getAD_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
+            //Change by mohit-to handle translation in general info. Added 2 new parametere- VAF_Language, IsBaseLangage. Asked by mukesh sir - 09/03/2018
+            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "VAF_TableView_ID": schema[0].VAF_TableView_ID, "VAF_Language": VIS.context.getVAF_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
 
             if (displayCols == null) {
                 alert(VIS.Msg.getMsg('ERRORGettingDisplayCols'));
@@ -402,7 +402,7 @@
             sql += " FROM " + tableName + " " + tableName;
             // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
             if (isTrlColExist) {
-                sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.AD_Language='" + VIS.context.getAD_Language() + "')";
+                sql += " Inner join " + tableName + "_Trl trlTable on (" + tableName + "." + tableName + "_ID=trlTable." + tableName + "_ID  AND trlTable.VAF_Language='" + VIS.context.getVAF_Language() + "')";
             }
 
             if (requery == true) {

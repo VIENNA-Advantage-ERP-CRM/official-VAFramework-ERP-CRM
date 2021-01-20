@@ -344,7 +344,7 @@ namespace VAdvantage.Model
             //if (IsReturnTrx())
             //    return;
 
-            //String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            //String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
             //    + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             //    + " p.SO_Description,p.IsDiscountPrinted,"
             //    + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
@@ -533,7 +533,7 @@ namespace VAdvantage.Model
             //if (IsReturnTrx())
             //    return;
 
-            //String sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
+            //String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
             //    + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
             //    + "p.SO_Description,p.IsDiscountPrinted,"
             //    + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
