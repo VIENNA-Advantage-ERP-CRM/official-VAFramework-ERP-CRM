@@ -61,8 +61,8 @@ namespace ViennaAdvantage.Process
                                         //ViennaAdvantage.Model.MCashLine cashline1 = new ViennaAdvantage.Model.MCashLine(GetCtx(), 0, Get_Trx());
                                         MCashLine cashline1 = new MCashLine(GetCtx(), 0, Get_Trx());
                                         cashline1.SetC_Cash_ID(cash.GetC_Cash_ID());
-                                        cashline1.SetAD_Client_ID(cash.GetAD_Client_ID());
-                                        cashline1.SetAD_Org_ID(cash.GetAD_Org_ID());
+                                        cashline1.SetVAF_Client_ID(cash.GetVAF_Client_ID());
+                                        cashline1.SetVAF_Org_ID(cash.GetVAF_Org_ID());
                                         if (cashline.GetCashType().ToString() == "A")
                                         {
                                             cashline1.SetCashType("F");
@@ -94,7 +94,7 @@ namespace ViennaAdvantage.Process
                                             if (cashline1.Get_ColumnIndex("C_ConversionType_ID") > 0)
                                             {
                                                 //_Curencyrate = MConversionRate.GetRate(C_Currencyheader_ID, Currency_ID, cash.GetDateAcct(), cashline.GetC_ConversionType_ID(),
-                                                //    cash.GetAD_Client_ID(), cash.GetAD_Org_ID());
+                                                //    cash.GetVAF_Client_ID(), cash.GetVAF_Org_ID());
 
                                                 convertedamount = Decimal.Negate(Util.GetValueOfDecimal(cashline.GetConvertedAmt()));
 
@@ -102,7 +102,7 @@ namespace ViennaAdvantage.Process
                                                 if (cashline.GetAmount() != 0 && convertedamount == 0)
                                                 {
                                                     convertedamount = MConversionRate.Convert(GetCtx(), Decimal.Negate(cashline.GetAmount()), Currency_ID, C_Currencyheader_ID,
-                                                        cash.GetDateAcct(), cashline.GetC_ConversionType_ID(), cash.GetAD_Client_ID(), cash.GetAD_Org_ID());
+                                                        cash.GetDateAcct(), cashline.GetC_ConversionType_ID(), cash.GetVAF_Client_ID(), cash.GetVAF_Org_ID());
                                                     cashline.SetConvertedAmt(Util.GetValueOfString(Decimal.Negate(convertedamount)));
                                                 }
 
@@ -186,8 +186,8 @@ namespace ViennaAdvantage.Process
                                     dscashbook.Dispose();
 
                                     MCash cash1 = new MCash(GetCtx(), 0, Get_Trx());
-                                    cash1.SetAD_Client_ID(cashheader.GetAD_Client_ID());
-                                    cash1.SetAD_Org_ID(cashheader.GetAD_Org_ID());
+                                    cash1.SetVAF_Client_ID(cashheader.GetVAF_Client_ID());
+                                    cash1.SetVAF_Org_ID(cashheader.GetVAF_Org_ID());
                                     cash1.SetC_DocType_ID(cashheader.GetC_DocType_ID());
                                     cash1.SetName(Util.GetValueOfString(System.DateTime.Today.ToShortDateString()));
                                     cash1.SetC_CashBook_ID(cashline.GetC_CashBook_ID());
@@ -224,8 +224,8 @@ namespace ViennaAdvantage.Process
                                     }
                                     MCashLine cashline1 = new MCashLine(GetCtx(), 0, Get_Trx());
                                     cashline1.SetC_Cash_ID(cash1.GetC_Cash_ID());
-                                    cashline1.SetAD_Client_ID(cash1.GetAD_Client_ID());
-                                    cashline1.SetAD_Org_ID(cash1.GetAD_Org_ID());
+                                    cashline1.SetVAF_Client_ID(cash1.GetVAF_Client_ID());
+                                    cashline1.SetVAF_Org_ID(cash1.GetVAF_Org_ID());
                                     if (cashline.GetCashType().ToString() == "A")
                                     {
                                         cashline1.SetCashType("F");
@@ -257,14 +257,14 @@ namespace ViennaAdvantage.Process
                                         if (cashline1.Get_ColumnIndex("C_ConversionType_ID") > 0)
                                         {
                                             //_Curencyrate = MConversionRate.GetRate(C_Currencyheader_ID, Currency_ID, cashheader.GetDateAcct(), cashline.GetC_ConversionType_ID(),
-                                            //    cashheader.GetAD_Client_ID(), cashheader.GetAD_Org_ID());
+                                            //    cashheader.GetVAF_Client_ID(), cashheader.GetVAF_Org_ID());
                                             convertedamount = Decimal.Negate(Util.GetValueOfDecimal(cashline.GetConvertedAmt()));
 
                                             // if converted amount not found then get amount based on currency conversion avaliable
                                             if (cashline.GetAmount() != 0 && convertedamount == 0)
                                             {
                                                 convertedamount = MConversionRate.Convert(GetCtx(), Decimal.Negate(cashline.GetAmount()), Currency_ID, C_Currencyheader_ID,
-                                                    cash1.GetDateAcct(), cashline.GetC_ConversionType_ID(), cash1.GetAD_Client_ID(), cash1.GetAD_Org_ID());
+                                                    cash1.GetDateAcct(), cashline.GetC_ConversionType_ID(), cash1.GetVAF_Client_ID(), cash1.GetVAF_Org_ID());
                                                 cashline.SetConvertedAmt(Util.GetValueOfString(Decimal.Negate(convertedamount)));
                                             }
 

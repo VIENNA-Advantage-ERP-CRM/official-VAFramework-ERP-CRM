@@ -349,7 +349,7 @@ namespace VAdvantage.Model
                     {
                         //                    qry = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
                         //                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
-                        //                                " AND t.AD_Client_ID = " + GetAD_Client_ID() +
+                        //                                " AND t.VAF_Client_ID = " + GetVAF_Client_ID() +
                         //                                @" AND t.M_Locator_ID = " + (move.IsReversal() && GetMovementQty() < 0 ? GetM_LocatorTo_ID() : GetM_Locator_ID()) +
                         //                                " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
                         //                                " AND NVL(t.M_ProductContainer_ID, 0) = " + (move.IsReversal() && !IsMoveFullContainer() && GetMovementQty() < 0 ? GetRef_M_ProductContainerTo_ID() : GetM_ProductContainer_ID());
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
 
                         //                    qry = @"SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t 
                         //                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
-                        //                               " AND t.AD_Client_ID = " + GetAD_Client_ID() +
+                        //                               " AND t.VAF_Client_ID = " + GetVAF_Client_ID() +
                         //                               @" AND t.M_Locator_ID = " + (move.IsReversal() && GetMovementQty() < 0 ? GetM_Locator_ID() : GetM_LocatorTo_ID()) +
                         //                               " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
                         //                               " AND NVL(t.M_ProductContainer_ID, 0) = " + (move.IsReversal() && !IsMoveFullContainer() && GetMovementQty() < 0 ? GetM_ProductContainer_ID() : GetRef_M_ProductContainerTo_ID());
@@ -365,7 +365,7 @@ namespace VAdvantage.Model
 
                         qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                                                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
-                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() +
+                                    " AND t.VAF_Client_ID = " + GetVAF_Client_ID() +
                                     @" AND t.M_Locator_ID = " + GetM_Locator_ID() +
                                     " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
                                     " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID();
@@ -373,7 +373,7 @@ namespace VAdvantage.Model
 
                         qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC)  AS CurrentQty FROM m_transaction t 
                                                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) +
-                                   " AND t.AD_Client_ID = " + GetAD_Client_ID() +
+                                   " AND t.VAF_Client_ID = " + GetVAF_Client_ID() +
                                    @" AND t.M_Locator_ID = " + GetM_LocatorTo_ID() +
                                    " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
                                    " AND NVL(t.M_ProductContainer_ID, 0) = " + GetRef_M_ProductContainerTo_ID();
@@ -432,23 +432,23 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA024_"))
             {
                 // checking are we moving product from one warehouse to other warehouse
-                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT CASE WHEN ((SELECT CASE WHEN o.IsLegalEntity = 'Y' THEN w.AD_Org_ID
-                 ELSE (SELECT AD_Org_ID FROM AD_Org WHERE Ad_Org_id = o.LegalEntityOrg ) END
-                 FROM m_warehouse w INNER JOIN ad_org o ON o.AD_Org_ID = w.AD_Org_ID WHERE w.m_warehouse_id = m.DTD001_MWarehouseSource_ID)) =
-                 (SELECT  CASE WHEN o2.IsLegalEntity = 'Y' THEN w2.AD_Org_ID 
-                 ELSE (SELECT AD_Org_ID FROM AD_Org WHERE Ad_Org_id = o2.LegalEntityOrg) END
-                 FROM m_warehouse w2 INNER JOIN ad_org o2 ON o2.AD_Org_ID = w2.AD_Org_ID WHERE M_Warehouse_ID = m.M_Warehouse_ID )
-                 THEN 0 ELSE (SELECT ad_org_id FROM m_warehouse WHERE M_Warehouse_ID = m.M_Warehouse_ID ) END AS result FROM m_movement m WHERE m_movement_id = " + GetM_Movement_ID(), null, Get_Trx())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT CASE WHEN ((SELECT CASE WHEN o.IsLegalEntity = 'Y' THEN w.VAF_Org_ID
+                 ELSE (SELECT VAF_Org_ID FROM VAF_Org WHERE vaf_org_id = o.LegalEntityOrg ) END
+                 FROM m_warehouse w INNER JOIN vaf_org o ON o.VAF_Org_ID = w.VAF_Org_ID WHERE w.m_warehouse_id = m.DTD001_MWarehouseSource_ID)) =
+                 (SELECT  CASE WHEN o2.IsLegalEntity = 'Y' THEN w2.VAF_Org_ID 
+                 ELSE (SELECT VAF_Org_ID FROM VAF_Org WHERE vaf_org_id = o2.LegalEntityOrg) END
+                 FROM m_warehouse w2 INNER JOIN vaf_org o2 ON o2.VAF_Org_ID = w2.VAF_Org_ID WHERE M_Warehouse_ID = m.M_Warehouse_ID )
+                 THEN 0 ELSE (SELECT vaf_org_id FROM m_warehouse WHERE M_Warehouse_ID = m.M_Warehouse_ID ) END AS result FROM m_movement m WHERE m_movement_id = " + GetM_Movement_ID(), null, Get_Trx())) > 0)
                 {
                     string qry1 = @"SELECT  SUM(o.VA024_UnitPrice)   FROM VA024_t_ObsoleteInventory o 
                                   WHERE o.IsActive = 'Y' AND  o.M_Product_ID = " + GetM_Product_ID() + @" and 
                                   ( o.M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + @" OR o.M_AttributeSetInstance_ID IS NULL )" +
-                             " AND o.AD_Org_ID = " + GetAD_Org_ID();
+                             " AND o.VAF_Org_ID = " + GetVAF_Org_ID();
                     VA024_ProvisionPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(qry1, null, Get_Trx()));
                     SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
                     // is used to get cost of binded cost method / costing level of primary accounting schema
-                    Decimal cost = MCost.GetproductCosts(move.GetAD_Client_ID(), move.GetAD_Org_ID(), GetM_Product_ID(),
+                    Decimal cost = MCost.GetproductCosts(move.GetVAF_Client_ID(), move.GetVAF_Org_ID(), GetM_Product_ID(),
                          GetM_AttributeSetInstance_ID(), Get_Trx(), move.GetDTD001_MWarehouseSource_ID());
                     SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }
@@ -642,16 +642,16 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA024_"))
             {
                 // checking are we moving product from one warehouse to other warehouse
-                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT CASE WHEN ((SELECT CASE WHEN o.IsLegalEntity = 'Y' THEN w.AD_Org_ID
-                 ELSE (SELECT AD_Org_ID FROM AD_Org WHERE Ad_Org_id = o.LegalEntityOrg ) END
-                 FROM m_warehouse w INNER JOIN ad_org o ON o.AD_Org_ID = w.AD_Org_ID WHERE w.m_warehouse_id = m.DTD001_MWarehouseSource_ID)) =
-                 (SELECT  CASE WHEN o2.IsLegalEntity = 'Y' THEN w2.AD_Org_ID 
-                 ELSE (SELECT AD_Org_ID FROM AD_Org WHERE Ad_Org_id = o2.LegalEntityOrg) END
-                 FROM m_warehouse w2 INNER JOIN ad_org o2 ON o2.AD_Org_ID = w2.AD_Org_ID WHERE M_Warehouse_ID = m.M_Warehouse_ID )
-                 THEN 0 ELSE (SELECT ad_org_id FROM m_warehouse WHERE M_Warehouse_ID = m.M_Warehouse_ID ) END AS result FROM m_movement m WHERE m_movement_id = " + GetM_Movement_ID(), null, Get_Trx())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT CASE WHEN ((SELECT CASE WHEN o.IsLegalEntity = 'Y' THEN w.VAF_Org_ID
+                 ELSE (SELECT VAF_Org_ID FROM VAF_Org WHERE vaf_org_id = o.LegalEntityOrg ) END
+                 FROM m_warehouse w INNER JOIN vaf_org o ON o.VAF_Org_ID = w.VAF_Org_ID WHERE w.m_warehouse_id = m.DTD001_MWarehouseSource_ID)) =
+                 (SELECT  CASE WHEN o2.IsLegalEntity = 'Y' THEN w2.VAF_Org_ID 
+                 ELSE (SELECT VAF_Org_ID FROM VAF_Org WHERE vaf_org_id = o2.LegalEntityOrg) END
+                 FROM m_warehouse w2 INNER JOIN vaf_org o2 ON o2.VAF_Org_ID = w2.VAF_Org_ID WHERE M_Warehouse_ID = m.M_Warehouse_ID )
+                 THEN 0 ELSE (SELECT vaf_org_id FROM m_warehouse WHERE M_Warehouse_ID = m.M_Warehouse_ID ) END AS result FROM m_movement m WHERE m_movement_id = " + GetM_Movement_ID(), null, Get_Trx())) > 0)
                 {
                     //checking product is provisioned or not
-                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM va024_t_obsoleteinventory WHERE ISACTIVE = 'Y' AND  AD_Org_ID = " + GetAD_Org_ID() +
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM va024_t_obsoleteinventory WHERE ISACTIVE = 'Y' AND  VAF_Org_ID = " + GetVAF_Org_ID() +
                            @" AND M_Product_ID = " + GetM_Product_ID() + "  AND NVL(M_AttributeSetInstance_ID , 0) = " + Util.GetValueOfInt(GetM_AttributeSetInstance_ID()))) > 0)
                     {
                         log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "VA024_AlreadyProvisionConvey"));

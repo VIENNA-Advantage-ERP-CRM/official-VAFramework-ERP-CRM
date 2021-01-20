@@ -39,8 +39,8 @@ namespace VAdvantage.Model
 
             if (recurring != null)
             {
-                SetAD_Client_ID(recurring.GetAD_Client_ID());
-                SetAD_Org_ID(recurring.GetAD_Org_ID());
+                SetVAF_Client_ID(recurring.GetVAF_Client_ID());
+                SetVAF_Org_ID(recurring.GetVAF_Org_ID());
                 SetC_Recurring_ID(recurring.GetC_Recurring_ID());
                 SetDateDoc(recurring.GetDateNextRun());
             }

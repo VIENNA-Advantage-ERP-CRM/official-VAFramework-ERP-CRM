@@ -76,7 +76,7 @@ static X_C_CycleStep()
 //static long serialVersionUID 27562514371639L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054850L;
-/** AD_Table_ID=590 */
+/** VAF_TableView_ID=590 */
 public static int Table_ID;
  // =590;
 

@@ -9,7 +9,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAttachmentReference: X_AD_AttachmentReference
+    public class MAttachmentReference: X_VAF_AttachmentReference
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(MAttachmentReference).FullName);
 
@@ -19,8 +19,8 @@ namespace VAdvantage.Model
 
         }
 
-        public MAttachmentReference(Ctx ctx, int AD_AttachmentReference_ID, Trx trx)
-            : base(ctx, AD_AttachmentReference_ID, trx)
+        public MAttachmentReference(Ctx ctx, int VAF_AttachmentReference_ID, Trx trx)
+            : base(ctx, VAF_AttachmentReference_ID, trx)
         {
 
         }
@@ -35,14 +35,14 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public int GetURIByAttachmentLineID(int AD_AttachmentLine_ID)
+        public int GetURIByAttachmentLineID(int VAF_AttachmentLine_ID)
         {
             string attURISql = @"
 SELECT 
-AD_AttachmentReference_ID, AD_AttachmentLine_ID, AD_AttachmentRef 
+VAF_AttachmentReference_ID, VAF_AttachmentLine_ID, VAF_AttachmentRef 
 FROM 
-AD_AttachmentReference 
-WHERE IsActive = 'Y' AND AD_AttachmentLine_ID = " + AD_AttachmentLine_ID + " AND AD_Client_ID = " + GetAD_Client_ID();
+VAF_AttachmentReference 
+WHERE IsActive = 'Y' AND VAF_AttachmentLine_ID = " + VAF_AttachmentLine_ID + " AND VAF_Client_ID = " + GetVAF_Client_ID();
 
             return Util.GetValueOfInt(DB.ExecuteScalar(attURISql));
         }
@@ -51,10 +51,10 @@ WHERE IsActive = 'Y' AND AD_AttachmentLine_ID = " + AD_AttachmentLine_ID + " AND
         {
             string attLineSql = @"
 SELECT 
-AD_AttachmentReference_ID, AD_AttachmentLine_ID, AD_AttachmentRef 
+VAF_AttachmentReference_ID, VAF_AttachmentLine_ID, VAF_AttachmentRef 
 FROM 
-AD_AttachmentReference 
-WHERE IsActive = 'Y' AND AD_AttachmentRef = '" + attchmentURI + "' AND AD_Client_ID = " + GetAD_Client_ID();
+VAF_AttachmentReference 
+WHERE IsActive = 'Y' AND VAF_AttachmentRef = '" + attchmentURI + "' AND VAF_Client_ID = " + GetVAF_Client_ID();
 
             return Util.GetValueOfInt(DB.ExecuteScalar(attLineSql));
         }

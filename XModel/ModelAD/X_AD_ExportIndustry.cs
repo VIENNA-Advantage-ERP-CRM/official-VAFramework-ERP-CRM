@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ExportIndustry
+/** Generated Model for VAF_ExportIndustry
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ExportIndustry : PO
+public class X_VAF_ExportIndustry : PO
 {
-public X_AD_ExportIndustry (Context ctx, int AD_ExportIndustry_ID, Trx trxName) : base (ctx, AD_ExportIndustry_ID, trxName)
+public X_VAF_ExportIndustry (Context ctx, int VAF_ExportIndustry_ID, Trx trxName) : base (ctx, VAF_ExportIndustry_ID, trxName)
 {
-/** if (AD_ExportIndustry_ID == 0)
+/** if (VAF_ExportIndustry_ID == 0)
 {
-SetAD_ExportIndustry_ID (0);
+SetVAF_ExportIndustry_ID (0);
 }
  */
 }
-public X_AD_ExportIndustry (Ctx ctx, int AD_ExportIndustry_ID, Trx trxName) : base (ctx, AD_ExportIndustry_ID, trxName)
+public X_VAF_ExportIndustry (Ctx ctx, int VAF_ExportIndustry_ID, Trx trxName) : base (ctx, VAF_ExportIndustry_ID, trxName)
 {
-/** if (AD_ExportIndustry_ID == 0)
+/** if (VAF_ExportIndustry_ID == 0)
 {
-SetAD_ExportIndustry_ID (0);
+SetVAF_ExportIndustry_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetAD_ExportIndustry_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExportIndustry (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExportIndustry (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_AD_ExportIndustry (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExportIndustry (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExportIndustry (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_AD_ExportIndustry (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExportIndustry (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ExportIndustry (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ExportIndustry()
+static X_VAF_ExportIndustry()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -68,12 +68,12 @@ static X_AD_ExportIndustry()
 //static long serialVersionUID = 27564341066445L;
 /** Last Updated Timestamp 8/19/2010 4:32:30 PM */
 public static long updatedMS = 1282215749656L;
-/** AD_Table_ID=1000166 */
+/** VAF_TableView_ID=1000166 */
 public static int Table_ID;
  // =1000166;
 
-/** TableName=AD_ExportIndustry */
-public static String Table_Name="AD_ExportIndustry";
+/** TableName=VAF_ExportIndustry */
+public static String Table_Name="VAF_ExportIndustry";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -107,21 +107,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ExportIndustry[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ExportIndustry[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_ExportIndustry_ID.
-@param AD_ExportIndustry_ID AD_ExportIndustry_ID */
-public void SetAD_ExportIndustry_ID (int AD_ExportIndustry_ID)
+/** Set VAF_ExportIndustry_ID.
+@param VAF_ExportIndustry_ID VAF_ExportIndustry_ID */
+public void SetVAF_ExportIndustry_ID (int VAF_ExportIndustry_ID)
 {
-if (AD_ExportIndustry_ID < 1) throw new ArgumentException ("AD_ExportIndustry_ID is mandatory.");
-Set_ValueNoCheck ("AD_ExportIndustry_ID", AD_ExportIndustry_ID);
+if (VAF_ExportIndustry_ID < 1) throw new ArgumentException ("VAF_ExportIndustry_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ExportIndustry_ID", VAF_ExportIndustry_ID);
 }
-/** Get AD_ExportIndustry_ID.
-@return AD_ExportIndustry_ID */
-public int GetAD_ExportIndustry_ID() 
+/** Get VAF_ExportIndustry_ID.
+@return VAF_ExportIndustry_ID */
+public int GetVAF_ExportIndustry_ID() 
 {
-Object ii = Get_Value("AD_ExportIndustry_ID");
+Object ii = Get_Value("VAF_ExportIndustry_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

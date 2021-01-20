@@ -178,16 +178,16 @@ namespace VAdvantage.Model
             if (s == null || recalc)
             {
                 String count = DataBase.DB.TO_CHAR("COUNT(*)", DisplayType.Number, Env.GetAD_Language(GetCtx()));
-                String sql = "SELECT 'C'||(SELECT " + count + " FROM AD_Client)"
+                String sql = "SELECT 'C'||(SELECT " + count + " FROM VAF_Client)"
                     + " ||'U'||(SELECT " + count + " FROM AD_User)"
                     + " ||'B'||(SELECT " + count + " FROM C_BPartner)"
                     + " ||'P'||(SELECT " + count + " FROM M_Product)"
                     + " ||'I'||(SELECT " + count + " FROM C_Invoice)"
                     + " ||'L'||(SELECT " + count + " FROM C_InvoiceLine)"
                     + " ||'M'||(SELECT " + count + " FROM M_Transaction)"
-                    + " ||'c'||(SELECT " + count + " FROM AD_Column WHERE EntityType NOT IN ('C','D'))"
-                    + " ||'t'||(SELECT " + count + " FROM AD_Table WHERE EntityType NOT IN ('C','D'))"
-                    + " ||'f'||(SELECT " + count + " FROM AD_Field WHERE EntityType NOT IN ('C','D'))"
+                    + " ||'c'||(SELECT " + count + " FROM VAF_Column WHERE EntityType NOT IN ('C','D'))"
+                    + " ||'t'||(SELECT " + count + " FROM VAF_TableView WHERE EntityType NOT IN ('C','D'))"
+                    + " ||'f'||(SELECT " + count + " FROM VAF_Field WHERE EntityType NOT IN ('C','D'))"
                     + " FROM AD_System";
                 IDataReader idr = null;
                 try
@@ -223,8 +223,8 @@ namespace VAdvantage.Model
             String s = base.GetProfileInfo();
             if (s == null || recalc)
             {
-                String sql = "SELECT Value FROM AD_Client "
-                    + "WHERE IsActive='Y' ORDER BY AD_Client_ID DESC";
+                String sql = "SELECT Value FROM VAF_Client "
+                    + "WHERE IsActive='Y' ORDER BY VAF_Client_ID DESC";
                 IDataReader idr = null;
                 StringBuilder sb = new StringBuilder();
                 try
@@ -460,7 +460,7 @@ namespace VAdvantage.Model
             String sql = "SELECT COUNT(DISTINCT (u.AD_User_ID)) AS iu "
                 + "FROM AD_User u"
                 + " INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID) "
-                + "WHERE u.AD_Client_ID<>11"			//	no Demo
+                + "WHERE u.VAF_Client_ID<>11"			//	no Demo
                 + " AND u.AD_User_ID NOT IN (0,100)";	//	no System/SuperUser
             IDataReader idr = null;
             try

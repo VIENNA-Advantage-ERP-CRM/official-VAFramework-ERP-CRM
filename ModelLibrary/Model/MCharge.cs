@@ -168,7 +168,7 @@ namespace VAdvantage.Model
         {
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
-            //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_Charge_Acct'");
+            //_sql.Append("Select count(*) from  vaf_tableview where tablename like 'FRPT_Charge_Acct'");
             //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Charge_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Charge_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
@@ -179,9 +179,9 @@ namespace VAdvantage.Model
                 var relatedtoChrge = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO chrgact = null;
-                _client_ID = GetAD_Client_ID();
+                _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -190,7 +190,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -205,7 +205,7 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoChrge)
                                     {
                                         _sql.Clear();
-                                        _sql.Append("Select COUNT(*) From C_Charge Bp Left Join Frpt_Charge_Acct ca On Bp.C_Charge_ID=ca.C_Charge_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Charge_ID = " + GetC_Charge_ID());
+                                        _sql.Append("Select COUNT(*) From C_Charge Bp Left Join Frpt_Charge_Acct ca On Bp.C_Charge_ID=ca.C_Charge_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Charge_ID = " + GetC_Charge_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -220,7 +220,7 @@ namespace VAdvantage.Model
                                         {
                                             chrgact = MTable.GetPO(GetCtx(), "FRPT_Charge_Acct", 0, null);
                                             chrgact.Set_ValueNoCheck("C_Charge_ID", Util.GetValueOfInt(GetC_Charge_ID()));
-                                            chrgact.Set_ValueNoCheck("AD_Org_ID", 0);
+                                            chrgact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             chrgact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             chrgact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
                                             chrgact.Set_ValueNoCheck("C_AcctSchema_ID", _AcctSchema_ID);

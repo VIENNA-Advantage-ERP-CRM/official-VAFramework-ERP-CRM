@@ -75,8 +75,8 @@ namespace VIS.Models
                     {
                         MOrg org = new MOrg(ctx, OrgID[i], null);
                         MUserOrgAccess roles = new MUserOrgAccess(org, user.GetAD_User_ID());
-                        roles.SetAD_Client_ID(ctx.GetAD_Client_ID());
-                        roles.SetAD_Org_ID(OrgID[i]);
+                        roles.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
+                        roles.SetVAF_Org_ID(OrgID[i]);
                         roles.SetIsReadOnly(false);
                         roles.Save();
                     }
@@ -121,20 +121,20 @@ namespace VIS.Models
                     {
                         orgs.Append(",");
                     }
-                    orgs.Append(accesss[i].AD_Org_ID);
+                    orgs.Append(accesss[i].VAF_Org_ID);
                 }
             }
 
-            String sql = "SELECT o.AD_Org_ID,o.Name,o.Description   "	//	1..3
-                + "FROM AD_Role r, AD_Client c"
-                + " INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID OR o.AD_Org_ID=0) "
+            String sql = "SELECT o.VAF_Org_ID,o.Name,o.Description   "	//	1..3
+                + "FROM AD_Role r, VAF_Client c"
+                + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID OR o.VAF_Org_ID=0) "
                 + "WHERE r.AD_Role_ID='" + ctx.GetAD_Role_ID() + "'" 	//	#1
-                + " AND c.AD_Client_ID='" + ctx.GetAD_Client_ID() + "'"	//	#2
+                + " AND c.VAF_Client_ID='" + ctx.GetVAF_Client_ID() + "'"	//	#2
                 + " AND o.IsActive='Y' AND o.IsSummary='N'"
                 + " AND (r.IsAccessAllOrgs='Y' "
-                    + "OR (r.IsUseUserOrgAccess='N' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
+                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_Role_OrgAccess ra "
                         + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
-                    + "OR (r.IsUseUserOrgAccess='Y' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_User_OrgAccess ua "
+                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
                         + "WHERE ua.AD_User_ID='" + ctx.GetAD_User_ID() + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
                 + "ORDER BY o.Name";
@@ -147,7 +147,7 @@ namespace VIS.Models
                     {
                         OrgName = ds.Tables[0].Rows[i]["Name"].ToString(),
                         Description = ds.Tables[0].Rows[i]["Description"].ToString(),
-                        OrgID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Org_ID"])
+                        OrgID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Org_ID"])
                     };
                     orgaccess.Add(access);
                 }

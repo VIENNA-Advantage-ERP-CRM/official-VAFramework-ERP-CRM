@@ -76,7 +76,7 @@ static X_C_Phase()
 //static long serialVersionUID 27562514374131L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057342L;
-/** AD_Table_ID=577 */
+/** VAF_TableView_ID=577 */
 public static int Table_ID;
  // =577;
 

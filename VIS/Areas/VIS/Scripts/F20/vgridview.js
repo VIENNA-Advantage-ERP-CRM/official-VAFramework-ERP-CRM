@@ -222,27 +222,27 @@
             //
             //int[] co = GetClientOrgRecordID(this.Rows[row]);
             var co = getClientOrgRecordID(row);
-            var AD_Client_ID = co[0];
-            var AD_Org_ID = co[1];
+            var VAF_Client_ID = co[0];
+            var VAF_Org_ID = co[1];
             var Record_ID = co[2];
 
             return VIS.MRole.canUpdate
-                (AD_Client_ID, AD_Org_ID, self.AD_Table_ID, Record_ID, false);
+                (VAF_Client_ID, VAF_Org_ID, self.VAF_TableView_ID, Record_ID, false);
 
         };
 
         function getClientOrgRecordID(row) {
-            var AD_Client_ID = -1;
+            var VAF_Client_ID = -1;
             if (typeof self.indexClientColumn != "undefined" && self.indexClientColumn != -1) {
                 var ii = self.grid.getCellValue(row, self.indexClientColumn);//].Value;
                 if (ii != null && ii !== "")
-                    AD_Client_ID = VIS.Utility.Util.getValueOfInt(ii);
+                    VAF_Client_ID = VIS.Utility.Util.getValueOfInt(ii);
             }
-            var AD_Org_ID = 0;
+            var VAF_Org_ID = 0;
             if (typeof self.indexOrgColumn != "undefined" && self.indexOrgColumn != -1) {
                 var ii = self.grid.getCellValue(row, self.indexOrgColumn);
                 if (ii != null && ii !== "")
-                    AD_Org_ID = VIS.Utility.Util.getValueOfInt(ii);
+                    VAF_Org_ID = VIS.Utility.Util.getValueOfInt(ii);
             }
             var Record_ID = 0;
             if (typeof self.indexKeyColumn != "undefined" && self.indexKeyColumn != -1) {
@@ -251,7 +251,7 @@
                     Record_ID = VIS.Utility.Util.getValueOfInt(ii);
             }
 
-            return [AD_Client_ID, AD_Org_ID, Record_ID];
+            return [VAF_Client_ID, VAF_Org_ID, Record_ID];
         };
 
         //this.onToolBarClick = function (target, data) {
@@ -289,7 +289,7 @@
         this.id = name;
         this.$container = $container;
         this.mTab = mTab;
-        this.AD_Table_ID = this.mTab.getAD_Table_ID();
+        this.VAF_TableView_ID = this.mTab.getVAF_TableView_ID();
 
 
         var oColumns = [];
@@ -323,9 +323,9 @@
                 this.indexActiveColumn = j;
             else if (columnName.equals("Processed"))
                 this.indexProcessedColumn = j;
-            else if (columnName.equals("AD_Client_ID"))
+            else if (columnName.equals("VAF_Client_ID"))
                 this.indexClientColumn = j;
-            else if (columnName.equals("AD_Org_ID"))
+            else if (columnName.equals("VAF_Org_ID"))
                 this.indexOrgColumn = j;
 
             var isDisplayed = mField.getIsDisplayedMR ? mField.getIsDisplayedMR() : mField.getIsDisplayed();
@@ -662,7 +662,7 @@
                         val = "-";
                         return val;
                     }
-                    return VIS.Msg.getElement1('AD_Image_ID') + '-' + val;
+                    return VIS.Msg.getElement1('VAF_Image_ID') + '-' + val;
                     //var img = $('img').error(function () {
                     //    $(this).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val + ".jpeg ");
                     //}).attr("src", VIS.Application.contextUrl + "/Images/Thumb32x32/" + val+".png ");

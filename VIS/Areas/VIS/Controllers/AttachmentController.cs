@@ -18,11 +18,11 @@ namespace VIS.Controllers
         {
             return View();
         }
-        //public JsonResult GetFileAttachment(int AD_Table_ID, int Record_ID)
+        //public JsonResult GetFileAttachment(int VAF_TableView_ID, int Record_ID)
         //{
         //    Ctx ctx = Session["ctx"] as Ctx;
         //    AttachmentModel am = new AttachmentModel();
-        //    return Json(new { result = am.GetFileAttachment(AD_Table_ID, Record_ID, ctx) }, JsonRequestBehavior.AllowGet);
+        //    return Json(new { result = am.GetFileAttachment(VAF_TableView_ID, Record_ID, ctx) }, JsonRequestBehavior.AllowGet);
         //}
         //public JsonResult GetFileLocations()
         //{
@@ -34,11 +34,11 @@ namespace VIS.Controllers
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult GetAttachment(int AD_Table_ID, int Record_ID)
+        public JsonResult GetAttachment(int VAF_TableView_ID, int Record_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentModel am = new AttachmentModel();
-            return Json(new { result = am.GetAttachment(AD_Table_ID, Record_ID, ctx) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = am.GetAttachment(VAF_TableView_ID, Record_ID, ctx) }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
@@ -107,22 +107,22 @@ namespace VIS.Controllers
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult SaveAttachmentEntries(string files, int AD_Attachment_ID, string folderKey, int AD_Table_ID, int Record_ID, string fileLocation, int NewRecord_ID, bool IsDMSAttachment)
+        public JsonResult SaveAttachmentEntries(string files, int VAF_Attachment_ID, string folderKey, int VAF_TableView_ID, int Record_ID, string fileLocation, int NewRecord_ID, bool IsDMSAttachment)
         {
             List<AttFileInfo> _files = JsonConvert.DeserializeObject<List<AttFileInfo>>(files);
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentModel am = new AttachmentModel();
-            return Json(new { result = am.CreateAttachmentEntries(_files, AD_Attachment_ID, folderKey, ctx, AD_Table_ID, Record_ID, fileLocation, NewRecord_ID, IsDMSAttachment) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = am.CreateAttachmentEntries(_files, VAF_Attachment_ID, folderKey, ctx, VAF_TableView_ID, Record_ID, fileLocation, NewRecord_ID, IsDMSAttachment) }, JsonRequestBehavior.AllowGet);
         }
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult DownloadAttachment(string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID, string actionOrigin, string originName, int AD_Table_ID, int recordID)
+        public JsonResult DownloadAttachment(string fileName, int VAF_Attachment_ID, int VAF_AttachmentLine_ID, string actionOrigin, string originName, int VAF_TableView_ID, int recordID)
         {
             //List<AttFileInfo> _files = JsonConvert.DeserializeObject<List<AttFileInfo>>(files);
             Ctx ctx = Session["ctx"] as Ctx;
             AttachmentModel am = new AttachmentModel();
-            return Json(new { result = am.DownloadAttachment(ctx, fileName, AD_Attachment_ID, AD_AttachmentLine_ID, actionOrigin, originName, AD_Table_ID, recordID) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = am.DownloadAttachment(ctx, fileName, VAF_Attachment_ID, VAF_AttachmentLine_ID, actionOrigin, originName, VAF_TableView_ID, recordID) }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]

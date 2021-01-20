@@ -20,7 +20,7 @@ public X_C_InterOrg_Acct (Context ctx, int C_InterOrg_Acct_ID, Trx trxName) : ba
 {
 /** if (C_InterOrg_Acct_ID == 0)
 {
-SetAD_OrgTo_ID (0);
+SetVAF_OrgTo_ID (0);
 SetC_AcctSchema_ID (0);
 SetIntercompanyDueFrom_Acct (0);
 SetIntercompanyDueTo_Acct (0);
@@ -31,7 +31,7 @@ public X_C_InterOrg_Acct (Ctx ctx, int C_InterOrg_Acct_ID, Trx trxName) : base (
 {
 /** if (C_InterOrg_Acct_ID == 0)
 {
-SetAD_OrgTo_ID (0);
+SetVAF_OrgTo_ID (0);
 SetC_AcctSchema_ID (0);
 SetIntercompanyDueFrom_Acct (0);
 SetIntercompanyDueTo_Acct (0);
@@ -74,7 +74,7 @@ static X_C_InterOrg_Acct()
 //static long serialVersionUID 27562514372234L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055445L;
-/** AD_Table_ID=397 */
+/** VAF_TableView_ID=397 */
 public static int Table_ID;
  // =397;
 
@@ -117,20 +117,20 @@ StringBuilder sb = new StringBuilder ("X_C_InterOrg_Acct[").Append(Get_ID()).App
 return sb.ToString();
 }
 
-/** AD_OrgTo_ID AD_Reference_ID=130 */
-public static int AD_ORGTO_ID_AD_Reference_ID=130;
+/** VAF_OrgTo_ID AD_Reference_ID=130 */
+public static int VAF_ORGTO_ID_AD_Reference_ID=130;
 /** Set Inter-Organization.
-@param AD_OrgTo_ID Organization valid for intercompany documents */
-public void SetAD_OrgTo_ID (int AD_OrgTo_ID)
+@param VAF_OrgTo_ID Organization valid for intercompany documents */
+public void SetVAF_OrgTo_ID (int VAF_OrgTo_ID)
 {
-if (AD_OrgTo_ID < 1) throw new ArgumentException ("AD_OrgTo_ID is mandatory.");
-Set_ValueNoCheck ("AD_OrgTo_ID", AD_OrgTo_ID);
+if (VAF_OrgTo_ID < 1) throw new ArgumentException ("VAF_OrgTo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_OrgTo_ID", VAF_OrgTo_ID);
 }
 /** Get Inter-Organization.
 @return Organization valid for intercompany documents */
-public int GetAD_OrgTo_ID() 
+public int GetVAF_OrgTo_ID() 
 {
-Object ii = Get_Value("AD_OrgTo_ID");
+Object ii = Get_Value("VAF_OrgTo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

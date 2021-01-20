@@ -452,15 +452,15 @@ namespace VAdvantage.Acct
                     //}
                     headerCashCurrency = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetC_Currency_ID());
                     childCashCurrency = (new MCashBook(Env.GetCtx(), line.Get_C_CashBook_ID(), null).GetC_Currency_ID());
-                    headerCashOrg = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetAD_Org_ID());
-                    childCashOrg = (new MCashBook(Env.GetCtx(), line.Get_C_CashBook_ID(), null).GetAD_Org_ID());
+                    headerCashOrg = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetVAF_Org_ID());
+                    childCashOrg = (new MCashBook(Env.GetCtx(), line.Get_C_CashBook_ID(), null).GetVAF_Org_ID());
 
                     //else
                     //{
                     if (headerCashCurrency != childCashCurrency)
                     {
                         Decimal transferdAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT Amount FROM C_CashLine WHERE C_CashLine_ID =" + line.Get_C_CashLine_Ref_ID()));
-                        Decimal recievedAmt = MConversionRate.Convert(Env.GetCtx(), line.GetAmount(), headerCashCurrency, childCashCurrency, GetAD_Client_ID(), GetAD_Org_ID());
+                        Decimal recievedAmt = MConversionRate.Convert(Env.GetCtx(), line.GetAmount(), headerCashCurrency, childCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
                         Decimal res = Decimal.Subtract(recievedAmt, Math.Abs(transferdAmt));
                         if (res > 0)
                         {
@@ -473,7 +473,7 @@ namespace VAdvantage.Acct
 
                         SetC_CashBook_ID(line.Get_C_CashBook_ID());
 
-                        int OrgID = line.GetAD_Org_ID();
+                        int OrgID = line.GetVAF_Org_ID();
                         if (headerCashOrg != childCashOrg)
                         {
                             OrgID = childCashOrg;
@@ -481,7 +481,7 @@ namespace VAdvantage.Acct
                         }
                         //else
                         //{
-                        transferdAmt = MConversionRate.Convert(Env.GetCtx(), transferdAmt, childCashCurrency, headerCashCurrency, GetAD_Client_ID(), GetAD_Org_ID());
+                        transferdAmt = MConversionRate.Convert(Env.GetCtx(), transferdAmt, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
                         //}
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
@@ -510,7 +510,7 @@ namespace VAdvantage.Acct
 
                     //if (headerCashOrg != childCashOrg)
                     //{
-                    //    DataSet ds = DB.ExecuteDataset("SELECT INTERCOMPANYDUETO_ACCT,INTERCOMPANYDUEFROM_ACCT FROM C_AcctSchema_GL WHERE AD_Client_ID=" + GetAD_Client_ID());
+                    //    DataSet ds = DB.ExecuteDataset("SELECT INTERCOMPANYDUETO_ACCT,INTERCOMPANYDUEFROM_ACCT FROM C_AcctSchema_GL WHERE VAF_Client_ID=" + GetVAF_Client_ID());
                     //    int dueFrom = 0;
                     //    int dueTo = 0;
                     //    if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -537,9 +537,9 @@ namespace VAdvantage.Acct
 
             if (TotalCurrGain != Env.ZERO)
             {
-                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT C_ElementValue_ID FROM C_ElementValue WHERE Value='80540' AND AD_Client_ID = " + GetAD_Client_ID() + " )"));
+                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT C_ElementValue_ID FROM C_ElementValue WHERE Value='80540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
-                TotalCurrGain = MConversionRate.Convert(Env.GetCtx(), TotalCurrGain, childCashCurrency, headerCashCurrency, GetAD_Client_ID(), GetAD_Org_ID());
+                TotalCurrGain = MConversionRate.Convert(Env.GetCtx(), TotalCurrGain, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 
                 fact.CreateLine(null, acct,
@@ -549,9 +549,9 @@ namespace VAdvantage.Acct
             }
             if (TotalCurrLoss != Env.ZERO)
             {
-                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT C_ElementValue_ID FROM C_ElementValue WHERE Value='82540' AND AD_Client_ID = " + GetAD_Client_ID() + " )"));
+                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT C_ElementValue_ID FROM C_ElementValue WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
-                TotalCurrLoss = MConversionRate.Convert(Env.GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetAD_Client_ID(), GetAD_Org_ID());
+                TotalCurrLoss = MConversionRate.Convert(Env.GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 
                 fact.CreateLine(null, acct,

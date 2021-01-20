@@ -70,7 +70,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = "SELECT * "
                 + "FROM M_Storage s "
-                + "WHERE AD_Client_ID =" + GetCtx().GetAD_Client_ID()
+                + "WHERE VAF_Client_ID =" + GetCtx().GetVAF_Client_ID()
                 + " AND QtyOnHand < 0"
                 //	Instance Attribute
                 + " AND EXISTS (SELECT * FROM M_Product p"

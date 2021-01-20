@@ -126,7 +126,7 @@ namespace VAdvantage.Model
                 else
                 {
                     MProjectTask toTask = new MProjectTask(GetCtx(), 0, Get_TrxName());
-                    PO.CopyValues(fromTasks[i], toTask, GetAD_Client_ID(), GetAD_Org_ID());
+                    PO.CopyValues(fromTasks[i], toTask, GetVAF_Client_ID(), GetVAF_Org_ID());
                     toTask.SetC_ProjectPhase_ID(GetC_ProjectPhase_ID());
                     if (toTask.Save())
                         count++;

@@ -20,7 +20,7 @@ public X_AD_Alert (Context ctx, int AD_Alert_ID, Trx trxName) : base (ctx, AD_Al
 {
 /** if (AD_Alert_ID == 0)
 {
-SetAD_AlertProcessor_ID (0);
+SetVAF_AlertHandler_ID (0);
 SetAD_Alert_ID (0);
 SetAlertMessage (null);
 SetAlertSubject (null);
@@ -35,7 +35,7 @@ public X_AD_Alert (Ctx ctx, int AD_Alert_ID, Trx trxName) : base (ctx, AD_Alert_
 {
 /** if (AD_Alert_ID == 0)
 {
-SetAD_AlertProcessor_ID (0);
+SetVAF_AlertHandler_ID (0);
 SetAD_Alert_ID (0);
 SetAlertMessage (null);
 SetAlertSubject (null);
@@ -82,7 +82,7 @@ static X_AD_Alert()
 //static long serialVersionUID = 27562514360213L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043424L;
-/** AD_Table_ID=594 */
+/** VAF_TableView_ID=594 */
 public static int Table_ID;
  // =594;
 
@@ -125,17 +125,17 @@ StringBuilder sb = new StringBuilder ("X_AD_Alert[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Alert Processor.
-@param AD_AlertProcessor_ID Alert Processor/Server Parameter */
-public void SetAD_AlertProcessor_ID (int AD_AlertProcessor_ID)
+@param VAF_AlertHandler_ID Alert Processor/Server Parameter */
+public void SetVAF_AlertHandler_ID (int VAF_AlertHandler_ID)
 {
-if (AD_AlertProcessor_ID < 1) throw new ArgumentException ("AD_AlertProcessor_ID is mandatory.");
-Set_Value ("AD_AlertProcessor_ID", AD_AlertProcessor_ID);
+if (VAF_AlertHandler_ID < 1) throw new ArgumentException ("VAF_AlertHandler_ID is mandatory.");
+Set_Value ("VAF_AlertHandler_ID", VAF_AlertHandler_ID);
 }
 /** Get Alert Processor.
 @return Alert Processor/Server Parameter */
-public int GetAD_AlertProcessor_ID() 
+public int GetVAF_AlertHandler_ID() 
 {
-Object ii = Get_Value("AD_AlertProcessor_ID");
+Object ii = Get_Value("VAF_AlertHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

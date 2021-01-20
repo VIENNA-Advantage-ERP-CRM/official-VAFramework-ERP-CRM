@@ -70,7 +70,7 @@ static X_CM_AccessNewsChannel()
 //static long serialVersionUID 27562514368065L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051276L;
-/** AD_Table_ID=891 */
+/** VAF_TableView_ID=891 */
 public static int Table_ID;
  // =891;
 

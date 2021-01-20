@@ -78,7 +78,7 @@ static X_AD_WF_NodeNext()
 //static long serialVersionUID 27562514366263L;
 /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
 public static long updatedMS = 1280389049474L;
-/** AD_Table_ID=131 */
+/** VAF_TableView_ID=131 */
 public static int Table_ID;
  // =131;
 

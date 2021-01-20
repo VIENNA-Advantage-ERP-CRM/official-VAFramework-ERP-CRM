@@ -108,7 +108,7 @@ namespace VIS.Models
             List<PaymentSelection> objPSelection = new List<PaymentSelection>();
             StringBuilder sql = new StringBuilder("SELECT C_PaySelection_ID, Name || ' - ' || " + DB.TO_CHAR("TotalAmt",
                       DisplayType.Number, ctx.GetAD_Language()) + " AS NAME FROM C_PaySelection "
-                      + "WHERE AD_Client_ID=" + ctx.GetAD_Client_ID() + " AND Processed='Y' AND IsActive='Y'");
+                      + "WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND Processed='Y' AND IsActive='Y'");
             if (!_printCheck)
             {
                 sql.Append(" AND EXISTS (SELECT * FROM C_PaySelectionCheck psc" +
@@ -278,14 +278,14 @@ namespace VIS.Models
             try
             {
 
-                sql = "select ad_table_id from ad_table where tablename = 'C_PaySelectionCheck'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelectionCheck'";
                 table_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 //sql = "select ad_process_id from ad_process where value = 'CheckPrint'";
                 sql = "select ad_process_id from ad_process where ad_printformat_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and c_bankaccountdoc.isactive = 'Y' and rownum =1)";
                 AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select ad_table_id from ad_table where tablename = 'C_Payment'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 sql = "select ad_process_id from ad_process where value = 'PaymentPrintFormat'";
@@ -303,7 +303,7 @@ namespace VIS.Models
             //    int record_ID = Util.GetValueOfInt(checkID);
             //  VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(null, AD_Process_ID, table_ID, Util.GetValueOfInt(check_ID[j]));
             //    pi.SetAD_User_ID(ctx.GetAD_User_ID());
-            //    pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            //    pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             //    byte[] reportData = null;
             //    string result="";
             //    pctrl = new VAdvantage.ProcessEngine.ProcessCtl(ctx,null, pi, null);
@@ -373,7 +373,7 @@ namespace VIS.Models
             VAdvantage.ProcessEngine.ProcessCtl pctrl = null;
             try
             {
-                sql = "select ad_table_id from ad_table where tablename = 'C_Payment'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 sql = "select ad_process_id from ad_process where value = 'PaymentPrintFormat'";
@@ -390,7 +390,7 @@ namespace VIS.Models
             //    string result = "";
             //    VAdvantage.ProcessEngine.ProcessInfo pin = new VAdvantage.ProcessEngine.ProcessInfo(null, paymentAD_Process_ID, paymentTable_ID, Util.GetValueOfInt(payment_ID[l]));
             //    pin.SetAD_User_ID(ctx.GetAD_User_ID());
-            //    pin.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            //    pin.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             //    pctrl = new VAdvantage.ProcessEngine.ProcessCtl(ctx,null, pin, null);
             //    pctrl.Process(pin, ctx,out reportData, out result);              
             //}

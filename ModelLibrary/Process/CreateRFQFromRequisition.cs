@@ -13,7 +13,7 @@ namespace VAdvantage.Process
 {
     class CreateRFQFromRequisition : SvrProcess
     {
-        private int AD_Org_ID = 0; // Variable for rfq organization input.
+        private int VAF_Org_ID = 0; // Variable for rfq organization input.
         private int Requisition_Org_ID = 0; // Variable for filtering requisition by organization.
         private int Warehouse_ID = 0; // Variable for filtering requisition by warehouse.
         private string Req = ""; // variable for processing only selected requisition.        
@@ -29,7 +29,7 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             // Passed parameters info
-            log.Info("Process start - Parameter - AD_Org_ID=" + AD_Org_ID
+            log.Info("Process start - Parameter - VAF_Org_ID=" + VAF_Org_ID
                 + ", Requisition Organization=" + Requisition_Org_ID
                  + ", Warehouse=" + Warehouse_ID
                  + " Requisition=" + Req
@@ -57,7 +57,7 @@ namespace VAdvantage.Process
                         INNER JOIN M_requisition req
                         ON (reqline.M_requisition_ID  =req.M_requisition_ID)
                         WHERE ReqLine.IsActive        ='Y' AND req.IsActive        ='Y'
-                        AND ReqLine.AD_org_ID         =" + Requisition_Org_ID + " AND req.DocStatus='CO' AND reqline.Qty!=reqline.DTD001_DeliveredQty  ");
+                        AND ReqLine.vaf_org_ID         =" + Requisition_Org_ID + " AND req.DocStatus='CO' AND reqline.Qty!=reqline.DTD001_DeliveredQty  ");
             // Requisition selection check
             if (!string.IsNullOrEmpty(Req))
             {
@@ -145,9 +145,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    AD_Org_ID = para[i].GetParameterAsInt();
+                    VAF_Org_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("OrgColumn"))
                 {
@@ -219,7 +219,7 @@ namespace VAdvantage.Process
                         LineNo = 0;
                         Requisition_ID = Util.GetValueOfInt(_ds.Tables[0].Rows[i]["M_Requisition_ID"]);
                         rfq = new MRfQ(GetCtx(), 0, Get_TrxName());
-                        rfq.SetAD_Org_ID(AD_Org_ID);
+                        rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
                         rfq.SetSalesRep_ID(GetCtx().GetAD_User_ID());
                         rfq.SetC_RfQ_Topic_ID(RfQTopic_ID);
@@ -277,7 +277,7 @@ namespace VAdvantage.Process
                     if (rfq == null)
                     {
                         rfq = new MRfQ(GetCtx(), 0, Get_TrxName());
-                        rfq.SetAD_Org_ID(AD_Org_ID);
+                        rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
                         rfq.SetSalesRep_ID(GetCtx().GetAD_User_ID());
                         rfq.SetC_RfQ_Topic_ID(RfQTopic_ID);

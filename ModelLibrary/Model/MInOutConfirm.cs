@@ -192,7 +192,7 @@ namespace VAdvantage.Model
                 _sql.Append(@"SELECT NVL(VA010_PercentQtyToVerify,0)VA010_PercentQtyToVerify,
                                 NVL(VA010_ReceiptQtyFrom,0) VA010_ReceiptQtyFrom,
                                 NVL(VA010_ReceiptQtyTo,0) VA010_ReceiptQtyTo FROM VA010_CheckingQty 
-                              WHERE IsActive='Y' AND VA010_Qualityplan_ID=" + VA010_QUalityPlan_ID + " AND AD_Client_ID=" + ctx.GetAD_Client_ID());
+                              WHERE IsActive='Y' AND VA010_Qualityplan_ID=" + VA010_QUalityPlan_ID + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID());
 
                 _ds = DB.ExecuteDataset(_sql.ToString(), null, Trx_Name);
                 if (_ds != null && _ds.Tables[0].Rows.Count > 0)
@@ -256,8 +256,8 @@ namespace VAdvantage.Model
                                 pos.Set_ValueNoCheck("M_InOutLineConfirm_ID", Util.GetValueOfInt(M_InOutConfirmLine_ID[i]));
                                 pos.Set_ValueNoCheck("VA010_TestPrmtrList_ID", Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA010_TestPrmtrList_ID"]));
                                 pos.Set_ValueNoCheck("VA010_QuantityToVerify", Util.GetValueOfDecimal(_qty));
-                                pos.Set_ValueNoCheck("AD_Client_ID", ctx.GetAD_Client_ID());
-                                pos.Set_ValueNoCheck("AD_Org_ID", ctx.GetAD_Org_ID());
+                                pos.Set_ValueNoCheck("VAF_Client_ID", ctx.GetVAF_Client_ID());
+                                pos.Set_ValueNoCheck("VAF_Org_ID", ctx.GetVAF_Org_ID());
 
                                 if (pos.Save(Trx_Name))
                                 {
@@ -939,7 +939,7 @@ namespace VAdvantage.Model
             split.AddDescription("Splitted from " + original.GetDocumentNo());
             split.SetIsInDispute(true);
             // new 13 jan
-            int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(*) FROM AD_Column clm INNER JOIN ad_table tbl on (tbl.ad_table_id=clm.ad_table_id) where tbl.tablename='M_InOutLineConfirm' and clm.columnname = 'M_Locator_ID' "));
+            int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(*) FROM VAF_Column clm INNER JOIN vaf_tableview tbl on (tbl.vaf_tableview_id=clm.vaf_tableview_id) where tbl.tablename='M_InOutLineConfirm' and clm.columnname = 'M_Locator_ID' "));
             //nnayak : Change for bug 1431337
             split.SetRef_InOut_ID(original.Get_ID());
 

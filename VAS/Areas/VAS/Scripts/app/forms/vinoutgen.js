@@ -258,7 +258,7 @@
             }
             if ($self.arrListColumns.length == 0) {
                 // this.arrListColumns.push({ field: "Select", caption: VIS.Msg.getMsg("Select"), sortable: true, size: '50px', hidden: false });
-                $self.arrListColumns.push({ field: "AD_Org_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "AD_Org_ID"), sortable: true, size: '16%', min: 150, hidden: false });
+                $self.arrListColumns.push({ field: "VAF_Org_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Org_ID"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "C_DocType_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_DocType_ID"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "DocumentNo", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "DocumentNo"), sortable: true, size: '16%', min: 150, hidden: false });
                 $self.arrListColumns.push({ field: "C_BPartner_ID", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "C_BPartner_ID"), sortable: true, size: '16%', min: 150, hidden: false });
@@ -296,7 +296,7 @@
         // Seacrh data
         function executeQuery() {
             var data = [];
-            var AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
+            var VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
 
 
             var mWarehouseID = "";
@@ -324,7 +324,7 @@
                 type: 'POST',
                 //async: false,
                 data: {
-                    adClientID: AD_Client_ID,
+                    adClientID: VAF_Client_ID,
                     mWarehouseIDs: mWarehouseID,
                     cBPartnerIDs: cBPartnerID,
                     cOrderIDSearchs: cOrderIDSearch
@@ -337,7 +337,7 @@
                             for (var i = 0; i < ress.length; i++) {
                                 var line = {};
                                 line['C_Order_ID'] = ress[i].c_order_id,
-                                    line['AD_Org_ID'] = ress[i].ord,
+                                    line['VAF_Org_ID'] = ress[i].ord,
                                     line['C_DocType_ID'] = ress[i].doctype,
                                     line['DocumentNo'] = VIS.Utility.encodeText(ress[i].documentno),
                                     line['C_BPartner_ID'] = ress[i].bpname,
@@ -379,15 +379,15 @@
         //function executeQuery() {
         //    var data = [];
         //    //C_Order_IDSearch = $self.vSearchOrder.getValue();
-        //    var AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
+        //    var VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
         //    //  Create SQL
         //    var sql = (
         //        "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
-        //        + "FROM M_InOut_Candidate_v ic, AD_Org o, C_BPartner bp, C_DocType dt "
-        //        + "WHERE ic.AD_Org_ID=o.AD_Org_ID"
+        //        + "FROM M_InOut_Candidate_v ic, VAF_Org o, C_BPartner bp, C_DocType dt "
+        //        + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
         //        + " AND ic.C_BPartner_ID=bp.C_BPartner_ID"
         //        + " AND ic.C_DocType_ID=dt.C_DocType_ID"
-        //        + " AND ic.AD_Client_ID=" + AD_Client_ID);
+        //        + " AND ic.VAF_Client_ID=" + VAF_Client_ID);
 
         //    if (M_Warehouse_ID != null) {
         //        if (M_Warehouse_ID.toString() != "-1") {
@@ -408,7 +408,7 @@
         //        while (dr.read()) {
         //            var line = {};
         //            line['C_Order_ID'] = dr.getInt(0);
-        //            line['AD_Org_ID'] = dr.getString(1);
+        //            line['VAF_Org_ID'] = dr.getString(1);
         //            line['C_DocType_ID'] = dr.getString(2);
         //            line['DocumentNo'] = dr.getString(3);
         //            line['C_BPartner_ID'] = dr.getString(4);

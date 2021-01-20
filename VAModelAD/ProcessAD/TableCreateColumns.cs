@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Module Name    : Application Dictionry
- * Purpose        : Fetch the column form database and insert into AD_Table 
+ * Purpose        : Fetch the column form database and insert into VAF_TableView 
  * Class Used     : context.cs,globalvariable.cs...
  * Chronological Development
  * Jagmohan Bhatt       02-Sept-2009
@@ -27,7 +27,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /** Entity Type			*/
         private String p_EntityType = "C";	//	ENTITYTYPE_Customization
         /** Table				*/
-        private int p_AD_Table_ID = 0;
+        private int p_VAF_TableView_ID = 0;
         /** CheckAllDBTables	*/
         private bool p_AllTables = false;
 
@@ -53,7 +53,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
-            p_AD_Table_ID = GetRecord_ID();
+            p_VAF_TableView_ID = GetRecord_ID();
         }	//	prepare
 
 
@@ -63,11 +63,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns></returns>
         protected override String DoIt()
         {
-           if (p_AD_Table_ID == 0)
-                throw new Exception("@NotFound@ @AD_Table_ID@ " + p_AD_Table_ID);
+           if (p_VAF_TableView_ID == 0)
+                throw new Exception("@NotFound@ @VAF_TableView_ID@ " + p_VAF_TableView_ID);
             log.Info("EntityType=" + p_EntityType
                 + ", AllTables=" + p_AllTables
-                + ", AD_Table_ID=" + p_AD_Table_ID);
+                + ", VAF_TableView_ID=" + p_VAF_TableView_ID);
 
             Trx trx = Trx.Get("getDatabaseMetaData");
             DatabaseMetaData md = new DatabaseMetaData();
@@ -81,9 +81,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             else
             {
 
-                MTable table = new MTable(GetCtx(), p_AD_Table_ID, Get_Trx());
+                MTable table = new MTable(GetCtx(), p_VAF_TableView_ID, Get_Trx());
                 if ((table == null) || (table.Get_ID() == 0))
-                    throw new Exception("@NotFound@ @AD_Table_ID@ " + p_AD_Table_ID);
+                    throw new Exception("@NotFound@ @VAF_TableView_ID@ " + p_VAF_TableView_ID);
                 log.Info(table.GetTableName() + ", EntityType=" + p_EntityType);
                 String tableName = table.GetTableName();
                 
@@ -204,7 +204,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     column.SetName(element.GetName());
                     column.SetDescription(element.GetDescription());
                     column.SetHelp(element.GetHelp());
-                    column.SetAD_Element_ID(element.GetAD_Element_ID());
+                    column.SetVAF_ColumnDic_ID(element.GetVAF_ColumnDic_ID());
                     //	Other
                     column.SetIsMandatory("NO".Equals(nullable));
                     column.SetIsMandatoryUI(column.IsMandatory());                    
@@ -251,7 +251,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         column.SetAD_Reference_ID(DisplayType.Table);
                         column.SetAD_Reference_Value_ID(110);
-                        column.SetConstraintType(X_AD_Column.CONSTRAINTTYPE_DoNOTCreate);
+                        column.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                         column.SetIsUpdateable(false);
                     }
                     // Export_ID
@@ -266,7 +266,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         column.SetAD_Reference_ID(DisplayType.Table);
                         column.SetAD_Reference_Value_ID(389);
                         column.SetDefaultValue("U");
-                        column.SetConstraintType(X_AD_Column.CONSTRAINTTYPE_Restrict);
+                        column.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
                         column.SetReadOnlyLogic("@EntityType@=D");
                     }
                     // CLOB
@@ -324,17 +324,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     //	General Defaults
                     if (columnName.EndsWith("_ID"))
-                        column.SetConstraintType(X_AD_Column.CONSTRAINTTYPE_Restrict);
-                    if (columnName.Equals("AD_Client_ID"))
+                        column.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
+                    if (columnName.Equals("VAF_Client_ID"))
                     {
-                        column.SetAD_Val_Rule_ID(116);	//	Client Login
-                        column.SetDefaultValue("@#AD_Client_ID@");
+                        column.SetVAF_DataVal_Rule_ID(116);	//	Client Login
+                        column.SetDefaultValue("@#VAF_Client_ID@");
                         column.SetIsUpdateable(false);                        
                     }
-                    else if (columnName.Equals("AD_Org_ID"))
+                    else if (columnName.Equals("VAF_Org_ID"))
                     {
-                        column.SetAD_Val_Rule_ID(104);	//	Org Security
-                        column.SetDefaultValue("@#AD_Org_ID@");
+                        column.SetVAF_DataVal_Rule_ID(104);	//	Org Security
+                        column.SetDefaultValue("@#VAF_Org_ID@");
                         column.SetIsUpdateable(false);                        
                     }
                     else if (columnName.Equals("Processed"))

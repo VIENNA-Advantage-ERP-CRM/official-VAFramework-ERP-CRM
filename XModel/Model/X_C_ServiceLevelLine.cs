@@ -74,7 +74,7 @@ static X_C_ServiceLevelLine()
 //static long serialVersionUID 27562514375196L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058407L;
-/** AD_Table_ID=338 */
+/** VAF_TableView_ID=338 */
 public static int Table_ID;
  // =338;
 

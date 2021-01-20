@@ -74,7 +74,7 @@ static X_C_Country()
 //static long serialVersionUID 27562514371498L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054709L;
-/** AD_Table_ID=170 */
+/** VAF_TableView_ID=170 */
 public static int Table_ID;
  // =170;
 

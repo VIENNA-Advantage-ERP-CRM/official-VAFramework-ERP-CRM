@@ -86,12 +86,12 @@
         var getZoomTargets = function () {
            
 
-            //var sql = "SELECT DISTINCT t.AD_Table_ID, t.TableName "
-            //    + "FROM AD_Table t "
-            //    + "WHERE EXISTS (SELECT 1 FROM AD_Tab tt "
-            //        + "WHERE tt.AD_Table_ID = t.AD_Table_ID AND tt.SeqNo=10) "
-            //    + " AND t.AD_Table_ID IN "
-            //        + "(SELECT AD_Table_ID FROM AD_Column "
+            //var sql = "SELECT DISTINCT t.VAF_TableView_ID, t.TableName "
+            //    + "FROM VAF_TableView t "
+            //    + "WHERE EXISTS (SELECT 1 FROM VAF_Tab tt "
+            //        + "WHERE tt.VAF_TableView_ID = t.VAF_TableView_ID AND tt.SeqNo=10) "
+            //    + " AND t.VAF_TableView_ID IN "
+            //        + "(SELECT VAF_TableView_ID FROM VAF_Column "
             //        + "WHERE ColumnName='" + tableName + "_ID') "
             //    + "AND TableName NOT LIKE 'I%'"
             //    + "AND TableName NOT LIKE '" + tableName + "' "
@@ -201,8 +201,8 @@
         //    // Find windows where the first tab is based on the table
         //    //var sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
         //    //        "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
-        //    //    + "FROM AD_Table t "
-        //    //    + "INNER JOIN AD_Tab tt ON (tt.AD_Table_ID = t.AD_Table_ID) ";
+        //    //    + "FROM VAF_TableView t "
+        //    //    + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
 
         //    //var baseLanguage = VIS.Env.isBaseLanguage();// GlobalVariable.IsBaseLanguage();
         //    //if (baseLanguage) {
@@ -219,7 +219,7 @@
         //    //    + "' AND w.AD_Window_ID <>" + curWindow_ID
         //    //    + " AND tt.SeqNo=10"
         //    //    + " AND (wp.AD_Window_ID IS NOT NULL "
-        //    //            + "OR EXISTS (SELECT 1 FROM AD_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.AD_Table_ID=t.AD_Table_ID AND tt2.SeqNo=10))"
+        //    //            + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
         //    //    + " ORDER BY 2";
 
 

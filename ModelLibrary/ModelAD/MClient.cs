@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Client
+ * Class Used     : X_VAF_Client
  * Chronological Development
  * ------
  * Veena Pandey     01-June-2009 Added functions of mail
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
         //Client Info					
         private MClientInfo _info = null;
         /**	Cache						*/
-        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("AD_Client", 3);
+        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("VAF_Client", 3);
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MClient).FullName);
 
-        public MClient(Ctx ctx, int AD_Client_ID, Trx trxName)
-            : this(ctx, AD_Client_ID, false, trxName)
+        public MClient(Ctx ctx, int VAF_Client_ID, Trx trxName)
+            : this(ctx, VAF_Client_ID, false, trxName)
         {
 
         }
@@ -42,17 +42,17 @@ namespace VAdvantage.Model
 
         public static MClient Get(Ctx ctx)
         {
-            return Get(ctx, ctx.GetAD_Client_ID());
+            return Get(ctx, ctx.GetVAF_Client_ID());
         }
 
-        public static MClient Get(Ctx ctx, int AD_Client_ID)
+        public static MClient Get(Ctx ctx, int VAF_Client_ID)
         {
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             MClient client = (MClient)s_cache[key];
             if (client != null)
                 return client;
-            client = new MClient(ctx, AD_Client_ID, null);
-            if (AD_Client_ID == 0)
+            client = new MClient(ctx, VAF_Client_ID, null);
+            if (VAF_Client_ID == 0)
                 client.Load((Trx)null);
             s_cache.Add(key, client);
             return client;
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         public static MClient[] GetAll(Ctx ctx)
         {
             List<MClient> list = new List<MClient>();
-            String sql = "SELECT * FROM AD_Client";
+            String sql = "SELECT * FROM VAF_Client";
             try
             {
                 DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -90,17 +90,17 @@ namespace VAdvantage.Model
 
         private bool m_createNew = false;
 
-        public MClient(Ctx ctx, int AD_Client_ID, bool createNew, Trx trxName)
-            : base(ctx, AD_Client_ID, trxName)
+        public MClient(Ctx ctx, int VAF_Client_ID, bool createNew, Trx trxName)
+            : base(ctx, VAF_Client_ID, trxName)
         {
             m_createNew = createNew;
-            if (AD_Client_ID == 0)
+            if (VAF_Client_ID == 0)
             {
                 if (m_createNew)
                 {
                     //	setValue (null);
                     //	setName (null);
-                    SetAD_Org_ID(0);
+                    SetVAF_Org_ID(0);
                     SetIsMultiLingualDocument(false);
                     SetIsSmtpAuthorization(false);
                     SetIsUseBetaFunctions(false);
@@ -176,7 +176,7 @@ namespace VAdvantage.Model
         internal MAcctSchema GetAcctSchema()
         {
             if (_info == null)
-                _info = MClientInfo.Get(GetCtx(), GetAD_Client_ID(), Get_TrxName());
+                _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (_info != null)
             {
                 int C_AcctSchema_ID = _info.GetC_AcctSchema1_ID();
@@ -193,7 +193,7 @@ namespace VAdvantage.Model
         public int GetAcctSchemaID()
         {
             if (_info == null)
-                _info = MClientInfo.Get(GetCtx(), GetAD_Client_ID(), Get_TrxName());
+                _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
             if (_info != null)
             {
                 int C_AcctSchema_ID = _info.GetC_AcctSchema1_ID();
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
         //public static MClient[] GetAll(Ctx ctx)
         //{
         //    List<MClient> list = new List<MClient>();
-        //    String sql = "SELECT * FROM AD_Client";
+        //    String sql = "SELECT * FROM VAF_Client";
         //    try
         //    {
         //        DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -252,7 +252,7 @@ namespace VAdvantage.Model
         public MClientInfo GetInfo()
         {
             if (_info == null)
-                _info = MClientInfo.Get(GetCtx(), GetAD_Client_ID(), Get_Trx());
+                _info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID(), Get_Trx());
             return _info;
         }
 
@@ -457,34 +457,34 @@ namespace VAdvantage.Model
             try
             {
                 // check columnname exist in table or not
-                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT count(*) FROM ad_column WHERE 
-                    ad_table_id = ( SELECT ad_table_id FROM ad_table WHERE tablename LIKE 'M_Inventory' ) AND columnname LIKE 'IsCostCalculated'", null, null)) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT count(*) FROM vaf_column WHERE 
+                    vaf_tableview_id = ( SELECT vaf_tableview_id FROM vaf_tableview WHERE tablename LIKE 'M_Inventory' ) AND columnname LIKE 'IsCostCalculated'", null, null)) > 0)
                 {
                     // check module exist or not
                     count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
 
                     // check how many records in system whose costing not calculated based on client
                     sql = @"SELECT SUM(record) FROM (
-                            SELECT COUNT(*) AS record FROM m_Inventory WHERE AD_Client_ID = " + client_ID + @" AND IsActive = 'Y'
+                            SELECT COUNT(*) AS record FROM m_Inventory WHERE VAF_Client_ID = " + client_ID + @" AND IsActive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL')  AND iscostcalculated = 'N')  OR (docstatus IN ('RE')  AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N'  AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM m_movement WHERE AD_Client_ID  = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM m_movement WHERE VAF_Client_ID  = " + client_ID + @" AND isactive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' 
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM C_Invoice WHERE AD_Client_ID = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM C_Invoice WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
                             AND issotrx = 'N' AND isreturntrx = 'N'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM m_inout  WHERE AD_Client_ID = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM m_inout  WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))";
                     if (count > 0)
                     {
                         sql += @" UNION 
-                                 SELECT COUNT(*) AS record FROM VAMFG_M_WrkOdrTransaction WHERE AD_Client_ID = " + client_ID + @" 
+                                 SELECT COUNT(*) AS record FROM VAMFG_M_WrkOdrTransaction WHERE VAF_Client_ID = " + client_ID + @" 
                                  AND VAMFG_WorkOrderTxnType IN ('CI', 'CR') AND  isactive = 'Y' AND
                                  ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' 
                                  AND ISREVERSEDCOSTCALCULATED= 'N' AND VAMFG_description like '%{->%'))";

@@ -20,10 +20,10 @@ namespace VIS.WebPages
         //    //        Ctx ctx = Session["ctx"] as Ctx;
         //    //        string title = Convert.ToString(Request.QueryString["title"]);
         //    //        int AD_Process_ID = Convert.ToInt32(Request.QueryString["pid"]);
-        //    //        int AD_Table_ID = Convert.ToInt32(Request.QueryString["tid"]);
+        //    //        int VAF_TableView_ID = Convert.ToInt32(Request.QueryString["tid"]);
         //    //        int Record_ID = Convert.ToInt32(Request.QueryString["rid"]);
         //    //        int AD_PInstance_ID = Convert.ToInt32(Request.QueryString["aid"]);
-        //    //        VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(title, AD_Process_ID, AD_Table_ID, Record_ID);
+        //    //        VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(title, AD_Process_ID, VAF_TableView_ID, Record_ID);
         //    //        pi.SetAD_PInstance_ID(AD_PInstance_ID);
         //    //        CrystalReportEngine cr = new CrystalReportEngine(ctx, pi);
         //    //        rd = cr.GetReportDocument();
@@ -49,10 +49,10 @@ namespace VIS.WebPages
                 Ctx ctx = Session["ctx"] as Ctx;
                 string title = Convert.ToString(Request.QueryString["title"]);
                 int AD_Process_ID = Convert.ToInt32(Request.QueryString["pid"]);
-                int AD_Table_ID = Convert.ToInt32(Request.QueryString["tid"]);
+                int VAF_TableView_ID = Convert.ToInt32(Request.QueryString["tid"]);
                 int Record_ID = Convert.ToInt32(Request.QueryString["rid"]);
                 int AD_PInstance_ID = Convert.ToInt32(Request.QueryString["aid"]);
-                VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(title, AD_Process_ID, AD_Table_ID, Record_ID);
+                VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(title, AD_Process_ID, VAF_TableView_ID, Record_ID);
                 pi.SetAD_PInstance_ID(AD_PInstance_ID);
                 CrystalReportEngine cr = new CrystalReportEngine(ctx, pi);
                 rd = cr.GetReportDocument();

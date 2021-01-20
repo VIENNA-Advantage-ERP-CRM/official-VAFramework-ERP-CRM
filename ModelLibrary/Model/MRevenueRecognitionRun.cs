@@ -41,7 +41,7 @@ namespace VAdvantage.Model
             }
             if (_orgId > 0)
             {
-                sql += " AND pl.AD_Org_ID=" + _orgId;
+                sql += " AND pl.VAF_Org_ID=" + _orgId;
             }
             sql += " And NVL(GL_Journal_ID,0) <= 0 ORDER BY rn.RecognitionDate, pl.c_currency_id, pl.c_acctschema_id";
 
@@ -82,8 +82,8 @@ namespace VAdvantage.Model
         /// <param name="revenueRecognitionPlan">Revenue Recognnition plan ID</param>
         public void SetRecognitionRun(MRevenueRecognitionPlan revenueRecognitionPlan)
         {
-            SetAD_Client_ID(revenueRecognitionPlan.GetAD_Client_ID());
-            SetAD_Org_ID(revenueRecognitionPlan.GetAD_Org_ID());
+            SetVAF_Client_ID(revenueRecognitionPlan.GetVAF_Client_ID());
+            SetVAF_Org_ID(revenueRecognitionPlan.GetVAF_Org_ID());
             SetC_RevenueRecognition_Plan_ID(revenueRecognitionPlan.GetC_RevenueRecognition_Plan_ID());
         }
     }

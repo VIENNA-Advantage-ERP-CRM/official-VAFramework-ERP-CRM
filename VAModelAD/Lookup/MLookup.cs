@@ -265,7 +265,7 @@ namespace VAdvantage.Model
             int size = _lookup.Count;
             log.Finer(_vInfo.keyColumn
                     + " (" + _vInfo.column_ID + "):"
-                //	+ " ID=" + m_info.AD_Column_ID + " " +
+                //	+ " ID=" + m_info.VAF_Column_ID + " " +
                     + " - Loader complete #" + size + " - all=" + _allLoaded
                     + " - ms=" +(CommonFunctions.CurrentTimeMillis() -  startTime));
                     //+ " (" + String.valueOf(System.currentTimeMillis() - startTime) + ")");

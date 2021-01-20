@@ -77,7 +77,7 @@ static X_C_FinRptConfig()
 static long serialVersionUID = 27692108111059L;
 /** Last Updated Timestamp 9/6/2014 11:23:14 AM */
 public static long updatedMS = 1409982794270L;
-/** AD_Table_ID=1000488 */
+/** VAF_TableView_ID=1000488 */
 public static int Table_ID;
  // =1000488;
 

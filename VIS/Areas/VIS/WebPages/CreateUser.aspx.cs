@@ -63,16 +63,16 @@ namespace VIS.Areas.VIS.WebPages
             string lang = q.QueryString["lang"];
             usernotSaved = Msg.GetMsg(lang, "VIS_ErrorSavingUser");
             Button1.Enabled = false;
-            int AD_Client_ID = 0;
-            int AD_Org_ID = 0;
+            int VAF_Client_ID = 0;
+            int VAF_Org_ID = 0;
 
             int inviteID = Convert.ToInt32(SecureEngine.Decrypt(q.QueryString["inviteID"]));
             String sql = "SELECT * FROM AD_InviteUser WHERE AD_InviteUser_ID=" + inviteID;
             DataSet dsIUser = DB.ExecuteDataset(sql);
             if (dsIUser != null && dsIUser.Tables[0].Rows.Count > 0)
             {
-                AD_Org_ID= Convert.ToInt32(dsIUser.Tables[0].Rows[0]["AD_Org_ID"]);
-                AD_Client_ID = Convert.ToInt32(dsIUser.Tables[0].Rows[0]["AD_Client_ID"]);
+                VAF_Org_ID= Convert.ToInt32(dsIUser.Tables[0].Rows[0]["VAF_Org_ID"]);
+                VAF_Client_ID = Convert.ToInt32(dsIUser.Tables[0].Rows[0]["VAF_Client_ID"]);
             }
 
             sql = "SELECT AD_Role_ID FROM ad_inviteuser_role WHERE AD_InviteUser_ID= " + inviteID;
@@ -81,13 +81,13 @@ namespace VIS.Areas.VIS.WebPages
 
 
             Ctx ctx = new Ctx();
-            ctx.SetAD_Client_ID(AD_Client_ID);
-            ctx.SetAD_Org_ID(AD_Org_ID);
+            ctx.SetVAF_Client_ID(VAF_Client_ID);
+            ctx.SetVAF_Org_ID(VAF_Org_ID);
 
 
             MUser user = new MUser(ctx, 0, null);
-            user.SetAD_Client_ID(AD_Client_ID);
-            user.SetAD_Org_ID(AD_Org_ID);
+            user.SetVAF_Client_ID(VAF_Client_ID);
+            user.SetVAF_Org_ID(VAF_Org_ID);
             user.SetIsLoginUser(true);
             user.SetName(Name.Value);
             user.SetValue(userIDs.Value);
@@ -102,8 +102,8 @@ namespace VIS.Areas.VIS.WebPages
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         MUserRoles uRoles = new MUserRoles(ctx, user.GetAD_User_ID(), Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]), null);
-                        uRoles.SetAD_Client_ID(AD_Client_ID);
-                        uRoles.SetAD_Org_ID(AD_Org_ID);
+                        uRoles.SetVAF_Client_ID(VAF_Client_ID);
+                        uRoles.SetVAF_Org_ID(VAF_Org_ID);
                         uRoles.Save();
                     }
                 }

@@ -70,7 +70,7 @@ static X_D_ChartAccess()
 //static long serialVersionUID 27562514376011L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059222L;
-/** AD_Table_ID=1000006 */
+/** VAF_TableView_ID=1000006 */
 public static int Table_ID;
  // =1000006;
 

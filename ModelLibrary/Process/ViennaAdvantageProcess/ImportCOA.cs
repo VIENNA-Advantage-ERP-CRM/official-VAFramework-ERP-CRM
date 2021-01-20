@@ -96,10 +96,10 @@ namespace ViennaAdvantage.Process
             int ind = filename.LastIndexOf(".");
             extension = filename.Substring(ind, filename.Length - ind);
 
-            int client = Util.GetValueOfInt(GetAD_Client_ID());
+            int client = Util.GetValueOfInt(GetVAF_Client_ID());
             int user = GetAD_User_ID();
 
-            sql = "select ad_tree_id from c_element where c_element_id = " + C_Elememt_ID + " and ad_client_id = " + client;
+            sql = "select ad_tree_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
             int ad_tree_id = 0;
             MTree tree = null;
 
@@ -136,14 +136,14 @@ namespace ViennaAdvantage.Process
 
                         //if (ad_tree_id == 0)
                         //{
-                        //    int tableID = Convert.ToInt32(DB.ExecuteScalar("select ad_table_id from ad_table where lower(tablename)='vactwz_elementvalue'"));
+                        //    int tableID = Convert.ToInt32(DB.ExecuteScalar("select vaf_tableview_id from vaf_tableview where lower(tablename)='vactwz_elementvalue'"));
 
                         //    tree = new MTree(GetCtx(), 0, null);
 
                         //    tree.SetName(CreateName("AcctWiz"));
 
 
-                        //    tree.SetAD_Table_ID(tableID);
+                        //    tree.SetVAF_TableView_ID(tableID);
                         //    //tree.SetTreeType("EV");
                         //    tree.Save();
                         //    ad_tree_id = tree.Get_ID();
@@ -156,7 +156,7 @@ namespace ViennaAdvantage.Process
                             key = Util.GetValueOfString(dt.Rows[i]["(Account_Value)"]);
                             if (key != "")
                             {
-                                sql = " SELECT c_elementvalue_id FROM c_elementvalue WHERE IsActive='Y' AND C_ELEMENT_ID=" + C_Elememt_ID + " AND value = '" + key + "' AND ad_client_id = " + client;
+                                sql = " SELECT c_elementvalue_id FROM c_elementvalue WHERE IsActive='Y' AND C_ELEMENT_ID=" + C_Elememt_ID + " AND value = '" + key + "' AND vaf_client_id = " + client;
                                 int C_ElementValue_ID = 0;
                                 try
                                 {
@@ -170,7 +170,7 @@ namespace ViennaAdvantage.Process
                                 eleValue = new MElementValue(GetCtx(), C_ElementValue_ID, null);
 
                                 string parent_ID = Util.GetValueOfString(dt.Rows[i]["(Account_Parent)"]);
-                                sql = "SELECT c_elementvalue_id FROM c_elementvalue WHERE IsActive='Y' AND C_Element_ID=" + C_Elememt_ID + " AND value = '" + parent_ID + "' AND ad_client_id = " + client;
+                                sql = "SELECT c_elementvalue_id FROM c_elementvalue WHERE IsActive='Y' AND C_Element_ID=" + C_Elememt_ID + " AND value = '" + parent_ID + "' AND vaf_client_id = " + client;
                                 int C_ElementValue_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                                 try
                                 {
@@ -181,7 +181,7 @@ namespace ViennaAdvantage.Process
                                     C_ElementValue_ID_Parent = 0;
                                 }
                                 //eleValue = new MElementValue(GetCtx(), 0, null);
-                                //int C_ElementValue_ID = DB.GetNextID(GetAD_Client_ID(), "VACTWZ_ELEMENTVALUE", null);
+                                //int C_ElementValue_ID = DB.GetNextID(GetVAF_Client_ID(), "VACTWZ_ELEMENTVALUE", null);
                                 string accSign = Util.GetValueOfString(dt.Rows[i]["(Account_Sign)"]);
                                 if (accSign == "")
                                 {
@@ -227,7 +227,7 @@ namespace ViennaAdvantage.Process
                                 string primaryGroup = dt.Rows[i]["(Primary_Group)"].ToString();
                                 if (!string.IsNullOrEmpty(primaryGroup))
                                 {
-                                    int primaryGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select c_accountgroup_id from c_accountgroup where value='" + primaryGroup + "' AND AD_CLient_ID=" + GetCtx().GetAD_Client_ID()));
+                                    int primaryGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select c_accountgroup_id from c_accountgroup where value='" + primaryGroup + "' AND vaf_client_ID=" + GetCtx().GetVAF_Client_ID()));
                                     if (primaryGroupID > 0)
                                     {
                                         eleValue.SetC_AccountGroup_ID(primaryGroupID);
@@ -243,7 +243,7 @@ namespace ViennaAdvantage.Process
                                 string primarysubGroup = dt.Rows[i]["(Primary_Sub_Group)"].ToString();
                                 if (!string.IsNullOrEmpty(primarysubGroup))
                                 {
-                                    int primarysubGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select c_accountsubgroup_id from c_accountsubgroup where value='" + primarysubGroup + "' AND AD_CLient_ID=" + GetCtx().GetAD_Client_ID()));
+                                    int primarysubGroupID = Util.GetValueOfInt(DB.ExecuteScalar("select c_accountsubgroup_id from c_accountsubgroup where value='" + primarysubGroup + "' AND vaf_client_ID=" + GetCtx().GetVAF_Client_ID()));
                                     if (primarysubGroupID > 0)
                                     {
                                         eleValue.SetC_AccountSubGroup_ID(primarysubGroupID);

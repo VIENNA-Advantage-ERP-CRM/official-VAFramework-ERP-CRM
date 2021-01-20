@@ -25,7 +25,7 @@ public X_AD_ModuleTable (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, t
  added by ->Harwinder */
 static X_AD_ModuleTable(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27780777866118L;/** Last Updated Timestamp 6/28/2017 5:52:29 PM */
-public static long updatedMS = 1498652549329L;/** AD_Table_ID=1000357 */
+public static long updatedMS = 1498652549329L;/** VAF_TableView_ID=1000357 */
 public static int Table_ID; // =1000357;
 /** TableName=AD_ModuleTable */
 public static String Table_Name="AD_ModuleTable";
@@ -52,11 +52,11 @@ public int GetAD_ModuleInfo_ID() {Object ii = Get_Value("AD_ModuleInfo_ID");if (
 public void SetAD_ModuleTable_ID (int AD_ModuleTable_ID){if (AD_ModuleTable_ID < 1) throw new ArgumentException ("AD_ModuleTable_ID is mandatory.");Set_ValueNoCheck ("AD_ModuleTable_ID", AD_ModuleTable_ID);}/** Get Module Table.
 @return Module Table */
 public int GetAD_ModuleTable_ID() {Object ii = Get_Value("AD_ModuleTable_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID){if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);else
-Set_Value ("AD_Table_ID", AD_Table_ID);}/** Get Table.
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID){if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);else
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);}/** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() {Object ii = Get_Value("AD_Table_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
+public int GetVAF_TableView_ID() {Object ii = Get_Value("VAF_TableView_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
 @param Export_ID Export */
 public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_ValueNoCheck ("Export_ID", Export_ID);}/** Get Export.
 @return Export */

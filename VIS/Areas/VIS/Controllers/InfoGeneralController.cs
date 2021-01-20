@@ -26,7 +26,7 @@ namespace VIS.Controllers
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult GetDispalyColumns(int AD_Table_ID, string AD_Language, bool IsBaseLangage, string TableName)
+        public JsonResult GetDispalyColumns(int VAF_TableView_ID, string AD_Language, bool IsBaseLangage, string TableName)
         {
             //Change by mohit-to handle translation in general info.
             //Added 2 new parametere- string AD_Language, bool IsBaseLangage.
@@ -34,7 +34,7 @@ namespace VIS.Controllers
 
             VIS.Models.InfoGeneralModel model = new Models.InfoGeneralModel();
 
-            return Json(new { result = model.GetDisplayCol(AD_Table_ID, AD_Language,IsBaseLangage,TableName) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = model.GetDisplayCol(VAF_TableView_ID, AD_Language,IsBaseLangage,TableName) }, JsonRequestBehavior.AllowGet);
             //return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
@@ -44,7 +44,7 @@ namespace VIS.Controllers
         public JsonResult GetData(string sql, string tableName, int pageNo)
         {
             VIS.Models.InfoGeneralModel model = new Models.InfoGeneralModel();
-            //model.GetSchema(Ad_InfoWindow_ID);
+            //model.GetSchema(VAF_QuickSearchWindow_ID);
             return Json(JsonConvert.SerializeObject(model.GetData(sql, tableName,pageNo, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 

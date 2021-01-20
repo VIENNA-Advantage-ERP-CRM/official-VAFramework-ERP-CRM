@@ -72,7 +72,7 @@ static X_AD_UserDef_Win()
 //static long serialVersionUID 27562514365385L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048596L;
-/** AD_Table_ID=467 */
+/** VAF_TableView_ID=467 */
 public static int Table_ID;
  // =467;
 

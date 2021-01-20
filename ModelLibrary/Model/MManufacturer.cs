@@ -64,7 +64,7 @@ namespace VAdvantage.Model
                 //sql = "SELECT UPCUNIQUE('m','" + GetUPC() + "') as productID FROM Dual";
                 //manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
 
-                manu_ID = MProduct.UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
+                manu_ID = MProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
                 {

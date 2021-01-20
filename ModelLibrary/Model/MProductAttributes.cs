@@ -70,7 +70,7 @@ namespace VAdvantage.Model
 
             ////For checking if attribute is already defined
             //sql.Append("SELECT M_AttributeSetInstance_ID FROM M_ProductAttributes WHERE M_Product_ID=" + GetM_Product_ID() +
-            //    " AND AD_Client_ID=" + GetAD_Client_ID() + " AND M_ProductAttributes_ID!=" + GetM_ProductAttributes_ID());
+            //    " AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND M_ProductAttributes_ID!=" + GetM_ProductAttributes_ID());
             //DataSet ds = new DataSet();
             //ds = DB.ExecuteDataset(sql.ToString(), null, null);
             //if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -96,7 +96,7 @@ namespace VAdvantage.Model
                 //manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                 //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
 
-                manu_ID = MProduct.UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
+                manu_ID = MProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 {
                     _log.SaveError("UPCUnique", "");

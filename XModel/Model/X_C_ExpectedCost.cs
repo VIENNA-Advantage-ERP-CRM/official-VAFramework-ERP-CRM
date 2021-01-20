@@ -41,7 +41,7 @@ SetM_CostElement_ID (0);} */
  added by ->Harwinder */
         static X_C_ExpectedCost() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27857572235483L;/** Last Updated Timestamp 12/4/2019 1:38:38 PM */
-        public static long updatedMS = 1575446918694L;/** AD_Table_ID=1000535 */
+        public static long updatedMS = 1575446918694L;/** VAF_TableView_ID=1000535 */
         public static int Table_ID; // =1000535;
                                     /** TableName=C_ExpectedCost */
         public static String Table_Name = "C_ExpectedCost";

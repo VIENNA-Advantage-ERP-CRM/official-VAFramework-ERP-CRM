@@ -152,13 +152,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             else
             {
-                String sql = "SELECT C_BPartner_ID FROM C_BPartner WHERE AD_Client_ID=@param1 ORDER BY Value";
+                String sql = "SELECT C_BPartner_ID FROM C_BPartner WHERE VAF_Client_ID=@param1 ORDER BY Value";
                 SqlParameter[] param = new SqlParameter[1];
                 DataTable dt = null;
                 IDataReader idr = null;
                 try
                 {
-                    param[0] = new SqlParameter("@param1", GetCtx().GetAD_Client_ID());
+                    param[0] = new SqlParameter("@param1", GetCtx().GetVAF_Client_ID());
 
                     idr = DataBase.DB.ExecuteReader(sql, param, Get_Trx());
                     dt = new DataTable();
@@ -588,7 +588,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             if (!CreateAllocation(_payment.GetC_Currency_ID(), "1:1 (" + _availableAmt + ")",
                                 _dateAcct, _availableAmt, null, null, null,
                                 _invoice.GetC_BPartner_ID(), _payment.GetC_Payment_ID(),
-                                _invoice.GetC_Invoice_ID(), _invoice.GetAD_Org_ID()))
+                                _invoice.GetC_Invoice_ID(), _invoice.GetVAF_Org_ID()))
                             {
                                 throw new Exception("Cannot create Allocation");
                             }
@@ -711,7 +711,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     if (!CreateAllocation(_C_Currency_ID, "BP All",
                         _dateAcct, _availableAmt, null, null, null,
-                        _payment.GetC_BPartner_ID(), _payment.GetC_Payment_ID(), 0, _payment.GetAD_Org_ID()))
+                        _payment.GetC_BPartner_ID(), _payment.GetC_Payment_ID(), 0, _payment.GetVAF_Org_ID()))
                     {
                         throw new Exception("Cannot create Allocation");
                     }
@@ -736,7 +736,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     if (!CreateAllocation(_C_Currency_ID, "BP All",
                         _dateAcct, _openAmt, null, null, null,
-                        _invoice.GetC_BPartner_ID(), 0, _invoice.GetC_Invoice_ID(), _invoice.GetAD_Org_ID()))
+                        _invoice.GetC_BPartner_ID(), 0, _invoice.GetC_Invoice_ID(), _invoice.GetVAF_Org_ID()))
                     {
                         throw new Exception("Cannot create Allocation");
                     }
@@ -872,7 +872,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Fine("Payment Allocated=" + _availableAmt);
                 if (!CreateAllocation(_C_Currency_ID, "BP Oldest (" + Math.Abs(_difference) + ")",
                     _dateAcct, _availableAmt, null, null, null,
-                    _payment.GetC_BPartner_ID(), _payment.GetC_Payment_ID(), 0, _payment.GetAD_Org_ID()))
+                    _payment.GetC_BPartner_ID(), _payment.GetC_Payment_ID(), 0, _payment.GetVAF_Org_ID()))
                 {
                     throw new Exception("Cannot create Allocation");
                 }
@@ -914,7 +914,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Fine("Invoice Allocated=" + _openAmt);
                 if (!CreateAllocation(_C_Currency_ID, "BP Oldest (" + Math.Abs(_difference) + ")",
                     _dateAcct, _openAmt, null, null, null,
-                    _invoice.GetC_BPartner_ID(), 0, _invoice.GetC_Invoice_ID(), _invoice.GetAD_Org_ID()))
+                    _invoice.GetC_BPartner_ID(), 0, _invoice.GetC_Invoice_ID(), _invoice.GetVAF_Org_ID()))
                 {
                     throw new Exception("Cannot create Allocation");
                 }
@@ -947,12 +947,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="_C_BPartner_ID"></param>
         /// <param name="C_Payment_ID"></param>
         /// <param name="C_Invoice_ID"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <returns>true if created</returns>
         private Boolean CreateAllocation(int _C_Currency_ID, String description,
             DateTime? _dateAcct, Decimal Amount,
             Decimal? DiscountAmt, Decimal? WriteOffAmt, Decimal? OverUnderAmt,
-            int _C_BPartner_ID, int C_Payment_ID, int C_Invoice_ID, int AD_Org_ID)
+            int _C_BPartner_ID, int C_Payment_ID, int C_Invoice_ID, int VAF_Org_ID)
         {
             //	Process old Allocation 
             if (_allocation != null
@@ -965,7 +965,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 _allocation = new MAllocationHdr(GetCtx(), false, _dateAcct,	//	automatic 
                     _C_Currency_ID, "Auto " + description, Get_Trx());
-                _allocation.SetAD_Org_ID(AD_Org_ID);
+                _allocation.SetVAF_Org_ID(VAF_Org_ID);
                 if (!_allocation.Save())
                 {
                     return false;

@@ -1606,7 +1606,7 @@
             list.push({ "Key": -1, "Name": "" });
         //
         //var sql = "SELECT C_ValidCombination_ID, Combination, Description "
-        //    + "FROM C_ValidCombination WHERE AD_Client_ID=" + this.ctx.getAD_Client_ID();
+        //    + "FROM C_ValidCombination WHERE VAF_Client_ID=" + this.ctx.getVAF_Client_ID();
         //if (onlyActive)
         //    sql += " AND IsActive='Y'";
         //sql.append(" ORDER BY 2");
@@ -1619,7 +1619,7 @@
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GetValidAccountCombination",
                 data: {
-                    AD_Client_ID: AD_Client_ID,
+                    VAF_Client_ID: VAF_Client_ID,
                     onlyActive: onlyActive
                 },
                 success: function (data) {
@@ -1900,7 +1900,7 @@
                     validationCode = dr.getString(3);
                 }
                 else {
-                    //this.log.Log(Level.SEVERE, "Column Not Found - AD_Column_ID=" + Column_ID);
+                    //this.log.Log(Level.SEVERE, "Column Not Found - VAF_Column_ID=" + Column_ID);
                 }
                 dr.close();
                 dr = null;

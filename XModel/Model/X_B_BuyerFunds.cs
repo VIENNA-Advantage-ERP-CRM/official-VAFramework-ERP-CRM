@@ -74,7 +74,7 @@ static X_B_BuyerFunds()
 //static long serialVersionUID 27562514367344L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050555L;
-/** AD_Table_ID=683 */
+/** VAF_TableView_ID=683 */
 public static int Table_ID;
  // =683;
 

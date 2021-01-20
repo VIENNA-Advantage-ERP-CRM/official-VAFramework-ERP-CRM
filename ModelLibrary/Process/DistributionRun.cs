@@ -191,13 +191,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Insert New
             sql = "INSERT INTO T_DistributionRunDetail "
                 + "(M_DistributionRun_ID, M_DistributionRunLine_ID, M_DistributionList_ID, M_DistributionListLine_ID,"
-                + "AD_Client_ID,AD_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
+                + "VAF_Client_ID,VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
                 + "C_BPartner_ID, C_BPartner_Location_ID, M_Product_ID,"
                 + "Ratio, MinQty, Qty) "
                 //
                 + "SELECT rl.M_DistributionRun_ID, rl.M_DistributionRunLine_ID,"
                 + "ll.M_DistributionList_ID, ll.M_DistributionListLine_ID, "
-                + "rl.AD_Client_ID,rl.AD_Org_ID, rl.IsActive, rl.Created,rl.CreatedBy, rl.Updated,rl.UpdatedBy,"
+                + "rl.VAF_Client_ID,rl.VAF_Org_ID, rl.IsActive, rl.Created,rl.CreatedBy, rl.Updated,rl.UpdatedBy,"
                 + "ll.C_BPartner_ID, ll.C_BPartner_Location_ID, rl.M_Product_ID, "
                 + "ll.Ratio, "
                 + "CASE WHEN rl.MinQty > ll.MinQty THEN rl.MinQty ELSE ll.MinQty END, ";
@@ -399,13 +399,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private bool CreateOrders()
         {
             //	Get Counter Org/BP
-            int runAD_Org_ID = _run.GetAD_Org_ID();
-            if (runAD_Org_ID == 0)
+            int runVAF_Org_ID = _run.GetVAF_Org_ID();
+            if (runVAF_Org_ID == 0)
             {
-                runAD_Org_ID = GetCtx().GetAD_Org_ID();
+                runVAF_Org_ID = GetCtx().GetVAF_Org_ID();
 
             }
-            MOrg runOrg = MOrg.Get(GetCtx(), runAD_Org_ID);
+            MOrg runOrg = MOrg.Get(GetCtx(), runVAF_Org_ID);
             int runC_BPartner_ID = runOrg.GetLinkedC_BPartner_ID();
             bool counter = !_run.IsCreateSingleOrder()	//	no single Order 
                 && runC_BPartner_ID > 0						//	Org linked to BP
@@ -495,12 +495,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         order.SetC_DocType_ID(_docType.GetC_DocType_ID());
                         order.SetIsSOTrx(_docType.IsSOTrx());
                         //	Counter Doc
-                        if (counter && bp.GetAD_OrgBP_ID_Int() > 0)
+                        if (counter && bp.GetVAF_OrgBP_ID_Int() > 0)
                         {
-                            log.Fine("Counter - From_BPOrg=" + bp.GetAD_OrgBP_ID_Int()
+                            log.Fine("Counter - From_BPOrg=" + bp.GetVAF_OrgBP_ID_Int()
                                 + "-" + bp + ", To_BP=" + runBPartner);
-                            order.SetAD_Org_ID(bp.GetAD_OrgBP_ID_Int());
-                            MOrgInfo oi = MOrgInfo.Get(GetCtx(), bp.GetAD_OrgBP_ID_Int(), null);
+                            order.SetVAF_Org_ID(bp.GetVAF_OrgBP_ID_Int());
+                            MOrgInfo oi = MOrgInfo.Get(GetCtx(), bp.GetVAF_OrgBP_ID_Int(), null);
                             if (oi.GetM_Warehouse_ID() > 0)
                             {
                                 order.SetM_Warehouse_ID(oi.GetM_Warehouse_ID());
@@ -509,9 +509,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         }
                         else	//	normal
                         {
-                            log.Fine("From_Org=" + runAD_Org_ID
+                            log.Fine("From_Org=" + runVAF_Org_ID
                                 + ", To_BP=" + bp);
-                            order.SetAD_Org_ID(runAD_Org_ID);
+                            order.SetVAF_Org_ID(runVAF_Org_ID);
                             order.SetBPartner(bp);
                             if (detail.GetC_BPartner_Location_ID() != 0)
                             {
@@ -540,7 +540,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 //	Create Order Line
                 MOrderLine line = new MOrderLine(order);
-                if (counter && bp.GetAD_OrgBP_ID_Int() > 0)
+                if (counter && bp.GetVAF_OrgBP_ID_Int() > 0)
                 {
                     ;	//	don't overwrite counter doc
                 }

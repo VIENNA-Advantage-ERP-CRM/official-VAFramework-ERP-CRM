@@ -74,7 +74,7 @@ static X_PA_Measure()
 //static long serialVersionUID 27562514381920L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065131L;
-/** AD_Table_ID=441 */
+/** VAF_TableView_ID=441 */
 public static int Table_ID;
  // =441;
 

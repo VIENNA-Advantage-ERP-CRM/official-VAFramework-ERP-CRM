@@ -85,7 +85,7 @@ namespace VAdvantage.Model
         public static String GetColumnName(String elementType)
         {
             if (elementType.Equals(ELEMENTTYPE_Organization))
-                return "AD_Org_ID";
+                return "VAF_Org_ID";
             else if (elementType.Equals(ELEMENTTYPE_Account))
                 return "Account_ID";
             else if (elementType.Equals(ELEMENTTYPE_BPartner))
@@ -101,7 +101,7 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
                 return "C_Campaign_ID";
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
-                return "AD_OrgTrx_ID";
+                return "VAF_OrgTrx_ID";
             else if (elementType.Equals(ELEMENTTYPE_Project))
                 return "C_Project_ID";
             else if (elementType.Equals(ELEMENTTYPE_SalesRegion))
@@ -140,7 +140,7 @@ namespace VAdvantage.Model
         public static String GetValueQuery(String elementType)
         {
             if (elementType.Equals(ELEMENTTYPE_Organization))
-                return "SELECT Value,Name FROM AD_Org WHERE AD_Org_ID=";
+                return "SELECT Value,Name FROM VAF_Org WHERE VAF_Org_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Account))
                 return "SELECT Value,Name FROM C_ElementValue WHERE C_ElementValue_ID=";
             else if (elementType.Equals(ELEMENTTYPE_SubAccount))
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
                 return "SELECT Value,Name FROM C_Campaign WHERE C_Campaign_ID=";
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
-                return "SELECT Value,Name FROM AD_Org WHERE AD_Org_ID=";
+                return "SELECT Value,Name FROM VAF_Org WHERE VAF_Org_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Project))
                 return "SELECT Value,Name FROM C_Project WHERE C_Project_ID=";
             else if (elementType.Equals(ELEMENTTYPE_SalesRegion))
@@ -396,7 +396,7 @@ namespace VAdvantage.Model
                 ELEMENTTYPE_UserElement9.Equals(et))
             {
                 if (_ColumnName == null)
-                    _ColumnName = MColumn.GetColumnName(GetCtx(), GetAD_Column_ID());
+                    _ColumnName = MColumn.GetColumnName(GetCtx(), GetVAF_Column_ID());
                 return _ColumnName;
             }
             return GetColumnName(et);
@@ -421,8 +421,8 @@ namespace VAdvantage.Model
         /// <returns>true if it can be saved</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             String et = GetElementType();
             if (IsMandatory() &&
                 (ELEMENTTYPE_UserList1.Equals(et) || ELEMENTTYPE_UserList2.Equals(et)
@@ -464,10 +464,10 @@ namespace VAdvantage.Model
                 }
             }
             //
-            if (GetAD_Column_ID() == 0
+            if (GetVAF_Column_ID() == 0
                 && (ELEMENTTYPE_UserElement1.Equals(et) || ELEMENTTYPE_UserElement2.Equals(et)))
             {
-                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@IsMandatory@: @AD_Column_ID@"));
+                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@IsMandatory@: @VAF_Column_ID@"));
                 return false;
             }
             return true;
@@ -495,7 +495,7 @@ namespace VAdvantage.Model
             }
             //	Resequence
             if (newRecord || Is_ValueChanged("SeqNo"))
-                MAccount.UpdateValueDescription(GetCtx(), "AD_Client_ID=" + GetAD_Client_ID(), Get_TrxName());
+                MAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
             //	Clear Cache
             s_cache.Clear();
             return success;
@@ -511,7 +511,7 @@ namespace VAdvantage.Model
             MAccount.UpdateValueDescription(GetCtx(), element + "=" + id, Get_TrxName());
             //
             String sql = "UPDATE C_ValidCombination SET " + element + "=" + id
-                + " WHERE " + element + " IS NULL AND AD_Client_ID=" + GetAD_Client_ID();
+                + " WHERE " + element + " IS NULL AND VAF_Client_ID=" + GetVAF_Client_ID();
             int noC = Convert.ToInt32(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
             //
             sql = "UPDATE Fact_Acct SET " + element + "=" + id
@@ -529,7 +529,7 @@ namespace VAdvantage.Model
         protected override bool AfterDelete(bool success)
         {
             //	Update Account Info
-            MAccount.UpdateValueDescription(GetCtx(), "AD_Client_ID=" + GetAD_Client_ID(), Get_TrxName());
+            MAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
             //
             s_cache.Clear();
             return success;

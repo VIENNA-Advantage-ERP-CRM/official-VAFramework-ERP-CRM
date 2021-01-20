@@ -72,7 +72,7 @@ static X_T_Spool()
 //static long serialVersionUID 27562514384506L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067717L;
-/** AD_Table_ID=365 */
+/** VAF_TableView_ID=365 */
 public static int Table_ID;
  // =365;
 

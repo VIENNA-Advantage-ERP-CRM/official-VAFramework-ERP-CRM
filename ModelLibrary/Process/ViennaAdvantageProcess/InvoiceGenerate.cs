@@ -34,7 +34,7 @@ namespace ViennaAdvantage.Process
         /**	Date Invoiced			*/
         private DateTime? _DateInvoiced = null;
         /**	Org						*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /** BPartner				*/
         private int _C_BPartner_ID = 0;
         /** Order					*/
@@ -82,9 +82,9 @@ namespace ViennaAdvantage.Process
                 {
                     _DateInvoiced = (DateTime?)para[i].GetParameter();
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    _AD_Org_ID = para[i].GetParameterAsInt();
+                    _VAF_Org_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("C_BPartner_ID"))
                 {
@@ -127,9 +127,9 @@ namespace ViennaAdvantage.Process
          */
         protected override String DoIt()
         {
-            defaultConversionType = MConversionType.GetDefault(GetAD_Client_ID());
+            defaultConversionType = MConversionType.GetDefault(GetVAF_Client_ID());
             log.Info("Selection=" + _Selection + ", DateInvoiced=" + _DateInvoiced
-                + ", AD_Org_ID=" + _AD_Org_ID + ", C_BPartner_ID=" + _C_BPartner_ID
+                + ", VAF_Org_ID=" + _VAF_Org_ID + ", C_BPartner_ID=" + _C_BPartner_ID
                 + ", C_Order_ID=" + _C_Order_ID + ",  VAdvantage.Process.DocAction=" + _docAction
                 + ", Consolidate=" + _ConsolidateDocument + ", Default Conversion Type = " + defaultConversionType);
             //
@@ -140,17 +140,17 @@ namespace ViennaAdvantage.Process
             //if (_Selection)	//	VInvoiceGen
             //{
             //    sql = "SELECT * FROM C_Order "
-            //        + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND AD_Client_ID = " + GetAD_Client_ID() + " AND AD_Org_ID = " + GetAD_Org_ID()
+            //        + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()
             //        + "ORDER BY M_Warehouse_ID, PriorityRule, C_BPartner_ID, C_PaymentTerm_ID, C_Order_ID";
             //}
             //else
             //{
             // not pick record of "Sales Quotation" And "Blanket Order"
             sql = "SELECT * FROM C_Order o "
-                + "WHERE o.DocStatus IN('CO','CL') AND o.IsSOTrx='Y' AND o.IsSalesQuotation = 'N' AND o.isblankettrx = 'N' AND o.AD_Client_ID = " + GetAD_Client_ID();
-            if (_AD_Org_ID != 0)
+                + "WHERE o.DocStatus IN('CO','CL') AND o.IsSOTrx='Y' AND o.IsSalesQuotation = 'N' AND o.isblankettrx = 'N' AND o.VAF_Client_ID = " + GetVAF_Client_ID();
+            if (_VAF_Org_ID != 0)
             {
-                sql += " AND AD_Org_ID=" + _AD_Org_ID;
+                sql += " AND VAF_Org_ID=" + _VAF_Org_ID;
             }
             if (_C_BPartner_ID != 0)
             {
@@ -163,7 +163,7 @@ namespace ViennaAdvantage.Process
             // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
             sql += " AND EXISTS (SELECT * FROM C_OrderLine ol "
                     + "WHERE o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
-                + "ORDER BY AD_Org_ID, C_BPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, C_ConversionType_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
+                + "ORDER BY VAF_Org_ID, C_BPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, C_ConversionType_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
 
             //sql += " AND EXISTS (SELECT * FROM C_OrderLine ol INNER JOIN c_order ord "
             //      + "  ON (ord.c_order_id = ol.c_order_id) WHERE ord.C_Order_ID  =ol.C_Order_ID "
@@ -277,7 +277,7 @@ namespace ViennaAdvantage.Process
                     && (_invoice.GetC_BPartner_Location_ID() != order.GetBill_Location_ID()
                         || _invoice.GetC_PaymentTerm_ID() != order.GetC_PaymentTerm_ID()
                         || _invoice.GetM_PriceList_ID() != order.GetM_PriceList_ID()
-                        || _invoice.GetAD_Org_ID() != order.GetAD_Org_ID()
+                        || _invoice.GetVAF_Org_ID() != order.GetVAF_Org_ID()
                         || ((_invoice.GetC_ConversionType_ID() != 0 ? _invoice.GetC_ConversionType_ID() : defaultConversionType)
                              != (order.GetC_ConversionType_ID() != 0 ? order.GetC_ConversionType_ID() : defaultConversionType))
                        )))
@@ -618,7 +618,7 @@ namespace ViennaAdvantage.Process
             //    }
 
             //    //	Reference: Delivery: 12345 - 12.12.12
-            //    MClient client = MClient.Get(GetCtx(), order.GetAD_Client_ID());
+            //    MClient client = MClient.Get(GetCtx(), order.GetVAF_Client_ID());
             //    String AD_Language = client.GetAD_Language();
             //    if (client.IsMultiLingualDocument() && _bp.GetAD_Language() != null)
             //    {
@@ -677,7 +677,7 @@ namespace ViennaAdvantage.Process
                 {
                     int PAcctSchema_ID = 0;
                     int pCurrency_ID = 0;
-                    MAcctSchema as1 = MClient.Get(GetCtx(), GetAD_Client_ID()).GetAcctSchema();
+                    MAcctSchema as1 = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
                     if (as1 != null)
                     {
                         PAcctSchema_ID = as1.GetC_AcctSchema_ID();
@@ -688,7 +688,7 @@ namespace ViennaAdvantage.Process
                     AssetCost = Decimal.Multiply(AssetCost, line1.GetQtyEntered());
                     if (LineNetAmt > 0)
                     {
-                        LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt, _invoice.GetC_Currency_ID(), pCurrency_ID, _invoice.GetAD_Client_ID(), _invoice.GetAD_Org_ID());
+                        LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt, _invoice.GetC_Currency_ID(), pCurrency_ID, _invoice.GetVAF_Client_ID(), _invoice.GetVAF_Org_ID());
                     }
                     decimal Diff = LineNetAmt - AssetCost;
                     line1.Set_Value("VAFAM_AssetCost", AssetCost);
@@ -757,7 +757,7 @@ namespace ViennaAdvantage.Process
                         ON(ass.m_product_id =pro.m_product_id AND pro.M_product_id=cost.m_Product_id)
                         INNER JOIN m_costelement costele
                         ON(costele.M_costelement_id =cost.m_costelement_id)
-                        INNER JOIN AD_ClientInfo ci ON ci.AD_Client_ID = ass.AD_Client_ID
+                        INNER JOIN VAF_ClientDetail ci ON ci.VAF_Client_ID = ass.VAF_Client_ID
                         left join C_AcctSchema accSch on accsch.C_AcctSchema_ID=ci.C_AcctSchema1_ID
                         WHERE ass.A_Asset_ID =" + Asset_ID + @" 
                         AND ass.M_Product_ID=" + Product_ID + @"

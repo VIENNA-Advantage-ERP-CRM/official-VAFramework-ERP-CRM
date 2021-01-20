@@ -53,7 +53,7 @@
             $mainpageContent = $('<div class="vis-gl-main-wrap">');
 
             // get User Element Column ID
-            var paramStr = VIS.context.getWindowContext($self.windowNo, "AD_Column_ID", true);
+            var paramStr = VIS.context.getWindowContext($self.windowNo, "VAF_Column_ID", true);
             if (paramStr == "") {
                 VIS.ADialog.error("VIS_DimensionColNotSelected", true, "", "");
                 return false;

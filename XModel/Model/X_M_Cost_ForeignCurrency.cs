@@ -25,7 +25,7 @@ public X_M_Cost_ForeignCurrency (Ctx ctx, IDataReader dr, Trx trxName) : base(ct
  added by ->Harwinder */
 static X_M_Cost_ForeignCurrency(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27763325247458L;/** Last Updated Timestamp 12/8/2016 5:55:30 PM */
-public static long updatedMS = 1481199930669L;/** AD_Table_ID=1000686 */
+public static long updatedMS = 1481199930669L;/** VAF_TableView_ID=1000686 */
 public static int Table_ID; // =1000686;
 /** TableName=M_Cost_ForeignCurrency */
 public static String Table_Name="M_Cost_ForeignCurrency";

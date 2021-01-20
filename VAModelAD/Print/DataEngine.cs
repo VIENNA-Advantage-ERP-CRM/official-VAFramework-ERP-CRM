@@ -80,9 +80,9 @@ namespace VAdvantage.Print
             //    //
             if (format.GetAD_ReportView_ID() != 0)
             {
-                String sql = "SELECT t.AD_Table_ID, t.TableName, rv.Name "
-                    + "FROM AD_Table t"
-                    + " INNER JOIN AD_ReportView rv ON (t.AD_Table_ID=rv.AD_Table_ID) "
+                String sql = "SELECT t.VAF_TableView_ID, t.TableName, rv.Name "
+                    + "FROM VAF_TableView t"
+                    + " INNER JOIN AD_ReportView rv ON (t.VAF_TableView_ID=rv.VAF_TableView_ID) "
                     + "WHERE rv.AD_ReportView_ID='" + format.GetAD_ReportView_ID() + "'";	//	1
                 IDataReader dr = null;
                 try
@@ -111,7 +111,7 @@ namespace VAdvantage.Print
             }
             else
             {
-                String sql = "SELECT TableName FROM AD_Table WHERE AD_Table_ID='" + format.GetAD_Table_ID() + "'";	//	#1
+                String sql = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID='" + format.GetVAF_TableView_ID() + "'";	//	#1
                 IDataReader dr = null;
                 try
                 {
@@ -176,18 +176,18 @@ namespace VAdvantage.Print
 
 
             //    //	Order Columns (identifed by non zero/null SortNo)
-            int[] orderAD_Column_IDs = format.GetOrderAD_Column_IDs();
+            int[] orderVAF_Column_IDs = format.GetOrderVAF_Column_IDs();
 
-            int AD_Tab_ID = 0;
-            if (format.GetAD_Tab_ID() > 0)
+            int VAF_Tab_ID = 0;
+            if (format.GetVAF_Tab_ID() > 0)
             {
-                AD_Tab_ID = format.GetAD_Tab_ID();
+                VAF_Tab_ID = format.GetVAF_Tab_ID();
             }
 
-            List<String> orderColumns = new List<String>(orderAD_Column_IDs.Length);
-            for (int i = 0; i < orderAD_Column_IDs.Length; i++)
+            List<String> orderColumns = new List<String>(orderVAF_Column_IDs.Length);
+            for (int i = 0; i < orderVAF_Column_IDs.Length; i++)
             {
-                //log.finest("Order AD_Column_ID=" + orderAD_Column_IDs[i]);
+                //log.finest("Order VAF_Column_ID=" + orderVAF_Column_IDs[i]);
                 orderColumns.Add("");		//	initial value overwritten with fully qualified name
             }
 
@@ -200,7 +200,7 @@ namespace VAdvantage.Print
             //    //
             bool IsGroupedBy = false;
             //    //
-            String sql = "SELECT c.AD_Column_ID,c.ColumnName,"				//	1..2
+            String sql = "SELECT c.VAF_Column_ID,c.ColumnName,"				//	1..2
                 + "c.AD_Reference_ID,c.AD_Reference_Value_ID,"				//	3..4
                 + "c.FieldLength,c.IsMandatory,c.IsKey,c.IsParent,"			//	5..8
                 + "COALESCE(rvc.IsGroupFunction,'N'),rvc.FunctionColumn,"	//	9..10
@@ -212,8 +212,8 @@ namespace VAdvantage.Print
                 + "c.ColumnSQL,pfi.ISASCENDING "											//	24
                 + "FROM AD_PrintFormat pf"
                 + " INNER JOIN AD_PrintFormatItem pfi ON (pf.AD_PrintFormat_ID=pfi.AD_PrintFormat_ID)"
-                + " INNER JOIN AD_Column c ON (pfi.AD_Column_ID=c.AD_Column_ID)"
-                + " LEFT OUTER JOIN AD_ReportView_Col rvc ON (pf.AD_ReportView_ID=rvc.AD_ReportView_ID AND c.AD_Column_ID=rvc.AD_Column_ID) "
+                + " INNER JOIN VAF_Column c ON (pfi.VAF_Column_ID=c.VAF_Column_ID)"
+                + " LEFT OUTER JOIN AD_ReportView_Col rvc ON (pf.AD_ReportView_ID=rvc.AD_ReportView_ID AND c.VAF_Column_ID=rvc.VAF_Column_ID) "
                 + "WHERE pf.AD_PrintFormat_ID='" + format.Get_ID() + "'"					//	#1
                 + " AND pfi.IsActive='Y' AND (pfi.IsPrinted='Y' OR c.IsKey='Y' OR pfi.SortNo > 0) "
                 + "ORDER BY pfi.IsPrinted DESC, pfi.SeqNo";		//	Functions are put in first column
@@ -227,7 +227,7 @@ namespace VAdvantage.Print
                 while (dr.Read())
                 {
                     //            //	Get Values from record
-                    int AD_Column_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    int VAF_Column_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                     String ColumnName = dr[1].ToString();
                     String ColumnSQL = dr[23].ToString();
                     if (ColumnSQL == null)
@@ -283,7 +283,7 @@ namespace VAdvantage.Print
                         //	=>	Table.Column,
                         sqlSELECT.Append(tableName).Append(".").Append(ColumnName).Append(",");
                         sqlGROUP.Append(tableName).Append(".").Append(ColumnName).Append(",");
-                        pdc = new PrintDataColumn(AD_Column_ID, ColumnName, AD_Reference_ID, FieldLength, KEY, isPageBreak);	//	KeyColumn
+                        pdc = new PrintDataColumn(VAF_Column_ID, ColumnName, AD_Reference_ID, FieldLength, KEY, isPageBreak);	//	KeyColumn
                     }
                     else if (!IsPrinted)	//	not printed Sort Columns
                     { }
@@ -315,7 +315,7 @@ namespace VAdvantage.Print
                             .Append(tableName).Append(".").Append(ColumnName).Append(",");
                         orderName = _synonym + display;
                         //
-                        pdc = new PrintDataColumn(AD_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
+                        pdc = new PrintDataColumn(VAF_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
                         SynonymNext();
                     }
                     //	-- Table --
@@ -365,7 +365,7 @@ namespace VAdvantage.Print
                         }
                         sqlFROM.Append(_synonym).Append(".").Append(tr.KeyColumn).Append(")");
                         //
-                        pdc = new PrintDataColumn(AD_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
+                        pdc = new PrintDataColumn(VAF_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
                         SynonymNext();
                     }
 
@@ -400,7 +400,7 @@ namespace VAdvantage.Print
                             sqlGROUP.Append(_synonym).Append(".Name,");
                             orderName = _synonym + "Name";
 
-                            //	LEFT OUTER JOIN AD_Ref_List XA ON (AD_Table.EntityType=XA.Value AND XA.AD_Reference_ID=245)
+                            //	LEFT OUTER JOIN AD_Ref_List XA ON (VAF_TableView.EntityType=XA.Value AND XA.AD_Reference_ID=245)
                             //	LEFT OUTER JOIN AD_Ref_List_Trl A ON (XA.AD_Ref_List_ID=A.AD_Ref_List_ID AND A.AD_Language='de_DE')
                             if (IsMandatory)
                                 sqlFROM.Append(" INNER JOIN ");
@@ -420,7 +420,7 @@ namespace VAdvantage.Print
                         }
                         // 	TableName.ColumnName,
                         sqlSELECT.Append(tableName).Append(".").Append(ColumnName).Append(",");
-                        pdc = new PrintDataColumn(AD_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
+                        pdc = new PrintDataColumn(VAF_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
                         SynonymNext();
                     }
 
@@ -490,7 +490,7 @@ namespace VAdvantage.Print
                             .Append(tableName).Append(".").Append(ColumnName).Append("=")
                             .Append(_synonym).Append(".").Append(key).Append(")");
                         //
-                        pdc = new PrintDataColumn(AD_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
+                        pdc = new PrintDataColumn(VAF_Column_ID, ColumnName, AD_Reference_ID, FieldLength, orderName, isPageBreak);
                         SynonymNext();
                     }
 
@@ -510,9 +510,9 @@ namespace VAdvantage.Print
                         }
                         else if (index == -1)
                         {
-                            MColumn col = new MColumn(ctx, AD_Column_ID, null);
+                            MColumn col = new MColumn(ctx, VAF_Column_ID, null);
                             string obscureType = col.GetObscureType();
-                            if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetAD_Table_ID(),AD_Column_ID,false))
+                            if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetVAF_TableView_ID(),VAF_Column_ID,false))
                             {
                                 sb.Append(DBFunctionCollections.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
                             }
@@ -538,14 +538,14 @@ namespace VAdvantage.Print
                                 sqlGROUP.Append(sb).Append(",");
                             orderName = ColumnName;		//	no prefix for synonym
                         }
-                        pdc = new PrintDataColumn(AD_Column_ID, ColumnName,
+                        pdc = new PrintDataColumn(VAF_Column_ID, ColumnName,
                             AD_Reference_ID, FieldLength, ColumnName, isPageBreak);
                     }
 
                     //	Order Sequence - Overwrite order column name
-                    for (int i = 0; i < orderAD_Column_IDs.Length; i++)
+                    for (int i = 0; i < orderVAF_Column_IDs.Length; i++)
                     {
-                        if (AD_Column_ID == orderAD_Column_IDs[i])
+                        if (VAF_Column_ID == orderVAF_Column_IDs[i])
                         {
                             orderColumns.RemoveAt(i);
                             if (isAsc)
@@ -646,9 +646,9 @@ namespace VAdvantage.Print
                 finalSQL = finalSQL.Replace(sqlSelfTableRef + " NOT IN", "nvl(" + sqlSelfTableRef + ",0) NOT IN");
             }
 
-            if (AD_Tab_ID > 0)
+            if (VAF_Tab_ID > 0)
             {
-                MTab tab = new MTab(ctx, AD_Tab_ID, null);
+                MTab tab = new MTab(ctx, VAF_Tab_ID, null);
                 string where = tab.GetWhereClause();
                 if (where != null && where.Length > 0)
                 {
@@ -1633,9 +1633,9 @@ namespace VAdvantage.Print
             String SQL = "SELECT t.TableName, ck.ColumnName AS KeyColumn,"	//	1..2
                 + " cd.ColumnName AS DisplayColumn, rt.IsValueDisplayed, cd.IsTranslated "
                 + "FROM AD_Ref_Table rt"
-                + " INNER JOIN AD_Table t ON (rt.AD_Table_ID = t.AD_Table_ID)"
-                + " INNER JOIN AD_Column ck ON (rt.Column_Key_ID = ck.AD_Column_ID)"
-                + " INNER JOIN AD_Column cd ON (rt.Column_Display_ID = cd.AD_Column_ID) "
+                + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID = t.VAF_TableView_ID)"
+                + " INNER JOIN VAF_Column ck ON (rt.Column_Key_ID = ck.VAF_Column_ID)"
+                + " INNER JOIN VAF_Column cd ON (rt.Column_Display_ID = cd.VAF_Column_ID) "
                 + "WHERE rt.AD_Reference_ID='" + AD_Reference_Value_ID + "'"			//	1
                 + " AND rt.IsActive = 'Y' AND t.IsActive = 'Y'";
             IDataReader dr = null;

@@ -1,9 +1,9 @@
 ﻿; (function (VIS, $) {
 
-    function AcctViewerData(windowNu, ad_Client_ID, ad_Table_ID) {
+    function AcctViewerData(windowNu, vaf_client_ID, vaf_tableview_ID) {
         this.windowNo = windowNu;
-        this.AD_Client_ID = ad_Client_ID;
-        this.AD_Org_ID = 0;
+        this.VAF_Client_ID = vaf_client_ID;
+        this.VAF_Org_ID = 0;
         this.DateFrom = null;
         this.DateTo = null;
         var $selfObj = this;
@@ -19,7 +19,7 @@
         this.C_AcctSchema_ID = 0;
         this.PostingType = "";
 
-        this.AD_Table_ID = ad_Table_ID;
+        this.VAF_TableView_ID = vaf_tableview_ID;
         this.Record_ID = 0;
 
         this.whereInfo = [];
@@ -48,15 +48,15 @@
         this.HasOrgUnit = null;
 
 
-        if (this.AD_Client_ID == 0) {
-            this.AD_Client_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "AD_Client_ID");
+        if (this.VAF_Client_ID == 0) {
+            this.VAF_Client_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAF_Client_ID");
         }
-        if (this.AD_Client_ID == 0) {
-            this.AD_Client_ID = VIS.Env.getCtx().ctx["AD_Client_ID"];
+        if (this.VAF_Client_ID == 0) {
+            this.VAF_Client_ID = VIS.Env.getCtx().ctx["VAF_Client_ID"];
         }
 
-        if (this.AD_Org_ID == 0) {
-            this.AD_Org_ID = Number(VIS.context.getWindowTabContext(this.windowNo, 0, "AD_Org_ID"));
+        if (this.VAF_Org_ID == 0) {
+            this.VAF_Org_ID = Number(VIS.context.getWindowTabContext(this.windowNo, 0, "VAF_Org_ID"));
         }
 
 
@@ -90,14 +90,14 @@
         var notShowPosted;
 
         // get Accounting Schema
-        this.getClientAcctSchema = function (AD_Client_ID, OrgID) {
+        this.getClientAcctSchema = function (VAF_Client_ID, OrgID) {
             var obj = [];
             var that = this;
             $.ajax({
                 url: VIS.Application.contextUrl + "AcctViewerData/GetClientAcctSchema",
                 type: 'POST',
                 async: true,
-                data: { ad_client_id: AD_Client_ID, ad_org_id: OrgID },
+                data: { vaf_client_id: VAF_Client_ID, vaf_org_id: OrgID },
                 success: function (data) {
                     if (data.result && data.result.AcctSchemas) {
                         var actSch = data.result.AcctSchemas;
@@ -133,18 +133,18 @@
         };
 
 
-        this.getClientAcctSchema(this.AD_Client_ID, this.AD_Org_ID);
-        //this.ASchemas = this.getClientAcctSchema(this.AD_Client_ID, this.AD_Org_ID);
+        this.getClientAcctSchema(this.VAF_Client_ID, this.VAF_Org_ID);
+        //this.ASchemas = this.getClientAcctSchema(this.VAF_Client_ID, this.VAF_Org_ID);
         // this.ASchema = this.ASchemas[0];
-        //function getClientAcctSchema(AD_Client_ID, OrgID) {
+        //function getClientAcctSchema(VAF_Client_ID, OrgID) {
         //    var obj = [];
 
-        //    //var sql = "SELECT C_ACCTSCHEMA_ID,NAME FROM C_ACCTSCHEMA WHERE C_ACCTSCHEMA_ID=(SELECT  C_ACCTSCHEMA1_ID   FROM AD_CLIENTINFO WHERE AD_CLIENT_ID=" + AD_Client_ID + ")";
+        //    //var sql = "SELECT C_ACCTSCHEMA_ID,NAME FROM C_ACCTSCHEMA WHERE C_ACCTSCHEMA_ID=(SELECT  C_ACCTSCHEMA1_ID   FROM VAF_ClientDetail WHERE VAF_CLIENT_ID=" + VAF_Client_ID + ")";
 
         //    sql = "SELECT C_ACCTSCHEMA_ID,NAME FROM C_AcctSchema WHERE ISACTIVE='Y' AND C_ACCTSCHEMA_ID IN( " +
-        //"SELECT C_ACCTSCHEMA_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND AD_CLIENT_ID=" + AD_Client_ID + " AND AD_ORG_ID=" + OrgID + ")" +
+        //"SELECT C_ACCTSCHEMA_ID FROM FRPT_AssignedOrg WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + VAF_Client_ID + " AND VAF_ORG_ID=" + OrgID + ")" +
         ////Get default Accounting schema selected on tenant
-        //" OR C_ACCTSCHEMA_ID IN (SELECT C_ACCTSCHEMA1_ID  FROM AD_ClientInfo where  AD_Client_ID=" + AD_Client_ID + ")";
+        //" OR C_ACCTSCHEMA_ID IN (SELECT C_ACCTSCHEMA1_ID  FROM VAF_ClientDetail where  VAF_Client_ID=" + VAF_Client_ID + ")";
 
 
         //    var c_acctschema_id = null;
@@ -164,8 +164,8 @@
         //        + "WHERE IsActive='Y'"
         //        + " AND EXISTS (SELECT * FROM C_AcctSchema_GL gl WHERE acs.C_AcctSchema_ID=gl.C_AcctSchema_ID)"
         //        + " AND EXISTS (SELECT * FROM C_AcctSchema_Default d WHERE acs.C_AcctSchema_ID=d.C_AcctSchema_ID)";
-        //    if (AD_Client_ID != 0) {
-        //        sql += " AND AD_Client_ID=" + AD_Client_ID;
+        //    if (VAF_Client_ID != 0) {
+        //        sql += " AND VAF_Client_ID=" + VAF_Client_ID;
         //    }
 
         //    sql += " ORDER BY C_AcctSchema_ID";
@@ -220,7 +220,7 @@
                     options.push({ "Key": "", "Name": "" });
                     var res = data.result;
                     for (var i = 0; i < res.length; i++) {
-                        var id = res[i].AD_Table_ID;
+                        var id = res[i].VAF_TableView_ID;
                         var tableName = VIS.Utility.encodeText(res[i].TableName);
                         var name = "";
                         // Change done to show order instead of purchase order in selection 
@@ -238,7 +238,7 @@
 
                         });
 
-                        if (id == this.AD_Table_ID) {
+                        if (id == this.VAF_TableView_ID) {
                             defaultKey = tableName;
                         }
                     }
@@ -257,9 +257,9 @@
     //    var options = [];
     //    var defaultKey = null;
 
-    //    var sql = "SELECT AD_Table_ID, TableName FROM AD_Table t "
-    //        + "WHERE EXISTS (SELECT * FROM AD_Column c"
-    //        + " WHERE t.AD_Table_ID=c.AD_Table_ID AND c.ColumnName='Posted')"
+    //    var sql = "SELECT VAF_TableView_ID, TableName FROM VAF_TableView t "
+    //        + "WHERE EXISTS (SELECT * FROM VAF_Column c"
+    //        + " WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='Posted')"
     //        + " AND IsView='N'";
 
     //    try {
@@ -274,7 +274,7 @@
 
     //            this.tableInfo.push({ "Key": id, "Name": tableName });
 
-    //            if (id == this.AD_Table_ID) {
+    //            if (id == this.VAF_TableView_ID) {
     //                defaultKey = tableName;
     //            }
     //        }
@@ -290,7 +290,7 @@
     //Get Organization
     AcctViewerData.prototype.getOrg = function () {
         var obj = [];
-        var cID = this.AD_Client_ID;
+        var cID = this.VAF_Client_ID;
         $.ajax({
             url: VIS.Application.contextUrl + "AcctViewerData/AcctViewerGetOrgData",
             type: 'POST',
@@ -302,7 +302,7 @@
                     obj.push({ 'Key': 0, 'Name': "" });
                     for (var i = 0; i < res.length; i++) {
                         obj.push({
-                            'Key': res[i].AD_Org_ID, 'Name': VIS.Utility.encodeText(res[i].OrgName)
+                            'Key': res[i].VAF_Org_ID, 'Name': VIS.Utility.encodeText(res[i].OrgName)
                         });
                     }
                 }
@@ -316,7 +316,7 @@
 
     //AcctViewerData.prototype.getOrg = function () {
     //    var obj = [];
-    //    var sql = "SELECT AD_Org_ID, Name FROM AD_Org WHERE AD_Client_ID=" + this.AD_Client_ID + " ORDER BY Value";
+    //    var sql = "SELECT VAF_Org_ID, Name FROM VAF_Org WHERE VAF_Client_ID=" + this.VAF_Client_ID + " ORDER BY Value";
     //    var dr = VIS.DB.executeReader(sql.toString(), null, null);
     //    obj.push({ 'Key': 0, 'Name': "" });
     //    while (dr.read()) {
@@ -447,7 +447,7 @@
 
     AcctViewerData.prototype.getColumnName = function (elementType) {
         if (elementType.equals(this.ELEMENTTYPE_Organization))
-            return "AD_Org_ID";
+            return "VAF_Org_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Account))
             return "Account_ID";
         else if (elementType.equals(this.ELEMENTTYPE_BPartner))
@@ -463,7 +463,7 @@
         else if (elementType.equals(this.ELEMENTTYPE_Campaign))
             return "C_Campaign_ID";
         else if (elementType.equals(this.ELEMENTTYPE_OrgTrx))
-            return "AD_OrgTrx_ID";
+            return "VAF_OrgTrx_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Project))
             return "C_Project_ID";
         else if (elementType.equals(this.ELEMENTTYPE_SalesRegion))
@@ -531,7 +531,7 @@
     //    return retValue;
     //}
 
-    AcctViewerData.prototype.Query = function (AD_Client_ID, callbackGetDataModel) {
+    AcctViewerData.prototype.Query = function (VAF_Client_ID, callbackGetDataModel) {
         //  Set Where Clause
         var whereClause = "";
         //  Add Organization
@@ -551,7 +551,7 @@
             if (whereClause.length > 0) {
                 whereClause = whereClause.concat(" AND ");
             }
-            whereClause = whereClause.concat(this.TABLE_ALIAS).concat(".AD_Table_ID=").concat(this.AD_Table_ID).concat(" AND ").concat(this.TABLE_ALIAS).concat(".Record_ID=").concat(this.Record_ID);
+            whereClause = whereClause.concat(this.TABLE_ALIAS).concat(".VAF_TableView_ID=").concat(this.VAF_TableView_ID).concat(" AND ").concat(this.TABLE_ALIAS).concat(".Record_ID=").concat(this.Record_ID);
         }
         else {
             //  get values (Queries)
@@ -588,11 +588,11 @@
             }
 
             //  Add Organization
-            if (this.AD_Org_ID != 0) {
+            if (this.VAF_Org_ID != 0) {
                 if (whereClause.length > 0) {
                     whereClause = whereClause.concat(" AND ");
                 }
-                whereClause = whereClause.concat(this.TABLE_ALIAS).concat(".AD_Org_ID=").concat(this.AD_Org_ID);
+                whereClause = whereClause.concat(this.TABLE_ALIAS).concat(".VAF_Org_ID=").concat(this.VAF_Org_ID);
             }
         }
 
@@ -623,12 +623,12 @@
             orderClause = orderClause.concat(this.TABLE_ALIAS).concat(".Fact_Acct_ID");
         }
 
-        this.getDataModel(AD_Client_ID, whereClause, orderClause, this.group1, this.group2, this.group3, this.group4, this.sortBy1, this.sortBy2, this.sortBy3, this.sortBy4, this.displayDocumentInfo, this.displaySourceAmt, this.displayQty, callbackGetDataModel);
+        this.getDataModel(VAF_Client_ID, whereClause, orderClause, this.group1, this.group2, this.group3, this.group4, this.sortBy1, this.sortBy2, this.sortBy3, this.sortBy4, this.displayDocumentInfo, this.displaySourceAmt, this.displayQty, callbackGetDataModel);
         //var val = this.dataByData;
         //return val;
     }
 
-    AcctViewerData.prototype.getDataModel = function (AD_Client_ID, whereClause, orderClause, gr1, gr2, gr3, gr4, sort1, sort2, sort3, sort4, displayDocInfo, displaySrcAmt, displayqty, callbackGetDataModel) {
+    AcctViewerData.prototype.getDataModel = function (VAF_Client_ID, whereClause, orderClause, gr1, gr2, gr3, gr4, sort1, sort2, sort3, sort4, displayDocInfo, displaySrcAmt, displayqty, callbackGetDataModel) {
         var obj = this;
         $.ajax({
             url: VIS.Application.contextUrl + "Common/GetDataQuery",
@@ -636,7 +636,7 @@
             dataType: "json",
             type: "POST",
             data: {
-                AD_Client_ID: AD_Client_ID,
+                VAF_Client_ID: VAF_Client_ID,
                 whereClause: whereClause,
                 orderClause: orderClause,
                 gr1: gr1,
@@ -660,14 +660,14 @@
     }
 
     //form declaretion
-    function AcctViewer(AD_Client_ID, AD_Table_ID, Record_ID, windowNum, AD_Window_ID) {
+    function AcctViewer(VAF_Client_ID, VAF_TableView_ID, Record_ID, windowNum, AD_Window_ID) {
 
         var $root = $("<div style='position:relative;'>");
         var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var $self = this;
-        var _AD_Client_ID = AD_Client_ID;
-        var _AD_Table_ID = AD_Table_ID;
+        var _VAF_Client_ID = VAF_Client_ID;
+        var _VAF_TableView_ID = VAF_TableView_ID;
         var _Record_ID = Record_ID;
         var windowNo = windowNum;
         var _AD_Window_ID = AD_Window_ID;
@@ -680,8 +680,8 @@
         var ACCT_SCHEMA = "C_AcctSchema_ID";
         var DOC_TYPE = "DocumentType";
         var POSTING_TYPE = "PostingType";
-        var ORG = "AD_Org_ID";
-        var TRXORG = "AD_OrgTrx_ID";
+        var ORG = "VAF_Org_ID";
+        var TRXORG = "VAF_OrgTrx_ID";
         var ACCT = "Account_ID";
         var SELECT_DOCUMENT = "SelectDocument";
         var ACCT_DATE = "AcctDateFrom";//DateAcct
@@ -809,7 +809,7 @@
         var rightSideDivWidth = $(window).width() / 2;
         var selectDivHeight = $(window).height() - 200;
         var _data = null;
-        //var _data = _data = new AcctViewerData(windowNo, AD_Client_ID, AD_Table_ID);;
+        //var _data = _data = new AcctViewerData(windowNo, VAF_Client_ID, VAF_TableView_ID);;
 
 
         function jbInit() {
@@ -996,8 +996,8 @@
                     setBusy(true);
                     _data.C_AcctSchema_ID = cmbAccSchemaFilter.getControl().find('option:selected').val();
                     setTimeout(function () {
-                        //var dataValue = _data.Query(AD_Client_ID , callbackGetDataModel);
-                        _data.Query(AD_Client_ID, callbackGetDataModel);
+                        //var dataValue = _data.Query(VAF_Client_ID , callbackGetDataModel);
+                        _data.Query(VAF_Client_ID, callbackGetDataModel);
                         //if (dataValues != null) {
                         //    setModel(dataValues);
                         //}
@@ -1025,7 +1025,7 @@
                 cmbSelectDoc.getControl().change(function () {
                     actionTable();
                     _data.Record_ID = Record_ID;
-                    _data.AD_Table_ID
+                    _data.VAF_TableView_ID
                 });
             }
 
@@ -1557,9 +1557,9 @@
             $root.append($busyDiv);
         }
 
-        function dynInit(AD_Table_ID, Record_ID) {
+        function dynInit(VAF_TableView_ID, Record_ID) {
             //if (!_data) {
-            _data = new AcctViewerData(windowNo, AD_Client_ID, AD_Table_ID);
+            _data = new AcctViewerData(windowNo, VAF_Client_ID, VAF_TableView_ID);
             _data.onLoaded = function () {
                 // }
                 //setTimeout(10);
@@ -1602,7 +1602,7 @@
                 btnOrgUnit.find('span').text('');
 
                 //  Document Select
-                var haveDoc = AD_Table_ID != 0 && Record_ID != 0;
+                var haveDoc = VAF_TableView_ID != 0 && Record_ID != 0;
 
                 if (haveDoc) {
                     chkSelectDoc.find('input').prop("checked", true);
@@ -1614,7 +1614,7 @@
                 lblstatusLine.getControl().css("color", "rgba(var(--v-c-primary), 1)");//css("font-size", "28px").
                 ////  Initial Query
                 if (haveDoc) {
-                    _data.AD_Table_ID = AD_Table_ID;
+                    _data.VAF_TableView_ID = VAF_TableView_ID;
                     _data.Record_ID = Record_ID;
 
                 }
@@ -1712,7 +1712,7 @@
             var para = "";
             //  Reset Selection Data
             _data.C_AcctSchema_ID = 0;
-            _data.AD_Org_ID = 0;
+            _data.VAF_Org_ID = 0;
 
             //  Save Selection Choices
             var kp = cmbAccSchema.getControl().find('option:selected').val();
@@ -1732,10 +1732,10 @@
             _data.documentQuery = chkSelectDoc.find('input').prop("checked");
             para = para.concat(", DocumentQuery=").concat(_data.documentQuery);
             if (chkSelectDoc.find('input').prop("checked")) {
-                if (_data.AD_Table_ID == 0 || _data.Record_ID == 0) {
+                if (_data.VAF_TableView_ID == 0 || _data.Record_ID == 0) {
                     return;
                 }
-                para = para.concat(", AD_Table_ID=").concat(_data.AD_Table_ID)
+                para = para.concat(", VAF_TableView_ID=").concat(_data.VAF_TableView_ID)
                     .concat(", Record_ID=").concat(_data.Record_ID);
             }
             else {
@@ -1750,9 +1750,9 @@
 
                 kp = cmbOrg.getControl().find('option:selected').val();
                 if (kp != null) {
-                    _data.AD_Org_ID = kp;
+                    _data.VAF_Org_ID = kp;
                 }
-                para = para.concat(", AD_Org_ID=").concat(_data.AD_Org_ID);
+                para = para.concat(", VAF_Org_ID=").concat(_data.VAF_Org_ID);
 
                 var it = _data.whereInfo;//.Values.GetEnumerator();
                 if (it != null) {
@@ -1824,8 +1824,8 @@
             //setModel(_data.Query(VIS.Env.getCtx()));
 
             //setTimeout(function () {
-            // var dataValue = _data.Query(AD_Client_ID);
-            _data.Query(AD_Client_ID, callbackGetDataModel);
+            // var dataValue = _data.Query(VAF_Client_ID);
+            _data.Query(VAF_Client_ID, callbackGetDataModel);
             //if (dataValues != null) {
             if (_data.C_AcctSchema_ID > 0) {
                 cmbAccSchemaFilter.setValue(_data.C_AcctSchema_ID);
@@ -1909,13 +1909,13 @@
         function actionTable() {
             var vp = cmbSelectDoc.getControl().find('option:selected').val();
             if (vp != null) {
-                //_data.AD_Table_ID = _data.tableInfo[vp];
+                //_data.VAF_TableView_ID = _data.tableInfo[vp];
                 if (jQuery.grep(_data.tableInfo, function (person) { return person.Name == vp })[0] != null) {
-                    _data.AD_Table_ID = jQuery.grep(_data.tableInfo, function (person) { return person.Name == vp })[0].Key;
+                    _data.VAF_TableView_ID = jQuery.grep(_data.tableInfo, function (person) { return person.Name == vp })[0].Key;
                 }
             }
 
-            //log.Config(vp + " = " + _data.AD_Table_ID);
+            //log.Config(vp + " = " + _data.VAF_TableView_ID);
             //  Reset Record
             // _data.Record_ID = 0;
 
@@ -2033,7 +2033,7 @@
 
         function actionRePost() {
             if (VIS.ADialog.ask("PostImmediate?")) {
-                if (_data.documentQuery && _data.AD_Table_ID != 0 && _data.Record_ID != 0) {
+                if (_data.documentQuery && _data.VAF_TableView_ID != 0 && _data.Record_ID != 0) {
                     var force = chkforcePost.prop("checked");
 
                     //check for old and new posting logic
@@ -2044,7 +2044,7 @@
                         }
 
                         if (window.FRPT && postingByNewLogic) {
-                            var orgID = Number(VIS.context.getWindowTabContext(windowNo, 0, "AD_Org_ID"));
+                            var orgID = Number(VIS.context.getWindowTabContext(windowNo, 0, "VAF_Org_ID"));
                             var docTypeID = Number(VIS.context.getWindowTabContext(windowNo, 0, "C_DocType_ID"));
 
                             $.ajax({
@@ -2052,8 +2052,8 @@
                                 dataType: "json",
                                 async: true,
                                 data: {
-                                    'AD_Client_ID': _data.AD_Client_ID,
-                                    'AD_Table_ID': _data.AD_Table_ID,
+                                    'VAF_Client_ID': _data.VAF_Client_ID,
+                                    'VAF_TableView_ID': _data.VAF_TableView_ID,
                                     'Record_ID': _data.Record_ID,
                                     'force': force,
                                     'OrgID': orgID,
@@ -2077,8 +2077,8 @@
                                 url: VIS.Application.contextUrl + "Posting/PostImmediate",
                                 dataType: "json",
                                 data: {
-                                    AD_Client_ID: _data.AD_Client_ID,
-                                    AD_Table_ID: _data.AD_Table_ID,
+                                    VAF_Client_ID: _data.VAF_Client_ID,
+                                    VAF_TableView_ID: _data.VAF_TableView_ID,
                                     Record_ID: _data.Record_ID,
                                     force: force
                                 },
@@ -2110,7 +2110,7 @@
                 dataType: "json",
                 async: true,
                 data: {
-                    AD_Client_ID: VIS.context.getAD_Client_ID()
+                    VAF_Client_ID: VIS.context.getVAF_Client_ID()
                 },
                 error: function (e) {
                     alert(VIS.Msg.getMsg('ERRORGettingPostingServer'));
@@ -2176,7 +2176,7 @@
             events();
             ///}, 2);
 
-            dynInit(_AD_Table_ID, _Record_ID);
+            dynInit(_VAF_TableView_ID, _Record_ID);
 
             $root.dialog({
                 modal: true,
@@ -2240,8 +2240,8 @@
 
 
 
-            _AD_Client_ID = null;
-            _AD_Table_ID = null;
+            _VAF_Client_ID = null;
+            _VAF_TableView_ID = null;
             _Record_ID = null;;
             windowNo = null;;
             this.arrListColumns = null;

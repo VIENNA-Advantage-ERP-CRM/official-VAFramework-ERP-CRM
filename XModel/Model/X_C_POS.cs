@@ -80,7 +80,7 @@ static X_C_POS()
 //static long serialVersionUID 27562514373488L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056699L;
-/** AD_Table_ID=748 */
+/** VAF_TableView_ID=748 */
 public static int Table_ID;
  // =748;
 

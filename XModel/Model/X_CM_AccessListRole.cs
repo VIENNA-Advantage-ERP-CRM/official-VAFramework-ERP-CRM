@@ -70,7 +70,7 @@ static X_CM_AccessListRole()
 //static long serialVersionUID 27562514368034L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051245L;
-/** AD_Table_ID=887 */
+/** VAF_TableView_ID=887 */
 public static int Table_ID;
  // =887;
 

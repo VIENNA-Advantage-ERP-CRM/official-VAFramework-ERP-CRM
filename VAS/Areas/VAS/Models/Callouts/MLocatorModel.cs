@@ -17,7 +17,7 @@ namespace VIS.Models
         /// <returns></returns>
           public Dictionary<string,string> GetLocator(Ctx ctx,string fields)
           {
-            MLocator defaultLocator = MLocator.GetDefaultLocatorOfOrg(ctx, ctx.GetAD_Org_ID());
+            MLocator defaultLocator = MLocator.GetDefaultLocatorOfOrg(ctx, ctx.GetVAF_Org_ID());
             int Default_Locator_ID = 0;
             if (defaultLocator != null)
             {

@@ -220,11 +220,11 @@ namespace VAdvantage.Process
         private void FillTable(MWarehouse wh)
         {
             String sql = "INSERT INTO T_Replenish "
-                + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, AD_Client_ID, AD_Org_ID,"
+                + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                 + " ReplenishType, Level_Min, Level_Max, QtyOnHand,QtyReserved,QtyOrdered,"
                 + " C_BPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
                 + "SELECT " + GetAD_PInstance_ID()
-                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.AD_Client_ID, r.AD_Org_ID,"
+                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                 + " r.ReplenishType, r.Level_Min, r.Level_Max, 0,0,0,"
                 + " po.C_BPartner_ID, po.Order_Min, po.Order_Pack, 0, ";
             if (_ReplenishmentCreate == null)
@@ -252,11 +252,11 @@ namespace VAdvantage.Process
             if (_C_BPartner_ID == 0 || _C_BPartner_ID == -1)
             {
                 sql = "INSERT INTO T_Replenish "
-                    + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, AD_Client_ID, AD_Org_ID,"
+                    + "(AD_PInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                     + " ReplenishType, Level_Min, Level_Max,"
                     + " C_BPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
                     + "SELECT " + GetAD_PInstance_ID()
-                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.AD_Client_ID, r.AD_Org_ID,"
+                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                     + " r.ReplenishType, r.Level_Min, r.Level_Max,"
                     //jz + " null, 1, 1, 0, ";
                     + VAdvantage.DataBase.DB.NULL("I", Types.VARCHAR)
@@ -490,7 +490,7 @@ namespace VAdvantage.Process
                     order.SetSalesRep_ID(GetAD_User_ID());
                     order.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH
-                    order.SetAD_Org_ID(wh.GetAD_Org_ID());
+                    order.SetVAF_Org_ID(wh.GetVAF_Org_ID());
                     order.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
                    
                     if (!order.Save())
@@ -543,7 +543,7 @@ namespace VAdvantage.Process
                     {
                         requisition.SetDTD001_MWarehouseSource_ID(wh.GetM_WarehouseSource_ID());
                     }
-                    requisition.SetAD_Org_ID(wh.GetAD_Org_ID());
+                    requisition.SetVAF_Org_ID(wh.GetVAF_Org_ID());
                     requisition.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
                     
                     if (!requisition.Save())
@@ -604,9 +604,9 @@ namespace VAdvantage.Process
                 {
                     whTarget = MWarehouse.Get(GetCtx(), replenish.GetM_Warehouse_ID());
                 }
-                if (client == null || client.GetAD_Client_ID() != whSource.GetAD_Client_ID())
+                if (client == null || client.GetVAF_Client_ID() != whSource.GetVAF_Client_ID())
                 {
-                    client = MClient.Get(GetCtx(), whSource.GetAD_Client_ID());
+                    client = MClient.Get(GetCtx(), whSource.GetVAF_Client_ID());
                 }
                 //
                 if (move == null
@@ -621,7 +621,7 @@ namespace VAdvantage.Process
                     move.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment")
                         + ": " + whSource.GetName() + "->" + whTarget.GetName());
                     //	Set Org
-                    move.SetAD_Org_ID(whSource.GetAD_Org_ID());
+                    move.SetVAF_Org_ID(whSource.GetVAF_Org_ID());
                     if (!move.Save())
                     {
                         return;

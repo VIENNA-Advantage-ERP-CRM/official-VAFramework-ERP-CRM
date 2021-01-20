@@ -14,16 +14,16 @@ using VAdvantage.Utility;
 
 namespace VAModelAD.Model
 {
-    public class MClient: VAdvantage.Model.X_AD_Client
+    public class MClient: VAdvantage.Model.X_VAF_Client
     {
 
-        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("AD_Client_AD", 3);
+        private static CCache<int, MClient> s_cache = new CCache<int, MClient>("VAF_Client_AD", 3);
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MClient).FullName);
 
         private VAdvantage.Login.Language _language = null;
-        public MClient(Ctx ctx, int AD_Client_ID, Trx trxName)
-            : base(ctx, AD_Client_ID, trxName)
+        public MClient(Ctx ctx, int VAF_Client_ID, Trx trxName)
+            : base(ctx, VAF_Client_ID, trxName)
         {
 
         }
@@ -34,17 +34,17 @@ namespace VAModelAD.Model
 
         internal static MClient Get(Ctx ctx)
         {
-            return Get(ctx, ctx.GetAD_Client_ID());
+            return Get(ctx, ctx.GetVAF_Client_ID());
         }
 
-        internal static MClient Get(Ctx ctx, int AD_Client_ID)
+        internal static MClient Get(Ctx ctx, int VAF_Client_ID)
         {
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             MClient client = (MClient)s_cache[key];
             if (client != null)
                 return client;
-            client = new MClient(ctx, AD_Client_ID, null);
-            if (AD_Client_ID == 0)
+            client = new MClient(ctx, VAF_Client_ID, null);
+            if (VAF_Client_ID == 0)
                 client.Load((Trx)null);
             s_cache.Add(key, client);
             return client;
@@ -85,7 +85,7 @@ namespace VAModelAD.Model
         internal static MClient[] GetAll(Ctx ctx)
         {
             List<MClient> list = new List<MClient>();
-            String sql = "SELECT * FROM AD_Client";
+            String sql = "SELECT * FROM VAF_Client";
             try
             {
                 DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -196,7 +196,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            from.GetAD_User_ID(),
                 //            toEMail, toName,
                 //            subject, message);
@@ -248,7 +248,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            from.GetAD_User_ID(),
                 //            toEMail, toName,
                 //            subject, message);
@@ -299,7 +299,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            toEMail, toName, subject, message);
                 //    }
                 //    else
@@ -371,7 +371,7 @@ namespace VAModelAD.Model
             }
         }
 
-        public bool SendEMail(String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int AD_Table_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
+        public bool SendEMail(String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int VAF_TableView_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
         {
             EMail email = CreateEMail(toEMail, toName, subject, message, isHtml);
             if (email == null)
@@ -383,7 +383,7 @@ namespace VAModelAD.Model
                 email.AddAttachment(array, fileName);
             }
 
-            FetchRecordsAttachment(email, AD_Table_ID, Record_ID);
+            FetchRecordsAttachment(email, VAF_TableView_ID, Record_ID);
             try
             {
                 String msg = email.Send();
@@ -405,9 +405,9 @@ namespace VAModelAD.Model
             }
         }
 
-        private void FetchRecordsAttachment(EMail email, int AD_Table_ID, int Record_ID)
+        private void FetchRecordsAttachment(EMail email, int VAF_TableView_ID, int Record_ID)
         {
-            MAttachment mAttach = MAttachment.Get(p_ctx, AD_Table_ID, Record_ID);
+            MAttachment mAttach = MAttachment.Get(p_ctx, VAF_TableView_ID, Record_ID);
             string filePath = ""; //System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload");
             if (mAttach == null)
                 return;
@@ -525,7 +525,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            from.GetAD_User_ID(),
                 //            toEMail, toName,
                 //            subject, message);
@@ -574,7 +574,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            from.GetAD_User_ID(),
                 //            toEMail, toName,
                 //            subject, message);
@@ -622,7 +622,7 @@ namespace VAModelAD.Model
                 //{
                 //    if (server != null)
                 //    {	//	See ServerBean
-                //        email = server.createEMail(GetCtx(), GetAD_Client_ID(),
+                //        email = server.createEMail(GetCtx(), GetVAF_Client_ID(),
                 //            toEMail, toName, subject, message);
                 //    }
                 //    else

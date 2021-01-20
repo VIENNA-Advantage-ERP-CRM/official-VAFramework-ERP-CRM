@@ -70,7 +70,7 @@ static X_C_IncomeTax()
 //static long serialVersionUID 27681650386553L;
 /** Last Updated Timestamp 5/8/2014 10:27:50 AM */
 public static long updatedMS = 1399525069764L;
-/** AD_Table_ID=1000441 */
+/** VAF_TableView_ID=1000441 */
 public static int Table_ID;
  // =1000441;
 

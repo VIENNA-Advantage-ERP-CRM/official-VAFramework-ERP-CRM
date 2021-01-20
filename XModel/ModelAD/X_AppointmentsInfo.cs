@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27629734074384L;
         /** Last Updated Timestamp 9/14/2012 1:15:57 PM */
         public static long updatedMS = 1347608757595L;
-        /** AD_Table_ID=1000001 */
+        /** VAF_TableView_ID=1000001 */
         public static int Table_ID;
         // =1000001;
 
@@ -118,16 +118,16 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(Decimal? AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(Decimal? VAF_TableView_ID)
         {
-            Set_Value("AD_Table_ID", (Decimal?)AD_Table_ID);
+            Set_Value("VAF_TableView_ID", (Decimal?)VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public Decimal GetAD_Table_ID()
+        public Decimal GetVAF_TableView_ID()
         {
-            Object bd = Get_Value("AD_Table_ID");
+            Object bd = Get_Value("VAF_TableView_ID");
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }

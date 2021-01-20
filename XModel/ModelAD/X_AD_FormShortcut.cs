@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_FormShortcut
+/** Generated Model for VAF_PageShortcut
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_FormShortcut : PO
+public class X_VAF_PageShortcut : PO
 {
-public X_AD_FormShortcut (Context ctx, int AD_FormShortcut_ID, Trx trxName) : base (ctx, AD_FormShortcut_ID, trxName)
+public X_VAF_PageShortcut (Context ctx, int VAF_PageShortcut_ID, Trx trxName) : base (ctx, VAF_PageShortcut_ID, trxName)
 {
-/** if (AD_FormShortcut_ID == 0)
+/** if (VAF_PageShortcut_ID == 0)
 {
-SetAD_FormShortcut_ID (0);
-SetAD_Form_ID (0);
+SetVAF_PageShortcut_ID (0);
+SetVAF_Page_ID (0);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_AD_FormShortcut (Ctx ctx, int AD_FormShortcut_ID, Trx trxName) : base (ctx, AD_FormShortcut_ID, trxName)
+public X_VAF_PageShortcut (Ctx ctx, int VAF_PageShortcut_ID, Trx trxName) : base (ctx, VAF_PageShortcut_ID, trxName)
 {
-/** if (AD_FormShortcut_ID == 0)
+/** if (VAF_PageShortcut_ID == 0)
 {
-SetAD_FormShortcut_ID (0);
-SetAD_Form_ID (0);
+SetVAF_PageShortcut_ID (0);
+SetVAF_Page_ID (0);
 SetName (null);
 SetValue (null);
 }
@@ -43,7 +43,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_FormShortcut (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_PageShortcut (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_FormShortcut (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_FormShortcut (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_PageShortcut (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_FormShortcut (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_FormShortcut (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_PageShortcut (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_FormShortcut()
+static X_VAF_PageShortcut()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_FormShortcut()
 //static long serialVersionUID = 27562514361389L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044600L;
-/** AD_Table_ID=908 */
+/** VAF_TableView_ID=908 */
 public static int Table_ID;
  // =908;
 
-/** TableName=AD_FormShortcut */
-public static String Table_Name="AD_FormShortcut";
+/** TableName=VAF_PageShortcut */
+public static String Table_Name="VAF_PageShortcut";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_FormShortcut[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_PageShortcut[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Form Shortcut.
-@param AD_FormShortcut_ID Form Shortcut */
-public void SetAD_FormShortcut_ID (int AD_FormShortcut_ID)
+@param VAF_PageShortcut_ID Form Shortcut */
+public void SetVAF_PageShortcut_ID (int VAF_PageShortcut_ID)
 {
-if (AD_FormShortcut_ID < 1) throw new ArgumentException ("AD_FormShortcut_ID is mandatory.");
-Set_ValueNoCheck ("AD_FormShortcut_ID", AD_FormShortcut_ID);
+if (VAF_PageShortcut_ID < 1) throw new ArgumentException ("VAF_PageShortcut_ID is mandatory.");
+Set_ValueNoCheck ("VAF_PageShortcut_ID", VAF_PageShortcut_ID);
 }
 /** Get Form Shortcut.
 @return Form Shortcut */
-public int GetAD_FormShortcut_ID() 
+public int GetVAF_PageShortcut_ID() 
 {
-Object ii = Get_Value("AD_FormShortcut_ID");
+Object ii = Get_Value("VAF_PageShortcut_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID < 1) throw new ArgumentException ("AD_Form_ID is mandatory.");
-Set_Value ("AD_Form_ID", AD_Form_ID);
+if (VAF_Page_ID < 1) throw new ArgumentException ("VAF_Page_ID is mandatory.");
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -72,22 +72,22 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get AD_Org_ID
+        /// Get VAF_Org_ID
         /// </summary>
         /// <param name="payment">if true get Org from payment</param>
         /// <returns>org</returns>
-        public int GetAD_Org_ID(bool payment)
+        public int GetVAF_Org_ID(bool payment)
         {
             if (payment && GetC_Payment_ID() != 0)
             {
-                String sql = "SELECT AD_Org_ID FROM C_Payment WHERE C_Payment_ID=@param1";
+                String sql = "SELECT VAF_Org_ID FROM C_Payment WHERE C_Payment_ID=@param1";
                 int id = DataBase.DB.GetSQLValue(null, sql, GetC_Payment_ID());
                 if (id > 0)
                 {
                     return id;
                 }
             }
-            return base.GetAD_Org_ID();
+            return base.GetVAF_Org_ID();
         }
 
         /// <summary>

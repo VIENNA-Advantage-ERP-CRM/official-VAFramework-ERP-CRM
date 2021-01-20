@@ -68,7 +68,7 @@ static X_T_Selection()
 //static long serialVersionUID 27562514384459L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067670L;
-/** AD_Table_ID=917 */
+/** VAF_TableView_ID=917 */
 public static int Table_ID;
  // =917;
 

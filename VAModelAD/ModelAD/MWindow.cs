@@ -145,7 +145,7 @@ namespace VAdvantage.Model
         {
             if (_tabs != null && !reload)
                 return _tabs;
-            String sql = "SELECT * FROM AD_Tab WHERE AD_Window_ID=" + GetAD_Window_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_Tab WHERE AD_Window_ID=" + GetAD_Window_ID() + " ORDER BY SeqNo";
             List<MTab> list = new List<MTab>();
             DataSet ds = null;
             try
@@ -169,14 +169,14 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Tab with ID
         /// </summary>
-        /// <param name="AD_Tab_ID">id</param>
+        /// <param name="VAF_Tab_ID">id</param>
         /// <returns>tab or null</returns>
-        public MTab GetTab(int AD_Tab_ID)
+        public MTab GetTab(int VAF_Tab_ID)
         {
             MTab[] tabs = GetTabs(false, Get_TrxName());
             for (int i = 0; i < tabs.Length; i++)
             {
-                if (tabs[i].GetAD_Tab_ID() == AD_Tab_ID)
+                if (tabs[i].GetVAF_Tab_ID() == VAF_Tab_ID)
                     return tabs[i];
             }
             return null;

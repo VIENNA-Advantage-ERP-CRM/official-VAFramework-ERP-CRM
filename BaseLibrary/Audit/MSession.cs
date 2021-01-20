@@ -322,20 +322,20 @@ namespace VAdvantage.Model
         /// 	Create Change Log only if table is logged
         /// </summary>
         /// <param name="TrxName">transaction name</param>
-        /// <param name="AD_ChangeLog_ID">0 for new change log</param>
-        /// <param name="AD_Table_ID">table</param>
-        /// <param name="AD_Column_ID">column</param>
+        /// <param name="VAF_AlterLog_ID">0 for new change log</param>
+        /// <param name="VAF_TableView_ID">table</param>
+        /// <param name="VAF_Column_ID">column</param>
         /// <param name="keyInfo">key value(s)</param>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="OldValue">old</param>
         /// <param name="NewValue">new</param>
         /// <param name="tableName"></param>
         /// <param name="type"></param>
         /// <returns>change log or null</returns>
-        public MChangeLog ChangeLog(Trx trx, int AD_ChangeLog_ID,
-        int AD_Table_ID, int AD_Column_ID, Object keyInfo,
-        int AD_Client_ID, int AD_Org_ID,
+        public MChangeLog ChangeLog(Trx trx, int VAF_AlterLog_ID,
+        int VAF_TableView_ID, int VAF_Column_ID, Object keyInfo,
+        int VAF_Client_ID, int VAF_Org_ID,
         Object oldValue, Object newValue,
         String tableName, String type)
         {
@@ -347,14 +347,14 @@ namespace VAdvantage.Model
                 return null;
 
             //	No Log
-            if (MChangeLog.IsNotLogged(AD_Table_ID, tableName, AD_Column_ID, type))
+            if (MChangeLog.IsNotLogged(VAF_TableView_ID, tableName, VAF_Column_ID, type))
                 return null;
 
             //	Role Logging
             // MRole role = MRole.GetDefault(GetCtx(), false);
             //	Do we need to log
             if (_webStoreSession						//	log if WebStore
-                || MChangeLog.IsLogged(AD_Table_ID, type)		//	im/explicit log
+                || MChangeLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
                 || (IsRoleChangeLog(GetCtx())))//	Role Logging
             {; }
             else
@@ -362,9 +362,9 @@ namespace VAdvantage.Model
                 return null;
             }
             //
-            log.Finest("AD_ChangeLog_ID=" + AD_ChangeLog_ID
+            log.Finest("VAF_AlterLog_ID=" + VAF_AlterLog_ID
                     + ", AD_Session_ID=" + GetAD_Session_ID()
-                    + ", AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID=" + AD_Column_ID
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID
                    + ": " + oldValue + " -> " + newValue);
             //Boolean success = false;
 
@@ -374,50 +374,50 @@ namespace VAdvantage.Model
                 if (trx != null)
                     trxName = trx.GetTrxName();
                 MChangeLog cl = new MChangeLog(GetCtx(),
-                    AD_ChangeLog_ID, trxName, GetAD_Session_ID(),
-                    AD_Table_ID, AD_Column_ID, keyInfo, AD_Client_ID, AD_Org_ID,
+                    VAF_AlterLog_ID, trxName, GetAD_Session_ID(),
+                    VAF_TableView_ID, VAF_Column_ID, keyInfo, VAF_Client_ID, VAF_Org_ID,
                     oldValue, newValue);
                 if (cl.Save())
                     return cl;
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "AD_ChangeLog_ID=" + AD_ChangeLog_ID
+                log.Log(Level.SEVERE, "VAF_AlterLog_ID=" + VAF_AlterLog_ID
                     + ", AD_Session_ID=" + GetAD_Session_ID()
-                    + ", AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID=" + AD_Column_ID, e);
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID, e);
                 return null;
             }
-            log.Log(Level.SEVERE, "AD_ChangeLog_ID=" + AD_ChangeLog_ID
+            log.Log(Level.SEVERE, "VAF_AlterLog_ID=" + VAF_AlterLog_ID
                + ", AD_Session_ID=" + GetAD_Session_ID()
-               + ", AD_Table_ID=" + AD_Table_ID + ", AD_Column_ID=" + AD_Column_ID);
+               + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID);
             return null;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="whereClause"></param>
         /// <param name="recordCount"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public MQueryLog QueryLog(int AD_Client_ID, int AD_Org_ID,
-        int AD_Table_ID, String whereClause, int recordCount, String parameter)
+        public MQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, String parameter)
         {
             MQueryLog qlog = null;
             try
             {
                 qlog = new MQueryLog(GetCtx(), GetAD_Session_ID(),
-                    AD_Client_ID, AD_Org_ID,
-                    AD_Table_ID, whereClause, recordCount, parameter);
+                    VAF_Client_ID, VAF_Org_ID,
+                    VAF_TableView_ID, whereClause, recordCount, parameter);
                 qlog.Save();
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
-                    + ", AD_Table_ID=" + AD_Table_ID + ", Where=" + whereClause
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", Where=" + whereClause
                    , e);
             }
             return qlog;
@@ -426,51 +426,51 @@ namespace VAdvantage.Model
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="whereClause"></param>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        public MQueryLog QueryLog(int AD_Client_ID, int AD_Org_ID,
-        int AD_Table_ID, String whereClause, int recordCount)
+        public MQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount)
         {
-            return QueryLog(AD_Client_ID, AD_Org_ID, AD_Table_ID,
+            return QueryLog(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID,
                 whereClause, recordCount, (String)null);
         }	//
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="whereClause"></param>
         /// <param name="recordCount"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public MQueryLog QueryLog(int AD_Client_ID, int AD_Org_ID,
-        int AD_Table_ID, String whereClause, int recordCount, Object parameter)
+        public MQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, Object parameter)
         {
             String para = null;
             if (parameter != null)
                 para = parameter.ToString();
-            return QueryLog(AD_Client_ID, AD_Org_ID, AD_Table_ID,
+            return QueryLog(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID,
                 whereClause, recordCount, para);
         }	//
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="whereClause"></param>
         /// <param name="recordCount"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public MQueryLog QueryLog(int AD_Client_ID, int AD_Org_ID,
-        int AD_Table_ID, String whereClause, int recordCount, Object[] parameters)
+        public MQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, Object[] parameters)
         {
             String para = null;
             if (parameters != null && parameters.Length > 0)
@@ -487,33 +487,33 @@ namespace VAdvantage.Model
                 }
                 para = sb.ToString();
             }
-            return QueryLog(AD_Client_ID, AD_Org_ID, AD_Table_ID,
+            return QueryLog(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID,
                 whereClause, recordCount, para);
         }	//	queryLog
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="AD_Window_ID"></param>
-        /// <param name="AD_Form_ID"></param>
+        /// <param name="VAF_Page_ID"></param>
         /// <returns></returns>
-        public MWindowLog WindowLog(int AD_Client_ID, int AD_Org_ID,
-        int AD_Window_ID, int AD_Form_ID)
+        public MWindowLog WindowLog(int VAF_Client_ID, int VAF_Org_ID,
+        int AD_Window_ID, int VAF_Page_ID)
         {
             MWindowLog wlog = null;
             try
             {
                 wlog = new MWindowLog(GetCtx(), GetAD_Session_ID(),
-                    AD_Client_ID, AD_Org_ID,
-                    AD_Window_ID, AD_Form_ID);
+                    VAF_Client_ID, VAF_Org_ID,
+                    AD_Window_ID, VAF_Page_ID);
                 wlog.Save();
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
-                    + ", AD_Window_ID=" + AD_Window_ID + ", AD_Form_ID=" + AD_Form_ID
+                    + ", AD_Window_ID=" + AD_Window_ID + ", VAF_Page_ID=" + VAF_Page_ID
                     , e);
             }
             return wlog;
@@ -539,20 +539,20 @@ namespace VAdvantage.Model
         /// <summary>
         /// Is the information logged?
         /// </summary>
-        /// <param name="AD_Table_ID"> table id</param>
+        /// <param name="VAF_TableView_ID"> table id</param>
         /// <param name="tableName">table name</param>
         /// <param name="type">change type</param>
         /// <returns> true if table is logged</returns>
-        public Boolean IsLogged(int AD_Table_ID, String tableName, String type)
+        public Boolean IsLogged(int VAF_TableView_ID, String tableName, String type)
         {
             //	No Log
-            if (MChangeLog.IsNotLogged(AD_Table_ID, tableName, 0, type))
+            if (MChangeLog.IsNotLogged(VAF_TableView_ID, tableName, 0, type))
                 return false;
             //	Role Logging
             //MRole role = MRole.GetDefault(GetCtx(), false);
             //	Do we need to log
             if (IsWebStoreSession()						//	log if WebStore
-                || MChangeLog.IsLogged(AD_Table_ID, type)		//	im/explicit log
+                || MChangeLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
                 || IsRoleChangeLog(GetCtx()))	//	Role Logging
                 return true;
             //
@@ -564,18 +564,18 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="AD_Session_ID">sessioni id</param>
-        /// <param name="AD_Client_ID"client id></param>
-        /// <param name="AD_Org_ID">org id</param>
+        /// <param name="VAF_Client_ID"client id></param>
+        /// <param name="VAF_Org_ID">org id</param>
         /// <param name="action">menu action (window.proces etc)</param>
         /// <param name="actionType"type of action></param>
         /// <param name="actionOrigin">origin of action</param>
         /// <param name="desc">additional info</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <returns></returns>
         public MActionLog ActionLog(Ctx ctx, int AD_Session_ID,
-    int AD_Client_ID, int AD_Org_ID,
-    String actionOrigin, string actionType, String OriginName, string desc, int AD_Table_ID, int Record_ID = 0)
+    int VAF_Client_ID, int VAF_Org_ID,
+    String actionOrigin, string actionType, String OriginName, string desc, int VAF_TableView_ID, int Record_ID = 0)
         {
 
 
@@ -583,14 +583,14 @@ namespace VAdvantage.Model
             try
             {
                 alog = new MActionLog(GetCtx(), GetAD_Session_ID(),
-                    AD_Client_ID, AD_Org_ID, actionOrigin, actionType, OriginName, desc, AD_Table_ID, Record_ID);
+                    VAF_Client_ID, VAF_Org_ID, actionOrigin, actionType, OriginName, desc, VAF_TableView_ID, Record_ID);
 
                 alog.Save();
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
-                    + ", AD_Table_ID=" + AD_Table_ID + ", actionOrigin=" + OriginName
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", actionOrigin=" + OriginName
                    , e);
             }
             return alog;

@@ -33,16 +33,16 @@ namespace VAdvantage.Model
 		//	Store/Refresh Cache and add to List
 		List<MRegistrationAttribute> list = new List<MRegistrationAttribute>();
 		String sql = "SELECT * FROM A_RegistrationAttribute "
-			+ "WHERE AD_Client_ID=@param "
+			+ "WHERE VAF_Client_ID=@param "
 			+ "ORDER BY SeqNo";
-		int AD_Client_ID = ctx.GetAD_Client_ID();
+		int VAF_Client_ID = ctx.GetVAF_Client_ID();
 		SqlParameter[] param=new SqlParameter[1];
         IDataReader idr=null;
 		try
 		{
 			//pstmt = DataBase.prepareStatement(sql, null);
-			//pstmt.setInt(1, AD_Client_ID);
-            param[0]=new SqlParameter("@param",AD_Client_ID);
+			//pstmt.setInt(1, VAF_Client_ID);
+            param[0]=new SqlParameter("@param",VAF_Client_ID);
 			idr=DataBase.DB.ExecuteReader(sql,param,null);
 			while (idr.Read())
 			{

@@ -264,7 +264,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
                     && !Ini.IsClient())		//	Post Immediate if on Server
                 {
 
-                    MClient client = MClient.Get(_document.GetCtx(), _document.GetAD_Client_ID());
+                    MClient client = MClient.Get(_document.GetCtx(), _document.GetVAF_Client_ID());
                     if (STATUS_COMPLETED.Equals(status) && client.IsPostImmediate())
                     {
                         _document.Save();
@@ -445,7 +445,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
                 //    if (server != null)
                 //    {
                 //        String error = server.postImmediate(GlobalVariable.GetContext(),
-                //            _document.GetAD_Client_ID(),
+                //            _document.GetVAF_Client_ID(),
                 //            _document.Get_Table_ID(), _document.Get_ID(),
                 //            true, _document.Get_TrxName());
                 //        //_document.get_Logger().config("Server: " + error == null ? "OK" : error);
@@ -732,7 +732,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
         /// Get Document Client
         /// </summary>
         /// <returns>thrwos exception</returns>
-        public int GetAD_Client_ID()
+        public int GetVAF_Client_ID()
         {
             throw new Exception(EXCEPTION_MSG);
         }
@@ -741,7 +741,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
         /// Get Document Organization
         /// </summary>
         /// <returns>thrwo Exception</returns>
-        public int GetAD_Org_ID()
+        public int GetVAF_Org_ID()
         {
             throw new Exception(EXCEPTION_MSG);
         }
@@ -789,7 +789,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
         /// <summary>
         /// Get AD Table
         /// </summary>
-        /// <returns>AD_Table_ID</returns>
+        /// <returns>VAF_TableView_ID</returns>
         public int Get_Table_ID()
         {
             if (_document != null)
@@ -858,12 +858,12 @@ using VAdvantage.Utility;namespace VAdvantage.Process
                     // check if period is open
 
                     // add doc header org to the list of orgs
-                    if (!docOrgs.Contains(doc.GetAD_Org_ID()))
+                    if (!docOrgs.Contains(doc.GetVAF_Org_ID()))
                     {
-                        docOrgs.Add(doc.GetAD_Org_ID());
+                        docOrgs.Add(doc.GetVAF_Org_ID());
                     }
                     // Std Period open?
-                    errorMsg = MPeriod.IsOpen(doc.GetCtx(), doc.GetAD_Client_ID(), docOrgs,
+                    errorMsg = MPeriod.IsOpen(doc.GetCtx(), doc.GetVAF_Client_ID(), docOrgs,
                         docDate, docBaseType);
                 }
             }
@@ -918,14 +918,14 @@ using VAdvantage.Utility;namespace VAdvantage.Process
          * @param processing
          * @param orderType
          * @param isSOTrx
-         * @param AD_Table_ID
+         * @param VAF_TableView_ID
          * @param docAction
          * @param options
          * @param index
          * @return Number of valid options
          */
         int customizeValidActions(String docStatus, Object processing,
-                String orderType, String isSOTrx, int AD_Table_ID, String[] docAction, String[] options, int index);
+                String orderType, String isSOTrx, int VAF_TableView_ID, String[] docAction, String[] options, int index);
 
     }	//	DocAction
 }

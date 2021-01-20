@@ -46,8 +46,8 @@ namespace VAdvantage.Process
                 {
                     Currobj = new MCurrCrossRate(GetCtx(), dr, Get_Trx());
                     // Getting records from currency rate based on conditions
-                    query.Append("SELECT AD_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) +
-                        " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND AD_Org_ID=" + Currobj.GetAD_Org_ID() + " AND C_ConversionType_ID=" + Currobj.GetC_ConversionType_ID() +
+                    query.Append("SELECT VAF_Org_ID,C_Currency_ID,ValidFrom,ValidTo,MultiplyRate FROM C_Conversion_Rate WHERE " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) +
+                        " BETWEEN ValidFrom AND ValidTo AND IsActive='Y' AND VAF_Org_ID=" + Currobj.GetVAF_Org_ID() + " AND C_ConversionType_ID=" + Currobj.GetC_ConversionType_ID() +
                         " AND C_Currency_To_ID=" + Currobj.GetC_Currency_ID() + " AND C_Currency_ID IN ('" + Currobj.GetC_Currency_From_ID() + "','" + Currobj.GetC_Currency_To_ID() + "')");
                     dsobj = DB.ExecuteDataset(query.ToString());
                     query.Clear();
@@ -55,7 +55,7 @@ namespace VAdvantage.Process
                     {
                         for (int j = 0; j < dsobj.Tables[0].Rows.Count; j++)
                         {
-                            //Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["AD_Org_ID"]);
+                            //Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAF_Org_ID"]);
                             FromCurr1 = Util.GetValueOfInt(dsobj.Tables[0].Rows[j]["C_Currency_ID"]);
                             // Getting multiply rate from both records
                             if (Currobj.GetC_Currency_From_ID() == FromCurr1)
@@ -113,7 +113,7 @@ namespace VAdvantage.Process
                         }
                         query.Clear();
                         //int ID = DB.GetNextID(0, "C_Conversion_Rate", null);
-                        //query.Append("INSERT INTO C_Conversion_Rate (AD_Client_ID,AD_Org_ID,C_Conversion_Rate_ID,C_Currency_ID,C_Currency_To_ID,C_ConversionType_ID,ValidFrom,ValidTo,MultiplyRate,DivideRate,CreatedBy,UpdatedBy) "
+                        //query.Append("INSERT INTO C_Conversion_Rate (VAF_Client_ID,VAF_Org_ID,C_Conversion_Rate_ID,C_Currency_ID,C_Currency_To_ID,C_ConversionType_ID,ValidFrom,ValidTo,MultiplyRate,DivideRate,CreatedBy,UpdatedBy) "
                         //    + "Values (" + Client_ID + ", " + Org_ID + ","+ ID +", " + FromCurr + ", " + ToCurr + ", " + CurrType + ", TO_DATE('" + newValidFrom.ToShortDateString() + "','MM-DD-YYYY'), TO_DATE('" + newValidTo.ToShortDateString() + "','MM-DD-YYYY') , " + newMulRate + ", " + newDivideRate + ", " + Client_ID + ", "+ Client_ID + ") ");
                         //int _updated = DB.ExecuteQuery(query.ToString(), null);
                         //if (_updated > 0)
@@ -122,8 +122,8 @@ namespace VAdvantage.Process
                         //}
                         // Inserting new conversion in the currency rate
                         conobj = new MConversionRate(GetCtx(), 0, Get_Trx());
-                        conobj.SetAD_Client_ID(Currobj.GetAD_Client_ID());
-                        conobj.SetAD_Org_ID(Currobj.GetAD_Org_ID());
+                        conobj.SetVAF_Client_ID(Currobj.GetVAF_Client_ID());
+                        conobj.SetVAF_Org_ID(Currobj.GetVAF_Org_ID());
                         conobj.SetC_Currency_ID(Currobj.GetC_Currency_From_ID());
                         conobj.SetC_Currency_To_ID(Currobj.GetC_Currency_To_ID());
                         conobj.SetC_ConversionType_ID(Currobj.GetC_ConversionType_ID());

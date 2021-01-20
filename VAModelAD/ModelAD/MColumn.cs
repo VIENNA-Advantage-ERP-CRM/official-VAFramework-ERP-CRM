@@ -13,19 +13,19 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MColumn : X_AD_Column
+    public class MColumn : X_VAF_Column
     {
         /**	Get Element			*/
         private M_Element _element = null;
         /**	Cache						*/
-        private static CCache<int, MColumn> s_cache = new CCache<int, MColumn>("AD_Column", 20);
+        private static CCache<int, MColumn> s_cache = new CCache<int, MColumn>("VAF_Column", 20);
         private static Logging.VLogger s_log = Logging.VLogger.GetVLogger(typeof(MColumn).FullName);
 
         public MColumn(MTable parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_Table_ID(parent.GetAD_Table_ID());
+            SetVAF_TableView_ID(parent.GetVAF_TableView_ID());
             SetEntityType(parent.GetEntityType());
         }	//	M_Column
 
@@ -33,14 +33,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Column_ID">column id</param>
+        /// <param name="VAF_Column_ID">column id</param>
         /// <param name="trxName">transaction</param>
-        public MColumn(Ctx ctx, int AD_Column_ID, Trx trxName)
-            : base(ctx, AD_Column_ID, trxName)
+        public MColumn(Ctx ctx, int VAF_Column_ID, Trx trxName)
+            : base(ctx, VAF_Column_ID, trxName)
         {
-            if (AD_Column_ID == 0)
+            if (VAF_Column_ID == 0)
             {
-                //	setAD_Element_ID (0);
+                //	setVAF_ColumnDic_ID (0);
                 //	setAD_Reference_ID (0);
                 //	setColumnName (null);
                 //	setName (null);
@@ -76,16 +76,16 @@ namespace VAdvantage.Model
         /// Get M_Column from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Column_ID">column id</param>
+        /// <param name="VAF_Column_ID">column id</param>
         /// <returns>MColumn</returns>
-        public static MColumn Get(Ctx ctx, int AD_Column_ID)
+        public static MColumn Get(Ctx ctx, int VAF_Column_ID)
         {
-            int key = AD_Column_ID;
+            int key = VAF_Column_ID;
             MColumn retValue = null;
             retValue = s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MColumn(ctx, AD_Column_ID, null);
+            retValue = new MColumn(ctx, VAF_Column_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -95,11 +95,11 @@ namespace VAdvantage.Model
         /// Get Column Name
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Column_ID">column id</param>
+        /// <param name="VAF_Column_ID">column id</param>
         /// <returns>Column Name or null</returns>
-        public static string GetColumnName(Ctx ctx, int AD_Column_ID)
+        public static string GetColumnName(Ctx ctx, int VAF_Column_ID)
         {
-            MColumn col = MColumn.Get(ctx, AD_Column_ID);
+            MColumn col = MColumn.Get(ctx, VAF_Column_ID);
             if (col.Get_ID() == 0)
                 return null;
             return col.GetColumnName();
@@ -108,12 +108,12 @@ namespace VAdvantage.Model
         /// <summary>
         ///Is Standard Column
         /// </summary>
-        /// <returns>true for AD_Client_ID, etc.</returns>
+        /// <returns>true for VAF_Client_ID, etc.</returns>
         public Boolean IsStandardColumn()
         {
             String columnName = GetColumnName();
-            if (columnName.Equals("AD_Client_ID")
-                || columnName.Equals("AD_Org_ID")
+            if (columnName.Equals("VAF_Client_ID")
+                || columnName.Equals("VAF_Org_ID")
                 || columnName.Equals("IsActive")
                 || columnName.StartsWith("Created")
                 || columnName.StartsWith("Updated"))
@@ -121,10 +121,10 @@ namespace VAdvantage.Model
             return false;
         }
 
-        public Boolean IsAD_Client_ID()
+        public Boolean IsVAF_Client_ID()
         {
             String columnName = GetColumnName();
-            if (columnName.Equals("AD_Client_ID", StringComparison.OrdinalIgnoreCase))
+            if (columnName.Equals("VAF_Client_ID", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -152,10 +152,10 @@ namespace VAdvantage.Model
         }
 
 
-        public Boolean IsAD_Org_ID()
+        public Boolean IsVAF_Org_ID()
         {
             String columnName = GetColumnName();
-            if (columnName.Equals("AD_Org_ID", StringComparison.OrdinalIgnoreCase))
+            if (columnName.Equals("VAF_Org_ID", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -556,11 +556,11 @@ namespace VAdvantage.Model
             //	Update Fields
             if (!newRecord)
             {
-                StringBuilder sql = new StringBuilder("UPDATE AD_Field SET Name=")
+                StringBuilder sql = new StringBuilder("UPDATE VAF_Field SET Name=")
                     .Append(DataBase.DB.TO_STRING(GetName()))
                     .Append(", Description=").Append(DataBase.DB.TO_STRING(GetDescription()))
                     .Append(", Help=").Append(DataBase.DB.TO_STRING(GetHelp()))
-                    .Append(" WHERE AD_Column_ID=").Append(Get_ID())
+                    .Append(" WHERE VAF_Column_ID=").Append(Get_ID())
                     .Append(" AND IsCentrallyMaintained='Y'");
 
                 int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -606,9 +606,9 @@ namespace VAdvantage.Model
             }
 
             /** Views are not updateable
-            UPDATE AD_Column c
+            UPDATE VAF_Column c
             SET IsUpdateable='N', IsAlwaysUpdateable='N'
-            WHERE AD_Table_ID IN (SELECT AD_Table_ID FROM AD_Table WHERE IsView='Y')
+            WHERE VAF_TableView_ID IN (SELECT VAF_TableView_ID FROM VAF_TableView WHERE IsView='Y')
             **/
 
             //	Virtual Column
@@ -646,10 +646,10 @@ namespace VAdvantage.Model
             }
 
             //	Sync Terminology
-            if ((newRecord || Is_ValueChanged("AD_Element_ID"))
-                && GetAD_Element_ID() != 0)
+            if ((newRecord || Is_ValueChanged("VAF_ColumnDic_ID"))
+                && GetVAF_ColumnDic_ID() != 0)
             {
-                _element = new M_Element(GetCtx(), GetAD_Element_ID(), Get_TrxName());
+                _element = new M_Element(GetCtx(), GetVAF_ColumnDic_ID(), Get_TrxName());
                 SetColumnName(_element.GetColumnName());
                 SetName(_element.GetName());
                 SetDescription(_element.GetDescription());
@@ -668,8 +668,8 @@ namespace VAdvantage.Model
         /// <returns>element</returns>
         public M_Element GetElement()
         {
-            if (_element == null || _element.GetAD_Element_ID() != GetAD_Element_ID())
-                _element = new M_Element(GetCtx(), GetAD_Element_ID(), Get_TrxName());
+            if (_element == null || _element.GetVAF_ColumnDic_ID() != GetVAF_ColumnDic_ID())
+                _element = new M_Element(GetCtx(), GetVAF_ColumnDic_ID(), Get_TrxName());
             return _element;
         }
 
@@ -850,7 +850,7 @@ namespace VAdvantage.Model
         public bool CheckVersions(bool delete)
         {
             bool check = true;
-            StringBuilder sb = new StringBuilder("SELECT COUNT(AD_Column_ID) FROM AD_Column WHERE AD_Table_ID = " + GetAD_Table_ID() + " AND IsMaintainVersions = 'Y' AND AD_Column_ID != " + GetAD_Column_ID());
+            StringBuilder sb = new StringBuilder("SELECT COUNT(VAF_Column_ID) FROM VAF_Column WHERE VAF_TableView_ID = " + GetVAF_TableView_ID() + " AND IsMaintainVersions = 'Y' AND VAF_Column_ID != " + GetVAF_Column_ID());
             if (!delete)
             {
                 if (!(Is_ValueChanged("IsMaintainVersions") && (Util.GetValueOfBool(Get_ValueOld("IsMaintainVersions")) && !Util.GetValueOfBool(Get_Value("IsMaintainVersions")))))
@@ -867,7 +867,7 @@ namespace VAdvantage.Model
                 if (countVerCols == 0)
                 {
                     sb.Clear();
-                    sb.Append("SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + GetAD_Table_ID());
+                    sb.Append("SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = " + GetVAF_TableView_ID());
                     string tableName = Util.GetValueOfString(DB.ExecuteScalar(sb.ToString(), null, Get_Trx()));
                     sb.Clear();
 
@@ -884,7 +884,7 @@ namespace VAdvantage.Model
                         if (tblVer.HasVersionData(tableName + "_Ver"))
                         {
                             // if Maintain Version is marked on Table Level then allow to remove Maintain Version from Column
-                            if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM AD_Table WHERE AD_Table_ID = " + GetAD_Table_ID(), null, Get_Trx())) == "Y")
+                            if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM VAF_TableView WHERE VAF_TableView_ID = " + GetVAF_TableView_ID(), null, Get_Trx())) == "Y")
                                 return true;
                             else
                             {

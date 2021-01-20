@@ -33,7 +33,7 @@ namespace VAdvantage.Classes
         /** Process ID      */
         private int _AD_Process_ID;
         /** Form ID         */
-        private int _AD_Form_ID;
+        private int _VAF_Page_ID;
         /** Workflow ID     */
         private int _AD_Workflow_ID;
         /** Task ID         */
@@ -161,7 +161,7 @@ namespace VAdvantage.Classes
 
             _AD_Process_ID = node.AD_Process_ID;
 
-            _AD_Form_ID = node.AD_Form_ID;
+            _VAF_Page_ID = node.VAF_Page_ID;
 
             _AD_Workflow_ID = node.AD_Workflow_ID;
 
@@ -206,7 +206,7 @@ namespace VAdvantage.Classes
 
             _AD_Process_ID = node.AD_Process_ID;
 
-            _AD_Form_ID = node.AD_Form_ID;
+            _VAF_Page_ID = node.VAF_Page_ID;
 
             _AD_Workflow_ID = node.AD_Workflow_ID;
 
@@ -305,15 +305,15 @@ namespace VAdvantage.Classes
         /// <summary>
         /// get and set form id
         /// </summary>
-        public int AD_Form_ID
+        public int VAF_Page_ID
         {
             get
             {
-                return _AD_Form_ID;
+                return _VAF_Page_ID;
             }
             set
             {
-                this._AD_Form_ID = value;
+                this._VAF_Page_ID = value;
             }
         }
 
@@ -590,7 +590,7 @@ namespace VAdvantage.Classes
             }
             else if (ACTION_FORM == _imageIndicator)
             {
-                id = AD_Form_ID;
+                id = VAF_Page_ID;
             }
 
             else if (ACTION_PROCESS == _imageIndicator)

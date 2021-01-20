@@ -31,7 +31,7 @@ namespace VAdvantage.Process
         //Action					
         private String _PeriodAction = null;
         //Organization					
-        private string _AD_Org_ID = null;
+        private string _VAF_Org_ID = null;
         // Document BaseType
         private string _docBaseType = null;
 
@@ -48,9 +48,9 @@ namespace VAdvantage.Process
                 {
 
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    _AD_Org_ID = Util.GetValueOfString(para[i].GetParameter());
+                    _VAF_Org_ID = Util.GetValueOfString(para[i].GetParameter());
                 }
                 else if (name.Equals("DocBaseType"))
                 {
@@ -101,9 +101,9 @@ namespace VAdvantage.Process
                 .Append(" AND PeriodStatus<>'").Append(_PeriodAction).Append("'");
 
             // if organization is selected then update period control of selected organizations
-            if (!String.IsNullOrEmpty(_AD_Org_ID))
+            if (!String.IsNullOrEmpty(_VAF_Org_ID))
             {
-                sql.Append(" AND AD_Org_ID IN (" + _AD_Org_ID + ")");
+                sql.Append(" AND VAF_Org_ID IN (" + _VAF_Org_ID + ")");
             }
 
             // if Document BaseType is selected then update period control for selected Document BaseType
@@ -123,7 +123,7 @@ namespace VAdvantage.Process
                 {
                     try
                     {
-                        string sqlSchID = "SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + GetCtx().GetAD_Client_ID();
+                        string sqlSchID = "SELECT C_AcctSchema_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetCtx().GetVAF_Client_ID();
                         DataSet ds = DB.ExecuteDataset(sqlSchID);
 
                         if (ds != null)
@@ -131,7 +131,7 @@ namespace VAdvantage.Process
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 int C_AcctSchema_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]);
-                                string sqlUpd = "UPDATE Fact_Accumulation SET DateFrom = " + DB.TO_DATE(period.GetStartDate().Value.AddDays(-1)) + " WHERE IsActive = 'Y' AND AD_Client_ID = " + GetCtx().GetAD_Client_ID();
+                                string sqlUpd = "UPDATE Fact_Accumulation SET DateFrom = " + DB.TO_DATE(period.GetStartDate().Value.AddDays(-1)) + " WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetCtx().GetVAF_Client_ID();
                                 no = DB.ExecuteQuery(sqlUpd, null, Get_TrxName());
                                 if (Get_Trx().Commit())
                                 {

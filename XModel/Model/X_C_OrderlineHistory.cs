@@ -45,7 +45,7 @@ SetQtyEntered (0.0);// 1
  added by ->Harwinder */
         static X_C_OrderlineHistory() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27785509045284L;/** Last Updated Timestamp 8/22/2017 12:05:28 PM */
-        public static long updatedMS = 1503383728495L;/** AD_Table_ID=1000511 */
+        public static long updatedMS = 1503383728495L;/** VAF_TableView_ID=1000511 */
         public static int Table_ID; // =1000511;
         /** TableName=C_OrderlineHistory */
         public static String Table_Name = "C_OrderlineHistory";

@@ -41,7 +41,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_M_MatchInvCostTrack() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27793156050767L;/** Last Updated Timestamp 11/19/2017 12:15:34 AM */
-        public static long updatedMS = 1511030733978L;/** AD_Table_ID=1000806 */
+        public static long updatedMS = 1511030733978L;/** VAF_TableView_ID=1000806 */
         public static int Table_ID; // =1000806;
         /** TableName=M_MatchInvCostTrack */
         public static String Table_Name = "M_MatchInvCostTrack";

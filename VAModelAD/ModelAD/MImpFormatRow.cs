@@ -37,7 +37,7 @@ namespace VAdvantage.Model
 		if (AD_ImpFormat_Row_ID == 0)
 		{
 		//	setAD_ImpFormat_ID (0);		Parent
-		//	setAD_Column_ID (0);
+		//	setVAF_Column_ID (0);
 		//	setDataType (null);
 		//	setName (null);
 		//	setSeqNo (10);

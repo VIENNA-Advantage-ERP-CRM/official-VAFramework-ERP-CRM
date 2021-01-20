@@ -70,7 +70,7 @@ static X_I_GLJournal()
 //static long serialVersionUID 27562514377061L;
 /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
 public static long updatedMS = 1280389060272L;
-/** AD_Table_ID=599 */
+/** VAF_TableView_ID=599 */
 public static int Table_ID;
  // =599;
 
@@ -113,40 +113,40 @@ StringBuilder sb = new StringBuilder ("X_I_GLJournal[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 
-/** AD_OrgDoc_ID AD_Reference_ID=130 */
-public static int AD_ORGDOC_ID_AD_Reference_ID=130;
+/** VAF_OrgDoc_ID AD_Reference_ID=130 */
+public static int VAF_ORGDOC_ID_AD_Reference_ID=130;
 /** Set Document Org.
-@param AD_OrgDoc_ID Document Organization (independent from account organization) */
-public void SetAD_OrgDoc_ID (int AD_OrgDoc_ID)
+@param VAF_OrgDoc_ID Document Organization (independent from account organization) */
+public void SetVAF_OrgDoc_ID (int VAF_OrgDoc_ID)
 {
-if (AD_OrgDoc_ID <= 0) Set_Value ("AD_OrgDoc_ID", null);
+if (VAF_OrgDoc_ID <= 0) Set_Value ("VAF_OrgDoc_ID", null);
 else
-Set_Value ("AD_OrgDoc_ID", AD_OrgDoc_ID);
+Set_Value ("VAF_OrgDoc_ID", VAF_OrgDoc_ID);
 }
 /** Get Document Org.
 @return Document Organization (independent from account organization) */
-public int GetAD_OrgDoc_ID() 
+public int GetVAF_OrgDoc_ID() 
 {
-Object ii = Get_Value("AD_OrgDoc_ID");
+Object ii = Get_Value("VAF_OrgDoc_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_OrgTrx_ID AD_Reference_ID=130 */
-public static int AD_ORGTRX_ID_AD_Reference_ID=130;
+/** VAF_OrgTrx_ID AD_Reference_ID=130 */
+public static int VAF_ORGTRX_ID_AD_Reference_ID=130;
 /** Set Trx Organization.
-@param AD_OrgTrx_ID Performing or initiating organization */
-public void SetAD_OrgTrx_ID (int AD_OrgTrx_ID)
+@param VAF_OrgTrx_ID Performing or initiating organization */
+public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID)
 {
-if (AD_OrgTrx_ID <= 0) Set_Value ("AD_OrgTrx_ID", null);
+if (VAF_OrgTrx_ID <= 0) Set_Value ("VAF_OrgTrx_ID", null);
 else
-Set_Value ("AD_OrgTrx_ID", AD_OrgTrx_ID);
+Set_Value ("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
 }
 /** Get Trx Organization.
 @return Performing or initiating organization */
-public int GetAD_OrgTrx_ID() 
+public int GetVAF_OrgTrx_ID() 
 {
-Object ii = Get_Value("AD_OrgTrx_ID");
+Object ii = Get_Value("VAF_OrgTrx_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

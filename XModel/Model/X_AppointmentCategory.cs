@@ -68,7 +68,7 @@ static X_AppointmentCategory()
 //static long serialVersionUID 27634395324576L;
 /** Last Updated Timestamp 11/7/2012 12:03:27 PM */
 public static long updatedMS = 1352270007787L;
-/** AD_Table_ID=1000220 */
+/** VAF_TableView_ID=1000220 */
 public static int Table_ID;
  // =1000220;
 
@@ -111,18 +111,18 @@ StringBuilder sb = new StringBuilder ("X_AppointmentCategory[").Append(Get_ID())
 return sb.ToString();
 }
 /** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID)
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID)
 {
-if (AD_Image_ID <= 0) Set_Value ("AD_Image_ID", null);
+if (VAF_Image_ID <= 0) Set_Value ("VAF_Image_ID", null);
 else
-Set_Value ("AD_Image_ID", AD_Image_ID);
+Set_Value ("VAF_Image_ID", VAF_Image_ID);
 }
 /** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() 
+public int GetVAF_Image_ID() 
 {
-Object ii = Get_Value("AD_Image_ID");
+Object ii = Get_Value("VAF_Image_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

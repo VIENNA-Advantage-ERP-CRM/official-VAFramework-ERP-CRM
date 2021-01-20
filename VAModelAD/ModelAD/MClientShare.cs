@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MClientShare
  * Purpose        : Client Share Info
- * Class Used     :  X_AD_ClientShare
+ * Class Used     :  X_VAF_ClientShare
  * Chronological    Development
  * Deepak           01-Feb-2009
   ******************************************************/
@@ -21,17 +21,17 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 namespace VAdvantage.Model
 {
-    public class MClientShare : X_AD_ClientShare
+    public class MClientShare : X_VAF_ClientShare
     {
       /// <summary>
       /// Is Table Client Level Only
 	  /// </summary>
-      /// <param name="AD_Client_ID">client</param>
-      /// <param name="AD_Table_ID">table</param>
+      /// <param name="VAF_Client_ID">client</param>
+      /// <param name="VAF_TableView_ID">table</param>
       /// <returns>true if client level only (default false)</returns>
-	public static bool IsClientLevelOnly (int AD_Client_ID, int AD_Table_ID)
+	public static bool IsClientLevelOnly (int VAF_Client_ID, int VAF_TableView_ID)
 	{
-		Boolean? share = IsShared(AD_Client_ID, AD_Table_ID);
+		Boolean? share = IsShared(VAF_Client_ID, VAF_TableView_ID);
 		if (share != null)
         {
 			return Utility.Util.GetValueOfBool(share);//.booleanValue();
@@ -42,12 +42,12 @@ namespace VAdvantage.Model
 	/// <summary>
 	/// Is Table Org Level Only
 	/// </summary>
-	/// <param name="AD_Client_ID">client</param>
-	/// <param name="AD_Table_ID">table</param>
+	/// <param name="VAF_Client_ID">client</param>
+	/// <param name="VAF_TableView_ID">table</param>
 	/// <returns>true if Org level only (default false)</returns>
-	public static bool IsOrgLevelOnly (int AD_Client_ID, int AD_Table_ID)
+	public static bool IsOrgLevelOnly (int VAF_Client_ID, int VAF_TableView_ID)
 	{
-		Boolean? share = IsShared(AD_Client_ID, AD_Table_ID);
+		Boolean? share = IsShared(VAF_Client_ID, VAF_TableView_ID);
 		if (share != null)
         {
 			return ! Utility.Util.GetValueOfBool(share);//.booleanValue();
@@ -58,16 +58,16 @@ namespace VAdvantage.Model
 	/// <summary>
 	/// Is Table Shared for Client
 	/// </summary>
-	/// <param name="AD_Client_ID">client</param>
-	/// <param name="AD_Table_ID">table</param>
+	/// <param name="VAF_Client_ID">client</param>
+	/// <param name="VAF_TableView_ID">table</param>
 	/// <returns>info or null</returns>
-	public static Boolean? IsShared (int AD_Client_ID, int AD_Table_ID)
+	public static Boolean? IsShared (int VAF_Client_ID, int VAF_TableView_ID)
 	{
 		//	Load
 		if (_shares.IsEmpty())
 		{
-			String sql = "SELECT AD_Client_ID, AD_Table_ID, ShareType "
-				+ "FROM AD_ClientShare WHERE ShareType<>'x' AND IsActive='Y'";
+			String sql = "SELECT VAF_Client_ID, VAF_TableView_ID, ShareType "
+				+ "FROM VAF_ClientShare WHERE ShareType<>'x' AND IsActive='Y'";
 			IDataReader idr=null;
 			try
 			{
@@ -107,13 +107,13 @@ namespace VAdvantage.Model
                 _shares.Add("0_0", true);
             }
 		}	//	load
-		String key1 = AD_Client_ID + "_" + AD_Table_ID;
+		String key1 = VAF_Client_ID + "_" + VAF_TableView_ID;
 		return (bool?)_shares.Get(key1);// .get(key);
 	}	//	load
 	
 	/**	Shared Info								*/
 	private static CCache<String,Boolean>	_shares 
-		= new CCache<String,Boolean>("AD_ClientShare", 10, 120);	//	2h
+		= new CCache<String,Boolean>("VAF_ClientShare", 10, 120);	//	2h
 	/**	Logger	*/
 	private static VLogger _log = VLogger.GetVLogger (typeof(MClientShare).FullName);//.class);
 	
@@ -121,9 +121,9 @@ namespace VAdvantage.Model
 	/// Default Constructor
 	/// </summary>
 	/// <param name="ctx">context</param>
-	/// <param name="AD_ClientShare_ID">id</param>
+	/// <param name="VAF_ClientShare_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MClientShare (Ctx ctx, int AD_ClientShare_ID, Trx trxName):base(ctx, AD_ClientShare_ID, trxName)
+	public MClientShare (Ctx ctx, int VAF_ClientShare_ID, Trx trxName):base(ctx, VAF_ClientShare_ID, trxName)
 	{
 		
 	}	//	MClientShare
@@ -168,7 +168,7 @@ namespace VAdvantage.Model
 	{
         if (_table == null)
         {
-            _table = MTable.Get(GetCtx(), GetAD_Table_ID());
+            _table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
         }
 		return _table;
 	}	//	getTable
@@ -209,9 +209,9 @@ namespace VAdvantage.Model
 		{
 			StringBuilder sql = new StringBuilder("UPDATE ")
 				.Append(GetTableName())
-				.Append(" SET AD_Org_ID=0 WHERE AD_Org_ID<>0 AND AD_Client_ID=@param1");
+				.Append(" SET VAF_Org_ID=0 WHERE VAF_Org_ID<>0 AND VAF_Client_ID=@param1");
             SqlParameter[] param = new SqlParameter[1];
-            param[0]=new SqlParameter("@param1", GetAD_Client_ID());
+            param[0]=new SqlParameter("@param1", GetVAF_Client_ID());
 			int no = CoreLibrary.DataBase.DB.ExecuteQuery(sql.ToString(),param, Get_TrxName());
 			info = GetTableName() + " set to Shared #" + no;
 			log.Info(info);
@@ -220,7 +220,7 @@ namespace VAdvantage.Model
 		{
 			StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM ")
 				.Append(GetTableName())
-                .Append(" WHERE AD_Org_ID=0 WHERE AD_Client_ID=").Append(GetAD_Client_ID());
+                .Append(" WHERE VAF_Org_ID=0 WHERE VAF_Client_ID=").Append(GetVAF_Client_ID());
             
             
 			int no = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql.ToString());
@@ -238,25 +238,25 @@ namespace VAdvantage.Model
 	public String ListChildRecords()
 	{
 		StringBuilder info = new StringBuilder();
-		String sql = "SELECT AD_Table_ID, TableName "
-			+ "FROM AD_Table t "
+		String sql = "SELECT VAF_TableView_ID, TableName "
+			+ "FROM VAF_TableView t "
 			+ "WHERE AccessLevel='3' AND IsView='N'"  //jz put quote for typing
-			+ " AND EXISTS (SELECT * FROM AD_Column c "
-				+ "WHERE t.AD_Table_ID=c.AD_Table_ID"
+			+ " AND EXISTS (SELECT * FROM VAF_Column c "
+				+ "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID"
 				+ " AND c.IsParent='Y'"
-				+ " AND c.ColumnName IN (SELECT ColumnName FROM AD_Column cc "
-					+ "WHERE cc.IsKey='Y' AND cc.AD_Table_ID=@param))";
+				+ " AND c.ColumnName IN (SELECT ColumnName FROM VAF_Column cc "
+					+ "WHERE cc.IsKey='Y' AND cc.VAF_TableView_ID=@param))";
         SqlParameter[] param = new SqlParameter[1];
         IDataReader idr = null;
 		try
 		{
 			//pstmt = DataBase.prepareStatement (sql, null);
-			//pstmt.setInt (1, getAD_Table_ID());
-            param[0] = new SqlParameter("@param", GetAD_Table_ID());
+			//pstmt.setInt (1, getVAF_TableView_ID());
+            param[0] = new SqlParameter("@param", GetVAF_TableView_ID());
             idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
 			while (idr.Read())
 			{
-                int AD_Table_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
+                int VAF_TableView_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
                 String TableName = Utility.Util.GetValueOfString(idr[1]);// rs.getString(2);
                 if (info.Length != 0)
                 {
@@ -286,9 +286,9 @@ namespace VAdvantage.Model
 	/// <returns>true</returns>
 	protected override bool BeforeSave (bool newRecord)
 	{
-        if (GetAD_Org_ID() != 0)
+        if (GetVAF_Org_ID() != 0)
         {
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
         }
 		return true;
 	}	//	beforeSave

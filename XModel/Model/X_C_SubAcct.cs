@@ -74,7 +74,7 @@ static X_C_SubAcct()
 //static long serialVersionUID 27562514375228L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058439L;
-/** AD_Table_ID=825 */
+/** VAF_TableView_ID=825 */
 public static int Table_ID;
  // =825;
 

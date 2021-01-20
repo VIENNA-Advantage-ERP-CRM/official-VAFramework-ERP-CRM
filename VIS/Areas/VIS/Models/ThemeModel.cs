@@ -77,7 +77,7 @@ namespace VIS.Models
         }
         internal bool UpdateForClient(int id, int tid)
         {
-            DBase.DB.ExecuteQuery("UPDATE AD_Client SET AD_Theme_ID = " + id + " WHERE AD_Client_ID = " + tid, null, null);
+            DBase.DB.ExecuteQuery("UPDATE VAF_Client SET AD_Theme_ID = " + id + " WHERE VAF_Client_ID = " + tid, null, null);
             return true;
         }
     }

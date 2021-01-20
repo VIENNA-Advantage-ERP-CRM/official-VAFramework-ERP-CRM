@@ -49,11 +49,11 @@ namespace ViennaAdvantage.Process
             }
             #region commented
             //            _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-            //                                   (AD_Client_ID,AD_Org_ID,value,m_product_category_id,C_UOM_ID,
+            //                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
             //                                  M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
 
             //            StringBuilder sql=new StringBuilder();
-            //            sql.Append(@"SELECT tr.ad_client_id,tr.ad_org_id,p.value,
+            //            sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
             //                                   p.m_product_category_id,
             //                                   p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
             //                                   tr.m_product_id,tr.currentqty,
@@ -141,10 +141,10 @@ namespace ViennaAdvantage.Process
             }
 
             _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-                                   (AD_Client_ID,AD_Org_ID,value,m_product_category_id,C_UOM_ID,
+                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
                                   M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
             sql = new StringBuilder();
-            sql.Append(@"SELECT tr.ad_client_id,tr.ad_org_id,p.value,
+            sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
                                    p.m_product_category_id,
                                    p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
                                    tr.m_product_id,tr.currentqty,
@@ -183,8 +183,8 @@ namespace ViennaAdvantage.Process
                     {
                         // if (Util.GetValueOfInt(dsProduct.Tables[0].Rows[]["M_Locator_Id"]) == _SelectedLocator)
                         //{
-                        _Insert.Append("values(" + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["Ad_client_ID"]) + @",
-                                                 " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["Ad_Org_ID"]) + @",
+                        _Insert.Append("values(" + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["vaf_client_ID"]) + @",
+                                                 " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsProductlocator.Tables[0].Rows[0]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["m_product_category_id"]) + @",
                                                 " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["C_Uom_id"]) + @",
@@ -244,8 +244,8 @@ namespace ViennaAdvantage.Process
                         {
                             // if (Util.GetValueOfInt(dsProduct.Tables[0].Rows[]["M_Locator_Id"]) == _SelectedLocator)
                             //{
-                            _Insert.Append("values(" + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["Ad_client_ID"]) + @",
-                                                 " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["Ad_Org_ID"]) + @",
+                            _Insert.Append("values(" + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["vaf_client_ID"]) + @",
+                                                 " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsProdLocator.Tables[0].Rows[0]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["m_product_category_id"]) + @",
                                                 " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["C_Uom_id"]) + @",
@@ -283,10 +283,10 @@ namespace ViennaAdvantage.Process
                         {
                             _Insert = new StringBuilder();
                             _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-                                   (AD_Client_ID,AD_Org_ID,value,m_product_category_id,C_UOM_ID,
+                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
                                   M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
                             sql = new StringBuilder();
-                            sql.Append(@"SELECT tr.ad_client_id,tr.ad_org_id,p.value,
+                            sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
                                    p.m_product_category_id,
                                    p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
                                    tr.m_product_id,tr.currentqty,
@@ -319,8 +319,8 @@ namespace ViennaAdvantage.Process
                                 {
                                     // if (Util.GetValueOfInt(dsProduct.Tables[0].Rows[]["M_Locator_Id"]) == _SelectedLocator)
                                     //{
-                                    _Insert.Append("values(" + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["Ad_client_ID"]) + @",
-                                                 " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["Ad_Org_ID"]) + @",
+                                    _Insert.Append("values(" + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["vaf_client_ID"]) + @",
+                                                 " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsProduct.Tables[0].Rows[0]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["m_product_category_id"]) + @",
                                                 " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["C_Uom_id"]) + @",
@@ -353,7 +353,7 @@ namespace ViennaAdvantage.Process
             else
             {
 
-                query = "select * from m_transaction where ad_client_ID=" + GetCtx().GetAD_Client_ID() + " order by M_product_ID";
+                query = "select * from m_transaction where vaf_client_ID=" + GetCtx().GetVAF_Client_ID() + " order by M_product_ID";
                 DataSet dstransaction = DB.ExecuteDataset(query, null, null);
                 if (dstransaction.Tables[0].Rows.Count > 0)
                 {
@@ -367,10 +367,10 @@ namespace ViennaAdvantage.Process
 
                             _Insert = new StringBuilder();
                             _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-                                   (AD_Client_ID,AD_Org_ID,value,m_product_category_id,C_UOM_ID,
+                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
                                   M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
                             sql = new StringBuilder();
-                            sql.Append(@"SELECT tr.ad_client_id,tr.ad_org_id,p.value,
+                            sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
                                    p.m_product_category_id,
                                    p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
                                    tr.m_product_id,tr.currentqty,
@@ -407,8 +407,8 @@ namespace ViennaAdvantage.Process
                                 {
                                     if (Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["M_Locator_Id"]) == _SelectedLocator)
                                     {
-                                        _Insert.Append("values(" + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["Ad_client_ID"]) + @",
-                                                 " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["Ad_Org_ID"]) + @",
+                                        _Insert.Append("values(" + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["vaf_client_ID"]) + @",
+                                                 " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsrecord.Tables[0].Rows[a]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["m_product_category_id"]) + @",
                                                 " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["C_Uom_id"]) + @",

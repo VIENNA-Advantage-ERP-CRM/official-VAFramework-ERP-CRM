@@ -21,7 +21,7 @@ namespace VAdvantage.Process
         private int _M_Product_ID = 0;
         private int _M_Locator_ID = 0;
         private int _M_AttributeSetInstance_ID = 0;
-        private int _Ad_Org_ID = 0;
+        private int _vaf_org_ID = 0;
         private decimal _currentQty = 0;
         private decimal OpeningStock = 0, ClosingStock = 0;
         private decimal _moveQty = 0;
@@ -63,7 +63,7 @@ namespace VAdvantage.Process
                       TR.MOVEMENTQTY ,
                       TR.MOVEMENTTYPE ,
                       TR.MOVEMENTDATE ,
-                      TR.AD_ORG_ID
+                      TR.VAF_ORG_ID
                     FROM M_TRANSACTION TR
                     INNER JOIN M_PRODUCT PR
                     ON PR.M_PRODUCT_ID  =TR.M_PRODUCT_ID
@@ -128,11 +128,11 @@ namespace VAdvantage.Process
                                     else
                                     {
                                         Qry = "SELECT NVL(GetStockofWarehouse(" + _M_Product_ID + "," + _M_Locator_ID + ",0," + _M_AttributeSetInstance_ID + ","
-                                        + GlobalVariable.TO_DATE(Convert.ToDateTime(_moveDate).AddDays(-1), true) + "," + GetAD_Client_ID() + "," + GetAD_Org_ID() + "),0) AS Stock FROM DUAL";
+                                        + GlobalVariable.TO_DATE(Convert.ToDateTime(_moveDate).AddDays(-1), true) + "," + GetVAF_Client_ID() + "," + GetVAF_Org_ID() + "),0) AS Stock FROM DUAL";
                                     }
                                     OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry));
                                     MLocator loc = new MLocator(GetCtx(), _M_Locator_ID, Get_TrxName());
-                                    Trs = new MTransactionSummary(GetCtx(), loc.GetAD_Org_ID(), _M_Locator_ID, _M_Product_ID, _M_AttributeSetInstance_ID,
+                                    Trs = new MTransactionSummary(GetCtx(), loc.GetVAF_Org_ID(), _M_Locator_ID, _M_Product_ID, _M_AttributeSetInstance_ID,
                                             OpeningStock, _currentQty, _moveDate, Get_TrxName());
                                 }
                                 if (_moveType == MTransaction.MOVEMENTTYPE_CustomerReturns)

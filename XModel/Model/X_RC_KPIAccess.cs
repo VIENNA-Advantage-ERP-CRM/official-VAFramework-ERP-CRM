@@ -70,7 +70,7 @@ static X_RC_KPIAccess()
 //static long serialVersionUID 27634330740979L;
 /** Last Updated Timestamp 11/6/2012 6:07:04 PM */
 public static long updatedMS = 1352205424190L;
-/** AD_Table_ID=1000229 */
+/** VAF_TableView_ID=1000229 */
 public static int Table_ID;
  // =1000229;
 

@@ -41,7 +41,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_C_Recurring_Run() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27763907230203L;/** Last Updated Timestamp 12/15/2016 11:35:13 AM */
-        public static long updatedMS = 1481781913414L;/** AD_Table_ID=573 */
+        public static long updatedMS = 1481781913414L;/** VAF_TableView_ID=573 */
         public static int Table_ID; // =573;
         /** TableName=C_Recurring_Run */
         public static String Table_Name = "C_Recurring_Run";

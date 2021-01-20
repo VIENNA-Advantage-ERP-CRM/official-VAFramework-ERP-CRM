@@ -101,7 +101,7 @@ namespace VAdvantage.Process
                     }
                 }
                // String sql = "select c_doctype_id from c_doctype where docbasetype= 'SOO' and  = 'Sales Quotation'";
-                String sql = "select c_doctype_id from c_doctype where docbasetype = 'SOO' and docsubtypeso = 'ON' and isreturntrx = 'N' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+                String sql = "select c_doctype_id from c_doctype where docbasetype = 'SOO' and docsubtypeso = 'ON' and isreturntrx = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 int Doctype_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 int MPriceList_id = Util.GetValueOfInt(fromProject.GetM_PriceList_ID());
                 order.SetM_PriceList_ID(MPriceList_id);
@@ -120,8 +120,8 @@ namespace VAdvantage.Process
                 {
                     VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_Bpartner_id, null);
                     bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
+                    bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
@@ -139,8 +139,8 @@ namespace VAdvantage.Process
                 {
                     VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), C_BPartnerSR_ID, null);
                     bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
+                    bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());

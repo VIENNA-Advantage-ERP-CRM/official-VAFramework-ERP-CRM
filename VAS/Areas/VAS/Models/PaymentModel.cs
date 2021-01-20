@@ -46,8 +46,8 @@ namespace VIS.Models
         int _C_BankAccount_ID = 0;
         //log
         //this.log = VIS.Logging.VLogger.getVLogger("vPayment");
-        int _AD_Client_ID = 0;
-        int _AD_Org_ID = 0;
+        int _VAF_Client_ID = 0;
+        int _VAF_Org_ID = 0;
         int _C_BPartner_ID = 0;
         private Decimal _Amount = Env.ZERO;	//	Payment Amount
         private MPayment _mPayment = null;
@@ -76,8 +76,8 @@ namespace VIS.Models
             _DateAcct = Convert.ToDateTime(inputValues._DateAcct);
             _C_PaymentTerm_ID = inputValues._C_PaymentTerm_ID;
             _C_Payment_ID = inputValues._C_Payment_ID;
-            _AD_Client_ID = inputValues._AD_Client_ID;
-            _AD_Org_ID = inputValues._AD_Org_ID;
+            _VAF_Client_ID = inputValues._VAF_Client_ID;
+            _VAF_Org_ID = inputValues._VAF_Org_ID;
             _C_BPartner_ID = inputValues._C_BPartner_ID;
             _Amount = inputValues._Amount;
             _C_CashLine_ID = inputValues._C_CashLine_ID;
@@ -280,7 +280,7 @@ namespace VIS.Models
 
             //Load Cash Books
             SQL = MRole.GetDefault(ctx).AddAccessSQL(
-                "SELECT C_CashBook_ID, Name, AD_Org_ID FROM C_CashBook WHERE IsActive='Y'",
+                "SELECT C_CashBook_ID, Name, VAF_Org_ID FROM C_CashBook WHERE IsActive='Y'",
                 "C_CashBook", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             kp = null;
             IDataReader idr3 = null;
@@ -308,7 +308,7 @@ namespace VIS.Models
                     {
                         kp = pp;
                     }
-                    if (kp == null && key == _AD_Org_ID)       //  Default Org
+                    if (kp == null && key == _VAF_Org_ID)       //  Default Org
                     {
                         kp = pp;
                     }
@@ -370,7 +370,7 @@ namespace VIS.Models
             if (_mPayment == null)
             {
                 _mPayment = new MPayment(ctx, 0, null);
-                _mPayment.SetAD_Org_ID(_AD_Org_ID);
+                _mPayment.SetVAF_Org_ID(_VAF_Org_ID);
                 _mPayment.SetIsReceipt(_isSOTrx);
                 _mPayment.SetAmount(C_Currency_ID, _Amount);
             }
@@ -679,7 +679,7 @@ namespace VIS.Models
                             }
                             else	//	Default
                             {
-                                cash = MCash.Get(ctx, inputs._AD_Org_ID, newDateAcct, C_Currency_ID, null);
+                                cash = MCash.Get(ctx, inputs._VAF_Org_ID, newDateAcct, C_Currency_ID, null);
                             }
                             if (cash == null || cash.Get_ID() == 0)
                             {
@@ -1025,8 +1025,8 @@ namespace VIS.Models
         // Start Payment            
         public int _C_Payment_ID { get; set; }
         //log
-        public int _AD_Client_ID { get; set; }
-        public int _AD_Org_ID { get; set; }
+        public int _VAF_Client_ID { get; set; }
+        public int _VAF_Org_ID { get; set; }
         public int _C_BPartner_ID { get; set; }
         public decimal _Amount { get; set; }
         public int _C_CashLine_ID { get; set; }

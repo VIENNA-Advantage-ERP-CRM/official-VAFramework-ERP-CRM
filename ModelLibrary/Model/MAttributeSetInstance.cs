@@ -285,15 +285,15 @@ namespace VAdvantage.Model
 
         /**
          * 	Exclude Lot creation
-         *	@param AD_Column_ID column
+         *	@param VAF_Column_ID column
          *	@param isSOTrx SO
          *	@return true if excluded
          */
-        public bool IsExcludeLot(int AD_Column_ID, bool isSOTrx)
+        public bool IsExcludeLot(int VAF_Column_ID, bool isSOTrx)
         {
             GetMAttributeSet();
             if (_mas != null)
-                return _mas.IsExcludeLot(AD_Column_ID, isSOTrx);
+                return _mas.IsExcludeLot(VAF_Column_ID, isSOTrx);
             return false;
         }
 
@@ -318,15 +318,15 @@ namespace VAdvantage.Model
 
         /**
          *	Exclude SerNo creation
-         *	@param AD_Column_ID column
+         *	@param VAF_Column_ID column
          *	@param isSOTrx SO
          *	@return true if excluded
          */
-        public bool IsExcludeSerNo(int AD_Column_ID, bool isSOTrx)
+        public bool IsExcludeSerNo(int VAF_Column_ID, bool isSOTrx)
         {
             GetMAttributeSet();
             if (_mas != null)
-                return _mas.IsExcludeSerNo(AD_Column_ID, isSOTrx);
+                return _mas.IsExcludeSerNo(VAF_Column_ID, isSOTrx);
             return false;
         }
 

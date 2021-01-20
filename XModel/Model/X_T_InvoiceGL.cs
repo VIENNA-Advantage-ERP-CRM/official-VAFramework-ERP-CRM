@@ -94,7 +94,7 @@ static X_T_InvoiceGL()
 //static long serialVersionUID 27562514384271L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067482L;
-/** AD_Table_ID=803 */
+/** VAF_TableView_ID=803 */
 public static int Table_ID;
  // =803;
 

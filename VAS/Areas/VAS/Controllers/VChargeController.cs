@@ -17,13 +17,13 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult CreateElementValue(int m_AD_Org_ID, String value, String name, bool expense, int m_C_Element_ID)
+        public JsonResult CreateElementValue(int m_VAF_Org_ID, String value, String name, bool expense, int m_C_Element_ID)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 VChargeModel obj = new VChargeModel();
-                obj.CreateElementValue(ctx, m_AD_Org_ID, value, name, expense, m_C_Element_ID);
+                obj.CreateElementValue(ctx, m_VAF_Org_ID, value, name, expense, m_C_Element_ID);
                 return Json(new { obj.ID, obj.Msg }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);

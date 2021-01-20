@@ -70,7 +70,7 @@ static X_C_AccountGroupBatch()
 //static long serialVersionUID 27640875294150L;
 /** Last Updated Timestamp 1/21/2013 12:02:57 PM */
 public static long updatedMS = 1358749977361L;
-/** AD_Table_ID=1000412 */
+/** VAF_TableView_ID=1000412 */
 public static int Table_ID;
  // =1000412;
 

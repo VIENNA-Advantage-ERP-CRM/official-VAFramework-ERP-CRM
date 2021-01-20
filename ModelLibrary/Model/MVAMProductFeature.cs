@@ -39,9 +39,9 @@ namespace VAdvantage.Model
         public static MVAMProductFeature[] GetOfClient(Ctx ctx, bool onlyProductAttributes, bool onlyListAttributes)
         {
             List<MVAMProductFeature> list = new List<MVAMProductFeature>();
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             String sql = "SELECT * FROM VAM_ProductFeature "
-                + "WHERE AD_Client_ID=" + AD_Client_ID + " AND IsActive='Y'";
+                + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND IsActive='Y'";
             if (onlyProductAttributes)
                 sql += " AND IsInstanceAttribute='N'";
             if (onlyListAttributes)
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
 
             MVAMProductFeature[] retValue = new MVAMProductFeature[list.Count];
             retValue = list.ToArray();
-            _log.Fine("AD_Client_ID=" + AD_Client_ID + " - #" + retValue.Length);
+            _log.Fine("VAF_Client_ID=" + VAF_Client_ID + " - #" + retValue.Length);
             return retValue;
         }
 
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
                         M_AttributeSetInstance_ID, 0, null, Get_TrxName());
                 }
                 // Create new Attribute Instances in * Organization
-                instance.SetAD_Org_ID(0);
+                instance.SetVAF_Org_ID(0);
             }
             else
             {

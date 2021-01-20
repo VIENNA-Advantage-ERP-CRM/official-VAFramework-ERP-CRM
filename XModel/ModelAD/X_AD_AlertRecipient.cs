@@ -70,7 +70,7 @@ static X_AD_AlertRecipient()
 //static long serialVersionUID = 27562514360386L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043597L;
-/** AD_Table_ID=592 */
+/** VAF_TableView_ID=592 */
 public static int Table_ID;
  // =592;
 

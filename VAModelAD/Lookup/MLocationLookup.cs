@@ -27,7 +27,7 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="WindowNo">WindowNo window no (to derive AD_Client/Org for new records)</param>
+        /// <param name="WindowNo">WindowNo window no (to derive VAF_Client/Org for new records)</param>
         public MLocationLookup(Ctx ctx, int windowNo)
             : base(ctx, windowNo, DisplayType.TableDir)
         {
@@ -129,7 +129,7 @@ namespace VAdvantage.Model
                 list.Add(new KeyNamePair(-1, ""));
             //
             StringBuilder sql = new StringBuilder(
-                    "SELECT C_Location_ID from C_Location WHERE AD_Client_ID = @ClientId AND (AD_Org_ID = 0 OR @parameter = 0)");
+                    "SELECT C_Location_ID from C_Location WHERE VAF_Client_ID = @ClientId AND (VAF_Org_ID = 0 OR @parameter = 0)");
             if (onlyActive)
                 sql.Append(" AND IsActive='Y'");
             sql.Append(" ORDER BY 1");
@@ -138,8 +138,8 @@ namespace VAdvantage.Model
             try
             {
                 param = new System.Data.SqlClient.SqlParameter[2];
-                param[0] = new System.Data.SqlClient.SqlParameter("@ClientId", GetCtx().GetAD_Client_ID(_WindowNo));
-                param[1] = new System.Data.SqlClient.SqlParameter("@parameter", GetCtx().GetAD_Org_ID(_WindowNo));
+                param[0] = new System.Data.SqlClient.SqlParameter("@ClientId", GetCtx().GetVAF_Client_ID(_WindowNo));
+                param[1] = new System.Data.SqlClient.SqlParameter("@parameter", GetCtx().GetVAF_Org_ID(_WindowNo));
 
                 dr = DataBase.DB.ExecuteReader(sql.ToString(), param);
                 while (dr.Read())

@@ -131,7 +131,7 @@ namespace VAdvantage.Model
                     + "WHERE po.C_OrderLine_ID=x.C_OrderLine_ID AND po.Qty=x.Qty "
                     + "GROUP BY C_OrderLine_ID, Qty "
                     + "HAVING COUNT(*) = 2) "
-                + " AND AD_Client_ID=" + ctx.GetAD_Client_ID()
+                + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID()
                 + "ORDER BY C_OrderLine_ID, M_InOutLine_ID";
             int success = 0;
             int errors = 0;
@@ -165,7 +165,7 @@ namespace VAdvantage.Model
                                     continue;
                                 }
                                 //
-                                String s2 = "DELETE FROM Fact_Acct WHERE AD_Table_ID=473 AND Record_ID=" + po2.GetM_MatchPO_ID();
+                                String s2 = "DELETE FROM Fact_Acct WHERE VAF_TableView_ID=473 AND Record_ID=" + po2.GetM_MatchPO_ID();
                                 int no2 = ExecuteQuery.ExecuteNonQuery(s2);
                                 String s3 = "DELETE FROM M_MatchPO WHERE M_MatchPO_ID=" + po2.GetM_MatchPO_ID();
                                 int no3 = ExecuteQuery.ExecuteNonQuery(s3);
@@ -544,7 +544,7 @@ namespace VAdvantage.Model
         {
             if (IsPosted())
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_MATCHPO, GetAD_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_MATCHPO, GetVAF_Org_ID()))
                     return false;
                 SetPosted(false);
                 return true;// MFactAcct.Delete(Table_ID, Get_ID(), Get_Trx()) >= 0;

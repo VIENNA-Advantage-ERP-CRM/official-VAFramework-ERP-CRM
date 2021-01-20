@@ -318,7 +318,7 @@ namespace VAdvantage.Model
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -326,7 +326,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -460,7 +460,7 @@ namespace VAdvantage.Model
                                 sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
                         t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                                   " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
+                                   " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
                                    " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
                                    " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID();
                             }
@@ -485,7 +485,7 @@ namespace VAdvantage.Model
                                 sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
                         t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                                 " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
+                                 " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + mmLine.GetM_Locator_ID() +
                                  " AND t.M_Product_ID = " + mmLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + mmLine.GetM_AttributeSetInstance_ID() +
                                  " AND NVL(t.M_ProductContainer_ID, 0) = " + mmLine.GetM_ProductContainer_ID();
                             }
@@ -639,7 +639,7 @@ namespace VAdvantage.Model
             }
 
             // check column name new 12 jan 0 vikas
-            int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM AD_Column WHERE columnname = 'DTD001_SourceReserve' "));
+            int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM VAF_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
             //	Outstanding (not processed) Incoming Confirmations ?
             MMovementConfirm[] confirmations = GetConfirmations(true);
@@ -690,13 +690,13 @@ namespace VAdvantage.Model
 
             // for checking - costing calculate on completion or not
             // IsCostImmediate = true - calculate cost on completion
-            MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
 
             //int countVA024 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA024_'"));
             //int tableId = 0;
             //try
             //{
-            //    query = @"SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename LIKE 'VA024_T_ObsoleteInventory' AND IsActive = 'Y'";
+            //    query = @"SELECT VAF_TABLEVIEW_ID  FROM VAF_TABLEVIEW WHERE tablename LIKE 'VA024_T_ObsoleteInventory' AND IsActive = 'Y'";
             //    tableId = Util.GetValueOfInt(DB.ExecuteScalar(query, null, Get_Trx()));
             //}
             //catch { }
@@ -830,7 +830,7 @@ namespace VAdvantage.Model
 
                         query = @"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                               " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
+                               " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
                         trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, Get_Trx()));
 
@@ -841,7 +841,7 @@ namespace VAdvantage.Model
                         }
 
                         //
-                        trxFrom = new MTransaction(GetCtx(), line.GetAD_Org_ID(),
+                        trxFrom = new MTransaction(GetCtx(), line.GetVAF_Org_ID(),
                             MTransaction.MOVEMENTTYPE_MovementFrom,
                             line.GetM_Locator_ID(), line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(),
                             Decimal.Negate(ma.GetMovementQty()), GetMovementDate(), Get_TrxName());
@@ -1109,7 +1109,7 @@ namespace VAdvantage.Model
 
                         query = @"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                               " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_LocatorTo_ID() +
+                               " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_LocatorTo_ID() +
                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
                         trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, Get_Trx()));
 
@@ -1123,7 +1123,7 @@ namespace VAdvantage.Model
 
                         // Done to Update Current Qty at Transaction
                         // create transaction entry with To Org
-                        MTransaction trxTo = new MTransaction(GetCtx(), line.GetAD_Org_ID(),
+                        MTransaction trxTo = new MTransaction(GetCtx(), line.GetVAF_Org_ID(),
                             MTransaction.MOVEMENTTYPE_MovementTo,
                             line.GetM_LocatorTo_ID(), line.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(),
                             ma.GetMovementQty(), GetMovementDate(), Get_TrxName());
@@ -1607,7 +1607,7 @@ namespace VAdvantage.Model
 
                     query = @"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                               " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
+                               " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_Locator_ID() +
                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
                     trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, Get_Trx()));
 
@@ -1618,7 +1618,7 @@ namespace VAdvantage.Model
                     }
 
                     //
-                    trxFrom = new MTransaction(GetCtx(), line.GetAD_Org_ID(),
+                    trxFrom = new MTransaction(GetCtx(), line.GetVAF_Org_ID(),
                         MTransaction.MOVEMENTTYPE_MovementFrom,
                         line.GetM_Locator_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                         Decimal.Negate(line.GetMovementQty()), GetMovementDate(), Get_TrxName());
@@ -1694,7 +1694,7 @@ namespace VAdvantage.Model
 
                     query = @"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                               " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_LocatorTo_ID() +
+                               " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + line.GetM_LocatorTo_ID() +
                            " AND t.M_Product_ID = " + line.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + line.GetM_AttributeSetInstance_ID();
                     trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, Get_Trx()));
 
@@ -1707,7 +1707,7 @@ namespace VAdvantage.Model
 
                     // Done to Update Current Qty at Transaction
                     // create transaction to with Locator To refernce
-                    MTransaction trxTo = new MTransaction(GetCtx(), line.GetAD_Org_ID(),
+                    MTransaction trxTo = new MTransaction(GetCtx(), line.GetVAF_Org_ID(),
                         MTransaction.MOVEMENTTYPE_MovementTo,
                         line.GetM_LocatorTo_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstanceTo_ID(),
                         line.GetMovementQty(), GetMovementDate(), Get_TrxName());
@@ -1773,11 +1773,11 @@ namespace VAdvantage.Model
                     {
                         // For From Warehouse
                         currentCostPrice = 0;
-                        currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                        currentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), line.GetVAF_Org_ID(),
                             line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetDTD001_MWarehouseSource_ID());
 
                         // For To Warehouse
-                        toCurrentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), locatorTo.GetAD_Org_ID(),
+                        toCurrentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), locatorTo.GetVAF_Org_ID(),
                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), locatorTo.GetM_Warehouse_ID());
 
                         //line.SetCurrentCostPrice(currentCostPrice);
@@ -1794,15 +1794,15 @@ namespace VAdvantage.Model
                     }
                     #endregion
 
-                    //query = "SELECT AD_Org_ID FROM M_Warehouse WHERE IsActive = 'Y' AND M_Warehouse_ID = " + GetM_Warehouse_ID();
+                    //query = "SELECT VAF_Org_ID FROM M_Warehouse WHERE IsActive = 'Y' AND M_Warehouse_ID = " + GetM_Warehouse_ID();
                     // Get Org of "To Warehouse"
-                    //int ToWarehouseOrg = MLocator.Get(GetCtx(), line.GetM_LocatorTo_ID()).GetAD_Org_ID();
-                    //if (GetAD_Org_ID() != ToWarehouseOrg)
+                    //int ToWarehouseOrg = MLocator.Get(GetCtx(), line.GetM_LocatorTo_ID()).GetVAF_Org_ID();
+                    //if (GetVAF_Org_ID() != ToWarehouseOrg)
                     //{
                     product1 = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());
                     if (product1.GetProductType() == "I") // for Item Type product
                     {
-                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
+                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetM_AttributeSetInstance_ID(),
                           "Inventory Move", null, null, line, null, null, 0, line.GetMovementQty(), Get_TrxName(), out conversionNotFoundInOut, optionalstr: "window"))
                         {
                             if (!conversionNotFoundMovement1.Contains(conversionNotFoundMovement))
@@ -1817,10 +1817,10 @@ namespace VAdvantage.Model
                         }
                         else if (!IsReversal()) // not to update cost for reversed document
                         {
-                            currentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), line.GetAD_Org_ID(),
+                            currentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), line.GetVAF_Org_ID(),
                          line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), GetDTD001_MWarehouseSource_ID());
 
-                            toCurrentCostPrice = MCost.GetproductCosts(line.GetAD_Client_ID(), locatorTo.GetAD_Org_ID(),
+                            toCurrentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), locatorTo.GetVAF_Org_ID(),
                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx(), locatorTo.GetM_Warehouse_ID());
 
                             DB.ExecuteQuery("UPDATE M_MovementLine SET PostCurrentCostPrice = " + currentCostPrice +
@@ -1867,7 +1867,7 @@ namespace VAdvantage.Model
                 SetMovementDate(DateTime.Now.Date);
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                 {
                     throw new Exception("@PeriodClosed@");
                 }
@@ -1914,10 +1914,10 @@ namespace VAdvantage.Model
             //                                     FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
             //                                      WHERE t.MovementDate <= 
             //                                            (Select MAX(movementdate) from m_transaction where 
-            //                                            AD_Client_ID = m.AD_Client_ID  AND M_Locator_ID = ml.M_Locator_ID
+            //                                            VAF_Client_ID = m.VAF_Client_ID  AND M_Locator_ID = ml.M_Locator_ID
             //                                            AND M_Product_ID = ml.M_Product_ID AND NVL(M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID, 0)
             //                                            AND NVL(M_ProductContainer_ID, 0) = NVL(ml.M_ProductContainer_ID, 0) )
-            //                                       AND t.AD_Client_ID                     = m.AD_Client_ID
+            //                                       AND t.VAF_Client_ID                     = m.VAF_Client_ID
             //                                       AND t.M_Locator_ID                     = ml.M_Locator_ID
             //                                       AND t.M_Product_ID                     = ml.M_Product_ID
             //                                       AND NVL(t.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID, 0)
@@ -2013,7 +2013,7 @@ namespace VAdvantage.Model
                     }
 
                     // update warehouse, locator and DateLastInventory on parent and its child record
-                    int no = DB.ExecuteQuery(@"UPDATE M_ProductContainer SET AD_Org_ID = " + locator.GetAD_Org_ID() +
+                    int no = DB.ExecuteQuery(@"UPDATE M_ProductContainer SET VAF_Org_ID = " + locator.GetVAF_Org_ID() +
                                              @" , M_Warehouse_ID = " + warehouseTo +
                                              @" , M_Locator_ID = " + Util.GetValueOfInt(listParentChildContainer[i].M_LocatorTo_ID) +
                                              @" , DateLastInventory = " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
@@ -2279,7 +2279,7 @@ namespace VAdvantage.Model
         private void updateCostQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
           int Org_ID, MCostElement ce, decimal movementQty)
         {
-            //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetM_AttributeSetInstance_ID(), acctSchema, GetAD_Org_ID(), costElement, null);
+            //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetM_AttributeSetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
             MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
             if (cQueue != null && cQueue.Length > 0)
             {
@@ -2836,7 +2836,7 @@ namespace VAdvantage.Model
                         t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty
                            FROM M_Transaction t
                            WHERE t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                           AND t.AD_Client_ID                       = " + line.GetAD_Client_ID() + @"
+                           AND t.VAF_Client_ID                       = " + line.GetVAF_Client_ID() + @"
                            AND t.M_Locator_ID                       = " + locatorId + @"
                            AND t.M_Product_ID                       = " + line.GetM_Product_ID() + @"
                            AND NVL(t.M_AttributeSetInstance_ID , 0) = COALESCE(" + line.GetM_AttributeSetInstance_ID() + @",0)
@@ -3213,7 +3213,7 @@ namespace VAdvantage.Model
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;
@@ -3221,7 +3221,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return false;
@@ -3258,7 +3258,7 @@ namespace VAdvantage.Model
             //	Deep Copy
 
             MMovement reversal = new MMovement(GetCtx(), 0, Get_TrxName());
-            CopyValues(this, reversal, GetAD_Client_ID(), GetAD_Org_ID());
+            CopyValues(this, reversal, GetVAF_Client_ID(), GetVAF_Org_ID());
 
             reversal.SetDocumentNo(GetDocumentNo() + REVERSE_INDICATOR);	//	indicate reversals
 
@@ -3299,7 +3299,7 @@ namespace VAdvantage.Model
             {
                 MMovementLine oLine = oLines[i];
                 MMovementLine rLine = new MMovementLine(GetCtx(), 0, Get_TrxName());
-                CopyValues(oLine, rLine, oLine.GetAD_Client_ID(), oLine.GetAD_Org_ID());
+                CopyValues(oLine, rLine, oLine.GetVAF_Client_ID(), oLine.GetVAF_Org_ID());
                 rLine.SetM_Movement_ID(reversal.GetM_Movement_ID());
                 //
                 rLine.SetMovementQty(Decimal.Negate(rLine.GetMovementQty()));

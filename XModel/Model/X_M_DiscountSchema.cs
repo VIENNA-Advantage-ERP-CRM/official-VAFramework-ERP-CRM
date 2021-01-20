@@ -78,7 +78,7 @@ static X_M_DiscountSchema()
 //static long serialVersionUID 27562514379083L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062294L;
-/** AD_Table_ID=475 */
+/** VAF_TableView_ID=475 */
 public static int Table_ID;
  // =475;
 

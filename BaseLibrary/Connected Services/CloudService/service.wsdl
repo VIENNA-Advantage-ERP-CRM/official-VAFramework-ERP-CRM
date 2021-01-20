@@ -186,8 +186,8 @@
             <s:element minOccurs="1" maxOccurs="1" name="C_Region_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="CreatedBy" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="salesrep_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="ad_org_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="ad_client_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="vaf_org_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="vaf_client_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="UpdatedBy" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="AccessKey" type="s:string" />
           </s:sequence>
@@ -468,7 +468,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="RequestID" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="AD_User_ID" type="s:int" />
           <s:element minOccurs="0" maxOccurs="1" name="modtype" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="AD_Client_IDs" type="tns:ArrayOfInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="VAF_Client_IDs" type="tns:ArrayOfInt" />
           <s:element minOccurs="0" maxOccurs="1" name="langIDs" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="ModuleName" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
@@ -1743,7 +1743,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="AD_Client_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAF_Client_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -2638,7 +2638,7 @@
       <s:element name="GetVideosFromDMS">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="AD_Client_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="VAF_Client_ID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="AD_User_ID" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="C_BPartner_ID" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="C_Lead_ID" type="s:int" />

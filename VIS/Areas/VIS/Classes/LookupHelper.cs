@@ -20,10 +20,10 @@ namespace VIS.Classes
             return VLookUpFactory.Get(ctx, windowNo, Column_ID, AD_Reference_ID, columnName, AD_Reference_Value_ID, IsParent, ValidationCode);
         }
 
-        public static string [] GetKeyColumns(int AD_Table_ID,Ctx ctx)
+        public static string [] GetKeyColumns(int VAF_TableView_ID,Ctx ctx)
         {
-            //return new MTable(ctx, AD_Table_ID, null).GetKeyColumns();
-            return MTable.Get(ctx, AD_Table_ID).GetKeyColumns();
+            //return new MTable(ctx, VAF_TableView_ID, null).GetKeyColumns();
+            return MTable.Get(ctx, VAF_TableView_ID).GetKeyColumns();
         }
     }
 
@@ -72,11 +72,11 @@ namespace VIS.Classes
         /// Delete image
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="ad_image_id"></param>
+        /// <param name="VAF_Image_id"></param>
         /// <returns></returns>
-        public static int DeleteImage(Ctx ctx, int ad_image_id)
+        public static int DeleteImage(Ctx ctx, int VAF_Image_id)
         {
-            MImage mimg = new MImage(ctx, ad_image_id, null);
+            MImage mimg = new MImage(ctx, VAF_Image_id, null);
             if (mimg.Delete(true))
                 return 1;
             else
@@ -88,7 +88,7 @@ namespace VIS.Classes
         {
 
             MUser user = new MUser(ctx, userID, null);
-            int imageID = Util.GetValueOfInt(user.GetAD_Image_ID());
+            int imageID = Util.GetValueOfInt(user.GetVAF_Image_ID());
 
             MImage mimg = new MImage(ctx, imageID, null);
             mimg.ByteArray = buffer;
@@ -111,13 +111,13 @@ namespace VIS.Classes
             {
                 return 0;
             }
-            user.SetAD_Image_ID(mimg.GetAD_Image_ID());
+            user.SetVAF_Image_ID(mimg.GetVAF_Image_ID());
             if (!user.Save())
             {
                 return 0;
             }
 
-            return mimg.GetAD_Image_ID();
+            return mimg.GetVAF_Image_ID();
         }
 
         public static void ConvertByteArrayToThumbnail(byte[] imageBytes, string imageName)

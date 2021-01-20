@@ -13,14 +13,14 @@ namespace VIS.Controllers
         /// <summary>
         /// Get Accouting schema
         /// </summary>
-        /// <param name="ad_client_id"></param>
-        /// <param name="ad_org_id"></param>
+        /// <param name="vaf_client_id"></param>
+        /// <param name="vaf_org_id"></param>
         /// <returns></returns>
-        public JsonResult GetClientAcctSchema(int ad_client_id, int ad_org_id)
+        public JsonResult GetClientAcctSchema(int vaf_client_id, int vaf_org_id)
         {
             var ctx = Session["ctx"] as Ctx;
             AcctViewerData obj = new AcctViewerData(); 
-            var value = obj.GetClientAcctSchema(ctx, ad_client_id, ad_org_id);
+            var value = obj.GetClientAcctSchema(ctx, vaf_client_id, vaf_org_id);
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
 

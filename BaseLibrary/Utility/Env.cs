@@ -616,8 +616,8 @@ namespace VAdvantage.Utility
             if (windowNo > 0)
                 sb.Append(ctx.GetContext(windowNo, "WindowName", false)).Append("  ");
             sb.Append(ctx.GetContext("##AD_User_Name")).Append("@")
-                .Append(ctx.GetContext("#AD_Org_Name")).Append(".")
-                .Append(ctx.GetContext("#AD_Client_Name"))
+                .Append(ctx.GetContext("#VAF_Org_Name")).Append(".")
+                .Append(ctx.GetContext("#VAF_Client_Name"))
                 .Append(" [").Append(VConnection.Get().ToString()).Append("]");//                   CConnection.get().toString()).append("]");
             return sb.ToString();
         }
@@ -795,8 +795,8 @@ namespace VAdvantage.Utility
         public static int GetColumnID(string tableName, string columnName)
         {
 
-            string sql = " SELECT cl.ad_column_id FROM ad_column cl WHERE cl.ad_table_id=" +
-                     "(SELECT tb.ad_table_id FROM ad_table tb WHERE tb.tablename='" + tableName + "'" +
+            string sql = " SELECT cl.vaf_column_id FROM vaf_column cl WHERE cl.vaf_tableview_id=" +
+                     "(SELECT tb.vaf_tableview_id FROM vaf_tableview tb WHERE tb.tablename='" + tableName + "'" +
                       ") and cl.columnname='" + columnName + "'";
 
             return DB.GetSQLValue(null, sql);
@@ -1061,7 +1061,7 @@ namespace VAdvantage.Utility
                 if (_cacheModules.Count == 0)
                 {
                     dr = DataBase.DB.ExecuteReader(" SELECT AD_ModuleInfo_ID,AssemblyName,NameSpace,"
-                                                                    + " VersionNo,VersionID,prefix FROM AD_ModuleInfo WHERE Prefix != 'VIS_' AND IsActive='Y' AND AD_Client_ID = 0 ");
+                                                                    + " VersionNo,VersionID,prefix FROM AD_ModuleInfo WHERE Prefix != 'VIS_' AND IsActive='Y' AND VAF_Client_ID = 0 ");
                     Tuple<string, string, string, string> modules = null;
 
                     while (dr.Read())
@@ -1079,7 +1079,7 @@ namespace VAdvantage.Utility
                     dr.Close();
 
                     dr = DataBase.DB.ExecuteReader(" SELECT AD_ModuleInfo_ID,AssemblyName,NameSpace,"
-                                                                    + " VersionNo,VersionID,prefix,Name FROM AD_ModuleInfo WHERE Prefix='VIS_' AND IsActive='Y' AND AD_Client_ID = 0 ");
+                                                                    + " VersionNo,VersionID,prefix,Name FROM AD_ModuleInfo WHERE Prefix='VIS_' AND IsActive='Y' AND VAF_Client_ID = 0 ");
 
                     while (dr.Read())
                     {

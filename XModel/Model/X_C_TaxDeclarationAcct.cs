@@ -74,7 +74,7 @@ static X_C_TaxDeclarationAcct()
 //static long serialVersionUID 27562514375463L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058674L;
-/** AD_Table_ID=820 */
+/** VAF_TableView_ID=820 */
 public static int Table_ID;
  // =820;
 

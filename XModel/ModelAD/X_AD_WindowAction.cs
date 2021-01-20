@@ -70,7 +70,7 @@ static X_AD_WindowAction()
 //static long serialVersionUID 27645730675536L;
 /** Last Updated Timestamp 18-03-2013 16:45:58 */
 public static long updatedMS = 1363605358747L;
-/** AD_Table_ID=1000331 */
+/** VAF_TableView_ID=1000331 */
 public static int Table_ID;
  // =1000331;
 

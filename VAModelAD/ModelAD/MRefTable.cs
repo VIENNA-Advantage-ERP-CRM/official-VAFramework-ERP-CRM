@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         {
             if (AD_Reference_ID == 0)
             {
-                //	setAD_Table_ID (0);
+                //	setVAF_TableView_ID (0);
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 SetIsValueDisplayed(false);
             }
@@ -77,8 +77,8 @@ namespace VAdvantage.Model
         /// <returns>table name</returns>
         public String GetTableName()
         {
-            int AD_Table_ID = GetAD_Table_ID();
-            return MTable.GetTableName(GetCtx(), AD_Table_ID);
+            int VAF_TableView_ID = GetVAF_TableView_ID();
+            return MTable.GetTableName(GetCtx(), VAF_TableView_ID);
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace VAdvantage.Model
         /// <returns>Key Column Name</returns>
         public String GetKeyColumnName()
         {
-            int AD_Column_ID = GetColumn_Key_ID();
-            return MColumn.GetColumnName(GetCtx(), AD_Column_ID);
+            int VAF_Column_ID = GetColumn_Key_ID();
+            return MColumn.GetColumnName(GetCtx(), VAF_Column_ID);
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace VAdvantage.Model
         /// <returns>Display Column Name</returns>
         public String GetDisplayColumnName()
         {
-            int AD_Column_ID = GetColumn_Display_ID();
-            return MColumn.GetColumnName(GetCtx(), AD_Column_ID);
+            int VAF_Column_ID = GetColumn_Display_ID();
+            return MColumn.GetColumnName(GetCtx(), VAF_Column_ID);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MRefTable[");
             sb.Append(GetAD_Reference_ID()).Append("-")
-                .Append(GetAD_Table_ID()).Append("]");
+                .Append(GetVAF_TableView_ID()).Append("]");
             return sb.ToString();
         }
     }

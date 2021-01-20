@@ -72,7 +72,7 @@ static X_W_Basket()
 //static long serialVersionUID 27562514384898L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068109L;
-/** AD_Table_ID=402 */
+/** VAF_TableView_ID=402 */
 public static int Table_ID;
  // =402;
 

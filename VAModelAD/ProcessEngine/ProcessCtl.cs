@@ -542,9 +542,9 @@ namespace VAdvantage.ProcessEngine
                     if (re is IReportView)
                     {
                         IReportView irv = re as IReportView;
-                        //  reportTable_ID = irv.GetPrintFormat().GetAD_Table_ID();
+                        //  reportTable_ID = irv.GetPrintFormat().GetVAF_TableView_ID();
                         irv.GetView();
-                        _pi.Set_AD_PrintFormat_Table_ID(irv.GetPrintFormat().GetAD_Table_ID());
+                        _pi.Set_AD_PrintFormat_Table_ID(irv.GetPrintFormat().GetVAF_TableView_ID());
                     }
                     _pi.SetSummary("Report", re != null);
                     Unlock();
@@ -609,9 +609,9 @@ namespace VAdvantage.ProcessEngine
                     //	Start Report	-----------------------------------------------
                     re = ReportCtl.Start(_ctx, _pi, IsDirectPrint);
                     _rep = (ReportEngine_N)re;
-                    // int reportTable_ID = _rep.GetPrintFormat().GetAD_Table_ID();
+                    // int reportTable_ID = _rep.GetPrintFormat().GetVAF_TableView_ID();
                     _rep.GetView();
-                    _pi.Set_AD_PrintFormat_Table_ID(_rep.GetPrintFormat().GetAD_Table_ID());
+                    _pi.Set_AD_PrintFormat_Table_ID(_rep.GetPrintFormat().GetVAF_TableView_ID());
                     _pi.Set_AD_PrintFormat_ID(_rep.GetPrintFormat().GetAD_PrintFormat_ID());
                     _pi.SetSummary("Report", re != null);
                     Unlock();
@@ -786,9 +786,9 @@ namespace VAdvantage.ProcessEngine
                     if (re is IReportView)
                     {
                         IReportView irv = re as IReportView;
-                        // reportTable_ID = irv.GetPrintFormat().GetAD_Table_ID();
+                        // reportTable_ID = irv.GetPrintFormat().GetVAF_TableView_ID();
                         irv.GetView();
-                        _pi.Set_AD_PrintFormat_Table_ID(irv.GetPrintFormat().GetAD_Table_ID());
+                        _pi.Set_AD_PrintFormat_Table_ID(irv.GetPrintFormat().GetVAF_TableView_ID());
                     }
                     _pi.SetSummary("Report", re != null);
                     Unlock();
@@ -914,10 +914,10 @@ namespace VAdvantage.ProcessEngine
                     //null check Implemented by raghu 22-May-2015
                     if (_rep != null)
                     {
-                        //reportTable_ID = _rep.GetPrintFormat().GetAD_Table_ID();
+                        //reportTable_ID = _rep.GetPrintFormat().GetVAF_TableView_ID();
                         _rep.GetView();
 
-                        _pi.Set_AD_PrintFormat_Table_ID(_rep.GetPrintFormat().GetAD_Table_ID());
+                        _pi.Set_AD_PrintFormat_Table_ID(_rep.GetPrintFormat().GetVAF_TableView_ID());
                         _pi.Set_AD_PrintFormat_ID(_rep.GetPrintFormat().GetAD_PrintFormat_ID());
                         //_pi.SetTotalRecords(_rep.GetPrintFormat().TotalPage);
                         _pi.Set_AD_ReportView_ID(AD_ReportView_ID);
@@ -1150,9 +1150,9 @@ namespace VAdvantage.ProcessEngine
         //        re = ReportCtl.Report;
         //        if (re != null)
         //        {
-        //            int reportTable_ID = re.GetPrintFormat().GetAD_Table_ID();
+        //            int reportTable_ID = re.GetPrintFormat().GetVAF_TableView_ID();
         //            re.GetView();
-        //            _pi.Set_AD_PrintFormat_Table_ID(re.GetPrintFormat().GetAD_Table_ID());
+        //            _pi.Set_AD_PrintFormat_Table_ID(re.GetPrintFormat().GetVAF_TableView_ID());
         //            _pi.SetSummary("Report", re != null);
         //            Unlock();
         //            if (re != null)
@@ -1199,9 +1199,9 @@ namespace VAdvantage.ProcessEngine
         //            //	Start Report	-----------------------------------------------
         //            re = ReportCtl.Start(_ctx, _pi, IsDirectPrint);
         //            _rep = re;
-        //            int reportTable_ID = re.GetPrintFormat().GetAD_Table_ID();
+        //            int reportTable_ID = re.GetPrintFormat().GetVAF_TableView_ID();
         //            re.GetView();
-        //            _pi.Set_AD_PrintFormat_Table_ID(re.GetPrintFormat().GetAD_Table_ID());
+        //            _pi.Set_AD_PrintFormat_Table_ID(re.GetPrintFormat().GetVAF_TableView_ID());
         //            _pi.Set_AD_PrintFormat_ID(re.GetPrintFormat().GetAD_PrintFormat_ID());
         //            _pi.SetSummary("Report", re != null);
         //            Unlock();

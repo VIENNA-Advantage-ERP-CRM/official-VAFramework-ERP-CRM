@@ -63,16 +63,16 @@ namespace VAdvantage.Print
         public int AddMissingColumns(MPrintFormat pf)
         {
            
-            String sql = "SELECT c.AD_Column_ID, c.ColumnName "
-                + "FROM AD_Column c "
+            String sql = "SELECT c.VAF_Column_ID, c.ColumnName "
+                + "FROM VAF_Column c "
                 + "WHERE NOT EXISTS "
                     + "(SELECT * "
                     + "FROM AD_PrintFormatItem pfi"
                     + " INNER JOIN AD_PrintFormat pf ON (pfi.AD_PrintFormat_ID=pf.AD_PrintFormat_ID) "
-                    + "WHERE pf.AD_Table_ID=c.AD_Table_ID"
-                    + " AND pfi.AD_Column_ID=c.AD_Column_ID"
+                    + "WHERE pf.VAF_TableView_ID=c.VAF_TableView_ID"
+                    + " AND pfi.VAF_Column_ID=c.VAF_Column_ID"
                     + " AND pfi.AD_PrintFormat_ID='" + pf.GetAD_PrintFormat_ID() + "')"	//	1 
-                + " AND c.AD_Table_ID='" + pf.GetAD_Table_ID() + "' "				//	2
+                + " AND c.VAF_TableView_ID='" + pf.GetVAF_TableView_ID() + "' "				//	2
                 + "ORDER BY 1";
             int counter = 0;
             IDataReader dr = null;
@@ -81,9 +81,9 @@ namespace VAdvantage.Print
                 dr = DataBase.DB.ExecuteReader(sql);
                 while (dr.Read())
                 {
-                    int AD_Column_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    int VAF_Column_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                     String ColumnName = dr.GetString(1);
-                    MPrintFormatItem pfi = MPrintFormatItem.CreateFromColumn(pf, AD_Column_ID, 0);
+                    MPrintFormatItem pfi = MPrintFormatItem.CreateFromColumn(pf, VAF_Column_ID, 0);
                     if (pfi.Get_ID() != 0)
                     { //log
                     }

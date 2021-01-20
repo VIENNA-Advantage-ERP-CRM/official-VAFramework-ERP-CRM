@@ -19,8 +19,8 @@ namespace VIS.Helpers
                 return result;
             }
 
-            string sql = "delete from ad_exportdata where record_id in (" + _strRecordID + ") " +
-                                   "and ad_table_id=" + _tableID;
+            string sql = "delete from VAF_ExportData where record_id in (" + _strRecordID + ") " +
+                                   "and vaf_tableview_id=" + _tableID;
 
             try
             {
@@ -38,9 +38,9 @@ namespace VIS.Helpers
             {
                 for (int j = 0; j < _recordID.Length; j++)
                 {
-                    X_AD_ExportData obj = new X_AD_ExportData(ctx, 0, null);
+                    X_VAF_ExportData obj = new X_VAF_ExportData(ctx, 0, null);
                     obj.SetRecord_ID(int.Parse(_recordID[j].ToString()));
-                    obj.SetAD_Table_ID(_tableID);
+                    obj.SetVAF_TableView_ID(_tableID);
                     obj.SetAD_ModuleInfo_ID(moduleId[i]);
 
                     if (!obj.Save())
@@ -82,7 +82,7 @@ namespace VIS.Helpers
         public List<int> GetExportData(int _recordID, int _tableID, Ctx ctx)
         {
             List<int> recID = null;
-            string sql = "SELECT AD_ModuleInfo_ID FROM AD_ExportData e WHERE e.Record_ID=" + _recordID + " AND e.AD_Table_ID = " + _tableID;
+            string sql = "SELECT AD_ModuleInfo_ID FROM VAF_ExportData e WHERE e.Record_ID=" + _recordID + " AND e.VAF_TableView_ID = " + _tableID;
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

@@ -145,17 +145,17 @@ namespace VAdvantage.Report
         /// Copy Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">parent</param>
-        /// <param name="AD_Org_ID">parent</param>
+        /// <param name="VAF_Client_ID">parent</param>
+        /// <param name="VAF_Org_ID">parent</param>
         /// <param name="PA_ReportLine_ID">parent</param>
         /// <param name="source">copy source</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Report Source</returns>
-        public static MReportSource Copy(Ctx ctx, int AD_Client_ID, int AD_Org_ID,
+        public static MReportSource Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
             int PA_ReportLine_ID, MReportSource source, Trx trxName)
         {
             MReportSource retValue = new MReportSource(ctx, 0, trxName);
-            MReportSource.CopyValues(source, retValue, AD_Client_ID, AD_Org_ID);
+            MReportSource.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
             retValue.SetPA_ReportLine_ID(PA_ReportLine_ID);
             return retValue;
         }	//	copy

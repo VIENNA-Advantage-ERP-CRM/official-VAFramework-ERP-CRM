@@ -26,9 +26,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     {
 
         /**	Client to be imported to			*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /**	Organization to be imported to		*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /**	Conversion Type to be imported to	*/
         private int _C_ConversionType_ID = 0;
         /**	Default Date					*/
@@ -51,10 +51,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Client_ID"))
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
-                else if (name.Equals("AD_Org_ID"))
-                    _AD_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAF_Client_ID"))
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAF_Org_ID"))
+                    _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("C_ConversionType_ID"))
                     _C_ConversionType_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("ValidFrom"))
@@ -75,15 +75,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("doIt - AD_Client_ID=" + _AD_Client_ID
-                + ",AD_Org_ID=" + _AD_Org_ID
+            log.Info("doIt - VAF_Client_ID=" + _VAF_Client_ID
+                + ",VAF_Org_ID=" + _VAF_Org_ID
                 + ",C_ConversionType_ID=" + _C_ConversionType_ID
                 + ",ValidFrom=" + _ValidFrom
                 + ",CreateReciprocalRate=" + _CreateReciprocalRate);
             //
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
             //	****	Prepare	****
 
             //	Delete Old Imported
@@ -97,8 +97,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, Location, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_Conversion_Rate "
-                  + "SET AD_Client_ID = COALESCE (AD_Client_ID,").Append(_AD_Client_ID).Append("),"
-                  + " AD_Org_ID = COALESCE (AD_Org_ID,").Append(_AD_Org_ID).Append("),");
+                  + "SET VAF_Client_ID = COALESCE (VAF_Client_ID,").Append(_VAF_Client_ID).Append("),"
+                  + " VAF_Org_ID = COALESCE (VAF_Org_ID,").Append(_VAF_Org_ID).Append("),");
             if (_C_ConversionType_ID != 0)
                 sql.Append(" C_ConversionType_ID = COALESCE (C_ConversionType_ID,").Append(_C_ConversionType_ID).Append("),");
             if (_ValidFrom != null)
@@ -122,8 +122,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String ts = DataBase.DB.IsPostgreSQL() ? "COALESCE(I_ErrorMsg,'')" : "I_ErrorMsg";  //java bug, it could not be used directly
             sql = new StringBuilder("UPDATE I_Conversion_Rate o "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Org, '"
-                + "WHERE (AD_Org_ID IS NULL"
-                + " OR EXISTS (SELECT * FROM AD_Org oo WHERE o.AD_Org_ID=oo.AD_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
+                + "WHERE (VAF_Org_ID IS NULL"
+                + " OR EXISTS (SELECT * FROM VAF_Org oo WHERE o.VAF_Org_ID=oo.VAF_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -132,7 +132,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Conversion Type
             sql = new StringBuilder("UPDATE I_Conversion_Rate i "
                 + "SET C_ConversionType_ID = (SELECT C_ConversionType_ID FROM C_ConversionType c"
-                + " WHERE c.Value=i.ConversionTypeValue AND c.AD_Client_ID IN (0,i.AD_Client_ID) AND c.IsActive='Y') "
+                + " WHERE c.Value=i.ConversionTypeValue AND c.VAF_Client_ID IN (0,i.VAF_Client_ID) AND c.IsActive='Y') "
                 + "WHERE C_ConversionType_ID IS NULL AND ConversionTypeValue IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -143,7 +143,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE (C_ConversionType_ID IS NULL"
                 + " OR NOT EXISTS (SELECT * FROM C_ConversionType c "
                     + "WHERE i.C_ConversionType_ID=c.C_ConversionType_ID AND c.IsActive='Y'"
-                    + " AND c.AD_Client_ID IN (0,i.AD_Client_ID)))"
+                    + " AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -152,7 +152,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Currency
             sql = new StringBuilder("UPDATE I_Conversion_Rate i "
                 + "SET C_Currency_ID = (SELECT C_Currency_ID FROM C_Currency c"
-                + "	WHERE c.ISO_Code=i.ISO_Code AND c.AD_Client_ID IN (0,i.AD_Client_ID) AND c.IsActive='Y') "
+                + "	WHERE c.ISO_Code=i.ISO_Code AND c.VAF_Client_ID IN (0,i.VAF_Client_ID) AND c.IsActive='Y') "
                 + "WHERE C_Currency_ID IS NULL AND ISO_Code IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -163,7 +163,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE (C_Currency_ID IS NULL"
                 + " OR NOT EXISTS (SELECT * FROM C_Currency c "
                     + "WHERE i.C_Currency_ID=c.C_Currency_ID AND c.IsActive='Y'"
-                    + " AND c.AD_Client_ID IN (0,i.AD_Client_ID)))"
+                    + " AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -172,7 +172,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Currency To
             sql = new StringBuilder("UPDATE I_Conversion_Rate i "
                 + "SET C_Currency_To_ID = (SELECT C_Currency_ID FROM C_Currency c"
-                + "	WHERE c.ISO_Code=i.ISO_Code_To AND c.AD_Client_ID IN (0,i.AD_Client_ID) AND c.IsActive='Y') "
+                + "	WHERE c.ISO_Code=i.ISO_Code_To AND c.VAF_Client_ID IN (0,i.VAF_Client_ID) AND c.IsActive='Y') "
                 + "WHERE C_Currency_To_ID IS NULL AND ISO_Code_To IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -183,7 +183,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE (C_Currency_To_ID IS NULL"
                 + " OR NOT EXISTS (SELECT * FROM C_Currency c "
                     + "WHERE i.C_Currency_To_ID=c.C_Currency_ID AND c.IsActive='Y'"
-                    + " AND c.AD_Client_ID IN (0,i.AD_Client_ID)))"
+                    + " AND c.VAF_Client_ID IN (0,i.VAF_Client_ID)))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

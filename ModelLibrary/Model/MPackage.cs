@@ -47,8 +47,8 @@ namespace VAdvantage.Model
             DateTime? moveDate = Convert.ToDateTime(shipment.GetMovementDate());
             String documentNo = shipment.GetDocumentNo();
             retValue.SetDateAcct(DateTime.Now.Date);
-            retValue.SetAD_Client_ID(shipment.GetAD_Client_ID());
-            retValue.SetAD_Org_ID(shipment.GetAD_Org_ID());
+            retValue.SetVAF_Client_ID(shipment.GetVAF_Client_ID());
+            retValue.SetVAF_Org_ID(shipment.GetVAF_Org_ID());
         
             if (!retValue.Save(trxName))
             {
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
                 //pLine.SetInOutLine(sLine);
                 //Changes in Below Method to create Lines and their values from Shipment/MR Lines to Package Lines
                 pLine.SetInOutLine(sLine, moveDate, documentNo,
-                    retValue.GetAD_Client_ID(), retValue.GetAD_Org_ID());
+                    retValue.GetVAF_Client_ID(), retValue.GetVAF_Org_ID());
 
                 if (!pLine.Save(trxName))
                 {

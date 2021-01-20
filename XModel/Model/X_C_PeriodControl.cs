@@ -74,7 +74,7 @@ static X_C_PeriodControl()
 //static long serialVersionUID 27562514374084L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057295L;
-/** AD_Table_ID=229 */
+/** VAF_TableView_ID=229 */
 public static int Table_ID;
  // =229;
 

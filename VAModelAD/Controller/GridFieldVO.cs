@@ -36,9 +36,9 @@ namespace VAdvantage.Controller
         public static String GetSQL(Ctx ctx, int AD_UserDef_Win_ID)
         {
             //	IsActive is part of View
-            String sql = "SELECT * FROM AD_Field_v WHERE AD_Tab_ID=@tabID";
-            if (!Env.IsBaseLanguage(ctx, "AD_Tab"))
-                sql = "SELECT * FROM AD_Field_vt WHERE AD_Tab_ID=@tabID"
+            String sql = "SELECT * FROM VAF_Field_v WHERE VAF_Tab_ID=@tabID";
+            if (!Env.IsBaseLanguage(ctx, "VAF_Tab"))
+                sql = "SELECT * FROM VAF_Field_vt WHERE VAF_Tab_ID=@tabID"
                     + " AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
             if (AD_UserDef_Win_ID != 0)
                 sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;
@@ -59,15 +59,15 @@ namespace VAdvantage.Controller
         /// <param name="WindowNo">window number</param>
         /// <param name="TabNo">tab number</param>
         /// <param name="AD_Window_ID">window Id</param>
-        /// <param name="AD_Tab_ID">Tab Id</param>
+        /// <param name="VAF_Tab_ID">Tab Id</param>
         /// <param name="readOnly">is readonly</param>
         /// <param name="dr">datarow</param>
         /// <returns>object of this Class</returns>
         public static GridFieldVO Create(Ctx ctx, int windowNo, int tabNo,
-            int AD_Window_ID, int AD_Tab_ID, bool readOnly, IDataReader dr)
+            int AD_Window_ID, int VAF_Tab_ID, bool readOnly, IDataReader dr)
         {
             GridFieldVO vo = new GridFieldVO(ctx, windowNo, tabNo,
-                AD_Window_ID, AD_Tab_ID, readOnly);
+                AD_Window_ID, VAF_Tab_ID, readOnly);
             String columnName = "ColumnName";
             try
             {
@@ -85,12 +85,12 @@ namespace VAdvantage.Controller
                         vo.Header = dr[i].ToString();
                     else if (columnName.Equals("AD_REFERENCE_ID"))
                         vo.displayType = Utility.Util.GetValueOfInt(dr[i]);//  Utility.Util.GetValueOfInt(dr[i])
-                    else if (columnName.Equals("AD_COLUMN_ID"))
-                        vo.AD_Column_ID = Utility.Util.GetValueOfInt(dr[i]);
-                    else if (columnName.Equals("AD_INFOWINDOW_ID"))
-                        vo.AD_InfoWindow_ID = Util.GetValueOfInt(dr[i]);
-                    else if (columnName.Equals("AD_TABLE_ID"))
-                        vo.AD_Table_ID = Utility.Util.GetValueOfInt(dr[i]);
+                    else if (columnName.Equals("VAF_COLUMN_ID"))
+                        vo.VAF_Column_ID = Utility.Util.GetValueOfInt(dr[i]);
+                    else if (columnName.Equals("VAF_QuickSearchWindow_ID"))
+                        vo.VAF_QuickSearchWindow_ID = Util.GetValueOfInt(dr[i]);
+                    else if (columnName.Equals("VAF_TABLEVIEW_ID"))
+                        vo.VAF_TableView_ID = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("DISPLAYLENGTH"))
                         vo.DisplayLength = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("ISSAMELINE"))
@@ -206,7 +206,7 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("AD_PROCESS_ID"))
                         vo.AD_Process_ID = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("AD_FORM_ID"))
-                        vo.AD_Form_ID = Utility.Util.GetValueOfInt(dr[i]);
+                        vo.VAF_Page_ID = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("READONLYLOGIC"))
                         vo.ReadOnlyLogic = dr[i].ToString();
                     else if (columnName.Equals("MANDATORYLOGIC"))
@@ -224,8 +224,8 @@ namespace VAdvantage.Controller
                         vo.ValidationCode = dr[i].ToString();
                     else if (columnName.Equals("COLUMNSQL"))
                         vo.ColumnSQL = dr[i].ToString();
-                    else if (columnName.Equals("AD_FIELD_ID"))
-                        vo.AD_Field_ID = Utility.Util.GetValueOfInt(dr[i]);
+                    else if (columnName.Equals("VAF_FIELD_ID"))
+                        vo.VAF_Field_ID = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("MOBILELISTINGFORMAT"))
                         vo.MobileListingFormat = Utility.Util.GetValueOfString(dr[i]);
                     else if (columnName.Equals("MRSEQNO"))
@@ -304,9 +304,9 @@ namespace VAdvantage.Controller
                     {
                         vo.ShowIcon = "Y".Equals(dr[i].ToString());
                     }
-                    else if (columnName.Equals("AD_Image_ID", StringComparison.OrdinalIgnoreCase))
+                    else if (columnName.Equals("VAF_Image_ID", StringComparison.OrdinalIgnoreCase))
                     {
-                        vo.AD_Image_ID = Utility.Util.GetValueOfInt(dr[i]);
+                        vo.VAF_Image_ID = Utility.Util.GetValueOfInt(dr[i]);
                     }
                     else if (columnName.Equals("PlaceHolder", StringComparison.OrdinalIgnoreCase))
                     {
@@ -385,8 +385,8 @@ namespace VAdvantage.Controller
 
             try
             {
-                vo.AD_Table_ID = 0;
-                vo.AD_Column_ID = Utility.Util.GetValueOfInt(dr["AD_Process_Para_ID"]);	//	**
+                vo.VAF_TableView_ID = 0;
+                vo.VAF_Column_ID = Utility.Util.GetValueOfInt(dr["AD_Process_Para_ID"]);	//	**
                 vo.ColumnName = dr["ColumnName"].ToString();
                 vo.Header = dr["Name"].ToString();
                 vo.Description = Utility.Util.GetValueOfString(dr["Description"]);
@@ -405,7 +405,7 @@ namespace VAdvantage.Controller
                 //
                 vo.AD_Reference_Value_ID = Utility.Util.GetValueOfInt(dr["AD_Reference_Value_ID"]);
                 vo.ValidationCode = Utility.Util.GetValueOfString(dr["ValidationCode"]);
-                vo.AD_InfoWindow_ID = Util.GetValueOfInt(dr["AD_INFOWINDOW_ID"]);
+                vo.VAF_QuickSearchWindow_ID = Util.GetValueOfInt(dr["VAF_QuickSearchWindow_ID"]);
             }
             catch (System.Exception e)
             {
@@ -426,14 +426,14 @@ namespace VAdvantage.Controller
         public static GridFieldVO CreateCrystalParameter(GridFieldVO voF)
         {
             GridFieldVO voT = new GridFieldVO(voF.ctx, voF.windowNo, voF.tabNo,
-                voF.AD_Window_ID, voF.AD_Tab_ID, voF.tabReadOnly);
+                voF.AD_Window_ID, voF.VAF_Tab_ID, voF.tabReadOnly);
             voT.isProcess = true;
             voT.IsDisplayedf = true;
             voT.IsReadOnly = false;
             voT.IsUpdateable = true;
             //
-            voT.AD_Table_ID = voF.AD_Table_ID;
-            voT.AD_Column_ID = voF.AD_Column_ID;    //  AD_Process_Para_ID
+            voT.VAF_TableView_ID = voF.VAF_TableView_ID;
+            voT.VAF_Column_ID = voF.VAF_Column_ID;    //  AD_Process_Para_ID
             voT.ColumnName = voF.ColumnName;
             voT.Header = voF.Header;
             voT.Description = voF.Description;
@@ -459,14 +459,14 @@ namespace VAdvantage.Controller
         public static GridFieldVO CreateParameter(GridFieldVO voF)
         {
             GridFieldVO voT = new GridFieldVO(voF.ctx, voF.windowNo, voF.tabNo,
-                voF.AD_Window_ID, voF.AD_Tab_ID, voF.tabReadOnly);
+                voF.AD_Window_ID, voF.VAF_Tab_ID, voF.tabReadOnly);
             voT.isProcess = true;
             voT.IsDisplayedf = true;
             voT.IsReadOnly = false;
             voT.IsUpdateable = true;
             //
-            voT.AD_Table_ID = voF.AD_Table_ID;
-            voT.AD_Column_ID = voF.AD_Column_ID;    //  AD_Process_Para_ID
+            voT.VAF_TableView_ID = voF.VAF_TableView_ID;
+            voT.VAF_Column_ID = voF.VAF_Column_ID;    //  AD_Process_Para_ID
             voT.ColumnName = voF.ColumnName;
             voT.Header = voF.Header;
             voT.Description = voF.Description;
@@ -492,17 +492,17 @@ namespace VAdvantage.Controller
         /// <param name="windowNo">window number</param>
         /// <param name="tabNo">tab number</param>
         /// <param name="AD_Window_ID">Window_ID</param>
-        /// <param name="AD_Tab_ID">Tab Id</param>
+        /// <param name="VAF_Tab_ID">Tab Id</param>
         /// <param name="tabReadOnly">tab readonly</param>
         /// <param name="isCreated">is prefic created column</param>
         /// <param name="isTimestamp">is prefix "update" column</param>
         /// <returns></returns>
         public static GridFieldVO CreateStdField(Ctx ctx, int windowNo, int tabNo,
-            int AD_Window_ID, int AD_Tab_ID, bool tabReadOnly,
+            int AD_Window_ID, int VAF_Tab_ID, bool tabReadOnly,
             bool isCreated, bool isTimestamp)
         {
             GridFieldVO vo = new GridFieldVO(ctx, windowNo, tabNo,
-                AD_Window_ID, AD_Tab_ID, tabReadOnly);
+                AD_Window_ID, VAF_Tab_ID, tabReadOnly);
             vo.ColumnName = isCreated ? "Created" : "Updated";
             if (!isTimestamp)
                 vo.ColumnName += "By";
@@ -534,8 +534,8 @@ namespace VAdvantage.Controller
             vo.IsUpdateable = true;
             try
             {
-                vo.AD_Table_ID = 0;
-                vo.AD_Column_ID = int.Parse(dr["AD_Process_Para_ID"].ToString());
+                vo.VAF_TableView_ID = 0;
+                vo.VAF_Column_ID = int.Parse(dr["AD_Process_Para_ID"].ToString());
                 vo.ColumnName = dr["COLUMNNAME"].ToString();
                 vo.Header = dr["Name"].ToString();
                 vo.name = dr["Name"].ToString();
@@ -553,7 +553,7 @@ namespace VAdvantage.Controller
                 vo.isRange = dr["ISRANGE"].ToString() == "Y";
                 vo.AD_Reference_Value_ID = int.Parse((dr["AD_REFERENCE_VALUE_ID"].ToString() == "") ? "0" : dr["AD_REFERENCE_VALUE_ID"].ToString());
                 vo.ValidationCode = dr["VALIDATIONCODE"].ToString();
-                vo.AD_InfoWindow_ID = Util.GetValueOfInt(dr["AD_INFOWINDOW_ID"]);
+                vo.VAF_QuickSearchWindow_ID = Util.GetValueOfInt(dr["VAF_QuickSearchWindow_ID"]);
                 vo.LoadRecursiveData = dr["LoadRecursiveData"].ToString() == "Y" ? true : false;
                 vo.ShowChildOfSelected = dr["ShowChildOfSelected"].ToString() == "Y" ? true : false;
 
@@ -589,8 +589,8 @@ namespace VAdvantage.Controller
             vo.IsUpdateable = true;
             try
             {
-                vo.AD_Table_ID = 0;
-                vo.AD_Column_ID = int.Parse(dr["AD_CrystalReport_Para_ID"].ToString());
+                vo.VAF_TableView_ID = 0;
+                vo.VAF_Column_ID = int.Parse(dr["VAF_CrystalReport_Para_ID"].ToString());
                 vo.ColumnName = dr["COLUMNNAME"].ToString();
                 vo.Header = dr["Name"].ToString();
                 vo.name = dr["Name"].ToString();
@@ -607,7 +607,7 @@ namespace VAdvantage.Controller
                 vo.isRange = dr["ISRANGE"].ToString() == "Y";
                 vo.AD_Reference_Value_ID = int.Parse((dr["AD_REFERENCE_VALUE_ID"].ToString() == "") ? "0" : dr["AD_REFERENCE_VALUE_ID"].ToString());
                 vo.ValidationCode = dr["VALIDATIONCODE"].ToString();
-                vo.AD_InfoWindow_ID = Util.GetValueOfInt(dr["AD_INFOWINDOW_ID"]);
+                vo.VAF_QuickSearchWindow_ID = Util.GetValueOfInt(dr["VAF_QuickSearchWindow_ID"]);
                 dr.Delete();
 
             }
@@ -629,16 +629,16 @@ namespace VAdvantage.Controller
         /// <param name="windowNo">windoe number</param>
         /// <param name="tabNo">tab number</param>
         /// <param name="ad_Window_ID">windoe _id</param>
-        /// <param name="ad_Tab_ID">tab id</param>
+        /// <param name="vaf_tab_ID">tab id</param>
         /// <param name="TabReadOnly">ia tab readonly</param>
         public GridFieldVO(Ctx newCtx, int windowNm, int tabNm,
-            int ad_Window_ID, int ad_Tab_ID, bool TabReadOnly)
+            int ad_Window_ID, int vaf_tab_ID, bool TabReadOnly)
         {
             ctx = newCtx;
             windowNo = windowNm;
             tabNo = tabNm;
             AD_Window_ID = ad_Window_ID;
-            AD_Tab_ID = ad_Tab_ID;
+            VAF_Tab_ID = vaf_tab_ID;
             tabReadOnly = TabReadOnly;
         }   //  MFieldVO
 
@@ -656,8 +656,8 @@ namespace VAdvantage.Controller
             vo.IsReadOnly = false;
             vo.IsUpdateable = true;
 
-            vo.AD_Table_ID = 0;
-            vo.AD_Column_ID = 0;
+            vo.VAF_TableView_ID = 0;
+            vo.VAF_Column_ID = 0;
             vo.ColumnName = f.ColumnName;
             vo.Header = "";
             vo.Description = f.Description;
@@ -729,7 +729,7 @@ namespace VAdvantage.Controller
                     try
                     {
                         lookupInfo = VLookUpFactory.GetLookUpInfo(ctx, windowNo, displayType,
-                            AD_Column_ID, Env.GetLanguage(ctx), ColumnName, AD_Reference_Value_ID,
+                            VAF_Column_ID, Env.GetLanguage(ctx), ColumnName, AD_Reference_Value_ID,
                             IsParent, ValidationCode);
                     }
                     catch (Exception e)     //  Cannot create Lookup
@@ -753,15 +753,15 @@ namespace VAdvantage.Controller
         /// <param name="windowNo">window number</param>
         /// <param name="tabNo">tab number</param>
         /// <param name="ad_Window_ID">window_id</param>
-        /// <param name="ad_Tab_ID">tab_ id</param>
+        /// <param name="vaf_tab_ID">tab_ id</param>
         /// <param name="TabReadOnly">is tabreadonly</param>
         /// <returns>this object</returns>
         public GridFieldVO Clone(Ctx ctx, int windowNo, int tabNo,
-            int ad_Window_ID, int ad_Tab_ID,
+            int ad_Window_ID, int vaf_tab_ID,
             bool TabReadOnly)
         {
             GridFieldVO clone = new GridFieldVO(ctx, windowNo, tabNo,
-            ad_Window_ID, ad_Tab_ID, TabReadOnly);
+            ad_Window_ID, vaf_tab_ID, TabReadOnly);
 
             clone.isProcess = false;
             //  Database Fields
@@ -769,8 +769,8 @@ namespace VAdvantage.Controller
             clone.ColumnSQL = ColumnSQL;
             clone.Header = Header;
             clone.displayType = displayType;
-            clone.AD_Table_ID = AD_Table_ID;
-            clone.AD_Column_ID = AD_Column_ID;
+            clone.VAF_TableView_ID = VAF_TableView_ID;
+            clone.VAF_Column_ID = VAF_Column_ID;
             clone.DisplayLength = DisplayLength;
             clone.IsSameLine = IsSameLine;
             clone.IsDisplayedf = IsDisplayedf;
@@ -814,8 +814,8 @@ namespace VAdvantage.Controller
 
 
             //Lakhwinder
-            clone.AD_Field_ID = AD_Field_ID;
-            clone.AD_InfoWindow_ID = AD_InfoWindow_ID;
+            clone.VAF_Field_ID = VAF_Field_ID;
+            clone.VAF_QuickSearchWindow_ID = VAF_QuickSearchWindow_ID;
 
             //Harwinder
             clone.MobileListingFormat = MobileListingFormat;
@@ -826,7 +826,7 @@ namespace VAdvantage.Controller
             clone.IsCopy = IsCopy;
             clone.ColumnWidth = ColumnWidth;
 
-            clone.AD_Form_ID = AD_Form_ID;
+            clone.VAF_Page_ID = VAF_Page_ID;
             clone.IsBackgroundProcess = IsBackgroundProcess;
             clone.AskUserBGProcess = AskUserBGProcess;
             clone.IsHeaderPanelitem = IsHeaderPanelitem;
@@ -837,7 +837,7 @@ namespace VAdvantage.Controller
             clone.HeaderIconOnly = HeaderIconOnly;
             clone.HtmlStyle = HtmlStyle;
             clone.ShowIcon = ShowIcon;
-            clone.AD_Image_ID = AD_Image_ID;
+            clone.VAF_Image_ID = VAF_Image_ID;
             clone.FontClass = FontClass;
             clone.ImageName = ImageName;
             clone.IsMaintainVersions = IsMaintainVersions;
@@ -858,7 +858,7 @@ namespace VAdvantage.Controller
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MFieldVO[");
-            sb.Append(AD_Column_ID).Append("-").Append(ColumnName)
+            sb.Append(VAF_Column_ID).Append("-").Append(ColumnName)
                 .Append("]");
             return sb.ToString();
         }

@@ -197,11 +197,11 @@ namespace VAdvantage.Model
 
         /**
          * 	Exclude entry
-         *	@param AD_Column_ID column
+         *	@param VAF_Column_ID column
          *	@param isSOTrx sales order
          *	@return true if excluded
          */
-        public bool ExcludeEntry(int AD_Column_ID, bool isSOTrx)
+        public bool ExcludeEntry(int VAF_Column_ID, bool isSOTrx)
         {
             if (_excludes == null)
             {
@@ -228,10 +228,10 @@ namespace VAdvantage.Model
             //	Find it
             if (_excludes != null && _excludes.Length > 0)
             {
-                MColumn column = MColumn.Get(GetCtx(), AD_Column_ID);
+                MColumn column = MColumn.Get(GetCtx(), VAF_Column_ID);
                 for (int i = 0; i < _excludes.Length; i++)
                 {
-                    if (_excludes[i].GetAD_Table_ID() == column.GetAD_Table_ID()
+                    if (_excludes[i].GetVAF_TableView_ID() == column.GetVAF_TableView_ID()
                         && _excludes[i].IsSOTrx() == isSOTrx)
                         return true;
                 }
@@ -241,11 +241,11 @@ namespace VAdvantage.Model
 
         /**
          * 	Exclude Lot creation
-         *	@param AD_Column_ID column
+         *	@param VAF_Column_ID column
          *	@param isSOTrx SO
          *	@return true if excluded
          */
-        public bool IsExcludeLot(int AD_Column_ID, bool isSOTrx)
+        public bool IsExcludeLot(int VAF_Column_ID, bool isSOTrx)
         {
             if (GetM_LotCtl_ID() == 0)
                 return true;
@@ -275,10 +275,10 @@ namespace VAdvantage.Model
             //	Find it
             if (_excludeLots != null && _excludeLots.Length > 0)
             {
-                MColumn column = MColumn.Get(GetCtx(), AD_Column_ID);
+                MColumn column = MColumn.Get(GetCtx(), VAF_Column_ID);
                 for (int i = 0; i < _excludeLots.Length; i++)
                 {
-                    if (_excludeLots[i].GetAD_Table_ID() == column.GetAD_Table_ID()
+                    if (_excludeLots[i].GetVAF_TableView_ID() == column.GetVAF_TableView_ID()
                         && _excludeLots[i].IsSOTrx() == isSOTrx)
                         return true;
                 }
@@ -288,11 +288,11 @@ namespace VAdvantage.Model
 
         /**
          *	Exclude SerNo creation
-         *	@param AD_Column_ID column
+         *	@param VAF_Column_ID column
          *	@param isSOTrx SO
          *	@return true if excluded
          */
-        public bool IsExcludeSerNo(int AD_Column_ID, bool isSOTrx)
+        public bool IsExcludeSerNo(int VAF_Column_ID, bool isSOTrx)
         {
             if (GetM_SerNoCtl_ID() == 0)
                 return true;
@@ -322,10 +322,10 @@ namespace VAdvantage.Model
             //	Find it
             if (_excludeSerNos != null && _excludeSerNos.Length > 0)
             {
-                MColumn column = MColumn.Get(GetCtx(), AD_Column_ID);
+                MColumn column = MColumn.Get(GetCtx(), VAF_Column_ID);
                 for (int i = 0; i < _excludeSerNos.Length; i++)
                 {
-                    if (_excludeSerNos[i].GetAD_Table_ID() == column.GetAD_Table_ID()
+                    if (_excludeSerNos[i].GetVAF_TableView_ID() == column.GetVAF_TableView_ID()
                         && _excludeSerNos[i].IsSOTrx() == isSOTrx)
                         return true;
                 }

@@ -196,16 +196,16 @@ VIS.context.getAD_Role_Name = function () {
     return this.getContext("#AD_Role_Name");
 };
 
-VIS.context.getAD_Client_ID = function () {
-    return VIS.context.getContext("#AD_Client_ID");
+VIS.context.getVAF_Client_ID = function () {
+    return VIS.context.getContext("#VAF_Client_ID");
 };
 
-VIS.context.getAD_Client_Name = function () {
-    return this.getContext("#AD_Client_Name");
+VIS.context.getVAF_Client_Name = function () {
+    return this.getContext("#VAF_Client_Name");
 };
 
-VIS.context.getAD_Org_ID = function () {
-    return VIS.context.getContext("#AD_Org_ID");
+VIS.context.getVAF_Org_ID = function () {
+    return VIS.context.getContext("#VAF_Org_ID");
 };
 
 VIS.context.getAD_Language = function () {

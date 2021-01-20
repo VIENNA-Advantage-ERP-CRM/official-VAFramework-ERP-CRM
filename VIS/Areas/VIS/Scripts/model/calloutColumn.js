@@ -19,7 +19,7 @@
 
         $.ajax({
             url: VIS.Application.contextUrl + "VIS/CalloutColumn/GetDBColunName",
-            data: { AD_Element_ID: value },
+            data: { VAF_ColumnDic_ID: value },
             success: function (result) {
                 if (result)
                     _mTab.setValue("ColumnName", result);

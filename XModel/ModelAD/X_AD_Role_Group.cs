@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (AD_Role_Group_ID == 0)
             {
-            SetAD_GroupInfo_ID (0);
+            SetVAF_GroupInfo_ID (0);
             SetAD_Role_ID (0);
             SetAD_User_ID (0);
             }
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         {
             /** if (AD_Role_Group_ID == 0)
             {
-            SetAD_GroupInfo_ID (0);
+            SetVAF_GroupInfo_ID (0);
             SetAD_Role_ID (0);
             SetAD_User_ID (0);
             }
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27713103313685L;
         /** Last Updated Timestamp 5/7/2015 11:23:17 AM */
         public static long updatedMS = 1430977996896L;
-        /** AD_Table_ID=1000495 */
+        /** VAF_TableView_ID=1000495 */
         public static int Table_ID;
         // =1000495;
 
@@ -119,18 +119,18 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("X_AD_Role_Group[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
-        /** Set AD_GroupInfo_ID.
-        @param AD_GroupInfo_ID AD_GroupInfo_ID */
-        public void SetAD_GroupInfo_ID(int AD_GroupInfo_ID)
+        /** Set VAF_GroupInfo_ID.
+        @param VAF_GroupInfo_ID VAF_GroupInfo_ID */
+        public void SetVAF_GroupInfo_ID(int VAF_GroupInfo_ID)
         {
-            if (AD_GroupInfo_ID < 1) throw new ArgumentException("AD_GroupInfo_ID is mandatory.");
-            Set_ValueNoCheck("AD_GroupInfo_ID", AD_GroupInfo_ID);
+            if (VAF_GroupInfo_ID < 1) throw new ArgumentException("VAF_GroupInfo_ID is mandatory.");
+            Set_ValueNoCheck("VAF_GroupInfo_ID", VAF_GroupInfo_ID);
         }
-        /** Get AD_GroupInfo_ID.
-        @return AD_GroupInfo_ID */
-        public int GetAD_GroupInfo_ID()
+        /** Get VAF_GroupInfo_ID.
+        @return VAF_GroupInfo_ID */
+        public int GetVAF_GroupInfo_ID()
         {
-            Object ii = Get_Value("AD_GroupInfo_ID");
+            Object ii = Get_Value("VAF_GroupInfo_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

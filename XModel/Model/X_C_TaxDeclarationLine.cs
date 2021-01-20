@@ -86,7 +86,7 @@ static X_C_TaxDeclarationLine()
 //static long serialVersionUID 27562514375494L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058705L;
-/** AD_Table_ID=819 */
+/** VAF_TableView_ID=819 */
 public static int Table_ID;
  // =819;
 

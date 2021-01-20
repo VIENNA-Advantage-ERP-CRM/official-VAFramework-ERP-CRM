@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Val_Rule
+ * Class Used     : X_VAF_DataVal_Rule
  * Chronological Development
  * Veena Pandey     29-Aug-09
  ******************************************************/
@@ -17,21 +17,21 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MValRule : X_AD_Val_Rule
+    public class MValRule : X_VAF_DataVal_Rule
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Val_Rule_ID">id</param>
+        /// <param name="VAF_DataVal_Rule_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MValRule(Context ctx, int AD_Val_Rule_ID, Trx trxName)
-            : base(ctx, AD_Val_Rule_ID, trxName)
+        public MValRule(Context ctx, int VAF_DataVal_Rule_ID, Trx trxName)
+            : base(ctx, VAF_DataVal_Rule_ID, trxName)
         {
         }
 
-        public MValRule(Ctx ctx, int AD_Val_Rule_ID, Trx trxName)
-            : base(ctx, AD_Val_Rule_ID, trxName)
+        public MValRule(Ctx ctx, int VAF_DataVal_Rule_ID, Trx trxName)
+            : base(ctx, VAF_DataVal_Rule_ID, trxName)
         {
         }
 

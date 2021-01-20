@@ -70,7 +70,7 @@ static X_AD_ModuleMenuFolder()
 //static long serialVersionUID 27626107731746L;
 /** Last Updated Timestamp 8/3/2012 1:56:55 PM */
 public static long updatedMS = 1343982414957L;
-/** AD_Table_ID=1000073 */
+/** VAF_TableView_ID=1000073 */
 public static int Table_ID;
  // =1000073;
 

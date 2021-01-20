@@ -105,9 +105,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             //	Client Info
             _client = MClient.Get(GetCtx());
-            if (_client.GetAD_Client_ID() == 0)
+            if (_client.GetVAF_Client_ID() == 0)
             {
-                throw new Exception("Not found @AD_Client_ID@");
+                throw new Exception("Not found @VAF_Client_ID@");
             }
             if (_client.GetSmtpHost() == null || _client.GetSmtpHost().Length == 0)
             {

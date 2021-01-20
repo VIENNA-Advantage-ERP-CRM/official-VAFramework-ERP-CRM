@@ -151,10 +151,10 @@ namespace VAdvantage.Model
 			toBeIndexed[1] = this.GetDescription();
 			toBeIndexed[2] = this.GetContentHTML();
 			MIndex.ReIndex (newRecord, toBeIndexed, GetCtx(), 
-				GetAD_Client_ID(), Get_Table_ID(), Get_ID(), CMWebProjectID, this.GetUpdated());
+				GetVAF_Client_ID(), Get_Table_ID(), Get_ID(), CMWebProjectID, this.GetUpdated());
 		}
 		if (!GetParent().IsIndexed () && !newRecord)
-			MIndex.CleanUp(Get_TrxName(), GetAD_Client_ID(), Get_Table_ID(), Get_ID());
+			MIndex.CleanUp(Get_TrxName(), GetVAF_Client_ID(), Get_Table_ID(), Get_ID());
 	}	// reIndex
 	
 }	//	MContainerElement

@@ -92,7 +92,7 @@ static X_CM_Ad()
 //static long serialVersionUID 27562514368222L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051433L;
-/** AD_Table_ID=858 */
+/** VAF_TableView_ID=858 */
 public static int Table_ID;
  // =858;
 

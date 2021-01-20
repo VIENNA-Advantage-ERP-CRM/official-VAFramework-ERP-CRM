@@ -82,7 +82,7 @@ static X_C_UserRemuneration()
 //static long serialVersionUID 27562514375823L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059034L;
-/** AD_Table_ID=794 */
+/** VAF_TableView_ID=794 */
 public static int Table_ID;
  // =794;
 

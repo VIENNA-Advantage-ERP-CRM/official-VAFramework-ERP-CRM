@@ -142,7 +142,7 @@ namespace VAdvantage.Acct
             for (int i = 0; i < _lines.Length; i++)
             {
                 DocLine line = _lines[i];
-                Decimal costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), false);
+                Decimal costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), false);
                 if ( Env.Signum(costs) == 0)
                 {
                     _error = "No Costs for " + line.GetProduct().GetName();
@@ -176,12 +176,12 @@ namespace VAdvantage.Acct
                 cr.SetQty(Decimal.Negate(line.GetQty().Value));
                 if (line.GetC_Charge_ID() != 0)	//	explicit overwrite for charge
                 {
-                    cr.SetAD_Org_ID(line.GetAD_Org_ID());
+                    cr.SetVAF_Org_ID(line.GetVAF_Org_ID());
                 }
                 if (!IsPosted())
                 {
                     //	Cost Detail
-                    MCostDetail.CreateInventory(as1, line.GetAD_Org_ID(),
+                    MCostDetail.CreateInventory(as1, line.GetVAF_Org_ID(),
                         line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                         line.Get_ID(), 0,
                         costs, line.GetQty().Value,

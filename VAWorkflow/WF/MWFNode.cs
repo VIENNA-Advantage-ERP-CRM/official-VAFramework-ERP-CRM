@@ -135,11 +135,11 @@ namespace VAdvantage.WF
         /// <summary>
         ///Set Client Org
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
-        //public  void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        //public  void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         //{
-        //    base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+        //    base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         //}
 
         /// <summary>
@@ -291,15 +291,15 @@ namespace VAdvantage.WF
             else if (ACTION_AppsTask.Equals(action))
                 return "Task:AD_Task_ID=" + GetAD_Task_ID();
             else if (ACTION_SetVariable.Equals(action))
-                return "SetVariable:AD_Column_ID=" + GetAD_Column_ID();
+                return "SetVariable:VAF_Column_ID=" + GetVAF_Column_ID();
             else if (ACTION_SubWorkflow.Equals(action))
                 return "Workflow:AD_Workflow_ID=" + GetAD_Workflow_ID();
             else if (ACTION_UserChoice.Equals(action))
-                return "UserChoice:AD_Column_ID=" + GetAD_Column_ID();
+                return "UserChoice:VAF_Column_ID=" + GetVAF_Column_ID();
             else if (ACTION_UserWorkbench.Equals(action))
                 return "Workbench:?";
             else if (ACTION_UserForm.Equals(action))
-                return "Form:AD_Form_ID=" + GetAD_Form_ID();
+                return "Form:VAF_Page_ID=" + GetVAF_Page_ID();
             else if (ACTION_UserWindow.Equals(action))
                 return "Window:AD_Window_ID=" + GetAD_Window_ID();
             else if (ACTION_WaitSleep.Equals(action))
@@ -314,7 +314,7 @@ namespace VAdvantage.WF
         /// <returns>Attribute Name</returns>
         public new String GetAttributeName()
         {
-            if (GetAD_Column_ID() == 0)
+            if (GetVAF_Column_ID() == 0)
                 return base.GetAttributeName();
             //	We have a column
             String attribute = base.GetAttributeName();
@@ -331,10 +331,10 @@ namespace VAdvantage.WF
         /// <returns>column if valid</returns>
         public MColumn GetColumn()
         {
-            if (GetAD_Column_ID() == 0)
+            if (GetVAF_Column_ID() == 0)
                 return null;
             if (_column == null)
-                _column = MColumn.Get(GetCtx(), GetAD_Column_ID());
+                _column = MColumn.Get(GetCtx(), GetVAF_Column_ID());
             return _column;
         }
 
@@ -536,17 +536,17 @@ namespace VAdvantage.WF
             }
             else if (action.Equals(ACTION_UserChoice))
             {
-                if (GetAD_Column_ID() == 0)
+                if (GetVAF_Column_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Column_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Column_ID"));
                     return false;
                 }
             }
             else if (action.Equals(ACTION_UserForm))
             {
-                if (GetAD_Form_ID() == 0)
+                if (GetVAF_Page_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Form_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Page_ID"));
                     return false;
                 }
             }
@@ -597,15 +597,15 @@ namespace VAdvantage.WF
         /// <summary>
         /// Get the transitions
         /// </summary>
-        /// <param name="AD_Client_ID">for client</param>
+        /// <param name="VAF_Client_ID">for client</param>
         /// <returns>array of next nodes</returns>
-        public MWFNodeNext[] GetTransitions(int AD_Client_ID)
+        public MWFNodeNext[] GetTransitions(int VAF_Client_ID)
         {
             List<MWFNodeNext> list = new List<MWFNodeNext>();
             for (int i = 0; i < _next.Count; i++)
             {
                 MWFNodeNext next = _next[i];
-                if (next.GetAD_Client_ID() == 0 || next.GetAD_Client_ID() == AD_Client_ID)
+                if (next.GetVAF_Client_ID() == 0 || next.GetVAF_Client_ID() == VAF_Client_ID)
                     list.Add(next);
             }
             MWFNodeNext[] retValue = new MWFNodeNext[list.Count];

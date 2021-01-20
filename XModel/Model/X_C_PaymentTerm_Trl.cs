@@ -74,7 +74,7 @@ static X_C_PaymentTerm_Trl()
 static long serialVersionUID = 27716755601852L;
 /** Last Updated Timestamp 6/18/2015 5:54:45 PM */
 public static long updatedMS = 1434630285063L;
-/** AD_Table_ID=303 */
+/** VAF_TableView_ID=303 */
 public static int Table_ID;
  // =303;
 

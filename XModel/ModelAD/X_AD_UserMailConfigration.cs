@@ -68,7 +68,7 @@ static X_AD_UserMailConfigration()
 //static long serialVersionUID 27589121536891L;
 /** Last Updated Timestamp 6/2/2011 12:00:20 PM */
 public static long updatedMS = 1306996220102L;
-/** AD_Table_ID=1000009 */
+/** VAF_TableView_ID=1000009 */
 public static int Table_ID;
  // =1000009;
 

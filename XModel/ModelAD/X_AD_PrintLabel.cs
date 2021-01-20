@@ -22,7 +22,7 @@ public X_AD_PrintLabel (Context ctx, int AD_PrintLabel_ID, Trx trxName) : base (
 {
 SetAD_LabelPrinter_ID (0);
 SetAD_PrintLabel_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetIsLandscape (false);
 SetLabelHeight (0);
 SetLabelWidth (0);
@@ -36,7 +36,7 @@ public X_AD_PrintLabel (Ctx ctx, int AD_PrintLabel_ID, Trx trxName) : base (ctx,
 {
 SetAD_LabelPrinter_ID (0);
 SetAD_PrintLabel_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetIsLandscape (false);
 SetLabelHeight (0);
 SetLabelWidth (0);
@@ -80,7 +80,7 @@ static X_AD_PrintLabel()
 //static long serialVersionUID = 27562514362925L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046136L;
-/** AD_Table_ID=570 */
+/** VAF_TableView_ID=570 */
 public static int Table_ID;
  // =570;
 
@@ -153,17 +153,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

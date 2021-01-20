@@ -79,7 +79,7 @@ namespace ViennaAdvantageServer.Process
             }
             else
             {
-                sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
+                sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 IDataReader idr = null;
                 try
                 {
@@ -208,8 +208,8 @@ namespace ViennaAdvantageServer.Process
                 price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
 
                 inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, Get_TrxName());
-                inv.SetAD_Client_ID(cont.GetAD_Client_ID());
-                inv.SetAD_Org_ID(cont.GetAD_Org_ID());
+                inv.SetVAF_Client_ID(cont.GetVAF_Client_ID());
+                inv.SetVAF_Org_ID(cont.GetVAF_Org_ID());
                 inv.SetC_BPartner_ID(cont.GetC_BPartner_ID());
                 if (Util.GetValueOfInt(cont.GetC_Order_ID()) != 0)
                 {
@@ -251,8 +251,8 @@ namespace ViennaAdvantageServer.Process
                 else
                 {
                     VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, Get_TrxName());
-                    invLine.SetAD_Client_ID(inv.GetAD_Client_ID());
-                    invLine.SetAD_Org_ID(inv.GetAD_Org_ID());
+                    invLine.SetVAF_Client_ID(inv.GetVAF_Client_ID());
+                    invLine.SetVAF_Org_ID(inv.GetVAF_Org_ID());
                     invLine.SetC_Campaign_ID(inv.GetC_Campaign_ID());
                     invLine.SetC_Invoice_ID(inv.GetC_Invoice_ID());
                     invLine.SetC_UOM_ID(cont.GetC_UOM_ID());

@@ -230,11 +230,11 @@ namespace VAdvantage.Model
 
         public static int GetDefault(Ctx ctx)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             int rPolicy_ID = 0;
 
             String sql = "SELECT M_ReturnPolicy_ID FROM M_ReturnPolicy"
-                + " WHERE IsDefault='Y' AND IsActive='Y' AND AD_Client_ID=" + AD_Client_ID;
+                + " WHERE IsDefault='Y' AND IsActive='Y' AND VAF_Client_ID=" + VAF_Client_ID;
             IDataReader idr = null;
             try
             {

@@ -70,7 +70,7 @@ static X_AD_WF_Recipient()
 //static long serialVersionUID 27666620426880L;
 /** Last Updated Timestamp 11/15/2013 11:28:30 AM */
 public static long updatedMS = 1384495110091L;
-/** AD_Table_ID=1000417 */
+/** VAF_TableView_ID=1000417 */
 public static int Table_ID;
  // =1000417;
 

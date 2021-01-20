@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 // check if same record is inserting again
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleField WHERE AD_Field_ID=" + GetAD_Field_ID() + " AND AD_ModuleTab_ID=" + GetAD_ModuleTab_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleField WHERE VAF_Field_ID=" + GetVAF_Field_ID() + " AND AD_ModuleTab_ID=" + GetAD_ModuleTab_ID())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "FieldExist"));
                     return false;
@@ -34,10 +34,10 @@ namespace VAdvantage.Model
             else
             {
                 // check if field value changed for previous record
-                if (Is_ValueChanged("AD_Field_ID"))
+                if (Is_ValueChanged("VAF_Field_ID"))
                 {
                     // check if same record is inserting again
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleField WHERE AD_Field_ID=" + GetAD_Field_ID() + " AND AD_ModuleTab_ID=" + GetAD_ModuleTab_ID())) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleField WHERE VAF_Field_ID=" + GetVAF_Field_ID() + " AND AD_ModuleTab_ID=" + GetAD_ModuleTab_ID())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "FieldExist"));
                         return false;

@@ -52,14 +52,14 @@ namespace VAWorkflow.Classes
                 while (true)
                 {
                     // Get records from mail queue table to send them one by one as email
-                    DataSet mailds = DB.ExecuteDataset("SELECT AD_Org_ID, AD_Client_ID, CreatedBy, AD_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, AD_Table_ID, Record_ID, AD_WF_Activity_ID, AD_WF_EventAudit_ID, AD_MailQueue_ID, AD_WF_Process_ID FROM AD_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY AD_MailQueue_ID");
+                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, AD_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, AD_WF_Activity_ID, AD_WF_EventAudit_ID, AD_MailQueue_ID, AD_WF_Process_ID FROM AD_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY AD_MailQueue_ID");
 
                     if (mailds != null && mailds.Tables.Count > 0 && mailds.Tables[0].Rows.Count > 0)
                     {
                         for (int m = 0; m < mailds.Tables[0].Rows.Count; m++)
                         {
-                            int AD_Org_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_Org_ID"]);
-                            int AD_Client_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_Client_ID"]);
+                            int VAF_Org_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Org_ID"]);
+                            int VAF_Client_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Client_ID"]);
                             int AD_User_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["CreatedBy"]);
                             int AD_Role_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_Role_ID"]);
 
@@ -69,7 +69,7 @@ namespace VAWorkflow.Classes
                             String message = Util.GetValueOfString(mailds.Tables[0].Rows[m]["MailMessage"]);
                             FileInfo attachment = null;
                             bool isHtml = Util.GetValueOfString(mailds.Tables[0].Rows[m]["IsHtmlEmail"]) == "Y" ? true : false;
-                            int AD_Table_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_Table_ID"]);
+                            int VAF_TableView_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_TableView_ID"]);
                             int Record_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["Record_ID"]);
                             byte[] array = null;
                             String fileName = null;
@@ -81,8 +81,8 @@ namespace VAWorkflow.Classes
 
                             // Create context
                             Ctx _ctx = new Ctx();
-                            _ctx.SetAD_Org_ID(AD_Org_ID);
-                            _ctx.SetAD_Client_ID(AD_Client_ID);
+                            _ctx.SetVAF_Org_ID(VAF_Org_ID);
+                            _ctx.SetVAF_Client_ID(VAF_Client_ID);
                             _ctx.SetAD_User_ID(AD_User_ID);
                             _ctx.SetAD_Role_ID(AD_Role_ID);
 
@@ -96,12 +96,12 @@ namespace VAWorkflow.Classes
                                 node = new X_AD_WF_Node(_ctx, Convert.ToInt32(nodeID), null);
                             }
                             FileInfo pdf = null;
-                            MTable table = MTable.Get(_ctx, AD_Table_ID);
+                            MTable table = MTable.Get(_ctx, VAF_TableView_ID);
                             PO po = table.GetPO(_ctx, Record_ID, null);
                             if (node.IsAttachReport())
                             {
                                 VAdvantage.Common.Common com = new Common();
-                                pdf = com.GetPdfReportForMail(_ctx, null, AD_Table_ID, Record_ID, AD_User_ID, AD_Client_ID,
+                                pdf = com.GetPdfReportForMail(_ctx, null, VAF_TableView_ID, Record_ID, AD_User_ID, VAF_Client_ID,
                                    "", 0, AD_WF_Activity_ID);
                             }
                             else if (po is VAdvantage.Process.DocAction)
@@ -110,7 +110,7 @@ namespace VAWorkflow.Classes
                                 attachment = doc.CreatePDF();
                             }
                             // Check if there is m class for the record and table and fetch attachment from that class 
-                            //MTable table = MTable.Get(_ctx, AD_Table_ID);
+                            //MTable table = MTable.Get(_ctx, VAF_TableView_ID);
                             //PO po = table.GetPO(_ctx, Record_ID, null);
 
                             //if (po is VAdvantage.Process.DocAction) // MClass Implement DocAction
@@ -118,7 +118,7 @@ namespace VAWorkflow.Classes
                             //VAdvantage.Process.DocAction doc = (VAdvantage.Process.DocAction)po;
                             //attachment = doc.CreatePDF();
                             //VAdvantage.Common.Common com = new Common();
-                            //FileInfo pdf = com.GetPdfReportForMail(_ctx, null, AD_Table_ID, Record_ID, AD_User_ID, AD_Client_ID,
+                            //FileInfo pdf = com.GetPdfReportForMail(_ctx, null, VAF_TableView_ID, Record_ID, AD_User_ID, VAF_Client_ID,
                             //   "", 0, AD_WF_Activity_ID);
                             if (pdf != null)
                             {
@@ -128,8 +128,8 @@ namespace VAWorkflow.Classes
                             //}
 
                             // Create Mclient object and send Email 
-                            MClient client = MClient.Get(_ctx, AD_Client_ID);
-                            bool mailsent = client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, AD_Table_ID, Record_ID, array, fileName);
+                            MClient client = MClient.Get(_ctx, VAF_Client_ID);
+                            bool mailsent = client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, VAF_TableView_ID, Record_ID, array, fileName);
 
                             ViennaAdvantage.Model.X_AD_MailQueue mailQueue = new ViennaAdvantage.Model.X_AD_MailQueue(_ctx, AD_MailQueue_ID, null);
 

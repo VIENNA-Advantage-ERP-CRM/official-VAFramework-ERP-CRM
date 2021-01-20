@@ -42,7 +42,7 @@ namespace VAdvantage.Classes
         /** Validation flag */
         public bool isValidated = false;
 
-        /**	AD_Column_Info or AD_Process_Para	*/
+        /**	VAF_Column_Info or AD_Process_Para	*/
         public int column_ID;
         /** Real AD_Reference_ID				*/
         public int AD_Reference_Value_ID;
@@ -146,18 +146,18 @@ namespace VAdvantage.Classes
 
 
         /// <summary>
-        ///  Get first AD_Column_ID of matching ColumnName.
+        ///  Get first VAF_Column_ID of matching ColumnName.
         ///  Can have SQL LIKE place holders.
         ///  (This is more a development tool than used for production)
         /// </summary>
         /// <param name="ColumnName">column name</param>
-        /// <returns>AD_Column_ID</returns>
-        public static int GetAD_Column_ID(String columnName)
+        /// <returns>VAF_Column_ID</returns>
+        public static int GetVAF_Column_ID(String columnName)
         {
             int RetValue = 0;
-            String sql = "SELECT c.AD_Column_ID,c.ColumnName,t.tableName "
-                + "FROM AD_Column c, AD_Table t "
-                + "WHERE c.ColumnName LIKE @name AND c.AD_Table_ID=t.AD_Table_ID";
+            String sql = "SELECT c.VAF_Column_ID,c.ColumnName,t.tableName "
+                + "FROM VAF_Column c, VAF_TableView t "
+                + "WHERE c.ColumnName LIKE @name AND c.VAF_TableView_ID=t.VAF_TableView_ID";
             IDataReader dr = null;
             try
             {

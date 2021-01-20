@@ -72,7 +72,7 @@ static X_CM_Template_Ad_Cat()
 //static long serialVersionUID 27562514369225L;
 /** Last Updated Timestamp 7/29/2010 1:07:32 PM */
 public static long updatedMS = 1280389052436L;
-/** AD_Table_ID=872 */
+/** VAF_TableView_ID=872 */
 public static int Table_ID;
  // =872;
 

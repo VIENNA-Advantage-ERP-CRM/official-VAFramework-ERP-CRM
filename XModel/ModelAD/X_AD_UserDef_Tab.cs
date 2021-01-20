@@ -20,7 +20,7 @@ public X_AD_UserDef_Tab (Context ctx, int AD_UserDef_Tab_ID, Trx trxName) : base
 {
 /** if (AD_UserDef_Tab_ID == 0)
 {
-SetAD_Tab_ID (0);
+SetVAF_Tab_ID (0);
 SetAD_UserDef_Tab_ID (0);
 SetAD_UserDef_Win_ID (0);
 }
@@ -30,7 +30,7 @@ public X_AD_UserDef_Tab (Ctx ctx, int AD_UserDef_Tab_ID, Trx trxName) : base (ct
 {
 /** if (AD_UserDef_Tab_ID == 0)
 {
-SetAD_Tab_ID (0);
+SetVAF_Tab_ID (0);
 SetAD_UserDef_Tab_ID (0);
 SetAD_UserDef_Win_ID (0);
 }
@@ -72,7 +72,7 @@ static X_AD_UserDef_Tab()
 //static long serialVersionUID 27562514365338L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048549L;
-/** AD_Table_ID=466 */
+/** VAF_TableView_ID=466 */
 public static int Table_ID;
  // =466;
 
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_AD_UserDef_Tab[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Tab.
-@param AD_Tab_ID Tab within a Window */
-public void SetAD_Tab_ID (int AD_Tab_ID)
+@param VAF_Tab_ID Tab within a Window */
+public void SetVAF_Tab_ID (int VAF_Tab_ID)
 {
-if (AD_Tab_ID < 1) throw new ArgumentException ("AD_Tab_ID is mandatory.");
-Set_Value ("AD_Tab_ID", AD_Tab_ID);
+if (VAF_Tab_ID < 1) throw new ArgumentException ("VAF_Tab_ID is mandatory.");
+Set_Value ("VAF_Tab_ID", VAF_Tab_ID);
 }
 /** Get Tab.
 @return Tab within a Window */
-public int GetAD_Tab_ID() 
+public int GetVAF_Tab_ID() 
 {
-Object ii = Get_Value("AD_Tab_ID");
+Object ii = Get_Value("VAF_Tab_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,7 +133,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Tab_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Tab_ID().ToString());
 }
 /** Set User defined Tab.
 @param AD_UserDef_Tab_ID User defined Tab */

@@ -64,7 +64,7 @@ namespace ViennaAdvantageServer.Process
 
                         //Neha---Commented code because object created but not used in further class---04 Sep,2018
 
-                        //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetAD_Client_ID(), GetCtx().GetAD_Org_ID(),
+                        //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
                         //    line.GetM_Product_ID(), order.GetC_BPartner_ID(), line.GetQtyOrdered(), true);                        
                         //pp.SetM_PriceList_ID(M_PriceList_ID);
                         //VAdvantage.Model.MProduct prd = new VAdvantage.Model.MProduct(GetCtx(), line.GetM_Product_ID(), null);
@@ -101,8 +101,8 @@ namespace ViennaAdvantageServer.Process
                         //int M_PriceList_Version_ID = GetCtx().GetContextAsInt(WindowNo, "M_PriceList_Version_ID");
                         //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
                         //Neha---Set Tenant,Organization from Sales Order---11 Sep,2018
-                        contact.SetAD_Client_ID(order.GetAD_Client_ID());
-                        contact.SetAD_Org_ID(order.GetAD_Org_ID());
+                        contact.SetVAF_Client_ID(order.GetVAF_Client_ID());
+                        contact.SetVAF_Org_ID(order.GetVAF_Org_ID());
                         //---------------------End ------------------
                         contact.SetDescription(order.GetDescription());
                         contact.SetC_Order_ID(order.GetC_Order_ID());
@@ -253,7 +253,7 @@ namespace ViennaAdvantageServer.Process
           int C_BPartner_ID = ctx.GetContextAsInt(WindowNo, "C_BPartner_ID");
                 Decimal Qty = Util.GetValueOfDecimal(mTab.GetValue("QtyOrdered"));
                 bool isSOTrx = ctx.GetContext(WindowNo, "IsSOTrx").Equals("Y");
-                MProductPricing pp = new MProductPricing(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
+                MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                         M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
                 int M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");
                 pp.SetM_PriceList_ID(M_PriceList_ID);

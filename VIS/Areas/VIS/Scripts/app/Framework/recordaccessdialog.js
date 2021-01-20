@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
     function RecordAccessDialog() {
-        var _AD_Table_ID = null;
+        var _VAF_TableView_ID = null;
         var _Record_ID = null;
         var root = null;
         var subroot = null;
@@ -48,8 +48,8 @@
         var recordAccessData = null;
         var curIndex = -1;
         var cmdnew = false;
-        this.Load = function (AD_Table_ID, Record_ID) {
-            _AD_Table_ID = AD_Table_ID;
+        this.Load = function (VAF_TableView_ID, Record_ID) {
+            _VAF_TableView_ID = VAF_TableView_ID;
             _Record_ID = Record_ID;
 
             //if (VIS.Application.isRTL) {
@@ -234,13 +234,13 @@
 
         };
         var loadRecords = function () {
-            //var sql = "SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID + " AND Record_ID=" + _Record_ID + " AND AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID();
+            //var sql = "SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE VAF_TableView_ID=" + _VAF_TableView_ID + " AND Record_ID=" + _Record_ID + " AND VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID();
             if (recordAccessData == null) {
                 recordAccessData = [];
             }
             //var dr = VIS.DB.executeReader(sql, null, null);
 
-            var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RecordAccess/GetRecordAccess", { "Table_ID": _AD_Table_ID, "Record_ID": _Record_ID }, null);
+            var dr = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "RecordAccess/GetRecordAccess", { "Table_ID": _VAF_TableView_ID, "Record_ID": _Record_ID }, null);
             var item = null;
             //while (dr.read()) {
             //    item = {};
@@ -292,7 +292,7 @@
                 dataType: "json",
                 data: {
                     AD_Role_ID: roleID,
-                    AD_Table_ID: _AD_Table_ID,
+                    VAF_TableView_ID: _VAF_TableView_ID,
                     Record_ID: _Record_ID,
                     isActive: chkActive.prop('checked'),
                     isExclude: chkExclude.prop('checked'),
@@ -385,7 +385,7 @@
                 dataType: "json",
                 data: {
                     AD_Role_ID: roleID,
-                    AD_Table_ID: _AD_Table_ID,
+                    VAF_TableView_ID: _VAF_TableView_ID,
                     Record_ID: _Record_ID,
                     isActive: chkActive.prop('checked'),
                     isExclude: chkExclude.prop('checked'),
@@ -417,7 +417,7 @@
             setLine = null;
             cmdDelete = null;
 
-            _AD_Table_ID = null;
+            _VAF_TableView_ID = null;
             _Record_ID = null;
             drow1 = null;
             drow2 = null;

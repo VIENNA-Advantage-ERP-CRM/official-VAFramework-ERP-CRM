@@ -259,62 +259,62 @@ namespace VAdvantage.Classes
         }
 
         /// <summary>
-        /// Get Login AD_Org_ID
+        /// Get Login VAF_Org_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Org_ID()
+        public int GetVAF_Org_ID()
         {
-            return GetContextAsInt("#AD_Org_ID");
+            return GetContextAsInt("#VAF_Org_ID");
         }
 
         /// <summary>
-        ///Get Window AD_Org_ID
+        ///Get Window VAF_Org_ID
         /// </summary>
         /// <param name="WindowNo"> window</param>
         /// <returns></returns>
-        public int GetAD_Org_ID(int windowNo)
+        public int GetVAF_Org_ID(int windowNo)
         {
-            return GetContextAsInt(windowNo, "AD_Org_ID");
+            return GetContextAsInt(windowNo, "VAF_Org_ID");
         }
 
 
         /// <summary>
-        ///	Get Login AD_Client_ID
+        ///	Get Login VAF_Client_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Client_ID()
+        public int GetVAF_Client_ID()
         {
-            return GetContextAsInt("#AD_Client_ID");
+            return GetContextAsInt("#VAF_Client_ID");
         }
 
         /// <summary>
-        ///	Get Login AD_Client_ID
+        ///	Get Login VAF_Client_ID
         /// </summary>
         /// <returns></returns>
-        public string GetAD_Client_Name()
+        public string GetVAF_Client_Name()
         {
-            return GetContext("#AD_Client_Name");
+            return GetContext("#VAF_Client_Name");
         }
 
         /// <summary>
-        /// Get AD_Client_ID
+        /// Get VAF_Client_ID
         /// </summary>
         /// <param name="WindowNo">Window</param>
-        /// <returns>AD_Client_ID</returns>
-        public int GetAD_Client_ID(int windowNo)
+        /// <returns>VAF_Client_ID</returns>
+        public int GetVAF_Client_ID(int windowNo)
         {
-            return GetContextAsInt(windowNo, "AD_Client_ID");
+            return GetContextAsInt(windowNo, "VAF_Client_ID");
         }
 
 
 
         /// <summary>
-        ///	Get Login AD_Client_ID
+        ///	Get Login VAF_Client_ID
         /// </summary>
         /// <returns></returns>
-        public string GetAD_Org_Name()
+        public string GetVAF_Org_Name()
         {
-            return GetContext("#AD_Org_Name");
+            return GetContext("#VAF_Org_Name");
         }
 
         /// <summary>

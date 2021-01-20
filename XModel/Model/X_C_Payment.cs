@@ -65,7 +65,7 @@ SetTrxType (null);// S
  added by ->Harwinder */
         static X_C_Payment() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27745609833465L;/** Last Updated Timestamp 5/17/2016 4:58:36 PM */
-        public static long updatedMS = 1463484516676L;/** AD_Table_ID=335 */
+        public static long updatedMS = 1463484516676L;/** VAF_TableView_ID=335 */
         public static int Table_ID; // =335;
         /** TableName=C_Payment */
         public static String Table_Name = "C_Payment";
@@ -84,17 +84,17 @@ SetTrxType (null);// S
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_C_Payment[").Append(Get_ID()).Append("]"); return sb.ToString(); }
-        /** AD_OrgTrx_ID AD_Reference_ID=130 */
-        public static int AD_ORGTRX_ID_AD_Reference_ID = 130;/** Set Trx Organization.
-@param AD_OrgTrx_ID Performing or initiating organization */
-        public void SetAD_OrgTrx_ID(int AD_OrgTrx_ID)
+        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
+        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;/** Set Trx Organization.
+@param VAF_OrgTrx_ID Performing or initiating organization */
+        public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
-            if (AD_OrgTrx_ID <= 0) Set_Value("AD_OrgTrx_ID", null);
+            if (VAF_OrgTrx_ID <= 0) Set_Value("VAF_OrgTrx_ID", null);
             else
-                Set_Value("AD_OrgTrx_ID", AD_OrgTrx_ID);
+                Set_Value("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
         }/** Get Trx Organization.
 @return Performing or initiating organization */
-        public int GetAD_OrgTrx_ID() { Object ii = Get_Value("AD_OrgTrx_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Account City.
+        public int GetVAF_OrgTrx_ID() { Object ii = Get_Value("VAF_OrgTrx_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Account City.
 @param A_City City or the Credit Card or Account Holder */
         public void SetA_City(String A_City) { if (A_City != null && A_City.Length > 60) { log.Warning("Length > 60 - truncated"); A_City = A_City.Substring(0, 60); } Set_Value("A_City", A_City); }/** Get Account City.
 @return City or the Credit Card or Account Holder */

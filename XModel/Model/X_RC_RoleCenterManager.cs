@@ -68,7 +68,7 @@ static X_RC_RoleCenterManager()
 //static long serialVersionUID 27634578386853L;
 /** Last Updated Timestamp 11/9/2012 2:54:30 PM */
 public static long updatedMS = 1352453070064L;
-/** AD_Table_ID=1000232 */
+/** VAF_TableView_ID=1000232 */
 public static int Table_ID;
  // =1000232;
 

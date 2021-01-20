@@ -169,7 +169,7 @@ VIS.Msg.translate3 = function (ad_language, isSOTrx, text) {
     if (AD_Language == null || AD_Language.length == 0)
         AD_Language = VIS.Env.getBaseAD_Language();
 
-    //	Check AD_Element
+    //	Check VAF_ColumnDic
     var retStr = VIS.Msg.getElement3(AD_Language, text, isSOTrx);
     if (!retStr.equals(""))
         return retStr.trim();
@@ -248,12 +248,12 @@ VIS.Msg.getElement3 = function (ad_language, ColumnName, isSOTrx) {
         return VIS.Msg.elements[ColumnName];
 
 
-    //	Check AD_Element
+    //	Check VAF_ColumnDic
     var retStr = "";
     var sqlQry = "";
     var dr = null;
     try {
-        if (AD_Language == null || AD_Language.length == 0 || VIS.Env.isBaseLanguage(AD_Language, "AD_Element")) {
+        if (AD_Language == null || AD_Language.length == 0 || VIS.Env.isBaseLanguage(AD_Language, "VAF_ColumnDic")) {
             sqlQry = "VIS_73";
             var param = [];
             param[0] = new VIS.DB.SqlParam("@ColumnName", ColumnName.toUpper());

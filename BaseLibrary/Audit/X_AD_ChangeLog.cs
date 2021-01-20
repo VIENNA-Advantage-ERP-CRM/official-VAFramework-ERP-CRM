@@ -8,32 +8,32 @@ namespace VAdvantage.Model
     using VAdvantage.Classes;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_ChangeLog
+    /** Generated Model for VAF_AlterLog
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ChangeLog : PO
+    public class X_VAF_AlterLog : PO
 {
-public X_AD_ChangeLog (Context ctx, int AD_ChangeLog_ID, Trx trxName) : base (ctx, AD_ChangeLog_ID, trxName)
+public X_VAF_AlterLog (Context ctx, int VAF_AlterLog_ID, Trx trxName) : base (ctx, VAF_AlterLog_ID, trxName)
 {
-/** if (AD_ChangeLog_ID == 0)
+/** if (VAF_AlterLog_ID == 0)
 {
-SetAD_ChangeLog_ID (0);
-SetAD_Column_ID (0);
+SetVAF_AlterLog_ID (0);
+SetVAF_Column_ID (0);
 SetAD_Session_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetIsCustomization (false);
 SetRecord_ID (0);
 }
  */
 }
-public X_AD_ChangeLog (Ctx ctx, int AD_ChangeLog_ID, Trx trxName) : base (ctx, AD_ChangeLog_ID, trxName)
+public X_VAF_AlterLog (Ctx ctx, int VAF_AlterLog_ID, Trx trxName) : base (ctx, VAF_AlterLog_ID, trxName)
 {
-/** if (AD_ChangeLog_ID == 0)
+/** if (VAF_AlterLog_ID == 0)
 {
-SetAD_ChangeLog_ID (0);
-SetAD_Column_ID (0);
+SetVAF_AlterLog_ID (0);
+SetVAF_Column_ID (0);
 SetAD_Session_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetIsCustomization (false);
 SetRecord_ID (0);
 }
@@ -44,7 +44,7 @@ SetRecord_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ChangeLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlterLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -52,7 +52,7 @@ public X_AD_ChangeLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ChangeLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AlterLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -60,13 +60,13 @@ public X_AD_ChangeLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ChangeLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_AlterLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ChangeLog()
+static X_VAF_AlterLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -75,12 +75,12 @@ static X_AD_ChangeLog()
 //static long serialVersionUID = 27562514360778L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043989L;
-/** AD_Table_ID=580 */
+/** VAF_TableView_ID=580 */
 public static int Table_ID;
  // =580;
 
-/** TableName=AD_ChangeLog */
-public static String Table_Name="AD_ChangeLog";
+/** TableName=VAF_AlterLog */
+public static String Table_Name="VAF_AlterLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -114,36 +114,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ChangeLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_AlterLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Change Log.
-@param AD_ChangeLog_ID Log of data changes */
-public void SetAD_ChangeLog_ID (int AD_ChangeLog_ID)
+@param VAF_AlterLog_ID Log of data changes */
+public void SetVAF_AlterLog_ID (int VAF_AlterLog_ID)
 {
-if (AD_ChangeLog_ID < 1) throw new ArgumentException ("AD_ChangeLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_ChangeLog_ID", AD_ChangeLog_ID);
+if (VAF_AlterLog_ID < 1) throw new ArgumentException ("VAF_AlterLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AlterLog_ID", VAF_AlterLog_ID);
 }
 /** Get Change Log.
 @return Log of data changes */
-public int GetAD_ChangeLog_ID() 
+public int GetVAF_AlterLog_ID() 
 {
-Object ii = Get_Value("AD_ChangeLog_ID");
+Object ii = Get_Value("VAF_AlterLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID < 1) throw new ArgumentException ("AD_Column_ID is mandatory.");
-Set_ValueNoCheck ("AD_Column_ID", AD_Column_ID);
+if (VAF_Column_ID < 1) throw new ArgumentException ("VAF_Column_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -185,17 +185,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetAD_Session_ID().ToString());
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_ValueNoCheck ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

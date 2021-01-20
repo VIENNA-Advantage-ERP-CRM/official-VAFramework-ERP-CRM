@@ -37,7 +37,7 @@ namespace VAdvantage.Common
         {
 
             lstTableName = new List<string>();
-            DataSet ds = DB.ExecuteDataset("select tablename from ad_table where isactive='Y'");
+            DataSet ds = DB.ExecuteDataset("select tablename from vaf_tableview where isactive='Y'");
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -60,33 +60,33 @@ namespace VAdvantage.Common
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="_trx"></param>
-        /// <param name="AD_TableID"></param>
+        /// <param name="VAF_TableViewID"></param>
         /// <param name="recordID"></param>
         /// <param name="AD_UserID"></param>
-        /// <param name="AD_ClientID"></param>
+        /// <param name="VAF_ClientID"></param>
         /// <param name="nodeName"></param>
         /// <param name="windowID"></param>
         /// <param name="WFActivity"></param>
         /// <returns>file info.</returns>
-        public FileInfo GetPdfReportForMail(Ctx ctx, Trx _trx, int AD_TableID, int recordID, int AD_UserID, int AD_ClientID, string nodeName, int windowID, int WFActivity)
+        public FileInfo GetPdfReportForMail(Ctx ctx, Trx _trx, int VAF_TableViewID, int recordID, int AD_UserID, int VAF_ClientID, string nodeName, int windowID, int WFActivity)
         {
             try
             {
 
-                int reportID = GetDoctypeBasedReport(ctx, AD_TableID, recordID, windowID, WFActivity);
+                int reportID = GetDoctypeBasedReport(ctx, VAF_TableViewID, recordID, windowID, WFActivity);
 
                 if (reportID == 0)
                 {
-                    VLogger.Get().Warning("No Report found on DocType and Window Tab. For Table=" + AD_TableID);
+                    VLogger.Get().Warning("No Report found on DocType and Window Tab. For Table=" + VAF_TableViewID);
                     return null;
                 }
                 FileInfo temp = null;
                 MProcess process = MProcess.Get(ctx, reportID);
 
                 ProcessInfo pi = new ProcessInfo(nodeName, reportID,
-                              AD_TableID, recordID);
+                              VAF_TableViewID, recordID);
                 pi.SetAD_User_ID(AD_UserID);
-                pi.SetAD_Client_ID(AD_ClientID);
+                pi.SetVAF_Client_ID(VAF_ClientID);
                 MPInstance pInstance = new MPInstance(process, recordID);
                 //FillParameter(pInstance, trx);
                 pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
@@ -144,12 +144,12 @@ namespace VAdvantage.Common
             string colName = "C_DocTypeTarget_ID";
 
 
-            string sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
+            string sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
             if (id < 1)
             {
                 colName = "C_DocType_ID";
-                sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocType_ID'";
+                sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='C_DocType_ID'";
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
             }
 
@@ -157,7 +157,7 @@ namespace VAdvantage.Common
             {
 
                 string tableName = MTable.GetTableName(ctx, tableID);
-                sql1 = "SELECT " + colName + ", AD_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
+                sql1 = "SELECT " + colName + ", VAF_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
                 DataSet ds = DB.ExecuteDataset(sql1);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -171,7 +171,7 @@ namespace VAdvantage.Common
                                 AND C_DocType.ISDOCNOCONTROLLED='Y')  
                                 JOIN AD_Sequence_No AD_Sequence_No
                                 On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
-                                AND Ad_Sequence_No.AD_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]) + @")
+                                AND Ad_Sequence_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
                                 JOIN AD_Process ON AD_Process.AD_Process_ID=AD_Sequence_No.Report_ID
                                 Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
                                 And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND AD_Process.IsActive='Y'";
@@ -193,9 +193,9 @@ namespace VAdvantage.Common
                     {
                         sql1 = @"SELECT  adt.AD_Window_ID, adt.TableName, adt.PO_Window_ID, " +
                                     "case when adwfa.AD_Window_ID is null then (select AD_WINDOW_ID from AD_WF_Activity where AD_WF_Process_ID = (select AD_WF_Process_ID from AD_WF_Activity where AD_WF_Activity_ID = adwfa.AD_WF_Activity_ID) and AD_WINDOW_ID is not null and rownum = 1) else adwfa.AD_Window_ID end as ActivityWindow " +
-                                    "FROM AD_Table adt " +
-                                    "LEFT JOIN AD_WF_Activity adwfa on adt.AD_Table_ID = adwfa.AD_Table_ID " +
-                                    "WHERE adt.AD_Table_ID = " + tableID + " and adwfa.AD_WF_Activity_ID =  " + WFActivity + " ";
+                                    "FROM VAF_TableView adt " +
+                                    "LEFT JOIN AD_WF_Activity adwfa on adt.VAF_TableView_ID = adwfa.VAF_TableView_ID " +
+                                    "WHERE adt.VAF_TableView_ID = " + tableID + " and adwfa.AD_WF_Activity_ID =  " + WFActivity + " ";
 
                         processID = DB.ExecuteScalar(sql1);
                         if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
@@ -211,7 +211,7 @@ namespace VAdvantage.Common
 
 
                     // Chgeck if Report is linked to TAB of selected report.
-                    sql1 = "SELECT AD_Process_ID FROM AD_Tab WHERE AD_Window_ID=" + windowID + " AND AD_Table_ID=" + tableID;
+                    sql1 = "SELECT AD_Process_ID FROM VAF_Tab WHERE AD_Window_ID=" + windowID + " AND VAF_TableView_ID=" + tableID;
                     processID = DB.ExecuteScalar(sql1);
                     if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
                     {
@@ -326,14 +326,14 @@ namespace VAdvantage.Common
         /// <param name="ctx">Current Context.</param>
         /// <param name="AD_Process_ID">Process ID.</param>
         /// <param name="Name">Name of process.</param>
-        /// <param name="AD_Table_ID">Table id for fetching report.</param>
+        /// <param name="VAF_TableView_ID">Table id for fetching report.</param>
         /// <param name="Record_ID">Record id.</param>
         /// <param name="WindowNo">Window Number if process fired from window.</param>
         /// <param name="recIDs">String of record id's/</param>
         /// <param name="fileType">Report type.</param>
         /// <param name="report">Out parameter to get byte array.</param>
         /// <returns>Returns Process Info list and report byte array.</returns>
-        public Dictionary<string, object> GetReport(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType, out byte[] report, out string rptFilePath)
+        public Dictionary<string, object> GetReport(Ctx ctx, int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string recIDs, string fileType, out byte[] report, out string rptFilePath)
         {
             Dictionary<string, object> d = null;
             report = null;
@@ -375,7 +375,7 @@ namespace VAdvantage.Common
 
 
             // Process info
-            ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, AD_Table_ID, Record_ID, recIDs);
+            ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID, recIDs);
             pi.SetFileType(fileType);
             TryPrintFromDocType(pi);
 
@@ -383,7 +383,7 @@ namespace VAdvantage.Common
             {
 
                 pi.SetAD_User_ID(ctx.GetAD_User_ID());
-                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
                 ProcessCtl ctl = new ProcessCtl();
                 d = new Dictionary<string, object>();
@@ -408,19 +408,19 @@ namespace VAdvantage.Common
             try
             {
                 string colName = "C_DocTypeTarget_ID";
-                string sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
+                string sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
                 int id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)
                 {
                     colName = "C_DocType_ID";
-                    sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocType_ID'";
+                    sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocType_ID'";
                     id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                     if (id < 1)
                     {
                         return;
                     }
                 }
-                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + _pi.GetTable_ID()));
+                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + _pi.GetTable_ID()));
                 sql = "SELECT " + colName + " FROM " + tableName + " WHERE " + tableName + "_ID =" + _pi.GetRecord_ID();
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)
@@ -471,7 +471,7 @@ namespace VAdvantage.Common
 
 
             //Check if User's pwd is to be encrypted or not
-            if (DB.ExecuteScalar("SELECT IsEncrypted from AD_Column WHERE AD_Column_ID=" + 417).ToString().Equals("Y"))
+            if (DB.ExecuteScalar("SELECT IsEncrypted from VAF_Column WHERE VAF_Column_ID=" + 417).ToString().Equals("Y"))
                 newPwd = SecureEngine.Encrypt(newPwd);
 
             string newpwdExpireDate = GlobalVariable.TO_DATE(DateTime.Now.AddMonths(passwordValidity), true);
@@ -647,13 +647,13 @@ namespace VAdvantage.Common
                 token = inStr.Substring(0, j);
                 if (token == "Tenant")
                 {
-                    int id = po.GetAD_Client_ID();
-                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_Client WHERE AD_Client_ID=" + id));
+                    int id = po.GetVAF_Client_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM VAF_Client WHERE VAF_Client_ID=" + id));
                 }
                 else if (token == "Org")
                 {
-                    int id = po.GetAD_Org_ID();
-                    outStr.Append(DB.ExecuteScalar("Select Name FROM AD_ORG WHERE AD_ORG_ID=" + id));
+                    int id = po.GetVAF_Org_ID();
+                    outStr.Append(DB.ExecuteScalar("Select Name FROM VAF_ORG WHERE VAF_ORG_ID=" + id));
                 }
                 else if (token == "BPName")
                 {
@@ -757,7 +757,7 @@ namespace VAdvantage.Common
             }
 
             //Get lookup display column name for ID 
-            if (_poInfo != null && _poInfo.getAD_Table_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
+            if (_poInfo != null && _poInfo.getVAF_TableView_ID() == po.Get_Table_ID() && _poInfo.IsColumnLookup(index) && value != null)
             {
                 VLookUpInfo lookup = Common.GetColumnLookupInfo(po.GetCtx(),_poInfo.GetColumnInfo(index)); //create lookup info for column
                 DataSet ds = DB.ExecuteDataset(lookup.queryDirect.Replace("@key", DB.TO_STRING(value.ToString())), null); //Get Name from data
@@ -817,21 +817,21 @@ namespace VAdvantage.Common
         public static int GetRootNode(string TreeType)
         {
             int AD_Tree_ID = 0;
-            if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and treetype='" + TreeType + "' and isAllNodes='Y'")) > 0)
+            if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and treetype='" + TreeType + "' and isAllNodes='Y'")) > 0)
             {
-                if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and " +
+                if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and " +
                 "isdefault='Y' and treetype='" + TreeType + "'").ToString()) > 0)
                 {
                     AD_Tree_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select ad_TREE_ID" +
-                   " from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and isdefault='Y' AND " +
-                   "created <=(select MIN(created) FROM ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " " +
+                   " from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and isdefault='Y' AND " +
+                   "created <=(select MIN(created) FROM ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " " +
                    "and isdefault='Y' and TREETYPE='" + TreeType + "') and TREETYPE='" + TreeType + "'"));
                 }
                 else
                 {
                     AD_Tree_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select ad_TREE_ID" +
-                  " from ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " and isAllNodes='Y' AND " +
-                  "created <=(select MIN(created) FROM ad_tree where ad_client_id=" + Utility.Env.GetContext().GetAD_Client_ID() + " " +
+                  " from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and isAllNodes='Y' AND " +
+                  "created <=(select MIN(created) FROM ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " " +
                   "and isAllNodes='Y' and TREETYPE='" + TreeType + "') and TREETYPE='" + TreeType + "'"));
                 }
 
@@ -861,7 +861,7 @@ namespace VAdvantage.Common
         /// <author>Kiran Sangwan</author>
         public static int CheckUniqueName(string tableName, string columnName, string columnValue)
         {
-            string sqlQuery = "select count(1) from " + tableName + " where " + columnName + "='" + columnValue + "' and AD_CLIENT_ID=" + Utility.Env.GetContext().GetAD_Client_ID();
+            string sqlQuery = "select count(1) from " + tableName + " where " + columnName + "='" + columnValue + "' and VAF_CLIENT_ID=" + Utility.Env.GetContext().GetVAF_Client_ID();
             return Utility.Util.GetValueOfInt(ExecuteQuery.ExecuteScalar(sqlQuery).ToString());
         }
 
@@ -874,7 +874,7 @@ namespace VAdvantage.Common
             VLookUpInfo lookup = null;
             try
             {
-                lookup = VLookUpFactory.GetLookUpInfo(ctx, WindowNo, colInfo.DisplayType, colInfo.AD_Column_ID, Env.GetLanguage(ctx),
+                lookup = VLookUpFactory.GetLookUpInfo(ctx, WindowNo, colInfo.DisplayType, colInfo.VAF_Column_ID, Env.GetLanguage(ctx),
                    colInfo.ColumnName, colInfo.AD_Reference_Value_ID,
                    colInfo.IsParent, colInfo.ValidationCode);
             }
@@ -893,7 +893,7 @@ namespace VAdvantage.Common
             Lookup lookup = null;
             try
             {
-                lookup = VLookUpFactory.Get(ctx, WindowNo, colInfo.AD_Column_ID,
+                lookup = VLookUpFactory.Get(ctx, WindowNo, colInfo.VAF_Column_ID,
                     colInfo.DisplayType,
                     colInfo.ColumnName,
                     colInfo.AD_Reference_Value_ID,
@@ -924,14 +924,14 @@ namespace VAdvantage.Common
         /// <param name="ctx"></param>
         /// <param name="ActionOrigin">Action Origin(Menu, Window, Form)</param>
         /// <param name="OriginName">(Form name or window name)</param>
-        /// <param name="AD_Table_ID">AD_Table_ID of table from where action intiated</param>
+        /// <param name="VAF_TableView_ID">VAF_TableView_ID of table from where action intiated</param>
         /// <param name="Record_ID">Selected Record_ID</param>
         /// <param name="Process_ID">AD_Process_ID with which report is linked</param>
         /// <param name="ProcessName">Name of Process</param>
         /// <param name="fileType">Requested file type(PDF, CSV, RTF)</param>
         /// <param name="description">Desciption like filename or anything else</param>
         /// <param name="ActionType">Action type.(Viewed Or Downloaded)</param>
-        public static void SaveActionLog(Ctx ctx, string ActionOrigin, string OriginName, int AD_Table_ID, int Record_ID,
+        public static void SaveActionLog(Ctx ctx, string ActionOrigin, string OriginName, int VAF_TableView_ID, int Record_ID,
            int processID, string ProcessName, string fileType, string description, string ActionType)
         {
             //Save Action Log key is fetched from System Config window
@@ -978,8 +978,8 @@ namespace VAdvantage.Common
             }
 
             MSession sess = MSession.Get(ctx);
-            sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID(),
-               ActionOrigin, reportTypeForLog, OriginName, descriptonForLog, AD_Table_ID, Record_ID);
+            sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
+               ActionOrigin, reportTypeForLog, OriginName, descriptonForLog, VAF_TableView_ID, Record_ID);
         }
 
 

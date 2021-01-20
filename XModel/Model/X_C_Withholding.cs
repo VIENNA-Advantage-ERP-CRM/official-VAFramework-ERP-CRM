@@ -39,7 +39,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_C_Withholding() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27866464672807L;/** Last Updated Timestamp 3/16/2020 11:45:56 AM */
-        public static long updatedMS = 1584339356018L;/** AD_Table_ID=304 */
+        public static long updatedMS = 1584339356018L;/** VAF_TableView_ID=304 */
         public static int Table_ID; // =304;
                                     /** TableName=C_Withholding */
         public static String Table_Name = "C_Withholding";

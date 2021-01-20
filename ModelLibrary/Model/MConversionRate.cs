@@ -93,14 +93,14 @@ namespace VAdvantage.Model
         /// <param name="CurFrom_ID">The C_Currency_ID FROM</param>
         /// <param name="ConvDate">conversion date - if null - use current date</param>
         /// <param name="C_ConversionType_ID">conversion rate type - if 0 - use Default</param>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">organization</param>
         /// <returns>converted amount</returns>
         public static Decimal ConvertBase(Ctx ctx, Decimal amt, int CurFrom_ID,
-            DateTime? convDate, int C_ConversionType_ID, int AD_Client_ID, int AD_Org_ID)
+            DateTime? convDate, int C_ConversionType_ID, int VAF_Client_ID, int VAF_Org_ID)
         {
             return Convert(ctx, amt, CurFrom_ID, VAdvantage.Model.MClient.Get(ctx).GetC_Currency_ID(),
-                convDate, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+                convDate, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
         }
 
         /// <summary>
@@ -110,13 +110,13 @@ namespace VAdvantage.Model
         /// <param name="Amt">amount to be converted</param>
         /// <param name="CurFrom_ID">The C_Currency_ID FROM</param>
         /// <param name="CurTo_ID">The C_Currency_ID TO</param>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">organization</param>
         /// <returns>converted amount</returns>
         public static Decimal Convert(Ctx ctx, decimal amt, int CurFrom_ID, int CurTo_ID,
-            int AD_Client_ID, int AD_Org_ID)
+            int VAF_Client_ID, int VAF_Org_ID)
         {
-            return Convert(ctx, amt, CurFrom_ID, CurTo_ID, null, 0, AD_Client_ID, AD_Org_ID);
+            return Convert(ctx, amt, CurFrom_ID, CurTo_ID, null, 0, VAF_Client_ID, VAF_Org_ID);
         }
 
         /// <summary>
@@ -128,12 +128,12 @@ namespace VAdvantage.Model
         /// <param name="CurTo_ID">The C_Currency_ID TO</param>
         /// <param name="ConvDate">conversion date - if null - use current date</param>
         /// <param name="C_ConversionType_ID">C_ConversionType_ID conversion rate type - if 0 - use Default</param>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">organization</param>
         /// <returns>converted amount or null if no rate</returns>
         public static Decimal Convert(Ctx ctx, Decimal amt, int CurFrom_ID, int CurTo_ID,
             DateTime? convDate, int C_ConversionType_ID,
-            int AD_Client_ID, int AD_Org_ID)
+            int VAF_Client_ID, int VAF_Org_ID)
         {
             //if (amt == null)
             //{
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
                 return amt;
             }
             //	Get Rate
-            Decimal retValue = GetRate(CurFrom_ID, CurTo_ID, convDate, C_ConversionType_ID, AD_Client_ID, AD_Org_ID);
+            Decimal retValue = GetRate(CurFrom_ID, CurTo_ID, convDate, C_ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
             //if (retValue == null)
             //{
             //    //return null;
@@ -167,11 +167,11 @@ namespace VAdvantage.Model
         /// <param name="CurTo_ID">The C_Currency_ID TO</param>
         /// <param name="ConvDate">The Conversion date - if null - use current date</param>
         /// <param name="ConversionType_ID">Conversion rate type - if 0 - use Default</param>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">organization</param>
         /// <returns>currency Rate or null</returns>
         public static Decimal GetRate(int CurFrom_ID, int CurTo_ID,
-            DateTime? convDate, int ConversionType_ID, int AD_Client_ID, int AD_Org_ID)
+            DateTime? convDate, int ConversionType_ID, int VAF_Client_ID, int VAF_Org_ID)
         {
             string isFetchAllDateOrNot = "N";
             if (CurFrom_ID == CurTo_ID)
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
             //	Conversion Type
             int C_ConversionType_ID = ConversionType_ID;
             if (C_ConversionType_ID == 0)
-                C_ConversionType_ID = MConversionType.GetDefault(AD_Client_ID);
+                C_ConversionType_ID = MConversionType.GetDefault(VAF_Client_ID);
             //	Conversion Date
             if (convDate == null)
             {
@@ -196,10 +196,10 @@ namespace VAdvantage.Model
                 + " AND C_Currency_To_ID=" + CurTo_ID					//	#2
                 + " AND	C_ConversionType_ID=" + C_ConversionType_ID				//	#3
                 + " AND " + CoreLibrary.DataBase.DB.TO_DATE(convDate, true) + " BETWEEN ValidFrom AND ValidTo"	//	#4	TRUNC (?) ORA-00932: inconsistent datatypes: expected NUMBER got TIMESTAMP
-                + " AND AD_Client_ID IN (0," + AD_Client_ID + ")"				//	#5
-                + " AND AD_Org_ID IN (0," + AD_Org_ID + ") "				//	#6
+                + " AND VAF_Client_ID IN (0," + VAF_Client_ID + ")"				//	#5
+                + " AND VAF_Org_ID IN (0," + VAF_Org_ID + ") "				//	#6
                 + " AND IsActive = 'Y' "                                    // #7
-                + "ORDER BY AD_Client_ID DESC, AD_Org_ID DESC, ValidFrom DESC";
+                + "ORDER BY VAF_Client_ID DESC, VAF_Org_ID DESC, ValidFrom DESC";
             //decimal retValue = null;
             decimal? retValue = null;
             DataSet ds = null;
@@ -238,8 +238,8 @@ namespace VAdvantage.Model
                               AND C_Currency_To_ID   = " + CurTo_ID + @" 
                               AND C_ConversionType_ID= " + C_ConversionType_ID + @"
                               AND ValidFrom < " +CoreLibrary.DataBase.DB.TO_DATE(convDate, true) + @"
-                              AND AD_Client_ID      IN (0," + AD_Client_ID + ")" + @"
-                              AND AD_Org_ID         IN (0," + AD_Org_ID + "))";
+                              AND VAF_Client_ID      IN (0," + VAF_Client_ID + ")" + @"
+                              AND VAF_Org_ID         IN (0," + VAF_Org_ID + "))";
                         retValue = null;
                         try
                         {
@@ -272,8 +272,8 @@ namespace VAdvantage.Model
           + ", CurTo=" + CurTo_ID
           + ", " + convDate
           + ", Type=" + ConversionType_ID + (ConversionType_ID == C_ConversionType_ID ? "" : "->" + C_ConversionType_ID)
-          + ", Client=" + AD_Client_ID
-          + ", Org=" + AD_Org_ID);
+          + ", Client=" + VAF_Client_ID
+          + ", Org=" + VAF_Org_ID);
                 retValue = 0;
             }
             return retValue.Value;
@@ -312,7 +312,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                object count = DB.ExecuteScalar("select count(*) FROM AD_Column where AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE Lower(TableName)='c_conversiontype') AND Lower(ColumnName)='isautocalculate'");
+                object count = DB.ExecuteScalar("select count(*) FROM VAF_Column where VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE Lower(TableName)='c_conversiontype') AND Lower(ColumnName)='isautocalculate'");
                 if (count != null || count != DBNull.Value && System.Convert.ToInt32(count) > 0)
                 {
                     DataSet dsConversion = DB.ExecuteDataset(@"SELECT Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency FROM c_conversiontype 
@@ -411,7 +411,7 @@ namespace VAdvantage.Model
             else
             {
 
-                object count = DB.ExecuteScalar("select count(*) FROM AD_Column where AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE Lower(TableName)='c_conversiontype') AND Lower(ColumnName)='isautocalculate'");
+                object count = DB.ExecuteScalar("select count(*) FROM VAF_Column where VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE Lower(TableName)='c_conversiontype') AND Lower(ColumnName)='isautocalculate'");
                 if (count != null || count != DBNull.Value && System.Convert.ToInt32(count) > 0)
                 {
                     DataSet dsConversion = DB.ExecuteDataset(@"SELECT Surchargepercentage,Surchargevalue,CurrencyRateUpdateFrequency FROM c_conversiontype 
@@ -521,8 +521,8 @@ namespace VAdvantage.Model
                          " AND c_currency_id = " + GetC_Currency_ID() + " AND C_Currency_To_ID = " + GetC_Currency_To_ID() +
                          " AND ( " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " BETWEEN ValidFrom AND ValidTo" +
                          " OR " + GlobalVariable.TO_DATE(GetValidTo(), true) + " BETWEEN ValidFrom AND ValidTo )" +
-                         " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND AD_Client_ID = " + GetAD_Client_ID() +
-                         " AND AD_Org_ID = " + GetAD_Org_ID();
+                         " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                         " AND VAF_Org_ID = " + GetVAF_Org_ID();
                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "CantChange"));
@@ -536,8 +536,8 @@ namespace VAdvantage.Model
                                 " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) + " OR  ValidTo BETWEEN " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + "  AND " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + " ) " +
-                                " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND AD_Client_ID = " + GetAD_Client_ID() +
-                                " AND AD_Org_ID = " + GetAD_Org_ID();
+                                " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                                " AND VAF_Org_ID = " + GetVAF_Org_ID();
                         if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "RecordExistforthisdate"));
@@ -550,13 +550,13 @@ namespace VAdvantage.Model
                     }
                 }
 
-                sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.ad_client_id  = cr.ad_client_id)
+                sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                                   WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                               " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
                               " AND i.c_currency_id = " + Util.GetValueOfInt(Get_ValueOld("C_Currency_ID")) +
                               " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_ValueOld("C_ConversionType_ID")) +
-                              " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + ")" +
+                              " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
                               " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
@@ -564,13 +564,13 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.ad_client_id  = cr.ad_client_id)
+                sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                                " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
                                " AND i.c_currency_id = " + Util.GetValueOfInt(Get_ValueOld("C_Currency_ID")) +
                                " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_ValueOld("C_ConversionType_ID")) +
-                               " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + ")" +
+                               " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
                                " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
@@ -578,13 +578,13 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.ad_client_id  = cr.ad_client_id)
+                sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                                + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                                " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
                                " AND i.c_currency_id = " + Util.GetValueOfInt(Get_ValueOld("C_Currency_ID")) +
                                " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_ValueOld("C_ConversionType_ID")) +
-                               " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + ")" +
+                               " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
                                " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
@@ -599,8 +599,8 @@ namespace VAdvantage.Model
                             " AND c_currency_id = " + GetC_Currency_ID() + " AND C_Currency_To_ID = " + GetC_Currency_To_ID() +
                             " AND ( " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " BETWEEN ValidFrom AND ValidTo" +
                             " OR " + GlobalVariable.TO_DATE(GetValidTo(), true) + " BETWEEN ValidFrom AND ValidTo )" +
-                            " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND AD_Client_ID = " + GetAD_Client_ID() +
-                            " AND AD_Org_ID = " + GetAD_Org_ID();
+                            " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                            " AND VAF_Org_ID = " + GetVAF_Org_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "RecordExistforthisdate"));
@@ -614,8 +614,8 @@ namespace VAdvantage.Model
                                 " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) + " OR  ValidTo BETWEEN " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + "  AND " +
                                   GlobalVariable.TO_DATE(GetValidTo(), true) + " ) " +
-                                " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND AD_Client_ID = " + GetAD_Client_ID() +
-                                " AND AD_Org_ID = " + GetAD_Org_ID();
+                                " AND c_conversiontype_id = " + GetC_ConversionType_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID() +
+                                " AND VAF_Org_ID = " + GetVAF_Org_ID();
                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "RecordExistforthisdate"));
@@ -665,13 +665,13 @@ namespace VAdvantage.Model
                               " AND C_Currency_To_ID = " + GetC_Currency_ID() + " AND c_conversiontype_id = " + GetC_ConversionType_ID() +
                               " AND ( ValidFrom BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) +
                               " OR ValidTo BETWEEN " + GlobalVariable.TO_DATE(GetValidFrom(), true) + " AND " + GlobalVariable.TO_DATE(GetValidTo(), true) + " ) " +
-                              " AND AD_Client_ID = " + GetAD_Client_ID() + " AND AD_Org_ID =" + GetAD_Org_ID();
+                              " AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID =" + GetVAF_Org_ID();
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) <= 0)
                 {
                     MConversionRate conRate = new MConversionRate(GetCtx(), 0, null);
-                    conRate.SetAD_Client_ID(GetAD_Client_ID());
+                    conRate.SetVAF_Client_ID(GetVAF_Client_ID());
                     conRate.UpdateFromServer = false;
-                    conRate.SetAD_Org_ID(GetAD_Org_ID());
+                    conRate.SetVAF_Org_ID(GetVAF_Org_ID());
                     conRate.SetC_Currency_ID(GetC_Currency_To_ID());
                     conRate.SetC_Currency_To_ID(GetC_Currency_ID());
                     conRate.SetC_ConversionType_ID(GetC_ConversionType_ID());
@@ -694,13 +694,13 @@ namespace VAdvantage.Model
         {
             // Cannot delete record if transaction occured agianst this currency and currenct to
             string sql;
-            sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.ad_client_id  = cr.ad_client_id)
+            sql = @"SELECT COUNT(*)  FROM C_Invoice i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                                   WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                               " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +
                               " AND i.c_currency_id = " + Util.GetValueOfInt(Get_Value("C_Currency_ID")) +
                               " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_Value("C_ConversionType_ID")) +
-                              " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + ")" +
+                              " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
                               " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
@@ -708,13 +708,13 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.ad_client_id  = cr.ad_client_id)
+            sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                           + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                            " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +
                            " AND i.c_currency_id = " + Util.GetValueOfInt(Get_Value("C_Currency_ID")) +
                            " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_Value("C_ConversionType_ID")) +
-                           " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + ")" +
+                           " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
                            " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
@@ -722,13 +722,13 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.ad_client_id  = cr.ad_client_id)
+            sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN C_Conversion_Rate cr ON (i.c_currency_id = cr.c_currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                            + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                            " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +
                            " AND i.c_currency_id = " + Util.GetValueOfInt(Get_Value("C_Currency_ID")) +
                            " AND i.c_conversiontype_id = " + Util.GetValueOfInt(Get_Value("C_ConversionType_ID")) +
-                           " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID() + ")" +
+                           " AND cr.C_Currency_To_ID IN (SELECT C_Currency_ID FROM C_AcctSchema WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + ")" +
                            " AND cr.C_Conversion_Rate_ID = " + GetC_Conversion_Rate_ID();
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {

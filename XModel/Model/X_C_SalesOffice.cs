@@ -73,7 +73,7 @@ static X_C_SalesOffice()
 static long serialVersionUID = 27716650921724L;
 /** Last Updated Timestamp 6/17/2015 12:50:05 PM */
 public static long updatedMS = 1434525604935L;
-/** AD_Table_ID=1000653 */
+/** VAF_TableView_ID=1000653 */
 public static int Table_ID;
  // =1000653;
 

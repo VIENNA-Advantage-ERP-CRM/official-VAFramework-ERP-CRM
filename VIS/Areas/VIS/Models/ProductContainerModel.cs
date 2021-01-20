@@ -323,12 +323,12 @@ namespace VIS.Models
         /// </summary>
         /// <param name="container"></param>
         /// <param name="movementDate"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="locator"></param>
         /// <param name="page"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public List<MoveContainer> GetProductContainerFromTransaction(int container, DateTime? movementDate, int AD_Org_ID, int locator, int page, int size)
+        public List<MoveContainer> GetProductContainerFromTransaction(int container, DateTime? movementDate, int VAF_Org_ID, int locator, int page, int size)
         {
             int countRecord = 0;
             List<MoveContainer> moveContainer = new List<MoveContainer>();
@@ -343,8 +343,8 @@ namespace VIS.Models
                             WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) = " + container +
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
-                               AND t.AD_Client_ID  = " + _ctx.GetAD_Client_ID() +
-                          //AND t.AD_Org_ID  = " + AD_Org_ID +
+                               AND t.VAF_Client_ID  = " + _ctx.GetVAF_Client_ID() +
+                          //AND t.VAF_Org_ID  = " + VAF_Org_ID +
                           //@" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
                           @" )t WHERE ContainerCurrentQty <> 0 ";
 
@@ -362,8 +362,8 @@ namespace VIS.Models
                             WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) = " + container +
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
-                               AND t.AD_Client_ID  = " + _ctx.GetAD_Client_ID() +
-                          //AND t.AD_Org_ID  = " + AD_Org_ID +
+                               AND t.VAF_Client_ID  = " + _ctx.GetVAF_Client_ID() +
+                          //AND t.VAF_Org_ID  = " + VAF_Org_ID +
                           // @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
                           @" )t WHERE ContainerCurrentQty <> 0 ";
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql1, null, null));
@@ -465,7 +465,7 @@ namespace VIS.Models
                              @" AND NVL(M_ProductContainer_ID, 0) = " + Util.GetValueOfInt(mData[i]["FromContainer"]) +
                              @" AND M_LocatorTo_ID = " + Util.GetValueOfInt(mData[i]["ToLocator"]) +
                              @" AND NVL(Ref_M_ProductContainerTo_ID, 0) = " + Util.GetValueOfInt(mData[i]["ToContainer"]) +
-                             @" AND AD_Org_ID = " + move.GetAD_Org_ID()));
+                             @" AND VAF_Org_ID = " + move.GetVAF_Org_ID()));
 
                     if (moveId > 0)
                     {
@@ -479,8 +479,8 @@ namespace VIS.Models
                     {
                         #region Create new record of movement line
                         lineNo += 10;
-                        moveline.SetAD_Client_ID(move.GetAD_Client_ID());
-                        moveline.SetAD_Org_ID(move.GetAD_Org_ID());
+                        moveline.SetVAF_Client_ID(move.GetVAF_Client_ID());
+                        moveline.SetVAF_Org_ID(move.GetVAF_Org_ID());
                         moveline.SetM_Movement_ID(move.GetM_Movement_ID());
                         moveline.SetLine(lineNo);
                         moveline.SetM_Product_ID(Util.GetValueOfInt(mData[i]["M_Product_ID"]));
@@ -655,7 +655,7 @@ namespace VIS.Models
                             WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) IN ( " + childContainerId +
                            @" ) AND t.MovementDate <=" + GlobalVariable.TO_DATE(movement.GetMovementDate(), true) + @" 
                                AND t.M_Locator_ID  = " + fromLocatorId + @"
-                               AND t.AD_Client_ID  = " + movement.GetAD_Client_ID() + @"
+                               AND t.VAF_Client_ID  = " + movement.GetVAF_Client_ID() + @"
                           ) t WHERE ContainerCurrentQty <> 0 ";
             DataSet dsRecords = DB.ExecuteDataset(sql, null, trx);
             if (dsRecords != null && dsRecords.Tables.Count > 0 && dsRecords.Tables[0].Rows.Count > 0)
@@ -673,7 +673,7 @@ namespace VIS.Models
                             @" AND NVL(M_ProductContainer_ID, 0) = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_ProductContainer_ID"]) +
                             @" AND M_LocatorTo_ID = " + Util.GetValueOfInt(toLocatorId) +
                             @" AND NVL(Ref_M_ProductContainerTo_ID, 0) = " + toContainerId +
-                            @" AND AD_Org_ID = " + movement.GetAD_Org_ID()));
+                            @" AND VAF_Org_ID = " + movement.GetVAF_Org_ID()));
 
                     if (movementlineId > 0)
                     {
@@ -687,8 +687,8 @@ namespace VIS.Models
                     {
                         #region Create new record of movement line
                         lineNo += 10;
-                        moveline.SetAD_Client_ID(movement.GetAD_Client_ID());
-                        moveline.SetAD_Org_ID(movement.GetAD_Org_ID());
+                        moveline.SetVAF_Client_ID(movement.GetVAF_Client_ID());
+                        moveline.SetVAF_Org_ID(movement.GetVAF_Org_ID());
                         moveline.SetM_Movement_ID(movement.GetM_Movement_ID());
                         moveline.SetLine(lineNo);
                         moveline.SetM_Product_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_Product_ID"]));
@@ -903,7 +903,7 @@ namespace VIS.Models
 
             // Create Product Container in Locator Organization
             MProductContainer container = new MProductContainer(_ctx, 0, null);
-            container.SetAD_Org_ID(m_locator.GetAD_Org_ID());
+            container.SetVAF_Org_ID(m_locator.GetVAF_Org_ID());
             container.SetValue(value);
             container.SetName(name);
             container.SetM_Warehouse_ID(warehouseId);

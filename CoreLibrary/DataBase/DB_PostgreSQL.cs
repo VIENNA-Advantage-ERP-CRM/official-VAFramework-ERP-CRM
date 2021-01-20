@@ -227,7 +227,7 @@ namespace VAdvantage.DataBase
                         + " (" + oraStatement + ") - " + m_convert.GetConversionError());
                 return oraStatement;
             }
-            //  Diagnostics (show changed, but not if AD_Error
+            //  Diagnostics (show changed, but not if VAF_Error
 
             return retValue[0];
 

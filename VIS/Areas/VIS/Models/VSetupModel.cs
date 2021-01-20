@@ -158,7 +158,7 @@ namespace VIS.Models
                     //worker.ReportProgress(90);
                     info += ms.GetInfo();
                     //	Create Print Documents
-                    ms.SetupPrintForm(ms.GetAD_Client_ID());
+                    ms.SetupPrintForm(ms.GetVAF_Client_ID());
                     // worker.ReportProgress(100);
                 }
 

@@ -302,8 +302,8 @@ namespace VAdvantage.Process
 
 
                         VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
-                        iLine.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                        iLine.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+                        iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                        iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         iLine.SetC_Invoice_ID(C_Invoice_ID);
                         iLine.SetC_Tax_ID(tLine.GetC_Tax_ID());
                         iLine.SetC_UOM_ID(tLine.GetC_UOM_ID());
@@ -358,8 +358,8 @@ namespace VAdvantage.Process
                     {
                         lineNo = lineNo + 10;
                         VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
-                        iLine.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                        iLine.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+                        iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                        iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         iLine.SetC_Invoice_ID(C_Invoice_ID);
                         iLine.SetC_Tax_ID(tLine.GetC_Tax_ID());
                         iLine.SetC_UOM_ID(tLine.GetC_UOM_ID());
@@ -421,15 +421,15 @@ namespace VAdvantage.Process
                 C_Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             }
 
-            sql = "select C_DocType_ID from c_doctype where docbasetype = 'API' and ad_client_id = " + GetCtx().GetAD_Client_ID();
+            sql = "select C_DocType_ID from c_doctype where docbasetype = 'API' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
             int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
             sql = "select C_BPartner_Location_ID from c_Bpartner_Location where c_bpartner_ID = " + C_BPartner_ID;
             int C_BPartner_Location_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
             VAdvantage.Model.X_C_Invoice inv = new VAdvantage.Model.X_C_Invoice(GetCtx(), 0, null);
-            inv.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-            inv.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+            inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+            inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             inv.SetAD_User_ID(tExp.GetAD_User_ID());
             inv.SetC_BPartner_ID(C_BPartner_ID);
             inv.SetC_BPartner_Location_ID(C_BPartner_Location_ID);
@@ -460,7 +460,7 @@ namespace VAdvantage.Process
 
                 if (C_PaymentTerm_ID == 0)
                 {
-                    sql = "select c_paymentterm_id from c_paymentterm where isdefault = 'Y' and ad_client_id= " + GetCtx().GetAD_Client_ID();
+                    sql = "select c_paymentterm_id from c_paymentterm where isdefault = 'Y' and vaf_client_id= " + GetCtx().GetVAF_Client_ID();
                     C_PaymentTerm_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 }
                 inv.SetC_PaymentTerm_ID(C_PaymentTerm_ID);

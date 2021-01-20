@@ -82,8 +82,8 @@ namespace ViennaAdvantageServer.Process
             }
 
            MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
-            order.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-            order.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+            order.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
+            order.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
             C_Bpartner_id = fromProject.GetC_BPartner_ID();
             C_Bpartner_Location_id = fromProject.GetC_BPartner_Location_ID();
             C_BPartnerSR_ID = fromProject.GetC_BPartnerSR_ID();
@@ -126,8 +126,8 @@ namespace ViennaAdvantageServer.Process
                     }
                 }
 
-                String sql = "SELECT C_DocType_ID FROM C_DocType WHERE DocBaseType = 'SOO' AND DocSubTypeSO = 'ON' AND IsReturnTrx = 'N' AND IsActive = 'Y' AND AD_Client_ID = "
-                            + GetCtx().GetAD_Client_ID() + " AND AD_Org_ID IN (0, " + GetAD_Org_ID() + ") ORDER BY  AD_Org_ID DESC";
+                String sql = "SELECT C_DocType_ID FROM C_DocType WHERE DocBaseType = 'SOO' AND DocSubTypeSO = 'ON' AND IsReturnTrx = 'N' AND IsActive = 'Y' AND VAF_Client_ID = "
+                            + GetCtx().GetVAF_Client_ID() + " AND VAF_Org_ID IN (0, " + GetVAF_Org_ID() + ") ORDER BY  VAF_Org_ID DESC";
                 int Doctype_id = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 int MPriceList_id = fromProject.GetM_PriceList_ID();
                 order.SetM_PriceList_ID(MPriceList_id);
@@ -141,8 +141,8 @@ namespace ViennaAdvantageServer.Process
                     bp = new MBPartner(GetCtx(), C_Bpartner_id, Get_TrxName());
                     if (bp.GetC_Campaign_ID() == 0 && fromProject.GetC_Campaign_ID() > 0)
                         bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    //bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    //bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    //bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
+                    //bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
@@ -160,8 +160,8 @@ namespace ViennaAdvantageServer.Process
                     bp = new MBPartner(GetCtx(), C_BPartnerSR_ID, Get_TrxName());
                     if (bp.GetC_Campaign_ID() == 0 && fromProject.GetC_Campaign_ID() > 0)
                         bp.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
-                    //bp.SetAD_Client_ID(fromProject.GetAD_Client_ID());
-                    //bp.SetAD_Org_ID(fromProject.GetAD_Org_ID());
+                    //bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
+                    //bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
                     if (bp.GetC_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());

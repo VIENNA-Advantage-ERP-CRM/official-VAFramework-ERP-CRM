@@ -68,7 +68,7 @@ static X_WSP_Note()
 //static long serialVersionUID 27688050402024L;
 /** Last Updated Timestamp 7/21/2014 12:14:45 PM */
 public static long updatedMS = 1405925085235L;
-/** AD_Table_ID=1000394 */
+/** VAF_TableView_ID=1000394 */
 public static int Table_ID;
  // =1000394;
 

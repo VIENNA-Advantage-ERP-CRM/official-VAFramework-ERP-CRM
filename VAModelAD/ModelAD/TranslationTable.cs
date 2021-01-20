@@ -158,8 +158,8 @@ namespace VAdvantage.Model
             sql2.Append("b.").Append(_baseTableName).Append("_ID,l.AD_Language");
 
             //	Base Columns
-            sql1.Append(", AD_Client_ID,AD_Org_ID,IsActive, Created,CreatedBy,Updated,UpdatedBy, IsTranslated");
-            sql2.Append(", b.AD_Client_ID,b.AD_Org_ID,b.IsActive, b.Created,b.CreatedBy,b.Updated,b.UpdatedBy, 'N'");
+            sql1.Append(", VAF_Client_ID,VAF_Org_ID,IsActive, Created,CreatedBy,Updated,UpdatedBy, IsTranslated");
+            sql2.Append(", b.VAF_Client_ID,b.VAF_Org_ID,b.IsActive, b.Created,b.CreatedBy,b.Updated,b.UpdatedBy, 'N'");
 
             for (int i = 0; i < _columns.Count; i++)
             {

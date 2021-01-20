@@ -62,7 +62,7 @@ namespace VAdvantage.Process
         private int _wordCount = 0;
 
         private String _ExportScope = null;
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         private String _AD_Language = null;
 
         internal static List<String> lstTableHasDisplayCol = new List<string>() { "AD_WINDOW", "AD_FORM", "AD_SHORTCUT" };
@@ -83,11 +83,11 @@ namespace VAdvantage.Process
         /// Set Export Scope	
         /// </summary>
         /// <param name="exportScope">exportScope 	</param>
-        /// <param name="AD_Client_ID"> only certain client if id >= 0</param>
-        public void SetExportScope(String exportScope, int AD_Client_ID)
+        /// <param name="VAF_Client_ID"> only certain client if id >= 0</param>
+        public void SetExportScope(String exportScope, int VAF_Client_ID)
         {
             _ExportScope = exportScope;
-            _AD_Client_ID = AD_Client_ID;
+            _VAF_Client_ID = VAF_Client_ID;
         }	//	setExportScope
 
         /* Set Prefix */
@@ -105,9 +105,9 @@ namespace VAdvantage.Process
         ///	Get Tenant	 
         /// </summary>
         /// <returns>tenant</returns>
-        public int GetAD_Client_ID()
+        public int GetVAF_Client_ID()
         {
-            return _AD_Client_ID;
+            return _VAF_Client_ID;
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace VAdvantage.Process
                 bool _isBaseLanguage = false;
                 string _tableName = "";
 
-                TranslationHandler handler = new TranslationHandler(_AD_Client_ID);
+                TranslationHandler handler = new TranslationHandler(_VAF_Client_ID);
                 handler.SetByExportD(_InsertExportID);
 
                 XmlReaderSettings factory = new XmlReaderSettings();
@@ -282,7 +282,7 @@ namespace VAdvantage.Process
         //          bool _isBaseLanguage = false;
         //          string _tableName = "";
 
-        //          TranslationHandler handler = new TranslationHandler(_AD_Client_ID);
+        //          TranslationHandler handler = new TranslationHandler(_VAF_Client_ID);
         //          handler.SetByExportD(_InsertExportID);
         //          using (XmlReader reader = XmlReader.Create(fileName))
         //          {
@@ -479,9 +479,9 @@ namespace VAdvantage.Process
                     haveWhere = true;
                 }
 
-                if (_AD_Client_ID >= 0)
+                if (_VAF_Client_ID >= 0)
                 {
-                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.AD_Client_ID=").Append(_AD_Client_ID);
+                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.VAF_Client_ID=").Append(_VAF_Client_ID);
                     haveWhere = true;
                 }
                 String scopeSQL = GetScopeSQL(baseTableName);
@@ -636,9 +636,9 @@ namespace VAdvantage.Process
                     haveWhere = true;
                 }
 
-                if (_AD_Client_ID >= 0)
+                if (_VAF_Client_ID >= 0)
                 {
-                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.AD_Client_ID=").Append(_AD_Client_ID);
+                    sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.VAF_Client_ID=").Append(_VAF_Client_ID);
                     haveWhere = true;
                 }
                 String scopeSQL = GetScopeSQL(baseTableName);
@@ -720,8 +720,8 @@ namespace VAdvantage.Process
         private String[] GetTrlColumns(String Base_Table)
         {
             _IsCentrallyMaintained = false;
-            String sql = "SELECT TableName FROM AD_Table t"
-                + " INNER JOIN AD_Column c ON (c.AD_Table_ID=t.AD_Table_ID AND c.ColumnName='IsCentrallyMaintained') "
+            String sql = "SELECT TableName FROM VAF_TableView t"
+                + " INNER JOIN VAF_Column c ON (c.VAF_TableView_ID=t.VAF_TableView_ID AND c.ColumnName='IsCentrallyMaintained') "
                 + "WHERE t.TableName=@param AND c.IsActive='Y'";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
@@ -747,8 +747,8 @@ namespace VAdvantage.Process
 
 
             sql = "SELECT ColumnName "
-                + "FROM AD_Column c"
-                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                + "FROM VAF_Column c"
+                + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE t.TableName=@param"
                 + " AND c.AD_Reference_ID IN (10,14) "
                   + " AND c.ColumnName <> 'Export_ID' "
@@ -799,23 +799,23 @@ namespace VAdvantage.Process
                 || !_ExportScope.Equals(TranslationImportExport.ExportScope_SystemUser))
                 return null;
             //	Not translated
-            if (baseTableName.Equals("AD_Table"))
+            if (baseTableName.Equals("VAF_TableView"))
                 return "1=2";
             //	AccessLevel 4=System only
             if (baseTableName.Equals("AD_Window"))
-                return "o.AD_Window_ID IN (SELECT t.AD_Window_ID FROM AD_Tab tab"
-                    + " INNER JOIN AD_Table tt ON (tab.AD_Table_ID=tt.AD_Table_ID) "
+                return "o.AD_Window_ID IN (SELECT t.AD_Window_ID FROM VAF_Tab tab"
+                    + " INNER JOIN VAF_TableView tt ON (tab.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Tab"))
-                return "EXISTS (SELECT * FROM AD_Table tt "
-                    + "WHERE o.AD_Table_ID=tt.AD_Table_ID AND tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Field"))
-                return "o.AD_Tab_ID IN (SELECT AD_Tab_ID FROM AD_Tab tab"
-                    + " INNER JOIN AD_Table tt ON (tab.AD_Table_ID=tt.AD_Table_ID) "
+            if (baseTableName.Equals("VAF_Tab"))
+                return "EXISTS (SELECT * FROM VAF_TableView tt "
+                    + "WHERE o.VAF_TableView_ID=tt.VAF_TableView_ID AND tt.AccessLevel <> '4')";
+            if (baseTableName.Equals("VAF_Field"))
+                return "o.VAF_Tab_ID IN (SELECT VAF_Tab_ID FROM VAF_Tab tab"
+                    + " INNER JOIN VAF_TableView tt ON (tab.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Element"))
-                return "o.AD_Element_ID IN (SELECT AD_Element_ID FROM AD_Column c"
-                    + " INNER JOIN AD_Table tt ON (c.AD_Table_ID=tt.AD_Table_ID) "
+            if (baseTableName.Equals("VAF_ColumnDic"))
+                return "o.VAF_ColumnDic_ID IN (SELECT VAF_ColumnDic_ID FROM VAF_Column c"
+                    + " INNER JOIN VAF_TableView tt ON (c.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
             if (baseTableName.Equals("AD_Process"))
                 return "o.AccessLevel <> '4'";
@@ -979,7 +979,7 @@ namespace VAdvantage.Process
             }
 
             String sql = "SELECT Name, TableName "
-                + "FROM AD_Table "
+                + "FROM VAF_TableView "
                 + "WHERE TableName LIKE '%_Trl' "
                 + "ORDER BY 1";
             List<String> trlTables = new List<String>();

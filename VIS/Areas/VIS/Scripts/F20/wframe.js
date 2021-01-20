@@ -467,21 +467,21 @@
 
     /**
 	 *	Dynamic Initialization form
-	 *  @param AD_Form_ID form
+	 *  @param VAF_Page_ID form
      *  @param callback to add menu item for form
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initForm = function (AD_Form_ID, callback, action) {
+    AWindow.prototype.initForm = function (VAF_Page_ID, callback, action) {
 
         this.cPanel = new VIS.AForm(VIS.Env.getScreenHeight() - 85); //initlize AForm
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();
-        this.id = windowNo + "_" + AD_Form_ID;
-        this.hid = action + "=" + AD_Form_ID;
+        this.id = windowNo + "_" + VAF_Page_ID;
+        this.hid = action + "=" + VAF_Page_ID;
 
         var self = this;
-        VIS.dataContext.getFormDataString({ AD_Form_ID: AD_Form_ID }, function (json) {
+        VIS.dataContext.getFormDataString({ VAF_Page_ID: VAF_Page_ID }, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error
                 self.dispose();
@@ -1478,7 +1478,7 @@
     //****************************************************//
     //**             VSortTab                          **//
     //**************************************************//
-    VIS.VSortTab = function (windowNo, AD_Table_ID, AD_ColumnSortOrder_ID, AD_ColumnSortYesNo_ID,
+    VIS.VSortTab = function (windowNo, VAF_TableView_ID, VAF_ColumnSortOrder_ID, VAF_ColumnSortYesNo_ID,
         isReadOnly, id) {
 
         this.winNumber = windowNo;
@@ -1537,7 +1537,7 @@
 
         initializeComponent();
 
-        this.dynInit(AD_Table_ID, AD_ColumnSortOrder_ID, AD_ColumnSortYesNo_ID); //Dynamic Initilize
+        this.dynInit(VAF_TableView_ID, VAF_ColumnSortOrder_ID, VAF_ColumnSortYesNo_ID); //Dynamic Initilize
 
         this.getRoot = function () {
             return $tblRoot;
@@ -1733,44 +1733,44 @@
             this.aPanel.aSave.setEnabled(enable);
     };
 
-    VIS.VSortTab.prototype.dynInit = function (AD_Table_ID, AD_ColumnSortOrder_ID, AD_ColumnSortYesNo_ID) {
+    VIS.VSortTab.prototype.dynInit = function (VAF_TableView_ID, VAF_ColumnSortOrder_ID, VAF_ColumnSortYesNo_ID) {
 
         var trl = !VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "");
 
 
 
-        //var sql = "SELECT t.TableName, c.AD_Column_ID, c.ColumnName, e.Name,"	//	1..4
+        //var sql = "SELECT t.TableName, c.VAF_Column_ID, c.ColumnName, e.Name,"	//	1..4
         //    + "c.IsParent, c.IsKey, c.IsIdentifier, c.IsTranslated "				//	4..8
-        //    + "FROM AD_Table t, AD_Column c, AD_Element e "
-        //    + "WHERE t.AD_Table_ID=" + AD_Table_ID						//	#1
-        //    + " AND t.AD_Table_ID=c.AD_Table_ID"
-        //    + " AND (c.AD_Column_ID=" + AD_ColumnSortOrder_ID + " OR AD_Column_ID=" + AD_ColumnSortYesNo_ID 	//	#2..3
+        //    + "FROM VAF_TableView t, VAF_Column c, VAF_ColumnDic e "
+        //    + "WHERE t.VAF_TableView_ID=" + VAF_TableView_ID						//	#1
+        //    + " AND t.VAF_TableView_ID=c.VAF_TableView_ID"
+        //    + " AND (c.VAF_Column_ID=" + VAF_ColumnSortOrder_ID + " OR VAF_Column_ID=" + VAF_ColumnSortYesNo_ID 	//	#2..3
         //    + " OR c.IsParent='Y' OR c.IsKey='Y' OR c.IsIdentifier='Y')"
-        //    + " AND c.AD_Element_ID=e.AD_Element_ID";
+        //    + " AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID";
 
 
         var sql = "VIS_122";
         var param = [];
-        param[0] = new VIS.DB.SqlParam("@AD_Table_ID", AD_Table_ID);
-        param[1] = new VIS.DB.SqlParam("@AD_ColumnSortOrder_ID", AD_ColumnSortOrder_ID);
-        param[2] = new VIS.DB.SqlParam("@AD_ColumnSortYesNo_ID", AD_ColumnSortYesNo_ID);
+        param[0] = new VIS.DB.SqlParam("@VAF_TableView_ID", VAF_TableView_ID);
+        param[1] = new VIS.DB.SqlParam("@VAF_ColumnSortOrder_ID", VAF_ColumnSortOrder_ID);
+        param[2] = new VIS.DB.SqlParam("@VAF_ColumnSortYesNo_ID", VAF_ColumnSortYesNo_ID);
 
         if (trl) {
-            //sql = "SELECT t.TableName, c.AD_Column_ID, c.ColumnName, et.Name,"	//	1..4
+            //sql = "SELECT t.TableName, c.VAF_Column_ID, c.ColumnName, et.Name,"	//	1..4
             //    + "c.IsParent, c.IsKey, c.IsIdentifier, c.IsTranslated "		//	4..8
-            //    + "FROM AD_Table t, AD_Column c, AD_Element_Trl et "
-            //    + "WHERE t.AD_Table_ID=" + AD_Table_ID						//	#1
-            //    + " AND t.AD_Table_ID=c.AD_Table_ID"
-            //    + " AND (c.AD_Column_ID=" + AD_ColumnSortOrder_ID + " OR AD_Column_ID=" + AD_ColumnSortYesNo_ID	//	#2..3
+            //    + "FROM VAF_TableView t, VAF_Column c, VAF_ColumnDic_TL et "
+            //    + "WHERE t.VAF_TableView_ID=" + VAF_TableView_ID						//	#1
+            //    + " AND t.VAF_TableView_ID=c.VAF_TableView_ID"
+            //    + " AND (c.VAF_Column_ID=" + VAF_ColumnSortOrder_ID + " OR VAF_Column_ID=" + VAF_ColumnSortYesNo_ID	//	#2..3
             //    + "	OR c.IsParent='Y' OR c.IsKey='Y' OR c.IsIdentifier='Y')"
-            //    + " AND c.AD_Element_ID=et.AD_Element_ID"
+            //    + " AND c.VAF_ColumnDic_ID=et.VAF_ColumnDic_ID"
             //    + " AND et.AD_Language='" + VIS.Env.getAD_Language(VIS.Env.getCtx()) + "'";                   //	#4
 
             sql = "VIS_123";
             param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_Table_ID", AD_Table_ID);
-            param[1] = new VIS.DB.SqlParam("@AD_ColumnSortOrder_ID", AD_ColumnSortOrder_ID);
-            param[2] = new VIS.DB.SqlParam("@AD_ColumnSortYesNo_ID", AD_ColumnSortYesNo_ID);
+            param[0] = new VIS.DB.SqlParam("@VAF_TableView_ID", VAF_TableView_ID);
+            param[1] = new VIS.DB.SqlParam("@VAF_ColumnSortOrder_ID", VAF_ColumnSortOrder_ID);
+            param[2] = new VIS.DB.SqlParam("@VAF_ColumnSortYesNo_ID", VAF_ColumnSortYesNo_ID);
             param[3] = new VIS.DB.SqlParam("@AD_Language", VIS.Env.getAD_Language(VIS.Env.getCtx()));
 
         }
@@ -1784,13 +1784,13 @@
                 while (dr.read()) {
                     self.tableName = dr.getString(0);
                     //	Sort Column
-                    if (AD_ColumnSortOrder_ID == dr.get(1)) {
+                    if (VAF_ColumnSortOrder_ID == dr.get(1)) {
                         //log.Fine("Sort=" + dr.GetString(0) + "." + dr.GetString(2));
                         self.columnSortName = dr.getString(2);
                         lblYesName = dr.getString(3);
                     }
                     //	Optional YesNo
-                    else if (AD_ColumnSortYesNo_ID == dr.get(1)) {
+                    else if (VAF_ColumnSortYesNo_ID == dr.get(1)) {
                         //log.Fine("YesNo=" + dr.GetString(0) + "." + dr.GetString(2));
                         self.columnYesNoName = dr.getString(2);
                     }
@@ -2087,7 +2087,7 @@
             "Updated": _dse.Updated,
             "UpdatedBy": _dse.UpdatedBy,
             "Info": _dse.Info,
-            "AD_Table_ID": _dse.AD_Table_ID,
+            "VAF_TableView_ID": _dse.VAF_TableView_ID,
             "Record_ID": _dse.Record_ID
         }
 
@@ -2117,7 +2117,7 @@
                     }
                     htm = '<tr class="vis-advancedSearchTableRow">';
                     obj = data.Rows[i];
-                    htm += '<td>' + obj["AD_Column_ID"] + '</td><td>' + obj["NewValue"] + '</td>' +
+                    htm += '<td>' + obj["VAF_Column_ID"] + '</td><td>' + obj["NewValue"] + '</td>' +
                         '<td>' + obj["OldValue"] + '</td><td>' + obj["UpdatedBy"] + '</td><td>' + Globalize.format(new Date(obj["Updated"]), 'f') + '</td>';
                     htm += '</tr>';
                     html += htm;

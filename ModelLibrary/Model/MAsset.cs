@@ -782,7 +782,7 @@ namespace VAdvantage.Model
                 string _RelatedToProduct = Convert.ToString(DB.ExecuteScalar(sql));
 
                 _sql.Clear();
-                _sql.Append("Select Count(*) From FRPT_Asset_Acct   where A_Asset_ID=" + assetId + " AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
+                _sql.Append("Select Count(*) From FRPT_Asset_Acct   where A_Asset_ID=" + assetId + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                 if (value < 1)
                 {
@@ -792,7 +792,7 @@ namespace VAdvantage.Model
                         " inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id " +
                         " where PCA.A_Asset_Group_ID=" + assetGroupId +
                         " and acc.frpt_relatedto='" + _RelatedToProduct +
-                        "' AND PCA.IsActive = 'Y' AND PCA.AD_Client_ID = " + GetAD_Client_ID());
+                        "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -800,7 +800,7 @@ namespace VAdvantage.Model
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             obj = MTable.GetPO(GetCtx(), "FRPT_Asset_Acct", 0, null);
-                            obj.Set_ValueNoCheck("AD_Org_ID", 0);
+                            obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                             obj.Set_ValueNoCheck("A_Asset_ID", assetId);
                             obj.Set_ValueNoCheck("C_AcctSchema_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_AcctSchema_ID"]));
                             obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
@@ -858,8 +858,8 @@ namespace VAdvantage.Model
             //                StringBuilder _sql = new StringBuilder();
             //                _sql.Clear();
             //                _sql.Clear();
-            //                _sql.Append(@" SELECT M_COST.AD_CLIENT_ID,
-            //                                          M_COST.AD_ORG_ID,
+            //                _sql.Append(@" SELECT M_COST.VAF_CLIENT_ID,
+            //                                          M_COST.VAF_ORG_ID,
             //                                          M_COST.M_COSTELEMENT_ID,
             //                                          M_PRODUCT.M_PRODUCT_ID,
             //                                          M_COST.C_ACCTSCHEMA_ID,
@@ -876,7 +876,7 @@ namespace VAdvantage.Model
             //                                        INNER JOIN M_COSTELEMENT
             //                                        ON(M_COSTELEMENT.M_COSTELEMENT_ID  =M_COST.M_COSTELEMENT_ID)
             //                                        WHERE M_COSTELEMENT.COSTELEMENTTYPE='M'
-            //                                        AND M_COST.AD_CLIENT_ID            =" + GetAD_Client_ID() +
+            //                                        AND M_COST.VAF_CLIENT_ID            =" + GetVAF_Client_ID() +
             //                            @" AND M_COST.ISACTIVE                ='Y' AND M_COST.IsAssetCost='N'
             //                                        AND M_PRODUCT.M_PRODUCT_ID         =" + GetM_Product_ID());
 
@@ -901,7 +901,7 @@ namespace VAdvantage.Model
             //                                    {
             //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["C_ACCTSCHEMA_ID"]), Get_TrxName());
             //                                        _cost = new MCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_ATTRIBUTESETINSTANCE_ID"]),
-            //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["AD_ORG_ID"]),
+            //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                            Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]),
             //                                            GetA_Asset_ID());
             //                                        _cost.SetBasisType(Util.GetValueOfString(_dsAsset.Tables[0].Rows[k]["BASISTYPE"]));
@@ -921,7 +921,7 @@ namespace VAdvantage.Model
             //                                    {
             //                                        _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["C_ACCTSCHEMA_ID"]), Get_TrxName());
             //                                        _cost = new MCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_ATTRIBUTESETINSTANCE_ID"]),
-            //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["AD_ORG_ID"]),
+            //                                            _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                            Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]),
             //                                            GetA_Asset_ID());
             //                                        _cost.SetBasisType(Util.GetValueOfString(_dsAsset.Tables[0].Rows[k]["BASISTYPE"]));
@@ -944,7 +944,7 @@ namespace VAdvantage.Model
             //                                {
             //                                    _acctsch = new MAcctSchema(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["C_ACCTSCHEMA_ID"]), Get_TrxName());
             //                                    _cost = new MCost(_product, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_ATTRIBUTESETINSTANCE_ID"]),
-            //                                        _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["AD_ORG_ID"]),
+            //                                        _acctsch, Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAF_ORG_ID"]),
             //                                        Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["M_COSTELEMENT_ID"]),
             //                                        GetA_Asset_ID());
             //                                    _cost.SetBasisType(Util.GetValueOfString(_dsAsset.Tables[0].Rows[k]["BASISTYPE"]));

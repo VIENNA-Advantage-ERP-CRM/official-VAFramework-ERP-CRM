@@ -8,10 +8,10 @@ using VAdvantage.Utility;
 using ViennaAdvantage.Model;
 namespace VAdvantage.Model
 {
-    public class MCardViewCondition : X_AD_CardView_Condition
+    public class MCardViewCondition : X_VAF_CardView_Condition
     {
-        public MCardViewCondition(Ctx ctx, int AD_CardViewColumn_ID, Trx trxName)
-            : base(ctx, AD_CardViewColumn_ID, trxName)
+        public MCardViewCondition(Ctx ctx, int VAF_CardViewColumn_ID, Trx trxName)
+            : base(ctx, VAF_CardViewColumn_ID, trxName)
         {
         }
 

@@ -27,14 +27,14 @@ namespace VAdvantage.Model
 
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             return true;
         }
 
         protected override bool BeforeDelete()
         {
-            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(GetCtx(), GetAD_Client_ID());
+            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID());
             for (int i = 0; i < ass.Length; i++)
             {
                 if (ass[i].GetM_CostType_ID() == GetM_CostType_ID())

@@ -70,7 +70,7 @@ static X_C_InviteeList()
 //static long serialVersionUID = 27610657762556L;
 /** Last Updated Timestamp 2/6/2012 6:17:26 PM */
 public static long updatedMS = 1328532445767L;
-/** AD_Table_ID=1000241 */
+/** VAF_TableView_ID=1000241 */
 public static int Table_ID;
  // =1000241;
 

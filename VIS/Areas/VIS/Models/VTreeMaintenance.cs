@@ -52,8 +52,8 @@ namespace VAdvantage.Classes
         /// <returns>DataSet</returns>
         public DataSet GetClientTrees()
         {
-            //string sqlCmd = "select Name,AD_Tree_Id +'|'+treetype+'|'+IsAllNodes as AD_Tree_Id from Ad_Tree where AD_Client_Id="+ctx.GetAD_Client_ID()+" and TreeType in('MM','OO') order by Name";
-            string sqlCmd = "select Name,AD_Tree_Id ||'|'||treetype || '|'||IsAllNodes as AD_Tree_Id from Ad_Tree where AD_Client_Id=" + ctx.GetAD_Client_ID() + " and TreeType in('MM','OO') order by Name";
+            //string sqlCmd = "select Name,AD_Tree_Id +'|'+treetype+'|'+IsAllNodes as AD_Tree_Id from Ad_Tree where VAF_Client_Id="+ctx.GetVAF_Client_ID()+" and TreeType in('MM','OO') order by Name";
+            string sqlCmd = "select Name,AD_Tree_Id ||'|'||treetype || '|'||IsAllNodes as AD_Tree_Id from Ad_Tree where VAF_Client_Id=" + ctx.GetVAF_Client_ID() + " and TreeType in('MM','OO') order by Name";
             return ExecuteQuery.ExecuteDataset(sqlCmd);
         }
 
@@ -69,16 +69,16 @@ namespace VAdvantage.Classes
             if(TreeType=="MM")
             {
                 //sqlCmd = "select ad_menu.Name +' ('+ad_menu.Description +')' as Name,ad_menu.ad_menu_id as pkid from ad_menu where " +
-                  //            "ad_client_id in(0," + ctx.GetAD_Client_ID() + ") order by ad_menu.Name" ;
+                  //            "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by ad_menu.Name" ;
                 sqlCmd = "select ad_menu.Name ||' ('|| ad_menu.Description ||')' as Name,ad_menu.ad_menu_id as pkid from ad_menu where " +
-                              "ad_client_id in(0," + ctx.GetAD_Client_ID() + ") order by ad_menu.Name";
+                              "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by ad_menu.Name";
             }
             else if (TreeType == "OO")
             {
-                //sqlCmd = "select ad_org.Name +' ('+ ad_org.Description +')' as Name,ad_org.ad_org_id as pkid from ad_org where " +
-                //              "ad_client_id in(0," + ctx.GetAD_Client_ID() + ") order by ad_org.Name";
-                sqlCmd = "select ad_org.Name ||' ('|| ad_org.Description ||')' as Name,ad_org.ad_org_id as pkid from ad_org where " +
-                              "ad_client_id in(0," + ctx.GetAD_Client_ID() + ") order by ad_org.Name";
+                //sqlCmd = "select vaf_org.Name +' ('+ vaf_org.Description +')' as Name,vaf_org.vaf_org_id as pkid from vaf_org where " +
+                //              "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by vaf_org.Name";
+                sqlCmd = "select vaf_org.Name ||' ('|| vaf_org.Description ||')' as Name,vaf_org.vaf_org_id as pkid from vaf_org where " +
+                              "vaf_client_id in(0," + ctx.GetVAF_Client_ID() + ") order by vaf_org.Name";
 
             }
             return ExecuteQuery.ExecuteDataset(sqlCmd);
@@ -102,17 +102,17 @@ namespace VAdvantage.Classes
                 tableName= "AD_TREENODE";
             }
            
-                 sqlCmd = new StringBuilder("insert into " + tableName + " (AD_CLIENT_ID,AD_ORG_ID,AD_TREE_ID,CREATEDBY," +
-                             "NODE_ID,SEQNO,PARENT_ID,UPDATEDBY) select " + ctx.GetAD_Client_ID() + ",0," + _AD_Tree_Id + ",100,");
+                 sqlCmd = new StringBuilder("insert into " + tableName + " (VAF_CLIENT_ID,VAF_ORG_ID,AD_TREE_ID,CREATEDBY," +
+                             "NODE_ID,SEQNO,PARENT_ID,UPDATEDBY) select " + ctx.GetVAF_Client_ID() + ",0," + _AD_Tree_Id + ",100,");
 
-            //if tree type MM then select from table AD_Menu else from AD_Org
+            //if tree type MM then select from table AD_Menu else from VAF_Org
                      if (TreeType == "MM")
                      {
-                         sqlCmd.Append("AD_Menu_ID,9999,0,100 from AD_Menu where AD_CLIENT_ID in(0," + ctx.GetAD_Client_ID() + ") and  AD_Menu_Id");
+                         sqlCmd.Append("AD_Menu_ID,9999,0,100 from AD_Menu where VAF_CLIENT_ID in(0," + ctx.GetVAF_Client_ID() + ") and  AD_Menu_Id");
                      }
                      else if (TreeType == "OO")
                      {
-                         sqlCmd.Append("AD_Org_ID,9999,0,100 from AD_Org where AD_CLIENT_ID in(0," + ctx.GetAD_Client_ID() + ") and  AD_Org_ID");
+                         sqlCmd.Append("VAF_Org_ID,9999,0,100 from VAF_Org where VAF_CLIENT_ID in(0," + ctx.GetVAF_Client_ID() + ") and  VAF_Org_ID");
                      }
             //.....................................................
             //add which are not in tree
@@ -128,7 +128,7 @@ namespace VAdvantage.Classes
                          }
                          else if (TreeType == "OO")
                          {
-                             sqlCmd.Append(" and ad_Org_id=" + nodeId);
+                             sqlCmd.Append(" and vaf_org_id=" + nodeId);
                          }
                      }
               
@@ -160,8 +160,8 @@ namespace VAdvantage.Classes
             if (_TreeType == "MM")
             {
                 sqlCmd.Append(" and Node_Id not in " +
-                    "(select AD_Menu_Id from AD_Menu where AD_Form_Id in " +
-                    "(select AD_Form_Id from AD_Form where ClassName='VAdvantage.Apps.Form.VTreeMaintenance'))");
+                    "(select AD_Menu_Id from AD_Menu where VAF_Page_Id in " +
+                    "(select VAF_Page_Id from VAF_Page where ClassName='VAdvantage.Apps.Form.VTreeMaintenance'))");
             }
             //if request is to delete a particular row
             if (!IsDeleteAll)
@@ -179,8 +179,8 @@ namespace VAdvantage.Classes
         /// <returns></returns>
         public int CheckMaintenenceNode(int Node_Id)
         {
-            string sqlCmd="select count(AD_Menu_Id) from AD_Menu where AD_Form_Id in " +
-                    "(select AD_Form_Id from AD_Form where ClassName='VAdvantage.Apps.Form.VTreeMaintenance') and AD_Menu_id="+Node_Id;
+            string sqlCmd="select count(AD_Menu_Id) from AD_Menu where VAF_Page_Id in " +
+                    "(select VAF_Page_Id from VAF_Page where ClassName='VAdvantage.Apps.Form.VTreeMaintenance') and AD_Menu_id="+Node_Id;
             return int.Parse(ExecuteQuery.ExecuteScalar(sqlCmd));
 
         }
@@ -198,7 +198,7 @@ namespace VAdvantage.Classes
             }
             else if (_TreeType == "OO")
             {
-                sqlCmd += "AD_Org where AD_Org_Id=" + nodeId;
+                sqlCmd += "VAF_Org where VAF_Org_Id=" + nodeId;
             }
             return ExecuteQuery.ExecuteScalar(sqlCmd).ToString();
         }

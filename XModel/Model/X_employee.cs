@@ -36,7 +36,7 @@ public X_employee (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 //static long serialVersionUID 27523912829005L;
 /** Last Updated Timestamp 5/8/2009 6:28:32 PM */
 public static long updatedMS = 1241787512216L;
-/** AD_Table_ID=1000003 */
+/** VAF_TableView_ID=1000003 */
 public static int Table_ID=1000003;
 
 /** TableName=employee */

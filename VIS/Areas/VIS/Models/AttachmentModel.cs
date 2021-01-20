@@ -11,39 +11,39 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
     public class AttachmentModel
     {
 
-        public InitAttachment GetAttachment(int AD_Table_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
+        public InitAttachment GetAttachment(int VAF_TableView_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
         {
             InitAttachment initialData = new InitAttachment();
-            initialData.Attachment = GetFileAttachment(AD_Table_ID, Record_ID, ctx);
+            initialData.Attachment = GetFileAttachment(VAF_TableView_ID, Record_ID, ctx);
             initialData.FLocation = GetFileLocations(ctx);
             return initialData;
         }
 
-        private MAttachment GetFileAttachment(int AD_Table_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
+        private MAttachment GetFileAttachment(int VAF_TableView_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
         {
-            int AD_Attachment_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Attachment_ID from AD_Attachment WHERE ad_table_id =" + AD_Table_ID + " AND record_id=" + Record_ID, null, null));
-            if (AD_Attachment_ID == 0)
+            int VAF_Attachment_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Attachment_ID from VAF_Attachment WHERE vaf_tableview_id =" + VAF_TableView_ID + " AND record_id=" + Record_ID, null, null));
+            if (VAF_Attachment_ID == 0)
             {
                 return null;
             }
-            MAttachment att = new MAttachment(ctx, AD_Attachment_ID, null);
-            att.AD_Attachment_ID = AD_Attachment_ID;
+            MAttachment att = new MAttachment(ctx, VAF_Attachment_ID, null);
+            att.VAF_Attachment_ID = VAF_Attachment_ID;
             return att;
         }
 
         private FileLocation GetFileLocations(Ctx ctx)
         {
-            //MAttachment att = new MAttachment(ctx, AD_Table_ID, Record_ID, null);
+            //MAttachment att = new MAttachment(ctx, VAF_TableView_ID, Record_ID, null);
             //return att;
             FileLocation locations = new FileLocation();
-            int AD_Reference_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select AD_Reference_Value_ID from ad_Column WHERE AD_Table_ID =(SELECT AD_Table_ID FROM AD_Table WHERE TableName='AD_ClientInfo') AND UPPER(ColumnName)='SAVEATTACHMENTON'", null, null));
+            int AD_Reference_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select AD_Reference_Value_ID from vaf_column WHERE VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAF_ClientDetail') AND UPPER(ColumnName)='SAVEATTACHMENTON'", null, null));
 
             locations.values = MRefList.GetList(AD_Reference_ID, false, ctx);
-            locations.selectedvalue = Util.GetValueOfString(DB.ExecuteScalar("Select SAVEATTACHMENTON From AD_CLientInfo WHERE Ad_client_ID=" + ctx.GetAD_Client_ID(), null, null));
+            locations.selectedvalue = Util.GetValueOfString(DB.ExecuteScalar("Select SAVEATTACHMENTON From VAF_ClientDetail WHERE vaf_client_ID=" + ctx.GetVAF_Client_ID(), null, null));
             return locations;
         }
 
-        public AttachmentInfo CreateAttachmentEntries(List<AttFileInfo> _files, int AD_Attachment_ID, string folderKey, Ctx ctx, int AD_Table_ID, int Record_ID, string fileLocation, int newRecord_ID, bool IsDMSAttachment)
+        public AttachmentInfo CreateAttachmentEntries(List<AttFileInfo> _files, int VAF_Attachment_ID, string folderKey, Ctx ctx, int VAF_TableView_ID, int Record_ID, string fileLocation, int newRecord_ID, bool IsDMSAttachment)
         {
             AttachmentInfo info = new AttachmentInfo();
 
@@ -55,29 +55,29 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             }
             else
             {
-                att = new MAttachment(ctx, AD_Attachment_ID, null);
+                att = new MAttachment(ctx, VAF_Attachment_ID, null);
                 att.SetRecord_ID(Record_ID);
             }
 
-            if (IsDMSAttachment && newRecord_ID == 0 && AD_Attachment_ID > 0)
+            if (IsDMSAttachment && newRecord_ID == 0 && VAF_Attachment_ID > 0)
             {
-                DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_Attachment_ID=" + AD_Attachment_ID, null, null);
+                DB.ExecuteQuery("DELETE FROM VAF_AttachmentLine WHERE VAF_Attachment_ID=" + VAF_Attachment_ID, null, null);
             }
-            att.SetAD_Table_ID(AD_Table_ID);
+            att.SetVAF_TableView_ID(VAF_TableView_ID);
             att.SetAttFileInfo(_files);
             att.FolderKey = folderKey;
             att.SetFileLocation(fileLocation);
             att.SetIsFromHTML(true);
             att.Save();
-            info.AD_attachment_ID = att.GetAD_Attachment_ID();
+            info.VAF_Attachment_ID = att.GetVAF_Attachment_ID();
             info.Error = att.Error;
 
             return info;
         }
 
-        private void CopyRecord(MAttachment att, int AD_Table_ID, int newRecord_ID, Ctx ctx)
+        private void CopyRecord(MAttachment att, int VAF_TableView_ID, int newRecord_ID, Ctx ctx)
         {
-            MAttachment newAttachment = new MAttachment(ctx, AD_Table_ID, newRecord_ID, null);
+            MAttachment newAttachment = new MAttachment(ctx, VAF_TableView_ID, newRecord_ID, null);
             att.CopyTo(newAttachment);
 
             //for (int i = 0; i < att.GetEntryCount(); i++)
@@ -89,21 +89,21 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             att = newAttachment;
         }
 
-        public string DownloadAttachment(Ctx _ctx, string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID, string actionOrigin, string originName, int AD_Table_ID, int recordID)
+        public string DownloadAttachment(Ctx _ctx, string fileName, int VAF_Attachment_ID, int VAF_AttachmentLine_ID, string actionOrigin, string originName, int VAF_TableView_ID, int recordID)
         {
             //Saved Action Log
-            VAdvantage.Common.Common.SaveActionLog(_ctx, actionOrigin, originName, AD_Table_ID, recordID, 0, "", "", "Attachment Downloaded:->" + fileName, MActionLog.ACTIONTYPE_Download);
+            VAdvantage.Common.Common.SaveActionLog(_ctx, actionOrigin, originName, VAF_TableView_ID, recordID, 0, "", "", "Attachment Downloaded:->" + fileName, MActionLog.ACTIONTYPE_Download);
 
-            MAttachment att = new MAttachment(_ctx, AD_Attachment_ID, null);
+            MAttachment att = new MAttachment(_ctx, VAF_Attachment_ID, null);
 
-            return att.GetFile(AD_AttachmentLine_ID);
+            return att.GetFile(VAF_AttachmentLine_ID);
         }
 
-        public string DownloadAttachment(Ctx ctx, string fileName, int AD_Attachment_ID, int AD_AttachmentLine_ID)
+        public string DownloadAttachment(Ctx ctx, string fileName, int VAF_Attachment_ID, int VAF_AttachmentLine_ID)
         {
-            MAttachment att = new MAttachment(ctx, AD_Attachment_ID, null);
+            MAttachment att = new MAttachment(ctx, VAF_Attachment_ID, null);
 
-            return att.GetFile(AD_AttachmentLine_ID);
+            return att.GetFile(VAF_AttachmentLine_ID);
         }
 
         public int DeleteAttachment(string AttachmentLines)
@@ -116,7 +116,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             {
                 AttachmentLines = AttachmentLines.Substring(0, AttachmentLines.Length - 1);
             }
-            return DB.ExecuteQuery("DELETE FROM AD_AttachmentLine WHERE AD_AttachmentLine_ID IN (" + AttachmentLines + ")", null, null);
+            return DB.ExecuteQuery("DELETE FROM VAF_AttachmentLine WHERE VAF_AttachmentLine_ID IN (" + AttachmentLines + ")", null, null);
 
 
         }
@@ -140,7 +140,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
     public class AttachmentInfo
     {
         public string Error { get; set; }
-        public int AD_attachment_ID { get; set; }
+        public int VAF_Attachment_ID { get; set; }
     }
 
     public class InitAttachment

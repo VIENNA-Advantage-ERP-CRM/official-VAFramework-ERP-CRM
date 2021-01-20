@@ -53,7 +53,7 @@ namespace VIS.DataContracts
         public List<int> SingleKeyWhere { get; set; }
         public List<String> MultiKeyWhere { get; set; }
         public bool HasKeyColumn { get; set; }
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public String TableName { get; set; }
     }
 
@@ -90,7 +90,7 @@ namespace VIS.DataContracts
 
         public string Info { get; set; }
 
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
 
         public object Record_ID { get; set; }
     }
@@ -105,7 +105,7 @@ namespace VIS.DataContracts
 
     public class RecordRow
     {
-        public string AD_Column_ID { get; set; }
+        public string VAF_Column_ID { get; set; }
         //public string ColumnName { get; set; }
         public string NewValue { get; set; }
         public string OldValue { get; set; }
@@ -119,7 +119,7 @@ namespace VIS.DataContracts
         public int FieldGroupID { get; set; }
         public List<int> IncludedCols { get; set; }
         public List<CardViewCondition> Conditions { get; set; }
-        public int AD_CardView_ID { get; set; }
+        public int VAF_CardView_ID { get; set; }
     }
 
     public class CardViewCondition

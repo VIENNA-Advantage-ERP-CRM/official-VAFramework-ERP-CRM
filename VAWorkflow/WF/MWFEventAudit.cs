@@ -107,7 +107,7 @@ namespace VAdvantage.WF
         {
             SetAD_WF_Process_ID(activity.GetAD_WF_Process_ID());
             SetAD_WF_Node_ID(activity.GetAD_WF_Node_ID());
-            SetAD_Table_ID(activity.GetAD_Table_ID());
+            SetVAF_TableView_ID(activity.GetVAF_TableView_ID());
             SetRecord_ID(activity.GetRecord_ID());
             SetAD_WF_Responsible_ID(activity.GetAD_WF_Responsible_ID());
             SetAD_User_ID(activity.GetAD_User_ID());

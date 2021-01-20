@@ -84,7 +84,7 @@ static X_AD_PrintPaper()
 //static long serialVersionUID = 27562514362987L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046198L;
-/** AD_Table_ID=492 */
+/** VAF_TableView_ID=492 */
 public static int Table_ID;
  // =492;
 

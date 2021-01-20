@@ -310,8 +310,8 @@ namespace VAdvantage.Model
         //public static void main (String[] args)
         //{
         //    /**	Migration before
-        //    UPDATE C_Country SET AD_Client_ID=0, AD_Org_ID=0 WHERE AD_Client_ID<>0 OR AD_Org_ID<>0;
-        //    UPDATE C_Region SET AD_Client_ID=0, AD_Org_ID=0 WHERE AD_Client_ID<>0 OR AD_Org_ID<>0;
+        //    UPDATE C_Country SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
+        //    UPDATE C_Region SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
         //    IDs migration for C_Location, C_City, C_Tax (C_Country, C_Region)
         //    **
         //    //	from http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt

@@ -57,8 +57,8 @@
             return null;
         }
 
-        this.AD_Client_ID = VIS.context.getAD_Client_ID();
-        this.AD_Org_ID = VIS.context.getWindowContext(this.windowNum, "AD_Org_ID", true);
+        this.VAF_Client_ID = VIS.context.getVAF_Client_ID();
+        this.VAF_Org_ID = VIS.context.getWindowContext(this.windowNum, "VAF_Org_ID", true);
         this.AD_User_ID = VIS.context.getAD_User_ID();
         this.role = VIS.MRole.getDefault();
 
@@ -292,12 +292,12 @@
     ValuePreference.prototype.getADPreferenceID = function () {
         // make sql query to get preference id
         var sql = "SELECT AD_Preference_ID FROM AD_Preference WHERE ";
-        var valuetem = this.tenantchk ? this.AD_Client_ID : 0;
+        var valuetem = this.tenantchk ? this.VAF_Client_ID : 0;
         //	Client
-        sql += "AD_Client_ID=" + valuetem;
+        sql += "VAF_Client_ID=" + valuetem;
         //	Org
-        valuetem = this.orgchk ? this.AD_Org_ID : 0;
-        sql += " AND AD_Org_ID=" + valuetem;
+        valuetem = this.orgchk ? this.VAF_Org_ID : 0;
+        sql += " AND VAF_Org_ID=" + valuetem;
         //	Optional User
         if (this.userchk) {
             sql += " AND AD_User_ID=" + this.AD_User_ID;
@@ -394,8 +394,8 @@
             dataType: "json",
             data: {
                 preferenceId: AD_Preference_ID,
-                clientId: this.tenantchk ? this.AD_Client_ID : 0,
-                orgId: this.orgchk ? this.AD_Org_ID : 0,
+                clientId: this.tenantchk ? this.VAF_Client_ID : 0,
+                orgId: this.orgchk ? this.VAF_Org_ID : 0,
                 chkWindow: this.windowchk,
                 AD_Window_ID: this.AD_Window_ID,
                 chkUser: this.userchk,

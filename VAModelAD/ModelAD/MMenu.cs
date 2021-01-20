@@ -112,8 +112,8 @@ namespace VAdvantage.Model
             //	Clean up references
             if (GetAD_Window_ID() != 0 && !action.Equals(ACTION_Window))
                 SetAD_Window_ID(0);
-            if (GetAD_Form_ID() != 0 && !action.Equals(ACTION_Form))
-                SetAD_Form_ID(0);
+            if (GetVAF_Page_ID() != 0 && !action.Equals(ACTION_Form))
+                SetVAF_Page_ID(0);
             if (GetAD_Workflow_ID() != 0 && !action.Equals(ACTION_WorkFlow))
                 SetAD_Workflow_ID(0);
             if (GetAD_Workbench_ID() != 0 && !action.Equals(ACTION_Workbench))

@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_InfoColumn
+/** Generated Model for VAF_QuickSearchColumn
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_InfoColumn : PO
+public class X_VAF_QuickSearchColumn : PO
 {
-public X_AD_InfoColumn (Context ctx, int AD_InfoColumn_ID, Trx trxName) : base (ctx, AD_InfoColumn_ID, trxName)
+public X_VAF_QuickSearchColumn (Context ctx, int VAF_QuickSearchColumn_ID, Trx trxName) : base (ctx, VAF_QuickSearchColumn_ID, trxName)
 {
-/** if (AD_InfoColumn_ID == 0)
+/** if (VAF_QuickSearchColumn_ID == 0)
 {
-SetAD_InfoColumn_ID (0);
-SetAD_InfoWindow_ID (0);
+SetVAF_QuickSearchColumn_ID (0);
+SetVAF_QuickSearchWindow_ID (0);
 SetAD_Reference_ID (0);
 SetEntityType (null);	// U
 SetIsDisplayed (true);	// Y
@@ -31,16 +31,16 @@ SetIsQueryCriteria (false);
 SetIsRange (false);
 SetName (null);
 SetSelectClause (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_InfoColumn WHERE AD_InfoWindow_ID=@AD_InfoWindow_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_QuickSearchColumn WHERE VAF_QuickSearchWindow_ID=@VAF_QuickSearchWindow_ID@
 }
  */
 }
-public X_AD_InfoColumn (Ctx ctx, int AD_InfoColumn_ID, Trx trxName) : base (ctx, AD_InfoColumn_ID, trxName)
+public X_VAF_QuickSearchColumn (Ctx ctx, int VAF_QuickSearchColumn_ID, Trx trxName) : base (ctx, VAF_QuickSearchColumn_ID, trxName)
 {
-/** if (AD_InfoColumn_ID == 0)
+/** if (VAF_QuickSearchColumn_ID == 0)
 {
-SetAD_InfoColumn_ID (0);
-SetAD_InfoWindow_ID (0);
+SetVAF_QuickSearchColumn_ID (0);
+SetVAF_QuickSearchWindow_ID (0);
 SetAD_Reference_ID (0);
 SetEntityType (null);	// U
 SetIsDisplayed (true);	// Y
@@ -50,7 +50,7 @@ SetIsQueryCriteria (false);
 SetIsRange (false);
 SetName (null);
 SetSelectClause (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_InfoColumn WHERE AD_InfoWindow_ID=@AD_InfoWindow_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_QuickSearchColumn WHERE VAF_QuickSearchWindow_ID=@VAF_QuickSearchWindow_ID@
 }
  */
 }
@@ -59,7 +59,7 @@ SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_I
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_InfoColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_QuickSearchColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,7 +67,7 @@ public X_AD_InfoColumn (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_InfoColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_QuickSearchColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -75,13 +75,13 @@ public X_AD_InfoColumn (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_InfoColumn (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_QuickSearchColumn (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_InfoColumn()
+static X_VAF_QuickSearchColumn()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -90,12 +90,12 @@ static X_AD_InfoColumn()
 //static long serialVersionUID = 27562514361781L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389044992L;
-/** AD_Table_ID=897 */
+/** VAF_TableView_ID=897 */
 public static int Table_ID;
  // =897;
 
-/** TableName=AD_InfoColumn */
-public static String Table_Name="AD_InfoColumn";
+/** TableName=VAF_QuickSearchColumn */
+public static String Table_Name="VAF_QuickSearchColumn";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -129,52 +129,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_InfoColumn[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_QuickSearchColumn[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set System Element.
-@param AD_Element_ID System Element enables the central maintenance of column description and help. */
-public void SetAD_Element_ID (int AD_Element_ID)
+@param VAF_ColumnDic_ID System Element enables the central maintenance of column description and help. */
+public void SetVAF_ColumnDic_ID (int VAF_ColumnDic_ID)
 {
-if (AD_Element_ID <= 0) Set_Value ("AD_Element_ID", null);
+if (VAF_ColumnDic_ID <= 0) Set_Value ("VAF_ColumnDic_ID", null);
 else
-Set_Value ("AD_Element_ID", AD_Element_ID);
+Set_Value ("VAF_ColumnDic_ID", VAF_ColumnDic_ID);
 }
 /** Get System Element.
 @return System Element enables the central maintenance of column description and help. */
-public int GetAD_Element_ID() 
+public int GetVAF_ColumnDic_ID() 
 {
-Object ii = Get_Value("AD_Element_ID");
+Object ii = Get_Value("VAF_ColumnDic_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Info Column.
-@param AD_InfoColumn_ID Info Window Column */
-public void SetAD_InfoColumn_ID (int AD_InfoColumn_ID)
+@param VAF_QuickSearchColumn_ID Info Window Column */
+public void SetVAF_QuickSearchColumn_ID (int VAF_QuickSearchColumn_ID)
 {
-if (AD_InfoColumn_ID < 1) throw new ArgumentException ("AD_InfoColumn_ID is mandatory.");
-Set_ValueNoCheck ("AD_InfoColumn_ID", AD_InfoColumn_ID);
+if (VAF_QuickSearchColumn_ID < 1) throw new ArgumentException ("VAF_QuickSearchColumn_ID is mandatory.");
+Set_ValueNoCheck ("VAF_QuickSearchColumn_ID", VAF_QuickSearchColumn_ID);
 }
 /** Get Info Column.
 @return Info Window Column */
-public int GetAD_InfoColumn_ID() 
+public int GetVAF_QuickSearchColumn_ID() 
 {
-Object ii = Get_Value("AD_InfoColumn_ID");
+Object ii = Get_Value("VAF_QuickSearchColumn_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Info Window.
-@param AD_InfoWindow_ID Info and search/select Window */
-public void SetAD_InfoWindow_ID (int AD_InfoWindow_ID)
+@param VAF_QuickSearchWindow_ID Info and search/select Window */
+public void SetVAF_QuickSearchWindow_ID (int VAF_QuickSearchWindow_ID)
 {
-if (AD_InfoWindow_ID < 1) throw new ArgumentException ("AD_InfoWindow_ID is mandatory.");
-Set_ValueNoCheck ("AD_InfoWindow_ID", AD_InfoWindow_ID);
+if (VAF_QuickSearchWindow_ID < 1) throw new ArgumentException ("VAF_QuickSearchWindow_ID is mandatory.");
+Set_ValueNoCheck ("VAF_QuickSearchWindow_ID", VAF_QuickSearchWindow_ID);
 }
 /** Get Info Window.
 @return Info and search/select Window */
-public int GetAD_InfoWindow_ID() 
+public int GetVAF_QuickSearchWindow_ID() 
 {
-Object ii = Get_Value("AD_InfoWindow_ID");
+Object ii = Get_Value("VAF_QuickSearchWindow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -82,7 +82,7 @@ static X_AD_PrintTableFormat()
 //static long serialVersionUID = 27562514363097L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046308L;
-/** AD_Table_ID=523 */
+/** VAF_TableView_ID=523 */
 public static int Table_ID;
  // =523;
 

@@ -382,9 +382,9 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 		{
 			StringBuilder sb = new StringBuilder (
 				"INSERT INTO AD_TreeNodeCMT "
-					+ "(AD_Client_ID,AD_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
+					+ "(VAF_Client_ID,VAF_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
 					+ "AD_Tree_ID, Node_ID, Parent_ID, SeqNo) " + "VALUES (")
-				.Append (GetAD_Client_ID ()).Append (
+				.Append (GetVAF_Client_ID ()).Append (
 					",0, 'Y', SysDate, 0, SysDate, 0,").Append (
 					GetAD_Tree_ID ()).Append (",").Append (Get_ID ()).Append (
 					", 0, 999)");

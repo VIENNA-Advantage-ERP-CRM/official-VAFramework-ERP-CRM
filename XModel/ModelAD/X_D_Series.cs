@@ -21,9 +21,9 @@ namespace VAdvantage.Model
         {
             /** if (D_Series_ID == 0)
             {
-            SetAD_Column_X_ID (0);
-            SetAD_Column_Y_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_Column_X_ID (0);
+            SetVAF_Column_Y_ID (0);
+            SetVAF_TableView_ID (0);
             SetAlertMessage (null);
             SetAlertValue_X (null);
             SetD_Chart_ID (0);
@@ -43,9 +43,9 @@ namespace VAdvantage.Model
         {
             /** if (D_Series_ID == 0)
             {
-            SetAD_Column_X_ID (0);
-            SetAD_Column_Y_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_Column_X_ID (0);
+            SetVAF_Column_Y_ID (0);
+            SetVAF_TableView_ID (0);
             SetAlertMessage (null);
             SetAlertValue_X (null);
             SetD_Chart_ID (0);
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27701444768925L;
         /** Last Updated Timestamp 23-12-2014 12:54:12 */
         public static long updatedMS = 1419319452136L;
-        /** AD_Table_ID=1000007 */
+        /** VAF_TableView_ID=1000007 */
         public static int Table_ID;
         // =1000007;
 
@@ -142,38 +142,38 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_Column_X_ID AD_Reference_ID=414 */
-        public static int AD_COLUMN_X_ID_AD_Reference_ID = 414;
+        /** VAF_Column_X_ID AD_Reference_ID=414 */
+        public static int VAF_COLUMN_X_ID_AD_Reference_ID = 414;
         /** Set Column X.
-        @param AD_Column_X_ID Column X */
-        public void SetAD_Column_X_ID(int AD_Column_X_ID)
+        @param VAF_Column_X_ID Column X */
+        public void SetVAF_Column_X_ID(int VAF_Column_X_ID)
         {
-            if (AD_Column_X_ID < 1) throw new ArgumentException("AD_Column_X_ID is mandatory.");
-            Set_Value("AD_Column_X_ID", AD_Column_X_ID);
+            if (VAF_Column_X_ID < 1) throw new ArgumentException("VAF_Column_X_ID is mandatory.");
+            Set_Value("VAF_Column_X_ID", VAF_Column_X_ID);
         }
         /** Get Column X.
         @return Column X */
-        public int GetAD_Column_X_ID()
+        public int GetVAF_Column_X_ID()
         {
-            Object ii = Get_Value("AD_Column_X_ID");
+            Object ii = Get_Value("VAF_Column_X_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Column_Y_ID AD_Reference_ID=414 */
-        public static int AD_COLUMN_Y_ID_AD_Reference_ID = 414;
+        /** VAF_Column_Y_ID AD_Reference_ID=414 */
+        public static int VAF_COLUMN_Y_ID_AD_Reference_ID = 414;
         /** Set Column Y.
-        @param AD_Column_Y_ID Column Y */
-        public void SetAD_Column_Y_ID(int AD_Column_Y_ID)
+        @param VAF_Column_Y_ID Column Y */
+        public void SetVAF_Column_Y_ID(int VAF_Column_Y_ID)
         {
-            if (AD_Column_Y_ID < 1) throw new ArgumentException("AD_Column_Y_ID is mandatory.");
-            Set_Value("AD_Column_Y_ID", AD_Column_Y_ID);
+            if (VAF_Column_Y_ID < 1) throw new ArgumentException("VAF_Column_Y_ID is mandatory.");
+            Set_Value("VAF_Column_Y_ID", VAF_Column_Y_ID);
         }
         /** Get Column Y.
         @return Column Y */
-        public int GetAD_Column_Y_ID()
+        public int GetVAF_Column_Y_ID()
         {
-            Object ii = Get_Value("AD_Column_Y_ID");
+            Object ii = Get_Value("VAF_Column_Y_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -235,35 +235,35 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Tab.
-        @param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+        @param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }
         /** Get Tab.
         @return Tab within a Window */
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            Object ii = Get_Value("AD_Tab_ID");
+            Object ii = Get_Value("VAF_Tab_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Table_ID AD_Reference_ID=415 */
-        public static int AD_TABLE_ID_AD_Reference_ID = 415;
+        /** VAF_TableView_ID AD_Reference_ID=415 */
+        public static int VAF_TABLEVIEW_ID_AD_Reference_ID = 415;
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            Set_Value("AD_Table_ID", AD_Table_ID);
+            Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

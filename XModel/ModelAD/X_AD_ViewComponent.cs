@@ -78,7 +78,7 @@ static X_AD_ViewComponent()
 //static long serialVersionUID 27562514365918L;
 /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
 public static long updatedMS = 1280389049129L;
-/** AD_Table_ID=934 */
+/** VAF_TableView_ID=934 */
 public static int Table_ID;
  // =934;
 
@@ -121,18 +121,18 @@ StringBuilder sb = new StringBuilder ("X_AD_ViewComponent[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_ValueNoCheck ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_ValueNoCheck ("VAF_TableView_ID", null);
 else
-Set_ValueNoCheck ("AD_Table_ID", AD_Table_ID);
+Set_ValueNoCheck ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -140,7 +140,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Table_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_TableView_ID().ToString());
 }
 /** Set View Component.
 @param AD_ViewComponent_ID Component (Select statement) of the view */

@@ -126,8 +126,8 @@ namespace VAdvantage.ProcessEngine
                                       ip.P_Date_To,
                                       ip.Info,
                                       ip.Info_To,
-                                      i.AD_Client_ID,
-                                      i.AD_Org_ID,
+                                      i.VAF_Client_ID,
+                                      i.VAF_Org_ID,
                                       i.AD_User_ID,
                                       NVL(PP.LOADRECURSIVEDATA,'N') as LOADRECURSIVEDATA,
                                      nvl(pp.ShowChildOfSelected,'N') as ShowChildOfSelected,nvl(pp.AD_Reference_ID,0) as AD_Reference_ID
@@ -269,8 +269,8 @@ namespace VAdvantage.ProcessEngine
                     //
                     list.Add(new ProcessInfoParameter(ParameterName, Parameter, Parameter_To, Info, Info_To));
                     //
-                    if (pi.GetAD_Client_ID() == null)
-                        pi.SetAD_Client_ID(int.Parse(dr[9].ToString()));
+                    if (pi.GetVAF_Client_ID() == null)
+                        pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
                     if (pi.GetAD_User_ID() == null)
                         pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
                 }
@@ -473,7 +473,7 @@ namespace VAdvantage.ProcessEngine
             String sql = "SELECT p.ParameterName,"         			    	//  1
                    + " p.P_String,p.P_String_To, p.P_Number,p.P_Number_To,"    //  2/3 4/5
                    + " p.P_Date,p.P_Date_To, p.Info,p.Info_To, "               //  6/7 8/9
-                   + " i.AD_Client_ID, i.AD_Org_ID, i.AD_User_ID "				//	10..12
+                   + " i.VAF_Client_ID, i.VAF_Org_ID, i.AD_User_ID "				//	10..12
                 // +" p.P_Date_Time,p.P_Date_Time_To,p.P_Time, p.P_Time_To "
                    + "FROM AD_PInstance_Para p"
                    + " INNER JOIN AD_PInstance i ON (p.AD_PInstance_ID=i.AD_PInstance_ID) "
@@ -490,8 +490,8 @@ namespace VAdvantage.ProcessEngine
             //                                      ip.P_Date_To,
             //                                      ip.Info,
             //                                      ip.Info_To,
-            //                                      i.AD_Client_ID,
-            //                                      i.AD_Org_ID,
+            //                                      i.VAF_Client_ID,
+            //                                      i.VAF_Org_ID,
             //                                      i.AD_User_ID,
             //                                      ip.P_Date_Time,
             //                                      ip.P_Date_Time_To,
@@ -596,8 +596,8 @@ namespace VAdvantage.ProcessEngine
                     //
                     list.Add(new ProcessInfoParameter(ParameterName, Parameter, Parameter_To, Info, Info_To));
                     //
-                    if (pi.GetAD_Client_ID() == null)
-                        pi.SetAD_Client_ID(int.Parse(dr[9].ToString()));
+                    if (pi.GetVAF_Client_ID() == null)
+                        pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
                     if (pi.GetAD_User_ID() == null)
                         pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
                 }
@@ -636,10 +636,10 @@ namespace VAdvantage.ProcessEngine
             String sql = "SELECT p.ParameterName,"         			    	//  1
                 + " p.P_String,p.P_String_To, p.P_Number,p.P_Number_To,"    //  2/3 4/5
                 + " p.P_Date,p.P_Date_To, p.Info,p.Info_To, "               //  6/7 8/9
-                + " i.AD_Client_ID, i.AD_Org_ID "				//	10..12
-                + " FROM AD_CrystalInstance_Para p"
-                + " INNER JOIN AD_CrystalInstance i ON (p.AD_CrystalInstance_ID=i.AD_CrystalInstance_ID) "
-                + "WHERE p.AD_CrystalInstance_ID=@pinstanceid "
+                + " i.VAF_Client_ID, i.VAF_Org_ID "				//	10..12
+                + " FROM VAF_CrystalInstance_Para p"
+                + " INNER JOIN VAF_CrystalInstance i ON (p.VAF_CrystalInstance_ID=i.VAF_CrystalInstance_ID) "
+                + "WHERE p.VAF_CrystalInstance_ID=@pinstanceid "
                 + "ORDER BY p.SeqNo";
             IDataReader dr = null;
             try
@@ -685,8 +685,8 @@ namespace VAdvantage.ProcessEngine
                     //
                     list.Add(new ProcessInfoParameter(ParameterName, Parameter, Parameter_To, Info, Info_To));
                     //
-                    //if (pi.GetAD_Client_ID() == null)
-                    //    pi.SetAD_Client_ID(int.Parse(dr[9].ToString()));
+                    //if (pi.GetVAF_Client_ID() == null)
+                    //    pi.SetVAF_Client_ID(int.Parse(dr[9].ToString()));
                     //if (pi.GetAD_User_ID() == null)
                     //    pi.SetAD_User_ID(int.Parse(dr[11].ToString()));
                 }

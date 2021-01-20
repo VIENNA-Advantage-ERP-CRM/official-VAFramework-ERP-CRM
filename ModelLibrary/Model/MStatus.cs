@@ -114,9 +114,9 @@ namespace VAdvantage.Model
          */
         public static MStatus[] GetClosed(Ctx ctx)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             String sql = "SELECT * FROM R_Status "
-                + "WHERE AD_Client_ID=" + AD_Client_ID + " AND IsActive='Y' AND IsClosed='Y' "
+                + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND IsActive='Y' AND IsClosed='Y' "
                 + "ORDER BY Value";
             List<MStatus> list = new List<MStatus>();
             IDataReader idr = null;

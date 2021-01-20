@@ -39,8 +39,8 @@ namespace VIS.Models
             {
                 DataSet dsInvoice = DB.ExecuteDataset(@"SELECT C_Currency_ID  ,
                 CASE WHEN NVL(C_ConversionType_ID , 0) != 0  THEN C_ConversionType_ID ELSE 
-                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.AD_Client_ID IN (0 , C_Invoice.AD_Client_ID )
-                AND C_ConversionType.AD_Org_ID      IN (0 , C_Invoice.AD_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
+                (SELECT MAX(C_ConversionType_ID) FROM C_ConversionType WHERE C_ConversionType.VAF_Client_ID IN (0 , C_Invoice.VAF_Client_ID )
+                AND C_ConversionType.VAF_Org_ID      IN (0 , C_Invoice.VAF_Org_ID ) AND C_ConversionType.IsDefault = 'Y') END AS C_ConversionType_ID,
                 M_PriceList_ID FROM C_Invoice WHERE C_Invoice_ID = " + InvoiceID);
                 if (dsInvoice != null && dsInvoice.Tables.Count > 0 && dsInvoice.Tables[0].Rows.Count > 0)
                 {
@@ -55,7 +55,7 @@ namespace VIS.Models
 
             if (OrgId > 0)
             {
-                sql.Append("AND o.AD_Org_ID = " + OrgId);
+                sql.Append("AND o.VAF_Org_ID = " + OrgId);
             }
 
             if (!String.IsNullOrEmpty(whereCondition))
@@ -257,11 +257,11 @@ namespace VIS.Models
 
             string sql =
                  "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
-                 + "FROM M_InOut_Candidate_v ic, AD_Org o, C_BPartner bp, C_DocType dt "
-                 + "WHERE ic.AD_Org_ID=o.AD_Org_ID"
+                 + "FROM M_InOut_Candidate_v ic, VAF_Org o, C_BPartner bp, C_DocType dt "
+                 + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
                  + " AND ic.C_BPartner_ID=bp.C_BPartner_ID"
                  + " AND ic.C_DocType_ID=dt.C_DocType_ID"
-                 + " AND ic.AD_Client_ID=" + adClientID;
+                 + " AND ic.VAF_Client_ID=" + adClientID;
 
             if (mWarehouseIDs != "")
             {
@@ -312,11 +312,11 @@ namespace VIS.Models
             List<ExecuteQueryVinoutgen> obj = new List<ExecuteQueryVinoutgen>();
 
             var sql = "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
-                      + "FROM C_Invoice_Candidate_v ic, AD_Org o, C_BPartner bp, C_DocType dt "
-                      + "WHERE ic.AD_Org_ID=o.AD_Org_ID"
+                      + "FROM C_Invoice_Candidate_v ic, VAF_Org o, C_BPartner bp, C_DocType dt "
+                      + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
                       + " AND ic.C_BPartner_ID=bp.C_BPartner_ID"
                       + " AND ic.C_DocType_ID=dt.C_DocType_ID"
-                      + " AND ic.AD_Client_ID=" + adClientID;
+                      + " AND ic.VAF_Client_ID=" + adClientID;
 
             if (adOrgIDs != "")
             {

@@ -62,7 +62,7 @@ namespace ViennaAdvantageServer.Process
 
             String sql = "select bp.iscustomer,bp.isprospect,bp.name,bp.c_bpartner_id,au.ad_user_id, bpl.c_bpartner_location_id"
                            + " from c_bpartner bp left join c_bpartner_location bpl on(bpl.c_bpartner_id= bp.c_bpartner_id)"
-                           + " left JOIN ad_user au on(au.c_bpartner_id= bp.c_bpartner_id) where bp.c_bpartner_id=" + "1001892" + " and bp.ad_client_id=" + GetCtx().GetAD_Client_ID();
+                           + " left JOIN ad_user au on(au.c_bpartner_id= bp.c_bpartner_id) where bp.c_bpartner_id=" + "1001892" + " and bp.vaf_client_id=" + GetCtx().GetVAF_Client_ID();
             IDataReader idr = null;
             IDataReader idr1 = null;
             try
@@ -83,7 +83,7 @@ namespace ViennaAdvantageServer.Process
                     {
                         c_bpartnerSR_id = Util.GetValueOfInt(idr["C_BPartner_ID"]);
                     }
-                    sql = "select mp.m_pricelist_id,cc.c_currency_id from m_pricelist_version mpv join m_pricelist mp on(mp.m_pricelist_id=mpv.m_pricelist_id) join c_currency cc on(cc.c_currency_id= mp.c_currency_id) where mpv.m_pricelist_version_id=" + _M_PriceList_Version_ID + " and mp.ad_client_id=" + GetCtx().GetAD_Client_ID();
+                    sql = "select mp.m_pricelist_id,cc.c_currency_id from m_pricelist_version mpv join m_pricelist mp on(mp.m_pricelist_id=mpv.m_pricelist_id) join c_currency cc on(cc.c_currency_id= mp.c_currency_id) where mpv.m_pricelist_version_id=" + _M_PriceList_Version_ID + " and mp.vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                     
                     idr1 = DB.ExecuteReader(sql);
                     if (idr1.Read())

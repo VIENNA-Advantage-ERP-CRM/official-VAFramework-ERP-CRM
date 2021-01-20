@@ -88,7 +88,7 @@ static X_AD_Schedule()
 //static long serialVersionUID = 27562514363912L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047123L;
-/** AD_Table_ID=916 */
+/** VAF_TableView_ID=916 */
 public static int Table_ID;
  // =916;
 

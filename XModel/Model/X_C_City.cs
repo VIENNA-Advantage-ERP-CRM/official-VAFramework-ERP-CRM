@@ -70,7 +70,7 @@ static X_C_City()
 //static long serialVersionUID 27562514371247L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054458L;
-/** AD_Table_ID=186 */
+/** VAF_TableView_ID=186 */
 public static int Table_ID;
  // =186;
 

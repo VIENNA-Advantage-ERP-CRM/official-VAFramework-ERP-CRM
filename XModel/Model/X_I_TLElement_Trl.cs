@@ -20,7 +20,7 @@ public X_I_TLElement_Trl (Context ctx, int I_TLElement_Trl_ID, Trx trxName) : ba
 {
 /** if (I_TLElement_Trl_ID == 0)
 {
-SetAD_Element_ID (0);
+SetVAF_ColumnDic_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -32,7 +32,7 @@ public X_I_TLElement_Trl (Ctx ctx, int I_TLElement_Trl_ID, Trx trxName) : base (
 {
 /** if (I_TLElement_Trl_ID == 0)
 {
-SetAD_Element_ID (0);
+SetVAF_ColumnDic_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -76,7 +76,7 @@ static X_I_TLElement_Trl()
 //static long serialVersionUID 27638799867526L;
 /** Last Updated Timestamp 12/28/2012 11:32:30 AM */
 public static long updatedMS = 1356674550737L;
-/** AD_Table_ID=1000404 */
+/** VAF_TableView_ID=1000404 */
 public static int Table_ID;
  // =1000404;
 
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLElement_Trl[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set System Element.
-@param AD_Element_ID System Element enables the central maintenance of column description and help. */
-public void SetAD_Element_ID (int AD_Element_ID)
+@param VAF_ColumnDic_ID System Element enables the central maintenance of column description and help. */
+public void SetVAF_ColumnDic_ID (int VAF_ColumnDic_ID)
 {
-if (AD_Element_ID < 1) throw new ArgumentException ("AD_Element_ID is mandatory.");
-Set_ValueNoCheck ("AD_Element_ID", AD_Element_ID);
+if (VAF_ColumnDic_ID < 1) throw new ArgumentException ("VAF_ColumnDic_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ColumnDic_ID", VAF_ColumnDic_ID);
 }
 /** Get System Element.
 @return System Element enables the central maintenance of column description and help. */
-public int GetAD_Element_ID() 
+public int GetVAF_ColumnDic_ID() 
 {
-Object ii = Get_Value("AD_Element_ID");
+Object ii = Get_Value("VAF_ColumnDic_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

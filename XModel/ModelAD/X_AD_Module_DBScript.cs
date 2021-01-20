@@ -25,7 +25,7 @@ public X_AD_Module_DBScript (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, d
  added by ->Harwinder */
 static X_AD_Module_DBScript(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27874610760145L;/** Last Updated Timestamp 6/18/2020 1:04:03 PM */
-public static long updatedMS = 1592485443356L;/** AD_Table_ID=1000361 */
+public static long updatedMS = 1592485443356L;/** VAF_TableView_ID=1000361 */
 public static int Table_ID; // =1000361;
 /** TableName=AD_Module_DBScript */
 public static String Table_Name="AD_Module_DBScript";

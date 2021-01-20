@@ -72,7 +72,7 @@ static X_C_BP_BankAccount()
 //static long serialVersionUID 27562514369868L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053079L;
-/** AD_Table_ID=298 */
+/** VAF_TableView_ID=298 */
 public static int Table_ID;
  // =298;
 

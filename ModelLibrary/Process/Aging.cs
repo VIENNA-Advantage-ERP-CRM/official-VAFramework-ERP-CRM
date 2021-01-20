@@ -28,7 +28,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /** The date to calculate the days due from			*/
         private DateTime? _StatementDate = null;
         private Boolean _IsSOTrx = false;
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         private int _C_Currency_ID = 0;
         private int _C_BP_Group_ID = 0;
         private int _C_BPartner_ID = 0;
@@ -61,9 +61,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _C_Currency_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    _AD_Org_ID = para[i].GetParameterAsInt();
+                    _VAF_Org_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("C_BP_Group_ID"))
                 {
@@ -102,7 +102,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("StatementDate=" + _StatementDate + ", IsSOTrx=" + _IsSOTrx
-                + ", C_Currency_ID=" + _C_Currency_ID + ",AD_Org_ID=" + _AD_Org_ID
+                + ", C_Currency_ID=" + _C_Currency_ID + ",VAF_Org_ID=" + _VAF_Org_ID
                 + ", C_BP_Group_ID=" + _C_BP_Group_ID + ", C_BPartner_ID=" + _C_BPartner_ID
                 + ", IsListInvoices=" + _IsListInvoices);
             //
@@ -116,7 +116,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             else
             {
-                String s = ",oi.C_Currency_ID," + _C_Currency_ID + ",oi.DateAcct,oi.C_ConversionType_ID,oi.AD_Client_ID,oi.AD_Org_ID)";
+                String s = ",oi.C_Currency_ID," + _C_Currency_ID + ",oi.DateAcct,oi.C_ConversionType_ID,oi.VAF_Client_ID,oi.VAF_Org_ID)";
                 sql.Append("currencyConvert(oi.GrandTotal").Append(s)		//	11..
                     .Append(", currencyConvert(oi.PaidAmt").Append(s)
                     .Append(", currencyConvert(oi.OpenAmt").Append(s);
@@ -125,9 +125,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "FROM RV_OpenItem oi"
                 + " INNER JOIN C_BPartner bp ON (oi.C_BPartner_ID=bp.C_BPartner_ID) "
                 + "WHERE oi.ISSoTrx=").Append(_IsSOTrx ? "'Y'" : "'N'");
-            if (_AD_Org_ID > 0)
+            if (_VAF_Org_ID > 0)
             {
-                sql.Append(" AND oi.AD_Org_ID=").Append(_AD_Org_ID);
+                sql.Append(" AND oi.VAF_Org_ID=").Append(_VAF_Org_ID);
             }
             if (_C_BPartner_ID > 0)
             {
@@ -208,9 +208,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             C_BPartner_ID, C_Currency_ID,
                             C_Invoice_ID, C_InvoicePaySchedule_ID,
                             C_BP_Group_ID, DueDate, IsSOTrx, Get_Trx());
-                        if (_AD_Org_ID > 0)
+                        if (_VAF_Org_ID > 0)
                         {
-                            aging.SetAD_Org_ID(_AD_Org_ID);
+                            aging.SetVAF_Org_ID(_VAF_Org_ID);
                         }
                         aging.SetC_Activity_ID(C_Activity_ID);
                         aging.SetC_Campaign_ID(C_Campaign_ID);

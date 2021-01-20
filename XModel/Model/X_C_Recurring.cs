@@ -43,7 +43,7 @@ SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
  added by ->Harwinder */
         static X_C_Recurring() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27763848376125L;/** Last Updated Timestamp 12/14/2016 7:14:19 PM */
-        public static long updatedMS = 1481723059336L;/** AD_Table_ID=574 */
+        public static long updatedMS = 1481723059336L;/** VAF_TableView_ID=574 */
         public static int Table_ID; // =574;
         /** TableName=C_Recurring */
         public static String Table_Name = "C_Recurring";

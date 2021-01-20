@@ -20,7 +20,7 @@ using BaseLibrary.Engine;
 
 namespace VAdvantage.Model
 {
-    public class MChangeLog : X_AD_ChangeLog
+    public class MChangeLog : X_VAF_AlterLog
     {
 
         /**	Change Log				*/
@@ -37,24 +37,24 @@ namespace VAdvantage.Model
         /// <summary>
         /// 	Do we track all changes for this table
         /// </summary>
-        /// <param name="AD_Table_ID"> table</param>
+        /// <param name="VAF_TableView_ID"> table</param>
         /// <param name="type"></param>
         /// <returns>true if changes are tracked</returns>
-        public static Boolean IsLogged(int AD_Table_ID, String type)
+        public static Boolean IsLogged(int VAF_TableView_ID, String type)
         {
 
             if (changeLogAll.Count == 0 && changeLogUpdate.Count == 0)
                 FillChangeLog();
 
-            //int index = Arrays.binarySearch(s_logAllChanges, AD_Table_ID);
+            //int index = Arrays.binarySearch(s_logAllChanges, VAF_TableView_ID);
 
-            if (changeLogAll.ContainsKey(AD_Table_ID))
+            if (changeLogAll.ContainsKey(VAF_TableView_ID))
             {
                 return true;
             }
 
             if (!CHANGELOGTYPE_Insert.Equals(type)) // Update and Deletes
-                return changeLogUpdate.ContainsKey(AD_Table_ID);
+                return changeLogUpdate.ContainsKey(VAF_TableView_ID);
             else
                 return false;
 
@@ -65,25 +65,25 @@ namespace VAdvantage.Model
 
 
             //if (!CHANGELOGTYPE_Insert.Equals(type) &&
-            //    (AD_Table_ID == MRole.Table_ID
-            //    || AD_Table_ID == MUser.Table_ID
-            //    || AD_Table_ID == MPreference.Table_ID
-            //    || AD_Table_ID == MClient.Table_ID
-            //    || AD_Table_ID == MOrg.Table_ID))
+            //    (VAF_TableView_ID == MRole.Table_ID
+            //    || VAF_TableView_ID == MUser.Table_ID
+            //    || VAF_TableView_ID == MPreference.Table_ID
+            //    || VAF_TableView_ID == MClient.Table_ID
+            //    || VAF_TableView_ID == MOrg.Table_ID))
             //    return true;
             //if (changeLogAll.Count == 0 && changeLogUpdate.Count == 0)
             //    FillChangeLog();
 
             ////
-            //if (type == X_AD_ChangeLog.CHANGELOGTYPE_Update || type == X_AD_ChangeLog.CHANGELOGTYPE_Delete)
+            //if (type == X_VAF_AlterLog.CHANGELOGTYPE_Update || type == X_VAF_AlterLog.CHANGELOGTYPE_Delete)
             //{
-            //    return changeLogUpdate.ContainsKey(AD_Table_ID);
+            //    return changeLogUpdate.ContainsKey(VAF_TableView_ID);
             //}
             //else
             //{
-            //    return changeLogAll.ContainsKey(AD_Table_ID);
+            //    return changeLogAll.ContainsKey(VAF_TableView_ID);
             //}
-            ////int index = Array.BinarySearch(changeLog, AD_Table_ID);
+            ////int index = Array.BinarySearch(changeLog, VAF_TableView_ID);
             //return false;
         }	//	trackChanges
 
@@ -91,27 +91,27 @@ namespace VAdvantage.Model
         /// <summary>
         /// Not Logged
         /// </summary>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <param name="tableName">column</param>
-        /// <param name="AD_Column_ID">type</param>
+        /// <param name="VAF_Column_ID">type</param>
         /// <param name="type"></param>
         /// <returns>true if not logged</returns>
-        public static Boolean IsNotLogged(int AD_Table_ID, String tableName,
-        int AD_Column_ID, String type)
+        public static Boolean IsNotLogged(int VAF_TableView_ID, String tableName,
+        int VAF_Column_ID, String type)
         {
 
-            if (AD_Table_ID == X_AD_ChangeLog.Table_ID
-                   || AD_Table_ID == X_AD_WindowLog.Table_ID
-                   || AD_Table_ID == X_AD_QueryLog.Table_ID
-                   || AD_Table_ID == X_AD_Issue.Table_ID
-                   || AD_Column_ID == 6652 // AD_Process.Statistics_Count
-                   || AD_Column_ID == 6653) // AD_Process.Statistics_Seconds
+            if (VAF_TableView_ID == X_VAF_AlterLog.Table_ID
+                   || VAF_TableView_ID == X_AD_WindowLog.Table_ID
+                   || VAF_TableView_ID == X_AD_QueryLog.Table_ID
+                   || VAF_TableView_ID == X_AD_Issue.Table_ID
+                   || VAF_Column_ID == 6652 // AD_Process.Statistics_Count
+                   || VAF_Column_ID == 6653) // AD_Process.Statistics_Seconds
                 return true;
 
             // Don't log Log entries
             if (CHANGELOGTYPE_Insert.Equals(type)
              && (tableName.IndexOf("Log") != -1
-              || AD_Table_ID == X_AD_Session.Table_ID))
+              || VAF_TableView_ID == X_AD_Session.Table_ID))
                 return true;
             //
             return false;
@@ -120,17 +120,17 @@ namespace VAdvantage.Model
 
 
 
-            //if (AD_Table_ID == MChangeLog.Table_ID
-            //    || AD_Table_ID == MWindowLog.Table_ID
-            //    || AD_Table_ID == MQueryLog.Table_ID
-            //    //|| AD_Table_ID == MIssue.Table_ID
-            //    || AD_Column_ID == 6652
-            //    || AD_Column_ID == 6653)		//	AD_Process.Statistics_
+            //if (VAF_TableView_ID == MChangeLog.Table_ID
+            //    || VAF_TableView_ID == MWindowLog.Table_ID
+            //    || VAF_TableView_ID == MQueryLog.Table_ID
+            //    //|| VAF_TableView_ID == MIssue.Table_ID
+            //    || VAF_Column_ID == 6652
+            //    || VAF_Column_ID == 6653)		//	AD_Process.Statistics_
             //    return true;
             ////	Don't log Log entries
             //if (CHANGELOGTYPE_Insert.Equals(type)
             //    && (tableName.IndexOf("Log") != -1
-            //        || AD_Table_ID == MSession.Table_ID))
+            //        || VAF_TableView_ID == MSession.Table_ID))
             //    return true;
             ////
             //return false;
@@ -142,11 +142,11 @@ namespace VAdvantage.Model
         private static void FillChangeLog()
         {
             List<int> list = new List<int>(40);
-            String sql = "SELECT t.AD_Table_ID ,t.ChangeLogLevel FROM AD_Table t "
+            String sql = "SELECT t.VAF_TableView_ID ,t.ChangeLogLevel FROM VAF_TableView t "
                 + "WHERE (t.IsChangeLog='Y' AND (t.ChangeLogLevel='A' or t.ChangeLogLevel='U') )"					//	also inactive
-                + " OR EXISTS (SELECT * FROM AD_Column c "
-                    + "WHERE t.AD_Table_ID=c.AD_Table_ID AND c.ColumnName='EntityType') "
-                + "ORDER BY t.AD_Table_ID";
+                + " OR EXISTS (SELECT * FROM VAF_Column c "
+                    + "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='EntityType') "
+                + "ORDER BY t.VAF_TableView_ID";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -160,14 +160,14 @@ namespace VAdvantage.Model
                 {
                     DataRow dr = dt.Rows[i];
                     String changeLogLevel = (String)dr[1];
-                    int AD_Table_ID = Convert.ToInt32(dr[0]);
+                    int VAF_TableView_ID = Convert.ToInt32(dr[0]);
                     if (changeLogLevel.Equals("A"))
                     {
-                        changeLogAll.Add(AD_Table_ID, AD_Table_ID);
+                        changeLogAll.Add(VAF_TableView_ID, VAF_TableView_ID);
                     }
                     else if (changeLogLevel.Equals("U"))
                     {
-                        changeLogUpdate.Add(AD_Table_ID, AD_Table_ID);
+                        changeLogUpdate.Add(VAF_TableView_ID, VAF_TableView_ID);
                     }
                 }
             }
@@ -211,13 +211,13 @@ namespace VAdvantage.Model
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_ChangeLog_ID"></param>
+        /// <param name="VAF_AlterLog_ID"></param>
         /// <param name="trxName"></param>
-        public MChangeLog(Ctx ctx, int AD_ChangeLog_ID, Trx trxName)
+        public MChangeLog(Ctx ctx, int VAF_AlterLog_ID, Trx trxName)
             : base(ctx, 0, trxName)
         {
 
-            if (AD_ChangeLog_ID == 0)
+            if (VAF_AlterLog_ID == 0)
             {
                 int AD_Role_ID = ctx.GetAD_Role_ID();
                 SetAD_Role_ID(AD_Role_ID);
@@ -229,38 +229,38 @@ namespace VAdvantage.Model
         /// Full Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_ChangeLog_ID">AD_ChangeLog_ID 0 for new change log</param>
+        /// <param name="VAF_AlterLog_ID">VAF_AlterLog_ID 0 for new change log</param>
         /// <param name="TrxName">TrxName change transaction name</param>
         /// <param name="AD_Session_ID">AD_Session_ID session</param>
-        /// <param name="AD_Table_ID">AD_Table_ID table</param>
-        /// <param name="AD_Column_ID">column</param>
+        /// <param name="VAF_TableView_ID">VAF_TableView_ID table</param>
+        /// <param name="VAF_Column_ID">column</param>
         /// <param name="keyInfo">keyInfo record key(s)</param>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="OldValue">old</param>
         /// <param name="NewValue">new</param>
-        public MChangeLog(Ctx ctx, int AD_ChangeLog_ID, String trxName,
+        public MChangeLog(Ctx ctx, int VAF_AlterLog_ID, String trxName,
         int AD_Session_ID,
-        int AD_Table_ID, int AD_Column_ID, Object keyInfo,
-        int AD_Client_ID, int AD_Org_ID,
+        int VAF_TableView_ID, int VAF_Column_ID, Object keyInfo,
+        int VAF_Client_ID, int VAF_Org_ID,
         Object oldValue, Object newValue)
             : this(ctx, 0, null)
         {
             //this (ctx, 0, null);	//	 out of trx
-            if (AD_ChangeLog_ID == 0)
+            if (VAF_AlterLog_ID == 0)
             {
-                AD_ChangeLog_ID = POActionEngine.Get().GetNextID(AD_Client_ID, Table_Name, null);
-                if (AD_ChangeLog_ID <= 0)
+                VAF_AlterLog_ID = POActionEngine.Get().GetNextID(VAF_Client_ID, Table_Name, null);
+                if (VAF_AlterLog_ID <= 0)
                 {
-                    log.Severe("No NextID (" + AD_ChangeLog_ID + ")");
+                    log.Severe("No NextID (" + VAF_AlterLog_ID + ")");
                 }
             }
-            SetAD_ChangeLog_ID(AD_ChangeLog_ID);
+            SetVAF_AlterLog_ID(VAF_AlterLog_ID);
             SetTrxName(trxName);
             SetAD_Session_ID(AD_Session_ID);
             //
-            SetAD_Table_ID(AD_Table_ID);
-            SetAD_Column_ID(AD_Column_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
+            SetVAF_Column_ID(VAF_Column_ID);
             //	Key
             if (keyInfo == null)
             {
@@ -271,7 +271,7 @@ namespace VAdvantage.Model
             else
                 SetRecord2_ID(keyInfo.ToString());
             //
-            SetClientOrg(AD_Client_ID, AD_Org_ID);
+            SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             //
            // SetAD_Role_ID(ctx.GetAD_Role_ID());
             SetOldValue(oldValue);

@@ -12,7 +12,7 @@
         this.cGroup = null;//Group Column
         this.mTab;
         this.AD_Window_ID;
-        this.AD_Tab_ID;
+        this.VAF_Tab_ID;
         this.groupCtrls = [];
         this.fields = [];// card view fields
         this.grpCount = 0;
@@ -49,7 +49,7 @@
         //            url: url,
         //            dataType: "json",
         //            contentType: 'application/json; charset=utf-8',
-        //            data: { ad_Window_ID: self.mTab.getAD_Window_ID(), ad_Tab_ID: self.mTab.getAD_Tab_ID() },
+        //            data: { ad_Window_ID: self.mTab.getAD_Window_ID(), vaf_tab_ID: self.mTab.getVAF_Tab_ID() },
         //            success: function (data) {
         //                data = JSON.parse(data);
 
@@ -92,7 +92,7 @@
         //                //    onSelect: function (event) {
         //                //        console.log(event);
         //                //        var target = $(event.target);
-        //                //        AD_CardView_ID = target.data("id");
+        //                //        VAF_CardView_ID = target.data("id");
 
         //                //    }
         //                //});
@@ -105,8 +105,8 @@
 
         //    $menu.on("click", function (e) {
         //        var target = $(e.target);
-        //        AD_CardView_ID = target.data("id");
-        //        if (!AD_CardView_ID)
+        //        VAF_CardView_ID = target.data("id");
+        //        if (!VAF_CardView_ID)
         //        {
         //            return;
         //        }
@@ -115,7 +115,7 @@
         //                type: "GET",
         //                url: VIS.Application.contextUrl + "CardView/SetDefaultView",
         //                dataType: "json",
-        //                data: { AD_Tab_ID: self.mTab.getAD_Tab_ID(), cardView: AD_CardView_ID },
+        //                data: { VAF_Tab_ID: self.mTab.getVAF_Tab_ID(), cardView: VAF_CardView_ID },
         //                success: function (data) {
 
         //                },
@@ -133,7 +133,7 @@
         //            url: url,
         //            dataType: "json",
         //            contentType: 'application/json; charset=utf-8',
-        //            data: { ad_CardView_ID: AD_CardView_ID },
+        //            data: { VAF_CardView_ID: VAF_CardView_ID },
         //            success: function (data) {
         //                var dbResult = JSON.parse(data);
         //                var CVColumns = dbResult[0].lstCardViewData;
@@ -144,18 +144,18 @@
 
         //                    var incColumns = [];
         //                    for (var i = 0; i < CVColumns.length; i++) {
-        //                        if (CVColumns[i].AD_Field_ID == 0) {
+        //                        if (CVColumns[i].VAF_Field_ID == 0) {
         //                            continue;
         //                        }
-        //                        incColumns.push(CVColumns[i].AD_Field_ID);
+        //                        incColumns.push(CVColumns[i].VAF_Field_ID);
         //                    }
 
 
         //                    var retVal = {};
-        //                    retVal.FieldGroupID = CVColumns[0].AD_GroupField_ID;
+        //                    retVal.FieldGroupID = CVColumns[0].VAF_GroupField_ID;
         //                    retVal.IncludedCols = incColumns;
         //                    retVal.Conditions = [];
-        //                    retVal.AD_CardView_ID = AD_CardView_ID;
+        //                    retVal.VAF_CardView_ID = VAF_CardView_ID;
         //                    retVal.Conditions = dbResult[0].lstCardViewConditonData;
         //                    self.setCardViewData(retVal);
 
@@ -268,13 +268,13 @@
             e.stopPropagation();
         });
 
-        this.getAD_CardView_ID = function () {
-            return this.AD_CardView_ID;
+        this.getVAF_CardView_ID = function () {
+            return this.VAF_CardView_ID;
         };
 
         this.getField_Group_ID = function () {
             if (this.cGroup)
-                return this.cGroup.getAD_Field_ID();
+                return this.cGroup.getVAF_Field_ID();
             return 0;
         };
 
@@ -372,7 +372,7 @@
         this.mTab = mTab;
         // this.aPanel = aPanel;
         var self = this;
-        VIS.dataContext.getCardViewInfo(mTab.getAD_Window_ID(), mTab.getAD_Tab_ID(), function (retData) {
+        VIS.dataContext.getCardViewInfo(mTab.getAD_Window_ID(), mTab.getVAF_Tab_ID(), function (retData) {
             //init 
             //var retData = {};
             // retData.Group = "AccessLevel" //C_UOM_ID";
@@ -395,7 +395,7 @@
         this.cConditions = [];
         if (retData) {
 
-            this.AD_CardView_ID = retData.AD_CardView_ID;
+            this.VAF_CardView_ID = retData.VAF_CardView_ID;
 
             var f = this.mTab.getFieldById(retData.FieldGroupID)
             if (f) {

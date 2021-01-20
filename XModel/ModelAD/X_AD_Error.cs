@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Error
+/** Generated Model for VAF_Error
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Error : PO
+public class X_VAF_Error : PO
 {
-public X_AD_Error (Context ctx, int AD_Error_ID, Trx trxName) : base (ctx, AD_Error_ID, trxName)
+public X_VAF_Error (Context ctx, int VAF_Error_ID, Trx trxName) : base (ctx, VAF_Error_ID, trxName)
 {
-/** if (AD_Error_ID == 0)
+/** if (VAF_Error_ID == 0)
 {
-SetAD_Error_ID (0);
+SetVAF_Error_ID (0);
 SetName (null);
 }
  */
 }
-public X_AD_Error (Ctx ctx, int AD_Error_ID, Trx trxName) : base (ctx, AD_Error_ID, trxName)
+public X_VAF_Error (Ctx ctx, int VAF_Error_ID, Trx trxName) : base (ctx, VAF_Error_ID, trxName)
 {
-/** if (AD_Error_ID == 0)
+/** if (VAF_Error_ID == 0)
 {
-SetAD_Error_ID (0);
+SetVAF_Error_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Error (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Error (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_Error (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Error (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Error (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_Error (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Error (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Error (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Error()
+static X_VAF_Error()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_Error()
 //static long serialVersionUID = 27562514361263L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044474L;
-/** AD_Table_ID=380 */
+/** VAF_TableView_ID=380 */
 public static int Table_ID;
  // =380;
 
-/** TableName=AD_Error */
-public static String Table_Name="AD_Error";
+/** TableName=VAF_Error */
+public static String Table_Name="VAF_Error";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Error[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Error[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Error.
-@param AD_Error_ID Error */
-public void SetAD_Error_ID (int AD_Error_ID)
+@param VAF_Error_ID Error */
+public void SetVAF_Error_ID (int VAF_Error_ID)
 {
-if (AD_Error_ID < 1) throw new ArgumentException ("AD_Error_ID is mandatory.");
-Set_ValueNoCheck ("AD_Error_ID", AD_Error_ID);
+if (VAF_Error_ID < 1) throw new ArgumentException ("VAF_Error_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Error_ID", VAF_Error_ID);
 }
 /** Get Error.
 @return Error */
-public int GetAD_Error_ID() 
+public int GetVAF_Error_ID() 
 {
-Object ii = Get_Value("AD_Error_ID");
+Object ii = Get_Value("VAF_Error_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

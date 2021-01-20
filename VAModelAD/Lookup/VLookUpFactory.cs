@@ -28,7 +28,7 @@ namespace VAdvantage.Classes
     public class VLookUpFactory
     {
         /*Table IsTranslated Cache */
-        // private static CCache<string, bool> _sIsTranslated = new CCache<string, bool>("AD_Table_isTranslated", 10);
+        // private static CCache<string, bool> _sIsTranslated = new CCache<string, bool>("VAF_TableView_isTranslated", 10);
         /** Table Reference Cache				*/
         // private static CCache<string, VLookUpInfo> _sCacheRefTable = new CCache<string, VLookUpInfo>("AD_Ref_Table", 30, 60);	//	1h
         /**	Logging								*/
@@ -50,9 +50,9 @@ namespace VAdvantage.Classes
             String validationCode = "";
             //
             String sql = "SELECT c.ColumnName, c.AD_Reference_Value_ID, c.IsParent, vr.Code "
-                + "FROM AD_Column c"
-                + " LEFT OUTER JOIN AD_Val_Rule vr ON (c.AD_Val_Rule_ID=vr.AD_Val_Rule_ID) "
-                + "WHERE c.AD_Column_ID=" + Column_ID;
+                + "FROM VAF_Column c"
+                + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) "
+                + "WHERE c.VAF_Column_ID=" + Column_ID;
             IDataReader dr = null;
             try
             {
@@ -66,7 +66,7 @@ namespace VAdvantage.Classes
                 }
                 else
                 {
-                    s_log.Log(Level.SEVERE, "Column Not Found - AD_Column_ID=" + Column_ID);
+                    s_log.Log(Level.SEVERE, "Column Not Found - VAF_Column_ID=" + Column_ID);
                 }
                 dr.Close();
                 dr = null;
@@ -125,7 +125,7 @@ namespace VAdvantage.Classes
         /// </pre>
         /// </summary>
         /// <param name="lookup">ctx context for access</param>
-        /// <param name="Column_ID">AD_Column_ID or AD_Process_Para_ID</param>
+        /// <param name="Column_ID">VAF_Column_ID or AD_Process_Para_ID</param>
         /// <param name="language">report lang</param>
         /// <param name="ColumnName">key column name</param>
         /// <param name="AD_Reference_Value_ID"></param>
@@ -248,7 +248,7 @@ namespace VAdvantage.Classes
                 local_validationCode = Utility.Env.ParseContext(ctx, windowNum, info.validationCode, true);
                 //  returns "" if not all variables were parsed
                 if (local_validationCode.Length == 0
-                    || info.validationCode.IndexOf("@AD_Org_ID@") != -1)	//	don't validate Org
+                    || info.validationCode.IndexOf("@VAF_Org_ID@") != -1)	//	don't validate Org
                 {
                     info.isValidated = false;
                     local_validationCode = "";
@@ -362,8 +362,8 @@ namespace VAdvantage.Classes
                 return null;
             }
             //	Hardcoded BPartner Org
-            if (columnName.Equals("AD_OrgBP_ID"))
-                columnName = "AD_Org_ID";
+            if (columnName.Equals("VAF_OrgBP_ID"))
+                columnName = "VAF_Org_ID";
 
             if (columnName.IndexOf("M_Locator") != -1)
                 columnName = "M_Locator_ID";
@@ -376,7 +376,7 @@ namespace VAdvantage.Classes
             string keyColumn = columnName;
 
             string sql = "SELECT t.AD_Window_ID,t.PO_Window_ID "
-                + "FROM AD_Table t "
+                + "FROM VAF_TableView t "
                 + "WHERE tableName=@tableName ";
 
             IDataReader dr = null;
@@ -479,7 +479,7 @@ namespace VAdvantage.Classes
 
             //	get display column name (first identifier column)
             String sql = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,c.AD_Reference_Value_ID "
-                + "FROM AD_Table t INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+                + "FROM VAF_TableView t INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE TableName='" + tableName + "'"
                 + " AND c.IsIdentifier='Y' "
                 + "ORDER BY c.SeqNo";
@@ -518,7 +518,7 @@ namespace VAdvantage.Classes
                 // Change By Lokesh Chauhan In Case Primary Key Column differs from table name in case
 
                 String sql1 = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,c.AD_Reference_Value_ID "
-               + "FROM AD_Table t INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+               + "FROM VAF_TableView t INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                + "WHERE UPPER(TableName)=UPPER('" + tableName + "')"
                + " AND c.IsIdentifier='Y' "
                + "ORDER BY c.SeqNo";
@@ -617,8 +617,8 @@ namespace VAdvantage.Classes
             //}
 
             string sql1 = "SELECT count(*) "
-                + "FROM AD_Table t"
-                + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+                + "FROM VAF_TableView t"
+                + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE tableName=@tableName"
                 + " AND c.IsIdentifier='Y' "
                 + " AND c.IsTranslated = 'Y' ";
@@ -654,8 +654,8 @@ namespace VAdvantage.Classes
             //	get display column names
             String sql0 = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,"
                 + "c.AD_Reference_Value_ID,t.AD_Window_ID,t.PO_Window_ID "
-                + "FROM AD_Table t"
-                + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+                + "FROM VAF_TableView t"
+                + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE tableName=@tableName"
                 + " AND c.IsIdentifier='Y' "
                 + "ORDER BY c.SeqNo";
@@ -791,11 +791,11 @@ namespace VAdvantage.Classes
             string sql0 = "SELECT t.TableName,ck.ColumnName AS KeyColumn,"				//	1..2
             + "cd.ColumnName AS DisplayColumn,rt.IsValueDisplayed,cd.IsTranslated,"	//	3..5
             + "rt.WhereClause,rt.OrderByClause,t.AD_Window_ID,t.PO_Window_ID, "		//	6..9
-            + "t.AD_Table_ID , rt.IsDisplayIdentifiers "								//	10..11
+            + "t.VAF_TableView_ID , rt.IsDisplayIdentifiers "								//	10..11
             + "FROM AD_Ref_Table rt"
-            + " INNER JOIN AD_Table t ON (rt.AD_Table_ID=t.AD_Table_ID)"
-            + " INNER JOIN AD_Column ck ON (rt.Column_Key_ID=ck.AD_Column_ID)"
-            + " INNER JOIN AD_Column cd ON (rt.Column_Display_ID=cd.AD_Column_ID) "
+            + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID)"
+            + " INNER JOIN VAF_Column ck ON (rt.Column_Key_ID=ck.VAF_Column_ID)"
+            + " INNER JOIN VAF_Column cd ON (rt.Column_Display_ID=cd.VAF_Column_ID) "
             + "WHERE rt.AD_Reference_ID = '" + key + "' "
             + " AND rt.IsActive='Y' AND t.IsActive='Y'";
             //
@@ -804,7 +804,7 @@ namespace VAdvantage.Classes
             bool isTranslated = false, isValueDisplayed = false, isDisplayIdentifiers = false;
             int zoomWindow = 0;
             int zoomWindowPO = 0;
-            //	int AD_Table_ID = 0;
+            //	int VAF_TableView_ID = 0;
             bool loaded = false;
 
             IDataReader dr = null;
@@ -984,9 +984,9 @@ namespace VAdvantage.Classes
             string sql = "SELECT t.tableName,ck.ColumnName AS keyColumn,"
                 + "cd.ColumnName AS DisplayColumn,rt.IsValueDisplayed,cd.IsTranslated "
                 + "FROM AD_Ref_Table rt"
-                + " INNER JOIN AD_Table t ON (rt.AD_Table_ID=t.AD_Table_ID)"
-                + " INNER JOIN AD_Column ck ON (rt.Column_Key_ID=ck.AD_Column_ID)"
-                + " INNER JOIN AD_Column cd ON (rt.Column_Display_ID=cd.AD_Column_ID) "
+                + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID)"
+                + " INNER JOIN VAF_Column ck ON (rt.Column_Key_ID=ck.VAF_Column_ID)"
+                + " INNER JOIN VAF_Column cd ON (rt.Column_Display_ID=cd.VAF_Column_ID) "
                 + "WHERE rt.AD_Reference_ID=" + AD_Reference_Value_ID.ToString() + ""
                 + " AND rt.IsActive='Y' AND t.IsActive='Y'";
             //
@@ -1060,12 +1060,12 @@ namespace VAdvantage.Classes
         /// <summary>
         /// crate Lookup_Acct info
         /// </summary>
-        /// <param name="AD_Column_ID"></param>
+        /// <param name="VAF_Column_ID"></param>
         /// <returns></returns>
-        private static VLookUpInfo GetLookup_Acct(Ctx ctx, int AD_Column_ID)
+        private static VLookUpInfo GetLookup_Acct(Ctx ctx, int VAF_Column_ID)
         {
             //	Try cache - assume no language change
-            string key = "Acct" + AD_Column_ID;
+            string key = "Acct" + VAF_Column_ID;
             VLookUpInfo retValue = null;
             //_sCacheRefTable.TryGetValue(key, out retValue);
             //if (retValue != null)
@@ -1091,12 +1091,12 @@ namespace VAdvantage.Classes
         /// <summary>
         /// crate Lookup_Acct info
         /// </summary>
-        /// <param name="AD_Column_ID"></param>
+        /// <param name="VAF_Column_ID"></param>
         /// <returns></returns>
-        private static VLookUpInfo GetLookup_PContainer(Ctx ctx, int AD_Column_ID)
+        private static VLookUpInfo GetLookup_PContainer(Ctx ctx, int VAF_Column_ID)
         {
             //	Try cache - assume no language change
-            string key = "pContainer" + AD_Column_ID;
+            string key = "pContainer" + VAF_Column_ID;
             VLookUpInfo retValue = null;
             //_sCacheRefTable.TryGetValue(key, out retValue);
             //if (retValue != null)

@@ -72,7 +72,7 @@ static X_AD_InviteUser()
 static long serialVersionUID = 27713540408526L;
 /** Last Updated Timestamp 5/12/2015 12:48:15 PM */
 public static long updatedMS = 1431415091737L;
-/** AD_Table_ID=1000500 */
+/** VAF_TableView_ID=1000500 */
 public static int Table_ID;
  // =1000500;
 

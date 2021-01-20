@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Form
+/** Generated Model for VAF_Page
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Form : PO
+public class X_VAF_Page : PO
 {
-public X_AD_Form (Context ctx, int AD_Form_ID, Trx trxName) : base (ctx, AD_Form_ID, trxName)
+public X_VAF_Page (Context ctx, int VAF_Page_ID, Trx trxName) : base (ctx, VAF_Page_ID, trxName)
 {
-/** if (AD_Form_ID == 0)
+/** if (VAF_Page_ID == 0)
 {
-SetAD_Form_ID (0);
+SetVAF_Page_ID (0);
 SetAccessLevel (null);
 SetEntityType (null);	// U
 SetImageField (null);
@@ -33,11 +33,11 @@ SetSqlQuery (null);
 }
  */
 }
-public X_AD_Form (Ctx ctx, int AD_Form_ID, Trx trxName) : base (ctx, AD_Form_ID, trxName)
+public X_VAF_Page (Ctx ctx, int VAF_Page_ID, Trx trxName) : base (ctx, VAF_Page_ID, trxName)
 {
-/** if (AD_Form_ID == 0)
+/** if (VAF_Page_ID == 0)
 {
-SetAD_Form_ID (0);
+SetVAF_Page_ID (0);
 SetAccessLevel (null);
 SetEntityType (null);	// U
 SetImageField (null);
@@ -55,7 +55,7 @@ SetSqlQuery (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Form (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Page (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_AD_Form (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Form (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Page (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_AD_Form (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Form (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Page (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Form()
+static X_VAF_Page()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,12 +86,12 @@ static X_AD_Form()
 //static long serialVersionUID = 27590957907743L;
 /** Last Updated Timestamp 6/23/2011 6:06:31 PM */
 public static long updatedMS = 1308832590954L;
-/** AD_Table_ID=376 */
+/** VAF_TableView_ID=376 */
 public static int Table_ID;
  // =376;
 
-/** TableName=AD_Form */
-public static String Table_Name="AD_Form";
+/** TableName=VAF_Page */
+public static String Table_Name="VAF_Page";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -125,37 +125,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Form[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Page[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Context Area.
-@param AD_CtxArea_ID Business Domain Area Terminology */
-public void SetAD_CtxArea_ID (int AD_CtxArea_ID)
+@param VAF_ContextScope_ID Business Domain Area Terminology */
+public void SetVAF_ContextScope_ID (int VAF_ContextScope_ID)
 {
-if (AD_CtxArea_ID <= 0) Set_Value ("AD_CtxArea_ID", null);
+if (VAF_ContextScope_ID <= 0) Set_Value ("VAF_ContextScope_ID", null);
 else
-Set_Value ("AD_CtxArea_ID", AD_CtxArea_ID);
+Set_Value ("VAF_ContextScope_ID", VAF_ContextScope_ID);
 }
 /** Get Context Area.
 @return Business Domain Area Terminology */
-public int GetAD_CtxArea_ID() 
+public int GetVAF_ContextScope_ID() 
 {
-Object ii = Get_Value("AD_CtxArea_ID");
+Object ii = Get_Value("VAF_ContextScope_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID < 1) throw new ArgumentException ("AD_Form_ID is mandatory.");
-Set_ValueNoCheck ("AD_Form_ID", AD_Form_ID);
+if (VAF_Page_ID < 1) throw new ArgumentException ("VAF_Page_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

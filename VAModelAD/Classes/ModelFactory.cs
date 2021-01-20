@@ -44,7 +44,7 @@ namespace VAModelAD.Classes
 
         /**	Special Classes				*/
         private static String[] _special = new String[] {
-        "AD_Element", "VAdvantage.Model.M_Element",
+        "VAF_ColumnDic", "VAdvantage.Model.M_Element",
         "AD_Registration", "VAdvantage.Model.M_Registration",
         "AD_Tree", "VAdvantage.Model.MTree_Base",
         "R_Category", "VAdvantage.Model.MRequestCategory",

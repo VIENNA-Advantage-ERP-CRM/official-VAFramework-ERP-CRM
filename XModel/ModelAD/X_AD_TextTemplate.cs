@@ -68,7 +68,7 @@ static X_AD_TextTemplate()
 //static long serialVersionUID 27562514364539L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047750L;
-/** AD_Table_ID=1000003 */
+/** VAF_TableView_ID=1000003 */
 public static int Table_ID;
  // =1000003;
 

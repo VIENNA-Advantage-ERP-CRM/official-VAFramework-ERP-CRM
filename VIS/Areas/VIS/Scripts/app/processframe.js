@@ -407,7 +407,7 @@
                 data: {
                     AD_Process_ID: pctl.pi.getAD_Process_ID(),
                     Name: pctl.pi.getTitle(),
-                    AD_Table_ID: pctl.pi.getTable_ID(),
+                    VAF_TableView_ID: pctl.pi.getTable_ID(),
                     Record_ID: pctl.pi.getRecord_ID(),
                     C_BPartner_ID: 0,
                     isReport: true,
@@ -433,7 +433,7 @@
             var pi = null;
             pi = new VIS.ProcessInfo(self.jpObj.Name, self.jpObj.AD_Process_ID, 0, 0);
             pi.setAD_User_ID(self.ctx.getAD_User_ID());
-            pi.setAD_Client_ID(self.ctx.getAD_Client_ID());
+            pi.setVAF_Client_ID(self.ctx.getVAF_Client_ID());
             pi.setUseCrystalReportViewer(VIS.context.getIsUseCrystalReportViewer());
             pi.setIsBackground($chkIsBG.is(':checked'));
             pi.setIsReport(self.isReport);
@@ -771,9 +771,9 @@
             if (!orginName)
                 orginName = "Menu";
             pctl.pi.setOriginName(orginName);
-            var AD_Table_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
+            var VAF_TableView_ID = pctl.pi.get_AD_PrintFormat_Table_ID();
 
-            canExport = VIS.MRole.getDefault().getIsCanExport(AD_Table_ID);
+            canExport = VIS.MRole.getDefault().getIsCanExport(VAF_TableView_ID);
             var checkName = [];
             var count = -1;
             otherPf = [];
@@ -782,7 +782,7 @@
                 type: 'Get',
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GetPrintFormatDetails",
-                data: { AD_Table_ID: AD_Table_ID },
+                data: { VAF_TableView_ID: VAF_TableView_ID },
                 success: function (data) {
                     dr = new VIS.DB.DataReader().toJson(data);
 
@@ -975,7 +975,7 @@
                     AD_Process_ID: pctl.pi.getAD_Process_ID(),
                     Name: pctl.pi.getTitle(),
                     AD_PInstance_ID: pctl.pi.getAD_PInstance_ID(),
-                    AD_Table_ID: pctl.pi.getTable_ID(),
+                    VAF_TableView_ID: pctl.pi.getTable_ID(),
                     Record_ID: pctl.pi.getRecord_ID(),
                     pageNumber: pageNo,
                     page_Size: PageSize,
@@ -1000,7 +1000,7 @@
                 return data;
             };
 
-            function getExecuteReportComposerData(AD_Process_ID, Name, AD_PInstance_ID, AD_Table_ID, Record_ID, pageNumber, page_Size, printAllPages) {
+            function getExecuteReportComposerData(AD_Process_ID, Name, AD_PInstance_ID, VAF_TableView_ID, Record_ID, pageNumber, page_Size, printAllPages) {
                 var orginName = pctl.pi.getOriginName();
                 if (!orginName)
                     orginName = "Menu";
@@ -1008,7 +1008,7 @@
                     AD_Process_ID: AD_Process_ID,
                     Name: Name,
                     AD_PInstance_ID: AD_PInstance_ID,
-                    AD_Table_ID: AD_Table_ID,
+                    VAF_TableView_ID: VAF_TableView_ID,
                     Record_ID: Record_ID,
                     pageNumber: pageNumber,
                     page_Size: page_Size,
@@ -1641,8 +1641,8 @@
 
                     var sqlQry = "VIS_76";
                     var param = [];
-                    param[0] = new VIS.DB.SqlParam("@tableID", pctl.pi.Ad_Table_ID);
-                    param[1] = new VIS.DB.SqlParam("@tabID", curTab.getAD_Tab_ID());
+                    param[0] = new VIS.DB.SqlParam("@tableID", pctl.pi.vaf_tableview_ID);
+                    param[1] = new VIS.DB.SqlParam("@tabID", curTab.getVAF_Tab_ID());
                     executeQuery(sql, param);
 
                     var sqlQry = "VIS_77";

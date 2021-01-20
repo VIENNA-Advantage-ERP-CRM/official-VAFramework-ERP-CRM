@@ -70,7 +70,7 @@ static X_RC_KPICenter()
 //static long serialVersionUID 27634333565125L;
 /** Last Updated Timestamp 11/6/2012 6:54:08 PM */
 public static long updatedMS = 1352208248336L;
-/** AD_Table_ID=1000230 */
+/** VAF_TableView_ID=1000230 */
 public static int Table_ID;
  // =1000230;
 

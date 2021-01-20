@@ -17,8 +17,8 @@ namespace VAdvantage.Process
     public class AttachMailToBP : ProcessEngine.SvrProcess
     {
         int AD_User_ID = 0;
-        int AD_Client_ID = 0;
-        int AD_Org_ID = 0;
+        int VAF_Client_ID = 0;
+        int VAF_Org_ID = 0;
         private Imap imapMail;
         //string sender = "contacts";
         string sender = string.Empty;
@@ -56,8 +56,8 @@ namespace VAdvantage.Process
                                   umail.imapport,
                                   umail.imapusername,
                                   umail.AD_User_ID,
-                                  umail.AD_CLient_ID,
-                                  umail.AD_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee
+                                  umail.vaf_client_ID,
+                                  umail.VAF_Org_ID,umail.ISAUTOATTACH,umail.TABLEATTACH,umail.IsExcludeEmployee
                                 FROM ad_usermailconfigration umail
                                 WHERE umail.IsActive ='Y' ";
 
@@ -143,21 +143,21 @@ namespace VAdvantage.Process
                     AD_User_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]);
                 }
 
-                //AD_Client_ID
-                if (ds.Tables[0].Rows[i]["AD_Client_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["AD_Client_ID"] != null)
+                //VAF_Client_ID
+                if (ds.Tables[0].Rows[i]["VAF_Client_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["VAF_Client_ID"] != null)
                 {
-                    AD_Client_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Client_ID"]);
+                    VAF_Client_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Client_ID"]);
                 }
 
-                if (ds.Tables[0].Rows[i]["AD_Org_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["AD_Org_ID"] != null)
+                if (ds.Tables[0].Rows[i]["VAF_Org_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["VAF_Org_ID"] != null)
                 {
-                    AD_Org_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Org_ID"]);
+                    VAF_Org_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Org_ID"]);
                 }
 
                 if (AD_User_ID > 0)
                 {
 
-                    GetMails(user, AD_User_ID, AD_Client_ID, AD_Org_ID);
+                    GetMails(user, AD_User_ID, VAF_Client_ID, VAF_Org_ID);
 
                 }
             }
@@ -167,7 +167,7 @@ namespace VAdvantage.Process
             return retVal.ToString();
         }
 
-        private void GetMails(UserInformation user, int AD_User_ID, int AD_Client_ID, int AD_Org_ID)
+        private void GetMails(UserInformation user, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID)
         {
             DataSet dsUser = DB.ExecuteDataset("select isemail,notificationtype from ad_user where ad_user_id=" + AD_User_ID);
             string login = Login(user);
@@ -258,9 +258,9 @@ namespace VAdvantage.Process
 
                             }
 
-                            mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                            mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
-                            mAttachment.SetAD_Table_ID(Convert.ToInt32(TableID));
+                            mAttachment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                            mAttachment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
+                            mAttachment.SetVAF_TableView_ID(Convert.ToInt32(TableID));
                             mAttachment.SetAttachmentType("I");
                             mAttachment.SetDateMailReceived(message.Date);
                             mAttachment.SetFolderName(folderName);
@@ -301,8 +301,8 @@ namespace VAdvantage.Process
                         try
                         {
                             string sql = "SELECT " + tableName + "_ID " + " , C_BPartner_ID,Name,value " + "FROM " + tableName + " WHERE lower(Email) like " + "'%" + from.Trim().ToLower() + "%'";
-                            sql += " AND AD_Client_ID=" + AD_Client_ID;
-                            //sql += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
+                            sql += " AND VAF_Client_ID=" + VAF_Client_ID;
+                            //sql += " AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID();
                             //string finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sql, tableName.ToString(), MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
                             IDataReader idr = DB.ExecuteReader(sql);//+ " order by ad_texttemplate_id");                    
                             DataTable dt = new DataTable();
@@ -327,8 +327,8 @@ namespace VAdvantage.Process
                                 for (int j = 0; j < dt.Rows.Count; j++)
                                 {
                                     string sqlQuery = "SELECT IsEmployee From C_BPartner WHERE C_BPartner_ID=" + Convert.ToInt32(dt.Rows[j][1]);
-                                    sql += " AND AD_Client_ID=" + AD_Client_ID;
-                                    //sqlQuery += " AND AD_Client_ID=" + GetCtx().GetAD_Client_ID();
+                                    sql += " AND VAF_Client_ID=" + VAF_Client_ID;
+                                    //sqlQuery += " AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID();
                                     //string finalQuery = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sqlQuery, "C_BPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
                                     DataSet ds = DB.ExecuteDataset(sqlQuery);
 
@@ -403,9 +403,9 @@ namespace VAdvantage.Process
                                     string date = ((DateTime)message.Date).ToShortDateString();
 
 
-                                    mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                                    mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
-                                    mAttachment.SetAD_Table_ID(_tableID);
+                                    mAttachment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                                    mAttachment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
+                                    mAttachment.SetVAF_TableView_ID(_tableID);
                                     mAttachment.SetAttachmentType("I");
                                     mAttachment.SetDateMailReceived(message.Date);
                                     mAttachment.SetFolderName(folderName);
@@ -475,7 +475,7 @@ namespace VAdvantage.Process
 
         private int GetAttachedRecord(int tableID, int RecordID, int MailUID, string folderName)//, string MailUserFrom)
         {
-            String sql = "SELECT MAILATTACHMENT1_ID FROM MAILATTACHMENT1 where AD_TABLE_ID=" + tableID
+            String sql = "SELECT MAILATTACHMENT1_ID FROM MAILATTACHMENT1 where VAF_TABLEVIEW_ID=" + tableID
                         + " AND RECORD_ID=" + RecordID
                         + " AND MAILUID=" + MailUID
                         + " AND FolderName=" + "'" + folderName + "'";
@@ -576,8 +576,8 @@ namespace VAdvantage.Process
                     MNote note = new MNote(ctx, 0, null);
                     note.SetAD_User_ID(userID);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-                    //note.SetClientOrg(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
-                    note.SetClientOrg(ctx.GetAD_Client_ID(), 0);
+                    //note.SetClientOrg(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
+                    note.SetClientOrg(ctx.GetVAF_Client_ID(), 0);
                     note.SetTextMsg(message);
                     note.SetDescription(Msg.GetMsg(ctx, "AttachEmailNotification"));
                     note.SetRecord(tableid, recordID);  // point to this
@@ -612,8 +612,8 @@ namespace VAdvantage.Process
                     MNote note = new MNote(ctx, 0, null);
                     note.SetAD_User_ID(userID);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-                    //note.SetClientOrg(ctx.GetAD_Client_ID(), ctx.GetAD_Org_ID());
-                    note.SetClientOrg(ctx.GetAD_Client_ID(), 0);
+                    //note.SetClientOrg(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
+                    note.SetClientOrg(ctx.GetVAF_Client_ID(), 0);
                     note.SetTextMsg(message);
                     note.SetDescription(Msg.GetMsg(ctx, "AttachEmailNotification"));
                     note.SetRecord(tableid, recordID);  // point to this

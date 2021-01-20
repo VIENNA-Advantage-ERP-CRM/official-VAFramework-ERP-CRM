@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_CrystalReport_Para
+/** Generated Model for VAF_CrystalReport_Para
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_CrystalReport_Para : PO
+public class X_VAF_CrystalReport_Para : PO
 {
-public X_AD_CrystalReport_Para (Context ctx, int AD_CrystalReport_Para_ID, Trx trxName) : base (ctx, AD_CrystalReport_Para_ID, trxName)
+public X_VAF_CrystalReport_Para (Context ctx, int VAF_CrystalReport_Para_ID, Trx trxName) : base (ctx, VAF_CrystalReport_Para_ID, trxName)
 {
-/** if (AD_CrystalReport_Para_ID == 0)
+/** if (VAF_CrystalReport_Para_ID == 0)
 {
-SetAD_CrystalReport_Para_ID (0);
-SetAD_Form_ID (0);
+SetVAF_CrystalReport_Para_ID (0);
+SetVAF_Page_ID (0);
 }
  */
 }
-public X_AD_CrystalReport_Para (Ctx ctx, int AD_CrystalReport_Para_ID, Trx trxName) : base (ctx, AD_CrystalReport_Para_ID, trxName)
+public X_VAF_CrystalReport_Para (Ctx ctx, int VAF_CrystalReport_Para_ID, Trx trxName) : base (ctx, VAF_CrystalReport_Para_ID, trxName)
 {
-/** if (AD_CrystalReport_Para_ID == 0)
+/** if (VAF_CrystalReport_Para_ID == 0)
 {
-SetAD_CrystalReport_Para_ID (0);
-SetAD_Form_ID (0);
+SetVAF_CrystalReport_Para_ID (0);
+SetVAF_Page_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Form_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CrystalReport_Para (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_CrystalReport_Para (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_CrystalReport_Para (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CrystalReport_Para (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_CrystalReport_Para (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_CrystalReport_Para (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CrystalReport_Para (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_CrystalReport_Para (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_CrystalReport_Para()
+static X_VAF_CrystalReport_Para()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_CrystalReport_Para()
 //static long serialVersionUID 27642972314450L;
 /** Last Updated Timestamp 2/14/2013 6:33:18 PM */
 public static long updatedMS = 1360846997661L;
-/** AD_Table_ID=1000175 */
+/** VAF_TableView_ID=1000175 */
 public static int Table_ID;
  // =1000175;
 
-/** TableName=AD_CrystalReport_Para */
-public static String Table_Name="AD_CrystalReport_Para";
+/** TableName=VAF_CrystalReport_Para */
+public static String Table_Name="VAF_CrystalReport_Para";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -109,52 +109,52 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_CrystalReport_Para[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_CrystalReport_Para[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_CrystalReport_Para_ID.
-@param AD_CrystalReport_Para_ID AD_CrystalReport_Para_ID */
-public void SetAD_CrystalReport_Para_ID (int AD_CrystalReport_Para_ID)
+/** Set VAF_CrystalReport_Para_ID.
+@param VAF_CrystalReport_Para_ID VAF_CrystalReport_Para_ID */
+public void SetVAF_CrystalReport_Para_ID (int VAF_CrystalReport_Para_ID)
 {
-if (AD_CrystalReport_Para_ID < 1) throw new ArgumentException ("AD_CrystalReport_Para_ID is mandatory.");
-Set_ValueNoCheck ("AD_CrystalReport_Para_ID", AD_CrystalReport_Para_ID);
+if (VAF_CrystalReport_Para_ID < 1) throw new ArgumentException ("VAF_CrystalReport_Para_ID is mandatory.");
+Set_ValueNoCheck ("VAF_CrystalReport_Para_ID", VAF_CrystalReport_Para_ID);
 }
-/** Get AD_CrystalReport_Para_ID.
-@return AD_CrystalReport_Para_ID */
-public int GetAD_CrystalReport_Para_ID() 
+/** Get VAF_CrystalReport_Para_ID.
+@return VAF_CrystalReport_Para_ID */
+public int GetVAF_CrystalReport_Para_ID() 
 {
-Object ii = Get_Value("AD_CrystalReport_Para_ID");
+Object ii = Get_Value("VAF_CrystalReport_Para_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set System Element.
-@param AD_Element_ID System Element enables the central maintenance of column description and help. */
-public void SetAD_Element_ID (int AD_Element_ID)
+@param VAF_ColumnDic_ID System Element enables the central maintenance of column description and help. */
+public void SetVAF_ColumnDic_ID (int VAF_ColumnDic_ID)
 {
-if (AD_Element_ID <= 0) Set_Value ("AD_Element_ID", null);
+if (VAF_ColumnDic_ID <= 0) Set_Value ("VAF_ColumnDic_ID", null);
 else
-Set_Value ("AD_Element_ID", AD_Element_ID);
+Set_Value ("VAF_ColumnDic_ID", VAF_ColumnDic_ID);
 }
 /** Get System Element.
 @return System Element enables the central maintenance of column description and help. */
-public int GetAD_Element_ID() 
+public int GetVAF_ColumnDic_ID() 
 {
-Object ii = Get_Value("AD_Element_ID");
+Object ii = Get_Value("VAF_ColumnDic_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID < 1) throw new ArgumentException ("AD_Form_ID is mandatory.");
-Set_ValueNoCheck ("AD_Form_ID", AD_Form_ID);
+if (VAF_Page_ID < 1) throw new ArgumentException ("VAF_Page_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -194,18 +194,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Dynamic Validation.
-@param AD_Val_Rule_ID Dynamic Validation Rule */
-public void SetAD_Val_Rule_ID (int AD_Val_Rule_ID)
+@param VAF_DataVal_Rule_ID Dynamic Validation Rule */
+public void SetVAF_DataVal_Rule_ID (int VAF_DataVal_Rule_ID)
 {
-if (AD_Val_Rule_ID <= 0) Set_Value ("AD_Val_Rule_ID", null);
+if (VAF_DataVal_Rule_ID <= 0) Set_Value ("VAF_DataVal_Rule_ID", null);
 else
-Set_Value ("AD_Val_Rule_ID", AD_Val_Rule_ID);
+Set_Value ("VAF_DataVal_Rule_ID", VAF_DataVal_Rule_ID);
 }
 /** Get Dynamic Validation.
 @return Dynamic Validation Rule */
-public int GetAD_Val_Rule_ID() 
+public int GetVAF_DataVal_Rule_ID() 
 {
-Object ii = Get_Value("AD_Val_Rule_ID");
+Object ii = Get_Value("VAF_DataVal_Rule_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

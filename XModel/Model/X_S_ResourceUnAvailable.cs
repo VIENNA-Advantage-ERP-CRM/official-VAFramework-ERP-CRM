@@ -72,7 +72,7 @@ static X_S_ResourceUnAvailable()
 //static long serialVersionUID 27562514383801L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067012L;
-/** AD_Table_ID=482 */
+/** VAF_TableView_ID=482 */
 public static int Table_ID;
  // =482;
 

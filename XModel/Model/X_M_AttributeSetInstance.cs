@@ -70,7 +70,7 @@ static X_M_AttributeSetInstance()
 //static long serialVersionUID 27562514378394L;
 /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
 public static long updatedMS = 1280389061605L;
-/** AD_Table_ID=559 */
+/** VAF_TableView_ID=559 */
 public static int Table_ID;
  // =559;
 

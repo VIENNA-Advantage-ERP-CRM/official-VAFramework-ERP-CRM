@@ -21,10 +21,10 @@ public X_AD_AssignCriteria (Context ctx, int AD_AssignCriteria_ID, Trx trxName) 
 /** if (AD_AssignCriteria_ID == 0)
 {
 SetAD_AssignCriteria_ID (0);
-SetAD_AssignTarget_ID (0);
+SetVAF_AllotTarget_ID (0);
 SetAD_SourceColumn_ID (0);
 SetOperation (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_AssignCriteria WHERE AD_AssignTarget_ID=@AD_AssignTarget_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_AssignCriteria WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID@
 }
  */
 }
@@ -33,10 +33,10 @@ public X_AD_AssignCriteria (Ctx ctx, int AD_AssignCriteria_ID, Trx trxName) : ba
 /** if (AD_AssignCriteria_ID == 0)
 {
 SetAD_AssignCriteria_ID (0);
-SetAD_AssignTarget_ID (0);
+SetVAF_AllotTarget_ID (0);
 SetAD_SourceColumn_ID (0);
 SetOperation (null);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_AssignCriteria WHERE AD_AssignTarget_ID=@AD_AssignTarget_ID@
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_AssignCriteria WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID@
 }
  */
 }
@@ -76,7 +76,7 @@ static X_AD_AssignCriteria()
 //static long serialVersionUID = 27562514360448L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043659L;
-/** AD_Table_ID=932 */
+/** VAF_TableView_ID=932 */
 public static int Table_ID;
  // =932;
 
@@ -134,17 +134,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Assign Target.
-@param AD_AssignTarget_ID Automatic Assignment Target Column */
-public void SetAD_AssignTarget_ID (int AD_AssignTarget_ID)
+@param VAF_AllotTarget_ID Automatic Assignment Target Column */
+public void SetVAF_AllotTarget_ID (int VAF_AllotTarget_ID)
 {
-if (AD_AssignTarget_ID < 1) throw new ArgumentException ("AD_AssignTarget_ID is mandatory.");
-Set_ValueNoCheck ("AD_AssignTarget_ID", AD_AssignTarget_ID);
+if (VAF_AllotTarget_ID < 1) throw new ArgumentException ("VAF_AllotTarget_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AllotTarget_ID", VAF_AllotTarget_ID);
 }
 /** Get Assign Target.
 @return Automatic Assignment Target Column */
-public int GetAD_AssignTarget_ID() 
+public int GetVAF_AllotTarget_ID() 
 {
-Object ii = Get_Value("AD_AssignTarget_ID");
+Object ii = Get_Value("VAF_AllotTarget_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

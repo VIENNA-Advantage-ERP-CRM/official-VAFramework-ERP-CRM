@@ -73,7 +73,7 @@ namespace VAdvantage.Process
                 throw new Exception("To Format not found - " + from_AD_ImpFormat_ID);
             }
             //
-            if (from.GetAD_Table_ID() != to.GetAD_Table_ID())
+            if (from.GetVAF_TableView_ID() != to.GetVAF_TableView_ID())
             {
                 throw new Exception("From-To do Not have same Format Table");
             }

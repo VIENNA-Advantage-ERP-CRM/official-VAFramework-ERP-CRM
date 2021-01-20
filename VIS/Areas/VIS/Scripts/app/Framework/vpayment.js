@@ -28,8 +28,8 @@
         var _CCType = "";
         //log
         this.log = VIS.Logging.VLogger.getVLogger("vPayment");
-        var _AD_Client_ID = 0;
-        var _AD_Org_ID = 0;
+        var _VAF_Client_ID = 0;
+        var _VAF_Org_ID = 0;
         var _C_BPartner_ID = 0;
 
         var inputProperties = {};
@@ -566,8 +566,8 @@
             }
 
             //Get Data from Grid
-            _AD_Client_ID = parseInt(mTab.getValue("AD_Client_ID"));
-            _AD_Org_ID = parseInt(mTab.getValue("AD_Org_ID"));//.intValue();
+            _VAF_Client_ID = parseInt(mTab.getValue("VAF_Client_ID"));
+            _VAF_Org_ID = parseInt(mTab.getValue("VAF_Org_ID"));//.intValue();
             _C_BPartner_ID = parseInt(mTab.getValue("C_BPartner_ID"));//.intValue();
             _PaymentRule = mTab.getValue("PaymentRule");
             _C_Currency_ID = parseInt(mTab.getValue("C_Currency_ID"));//.intValue();
@@ -584,7 +584,7 @@
             }
 
             inputProperties = {
-                _DocStatus: _DocStatus, _isSOTrx: _isSOTrx, _AD_Client_ID: _AD_Client_ID, _AD_Org_ID: _AD_Org_ID, _C_BPartner_ID: _C_BPartner_ID, _PaymentRule: _PaymentRule, _C_Currency_ID: _C_Currency_ID,
+                _DocStatus: _DocStatus, _isSOTrx: _isSOTrx, _VAF_Client_ID: _VAF_Client_ID, _VAF_Org_ID: _VAF_Org_ID, _C_BPartner_ID: _C_BPartner_ID, _PaymentRule: _PaymentRule, _C_Currency_ID: _C_Currency_ID,
                 _DateAcct: _DateAcct, _C_PaymentTerm_ID: _C_PaymentTerm_ID, _C_Payment_ID: _C_Payment_ID, _C_CashLine_ID: _C_CashLine_ID, values: JSON.stringify(values), _Amount: _Amount
             };
 

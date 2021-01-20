@@ -76,7 +76,7 @@ static X_M_StorageDetail()
 //static long serialVersionUID 27581088221905L;
 /** Last Updated Timestamp 3/1/2011 12:31:45 PM */
 public static long updatedMS = 1298962905116L;
-/** AD_Table_ID=2160 */
+/** VAF_TableView_ID=2160 */
 public static int Table_ID;
  // =2160;
 

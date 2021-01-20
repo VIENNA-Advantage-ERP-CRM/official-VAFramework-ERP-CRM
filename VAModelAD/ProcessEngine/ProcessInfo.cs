@@ -76,8 +76,8 @@ namespace VAdvantage.ProcessEngine
         string _tableName;
         int _record_ID;
         int _AD_User_ID;
-        int _AD_Client_ID;              //7    
-        int? _AD_Org_ID;
+        int _VAF_Client_ID;              //7    
+        int? _VAF_Org_ID;
         String _className = null;
         int _AD_PInstance_ID = 0;
         String _summary = "";
@@ -135,10 +135,10 @@ namespace VAdvantage.ProcessEngine
             lst.Add("Error", IsError());
             lst.Add("Summary", GetSummary());
             lst.Add("ClassName", _className);
-            lst.Add("AD_Table_ID", _table_ID);
-            lst.Add("AD_TableName", _tableName);
+            lst.Add("VAF_TableView_ID", _table_ID);
+            lst.Add("VAF_TableViewName", _tableName);
             lst.Add("AD_User_ID", _AD_User_ID);             //10
-            lst.Add("AD_Client_ID", _AD_Client_ID);
+            lst.Add("VAF_Client_ID", _VAF_Client_ID);
             lst.Add("Batch", _batch);
             lst.Add("TimeOut", _timeout);
             lst.Add("AD_PrintFormat_Table_ID", _AD_PrintFormat_Table_ID);     //14
@@ -176,10 +176,10 @@ namespace VAdvantage.ProcessEngine
             info._error = Convert.ToBoolean(lst["Error"]);
             info._summary = Util.GetValueOfString(lst["Summary"]);
             info._className = Util.GetValueOfString(lst["ClassName"]);
-            info._table_ID = Util.GetValueOfInt(lst["AD_Table_ID"]);
-            info._tableName = Util.GetValueOfString(lst["AD_TableName"]);
+            info._table_ID = Util.GetValueOfInt(lst["VAF_TableView_ID"]);
+            info._tableName = Util.GetValueOfString(lst["VAF_TableViewName"]);
             info._AD_User_ID = Util.GetValueOfInt(lst["AD_User_ID"]);
-            info._AD_Client_ID = Util.GetValueOfInt(lst["AD_Client_ID"]); ;
+            info._VAF_Client_ID = Util.GetValueOfInt(lst["VAF_Client_ID"]); ;
             // info._batch = Convert.ToBoolean(lst["Batch"]);
             info._timeout = Convert.ToBoolean(lst["TimeOut"]);
             info._AD_PrintFormat_Table_ID = Util.GetValueOfInt(lst["AD_PrintFormat_Table_ID"]);  //14
@@ -535,14 +535,14 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// set table id
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
-        public void SetTable_ID(int AD_Table_ID)
+        /// <param name="VAF_TableView_ID"></param>
+        public void SetTable_ID(int VAF_TableView_ID)
         {
-            String sql = "SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID;
+            String sql = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID;
             object ob = DB.ExecuteScalar(sql);
             if (ob != null)
                 _tableName = ob.ToString();
-            _table_ID = AD_Table_ID;
+            _table_ID = VAF_TableView_ID;
         }
 
         public void SetRecIDs(string recIds)
@@ -594,29 +594,29 @@ namespace VAdvantage.ProcessEngine
         /// <summary>
         /// set client id
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
-        public void SetAD_Client_ID(int AD_Client_ID)
+        /// <param name="VAF_Client_ID"></param>
+        public void SetVAF_Client_ID(int VAF_Client_ID)
         {
-            _AD_Client_ID = AD_Client_ID;
+            _VAF_Client_ID = VAF_Client_ID;
         }
 
-        public void SetAD_Org_ID(int AD_Org_ID)
+        public void SetVAF_Org_ID(int VAF_Org_ID)
         {
-            _AD_Org_ID = AD_Org_ID;
+            _VAF_Org_ID = VAF_Org_ID;
         }
 
         /// <summary>
         /// get client id
         /// </summary>
         /// <returns></returns>
-        public int? GetAD_Client_ID()
+        public int? GetVAF_Client_ID()
         {
-            return _AD_Client_ID;
+            return _VAF_Client_ID;
         }
 
-        public int? GetAD_Org_ID()
+        public int? GetVAF_Org_ID()
         {
-            return _AD_Org_ID;
+            return _VAF_Org_ID;
         }
 
         /// <summary>
@@ -813,7 +813,7 @@ namespace VAdvantage.ProcessEngine
         public void Set_AD_PrintFormat_Table_ID(int AD_PrintFormat_Table_ID)
         {
 
-            String sql = "SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + AD_PrintFormat_Table_ID;
+            String sql = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + AD_PrintFormat_Table_ID;
             object ob = DB.ExecuteScalar(sql);
             if (ob != null)
                 _AD_PrintFormat_TableName = ob.ToString();

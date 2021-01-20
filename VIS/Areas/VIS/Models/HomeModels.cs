@@ -39,7 +39,7 @@ namespace VIS.Models
         {
 
             MUser user = new MUser(ctx, ctx.GetAD_User_ID(), null);
-            int imageID = Util.GetValueOfInt(user.GetAD_Image_ID());
+            int imageID = Util.GetValueOfInt(user.GetVAF_Image_ID());
 
             MImage mimg = new MImage(ctx, imageID, null);
             mimg.ByteArray = buffer;
@@ -63,14 +63,14 @@ namespace VIS.Models
                 return 0;
             }
             //mimg = new MImage(ctx, imageID, null);
-            user.SetAD_Image_ID(mimg.GetAD_Image_ID());
+            user.SetVAF_Image_ID(mimg.GetVAF_Image_ID());
             if (!user.Save())
             {
                 return 0;
             }
 
 
-            return mimg.GetAD_Image_ID();
+            return mimg.GetVAF_Image_ID();
         }
 
 
@@ -96,7 +96,7 @@ namespace VIS.Models
         public string WinName { get; set; }
         public string WinImage { get; set; }
         //public object UsrImage { get; set; }
-        public int AD_Image_ID { get; set; }
+        public int VAF_Image_ID { get; set; }
         public DateTime Cdate { get; set; }
         public string TableName { get; set; }
         public int AD_User_ID { get; set; }
@@ -106,7 +106,7 @@ namespace VIS.Models
     public class FllUsrImages
     {
         public object UserImg { get; set; }
-        public int AD_Image_ID { get; set; }
+        public int VAF_Image_ID { get; set; }
     }
     //follups list
     public class HomeFolloUpsInfo
@@ -123,7 +123,7 @@ namespace VIS.Models
     public class HomeNotice
     {
         public int AD_Note_ID { get; set; }
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public int AD_Window_ID { get; set; }
         public int Record_ID { get; set; }
         public string MsgType { get; set; }

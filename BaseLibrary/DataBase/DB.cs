@@ -42,7 +42,7 @@ namespace VAdvantage.DataBase
                 throw new ArgumentException("Context missing");
             if ((TableName == null) || (TableName.Length == 0))
                 throw new ArgumentException("TableName missing");
-            return GetNextID(ctx.GetAD_Client_ID(), TableName, trx);
+            return GetNextID(ctx.GetVAF_Client_ID(), TableName, trx);
         }	//	getNextID
 
 
@@ -50,11 +50,11 @@ namespace VAdvantage.DataBase
         /// <summary>
         /// Get next number for Key column = 0 is Error.
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <param name="TableName">table name</param>
         /// <param name="trxName">optional Transaction Name</param>
         /// <returns>next no</returns>
-        public static int GetNextID(int AD_Client_ID, String TableName, Trx trxName)
+        public static int GetNextID(int VAF_Client_ID, String TableName, Trx trxName)
         {
             //if ((trxName == null || trxName.Length() == 0) && isRemoteObjects())
             //{
@@ -63,7 +63,7 @@ namespace VAdvantage.DataBase
             //    {
             //        if (server != null)
             //        {	//	See ServerBean
-            //            int id = server.getNextID(AD_Client_ID, TableName, null);
+            //            int id = server.getNextID(VAF_Client_ID, TableName, null);
             //            log.finest("server => " + id);
             //            if (id < 0)
             //                throw new DBException("No NextID");
@@ -82,7 +82,7 @@ namespace VAdvantage.DataBase
             //TODO
             //if (isDB2())
             //    trxName = null;	//	tries 3 times
-            int id = POActionEngine.Get().GetNextID(AD_Client_ID, TableName, trxName);	//	tries 3 times
+            int id = POActionEngine.Get().GetNextID(VAF_Client_ID, TableName, trxName);	//	tries 3 times
             //	if (id <= 0)
             //		throw new DBException("No NextID (" + id + ")");
             return id;
@@ -677,17 +677,17 @@ namespace VAdvantage.DataBase
         /// <summary>
         /// Get Document No from table
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <param name="TableName">table name</param>
         /// <param name="trx">optional Transaction Name</param>
         ///// <returns>document no or null</returns>
-        //public static String GetDocumentNo(int AD_Client_ID, String TableName, Trx trx, Ctx ctx)
+        //public static String GetDocumentNo(int VAF_Client_ID, String TableName, Trx trx, Ctx ctx)
         //{
 
 
-        //    String dn = MSequence.GetDocumentNo(AD_Client_ID, TableName, trx, ctx);
+        //    String dn = MSequence.GetDocumentNo(VAF_Client_ID, TableName, trx, ctx);
         //    if (dn == null)		//	try again
-        //        dn = MSequence.GetDocumentNo(AD_Client_ID, TableName, trx, ctx);
+        //        dn = MSequence.GetDocumentNo(VAF_Client_ID, TableName, trx, ctx);
         //    if (dn == null)
         //        throw new Exception("No DocumentNo");
         //    return dn;
@@ -794,7 +794,7 @@ namespace VAdvantage.DataBase
 
                 param[0] = new System.Data.SqlClient.SqlParameter("@param1", zipData);
 
-                // string sql = "Update AD_Attachment Set BinaryData = @param1 Where AD_Attachment_ID = " + AD_Attachment_ID;
+                // string sql = "Update VAF_Attachment Set BinaryData = @param1 Where VAF_Attachment_ID = " + VAF_Attachment_ID;
 
                 string sql = "Update " + tableName + " Set BinaryData = @param1 Where " + tableName + "_ID = " + Id;
 

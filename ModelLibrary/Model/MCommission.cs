@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         /// <returns>array of lines</returns>
         public MCommissionLine[] GetLines()
         {
-            String sql = "SELECT * FROM C_CommissionLine WHERE C_Commission_ID=@comid AND IsActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,C_BPartner_ID,C_BP_Group_ID,AD_Org_ID,C_SalesRegion_ID";
+            String sql = "SELECT * FROM C_CommissionLine WHERE C_Commission_ID=@comid AND IsActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,C_BPartner_ID,C_BP_Group_ID,VAF_Org_ID,C_SalesRegion_ID";
             List<MCommissionLine> list = new List<MCommissionLine>();
             try
             {
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromLines.Length; i++)
             {
                 MCommissionLine line = new MCommissionLine(GetCtx(), 0, Get_TrxName());
-                PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
                 line.Set_ValueNoCheck("C_CommissionLine_ID", null);	//	new
                 line.SetC_Commission_ID(GetC_Commission_ID());
                 if (line.Save())

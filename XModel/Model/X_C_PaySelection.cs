@@ -80,7 +80,7 @@ static X_C_PaySelection()
 //static long serialVersionUID 27562514373582L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056793L;
-/** AD_Table_ID=426 */
+/** VAF_TableView_ID=426 */
 public static int Table_ID;
  // =426;
 

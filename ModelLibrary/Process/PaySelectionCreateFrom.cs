@@ -142,10 +142,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String sql = "SELECT C_Invoice_ID,"
                 //	Open
                 + " currencyConvert(invoiceOpen(i.C_Invoice_ID, 0)"
-                    + ",i.C_Currency_ID, " + C_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ", i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID),"	//	##1/2 Currency_To,PayDate
+                    + ",i.C_Currency_ID, " + C_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ", i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID),"	//	##1/2 Currency_To,PayDate
                 //	Discount
                 + " currencyConvert(paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ")"	//	##3 PayDate
-                    + ",i.C_Currency_ID," + C_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ",i.C_ConversionType_ID,i.AD_Client_ID,i.AD_Org_ID),"	//	##4/5 Currency_To,PayDate
+                    + ",i.C_Currency_ID," + C_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ",i.C_ConversionType_ID,i.VAF_Client_ID,i.VAF_Org_ID),"	//	##4/5 Currency_To,PayDate
                 + " PaymentRule, IsSOTrx "		//	4..6
                 + "FROM C_Invoice i "
                 + "WHERE";
@@ -158,7 +158,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     sql += " IsSOTrx='N'";
                 }
             sql+=" AND IsPaid='N' AND DocStatus IN ('CO','CL')" // ##6
-                + " AND AD_Client_ID=" + psel.GetAD_Client_ID()				//	##7
+                + " AND VAF_Client_ID=" + psel.GetVAF_Client_ID()				//	##7
                 //	Existing Payments - Will reselect Invoice if prepared but not paid 
                 + " AND NOT EXISTS (SELECT * FROM C_PaySelectionLine psl "
                     + "WHERE i.C_Invoice_ID=psl.C_Invoice_ID AND psl.IsActive='Y'"

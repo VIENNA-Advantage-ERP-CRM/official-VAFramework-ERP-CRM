@@ -74,7 +74,7 @@ static X_T_InventoryValue()
 //static long serialVersionUID 27562514384255L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067466L;
-/** AD_Table_ID=478 */
+/** VAF_TableView_ID=478 */
 public static int Table_ID;
  // =478;
 

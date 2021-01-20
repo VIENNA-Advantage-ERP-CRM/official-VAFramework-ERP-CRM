@@ -55,14 +55,14 @@ namespace VIS.Models
                 // Check applied by mohit - asked by mukesh sir - to check if login langauge is base language - then pick non translated data.
             if (Env.IsBaseLanguage(ctx, ""))
             {
-                sql = "SELECT L.ADDRESS1,L.ADDRESS2,L.ADDRESS3,L.ADDRESS4,L.CITY,L.REGIONNAME ,L.POSTAL,L.POSTAL_ADD,CN.NAME AS COUNTRY,L.AD_CLIENT_ID,L.AD_ORG_ID,L.C_CITY_ID," +
+                sql = "SELECT L.ADDRESS1,L.ADDRESS2,L.ADDRESS3,L.ADDRESS4,L.CITY,L.REGIONNAME ,L.POSTAL,L.POSTAL_ADD,CN.NAME AS COUNTRY,L.VAF_CLIENT_ID,L.VAF_ORG_ID,L.C_CITY_ID," +
                            " L.C_COUNTRY_ID,L.C_LOCATION_ID,L.C_REGION_ID FROM C_LOCATION L" +
                            " LEFT JOIN C_COUNTRY CN ON CN.C_COUNTRY_ID=L.C_COUNTRY_ID WHERE L.IsActive='Y'";
             }
             else
             {
                 // Check applied by mohit - Picked data from translation tab - if base language
-                sql = "SELECT L.ADDRESS1,L.ADDRESS2,L.ADDRESS3,L.ADDRESS4,L.CITY,L.REGIONNAME ,L.POSTAL,L.POSTAL_ADD,CNTRL.NAME AS COUNTRY,L.AD_CLIENT_ID,L.AD_ORG_ID,L.C_CITY_ID," +
+                sql = "SELECT L.ADDRESS1,L.ADDRESS2,L.ADDRESS3,L.ADDRESS4,L.CITY,L.REGIONNAME ,L.POSTAL,L.POSTAL_ADD,CNTRL.NAME AS COUNTRY,L.VAF_CLIENT_ID,L.VAF_ORG_ID,L.C_CITY_ID," +
                            " L.C_COUNTRY_ID,L.C_LOCATION_ID,L.C_REGION_ID FROM C_LOCATION L" +
                            " LEFT JOIN C_COUNTRY CN ON CN.C_COUNTRY_ID=L.C_COUNTRY_ID INNER JOIN C_Country_trl CNTRL ON (CN.C_COUNTRY_ID  =CNTRL.C_COUNTRY_ID)" +
                            " WHERE L.IsActive='Y' AND CNTRL.AD_Language='" + ctx.GetAD_Language() + "' ";
@@ -251,7 +251,7 @@ namespace VIS.Models
             //{
             //    sqlquery = " SELECT * FROM (SELECT (NVL(cn.Name,'')||' '|| NVL(l.ADDRESS1,'') ||' '|| NVL(l.ADDRESS2,'') ||' '|| NVL(l.ADDRESS3,'') ||' '|| NVL(l.ADDRESS4,'') ||' '|| NVL(l.CITY,'') ||' '|| NVL(l.REGIONNAME,'') ||' '|| NVL(l.POSTAL,'') ||' '|| NVL(l.POSTAL_ADD,'')) as address," +
             //                        "cn.Name, l.ADDRESS1 , l.ADDRESS2 , l.ADDRESS3 , l.ADDRESS4 , l.CITY , l.REGIONNAME , l.POSTAL , l.POSTAL_ADD," +
-            //                        " l.AD_CLIENT_ID,l.AD_ORG_ID,l.C_CITY_ID,l.C_COUNTRY_ID,l.C_LOCATION_ID,l.C_REGION_ID FROM C_Location l" +
+            //                        " l.VAF_CLIENT_ID,l.VAF_ORG_ID,l.C_CITY_ID,l.C_COUNTRY_ID,l.C_LOCATION_ID,l.C_REGION_ID FROM C_Location l" +
             //                        " LEFT JOIN C_Country cn on cn.C_COUNTRY_ID=l.C_COUNTRY_ID WHERE l.ISACTIVE='Y') qb1";
             //}
             //else
@@ -259,7 +259,7 @@ namespace VIS.Models
             //    // Check applied by mohit - Picked data from translation tab - if base language
             //    sqlquery = " SELECT * FROM (SELECT (NVL(CNTRL.Name,'')||' '|| NVL(l.ADDRESS1,'') ||' '|| NVL(l.ADDRESS2,'') ||' '|| NVL(l.ADDRESS3,'') ||' '|| NVL(l.ADDRESS4,'') ||' '|| NVL(l.CITY,'') ||' '|| NVL(l.REGIONNAME,'') ||' '|| NVL(l.POSTAL,'') ||' '|| NVL(l.POSTAL_ADD,'')) as address," +
             //                        " cnTRL.Name, l.ADDRESS1 , l.ADDRESS2 , l.ADDRESS3 , l.ADDRESS4 , l.CITY , l.REGIONNAME , l.POSTAL , l.POSTAL_ADD," +
-            //                        " l.AD_CLIENT_ID,l.AD_ORG_ID,l.C_CITY_ID,l.C_COUNTRY_ID,l.C_LOCATION_ID,l.C_REGION_ID FROM C_Location l" +
+            //                        " l.VAF_CLIENT_ID,l.VAF_ORG_ID,l.C_CITY_ID,l.C_COUNTRY_ID,l.C_LOCATION_ID,l.C_REGION_ID FROM C_Location l" +
             //                        " LEFT JOIN C_Country cn on cn.C_COUNTRY_ID=l.C_COUNTRY_ID INNER JOIN C_Country_Trl CNTRL     ON (cn.C_Country_ID=CNTRL.C_Country_ID) WHERE l.ISACTIVE='Y' AND cnTRL.AD_Language='" + ctx.GetAD_Language() + "') qb1";
             //}
             #endregion
@@ -268,7 +268,7 @@ namespace VIS.Models
             {
                 sqlquery = " SELECT (NVL(cn.Name,'')||' '|| NVL(C_Location.ADDRESS1,'') ||' '|| NVL(C_Location.ADDRESS2,'') ||' '|| NVL(C_Location.ADDRESS3,'') ||' '|| NVL(C_Location.ADDRESS4,'') ||' '|| NVL(C_Location.CITY,'') ||' '|| NVL(C_Location.REGIONNAME,'') ||' '|| NVL(C_Location.POSTAL,'') ||' '|| NVL(C_Location.POSTAL_ADD,'')) as address," +
                                     "cn.Name, C_Location.ADDRESS1 , C_Location.ADDRESS2 , C_Location.ADDRESS3 , C_Location.ADDRESS4 , C_Location.CITY , C_Location.REGIONNAME , C_Location.POSTAL , C_Location.POSTAL_ADD," +
-                                    " C_Location.AD_CLIENT_ID,C_Location.AD_ORG_ID,C_Location.C_CITY_ID,C_Location.C_COUNTRY_ID,C_Location.C_LOCATION_ID,C_Location.C_REGION_ID FROM C_Location C_Location" +
+                                    " C_Location.VAF_CLIENT_ID,C_Location.VAF_ORG_ID,C_Location.C_CITY_ID,C_Location.C_COUNTRY_ID,C_Location.C_LOCATION_ID,C_Location.C_REGION_ID FROM C_Location C_Location" +
                                     " LEFT JOIN C_Country cn on cn.C_COUNTRY_ID=C_Location.C_COUNTRY_ID WHERE C_Location.ISACTIVE='Y'" +
                                     " AND Lower( (NVL(cn.Name,'') ||' '  || NVL(C_Location.ADDRESS1,'')  ||' ' || NVL(C_Location.ADDRESS2,'') ||' ' || NVL(C_Location.ADDRESS3,'')  ||' ' || NVL(C_Location.ADDRESS4,'') ||' ' || NVL(C_Location.CITY,'')" +
                                    " ||' '  || NVL(C_Location.REGIONNAME,'') ||' ' || NVL(C_Location.POSTAL,'')  ||' '   || NVL(C_Location.POSTAL_ADD,''))) like LOWER ('%" + name_startsWith + "%') AND rownum < 500";
@@ -278,7 +278,7 @@ namespace VIS.Models
                 // Check applied by mohit - Picked data from translation tab - if base language
                 sqlquery = " SELECT (NVL(CNTRL.Name,'')||' '|| NVL(C_Location.ADDRESS1,'') ||' '|| NVL(C_Location.ADDRESS2,'') ||' '|| NVL(C_Location.ADDRESS3,'') ||' '|| NVL(C_Location.ADDRESS4,'') ||' '|| NVL(C_Location.CITY,'') ||' '|| NVL(C_Location.REGIONNAME,'') ||' '|| NVL(C_Location.POSTAL,'') ||' '|| NVL(C_Location.POSTAL_ADD,'')) as address," +
                                     " cnTRL.Name, C_Location.ADDRESS1 , C_Location.ADDRESS2 , C_Location.ADDRESS3 , C_Location.ADDRESS4 , C_Location.CITY , C_Location.REGIONNAME , C_Location.POSTAL , C_Location.POSTAL_ADD," +
-                                    " C_Location.AD_CLIENT_ID,C_Location.AD_ORG_ID,C_Location.C_CITY_ID,C_Location.C_COUNTRY_ID,C_Location.C_LOCATION_ID,C_Location.C_REGION_ID FROM C_Location C_Location" +
+                                    " C_Location.VAF_CLIENT_ID,C_Location.VAF_ORG_ID,C_Location.C_CITY_ID,C_Location.C_COUNTRY_ID,C_Location.C_LOCATION_ID,C_Location.C_REGION_ID FROM C_Location C_Location" +
                                     " LEFT JOIN C_Country cn on cn.C_COUNTRY_ID=C_Location.C_COUNTRY_ID INNER JOIN C_Country_Trl CNTRL     ON (cn.C_Country_ID=CNTRL.C_Country_ID) WHERE C_Location.ISACTIVE='Y' AND cnTRL.AD_Language='" + ctx.GetAD_Language() + "'" +
                                     " AND Lower((NVL(CNTRL.Name,'')   ||' '  || NVL(C_Location.ADDRESS1,'')  ||' '  || NVL(C_Location.ADDRESS2,'')  ||' '  || NVL(C_Location.ADDRESS3,'')  ||' '  || NVL(C_Location.ADDRESS4,'')  ||' ' " +
                                     " || NVL(C_Location.CITY,'')  ||' '  || NVL(C_Location.REGIONNAME,'')  ||' '  || NVL(C_Location.POSTAL,'')  ||' '  || NVL(C_Location.POSTAL_ADD,''))) like Lower('%" + name_startsWith + "%')  AND rownum <500";
@@ -307,8 +307,8 @@ namespace VIS.Models
                         STATENAME = Convert.ToString(ds.Tables[0].Rows[i]["REGIONNAME"]),
                         ZIPCODE = Convert.ToString(ds.Tables[0].Rows[i]["POSTAL"]),
 
-                        AD_CLIENT_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_CLIENT_ID"]),
-                        AD_ORG_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_ORG_ID"]),
+                        VAF_CLIENT_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_CLIENT_ID"]),
+                        VAF_ORG_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_ORG_ID"]),
                         // C_CITY_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_CITY_ID"]),
                         C_COUNTRY_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_COUNTRY_ID"] == DBNull.Value ? null : ds.Tables[0].Rows[i]["C_COUNTRY_ID"]),
                         C_LOCATION_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_LOCATION_ID"]),
@@ -373,18 +373,18 @@ namespace VIS.Models
             try
             {
                 // load the country from login orgnization's organization info loaction.
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Location_ID FROM AD_OrgInfo WHERE IsActive='Y' AND AD_Org_ID=" + ctx.GetAD_Org_ID() + " ", null, null)) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Location_ID FROM VAF_OrgInfo WHERE IsActive='Y' AND VAF_Org_ID=" + ctx.GetVAF_Org_ID() + " ", null, null)) > 0)
                 {
                     if (Env.IsBaseLanguage(ctx, ""))
                     {
                         _ds = DB.ExecuteDataset("SELECT cnt.C_Country_ID,  cnt.Name FROM C_Country cnt INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) "
-                                         + " INNER JOIN AD_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE oi.AD_Org_ID =  " + ctx.GetAD_Org_ID());
+                                         + " INNER JOIN VAF_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE oi.VAF_Org_ID =  " + ctx.GetVAF_Org_ID());
                     }
                     else
                     {
                         _ds = DB.ExecuteDataset(@"SELECT cnt.C_Country_ID,  cntrl.Name FROM C_Country cnt INNER JOIN C_Country_Trl cntrl ON(cnt.c_country_ID = cntrl.c_country_id)
-                                                INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) INNER JOIN AD_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE 
-                                                oi.AD_Org_ID = " + ctx.GetAD_Org_ID() + "  AND CNTRL.AD_Language = '" + AD_language + "'");
+                                                INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) INNER JOIN VAF_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE 
+                                                oi.VAF_Org_ID = " + ctx.GetVAF_Org_ID() + "  AND CNTRL.AD_Language = '" + AD_language + "'");
                     }
                 }
                 else
@@ -462,8 +462,8 @@ namespace VIS.Models
         public string STATENAME { get; set; }
         public string ZIPCODE { get; set; }
 
-        public int AD_CLIENT_ID { get; set; }
-        public int AD_ORG_ID { get; set; }
+        public int VAF_CLIENT_ID { get; set; }
+        public int VAF_ORG_ID { get; set; }
         // public int? C_CITY_ID { get; set; }
         public int? C_COUNTRY_ID { get; set; }
         public int C_LOCATION_ID { get; set; }

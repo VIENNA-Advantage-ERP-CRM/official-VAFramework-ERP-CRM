@@ -77,7 +77,7 @@ namespace VAdvantage.Process
         {
             int index = 1;
             StringBuilder sql = new StringBuilder("SELECT * FROM S_TimeExpenseLine el "
-                + "WHERE el.AD_Client_ID=@param1"                       //	#1
+                + "WHERE el.VAF_Client_ID=@param1"                       //	#1
                 + " AND el.C_BPartner_ID>0 AND el.IsInvoiced='Y'"   //	Business Partner && to be invoiced
                 + " AND el.C_OrderLine_ID IS NULL"                  //	not invoiced yet
                 + " AND EXISTS (SELECT * FROM S_TimeExpense e "     //	processed only
@@ -119,8 +119,8 @@ namespace VAdvantage.Process
             {
                 //pstmt = DataBase.prepareStatement(sql.toString(), get_TrxName());
                 int par = 0;
-                //pstmt.setInt(par++, getAD_Client_ID());
-                param[par] = new SqlParameter("@param1", GetAD_Client_ID());
+                //pstmt.setInt(par++, getVAF_Client_ID());
+                param[par] = new SqlParameter("@param1", GetVAF_Client_ID());
                 if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
                 {
                     //pstmt.setInt(par++, _C_BPartner_ID);
@@ -231,7 +231,7 @@ namespace VAdvantage.Process
             {
                 log.Info("New Order for " + bp + ", Project=" + tel.GetC_Project_ID());
                 _order = new MOrder(GetCtx(), 0, Get_TrxName());
-                _order.SetAD_Org_ID(tel.GetAD_Org_ID());
+                _order.SetVAF_Org_ID(tel.GetVAF_Org_ID());
                 _order.SetC_DocTypeTarget_ID(MOrder.DocSubTypeSO_Standard);
                 //
                 _order.SetBPartner(bp);
@@ -422,7 +422,7 @@ namespace VAdvantage.Process
                 if (tel.GetC_Currency_ID() != _order.GetC_Currency_ID())
                     price = MConversionRate.Convert(GetCtx(), price,
                         tel.GetC_Currency_ID(), _order.GetC_Currency_ID(),
-                        _order.GetAD_Client_ID(), _order.GetAD_Org_ID());
+                        _order.GetVAF_Client_ID(), _order.GetVAF_Org_ID());
                 ol.SetPrice(price);
                 // added by Bhupendra to set the entered price
                 ol.SetPriceEntered(price);
@@ -498,9 +498,9 @@ namespace VAdvantage.Process
         public int GetPaymentMethod(){
             //get organisation default 
             //added IsActive condition to check weather the paymentmethod is active or not
-            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string sql = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND VAF_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY VAF_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
+            param[0] = new SqlParameter("@param1", tel.GetVAF_Org_ID());
             dynamic pri = DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
             return Convert.ToInt32(pri);
         }
@@ -510,9 +510,9 @@ namespace VAdvantage.Process
         /// <returns> returns payment term ID</returns>
         public int GetPaymentTerm(){
             //added IsActive condition to check weather the term is active or not
-            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY AD_ORG_ID DESC, C_PaymentTerm_ID DESC";
+            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_ORG_ID IN(@param1,0) AND IsActive='Y' ORDER BY VAF_ORG_ID DESC, C_PaymentTerm_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@param1", tel.GetAD_Org_ID());
+            param[0] = new SqlParameter("@param1", tel.GetVAF_Org_ID());
             dynamic pri= DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());
             return Convert.ToInt32(pri);
         }

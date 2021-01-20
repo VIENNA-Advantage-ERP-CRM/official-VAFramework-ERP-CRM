@@ -87,7 +87,7 @@ namespace VAdvantage.Model
                 throw new ArgumentException("Header not saved");
             _parent = inventory;
             SetM_Inventory_ID(inventory.GetM_Inventory_ID());		//	Parent
-            SetClientOrg(inventory.GetAD_Client_ID(), inventory.GetAD_Org_ID());
+            SetClientOrg(inventory.GetVAF_Client_ID(), inventory.GetVAF_Org_ID());
             SetM_Locator_ID(M_Locator_ID);		//	FK
             SetM_Product_ID(M_Product_ID);		//	FK
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
@@ -405,7 +405,7 @@ namespace VAdvantage.Model
                     {
                         qry = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + GetM_Locator_ID() +
+                                    " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + GetM_Locator_ID() +
                                     " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
                                     " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID();
                         containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, null)); // dont use Transaction here - otherwise impact goes wrong on completion
@@ -474,9 +474,9 @@ namespace VAdvantage.Model
             else if (GetC_Charge_ID() != 0)
                 SetC_Charge_ID(0);
 
-            //	Set AD_Org to parent if not charge
+            //	Set VAF_Org to parent if not charge
             if (GetC_Charge_ID() == 0)
-                SetAD_Org_ID(GetParent().GetAD_Org_ID());
+                SetVAF_Org_ID(GetParent().GetVAF_Org_ID());
 
             // By Amit for Obsolete Inventory - 25-May-2016
             if (Env.IsModuleInstalled("VA024_"))
@@ -490,7 +490,7 @@ namespace VAdvantage.Model
                         string qry1 = @"SELECT  SUM(o.VA024_UnitPrice)   FROM VA024_t_ObsoleteInventory o 
                                   WHERE o.IsActive = 'Y' AND  o.M_Product_ID = " + GetM_Product_ID() + @" and 
                                   ( o.M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + @" OR o.M_AttributeSetInstance_ID IS NULL )" +
-                                 " AND o.AD_Org_ID = " + GetAD_Org_ID();
+                                 " AND o.VAF_Org_ID = " + GetVAF_Org_ID();
                         //+" AND M_Warehouse_ID = " + inventory.GetM_Warehouse_ID();
                         VA024_ProvisionPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(qry1, null, Get_Trx()));
                         if (!inventory.IsInternalUse() && (GetQtyBook() - GetQtyCount()) > 0)
@@ -512,21 +512,21 @@ namespace VAdvantage.Model
                         }
                         qry1 += @" FROM m_product p  INNER JOIN va024_t_obsoleteinventory oi ON p.m_product_id = oi.M_product_ID
                                  INNER JOIN m_product_category pc ON pc.m_product_category_ID = p.m_product_category_ID
-                                 INNER JOIN AD_client c ON c.AD_Client_ID = p.Ad_Client_ID   INNER JOIN AD_ClientInfo ci  ON c.AD_Client_ID = ci.Ad_Client_ID
+                                 INNER JOIN vaf_client c ON c.VAF_Client_ID = p.vaf_client_ID   INNER JOIN VAF_ClientDetail ci  ON c.VAF_Client_ID = ci.vaf_client_ID
                                  INNER JOIN m_cost ct ON ( p.M_Product_ID     = ct.M_Product_ID  AND ci.C_AcctSchema1_ID = ct.C_AcctSchema_ID )
                                  INNER JOIN c_acctschema asch  ON (asch.C_AcctSchema_ID = ci.C_AcctSchema1_ID)
                                  INNER JOIN va024_obsoleteinvline oil ON oil.va024_obsoleteinvline_ID = oi.va024_obsoleteinvline_ID ";
-                        qry1 += @"    WHERE ct.AD_Org_ID =  
-                          CASE WHEN ( pc.costinglevel IS NOT NULL AND pc.costinglevel = 'O') THEN " + GetAD_Org_ID() + @" 
+                        qry1 += @"    WHERE ct.VAF_Org_ID =  
+                          CASE WHEN ( pc.costinglevel IS NOT NULL AND pc.costinglevel = 'O') THEN " + GetVAF_Org_ID() + @" 
                                WHEN ( pc.costinglevel IS NOT NULL AND (pc.costinglevel  = 'C' OR pc.costinglevel = 'B')) THEN 0 
-                               WHEN (pc.costinglevel IS NULL AND asch.costinglevel  = 'O') THEN " + GetAD_Org_ID() + @" 
+                               WHEN (pc.costinglevel IS NULL AND asch.costinglevel  = 'O') THEN " + GetVAF_Org_ID() + @" 
                                WHEN ( pc.costinglevel IS NULL AND (asch.costinglevel  = 'C' OR asch.costinglevel   = 'B')) THEN 0  END
                           AND ct.m_costelement_id =  
                           CASE WHEN ( pc.costingmethod IS NOT NULL AND pc.costingmethod  != 'C') THEN  (SELECT MIN(m_costelement_id)  FROM m_costelement  
-                                     WHERE m_costelement.costingmethod =pc.costingmethod  AND m_costelement.Ad_Client_ID  = oi.ad_client_id  ) 
+                                     WHERE m_costelement.costingmethod =pc.costingmethod  AND m_costelement.vaf_client_ID  = oi.vaf_client_id  ) 
                                 WHEN ( pc.costingmethod IS NOT NULL AND pc.costingmethod = 'C' ) THEN  pc.m_costelement_id 
                                 WHEN ( pc.costingmethod IS NULL AND asch.costingmethod  != 'C') THEN  (SELECT MIN(m_costelement_id)  FROM m_costelement 
-                                     WHERE m_costelement.costingmethod = asch.costingmethod  AND m_costelement.Ad_Client_ID  = oi.ad_client_id  )
+                                     WHERE m_costelement.costingmethod = asch.costingmethod  AND m_costelement.vaf_client_ID  = oi.vaf_client_id  )
                                 WHEN ( pc.costingmethod IS NULL AND asch.costingmethod  = 'C') THEN asch.m_costelement_id  END 
                          AND NVL(ct.M_Attributesetinstance_ID , 0) =  
                          CASE WHEN ( pc.costinglevel IS NOT NULL AND pc.costinglevel = 'B') THEN " + GetM_AttributeSetInstance_ID() + @" 

@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             SetAD_PrintFont_ID (0);
             SetAD_PrintFormat_ID (0);
             SetAD_PrintPaper_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_TableView_ID (0);
             SetFooterMargin (0);
             SetHeaderMargin (0);
             SetIsDefault (false);
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
             SetAD_PrintFont_ID (0);
             SetAD_PrintFormat_ID (0);
             SetAD_PrintPaper_ID (0);
-            SetAD_Table_ID (0);
+            SetVAF_TableView_ID (0);
             SetFooterMargin (0);
             SetHeaderMargin (0);
             SetIsDefault (false);
@@ -97,7 +97,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27673821570957L;
         /** Last Updated Timestamp 2/6/2014 7:47:34 PM */
         public static long updatedMS = 1391696254168L;
-        /** AD_Table_ID=493 */
+        /** VAF_TableView_ID=493 */
         public static int Table_ID;
         // =493;
 
@@ -248,33 +248,33 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Tab.
-        @param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+        @param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }
         /** Get Tab.
         @return Tab within a Window */
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            Object ii = Get_Value("AD_Tab_ID");
+            Object ii = Get_Value("VAF_Tab_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID < 1) throw new ArgumentException("AD_Table_ID is mandatory.");
-            Set_ValueNoCheck("AD_Table_ID", AD_Table_ID);
+            if (VAF_TableView_ID < 1) throw new ArgumentException("VAF_TableView_ID is mandatory.");
+            Set_ValueNoCheck("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

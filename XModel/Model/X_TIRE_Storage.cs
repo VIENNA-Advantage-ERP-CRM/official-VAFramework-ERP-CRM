@@ -76,7 +76,7 @@ static X_TIRE_Storage()
 //static long serialVersionUID 27562514384083L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067294L;
-/** AD_Table_ID=384 */
+/** VAF_TableView_ID=384 */
 public static int Table_ID;
  // =384;
 

@@ -291,10 +291,10 @@ namespace VAdvantage.Model
 		if (newRecord)
 		{
 			StringBuilder sb = new StringBuilder ("INSERT INTO AD_TreeNodeCMS "
-				+ "(AD_Client_ID,AD_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
+				+ "(VAF_Client_ID,VAF_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
 				+ "AD_Tree_ID, Node_ID, Parent_ID, SeqNo) "
 				+ "VALUES (")
-				.Append(GetAD_Client_ID()).Append(",0, 'Y', SysDate, 0, SysDate, 0,")
+				.Append(GetVAF_Client_ID()).Append(",0, 'Y', SysDate, 0, SysDate, 0,")
 				.Append(GetAD_Tree_ID()).Append(",").Append(Get_ID())
 				.Append(", 0, 999)");
 			int no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
@@ -374,8 +374,8 @@ namespace VAdvantage.Model
 		if (thisElement==null) 
         {
 			thisElement = new MCStageElement(GetCtx(), 0, Get_TrxName());
-			thisElement.SetAD_Client_ID(GetAD_Client_ID());
-			thisElement.SetAD_Org_ID(GetAD_Org_ID());
+			thisElement.SetVAF_Client_ID(GetVAF_Client_ID());
+			thisElement.SetVAF_Org_ID(GetVAF_Org_ID());
 			thisElement.SetCM_CStage_ID(this.Get_ID());
 			thisElement.SetContentHTML(" ");
 			thisElement.SetName(elementName);
@@ -398,8 +398,8 @@ namespace VAdvantage.Model
 				if (existingKeys==null || existingKeys.Length==0)
                 {
 					X_CM_CStageTTable newCStageTTable = new X_CM_CStageTTable(GetCtx(), 0, Get_TrxName());
-					newCStageTTable.SetAD_Client_ID(GetAD_Client_ID());
-					newCStageTTable.SetAD_Org_ID(GetAD_Org_ID());
+					newCStageTTable.SetVAF_Client_ID(GetVAF_Client_ID());
+					newCStageTTable.SetVAF_Org_ID(GetVAF_Org_ID());
 					newCStageTTable.SetCM_CStage_ID(Get_ID());
 					newCStageTTable.SetCM_TemplateTable_ID(thisTemplateTable.Get_ID());
 					newCStageTTable.SetDescription(thisTemplateTable.GetDescription());

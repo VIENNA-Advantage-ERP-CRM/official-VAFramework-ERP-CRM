@@ -116,7 +116,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID, List<string> obscureFields)
+        public JsonResult GetWindowRecords(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int VAF_TableView_ID, List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -133,7 +133,7 @@ namespace VIS.Controllers
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlIn.sqlDirect = Server.HtmlDecode(sqlIn.sqlDirect);
-                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, obscureFields);
+                    data = w.GetWindowRecords(sqlIn, fields, ctx, rowCount, sqlCount, VAF_TableView_ID, obscureFields);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
@@ -180,7 +180,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetWindowRecordsForTreeNode(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int AD_Table_ID, int treeID, int treeNodeID, List<string> obscureFields)
+        public JsonResult GetWindowRecordsForTreeNode(List<string> fields, SqlParamsIn sqlIn, int rowCount, string sqlCount, int VAF_TableView_ID, int treeID, int treeNodeID, List<string> obscureFields)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -195,7 +195,7 @@ namespace VIS.Controllers
                     sqlIn.sql = SecureEngineBridge.DecryptByClientKey(sqlIn.sql, ctx.GetSecureKey());
                     sqlIn.sql = Server.HtmlDecode(sqlIn.sql);
                     sqlCount = SecureEngineBridge.DecryptByClientKey(sqlCount, ctx.GetSecureKey());
-                    data = w.GetWindowRecordsForTreeNode(sqlIn, fields, ctx, rowCount, sqlCount, AD_Table_ID, treeID, treeNodeID, obscureFields);
+                    data = w.GetWindowRecordsForTreeNode(sqlIn, fields, ctx, rowCount, sqlCount, VAF_TableView_ID, treeID, treeNodeID, obscureFields);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
@@ -208,7 +208,7 @@ namespace VIS.Controllers
         /// <param name="windowNo">window number</param>
         /// <param name="AD_Window_ID">window Id</param>
         /// <returns>grid window json result</returns>
-        public JsonResult GetRecordCountForTreeNode(string sqlIn, int AD_Table_ID, int treeID, int treeNodeID, int windowNo, bool summaryOnly)
+        public JsonResult GetRecordCountForTreeNode(string sqlIn, int VAF_TableView_ID, int treeID, int treeNodeID, int windowNo, bool summaryOnly)
         {
             object data = null;
             if (Session["ctx"] == null)
@@ -220,7 +220,7 @@ namespace VIS.Controllers
                 using (var w = new WindowHelper())
                 {
                     sqlIn = Server.HtmlDecode(sqlIn);
-                    data = w.GetRecordCountForTreeNode(sqlIn, Session["ctx"] as Ctx, AD_Table_ID, treeID, treeNodeID, windowNo, summaryOnly);
+                    data = w.GetRecordCountForTreeNode(sqlIn, Session["ctx"] as Ctx, VAF_TableView_ID, treeID, treeNodeID, windowNo, summaryOnly);
                 }
             }
             return Json(JsonConvert.SerializeObject(data), JsonRequestBehavior.AllowGet);
@@ -299,12 +299,12 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(gOut), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateOrInsertPersonalLock(int AD_User_ID, int AD_Table_ID, int Record_ID, bool locked)
+        public JsonResult UpdateOrInsertPersonalLock(int AD_User_ID, int VAF_TableView_ID, int Record_ID, bool locked)
         {
-            MPrivateAccess access = MPrivateAccess.Get(Session["ctx"] as Ctx, AD_User_ID, AD_Table_ID, Record_ID);
+            MPrivateAccess access = MPrivateAccess.Get(Session["ctx"] as Ctx, AD_User_ID, VAF_TableView_ID, Record_ID);
             if (access == null)
             {
-                access = new MPrivateAccess(Session["ctx"] as Ctx, AD_User_ID, AD_Table_ID, Record_ID);
+                access = new MPrivateAccess(Session["ctx"] as Ctx, AD_User_ID, VAF_TableView_ID, Record_ID);
             }
             access.SetIsActive(locked);
             bool ret = access.Save();
@@ -319,16 +319,16 @@ namespace VIS.Controllers
         /// get form Info agianst form Id 
         /// - call from menu form item
         /// </summary>
-        /// <param name="AD_Form_ID">id of form</param>
+        /// <param name="VAF_Page_ID">id of form</param>
         /// <returns>json result</returns>
-        public JsonResult GetFormInfo(int AD_Form_ID)
+        public JsonResult GetFormInfo(int VAF_Page_ID)
         {
             string retJSON = "";
             string retError = null;
 
             if (Session["ctx"] != null)
             {
-                retJSON = JsonConvert.SerializeObject(FormHelper.GetFormInfo(AD_Form_ID, Session["ctx"] as Ctx));
+                retJSON = JsonConvert.SerializeObject(FormHelper.GetFormInfo(VAF_Page_ID, Session["ctx"] as Ctx));
             }
             else
             {
@@ -370,7 +370,7 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="AD_Process_ID">id of process</param>
         /// <param name="Name">name of process</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record  id of table</param>
         /// <param name="WindowNo">window number</param>
         /// <returns>json result
@@ -385,7 +385,7 @@ namespace VIS.Controllers
 
             if (Session["ctx"] != null)
             {
-                //int pID = GetDoctypeBasedReport(Session["ctx"] as Ctx, Convert.ToInt32(processInfo["AD_Table_ID"]), Convert.ToInt32(processInfo["Record_ID"]));
+                //int pID = GetDoctypeBasedReport(Session["ctx"] as Ctx, Convert.ToInt32(processInfo["VAF_TableView_ID"]), Convert.ToInt32(processInfo["Record_ID"]));
                 //if (pID > 0)
                 //{
                 //    processInfo["Process_ID"] = pID.ToString();
@@ -407,7 +407,7 @@ namespace VIS.Controllers
         /// <param name="AD_Process_ID">id of process</param>
         /// <param name="Name">name of process</param>
         /// <param name="AD_PInstance_ID">process instance id</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <param name="ParameterList">process parameter list</param>
         /// <returns>json result</returns>
@@ -418,7 +418,7 @@ namespace VIS.Controllers
 
             if (Session["ctx"] != null)
             {
-                //int pID = GetDoctypeBasedReport(Session["ctx"] as Ctx, Convert.ToInt32(processInfo["AD_Table_ID"]), Convert.ToInt32(processInfo["Record_ID"]));
+                //int pID = GetDoctypeBasedReport(Session["ctx"] as Ctx, Convert.ToInt32(processInfo["VAF_TableView_ID"]), Convert.ToInt32(processInfo["Record_ID"]));
                 //if (pID > 0)
                 //{
                 //    processInfo["Process_ID"] = pID.ToString();
@@ -443,7 +443,7 @@ namespace VIS.Controllers
                 //}
 
                 retJSON = JsonConvert.SerializeObject(rep);
-                //retJSON = JsonConvert.SerializeObject(ProcessHelper.ExecuteProcess(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_PInstance_ID, AD_Table_ID, Record_ID, ParameterList));
+                //retJSON = JsonConvert.SerializeObject(ProcessHelper.ExecuteProcess(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_PInstance_ID, VAF_TableView_ID, Record_ID, ParameterList));
             }
             else
             {
@@ -467,12 +467,12 @@ namespace VIS.Controllers
             string colName = "C_DocTypeTarget_ID";
 
 
-            string sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
+            string sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='C_DocTypeTarget_ID'";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
             if (id < 1)
             {
                 colName = "C_DocType_ID";
-                sql1 = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + tableID + " AND ColumnName   ='C_DocType_ID'";
+                sql1 = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName   ='C_DocType_ID'";
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql1));
             }
 
@@ -480,7 +480,7 @@ namespace VIS.Controllers
             {
 
                 string tableName = MTable.GetTableName(ctx, tableID);
-                sql1 = "SELECT " + colName + ", AD_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
+                sql1 = "SELECT " + colName + ", VAF_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
                 DataSet ds = DB.ExecuteDataset(sql1);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -494,7 +494,7 @@ namespace VIS.Controllers
                                 AND C_DocType.ISDOCNOCONTROLLED='Y')  
                                 JOIN AD_Sequence_No AD_Sequence_No
                                 On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
-                                AND Ad_Sequence_No.AD_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["AD_Org_ID"]) + @")
+                                AND Ad_Sequence_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
                                 JOIN AD_Process ON AD_Process.AD_Process_ID=AD_Sequence_No.Report_ID
                                 Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
                                 And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND AD_Process.IsActive='Y'";
@@ -706,7 +706,7 @@ namespace VIS.Controllers
         {
             if (Session["ctx"] != null)
             {
-                //int pID = GetDoctypeBasedReport(Session["ctx"] as Ctx, Convert.ToInt32(processInfo["AD_Table_ID"]), Convert.ToInt32(processInfo["Record_ID"]));
+                //int pID = GetDoctypeBasedReport(Session["ctx"] as Ctx, Convert.ToInt32(processInfo["VAF_TableView_ID"]), Convert.ToInt32(processInfo["Record_ID"]));
                 //if (pID > 0)
                 //{
                 //    processInfo["Process_ID"] = pID.ToString();
@@ -722,18 +722,18 @@ namespace VIS.Controllers
             }
         }
 
-        public JsonResult GeneratePrint(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
+        public JsonResult GeneratePrint(int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
                 Ctx ctx = Session["ctx"] as Ctx;
-                int pID = GetDoctypeBasedReport(ctx, AD_Table_ID, Record_ID);
+                int pID = GetDoctypeBasedReport(ctx, VAF_TableView_ID, Record_ID);
                 if (pID > 0)
                 {
                     ctx.SetContext("FetchingDocReport", "Y");
                     AD_Process_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, WindowNo, "", filetype, actionOrigin, originName));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, VAF_TableView_ID, Record_ID, WindowNo, "", filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
@@ -749,24 +749,24 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="AD_Process_ID"></param>
         /// <param name="Name"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="RecIDs"></param>
         /// <param name="WindowNo"></param>
         /// <param name="filetype"></param>
         /// <returns></returns>
-        public JsonResult GenerateMultiPrint(int AD_Process_ID, string Name, int AD_Table_ID, string RecIDs, int WindowNo, string filetype, string actionOrigin, string originName)
+        public JsonResult GenerateMultiPrint(int AD_Process_ID, string Name, int VAF_TableView_ID, string RecIDs, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
                 Ctx ctx = Session["ctx"] as Ctx;
                 ctx.SetContext("FetchingDocReport", "Y");
                 int Record_ID = Convert.ToInt32(RecIDs.Split(',')[0]);
-                int pID = GetDoctypeBasedReport(ctx, AD_Table_ID, Record_ID);
+                int pID = GetDoctypeBasedReport(ctx, VAF_TableView_ID, Record_ID);
                 if (pID > 0)
                 {
                     AD_Process_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, AD_Process_ID, Name, AD_Table_ID, 0, WindowNo, RecIDs, filetype, actionOrigin, originName));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, AD_Process_ID, Name, VAF_TableView_ID, 0, WindowNo, RecIDs, filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
@@ -780,11 +780,11 @@ namespace VIS.Controllers
 
 
 
-        public JsonResult ArchiveDoc(int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
+        public JsonResult ArchiveDoc(int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
         {
             if (Session["ctx"] != null)
             {
-                return Json(JsonConvert.SerializeObject(ProcessHelper.ArchiveDoc(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_Table_ID, Record_ID, C_BPartner_ID, isReport, binaryData, reportPath)), JsonRequestBehavior.AllowGet);
+                return Json(JsonConvert.SerializeObject(ProcessHelper.ArchiveDoc(Session["ctx"] as Ctx, AD_Process_ID, Name, VAF_TableView_ID, Record_ID, C_BPartner_ID, isReport, binaryData, reportPath)), JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -805,13 +805,13 @@ namespace VIS.Controllers
                     {
                         strMetaId = strDocIds[j].Split('-');
                         Ctx ctx = Session["ctx"] as Ctx;
-                        string sql1 = "Select count(dlink.VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink dlink INNER JOIN vadms_attachmetadata amd ON amd.VADMS_WindowDocLink_ID = dlink.VADMS_WindowDocLink_ID where dlink.AD_Table_ID=" + tableID + " AND dlink.record_ID=" + recID + " AND dlink.AD_Window_ID=" + winID + " AND dlink.VADMS_Document_ID=" + strMetaId[0] + " AND amd.VADMS_MetaData_ID=" + strMetaId[1];
+                        string sql1 = "Select count(dlink.VADMS_WindowDocLink_ID) FROM VADMS_WindowDocLink dlink INNER JOIN vadms_attachmetadata amd ON amd.VADMS_WindowDocLink_ID = dlink.VADMS_WindowDocLink_ID where dlink.VAF_TableView_ID=" + tableID + " AND dlink.record_ID=" + recID + " AND dlink.AD_Window_ID=" + winID + " AND dlink.VADMS_Document_ID=" + strMetaId[0] + " AND amd.VADMS_MetaData_ID=" + strMetaId[1];
                         int count = Convert.ToInt32(DB.ExecuteScalar(sql1));
                         if (count > 0)
                         {
                             return Json(JsonConvert.SerializeObject("NotSaved"), JsonRequestBehavior.AllowGet);
                         }
-                        string sql = "Select VADMS_WindowDocLink_ID from VADMS_WindowDocLink where AD_Table_ID=" + tableID + " AND record_ID=" + recID + " AND AD_Window_ID=" + winID + " AND VADMS_Document_ID=" + strMetaId[0];
+                        string sql = "Select VADMS_WindowDocLink_ID from VADMS_WindowDocLink where VAF_TableView_ID=" + tableID + " AND record_ID=" + recID + " AND AD_Window_ID=" + winID + " AND VADMS_Document_ID=" + strMetaId[0];
                         int ID = Convert.ToInt32(DB.ExecuteScalar(sql));
                         if (ID > 0)
                         {
@@ -827,9 +827,9 @@ namespace VIS.Controllers
                         {
                             wlink = new VAdvantage.Model.X_VADMS_WindowDocLink(ctx, ID, null);
                         }
-                        wlink.SetAD_Client_ID(ctx.GetAD_Client_ID());
-                        wlink.SetAD_Org_ID(ctx.GetAD_Org_ID());
-                        wlink.SetAD_Table_ID(tableID);
+                        wlink.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
+                        wlink.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
+                        wlink.SetVAF_TableView_ID(tableID);
                         wlink.SetAD_Window_ID(winID);
                         wlink.SetRecord_ID(recID);
                         if (strDocIds[j].Trim() != string.Empty)
@@ -876,12 +876,12 @@ namespace VIS.Controllers
         }
 
 
-        public JsonResult GetKeyColumns(int AD_Table_ID)
+        public JsonResult GetKeyColumns(int VAF_TableView_ID)
         {
             if (Session["ctx"] != null)
             {
                 Ctx _ctx = Session["ctx"] as Ctx;
-                string[] res = LookupHelper.GetKeyColumns(AD_Table_ID, _ctx);
+                string[] res = LookupHelper.GetKeyColumns(VAF_TableView_ID, _ctx);
                 return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
             }
             else
@@ -912,17 +912,17 @@ namespace VIS.Controllers
 
         //Card View
 
-        public JsonResult GetCardViewDetail(int AD_Window_ID, int AD_Tab_ID)
+        public JsonResult GetCardViewDetail(int AD_Window_ID, int VAF_Tab_ID)
         {
-            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, AD_Tab_ID, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(WindowHelper.GetCardViewDetail(AD_Window_ID, VAF_Tab_ID, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult InsertUpdateDefaultSearch(int AD_Tab_ID, int AD_Table_ID, int AD_User_ID, int? AD_UserQuery_ID)
+        public JsonResult InsertUpdateDefaultSearch(int VAF_Tab_ID, int VAF_TableView_ID, int AD_User_ID, int? AD_UserQuery_ID)
         {
             Ctx _ctx = Session["ctx"] as Ctx;
 
             WindowHelper wHelper = new WindowHelper();
-            wHelper.InsertUpdateDefaultSearch(_ctx, AD_Tab_ID, AD_Table_ID, AD_User_ID, AD_UserQuery_ID);
+            wHelper.InsertUpdateDefaultSearch(_ctx, VAF_Tab_ID, VAF_TableView_ID, AD_User_ID, AD_UserQuery_ID);
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
@@ -1108,13 +1108,13 @@ namespace VIS.Controllers
     /// </summary>
     public class TreeController : Controller
     {
-        public ActionResult GetTreeAsString(int AD_Tree_ID, bool editable, int windowNo, bool onDemandTree, int AD_Tab_ID)
+        public ActionResult GetTreeAsString(int AD_Tree_ID, bool editable, int windowNo, bool onDemandTree, int VAF_Tab_ID)
         {
             var html = "";
             if (Session["ctx"] != null)
             {
                 var m = new MenuHelper(Session["ctx"] as Ctx);
-                var tree = m.GetMenuTree(AD_Tree_ID, editable, onDemandTree, 0, AD_Tab_ID, windowNo);
+                var tree = m.GetMenuTree(AD_Tree_ID, editable, onDemandTree, 0, VAF_Tab_ID, windowNo);
                 html = m.GetMenuTreeUI(tree.GetRootNode(), @Url.Content("~/"), windowNo.ToString(), tree.GetNodeTableName());
                 m.dispose();
             }

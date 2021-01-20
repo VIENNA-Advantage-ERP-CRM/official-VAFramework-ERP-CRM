@@ -84,7 +84,7 @@ namespace VAdvantage.Process
                 trxName = sp.Get_Trx();
             }
             String sql = "SELECT TableName "
-                + "FROM AD_Table t "
+                + "FROM VAF_TableView t "
                 + "WHERE IsActive='Y' AND IsView='N'"
                 + " AND NOT EXISTS (SELECT * FROM AD_Sequence s "
                 + "WHERE UPPER(s.Name)=UPPER(t.TableName) AND s.IsTableID='Y')";
@@ -127,10 +127,10 @@ namespace VAdvantage.Process
             //	Sync Table Name case
             //jz replace s with AD_Sequence
             sql = "UPDATE AD_Sequence "
-                + "SET Name = (SELECT TableName FROM AD_Table t "
+                + "SET Name = (SELECT TableName FROM VAF_TableView t "
                     + "WHERE t.IsView='N' AND UPPER(AD_Sequence.Name)=UPPER(t.TableName)) "
                 + "WHERE AD_Sequence.IsTableID='Y'"
-                + " AND EXISTS (SELECT * FROM AD_Table t "
+                + " AND EXISTS (SELECT * FROM VAF_TableView t "
                     + "WHERE t.IsActive='Y' AND t.IsView='N'"
                     + " AND UPPER(AD_Sequence.Name)=UPPER(t.TableName) AND AD_Sequence.Name<>t.TableName)";
             int no = DataBase.DB.ExecuteQuery(sql, null, trxName);// DataBase.executeUpdate(sql, trxName);
@@ -151,7 +151,7 @@ namespace VAdvantage.Process
             }
             /** Find Duplicates 		 */
             sql = "SELECT TableName, s.Name "
-                + "FROM AD_Table t, AD_Sequence s "
+                + "FROM VAF_TableView t, AD_Sequence s "
                 + "WHERE t.IsActive='Y' AND t.IsView='N'"
                 + " AND UPPER(s.Name)=UPPER(t.TableName) AND s.Name<>t.TableName";
             //
@@ -294,7 +294,7 @@ namespace VAdvantage.Process
                 {
                     continue;
                 }
-                MSequence.CheckClientSequences(ctx, client.GetAD_Client_ID(), trxName);
+                MSequence.CheckClientSequences(ctx, client.GetVAF_Client_ID(), trxName);
             }	//	for all clients
 
         }	//	checkClientSequences

@@ -80,7 +80,7 @@ static X_C_LandedCostAllocation()
 //static long serialVersionUID 27562514372955L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056166L;
-/** AD_Table_ID=760 */
+/** VAF_TableView_ID=760 */
 public static int Table_ID;
  // =760;
 

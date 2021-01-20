@@ -26,9 +26,9 @@ namespace VAdvantage.Process
     public class FactAcctReset : ProcessEngine.SvrProcess
     {
         /**	Client Parameter		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /** Table Parameter			*/
-        private int _AD_Table_ID = 0;
+        private int _VAF_TableView_ID = 0;
         /**	Delete Parameter		*/
         private Boolean _DeletePosting = false;
 
@@ -49,15 +49,15 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Client_ID"))
+                else if (name.Equals("VAF_Client_ID"))
                 {
 
-                    _AD_Client_ID = Utility.Util.GetValueOfInt(Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt(Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
-                else if (name.Equals("AD_Table_ID"))
+                else if (name.Equals("VAF_TableView_ID"))
                 {
-                    //_AD_Table_ID = ((BigDecimal)para[i].getParameter()).intValue();
-                    _AD_Table_ID = Utility.Util.GetValueOfInt(Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
+                    //_VAF_TableView_ID = ((BigDecimal)para[i].getParameter()).intValue();
+                    _VAF_TableView_ID = Utility.Util.GetValueOfInt(Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
                 else if (name.Equals("DeletePosting"))
                 {
@@ -76,29 +76,29 @@ namespace VAdvantage.Process
         /// <returns>(clear text)</returns>
         protected override String DoIt()
         {
-            log.Info("AD_Client_ID=" + _AD_Client_ID
-                + ", AD_Table_ID=" + _AD_Table_ID + ", DeletePosting=" + _DeletePosting);
+            log.Info("VAF_Client_ID=" + _VAF_Client_ID
+                + ", VAF_TableView_ID=" + _VAF_TableView_ID + ", DeletePosting=" + _DeletePosting);
             //	List of Tables with Accounting Consequences
-            String sql = "SELECT AD_Table_ID, TableName "
-                + "FROM AD_Table t "
+            String sql = "SELECT VAF_TableView_ID, TableName "
+                + "FROM VAF_TableView t "
                 + "WHERE t.IsView='N'";
-            if (_AD_Table_ID > 0)
+            if (_VAF_TableView_ID > 0)
             {
-                sql += " AND t.AD_Table_ID=" + _AD_Table_ID;
+                sql += " AND t.VAF_TableView_ID=" + _VAF_TableView_ID;
             }
-            sql += " AND EXISTS (SELECT * FROM AD_Column c "
-                    + "WHERE t.AD_Table_ID=c.AD_Table_ID AND c.ColumnName='Posted' AND c.IsActive='Y')";
+            sql += " AND EXISTS (SELECT * FROM VAF_Column c "
+                    + "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='Posted' AND c.IsActive='Y')";
             IDataReader idr = null;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 while (idr.Read())
                 {
-                    int AD_Table_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
+                    int VAF_TableView_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
                     String TableName = Utility.Util.GetValueOfString(idr[1]);// rs.getString(2);
                     if (_DeletePosting)
                     {
-                        Delete(TableName, AD_Table_ID);
+                        Delete(TableName, VAF_TableView_ID);
                     }
                     else
                     {
@@ -119,7 +119,7 @@ namespace VAdvantage.Process
             //	Balances
             if (_DeletePosting)
             {
-                //  FinBalance.updateBalanceClient(GetCtx(), _AD_Client_ID, true);		//	delete
+                //  FinBalance.updateBalanceClient(GetCtx(), _VAF_Client_ID, true);		//	delete
             }
             //
             return "@Updated@ = " + _countReset + ", @Deleted@ = " + _countDelete;
@@ -131,11 +131,11 @@ namespace VAdvantage.Process
         private void Reset(String TableName)
         {
             String sql = "UPDATE " + TableName
-                + " SET Processing='N' WHERE AD_Client_ID=" + _AD_Client_ID
+                + " SET Processing='N' WHERE VAF_Client_ID=" + _VAF_Client_ID
                 + " AND (Processing<>'N' OR Processing IS NULL)";
             int unlocked = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             sql = "UPDATE " + TableName
-                + " SET Posted='N' WHERE AD_Client_ID=" + _AD_Client_ID
+                + " SET Posted='N' WHERE VAF_Client_ID=" + _VAF_Client_ID
                 + " AND (Posted NOT IN ('Y','N') OR Posted IS NULL) AND Processed='Y'";
             int invalid = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (unlocked + invalid != 0)
@@ -149,8 +149,8 @@ namespace VAdvantage.Process
         /// Delete Accounting Table where period status is open and update count.
         /// </summary>
         /// <param name="TableName">table name</param>
-        /// <param name="AD_Table_ID">table</param>
-        private void Delete(String TableName, int AD_Table_ID)
+        /// <param name="VAF_TableView_ID">table</param>
+        private void Delete(String TableName, int VAF_TableView_ID)
         {
             Reset(TableName);
             _countReset = 0;
@@ -160,7 +160,7 @@ namespace VAdvantage.Process
             /// MTable rather than static constructor of mclass. Askes By Mukesh Sir, Amit Date=04/08/2017
 
             String docBaseType = null;
-            if (AD_Table_ID == MTable.Get_Table_ID("C_Invoice"))
+            if (VAF_TableView_ID == MTable.Get_Table_ID("C_Invoice"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_APINVOICE
                     + "','" + MDocBaseType.DOCBASETYPE_APCREDITMEMO
@@ -168,100 +168,100 @@ namespace VAdvantage.Process
                     + "','" + MDocBaseType.DOCBASETYPE_ARCREDITMEMO
                     + "','" + MDocBaseType.DOCBASETYPE_ARPROFORMAINVOICE + "')";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("M_InOut"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("M_InOut"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_MATERIALDELIVERY
                     + "','" + MDocBaseType.DOCBASETYPE_MATERIALRECEIPT + "')";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_Payment"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_Payment"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_APPAYMENT
                     + "','" + MDocBaseType.DOCBASETYPE_ARRECEIPT + "')";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_Order"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_Order"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_SALESORDER
                     + "','" + MDocBaseType.DOCBASETYPE_PURCHASEORDER + "')";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_ProjectIssue"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_ProjectIssue"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PROJECTISSUE + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_BankStatement"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_BankStatement"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_BANKSTATEMENT + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_Cash"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_Cash"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_CASHJOURNAL + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_AllocationHdr"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_AllocationHdr"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION + "'";
             }
 
-            else if (AD_Table_ID == MTable.Get_Table_ID("GL_Journal"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("GL_Journal"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "'";
 
             }
-            //	else if (AD_Table_ID == M.Table_ID)
+            //	else if (VAF_TableView_ID == M.Table_ID)
             // {
             //		docBaseType = "= '" + MDocBaseType.DOCBASETYPE_GLDocument + "'";
             //  }
-            else if (AD_Table_ID == MTable.Get_Table_ID("M_Movement"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("M_Movement"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("M_Requisition"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("M_Requisition"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("M_Inventory"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("M_Inventory"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("M_Production"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("M_Production"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("M_MatchInv"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("M_MatchInv"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATCHINVOICE + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("M_MatchPO"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("M_MatchPO"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATCHPO + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_IncomeTax"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_IncomeTax"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_INCOMETAX + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("C_ProfitLoss"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_ProfitLoss"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PROFITLOSS + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("VAFAM_AssetDepreciation"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAFAM_AssetDepreciation"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_FIXASSET + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("VAFAM_AssetImpairEnhance"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAFAM_AssetImpairEnhance"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_FIXASSETIMPAIRMENT + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("VA026_LCDetail"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VA026_LCDetail"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_LETTEROFCREDIT + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("VA024_ObsoleteInventory"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VA024_ObsoleteInventory"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_INVENTORYPOVISION + "'";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("VA027_PostDatedCheck"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VA027_PostDatedCheck"))
             {
                 docBaseType = " IN ( '" + MDocBaseType.DOCBASETYPE_PDCPAYABLE + "' ,'" + MDocBaseType.DOCBASETYPE_PDCRECEIVABLE + "' )";
             }
-            else if (AD_Table_ID == MTable.Get_Table_ID("VAMFG_M_WorkOrder") || AD_Table_ID == MTable.Get_Table_ID("VAMFG_M_WrkOdrTransaction"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAMFG_M_WorkOrder") || VAF_TableView_ID == MTable.Get_Table_ID("VAMFG_M_WrkOdrTransaction"))
             {
                 bypass = true;
                 docBaseType = null;
@@ -283,24 +283,24 @@ namespace VAdvantage.Process
             //	Doc
             String sql1 = "UPDATE " + TableName + " doc"
                 + " SET Posted='N', Processing='N' "
-                + "WHERE AD_Client_ID=" + _AD_Client_ID
+                + "WHERE VAF_Client_ID=" + _VAF_Client_ID
                 + " AND (Posted<>'N' OR Posted IS NULL OR Processing<>'N' OR Processing IS NULL)"
                 + " AND EXISTS (SELECT * FROM C_PeriodControl pc"
                     + " INNER JOIN Fact_Acct fact ON (fact.C_Period_ID=pc.C_Period_ID) "
                     + "WHERE pc.PeriodStatus = 'O'" + docBaseType
-                    + " AND fact.AD_Table_ID=" + AD_Table_ID
+                    + " AND fact.VAF_TableView_ID=" + VAF_TableView_ID
                     + " AND fact.Record_ID=doc." + TableName + "_ID)";
             int reset = DataBase.DB.ExecuteQuery(sql1, null, Get_TrxName());
             //	Fact
             String sql2 = "DELETE FROM Fact_Acct fact "
-                + "WHERE AD_Client_ID=" + _AD_Client_ID
-                + " AND AD_Table_ID=" + AD_Table_ID
+                + "WHERE VAF_Client_ID=" + _VAF_Client_ID
+                + " AND VAF_TableView_ID=" + VAF_TableView_ID
                 + " AND EXISTS (SELECT * FROM C_PeriodControl pc "
                     + "WHERE pc.PeriodStatus = 'O'" + docBaseType
                     + " AND fact.C_Period_ID=pc.C_Period_ID)";
             int deleted = DataBase.DB.ExecuteQuery(sql2, null, Get_TrxName());
             //
-            log.Info(TableName + "(" + AD_Table_ID + ") - Reset=" + reset + " - Deleted=" + deleted);
+            log.Info(TableName + "(" + VAF_TableView_ID + ") - Reset=" + reset + " - Deleted=" + deleted);
             String s1 = TableName + " - Reset=" + reset + " - Deleted=" + deleted;
             AddLog(s1);
             if (reset == 0)

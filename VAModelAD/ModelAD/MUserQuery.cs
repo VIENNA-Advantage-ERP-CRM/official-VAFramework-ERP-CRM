@@ -66,17 +66,17 @@ namespace VAdvantage.Model
         /// Get query names stored in database
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Tab_ID">tab id</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_Tab_ID">tab id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="valueColumnName">column name</param>
         /// <returns>DataSet</returns>
-        public static DataSet GetDataSet(Context ctx, int AD_Tab_ID, int AD_Table_ID, string valueColumnName)
+        public static DataSet GetDataSet(Context ctx, int VAF_Tab_ID, int VAF_TableView_ID, string valueColumnName)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             DataSet ds = null;
             string sql = "SELECT NAME," + valueColumnName + " FROM AD_UserQuery WHERE"
-                + " AD_Client_ID=" + AD_Client_ID + " AND IsActive='Y'"
-                + " AND (AD_Tab_ID=" + AD_Tab_ID + " OR AD_Table_ID=" + AD_Table_ID + ")"
+                + " VAF_Client_ID=" + VAF_Client_ID + " AND IsActive='Y'"
+                + " AND (VAF_Tab_ID=" + VAF_Tab_ID + " OR VAF_TableView_ID=" + VAF_TableView_ID + ")"
                 + " ORDER BY AD_UserQuery_ID";
             try
             {
@@ -96,13 +96,13 @@ namespace VAdvantage.Model
 
         #region "commented area"
 
-        //public static MUserQuery[] Get(Context ctx, int AD_Tab_ID, int AD_Table_ID)
+        //public static MUserQuery[] Get(Context ctx, int VAF_Tab_ID, int VAF_TableView_ID)
         //{
-        //    int AD_Client_ID = ctx.GetAD_Client_ID();
+        //    int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
         //    string sqlQry = "SELECT * FROM AD_UserQuery WHERE"
-        //        + " AD_Client_ID=" + AD_Client_ID + " AND IsActive='Y'"
-        //        + " AND (AD_Tab_ID=" + AD_Tab_ID + " OR AD_Table_ID=" + AD_Table_ID + ")"
+        //        + " VAF_Client_ID=" + VAF_Client_ID + " AND IsActive='Y'"
+        //        + " AND (VAF_Tab_ID=" + VAF_Tab_ID + " OR VAF_TableView_ID=" + VAF_TableView_ID + ")"
         //        + " ORDER BY Name";
         //    List<MUserQuery> list = new List<MUserQuery>();
         //    try
@@ -125,13 +125,13 @@ namespace VAdvantage.Model
         //}
 
 
-        //public static MUserQuery Get(Context ctx, int AD_Tab_ID, string name)
+        //public static MUserQuery Get(Context ctx, int VAF_Tab_ID, string name)
         //{
-        //    int AD_Client_ID = ctx.GetAD_Client_ID();
+        //    int VAF_Client_ID = ctx.GetVAF_Client_ID();
         //    if (name == null)
         //        name = "%";
         //    string sqlQry = "SELECT * FROM AD_UserQuery WHERE"
-        //        + " AD_Client_ID=" + AD_Client_ID + " AND AD_Tab_ID=" + AD_Tab_ID + " AND"
+        //        + " VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Tab_ID=" + VAF_Tab_ID + " AND"
         //        + " UPPER(Name) LIKE '" + name.ToUpper() + "' AND IsActive='Y'"
         //        + " ORDER BY Name";
         //    MUserQuery retValue = null;
@@ -152,10 +152,10 @@ namespace VAdvantage.Model
         //}
 
 
-        //public static List<string> GetSavedQueryNames(int AD_Client_ID, int AD_Tab_ID)
+        //public static List<string> GetSavedQueryNames(int VAF_Client_ID, int VAF_Tab_ID)
         //{
         //    string sqlQry = "SELECT Name FROM AD_UserQuery WHERE"
-        //        + " AD_Client_ID=" + AD_Client_ID + " AND AD_Tab_ID=" + AD_Tab_ID + " AND IsActive='Y'"
+        //        + " VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Tab_ID=" + VAF_Tab_ID + " AND IsActive='Y'"
         //        + " ORDER BY Name";
         //    List<string> retValue = new List<string>();
         //    try
@@ -176,10 +176,10 @@ namespace VAdvantage.Model
         //}
 
 
-        //public static List<string> GetSavedQueryNamesForUser(int AD_User_ID, int AD_Tab_ID)
+        //public static List<string> GetSavedQueryNamesForUser(int AD_User_ID, int VAF_Tab_ID)
         //{
         //    string sqlQry = "SELECT Name FROM AD_UserQuery WHERE"
-        //        + " AD_User_ID=" + AD_User_ID + " AND AD_Tab_ID=" + AD_Tab_ID + " AND IsActive='Y'"
+        //        + " AD_User_ID=" + AD_User_ID + " AND VAF_Tab_ID=" + VAF_Tab_ID + " AND IsActive='Y'"
         //        + " ORDER BY Name";
         //    List<string> retValue = new List<string>();
         //    try
@@ -200,13 +200,13 @@ namespace VAdvantage.Model
         //}
 
 
-        //public static MUserQuery GetForUser(Context ctx, int AD_Tab_ID, string name)
+        //public static MUserQuery GetForUser(Context ctx, int VAF_Tab_ID, string name)
         //{
         //    int AD_User_ID = ctx.GetAD_User_ID();
         //    if (name == null)
         //        name = "%";
         //    string sqlQry = "SELECT * FROM AD_UserQuery WHERE"
-        //        + " AD_User_ID=" + AD_User_ID + " AND AD_Tab_ID=" + AD_Tab_ID + " AND"
+        //        + " AD_User_ID=" + AD_User_ID + " AND VAF_Tab_ID=" + VAF_Tab_ID + " AND"
         //        + " UPPER(Name) LIKE '" + name.ToUpper() + "' AND IsActive='Y'"
         //        + " ORDER BY Name";
         //    MUserQuery retValue = null;

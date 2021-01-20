@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_AssignLog
+/** Generated Model for VAF_AllotLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AssignLog : PO
+public class X_VAF_AllotLog : PO
 {
-public X_AD_AssignLog (Context ctx, int AD_AssignLog_ID, Trx trxName) : base (ctx, AD_AssignLog_ID, trxName)
+public X_VAF_AllotLog (Context ctx, int VAF_AllotLog_ID, Trx trxName) : base (ctx, VAF_AllotLog_ID, trxName)
 {
-/** if (AD_AssignLog_ID == 0)
+/** if (VAF_AllotLog_ID == 0)
 {
-SetAD_AssignLog_ID (0);
-SetAD_AssignTarget_ID (0);
+SetVAF_AllotLog_ID (0);
+SetVAF_AllotTarget_ID (0);
 }
  */
 }
-public X_AD_AssignLog (Ctx ctx, int AD_AssignLog_ID, Trx trxName) : base (ctx, AD_AssignLog_ID, trxName)
+public X_VAF_AllotLog (Ctx ctx, int VAF_AllotLog_ID, Trx trxName) : base (ctx, VAF_AllotLog_ID, trxName)
 {
-/** if (AD_AssignLog_ID == 0)
+/** if (VAF_AllotLog_ID == 0)
 {
-SetAD_AssignLog_ID (0);
-SetAD_AssignTarget_ID (0);
+SetVAF_AllotLog_ID (0);
+SetVAF_AllotTarget_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_AssignTarget_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AllotLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_AssignLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AllotLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_AssignLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_AllotLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AssignLog()
+static X_VAF_AllotLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_AssignLog()
 //static long serialVersionUID = 27562514360495L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043706L;
-/** AD_Table_ID=933 */
+/** VAF_TableView_ID=933 */
 public static int Table_ID;
  // =933;
 
-/** TableName=AD_AssignLog */
-public static String Table_Name="AD_AssignLog";
+/** TableName=VAF_AllotLog */
+public static String Table_Name="VAF_AllotLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,36 +109,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_AssignLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_AllotLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Assign Log.
-@param AD_AssignLog_ID Assignment Log */
-public void SetAD_AssignLog_ID (int AD_AssignLog_ID)
+@param VAF_AllotLog_ID Assignment Log */
+public void SetVAF_AllotLog_ID (int VAF_AllotLog_ID)
 {
-if (AD_AssignLog_ID < 1) throw new ArgumentException ("AD_AssignLog_ID is mandatory.");
-Set_ValueNoCheck ("AD_AssignLog_ID", AD_AssignLog_ID);
+if (VAF_AllotLog_ID < 1) throw new ArgumentException ("VAF_AllotLog_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AllotLog_ID", VAF_AllotLog_ID);
 }
 /** Get Assign Log.
 @return Assignment Log */
-public int GetAD_AssignLog_ID() 
+public int GetVAF_AllotLog_ID() 
 {
-Object ii = Get_Value("AD_AssignLog_ID");
+Object ii = Get_Value("VAF_AllotLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Assign Target.
-@param AD_AssignTarget_ID Automatic Assignment Target Column */
-public void SetAD_AssignTarget_ID (int AD_AssignTarget_ID)
+@param VAF_AllotTarget_ID Automatic Assignment Target Column */
+public void SetVAF_AllotTarget_ID (int VAF_AllotTarget_ID)
 {
-if (AD_AssignTarget_ID < 1) throw new ArgumentException ("AD_AssignTarget_ID is mandatory.");
-Set_ValueNoCheck ("AD_AssignTarget_ID", AD_AssignTarget_ID);
+if (VAF_AllotTarget_ID < 1) throw new ArgumentException ("VAF_AllotTarget_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AllotTarget_ID", VAF_AllotTarget_ID);
 }
 /** Get Assign Target.
 @return Automatic Assignment Target Column */
-public int GetAD_AssignTarget_ID() 
+public int GetVAF_AllotTarget_ID() 
 {
-Object ii = Get_Value("AD_AssignTarget_ID");
+Object ii = Get_Value("VAF_AllotTarget_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

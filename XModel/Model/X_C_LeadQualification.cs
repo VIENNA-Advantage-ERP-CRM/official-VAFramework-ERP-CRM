@@ -74,7 +74,7 @@ static X_C_LeadQualification()
 //static long serialVersionUID 27562514373034L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056245L;
-/** AD_Table_ID=925 */
+/** VAF_TableView_ID=925 */
 public static int Table_ID;
  // =925;
 

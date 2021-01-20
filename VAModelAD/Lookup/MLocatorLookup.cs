@@ -297,7 +297,7 @@ namespace VAdvantage.Model
      /// </summary>
         private void Load()
         {
-            //	log.config("MLocatorLookup Loader.run " + m_AD_Column_ID);
+            //	log.config("MLocatorLookup Loader.run " + m_VAF_Column_ID);
             //	Set Info	- see VLocator.actionText
 
             int only_Warehouse_ID = GetOnly_Warehouse_ID();

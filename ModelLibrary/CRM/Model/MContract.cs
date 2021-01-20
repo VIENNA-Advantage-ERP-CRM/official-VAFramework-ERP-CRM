@@ -67,7 +67,7 @@ namespace VAdvantage.Model
             MContract to = new MContract(from.GetCtx(), 0, trxName);
 
             //to.Set_TrxName(trxName);
-            //VAdvantage.Model.PO.CopyValues(from, to, from.GetAD_Client_ID(), from.GetAD_Org_ID());
+            //VAdvantage.Model.PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             //to.Set_ValueNoCheck("C_Order_ID", I_ZERO);
             //to.Set_ValueNoCheck("DocumentNo", null);
             ////
@@ -148,8 +148,8 @@ namespace VAdvantage.Model
         //{
 
 
-        //    SetAD_Client_ID(project.GetAD_Client_ID());
-        //    SetAD_Org_ID(project.GetAD_Org_ID());
+        //    SetVAF_Client_ID(project.GetVAF_Client_ID());
+        //    SetVAF_Org_ID(project.GetVAF_Org_ID());
         //    SetC_Campaign_ID(project.GetC_Campaign_ID());
         //    SetSalesRep_ID(project.GetSalesRep_ID());
         //    //
@@ -200,12 +200,12 @@ namespace VAdvantage.Model
 
 
         /*	Overwrite Client/Org if required
-      * 	@param AD_Client_ID client
-      * 	@param AD_Org_ID org
+      * 	@param VAF_Client_ID client
+      * 	@param VAF_Org_ID org
       */
-        public new void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        public new void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         {
-            base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+            base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         }
 
         /// <summary>
@@ -991,13 +991,13 @@ namespace VAdvantage.Model
             try
             {
                 String sql = "SELECT C_DocType_ID FROM C_DocType "
-                    + "WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Org_ID IN (0," + GetAD_Org_ID()
+                    + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Org_ID IN (0," + GetVAF_Org_ID()
                     + ") AND DocSubTypeSO='" + DocSubTypeSO_x + "' AND IsReturnTrx='N' "
-                    + "ORDER BY AD_Org_ID DESC, IsDefault DESC";
+                    + "ORDER BY VAF_Org_ID DESC, IsDefault DESC";
                 int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 if (C_DocType_ID <= 0)
                 {
-                    log.Severe("Not found for AD_Client_ID=" + GetAD_Client_ID() + ", SubType=" + DocSubTypeSO_x);
+                    log.Severe("Not found for VAF_Client_ID=" + GetVAF_Client_ID() + ", SubType=" + DocSubTypeSO_x);
                 }
                 else
                 {
@@ -1051,13 +1051,13 @@ namespace VAdvantage.Model
                 //}
                 //	VAdvantage.Model.PO
                 String sql = "SELECT C_DocType_ID FROM C_DocType "
-                    + "WHERE AD_Client_ID=" + GetAD_Client_ID() + " AND AD_Org_ID IN (0," + GetAD_Org_ID()
+                    + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Org_ID IN (0," + GetVAF_Org_ID()
                     + ") AND DocBaseType='POO' AND IsReturnTrx='N' "
-                    + "ORDER BY AD_Org_ID DESC, IsDefault DESC";
+                    + "ORDER BY VAF_Org_ID DESC, IsDefault DESC";
                 int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 if (C_DocType_ID <= 0)
                 {
-                    log.Severe("No POO found for AD_Client_ID=" + GetAD_Client_ID());
+                    log.Severe("No POO found for VAF_Client_ID=" + GetVAF_Client_ID());
                 }
                 else
                 {
@@ -1090,7 +1090,7 @@ namespace VAdvantage.Model
                 //for (int i = 0; i < fromLines.Length; i++)
                 //{
                 //    MOrderLine line = new MOrderLine(this);
-                //    VAdvantage.Model.PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
+                //    VAdvantage.Model.PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
                 //    line.SetC_Order_ID(GetC_Order_ID());
                 //    line.SetOrder(this);
                 //    line.Set_ValueNoCheck("C_OrderLine_ID", I_ZERO);	//	new
@@ -1406,7 +1406,7 @@ namespace VAdvantage.Model
                 // SetC_Project_ID(origInOut.GetC_Project_ID());
                 SetC_Campaign_ID(origInOut.GetC_Campaign_ID());
                 // SetC_Activity_ID(origInOut.GetC_Activity_ID());
-                // SetAD_OrgTrx_ID(origInOut.GetAD_OrgTrx_ID());
+                // SetVAF_OrgTrx_ID(origInOut.GetVAF_OrgTrx_ID());
                 //  SetUser1_ID(origInOut.GetUser1_ID());
                 //  SetUser2_ID(origInOut.GetUser2_ID());
             }
@@ -1901,7 +1901,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             //Neha----Can not save Service Contract in * Organization---12 Sep,2018
-            if (GetAD_Org_ID() == 0)
+            if (GetVAF_Org_ID() == 0)
             {
                 log.SaveWarning("ValidateOrg", "");
                 return false;
@@ -2173,7 +2173,7 @@ namespace VAdvantage.Model
             //    }
             //    Decimal grandTotal = VAdvantage.Model.MConversionRate.ConvertBase(GetCtx(),
             //        GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
-            //        GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+            //        GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
             //    if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
             //    {
             //        _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
@@ -2304,8 +2304,8 @@ namespace VAdvantage.Model
         //            {
         //                if (header_M_Warehouse_ID != line.GetM_Warehouse_ID())
         //                    line.SetM_Warehouse_ID(header_M_Warehouse_ID);
-        //                if (GetAD_Org_ID() != line.GetAD_Org_ID())
-        //                    line.SetAD_Org_ID(GetAD_Org_ID());
+        //                if (GetVAF_Org_ID() != line.GetVAF_Org_ID())
+        //                    line.SetVAF_Org_ID(GetVAF_Org_ID());
         //            }
         //            //	Binding
         //            Decimal target = binding ? line.GetQtyOrdered() : Env.ZERO;

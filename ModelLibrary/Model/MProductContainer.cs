@@ -47,7 +47,7 @@ namespace VAdvantage.Model
                         t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
                              FROM m_transaction t " +
                                      @" INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID 
-                            WHERE t.AD_Client_ID = " + GetAD_Client_ID()
+                            WHERE t.VAF_Client_ID = " + GetVAF_Client_ID()
                                    + " AND T.M_LOCATOR_ID = " + Get_ValueOld("M_Locator_ID")//get previous selected value
                                     + @" AND NVL(t.M_ProductContainer_ID, 0)    = " + GetM_ProductContainer_ID();
                     Decimal no = Util.GetValueOfDecimal(DB.ExecuteScalar(_sql, null, Get_Trx()));
@@ -123,7 +123,7 @@ namespace VAdvantage.Model
             List<X_M_ContainerStorage> list = new List<X_M_ContainerStorage>();
             //	Specific Attribute Set Instance
             String sql = "SELECT s.M_Locator_ID,s.M_ProductContainer_ID,s.M_Product_ID,s.M_AttributeSetInstance_ID,"
-                + "s.AD_Client_ID,s.AD_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
+                + "s.VAF_Client_ID,s.VAF_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
                 + "s.Qty,s.MMPolicyDate "
                 + "FROM M_ContainerStorage s"
                 + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) ";
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
             if (allAttributeInstances)
             {
                 sql = "SELECT s.M_Locator_ID,s.M_ProductContainer_ID,s.M_Product_ID,s.M_AttributeSetInstance_ID,"
-                    + "s.AD_Client_ID,s.AD_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
+                    + "s.VAF_Client_ID,s.VAF_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
                     + "s.Qty,s.MMPolicyDate "
                     + "FROM M_ContainerStorage s"
                     + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID)"
@@ -261,7 +261,7 @@ namespace VAdvantage.Model
 
             List<X_M_ContainerStorage> list = new List<X_M_ContainerStorage>();
             String sql = "SELECT s.M_Locator_ID,s.M_ProductContainer_ID,s.M_Product_ID,s.M_AttributeSetInstance_ID,"
-                + "s.AD_Client_ID,s.AD_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
+                + "s.VAF_Client_ID,s.VAF_Org_ID,s.IsActive,s.Created,s.CreatedBy,s.Updated,s.UpdatedBy,"
                 + "s.Qty,s.MMPolicyDate "
                 + "FROM M_ContainerStorage s"
                 + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID)"

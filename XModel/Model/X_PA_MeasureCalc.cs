@@ -20,7 +20,7 @@ public X_PA_MeasureCalc (Context ctx, int PA_MeasureCalc_ID, Trx trxName) : base
 {
 /** if (PA_MeasureCalc_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetDateColumn (null);	// x.Date
 SetEntityType (null);	// U
 SetKeyColumn (null);
@@ -35,7 +35,7 @@ public X_PA_MeasureCalc (Ctx ctx, int PA_MeasureCalc_ID, Trx trxName) : base (ct
 {
 /** if (PA_MeasureCalc_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetDateColumn (null);	// x.Date
 SetEntityType (null);	// U
 SetKeyColumn (null);
@@ -82,7 +82,7 @@ static X_PA_MeasureCalc()
 //static long serialVersionUID 27562514381951L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065162L;
-/** AD_Table_ID=442 */
+/** VAF_TableView_ID=442 */
 public static int Table_ID;
  // =442;
 
@@ -125,17 +125,17 @@ StringBuilder sb = new StringBuilder ("X_PA_MeasureCalc[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -256,7 +256,7 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Org Column.
-@param OrgColumn Fully qualified Organization column (AD_Org_ID) */
+@param OrgColumn Fully qualified Organization column (VAF_Org_ID) */
 public void SetOrgColumn (String OrgColumn)
 {
 if (OrgColumn != null && OrgColumn.Length > 60)
@@ -267,7 +267,7 @@ OrgColumn = OrgColumn.Substring(0,60);
 Set_Value ("OrgColumn", OrgColumn);
 }
 /** Get Org Column.
-@return Fully qualified Organization column (AD_Org_ID) */
+@return Fully qualified Organization column (VAF_Org_ID) */
 public String GetOrgColumn() 
 {
 return (String)Get_Value("OrgColumn");

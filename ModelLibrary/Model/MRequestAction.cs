@@ -89,7 +89,7 @@ namespace VAdvantage.Model
             GetChangeHTML(sb, "SalesRep_ID");
             GetChangeHTML(sb, "Summary");
             //
-            //	GetChangeHTML(sb, "AD_Org_ID");		//	always stored
+            //	GetChangeHTML(sb, "VAF_Org_ID");		//	always stored
             GetChangeHTML(sb, "AD_Role_ID");
             GetChangeHTML(sb, "AD_User_ID");
             GetChangeHTML(sb, "C_Activity_ID");

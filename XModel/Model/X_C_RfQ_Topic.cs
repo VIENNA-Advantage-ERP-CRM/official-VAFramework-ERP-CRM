@@ -42,7 +42,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_C_RfQ_Topic() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27867952784146L;/** Last Updated Timestamp 4/2/2020 5:07:47 PM */
-        public static long updatedMS = 1585827467357L;/** AD_Table_ID=671 */
+        public static long updatedMS = 1585827467357L;/** VAF_TableView_ID=671 */
         public static int Table_ID; // =671;
         /** TableName=C_RfQ_Topic */
         public static String Table_Name = "C_RfQ_Topic";

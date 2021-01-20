@@ -87,7 +87,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721931421699L;
         /** Last Updated Timestamp 8/17/2015 3:38:25 PM */
         public static long updatedMS = 1439806104910L;
-        /** AD_Table_ID=209 */
+        /** VAF_TableView_ID=209 */
         public static int Table_ID;
         // =209;
 
@@ -130,18 +130,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Image.
-        @param AD_Image_ID Image or Icon */
-        public void SetAD_Image_ID(int AD_Image_ID)
+        @param VAF_Image_ID Image or Icon */
+        public void SetVAF_Image_ID(int VAF_Image_ID)
         {
-            if (AD_Image_ID <= 0) Set_Value("AD_Image_ID", null);
+            if (VAF_Image_ID <= 0) Set_Value("VAF_Image_ID", null);
             else
-                Set_Value("AD_Image_ID", AD_Image_ID);
+                Set_Value("VAF_Image_ID", VAF_Image_ID);
         }
         /** Get Image.
         @return Image or Icon */
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            Object ii = Get_Value("AD_Image_ID");
+            Object ii = Get_Value("VAF_Image_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

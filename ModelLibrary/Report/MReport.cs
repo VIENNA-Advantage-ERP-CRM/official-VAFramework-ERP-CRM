@@ -90,7 +90,7 @@ namespace VAdvantage.Report
         /// <returns>Where Clause for Report</returns>
         public String GetWhereClause()
         {
-            //	AD_Client indirectly via AcctSchema
+            //	VAF_Client indirectly via AcctSchema
             StringBuilder sb = new StringBuilder();
             //	Mandatory 	AcctSchema
             sb.Append("C_AcctSchema_ID=").Append(GetC_AcctSchema_ID());

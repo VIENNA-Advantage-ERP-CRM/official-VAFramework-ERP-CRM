@@ -74,7 +74,7 @@ static X_R_RequestProcessor_Route()
 //static long serialVersionUID 27562514383283L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066494L;
-/** AD_Table_ID=474 */
+/** VAF_TableView_ID=474 */
 public static int Table_ID;
  // =474;
 

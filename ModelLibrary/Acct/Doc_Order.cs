@@ -422,7 +422,7 @@ namespace VAdvantage.Acct
         /// <param name="as1">accounting schema</param>
         private void UpdateProductPO(MAcctSchema as1)
         {
-            MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetAD_Client_ID());
+            MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetVAF_Client_ID());
             if (ci.GetC_AcctSchema1_ID() != as1.GetC_AcctSchema_ID())
             {
                 return;
@@ -430,7 +430,7 @@ namespace VAdvantage.Acct
 
             StringBuilder sql = new StringBuilder(
                 "UPDATE M_Product_PO po "
-                + "SET PriceLastPO = (SELECT currencyConvert(ol.PriceActual,ol.C_Currency_ID,po.C_Currency_ID,o.DateOrdered,o.C_ConversionType_ID,o.AD_Client_ID,o.AD_Org_ID) "
+                + "SET PriceLastPO = (SELECT currencyConvert(ol.PriceActual,ol.C_Currency_ID,po.C_Currency_ID,o.DateOrdered,o.C_ConversionType_ID,o.VAF_Client_ID,o.VAF_Org_ID) "
                 + "FROM C_Order o, C_OrderLine ol "
                 + "WHERE o.C_Order_ID=ol.C_Order_ID"
                 + " AND po.M_Product_ID=ol.M_Product_ID AND po.C_BPartner_ID=o.C_BPartner_ID");

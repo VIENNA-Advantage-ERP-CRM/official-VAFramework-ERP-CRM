@@ -76,7 +76,7 @@ static X_C_DocTypeCounter()
 //static long serialVersionUID 27562514371921L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055132L;
-/** AD_Table_ID=718 */
+/** VAF_TableView_ID=718 */
 public static int Table_ID;
  // =718;
 

@@ -559,7 +559,7 @@ namespace VAdvantage.Model
                         #region IF VA009 (VA Payment management is installed)
 
                         payment = new MPayment(check.GetCtx(), 0, null);
-                        payment.SetAD_Org_ID(check.GetAD_Org_ID());
+                        payment.SetVAF_Org_ID(check.GetVAF_Org_ID());
                         payment.SetC_DocType_ID(false);
                         //
                         if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
@@ -670,8 +670,8 @@ namespace VAdvantage.Model
                                     PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
                                     PayAlocate.SetAmount(psls[j].GetPayAmt());
                                     PayAlocate.SetInvoiceAmt(psls[j].GetOpenAmt());
-                                    PayAlocate.SetAD_Client_ID(psls[j].GetAD_Client_ID());
-                                    PayAlocate.SetAD_Org_ID(psls[j].GetAD_Org_ID());
+                                    PayAlocate.SetVAF_Client_ID(psls[j].GetVAF_Client_ID());
+                                    PayAlocate.SetVAF_Org_ID(psls[j].GetVAF_Org_ID());
                                     PayAlocate.SetWriteOffAmt(0);
                                     PayAlocate.SetOverUnderAmt(0);
                                     if (!PayAlocate.Save())
@@ -719,7 +719,7 @@ namespace VAdvantage.Model
                     else
                     {
                         payment = new MPayment(check.GetCtx(), 0, null);
-                        payment.SetAD_Org_ID(check.GetAD_Org_ID());
+                        payment.SetVAF_Org_ID(check.GetVAF_Org_ID());
                         payment.SetC_DocType_ID(false);
                         //
                         if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
@@ -793,8 +793,8 @@ namespace VAdvantage.Model
                                     PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
                                     PayAlocate.SetAmount(psls[j].GetPayAmt());
                                     PayAlocate.SetInvoiceAmt(psls[j].GetOpenAmt());
-                                    PayAlocate.SetAD_Client_ID(psls[j].GetAD_Client_ID());
-                                    PayAlocate.SetAD_Org_ID(psls[j].GetAD_Org_ID());
+                                    PayAlocate.SetVAF_Client_ID(psls[j].GetVAF_Client_ID());
+                                    PayAlocate.SetVAF_Org_ID(psls[j].GetVAF_Org_ID());
                                     PayAlocate.SetWriteOffAmt(0);
                                     PayAlocate.SetOverUnderAmt(0);
                                     if (!PayAlocate.Save())

@@ -89,7 +89,7 @@ namespace VAdvantage.Process
 
             //	Create Expense Invoice 
             MInvoice invoice = new MInvoice(GetCtx(), 0, null);
-            invoice.SetClientOrg(com.GetAD_Client_ID(), com.GetAD_Org_ID());
+            invoice.SetClientOrg(com.GetVAF_Client_ID(), com.GetVAF_Org_ID());
             invoice.SetC_DocTypeTarget_ID(_C_DocType_ID);   //	API
             invoice.SetIsExpenseInvoice(true);
             invoice.SetIsSOTrx(false);
@@ -98,7 +98,7 @@ namespace VAdvantage.Process
             // JID_0101: When we generate the AP invoice from Commission run window, its giving price list error.
             if (invoice.GetM_PriceList_ID() == 0)
             {
-                string sql = "SELECT M_PriceList_ID FROM M_PriceList WHERE IsActive = 'Y' AND AD_Client_ID = " + com.GetAD_Client_ID() + " AND AD_Org_ID = " + com.GetAD_Org_ID()
+                string sql = "SELECT M_PriceList_ID FROM M_PriceList WHERE IsActive = 'Y' AND VAF_Client_ID = " + com.GetVAF_Client_ID() + " AND VAF_Org_ID = " + com.GetVAF_Org_ID()
                             + " AND IsDefault='Y' AND IsSOPriceList='N'";
                 int pricelist = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (pricelist == 0)

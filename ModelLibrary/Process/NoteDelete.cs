@@ -45,7 +45,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             log.Info("doIt - AD_User_ID=" + p_AD_User_ID);
 
-            String sql = "DELETE FROM AD_Note WHERE AD_Client_ID=" + GetAD_Client_ID();
+            String sql = "DELETE FROM AD_Note WHERE VAF_Client_ID=" + GetVAF_Client_ID();
             if (p_AD_User_ID > 0)
             {
                 sql += " AND AD_User_ID=" + p_AD_User_ID;

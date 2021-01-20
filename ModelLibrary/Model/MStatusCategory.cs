@@ -25,10 +25,10 @@ namespace VAdvantage.Model
          */
         public static MStatusCategory GetDefault(Ctx ctx)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             String sql = "SELECT * FROM R_StatusCategory "
-                + "WHERE AD_Client_ID in (0,@AD_Client_ID) AND IsDefault='Y' "
-                + "ORDER BY AD_Client_ID DESC";
+                + "WHERE VAF_Client_ID in (0,@VAF_Client_ID) AND IsDefault='Y' "
+                + "ORDER BY VAF_Client_ID DESC";
             MStatusCategory retValue = null;
             //PreparedStatement pstmt = null;
             DataTable dt = null;
@@ -36,10 +36,10 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_Client_ID", AD_Client_ID);
+                param[0] = new SqlParameter("@VAF_Client_ID", VAF_Client_ID);
 
                 //pstmt = DataBase.prepareStatement (sql, null);
-                //pstmt.SetInt (1, AD_Client_ID);
+                //pstmt.SetInt (1, VAF_Client_ID);
                  idr = DataBase.DB.ExecuteReader(sql, param);
                  dt = new DataTable();
                  dt.Load(idr);
@@ -88,17 +88,17 @@ namespace VAdvantage.Model
          */
         public static MStatusCategory CreateDefault(Ctx ctx)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             MStatusCategory retValue = new MStatusCategory(ctx, 0, null);
-            retValue.SetClientOrg(AD_Client_ID, 0);
+            retValue.SetClientOrg(VAF_Client_ID, 0);
             retValue.SetName(Msg.GetMsg(ctx, "Standard", true));
             retValue.SetIsDefault(true);
             if (!retValue.Save())
                 return null;
             String sql = "UPDATE R_Status SET R_StatusCategory_ID=" + retValue.GetR_StatusCategory_ID()
-                + " WHERE R_StatusCategory_ID IS NULL AND AD_Client_ID=" + AD_Client_ID;
+                + " WHERE R_StatusCategory_ID IS NULL AND VAF_Client_ID=" + VAF_Client_ID;
             int no = DataBase.DB.ExecuteQuery(sql, null, null);
-            _log.Info("Default for AD_Client_ID=" + AD_Client_ID + " - Status #" + no);
+            _log.Info("Default for VAF_Client_ID=" + VAF_Client_ID + " - Status #" + no);
             return retValue;
         }	
 

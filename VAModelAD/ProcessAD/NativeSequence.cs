@@ -42,8 +42,8 @@ namespace VAdvantage.Process
 
 
             String sql = "SELECT Value FROM AD_SysConfig"
-                      + " WHERE Name='SYSTEM_NATIVE_SEQUENCE' AND AD_Client_ID IN (0) AND AD_Org_ID IN (0) AND IsActive='Y'"
-                      + " ORDER BY AD_Client_ID DESC, AD_Org_ID DESC";
+                      + " WHERE Name='SYSTEM_NATIVE_SEQUENCE' AND VAF_Client_ID IN (0) AND VAF_Org_ID IN (0) AND IsActive='Y'"
+                      + " ORDER BY VAF_Client_ID DESC, VAF_Org_ID DESC";
 
             object result= DB.ExecuteScalar(sql);
             if (result == null || result == DBNull.Value)
@@ -70,19 +70,19 @@ namespace VAdvantage.Process
             {
                 CreateSequence("AD_Sequence", null);
                 CreateSequence("AD_Issue", null);
-                CreateSequence("AD_ChangeLog", null);
+                CreateSequence("VAF_AlterLog", null);
                 //
-                String whereClause = "TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog')";
-                //List<MTable> tables = new Query(GetCtx(),X_AD_Table.Table_Name, whereClause, Get_TrxName().GetTrxName())
+                String whereClause = "TableName NOT IN ('AD_Sequence', 'AD_Issue', 'VAF_AlterLog')";
+                //List<MTable> tables = new Query(GetCtx(),X_VAF_TableView.Table_Name, whereClause, Get_TrxName().GetTrxName())
                 //    .SetOrderBy("TableName")
                 //    .list();
-                 sql = "SELECT AD_Table_ID FROM AD_Table WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog') AND IsActive='Y'";
+                 sql = "SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'VAF_AlterLog') AND IsActive='Y'";
                 DataSet ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MTable table = new MTable(GetCtx(), Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Table_ID"]), null);
+                        MTable table = new MTable(GetCtx(), Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
                         CreateSequence(table, Get_TrxName());
                     }
 
@@ -189,7 +189,7 @@ namespace VAdvantage.Process
         //            string sql = @"select t1.ad_sequence_id, upper(t1.name) as NAME, t1.currentnext, t1.currentnextsys, t1.incrementno
         //,(SELECT upper(cols.column_name) FROM user_constraints cons, user_cons_columns cols 
         //WHERE cols.table_name = upper(t1.name) AND cons.constraint_type = 'P' AND cons.constraint_name = cols.constraint_name) as PCOL
-        //from ad_sequence t1 inner join ad_table t2 on t1.name = t2.name 
+        //from ad_sequence t1 inner join vaf_tableview t2 on t1.name = t2.name 
         //where t2.isview = 'N' and t1.name not like 'DocumentNo_%' 
         //and not exists (select sequence_name from user_sequences where upper(sequence_name) = concat(upper(t1.name), '_ID_SEQ')) 
         //and upper(t1.name) in 

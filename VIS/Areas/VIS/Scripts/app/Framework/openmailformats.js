@@ -21,8 +21,8 @@
             //sql += " nvl(SUBJECT,' ')  as SUBJECT          ,"
             //sql += " nvl(MAILTEXT,' ')     as MAILTEXT    ,"
             //sql += " nvl(CREATED,sysdate)         as CREATED  , "
-            //sql += " AD_CLIENT_ID      ,"
-            //sql += "  AD_ORG_ID         ,"
+            //sql += " VAF_CLIENT_ID      ,"
+            //sql += "  VAF_ORG_ID         ,"
             //sql += " CREATEDBY         ,"
             //sql += "  nvl(ISACTIVE,'Y')         as ISACTIVE ,"
             //sql += " nvl(ISHTML,'Y')          as ISHTML  ,"
@@ -53,7 +53,7 @@
             var index = w2ui['openformatgrid'].getSelection();
             selectedRow = w2ui['openformatgrid'].get(index);
 
-            //var sql = "select name from MailAttachment1 where ad_table_id=(Select AD_Table_ID from AD_Table where tablename='AD_TextTemplate') and record_id=" + selectedRow.ad_texttemplate_ID;
+            //var sql = "select name from MailAttachment1 where vaf_tableview_id=(Select VAF_TableView_ID from VAF_TableView where tablename='AD_TextTemplate') and record_id=" + selectedRow.ad_texttemplate_ID;
             //ds = VIS.DB.executeDataSet(sql);
 
 

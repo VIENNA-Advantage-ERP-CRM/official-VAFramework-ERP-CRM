@@ -62,12 +62,12 @@ namespace VAdvantage.Process
                 }
 
                 //Get data from Production Plan
-                dsProductionPlan = DB.ExecuteDataset(@"SELECT AD_CLIENT_ID , AD_ORG_ID , DESCRIPTION , LINE , M_LOCATOR_ID , 
+                dsProductionPlan = DB.ExecuteDataset(@"SELECT VAF_CLIENT_ID , VAF_ORG_ID , DESCRIPTION , LINE , M_LOCATOR_ID , 
                                        M_PRODUCT_ID , M_PRODUCTIONPLAN_ID ,  M_PRODUCTION_ID  ,  PROCESSED  , PRODUCTIONQTY  M_WAREHOUSE_ID FROM M_ProductionPlan 
                                        WHERE IsActive = 'Y' AND M_PRODUCTION_ID = " + M_Production_ID, null, Get_Trx());
 
                 //get data from production Line
-                dsProductionLine = DB.ExecuteDataset(@"SELECT AD_CLIENT_ID , AD_ORG_ID , DESCRIPTION , LINE , M_ATTRIBUTESETINSTANCE_ID , M_LOCATOR_ID , 
+                dsProductionLine = DB.ExecuteDataset(@"SELECT VAF_CLIENT_ID , VAF_ORG_ID , DESCRIPTION , LINE , M_ATTRIBUTESETINSTANCE_ID , M_LOCATOR_ID , 
                                        M_PRODUCT_ID ,  M_PRODUCTIONLINE_ID, M_PRODUCTIONPLAN_ID , M_PRODUCTION_ID  , PROCESSED  , MOVEMENTQTY , 
                                        C_UOM_ID , PLANNEDQTY , M_WAREHOUSE_ID FROM M_ProductionLine 
                                        WHERE IsActive = 'Y' AND M_PRODUCTION_ID = " + M_Production_ID, null, Get_Trx());
@@ -78,7 +78,7 @@ namespace VAdvantage.Process
                 try
                 {
                     productionTo.Set_TrxName(production.Get_Trx());
-                    PO.CopyValues(production, productionTo, production.GetAD_Client_ID(), production.GetAD_Org_ID());
+                    PO.CopyValues(production, productionTo, production.GetVAF_Client_ID(), production.GetVAF_Org_ID());
                     productionTo.SetName("{->" + productionTo.GetName() + ")");
                     if (production.Get_ColumnIndex("DocumentNo") > 0)
                     {
@@ -108,7 +108,7 @@ namespace VAdvantage.Process
                                 try
                                 {
                                     toProdPlan.Set_TrxName(production.Get_Trx());
-                                    PO.CopyValues(fromProdPlan, toProdPlan, fromProdPlan.GetAD_Client_ID(), fromProdPlan.GetAD_Org_ID());
+                                    PO.CopyValues(fromProdPlan, toProdPlan, fromProdPlan.GetVAF_Client_ID(), fromProdPlan.GetVAF_Org_ID());
                                     toProdPlan.SetProductionQty(Decimal.Negate(toProdPlan.GetProductionQty()));
                                     toProdPlan.SetM_Production_ID(productionTo.GetM_Production_ID());
                                     toProdPlan.SetProcessed(false);
@@ -138,7 +138,7 @@ namespace VAdvantage.Process
                                                     try
                                                     {
                                                         toProdline.Set_TrxName(production.Get_Trx());
-                                                        PO.CopyValues(fromProdline, toProdline, fromProdPlan.GetAD_Client_ID(), fromProdPlan.GetAD_Org_ID());
+                                                        PO.CopyValues(fromProdline, toProdline, fromProdPlan.GetVAF_Client_ID(), fromProdPlan.GetVAF_Org_ID());
                                                         toProdline.SetMovementQty(Decimal.Negate(toProdline.GetMovementQty()));
                                                         toProdline.SetPlannedQty(Decimal.Negate(toProdline.GetPlannedQty()));
                                                         toProdline.SetM_Production_ID(productionTo.GetM_Production_ID());
@@ -167,9 +167,9 @@ namespace VAdvantage.Process
                                                             // Create New record of Production line Policy (Material Policy) with Reverse Entry
                                                             sql.Clear();
                                                             sql.Append(@"INSERT INTO M_ProductionLineMA 
-                                                                  (  AD_CLIENT_ID, AD_ORG_ID , CREATED , CREATEDBY , ISACTIVE , UPDATED , UPDATEDBY ,
+                                                                  (  VAF_CLIENT_ID, VAF_ORG_ID , CREATED , CREATEDBY , ISACTIVE , UPDATED , UPDATEDBY ,
                                                                     M_PRODUCTIONLINE_ID , M_ATTRIBUTESETINSTANCE_ID , MMPOLICYDATE , M_PRODUCTCONTAINER_ID, MOVEMENTQTY )
-                                                                  (SELECT AD_CLIENT_ID, AD_ORG_ID , sysdate , CREATEDBY , ISACTIVE , sysdate , UPDATEDBY ,
+                                                                  (SELECT VAF_CLIENT_ID, VAF_ORG_ID , sysdate , CREATEDBY , ISACTIVE , sysdate , UPDATEDBY ,
                                                                       " + toProdline.GetM_ProductionLine_ID() + @" , M_ATTRIBUTESETINSTANCE_ID , MMPOLICYDATE , M_PRODUCTCONTAINER_ID,  -1 * MOVEMENTQTY
                                                                     FROM M_ProductionLineMA  WHERE M_ProductionLine_ID = " + fromProdline.GetM_ProductionLine_ID() + @" ) ");
                                                             int no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx());

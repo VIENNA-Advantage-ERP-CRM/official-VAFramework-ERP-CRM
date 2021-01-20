@@ -74,7 +74,7 @@ static X_AD_WorkflowProcessor()
 //static long serialVersionUID 27562514366874L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050085L;
-/** AD_Table_ID=697 */
+/** VAF_TableView_ID=697 */
 public static int Table_ID;
  // =697;
 

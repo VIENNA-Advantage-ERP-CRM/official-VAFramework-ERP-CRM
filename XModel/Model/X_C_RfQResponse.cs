@@ -88,7 +88,7 @@ static X_C_RfQResponse()
 //static long serialVersionUID 27562514374961L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058172L;
-/** AD_Table_ID=674 */
+/** VAF_TableView_ID=674 */
 public static int Table_ID;
  // =674;
 

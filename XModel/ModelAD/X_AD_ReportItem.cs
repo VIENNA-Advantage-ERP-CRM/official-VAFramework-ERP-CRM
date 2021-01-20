@@ -70,7 +70,7 @@ static X_AD_ReportItem()
 //static long serialVersionUID = 27657404046527L;
 /** Last Updated Timestamp 7/31/2013 7:22:10 PM */
 public static long updatedMS = 1375278729738L;
-/** AD_Table_ID=1000728 */
+/** VAF_TableView_ID=1000728 */
 public static int Table_ID;
  // =1000728;
 
@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_AD_ReportItem[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);
+if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);
 else
-Set_Value ("AD_Column_ID", AD_Column_ID);
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -211,7 +211,7 @@ namespace VAdvantage.Model
             if (IsSummary())
             {
                 SetMediaType(null);
-                SetAD_Image_ID(0);
+                SetVAF_Image_ID(0);
             }
             return true;
         }	//	beforeSave
@@ -229,10 +229,10 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 StringBuilder sb = new StringBuilder("INSERT INTO AD_TreeNodeCMM "
-                    + "(AD_Client_ID,AD_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
+                    + "(VAF_Client_ID,VAF_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
                     + "AD_Tree_ID, Node_ID, Parent_ID, SeqNo) "
                     + "VALUES (")
-                    .Append(GetAD_Client_ID()).Append(",0, 'Y', SysDate, 0, SysDate, 0,")
+                    .Append(GetVAF_Client_ID()).Append(",0, 'Y', SysDate, 0, SysDate, 0,")
                     .Append(GetAD_Tree_ID()).Append(",").Append(Get_ID())
                     .Append(", 0, 999)");
                 int no = DataBase.DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
@@ -353,8 +353,8 @@ namespace VAdvantage.Model
         /// <returns>image or null</returns>
         public MImage GetImage()
         {
-            if (GetAD_Image_ID() != 0)
-                return MImage.Get(GetCtx(), GetAD_Image_ID());
+            if (GetVAF_Image_ID() != 0)
+                return MImage.Get(GetCtx(), GetVAF_Image_ID());
             return null;
         }	//	getImage
 

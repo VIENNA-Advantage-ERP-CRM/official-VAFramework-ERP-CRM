@@ -12,7 +12,7 @@ namespace VAdvantage.Print
         /** PrintFormat             */
         private Decimal? _AD_PrintFormat_ID;
         /** Table	                */
-        private Decimal? _AD_Table_ID;
+        private Decimal? _VAF_TableView_ID;
 
         protected override void Prepare()
         {
@@ -24,8 +24,8 @@ namespace VAdvantage.Print
                 { ; }
                 else if (name.Equals("AD_PrintFormat_ID"))
                     _AD_PrintFormat_ID = ((Decimal?)para[i].GetParameter());
-                else if (name.Equals("AD_Table_ID"))
-                    _AD_Table_ID = ((Decimal?)para[i].GetParameter());
+                else if (name.Equals("VAF_TableView_ID"))
+                    _VAF_TableView_ID = ((Decimal?)para[i].GetParameter());
                 else
                     log.Equals("prepare - Unknown Parameter=" + para[i].GetParameterName());
             }
@@ -37,11 +37,11 @@ namespace VAdvantage.Print
         /// <returns>info</returns>
         protected override string DoIt()
         {
-            if (_AD_Table_ID != null && int.Parse(_AD_Table_ID.ToString()) > 0)
+            if (_VAF_TableView_ID != null && int.Parse(_VAF_TableView_ID.ToString()) > 0)
             {
 
-                MPrintFormat pf = MPrintFormat.CreateFromTable(GetCtx(), int.Parse(_AD_Table_ID.ToString()), GetRecord_ID());
-                AddLog(Utility.Util.GetValueOfInt(_AD_Table_ID.ToString()), null, pf.GetItemCount(), pf.GetName());
+                MPrintFormat pf = MPrintFormat.CreateFromTable(GetCtx(), int.Parse(_VAF_TableView_ID.ToString()), GetRecord_ID());
+                AddLog(Utility.Util.GetValueOfInt(_VAF_TableView_ID.ToString()), null, pf.GetItemCount(), pf.GetName());
                 return pf.GetName() + " #" + pf.GetItemCount();
             }
             else if (_AD_PrintFormat_ID != null && _AD_PrintFormat_ID > 0)

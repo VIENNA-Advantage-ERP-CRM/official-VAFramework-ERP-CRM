@@ -97,8 +97,8 @@ namespace VAdvantage.Controller
         public int tabNo;
         /** AD_Winmdow_ID               */
         public int AD_Window_ID;
-        /** AD_Tab_ID					*/
-        public int AD_Tab_ID;
+        /** VAF_Tab_ID					*/
+        public int VAF_Tab_ID;
         /** Is the Tab Read Only        */
         public bool tabReadOnly = false;
 
@@ -114,13 +114,13 @@ namespace VAdvantage.Controller
         /**	DisplayType		*/
         public int displayType = 0;
         /**	Table ID		*/
-        public int AD_Table_ID = 0;
+        public int VAF_TableView_ID = 0;
         /**	Clumn ID		*/
-        public int AD_Column_ID = 0;
+        public int VAF_Column_ID = 0;
         //
-        public int AD_InfoWindow_ID = 0;
+        public int VAF_QuickSearchWindow_ID = 0;
         /**FieldID   */
-        public int AD_Field_ID = 0;
+        public int VAF_Field_ID = 0;
         /**	Display Length	*/
         public int DisplayLength = 0;
         /**	Same Line		*/
@@ -174,7 +174,7 @@ namespace VAdvantage.Controller
         /**	Process			*/
         public int AD_Process_ID = 0;
         /**	Process			*/
-        public int AD_Form_ID = 0;
+        public int VAF_Page_ID = 0;
         /**	Description		*/
         public String Description = "";
         /**	Help			*/
@@ -199,7 +199,7 @@ namespace VAdvantage.Controller
         /* display Type Id */
         public int AD_Reference_ID;
         /* Val_rule_ID */
-        public int AD_Val_Rule_ID;
+        public int VAF_DataVal_Rule_ID;
 
         /**	Label			*/
         public String name = "";
@@ -254,7 +254,7 @@ namespace VAdvantage.Controller
         public bool HeaderIconOnly = false;
         public string HtmlStyle = null;
         public bool ShowIcon = false;
-        public int AD_Image_ID = 0;
+        public int VAF_Image_ID = 0;
         public string FontClass = "";
         public string PlaceHolder = "";
         public string ImageName = "";
@@ -363,18 +363,18 @@ namespace VAdvantage.Controller
             //	Role Access & Column Access			
             //	if (ctx != null)
             //	{
-            //		int AD_Client_ID = ctx.getAD_Client_ID(windowNo);
-            //		int AD_Org_ID = ctx.getAD_Org_ID(windowNo);
+            //		int VAF_Client_ID = ctx.getVAF_Client_ID(windowNo);
+            //		int VAF_Org_ID = ctx.getVAF_Org_ID(windowNo);
             //		String keyColumn = tabKeyColumn;
             //		if ("EntityType".Equals(keyColumn))
-            //			keyColumn = "AD_EntityType_ID";
+            //			keyColumn = "VAF_RecrodType_ID";
             //		if (!keyColumn.endsWith("_ID"))
             //			keyColumn += "_ID";			//	AD_Language_ID
             //		int Record_ID = ctx.getContextAsInt(keyColumn);
             //	MRole role = MRole.getDefault(ctx, false); 
-            //if (!role.canUpdate(AD_Client_ID, AD_Org_ID, AD_Table_ID, Record_ID, false))
+            //if (!role.canUpdate(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID, Record_ID, false))
             //return false;
-            //if (!role.isColumnAccess(AD_Table_ID, AD_Column_ID, false))
+            //if (!role.isColumnAccess(VAF_TableView_ID, VAF_Column_ID, false))
             //		return false;
             //	}
             if (rowReadOnly)
@@ -494,10 +494,10 @@ namespace VAdvantage.Controller
         //{
         //    FieldVO f = new FieldVO();
 
-        //    f.AD_Column_ID = this.AD_Column_ID;
-        //    f.AD_Field_ID = this.AD_Field_ID;
-        //    f.AD_Tab_ID = this.AD_Tab_ID;
-        //    f.AD_Table_ID = this.AD_Table_ID;
+        //    f.VAF_Column_ID = this.VAF_Column_ID;
+        //    f.VAF_Field_ID = this.VAF_Field_ID;
+        //    f.VAF_Tab_ID = this.VAF_Tab_ID;
+        //    f.VAF_TableView_ID = this.VAF_TableView_ID;
         //    f.ColumnName = this.ColumnName;
         //    f.tableName = this.tableName;
         //    if(this.displayType == FieldType.Text)
@@ -546,10 +546,10 @@ namespace VAdvantage.Controller
         //{
         //    FieldVO f = new FieldVO();
 
-        //    f.AD_Column_ID = this.AD_Column_ID;
-        //    f.AD_Field_ID = this.AD_Field_ID;
-        //    f.AD_Tab_ID = this.AD_Tab_ID;
-        //    f.AD_Table_ID = this.AD_Table_ID;
+        //    f.VAF_Column_ID = this.VAF_Column_ID;
+        //    f.VAF_Field_ID = this.VAF_Field_ID;
+        //    f.VAF_Tab_ID = this.VAF_Tab_ID;
+        //    f.VAF_TableView_ID = this.VAF_TableView_ID;
         //    f.ColumnName = this.ColumnName;
         //    f.tableName = this.tableName;
         //    if(this.displayType == FieldType.Text)

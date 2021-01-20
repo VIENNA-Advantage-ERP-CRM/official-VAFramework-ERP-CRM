@@ -38,7 +38,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_AD_ActionLog() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27883142468540L;/** Last Updated Timestamp 9/25/2020 8:59:12 AM */
-        public static long updatedMS = 1601017151751L;/** AD_Table_ID=1001065 */
+        public static long updatedMS = 1601017151751L;/** VAF_TableView_ID=1001065 */
         public static int Table_ID; // =1001065;
         /** TableName=AD_ActionLog */
         public static String Table_Name = "AD_ActionLog";
@@ -79,15 +79,15 @@ namespace VAdvantage.Model
         }/** Get Session.
 @return User Session Online or Web */
         public int GetAD_Session_ID() { Object ii = Get_Value("AD_Session_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Table/View.
-@param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID <= 0) Set_Value("AD_Table_ID", null);
+            if (VAF_TableView_ID <= 0) Set_Value("VAF_TableView_ID", null);
             else
-                Set_Value("AD_Table_ID", AD_Table_ID);
+                Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }/** Get Table/View.
 @return Database Table information */
-        public int GetAD_Table_ID() { Object ii = Get_Value("AD_Table_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAF_TableView_ID() { Object ii = Get_Value("VAF_TableView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** Action AD_Reference_ID=104 */
         public static int ACTION_AD_Reference_ID = 104;/** Workbench = B */
         public static String ACTION_Workbench = "B";/** WorkFlow = F */

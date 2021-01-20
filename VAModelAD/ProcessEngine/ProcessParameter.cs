@@ -30,7 +30,7 @@ namespace VAdvantage.ProcessEngine
                 //    + "p.DefaultValue, p.DefaultValue2, p.VFormat, p.ValueMin, p.ValueMax, "
                 //    + "p.SeqNo, p.AD_Reference_Value_ID, vr.Code AS ValidationCode "
                 //    + "FROM AD_Process_Para p"
-                //    + " LEFT OUTER JOIN AD_Val_Rule vr ON (p.AD_Val_Rule_ID=vr.AD_Val_Rule_ID) "
+                //    + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (p.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) "
                 //    + "WHERE p.AD_Process_ID=@processid"		//	1
                 //    + " AND p.IsActive='Y' "
                 //    + "ORDER BY SeqNo";
@@ -52,13 +52,13 @@ namespace VAdvantage.ProcessEngine
                                   p.SeqNo,
                                   p.AD_Reference_Value_ID,
                                   vr.Code AS ValidationCode,
-                                  p.AD_InfoWindow_ID,
+                                  p.VAF_QuickSearchWindow_ID,
                                   p.LoadRecursiveData,
 p.ShowChildOfSelected,
 p.IsEncrypted
                                 FROM AD_Process_Para p
-                                LEFT OUTER JOIN AD_Val_Rule vr
-                                ON (p.AD_Val_Rule_ID =vr.AD_Val_Rule_ID)
+                                LEFT OUTER JOIN VAF_DataVal_Rule vr
+                                ON (p.VAF_DataVal_Rule_ID =vr.VAF_DataVal_Rule_ID)
                                 WHERE p.AD_Process_ID=@processid
                                 AND p.IsActive       ='Y'
                                 ORDER BY SeqNo";
@@ -75,7 +75,7 @@ p.IsEncrypted
                 //    + "p.SeqNo, p.AD_Reference_Value_ID, vr.Code AS ValidationCode "
                 //    + "FROM AD_Process_Para p"
                 //    + " INNER JOIN AD_Process_Para_Trl t ON (p.AD_Process_Para_ID=t.AD_Process_Para_ID)"
-                //    + " LEFT OUTER JOIN AD_Val_Rule vr ON (p.AD_Val_Rule_ID=vr.AD_Val_Rule_ID) "
+                //    + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (p.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) "
                 //    + "WHERE p.AD_Process_ID=@processid"		//	1
                 //    + " AND t.AD_Language='" + Utility.Env.GetAD_Language(ctx) + "'"
                 //    + " AND p.IsActive='Y' "
@@ -98,15 +98,15 @@ p.IsEncrypted
                                   p.SeqNo,
                                   p.AD_Reference_Value_ID,
                                   vr.Code AS ValidationCode,
-                                  p.ad_infowindow_id,
+                                  p.VAF_QuickSearchWindow_id,
                                   p.LoadRecursiveData
                                     , p.ShowChildOfSelected,
 p.IsEncrypted
                                 FROM AD_Process_Para p
                                 INNER JOIN AD_Process_Para_Trl t
                                 ON (p.AD_Process_Para_ID=t.AD_Process_Para_ID)
-                                LEFT OUTER JOIN AD_Val_Rule vr
-                                ON (p.AD_Val_Rule_ID =vr.AD_Val_Rule_ID)
+                                LEFT OUTER JOIN VAF_DataVal_Rule vr
+                                ON (p.VAF_DataVal_Rule_ID =vr.VAF_DataVal_Rule_ID)
                                 WHERE p.AD_Process_ID=@processid
                                 AND t.AD_Language    ='" + Utility.Env.GetAD_Language(ctx) + @"'
                                 AND p.IsActive       ='Y'

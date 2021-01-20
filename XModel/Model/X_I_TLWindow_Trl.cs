@@ -74,7 +74,7 @@ static X_I_TLWindow_Trl()
 //static long serialVersionUID 27638799923495L;
 /** Last Updated Timestamp 12/28/2012 11:33:26 AM */
 public static long updatedMS = 1356674606706L;
-/** AD_Table_ID=1000406 */
+/** VAF_TableView_ID=1000406 */
 public static int Table_ID;
  // =1000406;
 

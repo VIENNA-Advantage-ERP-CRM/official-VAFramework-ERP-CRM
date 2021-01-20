@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_InfoWindow
+ * Class Used     : X_VAF_QuickSearchWindow
  * Chronological Development
  * Veena Pandey     31-Aug-09
  ******************************************************/
@@ -19,7 +19,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MInfoWindow : X_AD_InfoWindow
+    public class MInfoWindow : X_VAF_QuickSearchWindow
     {
         // The Lines
         private MInfoColumn[] _lines = null;
@@ -30,12 +30,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_InfoWindow_ID">id</param>
+        /// <param name="VAF_QuickSearchWindow_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MInfoWindow(Ctx ctx, int AD_InfoWindow_ID, Trx trxName)
-            : base(ctx, AD_InfoWindow_ID, trxName)
+        public MInfoWindow(Ctx ctx, int VAF_QuickSearchWindow_ID, Trx trxName)
+            : base(ctx, VAF_QuickSearchWindow_ID, trxName)
         {
-            if (AD_InfoWindow_ID == 0)
+            if (VAF_QuickSearchWindow_ID == 0)
             {
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 SetIsCustomDefault(false);
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
                 return _lines;
             }
 
-            String sql = "SELECT * FROM AD_InfoColumn WHERE AD_InfoWindow_ID=@infowindid ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_QuickSearchColumn WHERE VAF_QuickSearchWindow_ID=@infowindid ORDER BY SeqNo";
             List<MInfoColumn> list = new List<MInfoColumn>();
             DataTable dt = null;
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@infowindid", GetAD_InfoWindow_ID());
+                param[0] = new SqlParameter("@infowindid", GetVAF_QuickSearchWindow_ID());
 
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
         {
             if (_tableName == null)
             {
-                MTable table = MTable.Get(GetCtx(), GetAD_Table_ID());
+                MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
                 _tableName = table.Get_TableName();
             }
             return _tableName;

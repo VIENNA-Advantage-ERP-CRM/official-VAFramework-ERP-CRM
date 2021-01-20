@@ -99,7 +99,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27671913487529L;
         /** Last Updated Timestamp 15-01-2014 17:46:10 */
         public static long updatedMS = 1389788170740L;
-        /** AD_Table_ID=129 */
+        /** VAF_TableView_ID=129 */
         public static int Table_ID;
         // =129;
 
@@ -142,101 +142,101 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Column.
-        @param AD_Column_ID Column in the table */
-        public void SetAD_Column_ID(int AD_Column_ID)
+        @param VAF_Column_ID Column in the table */
+        public void SetVAF_Column_ID(int VAF_Column_ID)
         {
-            if (AD_Column_ID <= 0) Set_Value("AD_Column_ID", null);
+            if (VAF_Column_ID <= 0) Set_Value("VAF_Column_ID", null);
             else
-                Set_Value("AD_Column_ID", AD_Column_ID);
+                Set_Value("VAF_Column_ID", VAF_Column_ID);
         }
         /** Get Column.
         @return Column in the table */
-        public int GetAD_Column_ID()
+        public int GetVAF_Column_ID()
         {
-            Object ii = Get_Value("AD_Column_ID");
+            Object ii = Get_Value("VAF_Column_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Column_ID_1 AD_Reference_ID=414 */
-        public static int AD_COLUMN_ID_1_AD_Reference_ID = 414;
+        /** VAF_Column_ID_1 AD_Reference_ID=414 */
+        public static int VAF_COLUMN_ID_1_AD_Reference_ID = 414;
         /** Set Column.
-        @param AD_Column_ID_1 Used to store second reference of AD_Column_ID column  */
-        public void SetAD_Column_ID_1(int AD_Column_ID_1)
+        @param VAF_Column_ID_1 Used to store second reference of VAF_Column_ID column  */
+        public void SetVAF_Column_ID_1(int VAF_Column_ID_1)
         {
-            Set_Value("AD_Column_ID_1", AD_Column_ID_1);
+            Set_Value("VAF_Column_ID_1", VAF_Column_ID_1);
         }
         /** Get Column.
-        @return Used to store second reference of AD_Column_ID column  */
-        public int GetAD_Column_ID_1()
+        @return Used to store second reference of VAF_Column_ID column  */
+        public int GetVAF_Column_ID_1()
         {
-            Object ii = Get_Value("AD_Column_ID_1");
+            Object ii = Get_Value("VAF_Column_ID_1");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Column_ID_2 AD_Reference_ID=414 */
-        public static int AD_COLUMN_ID_2_AD_Reference_ID = 414;
+        /** VAF_Column_ID_2 AD_Reference_ID=414 */
+        public static int VAF_COLUMN_ID_2_AD_Reference_ID = 414;
         /** Set Column.
-        @param AD_Column_ID_2 Used to store third reference of AD_Column_ID column  */
-        public void SetAD_Column_ID_2(int AD_Column_ID_2)
+        @param VAF_Column_ID_2 Used to store third reference of VAF_Column_ID column  */
+        public void SetVAF_Column_ID_2(int VAF_Column_ID_2)
         {
-            Set_Value("AD_Column_ID_2", AD_Column_ID_2);
+            Set_Value("VAF_Column_ID_2", VAF_Column_ID_2);
         }
         /** Get Column.
-        @return Used to store third reference of AD_Column_ID column  */
-        public int GetAD_Column_ID_2()
+        @return Used to store third reference of VAF_Column_ID column  */
+        public int GetVAF_Column_ID_2()
         {
-            Object ii = Get_Value("AD_Column_ID_2");
+            Object ii = Get_Value("VAF_Column_ID_2");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Column_ID_3 AD_Reference_ID=414 */
-        public static int AD_COLUMN_ID_3_AD_Reference_ID = 414;
+        /** VAF_Column_ID_3 AD_Reference_ID=414 */
+        public static int VAF_COLUMN_ID_3_AD_Reference_ID = 414;
         /** Set Invoked By.
-        @param AD_Column_ID_3 Invoked By */
-        public void SetAD_Column_ID_3(int AD_Column_ID_3)
+        @param VAF_Column_ID_3 Invoked By */
+        public void SetVAF_Column_ID_3(int VAF_Column_ID_3)
         {
-            Set_Value("AD_Column_ID_3", AD_Column_ID_3);
+            Set_Value("VAF_Column_ID_3", VAF_Column_ID_3);
         }
         /** Get Invoked By.
         @return Invoked By */
-        public int GetAD_Column_ID_3()
+        public int GetVAF_Column_ID_3()
         {
-            Object ii = Get_Value("AD_Column_ID_3");
+            Object ii = Get_Value("VAF_Column_ID_3");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Special Form.
-        @param AD_Form_ID Special Form */
-        public void SetAD_Form_ID(int AD_Form_ID)
+        @param VAF_Page_ID Special Form */
+        public void SetVAF_Page_ID(int VAF_Page_ID)
         {
-            if (AD_Form_ID <= 0) Set_Value("AD_Form_ID", null);
+            if (VAF_Page_ID <= 0) Set_Value("VAF_Page_ID", null);
             else
-                Set_Value("AD_Form_ID", AD_Form_ID);
+                Set_Value("VAF_Page_ID", VAF_Page_ID);
         }
         /** Get Special Form.
         @return Special Form */
-        public int GetAD_Form_ID()
+        public int GetVAF_Page_ID()
         {
-            Object ii = Get_Value("AD_Form_ID");
+            Object ii = Get_Value("VAF_Page_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Image.
-        @param AD_Image_ID Image or Icon */
-        public void SetAD_Image_ID(int AD_Image_ID)
+        @param VAF_Image_ID Image or Icon */
+        public void SetVAF_Image_ID(int VAF_Image_ID)
         {
-            if (AD_Image_ID <= 0) Set_Value("AD_Image_ID", null);
+            if (VAF_Image_ID <= 0) Set_Value("VAF_Image_ID", null);
             else
-                Set_Value("AD_Image_ID", AD_Image_ID);
+                Set_Value("VAF_Image_ID", VAF_Image_ID);
         }
         /** Get Image.
         @return Image or Icon */
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            Object ii = Get_Value("AD_Image_ID");
+            Object ii = Get_Value("VAF_Image_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

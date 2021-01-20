@@ -41,8 +41,8 @@ namespace VIS.Helpers
 
             int AD_Tree_ID = DB.GetSQLValue(null,
           "SELECT COALESCE(r.AD_Tree_Menu_ID, ci.AD_Tree_Menu_ID)"
-                          + "FROM AD_ClientInfo ci"
-                          + " INNER JOIN AD_Role r ON (ci.AD_Client_ID=r.AD_Client_ID) "
+                          + "FROM VAF_ClientDetail ci"
+                          + " INNER JOIN AD_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
                           + "WHERE AD_Role_ID=" + _ctx.GetAD_Role_ID());
 
             MRole.GetDefault(_ctx, true); // init MRole
@@ -81,17 +81,17 @@ namespace VIS.Helpers
         /// <param name="editable"></param>
         /// <returns></returns>
 
-        public MTree GetMenuTree(int AD_Tree_ID, bool editable, bool onDemandTree, int nodeID,int AD_Tab_ID,int winNo)
+        public MTree GetMenuTree(int AD_Tree_ID, bool editable, bool onDemandTree, int nodeID,int VAF_Tab_ID,int winNo)
         {
             _onDemandTree = onDemandTree;
             MTree vTree = null;
             if (onDemandTree)
             {
-                vTree = new MTree(_ctx, AD_Tree_ID, editable, true, null, true, AD_Tab_ID, winNo);
+                vTree = new MTree(_ctx, AD_Tree_ID, editable, true, null, true, VAF_Tab_ID, winNo);
             }
             else
             {
-                vTree = new MTree(_ctx, AD_Tree_ID, editable, true, null, nodeID, AD_Tab_ID);
+                vTree = new MTree(_ctx, AD_Tree_ID, editable, true, null, nodeID, VAF_Tab_ID);
             }
             return vTree;
         }
@@ -411,7 +411,7 @@ namespace VIS.Helpers
             bool isBase = false;
             try
             {
-                string str = "SELECT Count(1) FROM AD_TABLE WHERE upper(TableName) = 'C_BPARTNER' ";
+                string str = "SELECT Count(1) FROM VAF_TABLEVIEW WHERE upper(TableName) = 'C_BPARTNER' ";
                 int count = Convert.ToInt32(DB.ExecuteScalar(str, null, null));
                 if (count <= 0)
                     isBase = true;

@@ -24,9 +24,9 @@ namespace VIS.Models
             Dictionary<string, object> retDic = null;
             string sql = "SELECT BP.CreditStatusSettingOn, " +
                          "(SELECT MIN(L.C_BPartner_Location_ID) FROM C_BPartner_Location L WHERE IsActive='Y' AND L.C_BPartner_ID="
-                          + C_BPartner_ID + " AND L.AD_Client_ID=" + Client_ID + ")AS C_BPartner_Location_ID" +
+                          + C_BPartner_ID + " AND L.VAF_Client_ID=" + Client_ID + ")AS C_BPartner_Location_ID" +
                             " FROM C_BPartner BP Where BP.C_BPartner_ID=" + C_BPartner_ID +
-                            " AND AD_Client_ID=" + Client_ID;
+                            " AND VAF_Client_ID=" + Client_ID;
             IDataReader idr = null;
             try
             {
@@ -88,12 +88,12 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             int C_CashBook_ID = Util.GetValueOfInt(paramValue[0]);
-            int AD_Client_ID = Util.GetValueOfInt(paramValue[1]);
-            int AD_Org_ID = Util.GetValueOfInt(paramValue[2]);
+            int VAF_Client_ID = Util.GetValueOfInt(paramValue[1]);
+            int VAF_Org_ID = Util.GetValueOfInt(paramValue[2]);
             string sql = "SELECT EndingBalance FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID + " AND" +
-             " AD_Client_ID=" + AD_Client_ID + " AND AD_Org_ID=" + AD_Org_ID + " AND " +
+             " VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + " AND " +
              "c_cash_id IN (SELECT Max(c_cash_id) FROM C_Cash WHERE C_CashBook_ID=" + C_CashBook_ID
-             + "AND AD_Client_ID=" + AD_Client_ID + " AND AD_Org_ID=" + AD_Org_ID + ") AND Processed='Y'";
+             + "AND VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + ") AND Processed='Y'";
 
             return Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
         }

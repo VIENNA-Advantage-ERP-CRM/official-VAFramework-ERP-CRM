@@ -196,14 +196,14 @@ namespace VAdvantage.Acct
                         }
                         if (!line0.IsProductionBOM())
                         {
-                            bomCost = Decimal.Add(bomCost, line0.GetProductCosts(as1, line.GetAD_Org_ID(), false));
+                            bomCost = Decimal.Add(bomCost, line0.GetProductCosts(as1, line.GetVAF_Org_ID(), false));
                         }
                     }
                     costs = Decimal.Negate(bomCost);
                 }
                 else
                 {
-                    costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), false);
+                    costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), false);
                 }
 
                 //  Inventory       DR      CR
@@ -231,7 +231,7 @@ namespace VAdvantage.Acct
 
                 if (!IsPosted())
                 {
-                    MCostDetail.CreateProduction(as1, line.GetAD_Org_ID(),
+                    MCostDetail.CreateProduction(as1, line.GetVAF_Org_ID(),
                         line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                         line.Get_ID(), 0,
                        Utility.Util.GetValueOfInt(costs), line.GetQty().Value,

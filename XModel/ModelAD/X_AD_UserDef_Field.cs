@@ -20,7 +20,7 @@ public X_AD_UserDef_Field (Context ctx, int AD_UserDef_Field_ID, Trx trxName) : 
 {
 /** if (AD_UserDef_Field_ID == 0)
 {
-SetAD_Field_ID (0);
+SetVAF_Field_ID (0);
 SetAD_UserDef_Field_ID (0);
 SetAD_UserDef_Tab_ID (0);
 }
@@ -30,7 +30,7 @@ public X_AD_UserDef_Field (Ctx ctx, int AD_UserDef_Field_ID, Trx trxName) : base
 {
 /** if (AD_UserDef_Field_ID == 0)
 {
-SetAD_Field_ID (0);
+SetVAF_Field_ID (0);
 SetAD_UserDef_Field_ID (0);
 SetAD_UserDef_Tab_ID (0);
 }
@@ -72,7 +72,7 @@ static X_AD_UserDef_Field()
 //static long serialVersionUID 27562514365307L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048518L;
-/** AD_Table_ID=464 */
+/** VAF_TableView_ID=464 */
 public static int Table_ID;
  // =464;
 
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_AD_UserDef_Field[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set Field.
-@param AD_Field_ID Field on a tab in a window */
-public void SetAD_Field_ID (int AD_Field_ID)
+@param VAF_Field_ID Field on a tab in a window */
+public void SetVAF_Field_ID (int VAF_Field_ID)
 {
-if (AD_Field_ID < 1) throw new ArgumentException ("AD_Field_ID is mandatory.");
-Set_Value ("AD_Field_ID", AD_Field_ID);
+if (VAF_Field_ID < 1) throw new ArgumentException ("VAF_Field_ID is mandatory.");
+Set_Value ("VAF_Field_ID", VAF_Field_ID);
 }
 /** Get Field.
 @return Field on a tab in a window */
-public int GetAD_Field_ID() 
+public int GetVAF_Field_ID() 
 {
-Object ii = Get_Value("AD_Field_ID");
+Object ii = Get_Value("VAF_Field_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,7 +133,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Field_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Field_ID().ToString());
 }
 /** Set User defined Field.
 @param AD_UserDef_Field_ID User defined Field */

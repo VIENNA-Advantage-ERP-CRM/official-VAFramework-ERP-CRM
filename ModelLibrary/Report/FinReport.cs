@@ -888,8 +888,8 @@ namespace VAdvantage.Report
         //	Set Name,Description
         String sql_select = "SELECT e.Name, fa.Description "
             + "FROM Fact_Acct fa"
-            + " INNER JOIN AD_Table t ON (fa.AD_Table_ID=t.AD_Table_ID)"
-            + " INNER JOIN AD_Element e ON (t.TableName||'_ID'=e.ColumnName) "
+            + " INNER JOIN VAF_TableView t ON (fa.VAF_TableView_ID=t.VAF_TableView_ID)"
+            + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
             + "WHERE r.Fact_Acct_ID=fa.Fact_Acct_ID";
         //	Translated Version ...
         sql = new StringBuilder ("UPDATE T_Report r SET (Name,Description)=(")
@@ -1163,8 +1163,8 @@ namespace VAdvantage.Report
         //	Create New
         if (createNew)
         {
-            int AD_Table_ID = 544;		//	T_Report
-            pf = MPrintFormat.CreateFromTable(GetCtx(), AD_Table_ID);
+            int VAF_TableView_ID = 544;		//	T_Report
+            pf = MPrintFormat.CreateFromTable(GetCtx(), VAF_TableView_ID);
             AD_PrintFormat_ID = pf.GetAD_PrintFormat_ID();
             _report.SetAD_PrintFormat_ID(AD_PrintFormat_ID);
             _report.Save();

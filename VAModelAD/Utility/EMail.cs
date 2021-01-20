@@ -109,7 +109,7 @@ namespace VAdvantage.Utility
         /// <param name="toName"></param>
         /// <param name="subject"></param>
         /// <param name="message"></param>
-        public EMail(X_AD_Client client, String fromEMail, String fromName, String toEMail, String toName,
+        public EMail(X_VAF_Client client, String fromEMail, String fromName, String toEMail, String toName,
             String subject, String message)
             : this(client.GetCtx(), client.GetSmtpHost(), client.GetSmtpPort(), client.IsSmtpTLS(),
                 fromEMail, fromName, toEMail, toName, subject, message)
@@ -131,7 +131,7 @@ namespace VAdvantage.Utility
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <param name="isHtml"></param>
-        public EMail(X_AD_Client client, String fromEMail, String fromName, String toEMail, String toName,
+        public EMail(X_VAF_Client client, String fromEMail, String fromName, String toEMail, String toName,
             String subject, String message, bool? isHtml)
             : this(client.GetCtx(), client.GetSmtpHost(), client.GetSmtpPort(), client.IsSmtpTLS(),
                 fromEMail, fromName, toEMail, toName, subject, message, isHtml)
@@ -1576,7 +1576,7 @@ namespace VAdvantage.Utility
             }
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(GetSmtpHost()) || sendFromClient)
             {
-                X_AD_Client client = new X_AD_Client(ctx, ctx.GetAD_Client_ID(), null);
+                X_VAF_Client client = new X_VAF_Client(ctx, ctx.GetVAF_Client_ID(), null);
                 SetSmtpHost(client.GetSmtpHost());
                 smtpport = client.GetSmtpPort();
                 if (smtpport != 0)
@@ -1626,7 +1626,7 @@ namespace VAdvantage.Utility
             string host = userConfig.GetSmtpHost();
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(host) || IsSendFromClient)
             {
-                X_AD_Client client = new X_AD_Client(ctx, ctx.GetAD_Client_ID(), null);
+                X_VAF_Client client = new X_VAF_Client(ctx, ctx.GetVAF_Client_ID(), null);
                 host = client.GetSmtpHost();
                 int smtpport = client.GetSmtpPort();
                 if (!IsSendFromClient)
@@ -1767,7 +1767,7 @@ namespace VAdvantage.Utility
         public static String GetURL(int AD_User_ID)
         {
 
-            string sql = "Select URL from AD_Client where AD_Client_ID=" + AD_User_ID + "and IsActive='Y'";
+            string sql = "Select URL from VAF_Client where VAF_Client_ID=" + AD_User_ID + "and IsActive='Y'";
 
             try
             {

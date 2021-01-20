@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_InfoWindow
+/** Generated Model for VAF_QuickSearchWindow
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_InfoWindow : PO
+public class X_VAF_QuickSearchWindow : PO
 {
-public X_AD_InfoWindow (Context ctx, int AD_InfoWindow_ID, Trx trxName) : base (ctx, AD_InfoWindow_ID, trxName)
+public X_VAF_QuickSearchWindow (Context ctx, int VAF_QuickSearchWindow_ID, Trx trxName) : base (ctx, VAF_QuickSearchWindow_ID, trxName)
 {
-/** if (AD_InfoWindow_ID == 0)
+/** if (VAF_QuickSearchWindow_ID == 0)
 {
-SetAD_InfoWindow_ID (0);
+SetVAF_QuickSearchWindow_ID (0);
 SetEntityType (null);	// U
 SetFromClause (null);
 SetName (null);
 }
  */
 }
-public X_AD_InfoWindow (Ctx ctx, int AD_InfoWindow_ID, Trx trxName) : base (ctx, AD_InfoWindow_ID, trxName)
+public X_VAF_QuickSearchWindow (Ctx ctx, int VAF_QuickSearchWindow_ID, Trx trxName) : base (ctx, VAF_QuickSearchWindow_ID, trxName)
 {
-/** if (AD_InfoWindow_ID == 0)
+/** if (VAF_QuickSearchWindow_ID == 0)
 {
-SetAD_InfoWindow_ID (0);
+SetVAF_QuickSearchWindow_ID (0);
 SetEntityType (null);	// U
 SetFromClause (null);
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_InfoWindow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_QuickSearchWindow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_InfoWindow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_InfoWindow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_QuickSearchWindow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_InfoWindow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_InfoWindow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_QuickSearchWindow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_InfoWindow()
+static X_VAF_QuickSearchWindow()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_InfoWindow()
 //static long serialVersionUID = 27562514361812L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045023L;
-/** AD_Table_ID=895 */
+/** VAF_TableView_ID=895 */
 public static int Table_ID;
  // =895;
 
-/** TableName=AD_InfoWindow */
-public static String Table_Name="AD_InfoWindow";
+/** TableName=VAF_QuickSearchWindow */
+public static String Table_Name="VAF_QuickSearchWindow";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,37 +113,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_InfoWindow[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_QuickSearchWindow[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Info Window.
-@param AD_InfoWindow_ID Info and search/select Window */
-public void SetAD_InfoWindow_ID (int AD_InfoWindow_ID)
+@param VAF_QuickSearchWindow_ID Info and search/select Window */
+public void SetVAF_QuickSearchWindow_ID (int VAF_QuickSearchWindow_ID)
 {
-if (AD_InfoWindow_ID < 1) throw new ArgumentException ("AD_InfoWindow_ID is mandatory.");
-Set_ValueNoCheck ("AD_InfoWindow_ID", AD_InfoWindow_ID);
+if (VAF_QuickSearchWindow_ID < 1) throw new ArgumentException ("VAF_QuickSearchWindow_ID is mandatory.");
+Set_ValueNoCheck ("VAF_QuickSearchWindow_ID", VAF_QuickSearchWindow_ID);
 }
 /** Get Info Window.
 @return Info and search/select Window */
-public int GetAD_InfoWindow_ID() 
+public int GetVAF_QuickSearchWindow_ID() 
 {
-Object ii = Get_Value("AD_InfoWindow_ID");
+Object ii = Get_Value("VAF_QuickSearchWindow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

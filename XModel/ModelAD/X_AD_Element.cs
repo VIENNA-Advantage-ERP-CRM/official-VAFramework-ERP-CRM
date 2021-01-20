@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Element
+/** Generated Model for VAF_ColumnDic
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Element : PO
+public class X_VAF_ColumnDic : PO
 {
-public X_AD_Element (Context ctx, int AD_Element_ID, Trx trxName) : base (ctx, AD_Element_ID, trxName)
+public X_VAF_ColumnDic (Context ctx, int VAF_ColumnDic_ID, Trx trxName) : base (ctx, VAF_ColumnDic_ID, trxName)
 {
-/** if (AD_Element_ID == 0)
+/** if (VAF_ColumnDic_ID == 0)
 {
-SetAD_Element_ID (0);
+SetVAF_ColumnDic_ID (0);
 SetColumnName (null);
 SetEntityType (null);	// U
 SetName (null);
@@ -28,11 +28,11 @@ SetPrintName (null);
 }
  */
 }
-public X_AD_Element (Ctx ctx, int AD_Element_ID, Trx trxName) : base (ctx, AD_Element_ID, trxName)
+public X_VAF_ColumnDic (Ctx ctx, int VAF_ColumnDic_ID, Trx trxName) : base (ctx, VAF_ColumnDic_ID, trxName)
 {
-/** if (AD_Element_ID == 0)
+/** if (VAF_ColumnDic_ID == 0)
 {
-SetAD_Element_ID (0);
+SetVAF_ColumnDic_ID (0);
 SetColumnName (null);
 SetEntityType (null);	// U
 SetName (null);
@@ -45,7 +45,7 @@ SetPrintName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ColumnDic (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_AD_Element (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ColumnDic (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_AD_Element (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Element (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ColumnDic (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Element()
+static X_VAF_ColumnDic()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,12 +76,12 @@ static X_AD_Element()
 //static long serialVersionUID = 27562514361138L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044349L;
-/** AD_Table_ID=276 */
+/** VAF_TableView_ID=276 */
 public static int Table_ID;
  // =276;
 
-/** TableName=AD_Element */
-public static String Table_Name="AD_Element";
+/** TableName=VAF_ColumnDic */
+public static String Table_Name="VAF_ColumnDic";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -115,21 +115,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Element[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ColumnDic[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set System Element.
-@param AD_Element_ID System Element enables the central maintenance of column description and help. */
-public void SetAD_Element_ID (int AD_Element_ID)
+@param VAF_ColumnDic_ID System Element enables the central maintenance of column description and help. */
+public void SetVAF_ColumnDic_ID (int VAF_ColumnDic_ID)
 {
-if (AD_Element_ID < 1) throw new ArgumentException ("AD_Element_ID is mandatory.");
-Set_ValueNoCheck ("AD_Element_ID", AD_Element_ID);
+if (VAF_ColumnDic_ID < 1) throw new ArgumentException ("VAF_ColumnDic_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ColumnDic_ID", VAF_ColumnDic_ID);
 }
 /** Get System Element.
 @return System Element enables the central maintenance of column description and help. */
-public int GetAD_Element_ID() 
+public int GetVAF_ColumnDic_ID() 
 {
-Object ii = Get_Value("AD_Element_ID");
+Object ii = Get_Value("VAF_ColumnDic_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -172,18 +172,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Dynamic Validation.
-@param AD_Val_Rule_ID Dynamic Validation Rule */
-public void SetAD_Val_Rule_ID (int AD_Val_Rule_ID)
+@param VAF_DataVal_Rule_ID Dynamic Validation Rule */
+public void SetVAF_DataVal_Rule_ID (int VAF_DataVal_Rule_ID)
 {
-if (AD_Val_Rule_ID <= 0) Set_Value ("AD_Val_Rule_ID", null);
+if (VAF_DataVal_Rule_ID <= 0) Set_Value ("VAF_DataVal_Rule_ID", null);
 else
-Set_Value ("AD_Val_Rule_ID", AD_Val_Rule_ID);
+Set_Value ("VAF_DataVal_Rule_ID", VAF_DataVal_Rule_ID);
 }
 /** Get Dynamic Validation.
 @return Dynamic Validation Rule */
-public int GetAD_Val_Rule_ID() 
+public int GetVAF_DataVal_Rule_ID() 
 {
-Object ii = Get_Value("AD_Val_Rule_ID");
+Object ii = Get_Value("VAF_DataVal_Rule_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

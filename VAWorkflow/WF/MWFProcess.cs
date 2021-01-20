@@ -82,7 +82,7 @@ namespace VAdvantage.WF
             }
 		    _wf = wf;
 		    _pi = pi;
-            SetAD_Client_ID(wf.GetAD_Client_ID());
+            SetVAF_Client_ID(wf.GetVAF_Client_ID());
 		    SetAD_Workflow_ID (wf.GetAD_Workflow_ID());
 		    SetPriority(wf.GetPriority());
 		    base.SetWFState (WFSTATE_NotStarted);
@@ -92,7 +92,7 @@ namespace VAdvantage.WF
             //
 
 		    //	Document
-		    SetAD_Table_ID(wf.GetAD_Table_ID());
+		    SetVAF_TableView_ID(wf.GetVAF_TableView_ID());
 		    SetRecord_ID(pi.GetRecord_ID());
 		    if (GetPO() == null)
 		    {
@@ -116,7 +116,7 @@ namespace VAdvantage.WF
             if (_po != null)
             {
                 // Set transaction organization on workflow process
-                SetAD_Org_ID(_po.GetAD_Org_ID());
+                SetVAF_Org_ID(_po.GetVAF_Org_ID());
                 _po.Lock();
             }
 	    }
@@ -314,7 +314,7 @@ namespace VAdvantage.WF
         {
             log.Config("Last=" + last);
             //	transitions from the last processed node
-            MWFNodeNext[] transitions = GetWorkflow().GetNodeNexts(last.GetAD_WF_Node_ID(), last.GetAD_Client_ID());
+            MWFNodeNext[] transitions = GetWorkflow().GetNodeNexts(last.GetAD_WF_Node_ID(), last.GetVAF_Client_ID());
             if (transitions == null || transitions.Length == 0)
             {
                 log.Config("none");
@@ -368,7 +368,7 @@ namespace VAdvantage.WF
                     MRole.GetDefault(GetCtx(), false).AddAccessSQL(
                     "SELECT AD_WF_Responsible_ID FROM AD_WF_Responsible "
                     + "WHERE ResponsibleType='H' AND COALESCE(AD_User_ID,0)=0 "
-                    + "ORDER BY AD_Client_ID DESC",
+                    + "ORDER BY VAF_Client_ID DESC",
                     "AD_WF_Responsible", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO));
             SetAD_WF_Responsible_ID(AD_WF_Responsible_ID);
         }
@@ -513,7 +513,7 @@ namespace VAdvantage.WF
             if (GetRecord_ID() == 0)
                 return null;
 
-            MTable table = MTable.Get(GetCtx(), GetAD_Table_ID());
+            MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
             _po = table.GetPO(GetCtx(), GetRecord_ID(), Get_TrxName());
             return _po;
         }

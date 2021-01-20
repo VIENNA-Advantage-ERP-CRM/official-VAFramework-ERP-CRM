@@ -98,7 +98,7 @@ static X_C_PaymentProcessor()
 //static long serialVersionUID 27562514373990L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057201L;
-/** AD_Table_ID=398 */
+/** VAF_TableView_ID=398 */
 public static int Table_ID;
  // =398;
 

@@ -27,7 +27,7 @@ public X_GL_ReDistribution (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr
  added by ->Harwinder */
 static X_GL_ReDistribution(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27856268167673L;/** Last Updated Timestamp 11/19/2019 11:24:10 AM */
-public static long updatedMS = 1574142850884L;/** AD_Table_ID=1000533 */
+public static long updatedMS = 1574142850884L;/** VAF_TableView_ID=1000533 */
 public static int Table_ID; // =1000533;
 /** TableName=GL_ReDistribution */
 public static String Table_Name="GL_ReDistribution";

@@ -109,30 +109,30 @@ namespace VAdvantage.Model
         /// Get AccountSchema of Client
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">client or 0 for all</param>
+        /// <param name="VAF_Client_ID">client or 0 for all</param>
         /// <returns>Array of AcctSchema of Client</returns>
-        public static MAcctSchema[] GetClientAcctSchema(Ctx ctx, int AD_Client_ID)
+        public static MAcctSchema[] GetClientAcctSchema(Ctx ctx, int VAF_Client_ID)
         {
-            return GetClientAcctSchema(ctx, AD_Client_ID, null);
+            return GetClientAcctSchema(ctx, VAF_Client_ID, null);
         }	//	getClientAcctSchema
 
         /// <summary>
         /// Get AccountSchema of Client
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">client or 0 for all</param>
+        /// <param name="VAF_Client_ID">client or 0 for all</param>
         /// <param name="trxName">optional trx </param>
         /// <returns>Array of AcctSchema of Client</returns>
-        public static MAcctSchema[] GetClientAcctSchema(Ctx ctx, int AD_Client_ID, Trx trxName)
+        public static MAcctSchema[] GetClientAcctSchema(Ctx ctx, int VAF_Client_ID, Trx trxName)
         {
             //  Check Cache
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             if (_schema.ContainsKey(key))
                 return (MAcctSchema[])_schema[key];
 
             //  Create New
             List<MAcctSchema> list = new List<MAcctSchema>();
-            MClientInfo info = MClientInfo.Get(ctx, AD_Client_ID, trxName);
+            MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID, trxName);
             MAcctSchema ass = MAcctSchema.Get(ctx, info.GetC_AcctSchema1_ID(), trxName);
             if (ass.Get_ID() != 0 && trxName == null)
                 list.Add(ass);
@@ -142,9 +142,9 @@ namespace VAdvantage.Model
                 + "WHERE IsActive='Y'"
                 + " AND EXISTS (SELECT * FROM C_AcctSchema_GL gl WHERE acs.C_AcctSchema_ID=gl.C_AcctSchema_ID)"
                 + " AND EXISTS (SELECT * FROM C_AcctSchema_Default d WHERE acs.C_AcctSchema_ID=d.C_AcctSchema_ID)";
-            if (AD_Client_ID != 0)
+            if (VAF_Client_ID != 0)
             {
-                sql += " AND AD_Client_ID=" + AD_Client_ID;
+                sql += " AND VAF_Client_ID=" + VAF_Client_ID;
             }
             sql += " ORDER BY C_AcctSchema_ID";
 
@@ -190,16 +190,16 @@ namespace VAdvantage.Model
         }   //  getClientAcctSchema
 
         // by amit 23-12-2015
-        public static MAcctSchema[] GetClientAcctSchemas(Ctx ctx, int AD_Client_ID, Trx trxName)
+        public static MAcctSchema[] GetClientAcctSchemas(Ctx ctx, int VAF_Client_ID, Trx trxName)
         {
             //  Check Cache
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             if (_schema.ContainsKey(key))
                 return (MAcctSchema[])_schema[key];
 
             //  Create New
             List<MAcctSchema> list = new List<MAcctSchema>();
-            MClientInfo info = MClientInfo.Get(ctx, AD_Client_ID, trxName);
+            MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID, trxName);
             MAcctSchema ass = MAcctSchema.Get(ctx, info.GetC_AcctSchema1_ID(), trxName);
             if (ass.Get_ID() != 0 && trxName == null)
                 list.Add(ass);
@@ -207,9 +207,9 @@ namespace VAdvantage.Model
             //	Other
             String sql = "SELECT C_AcctSchema_ID FROM C_AcctSchema acs "
                 + "WHERE IsActive='Y'";
-            if (AD_Client_ID != 0)
+            if (VAF_Client_ID != 0)
             {
-                sql += " AND AD_Client_ID=" + AD_Client_ID;
+                sql += " AND VAF_Client_ID=" + VAF_Client_ID;
             }
             sql += " ORDER BY C_AcctSchema_ID";
 
@@ -256,7 +256,7 @@ namespace VAdvantage.Model
 
 
         /** Cache of Client AcctSchema Arrays		**/
-        private static CCache<int, MAcctSchema[]> _schema = new CCache<int, MAcctSchema[]>("AD_ClientInfo", 3);	//  3 clients
+        private static CCache<int, MAcctSchema[]> _schema = new CCache<int, MAcctSchema[]>("VAF_ClientDetail", 3);	//  3 clients
         /**	Cache of AcctSchemas 					**/
         private static CCache<int, MAcctSchema> _cache = new CCache<int, MAcctSchema>("C_AcctSchema", 3);	//  3 accounting schemas
         /**	Logger			*/
@@ -348,17 +348,17 @@ namespace VAdvantage.Model
 
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             if (base.GetTaxCorrectionType() == null)
                 SetTaxCorrectionType(IsDiscountCorrectsTax() ? TAXCORRECTIONTYPE_Write_OffAndDiscount : TAXCORRECTIONTYPE_None);
             CheckCosting();
             //	Check Primary
-            if (GetAD_OrgOnly_ID() != 0)
+            if (GetVAF_OrgOnly_ID() != 0)
             {
-                MClientInfo info = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
+                MClientInfo info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID());
                 if (info.GetC_AcctSchema1_ID() == GetC_AcctSchema_ID())
-                    SetAD_OrgOnly_ID(0);
+                    SetVAF_OrgOnly_ID(0);
             }
             return true;
         }
@@ -370,7 +370,7 @@ namespace VAdvantage.Model
             if (GetM_CostType_ID() == 0)
             {
                 MCostType ct = new MCostType(GetCtx(), 0, Get_TrxName());
-                ct.SetClientOrg(GetAD_Client_ID(), 0);
+                ct.SetClientOrg(GetVAF_Client_ID(), 0);
                 ct.SetName(GetName());
                 ct.Save();
                 SetM_CostType_ID(ct.GetM_CostType_ID());
@@ -418,21 +418,21 @@ namespace VAdvantage.Model
         /// Skip creating postings for this Org.
         /// Requires setOnlyOrgs (MReportTree requires MTree in Basis)
         /// </summary>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <returns>true if to skip</returns>
-        public bool IsSkipOrg(int AD_Org_ID)
+        public bool IsSkipOrg(int VAF_Org_ID)
         {
-            if (GetAD_OrgOnly_ID() == 0)
+            if (GetVAF_OrgOnly_ID() == 0)
             {
                 return false;
             }
             //	Only Organization
-            if (GetAD_OrgOnly_ID() == AD_Org_ID)
+            if (GetVAF_OrgOnly_ID() == VAF_Org_ID)
             {
                 return false;
             }
             if (_onlyOrg == null)
-                _onlyOrg = MOrg.Get(GetCtx(), GetAD_OrgOnly_ID());
+                _onlyOrg = MOrg.Get(GetCtx(), GetVAF_OrgOnly_ID());
             //	Not Summary Only - i.e. skip it
             if (!_onlyOrg.IsSummary())
             {
@@ -444,7 +444,7 @@ namespace VAdvantage.Model
             }
             for (int i = 0; i < _onlyOrgs.Length; i++)
             {
-                if (AD_Org_ID == Utility.Util.GetValueOfInt(_onlyOrgs[i]))
+                if (VAF_Org_ID == Utility.Util.GetValueOfInt(_onlyOrgs[i]))
                 {
                     return false;
 

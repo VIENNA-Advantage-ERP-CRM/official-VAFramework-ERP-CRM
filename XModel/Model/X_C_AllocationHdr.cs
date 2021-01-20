@@ -45,7 +45,7 @@ SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false)
  added by ->Harwinder */
         static X_C_AllocationHdr() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27884379466138L;/** Last Updated Timestamp 10/9/2020 2:35:49 PM */
-        public static long updatedMS = 1602254149349L;/** AD_Table_ID=735 */
+        public static long updatedMS = 1602254149349L;/** VAF_TableView_ID=735 */
         public static int Table_ID; // =735;
         /** TableName=C_AllocationHdr */
         public static String Table_Name = "C_AllocationHdr";

@@ -43,7 +43,7 @@ SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
  added by ->Harwinder */
         static X_M_Product_BOM() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27763409763836L;/** Last Updated Timestamp 12/9/2016 5:24:07 PM */
-        public static long updatedMS = 1481284447047L;/** AD_Table_ID=383 */
+        public static long updatedMS = 1481284447047L;/** VAF_TableView_ID=383 */
         public static int Table_ID; // =383;
         /** TableName=M_Product_BOM */
         public static String Table_Name = "M_Product_BOM";

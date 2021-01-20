@@ -374,7 +374,7 @@ namespace VAdvantage.Model
             }
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -382,7 +382,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetStatementDate(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetStatementDate(), GetVAF_Org_ID()))
             {
                 m_processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -413,8 +413,8 @@ namespace VAdvantage.Model
             }
             SetStatementDifference(total);
             SetEndingBalance(Decimal.Add(GetBeginningBalance(), total));
-            if (!MPeriod.IsOpen(GetCtx(), minDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID())
-                || !MPeriod.IsOpen(GetCtx(), maxDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), minDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID())
+                || !MPeriod.IsOpen(GetCtx(), maxDate, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -422,7 +422,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetStatementDate(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetStatementDate(), GetVAF_Org_ID()))
             {
                 m_processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -613,7 +613,7 @@ namespace VAdvantage.Model
             //	Std Period open?
             else
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetAD_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MDocBaseType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
                 {
                     m_processMsg = "@PeriodClosed@";
                     return false;
@@ -621,7 +621,7 @@ namespace VAdvantage.Model
 
                 // is Non Business Day?
                 // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-                if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetStatementDate(), GetAD_Org_ID()))
+                if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetStatementDate(), GetVAF_Org_ID()))
                 {
                     m_processMsg = Common.Common.NONBUSINESSDAY;
                     return false;
@@ -688,7 +688,7 @@ namespace VAdvantage.Model
                     if (line.GetC_Payment_ID() != 0)
                     {
                         MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_TrxName());
-                        string _paymentMethod = Util.GetValueOfString(DB.ExecuteScalar("Select va009_paymentbaseType from va009_paymentmethod where va009_paymentmethod_id=" + payment.GetVA009_PaymentMethod_ID() + " And IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID()));
+                        string _paymentMethod = Util.GetValueOfString(DB.ExecuteScalar("Select va009_paymentbaseType from va009_paymentmethod where va009_paymentmethod_id=" + payment.GetVA009_PaymentMethod_ID() + " And IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (_paymentMethod == "S") // Check
                             status = "B"; // Bounced
                         else

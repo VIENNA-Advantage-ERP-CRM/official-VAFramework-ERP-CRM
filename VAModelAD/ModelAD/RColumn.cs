@@ -185,10 +185,10 @@ namespace VAdvantage.Model
                         language, "C_Location_ID", RModel.TABLE_ALIAS, columnName) + ")";
                     _isIDcol = true;
                 }
-                else if (columnName.Equals("AD_OrgTrx_ID"))
+                else if (columnName.Equals("VAF_OrgTrx_ID"))
                 {
                     _colSQL += ",(" + VLookUpFactory.GetLookup_TableDirEmbed(
-                        language, "AD_Org_ID", RModel.TABLE_ALIAS, columnName) + ")";
+                        language, "VAF_Org_ID", RModel.TABLE_ALIAS, columnName) + ")";
                     _isIDcol = true;
                 }
                 else if (displayType == DisplayType.TableDir)

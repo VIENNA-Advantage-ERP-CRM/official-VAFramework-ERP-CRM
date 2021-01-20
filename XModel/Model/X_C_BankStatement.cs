@@ -88,7 +88,7 @@ static X_C_BankStatement()
 //static long serialVersionUID 27562514370839L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054050L;
-/** AD_Table_ID=392 */
+/** VAF_TableView_ID=392 */
 public static int Table_ID;
  // =392;
 

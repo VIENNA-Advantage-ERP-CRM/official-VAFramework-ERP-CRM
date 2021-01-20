@@ -64,7 +64,7 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-            string query = "Select C_CampaignTargetList_id from C_CampaignTargetList where C_Campaign_id=" + GetRecord_ID() + " and ad_client_id = " + GetCtx().GetAD_Client_ID();
+            string query = "Select C_CampaignTargetList_id from C_CampaignTargetList where C_Campaign_id=" + GetRecord_ID() + " and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
             IDataReader MainDr = DB.ExecuteReader(query, null, Get_Trx());
             query = "Delete From C_InviteeList  where C_Campaign_id=" + GetRecord_ID();
             int value = DB.ExecuteQuery(query);

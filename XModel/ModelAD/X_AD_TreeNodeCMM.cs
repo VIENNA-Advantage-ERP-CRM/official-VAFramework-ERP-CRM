@@ -72,7 +72,7 @@ static X_AD_TreeNodeCMM()
 //static long serialVersionUID 27562514364993L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048204L;
-/** AD_Table_ID=846 */
+/** VAF_TableView_ID=846 */
 public static int Table_ID;
  // =846;
 

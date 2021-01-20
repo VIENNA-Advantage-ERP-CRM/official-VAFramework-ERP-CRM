@@ -502,9 +502,9 @@
 
         var fields = mTab.gridTable.gridFields;
         var mField = null;
-        var vGridId = curWindowNo + "_" + mTab.vo.AD_Tab_ID;
-        var vCardId = curWindowNo + "_c" + mTab.vo.AD_Tab_ID;
-        var vMapId = curWindowNo + "_m" + mTab.vo.AD_Tab_ID;
+        var vGridId = curWindowNo + "_" + mTab.vo.VAF_Tab_ID;
+        var vCardId = curWindowNo + "_c" + mTab.vo.VAF_Tab_ID;
+        var vMapId = curWindowNo + "_m" + mTab.vo.VAF_Tab_ID;
 
         mTab.getTableModel().setDoPaging(this.doPaging);
 
@@ -512,9 +512,9 @@
         //var bindingSource = null;
         var role = VIS.MRole;
         if (!role.getIsDisplayClient() || !this.showClient)
-            mTab.getField("AD_Client_ID").setDisplayed(false);
+            mTab.getField("VAF_Client_ID").setDisplayed(false);
         if (!role.getIsDisplayOrg() || !this.showOrg)
-            mTab.getField("AD_Org_ID").setDisplayed(false);
+            mTab.getField("VAF_Org_ID").setDisplayed(false);
 
 
 
@@ -579,8 +579,8 @@
             var sql = "VIS_120";
 
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_Client_ID", VIS.Env.getCtx().getAD_Client_ID());
-            param[1] = new VIS.DB.SqlParam("@AD_Table_ID", mTab.getAD_Table_ID());
+            param[0] = new VIS.DB.SqlParam("@VAF_Client_ID", VIS.Env.getCtx().getVAF_Client_ID());
+            param[1] = new VIS.DB.SqlParam("@VAF_TableView_ID", mTab.getVAF_TableView_ID());
             AD_Tree_ID = executeScalar(sql, param);
 
             //if (AD_Tree_ID > 0) {
@@ -611,7 +611,7 @@
                     this.m_tree = new VIS.TreePanel(curWindowNo, false, true, false, this);
                     aPanel.aShowSummaryLevel.hide();
                 }
-                this.m_tree.setTabID(mTab.getAD_Tab_ID());
+                this.m_tree.setTabID(mTab.getVAF_Tab_ID());
                 //Set Style
                 if (mTab.getTabNo() == 0)	//	initialize other tabs later
                 {
@@ -1104,20 +1104,20 @@
             }
             if (AD_Tree_ID == 0) {
 
-                var AD_Table_ID = this.gTab.getAD_Table_ID();
-                var AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
+                var VAF_TableView_ID = this.gTab.getVAF_TableView_ID();
+                var VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
 
-                if (AD_Table_ID == 0)
+                if (VAF_TableView_ID == 0)
                     return 0;
 
                 //var dr = executeReader("SELECT AD_Tree_ID, Name FROM AD_Tree "
-                //    + "WHERE AD_Client_ID=" + AD_Client_ID + " AND AD_Table_ID=" + AD_Table_ID + " AND IsActive='Y' AND IsAllNodes='Y' "
+                //    + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND IsActive='Y' AND IsAllNodes='Y' "
                 //    + "ORDER BY IsDefault DESC, AD_Tree_ID");
 
                 var sql = "VIS_121";
                 var param = [];
-                param[0] = new VIS.DB.SqlParam("@AD_Client_ID", AD_Client_ID);
-                param[1] = new VIS.DB.SqlParam("@AD_Table_ID", AD_Table_ID);
+                param[0] = new VIS.DB.SqlParam("@VAF_Client_ID", VAF_Client_ID);
+                param[1] = new VIS.DB.SqlParam("@VAF_TableView_ID", VAF_TableView_ID);
                 var dr = executeReader(sql, param);
 
                 if (dr.read()) {
@@ -1126,7 +1126,7 @@
                 dr = null;
                 //AD_Tree_ID = 101;
                 //MTree.getDefaultAD_Tree_ID(
-                //		Env.getCtx().getAD_Client_ID(), m_mTab.getAD_Table_ID());
+                //		Env.getCtx().getVAF_Client_ID(), m_mTab.getVAF_TableView_ID());
             }
             if (this.m_tree != null && AD_Tree_ID > 0)
                 this.m_tree.initTree(AD_Tree_ID);
@@ -1158,7 +1158,7 @@
             // this.gTab.setQuery(null);
             this.navigate(0);
 
-            this.query(0, 0, false, nodeID, this.treeID, this.gTab.getAD_Table_ID());   //  autoSize
+            this.query(0, 0, false, nodeID, this.treeID, this.gTab.getVAF_TableView_ID());   //  autoSize
             return;
         }
 
@@ -1424,7 +1424,7 @@
         //MRole role = MRole.GetDefault();
         this.query(this.gTab.getOnlyCurrentDays(),
             //role.GetMaxQueryRecords(), false);	//	updated
-            0, false, this.treeNodeID, this.treeID, this.gTab.getAD_Table_ID());	//	updated
+            0, false, this.treeNodeID, this.treeID, this.gTab.getVAF_TableView_ID());	//	updated
     };
 
     VIS.GridController.prototype.navigatePage = function (newPage) {
@@ -1433,7 +1433,7 @@
         //MRole role = MRole.GetDefault();
         this.query(this.gTab.getOnlyCurrentDays(),
             //role.GetMaxQueryRecords(), false);	//	updated
-            0, false, this.treeNodeID, this.treeID, this.gTab.getAD_Table_ID());	//	updated
+            0, false, this.treeNodeID, this.treeID, this.gTab.getVAF_TableView_ID());	//	updated
     };
 
     VIS.GridController.prototype.navigateRelative = function (rowChange) {
@@ -1493,8 +1493,8 @@
 
         for (var i = 0; i < selIndices.length; i++) {
             var record = records[selIndices[i]];
-            if ("ad_client_id" in record) {
-                if (!VIS.MRole.getIsClientAccess(record.ad_client_id, true))
+            if ("vaf_client_id" in record) {
+                if (!VIS.MRole.getIsClientAccess(record.vaf_client_id, true))
                     retIndices.push(selIndices[i]);
             }
         }
@@ -1641,7 +1641,7 @@
 
     VIS.GridController.prototype.includeTab = function (gc) {
         var imcludedMTab = gc.getMTab();
-        if (this.gTab.getIncluded_Tab_ID() != imcludedMTab.getAD_Tab_ID())
+        if (this.gTab.getIncluded_Tab_ID() != imcludedMTab.getVAF_Tab_ID())
             return false;
         this.vIncludedGC = gc;
         this.vIncludedGC.switchMultiRow();

@@ -1,34 +1,34 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for AD_GridLayout
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAF_GridLayout
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_GridLayout : PO{public X_AD_GridLayout (Context ctx, int AD_GridLayout_ID, Trx trxName) : base (ctx, AD_GridLayout_ID, trxName){/** if (AD_GridLayout_ID == 0){SetAD_GridLayout_ID (0);SetAD_HeaderLayout_ID (0);} */
-}public X_AD_GridLayout (Ctx ctx, int AD_GridLayout_ID, Trx trxName) : base (ctx, AD_GridLayout_ID, trxName){/** if (AD_GridLayout_ID == 0){SetAD_GridLayout_ID (0);SetAD_HeaderLayout_ID (0);} */
+public class X_VAF_GridLayout : PO{public X_VAF_GridLayout (Context ctx, int VAF_GridLayout_ID, Trx trxName) : base (ctx, VAF_GridLayout_ID, trxName){/** if (VAF_GridLayout_ID == 0){SetVAF_GridLayout_ID (0);SetVAF_HeaderLayout_ID (0);} */
+}public X_VAF_GridLayout (Ctx ctx, int VAF_GridLayout_ID, Trx trxName) : base (ctx, VAF_GridLayout_ID, trxName){/** if (VAF_GridLayout_ID == 0){SetVAF_GridLayout_ID (0);SetVAF_HeaderLayout_ID (0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_GridLayout (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_GridLayout (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_GridLayout (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_GridLayout (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_GridLayout (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAF_GridLayout (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_GridLayout(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAF_GridLayout(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27858187917554L;/** Last Updated Timestamp 12/11/2019 4:40:00 PM */
-public static long updatedMS = 1576062600765L;/** AD_Table_ID=1000538 */
+public static long updatedMS = 1576062600765L;/** VAF_TableView_ID=1000538 */
 public static int Table_ID; // =1000538;
-/** TableName=AD_GridLayout */
-public static String Table_Name="AD_GridLayout";
+/** TableName=VAF_GridLayout */
+public static String Table_Name="VAF_GridLayout";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(4);/** AccessLevel
 @return 4 - System 
 */
@@ -43,15 +43,15 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_AD_GridLayout[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Grid Layout.
-@param AD_GridLayout_ID Grid Layout */
-public void SetAD_GridLayout_ID (int AD_GridLayout_ID){if (AD_GridLayout_ID < 1) throw new ArgumentException ("AD_GridLayout_ID is mandatory.");Set_ValueNoCheck ("AD_GridLayout_ID", AD_GridLayout_ID);}/** Get Grid Layout.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAF_GridLayout[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Grid Layout.
+@param VAF_GridLayout_ID Grid Layout */
+public void SetVAF_GridLayout_ID (int VAF_GridLayout_ID){if (VAF_GridLayout_ID < 1) throw new ArgumentException ("VAF_GridLayout_ID is mandatory.");Set_ValueNoCheck ("VAF_GridLayout_ID", VAF_GridLayout_ID);}/** Get Grid Layout.
 @return Grid Layout */
-public int GetAD_GridLayout_ID() {Object ii = Get_Value("AD_GridLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Header Layout.
-@param AD_HeaderLayout_ID Header Layout */
-public void SetAD_HeaderLayout_ID (int AD_HeaderLayout_ID){if (AD_HeaderLayout_ID < 1) throw new ArgumentException ("AD_HeaderLayout_ID is mandatory.");Set_ValueNoCheck ("AD_HeaderLayout_ID", AD_HeaderLayout_ID);}/** Get Header Layout.
+public int GetVAF_GridLayout_ID() {Object ii = Get_Value("VAF_GridLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Header Layout.
+@param VAF_HeaderLayout_ID Header Layout */
+public void SetVAF_HeaderLayout_ID (int VAF_HeaderLayout_ID){if (VAF_HeaderLayout_ID < 1) throw new ArgumentException ("VAF_HeaderLayout_ID is mandatory.");Set_ValueNoCheck ("VAF_HeaderLayout_ID", VAF_HeaderLayout_ID);}/** Get Header Layout.
 @return Header Layout */
-public int GetAD_HeaderLayout_ID() {Object ii = Get_Value("AD_HeaderLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+public int GetVAF_HeaderLayout_ID() {Object ii = Get_Value("VAF_HeaderLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
 /** Alignment AD_Reference_ID=1000223 */
 public static int ALIGNMENT_AD_Reference_ID=1000223;/** Horizontal = H */
 public static String ALIGNMENT_Horizontal = "H";/** Vertical = V */

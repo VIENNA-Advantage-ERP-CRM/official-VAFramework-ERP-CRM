@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Module Name    : Application Dictionry
- * Purpose        : Fetch the column form database and insert into AD_Table 
+ * Purpose        : Fetch the column form database and insert into VAF_TableView 
  * Class Used     : context.cs,globalvariable.cs...
  * Chronological Development
  * Jagmohan Bhatt       03-Sept-2009
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
             if (history)	//	Default=Each
                 m_dTableName = tableName + "H";
             else
-                m_derivedTableType = userDef ? X_AD_Table.SUBTABLETYPE_Delta_User : X_AD_Table.SUBTABLETYPE_Delta_System;
+                m_derivedTableType = userDef ? X_VAF_TableView.SUBTABLETYPE_Delta_User : X_VAF_TableView.SUBTABLETYPE_Delta_System;
             m_vTableName = tableName + "_v";
             log.Info(tableName + " + " + m_dTableName + " = " + m_vTableName);
         }	//	SubTableUtil
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
         /** The derived table		*/
         private MTable m_derivedTable;
         /**	Sub Table Type			*/
-        private String m_derivedTableType = X_AD_Table.SUBTABLETYPE_History_Each;
+        private String m_derivedTableType = X_VAF_TableView.SUBTABLETYPE_History_Each;
         /** The view table		*/
         private MTable m_viewTable;
         /** UserDef or SysDef Delta	*/
@@ -138,7 +138,7 @@ namespace VAdvantage.Model
             m_derivedTable.SetTableName(m_dTableName);
             m_derivedTable.SetName(m_derivedTable.GetName() + " SubTable");
             m_derivedTable.SetSubTableType(m_derivedTableType);
-            m_derivedTable.SetBase_Table_ID(m_baseTable.GetAD_Table_ID());
+            m_derivedTable.SetBase_Table_ID(m_baseTable.GetVAF_TableView_ID());
             if (!m_derivedTable.Save())
                 throw new Exception("Cannot save " + m_dTableName);
 
@@ -288,7 +288,7 @@ namespace VAdvantage.Model
                 if (tCol == null)
                     tCol = new MColumn(target);
                 PO.CopyValues(sCol, tCol);
-                tCol.SetAD_Table_ID(target.GetAD_Table_ID());	//	reset parent
+                tCol.SetVAF_TableView_ID(target.GetVAF_TableView_ID());	//	reset parent
                 tCol.SetIsCallout(false);
                 tCol.SetCallout(null);
                 tCol.SetIsMandatory(false);
@@ -320,7 +320,7 @@ namespace VAdvantage.Model
                         ele = new M_Element(m_ctx, keyColumnName, target.GetEntityType(), null);
                         ele.Save();
                     }
-                    key.SetAD_Element_ID(ele.GetAD_Element_ID());
+                    key.SetVAF_ColumnDic_ID(ele.GetVAF_ColumnDic_ID());
                     key.SetAD_Reference_ID(DisplayType.ID);
                     key.Save();
                 }
@@ -432,7 +432,7 @@ namespace VAdvantage.Model
                 col.SetIsCopy(false);           // By Default isCopy check box should be False on this Column.
                 CreateColumn(col, table, true);
             }
-            colName = "AD_Client_ID";
+            colName = "VAF_Client_ID";
             if (table.GetColumn(colName) == null)
             {
                 MColumn col = new MColumn(table);
@@ -440,14 +440,14 @@ namespace VAdvantage.Model
                 col.SetAD_Reference_ID(DisplayType.TableDir);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
-                col.SetAD_Val_Rule_ID(116);	//	Client Login
-                col.SetDefaultValue("@#AD_Client_ID@");
-                col.SetConstraintType(X_AD_Column.CONSTRAINTTYPE_Restrict);
+                col.SetVAF_DataVal_Rule_ID(116);	//	Client Login
+                col.SetDefaultValue("@#VAF_Client_ID@");
+                col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
                 col.SetEntityType(EntityType);
                 col.SetIsCopy(true);            // By Default isCopy check box should be true on this Column.
                 CreateColumn(col, table, true);
             }
-            colName = "AD_Org_ID";
+            colName = "VAF_Org_ID";
             if (table.GetColumn(colName) == null)
             {
                 MColumn col = new MColumn(table);
@@ -456,9 +456,9 @@ namespace VAdvantage.Model
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
                 col.SetIsMandatoryUI(true);
-                col.SetAD_Val_Rule_ID(104);	//	Org Security
-                col.SetDefaultValue("@#AD_Org_ID@");
-                col.SetConstraintType(X_AD_Column.CONSTRAINTTYPE_Restrict);
+                col.SetVAF_DataVal_Rule_ID(104);	//	Org Security
+                col.SetDefaultValue("@#VAF_Org_ID@");
+                col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
                 col.SetEntityType(EntityType);
                 col.SetIsCopy(true);            // By Default isCopy check box should be true on this Column.
                 CreateColumn(col, table, true);
@@ -494,7 +494,7 @@ namespace VAdvantage.Model
                 col.SetColumnName(colName);
                 col.SetAD_Reference_ID(DisplayType.Table);
                 col.SetAD_Reference_Value_ID(110);
-                col.SetConstraintType(X_AD_Column.CONSTRAINTTYPE_DoNOTCreate);
+                col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
                 col.SetEntityType(EntityType);
@@ -508,7 +508,7 @@ namespace VAdvantage.Model
                 col.SetColumnName(colName);
                 col.SetAD_Reference_ID(DisplayType.Table);
                 col.SetAD_Reference_Value_ID(110);
-                col.SetConstraintType(X_AD_Column.CONSTRAINTTYPE_DoNOTCreate);
+                col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
                 col.SetEntityType(EntityType);
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
             col.SetName(element.GetName());
             col.SetDescription(element.GetDescription());
             col.SetHelp(element.GetHelp());
-            col.SetAD_Element_ID(element.GetAD_Element_ID());
+            col.SetVAF_ColumnDic_ID(element.GetVAF_ColumnDic_ID());
             //
 
             if (!col.Save())

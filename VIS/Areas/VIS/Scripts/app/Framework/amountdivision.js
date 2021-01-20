@@ -1,9 +1,9 @@
 ﻿; (function (VIS, $) {
-	function AmountDivision(C_DimAmt_ID, AD_Org_ID, defaultVal, isReadOnly) {
-		//  AD_TableId = 0;
+	function AmountDivision(C_DimAmt_ID, VAF_Org_ID, defaultVal, isReadOnly) {
+		//  VAF_TableViewId = 0;
 		//  AD_RecordID = 0;
 		// C_DimAmt_ID = 0;
-		//  AD_Org_ID = 0;
+		//  VAF_Org_ID = 0;
 		if (C_DimAmt_ID && C_DimAmt_ID.toString().indexOf("<") > -1) {
 			C_DimAmt_ID = 0;
 		}
@@ -40,7 +40,7 @@
 		var arrAcctSchemaID = null;
 		var arrDimensionEType = null;
 		var ch = new VIS.ChildDialog();
-		//AD_Org_ID = 0;
+		//VAF_Org_ID = 0;
 		var ctrlDiv = null;
 		var divOrg = null;
 		var divAccountElement = null;
@@ -1793,7 +1793,7 @@
 					}
 				}//User List 1//User List 2
 				else if (DimensionTypeVal == "X1" || DimensionTypeVal == "X2" || DimensionTypeVal == "X3" || DimensionTypeVal == "X4" || DimensionTypeVal == "X5" || DimensionTypeVal == "X6" ||
-					DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and AD_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
+					DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and VAF_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
 				chkDuplicate = VIS.DB.executeScalar(sql);
 				if (chkDuplicate == null) {
 					var paramStr = DimensionLineID.toString();
@@ -1845,7 +1845,7 @@
 						}
 					}//User List 1//User List 2
 					else if (DimensionTypeVal == "X1" || DimensionTypeVal == "X2" || DimensionTypeVal == "X3" || DimensionTypeVal == "X4" || DimensionTypeVal == "X5" || DimensionTypeVal == "X6" ||
-						DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and AD_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
+						DimensionTypeVal == "X7" || DimensionTypeVal == "X8" || DimensionTypeVal == "X9") { sql += " and VAF_Column_ID=" + DimensionNameVal }//User Element 1 to User Element 9
 
 					chkDuplicate = VIS.DB.executeScalar(sql);
 
@@ -1952,7 +1952,7 @@
 				},
 				success: function (data) {
 					var Sql = "";
-					var DefaultValue = VIS.DB.executeScalar("select c_acctschema1_id from ad_clientinfo where ad_client_ID=" + VIS.Env.getCtx().getAD_Client_ID() + "");
+					var DefaultValue = VIS.DB.executeScalar("select c_acctschema1_id from VAF_ClientDetail where vaf_client_ID=" + VIS.Env.getCtx().getVAF_Client_ID() + "");
 					var defaultCheck = false;
 					var res = JSON.parse(data);
 					if (res.Error) {
@@ -2012,8 +2012,8 @@
 			else {
 				orgWhere = " AND IsSummary='N' AND (IsCostCenter='Y' OR IsProfitCenter='Y')";
 			}
-			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org_ID<>0" + orgWhere);
-			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, "AD_Org_ID<>0" + orgWhere);
+			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAF_Org_ID", 0, false, "VAF_Org_ID<>0" + orgWhere);
+			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAF_Org_ID", 0, false, "VAF_Org_ID<>0" + orgWhere);
 			var cmb = new VIS.Controls.VComboBox("Org_ID", false, false, true, lookup, 50);
 			var modalCmb = new VIS.Controls.VComboBox("Org_ID", false, false, true, modalLookup, 50);
 			cmbOrg = cmb.getControl().attr('placeholder', ' ').attr('data-placeholder', '');
@@ -2141,10 +2141,10 @@
 		var getUserElement = function () {
 			cmbUserElement = $("<select>");
 			modalCmbUserElement = $("<select>");
-			var sql = "select adt.ad_column_id,adt.columnname,adtab.TableName from c_acctschema_element ac inner join ad_column ad on ac.ad_column_id=ad.ad_column_id " +
-				" inner join ad_column adt on ad.ad_table_ID=adt.ad_table_ID and adt.isactive='Y' " +
-				"  inner join ad_table adtab on adtab.ad_table_id=ad.ad_table_ID " +
-				" where ac.c_acctschema_id=" + arrAcctSchemaID[0] + " and ac.elementtype='" + cmbDimensionType.find("option:selected").val() + "' and adt.isidentifier='Y' order by adt.ad_column_ID";
+			var sql = "select adt.vaf_column_id,adt.columnname,adtab.TableName from c_acctschema_element ac inner join vaf_column ad on ac.vaf_column_id=ad.vaf_column_id " +
+				" inner join vaf_column adt on ad.vaf_tableview_ID=adt.vaf_tableview_ID and adt.isactive='Y' " +
+				"  inner join vaf_tableview adtab on adtab.vaf_tableview_id=ad.vaf_tableview_ID " +
+				" where ac.c_acctschema_id=" + arrAcctSchemaID[0] + " and ac.elementtype='" + cmbDimensionType.find("option:selected").val() + "' and adt.isidentifier='Y' order by adt.vaf_column_ID";
 			var dr = VIS.DB.executeReader(sql);
 			var tblName = "";
 			var colName = "";
@@ -2176,11 +2176,11 @@
 					modalCmbUserElement.append('<option value=' + drTbl.getInt(0) + '>' + drTbl.getString(1) + '</option>');
 				}
 			}
-			//var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Column_ID", 0, false, "AD_Column.IsKey='Y' AND AD_Column.IsActive='Y'");
-			//var cmb = new VIS.Controls.VComboBox("AD_Column_ID", false, false, true, lookup, 50);
+			//var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAF_Column_ID", 0, false, "VAF_Column.IsKey='Y' AND VAF_Column.IsActive='Y'");
+			//var cmb = new VIS.Controls.VComboBox("VAF_Column_ID", false, false, true, lookup, 50);
 			//cmbUserElement = cmb.getControl();
 			cmbUserElement.attr("tabindex", "4");
-			lblUserElement.append(VIS.Msg.translate(VIS.Env.getCtx(), "AD_Column_ID"));
+			lblUserElement.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Column_ID"));
 			divUserElement = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
 			divUserElement.css("width", "100%");
 			var divUserElementCtrlWrap = $("<div class='vis-control-wrap'>");
@@ -2190,11 +2190,11 @@
 			cmbUserElement.focus();
 			modalLblUserElement = $("<label>");
 
-			//var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "AD_Column_ID", 0, false, "AD_Column.IsKey='Y' AND AD_Column.IsActive='Y'");
-			//var modalCmb = new VIS.Controls.VComboBox("AD_Column_ID", false, false, true, modalLookup, 50);
+			//var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAF_Column_ID", 0, false, "VAF_Column.IsKey='Y' AND VAF_Column.IsActive='Y'");
+			//var modalCmb = new VIS.Controls.VComboBox("VAF_Column_ID", false, false, true, modalLookup, 50);
 			//modalCmbUserElement = modalCmb.getControl();
 			modalCmbUserElement.attr("tabindex", "9");
-			modalLblUserElement.append(VIS.Msg.translate(VIS.Env.getCtx(), "AD_Column_ID"));
+			modalLblUserElement.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Column_ID"));
 			modalDivUserElement = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
 			modalDivUserElement.css("width", "100%");
 			var modalDivUserElementCtrlWrap = $("<div class='vis-control-wrap'>");
@@ -2842,7 +2842,7 @@
 			busyDiv("visible");
 			txtAmount.addVetoableChangeListener(this);
 			modalTxtAmount.addVetoableChangeListener(this);
-			getAccountingSchema(AD_Org_ID, function () {
+			getAccountingSchema(VAF_Org_ID, function () {
 
 				getDimensionLine(allAcctSchemaID, true, function (tempData) {
 

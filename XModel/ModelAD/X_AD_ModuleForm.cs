@@ -70,7 +70,7 @@ static X_AD_ModuleForm()
 //static long serialVersionUID = 27622811914920L;
 /** Last Updated Timestamp 6/26/2012 10:26:38 AM */
 public static long updatedMS = 1340686598131L;
-/** AD_Table_ID=1000058 */
+/** VAF_TableView_ID=1000058 */
 public static int Table_ID;
  // =1000058;
 
@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_AD_ModuleForm[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID <= 0) Set_Value ("AD_Form_ID", null);
+if (VAF_Page_ID <= 0) Set_Value ("VAF_Page_ID", null);
 else
-Set_Value ("AD_Form_ID", AD_Form_ID);
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

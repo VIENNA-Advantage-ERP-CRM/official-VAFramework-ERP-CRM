@@ -28,7 +28,7 @@
                 baseObj.cmbShipment.getControl().css('display', 'none');
             if (baseObj.Applybtn)
                 baseObj.Applybtn.css("display", "block");
-            var AD_Column_ID = 3537;            //  M_InOut.M_Locator_ID
+            var VAF_Column_ID = 3537;            //  M_InOut.M_Locator_ID
             var lookup = new VIS.MLocatorLookup(VIS.Env.getCtx(), baseObj.windowNo);
             baseObj.locatorField = new VIS.Controls.VLocator("M_Locator_ID", true, false, true, VIS.DisplayType.Locator, lookup);
             baseObj.deliveryDate = new VIS.Controls.VDate("DeliveryDate", false, false, true, VIS.DisplayType.Date, "DeliveryDate");

@@ -21,7 +21,7 @@ namespace VAdvantage.Process
         private int _M_Product_ID = 0;
         private int _M_Locator_ID = 0;
         private int _M_AttributeSetInstance_ID = 0;
-        private int _Ad_Org_ID = 0;
+        private int _vaf_org_ID = 0;
         private decimal _currentQty = 0;
         private decimal OpeningStock = 0, ClosingStock = 0;
         private decimal _moveQty = 0;
@@ -57,7 +57,7 @@ namespace VAdvantage.Process
             Qry = "TRUNCATE TABLE M_ProductStockSummary";
             int no = DB.ExecuteQuery(Qry);
             sql.Append(@" SELECT TR.M_PRODUCT_ID ,                      
-                      LC.AD_ORG_ID ,
+                      LC.VAF_ORG_ID ,
                       TR.M_TRANSACTION_ID ,
                       TR.CURRENTQTY ,
                       TR.MOVEMENTQTY ,
@@ -98,14 +98,14 @@ namespace VAdvantage.Process
                                     log.Info(" =====> " + i + " Transactions Updated till " + DateTime.Now.ToString() + "<===== ");
                                 }
                                 _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                _Ad_Org_ID  = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["AD_Org_ID"]);                                
+                                _vaf_org_ID  = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAF_Org_ID"]);                                
                                 _moveDate = Util.GetValueOfDateTime(dsTransaction.Tables[0].Rows[i]["MovementDate"]);
                                 _moveQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"]);
                                 _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
                                 sql.Clear();
 
                                 Qry= "SELECT M_ProductStockSummary_ID FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + _M_Product_ID +
-                                        " AND AD_Org_ID = " + _Ad_Org_ID + " AND MovementFromDate = " + GlobalVariable.TO_DATE(_moveDate, true);
+                                        " AND VAF_Org_ID = " + _vaf_org_ID + " AND MovementFromDate = " + GlobalVariable.TO_DATE(_moveDate, true);
                                 int M_ProductStockSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
                                 if (M_ProductStockSummary_ID > 0)
                                 {
@@ -115,15 +115,15 @@ namespace VAdvantage.Process
                                 else
                                 {
                                     Qry = "SELECT Count(*) FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + _M_Product_ID +
-                                            " AND AD_Org_ID = " + _Ad_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true);
+                                            " AND VAF_Org_ID = " + _vaf_org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true);
                                     existOld = Util.GetValueOfInt(DB.ExecuteScalar(Qry, null, Get_Trx()));
                                     if (existOld > 0)
                                     {
                                         Qry = "SELECT QtyCloseStockOrg FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + _M_Product_ID +
-                                            " AND AD_Org_ID = " + _Ad_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true) + " ORDER BY MovementFromDate DESC";
+                                            " AND VAF_Org_ID = " + _vaf_org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true) + " ORDER BY MovementFromDate DESC";
                                         OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry, null, Get_Trx()));
                                     }
-                                    Trs = new MProductStockSummary(GetCtx(), _Ad_Org_ID, _M_Product_ID,
+                                    Trs = new MProductStockSummary(GetCtx(), _vaf_org_ID, _M_Product_ID,
                                             OpeningStock, OpeningStock + _moveQty, _moveDate, Get_TrxName());
                                     Trs.SetIsStockSummarized(true);
                                 }                                
@@ -137,7 +137,7 @@ namespace VAdvantage.Process
                                     if (existOld > 0)
                                     {
                                         Qry = "SELECT M_ProductStockSummary_ID FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + _M_Product_ID +
-                                                    " AND AD_Org_ID = " + _Ad_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true) + " ORDER BY MovementFromDate DESC";
+                                                    " AND VAF_Org_ID = " + _vaf_org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(_moveDate, true) + " ORDER BY MovementFromDate DESC";
                                         int oldSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
                                         MProductStockSummary oldTrs = new MProductStockSummary(GetCtx(), oldSummary_ID, Get_Trx());
                                         oldTrs.SetMovementToDate(Convert.ToDateTime(_moveDate).AddDays(-1));

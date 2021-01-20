@@ -585,22 +585,22 @@
 
     VCreateFrom.prototype.create = function (mTab) {
         //	dynamic init preparation
-        var AD_Table_ID = VIS.Env.getCtx().getContextAsInt(mTab.getWindowNo(), "BaseTable_ID");
+        var VAF_TableView_ID = VIS.Env.getCtx().getContextAsInt(mTab.getWindowNo(), "BaseTable_ID");
 
         var retValue = null;// VCreateFrom form object
-        if (AD_Table_ID == 392)             //  C_BankStatement
+        if (VAF_TableView_ID == 392)             //  C_BankStatement
         {
             retValue = new VIS.VCreateFromStatement(mTab);
         }
-        else if (AD_Table_ID == 318)        //  C_Invoice
+        else if (VAF_TableView_ID == 318)        //  C_Invoice
         {
             retValue = new VIS.VCreateFromInvoice(mTab);
         }
-        else if (AD_Table_ID == 319)        //  M_InOut
+        else if (VAF_TableView_ID == 319)        //  M_InOut
         {
             retValue = new VIS.VCreateFromShipment(mTab);
         }
-        else if (AD_Table_ID == 426)		//	C_PaySelection
+        else if (VAF_TableView_ID == 426)		//	C_PaySelection
         {
             return null;	//	ignore - will call process C_PaySelection_CreateFrom
         }
@@ -617,8 +617,8 @@
 
     VCreateFrom.prototype.initBPartner = function (forInvoice) {
         //  load BPartner
-        var AD_Column_ID = 3499;        //  C_Invoice.C_BPartner_ID
-        var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), this.windowNo, AD_Column_ID, VIS.DisplayType.Search);
+        var VAF_Column_ID = 3499;        //  C_Invoice.C_BPartner_ID
+        var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), this.windowNo, VAF_Column_ID, VIS.DisplayType.Search);
 
         this.vBPartner = new VIS.Controls.VTextBoxButton("C_BPartner_ID", true, false, true, VIS.DisplayType.Search, lookup);
         var C_BPartner_ID = VIS.Env.getCtx().getContextAsInt(this.windowNo, "C_BPartner_ID");
@@ -669,7 +669,7 @@
         }
 
 
-        var OrgId = VIS.Env.getCtx().getContextAsInt(this.windowNo, "AD_Org_ID")
+        var OrgId = VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAF_Org_ID")
         // Added by Vivek on 09/10/2017 advised by Pradeep
         var _isdrop = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsDropShip"));
         var _isSoTrx = "Y".equals(VIS.Env.getCtx().getWindowContext(this.windowNo, "IsSOTrx"));
@@ -2055,7 +2055,7 @@
                 dateCret = date;
                 DelivDate = " AND l.DatePromised <= " + date;
             }
-            var adOrgIDS = $self.mTab.getValue("AD_Org_ID")
+            var adOrgIDS = $self.mTab.getValue("VAF_Org_ID")
 
 
             $.ajax({
@@ -2221,7 +2221,7 @@
     //            var date = VIS.DB.to_date(DeliveryDate, true);
     //            sql = sql.concat(" AND l.DatePromised <= " + date);
     //        }
-    //        sql = sql.concat(" AND l.DTD001_Org_ID = " + $self.mTab.getValue($self.windowNo, "AD_Org_ID")
+    //        sql = sql.concat(" AND l.DTD001_Org_ID = " + $self.mTab.getValue($self.windowNo, "VAF_Org_ID")
     //            + " GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
     //            + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
     //                + "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description  "
@@ -2428,7 +2428,7 @@
             else {
                 isBaseLang = " LEFT OUTER JOIN C_UOM_Trl uom ON (l.C_UOM_ID=uom.C_UOM_ID AND uom.AD_Language='" + VIS.Env.getAD_Language(ctx) + "')";
             }
-            var orggetVal = $self.mTab.getValue($self.windowNo, "AD_Org_ID");
+            var orggetVal = $self.mTab.getValue($self.windowNo, "VAF_Org_ID");
             var lang = VIS.Env.getAD_Language(ctx);
             $.ajax({
                 url: VIS.Application.contextUrl + "VCreateFrom/GetOrderDataCommons",
@@ -2596,7 +2596,7 @@
 
     //        sql = sql.concat(" LEFT OUTER JOIN M_AttributeSetInstance ins ON (ins.M_AttributeSetInstance_ID =l.M_AttributeSetInstance_ID) ");
 
-    //        sql = sql.concat(" WHERE l.C_Order_ID=" + C_Order_ID + " AND l.DTD001_Org_ID = " + $self.mTab.getValue($self.windowNo, "AD_Org_ID")
+    //        sql = sql.concat(" WHERE l.C_Order_ID=" + C_Order_ID + " AND l.DTD001_Org_ID = " + $self.mTab.getValue($self.windowNo, "VAF_Org_ID")
     //            + " GROUP BY l.QtyOrdered,CASE WHEN l.QtyOrdered=0 THEN 0 ELSE l.QtyEntered/l.QtyOrdered END, "
     //            + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name), "
     //                + "l.M_Product_ID,COALESCE(p.Name,c.Name),l.M_AttributeSetInstance_ID , l.Line,l.C_OrderLine_ID, ins.description  "
@@ -3037,11 +3037,11 @@
             // JID_1278: Should not allow to bind Attribute Set Instance to the Product if the Attribute Set is not mapped with the Product.
             VIS.Env.getCtx().setContext($self.windowNo, "M_Product_ID", VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1]["M_Product_ID_K"]));
 
-            //var AD_Column_ID = 0;
-            //var productWindow = AD_Column_ID == 8418;		//	HARDCODED
+            //var VAF_Column_ID = 0;
+            //var productWindow = VAF_Column_ID == 8418;		//	HARDCODED
             //var M_Locator_ID = VIS.context.getContextAsInt($self.windowNo, "M_Locator_ID");
             //var C_BPartner_ID = VIS.context.getContextAsInt($self.windowNo, "C_BPartner_ID");
-            //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K), VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_Product_ID_K), M_Locator_ID, C_BPartner_ID, productWindow, AD_Column_ID, $self.windowNo);
+            //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_AttributeSetInstance_ID_K), VIS.Utility.Util.getValueOfInt($self.dGrid.records[e.recid - 1].M_Product_ID_K), M_Locator_ID, C_BPartner_ID, productWindow, VAF_Column_ID, $self.windowNo);
             //if (obj.hasAttribute) {
             //    obj.showDialog();
             //}

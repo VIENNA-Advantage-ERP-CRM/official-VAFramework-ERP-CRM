@@ -77,11 +77,11 @@ namespace VAdvantage.WF
         /// <summary>
         /// Set Client Org
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
-        //public void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        //public void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         //{
-        //    base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+        //    base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         //}
 
         /// <summary>

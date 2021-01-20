@@ -79,7 +79,7 @@
             txtTenant = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('Tenant') + '">');
             dTenant.append(dTenantInner);
             dTenantInner.append(txtTenant);
-            dTenantInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "AD_Client_ID")));         
+            dTenantInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAF_Client_ID")));         
             dTForm.append(dTenant);
 
             var dOrg = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
@@ -87,7 +87,7 @@
             txtOrg = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('Org') + '">');
             dOrg.append(dOrgInner);
             dOrgInner.append(txtOrg);
-            dOrgInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "AD_Org_ID")));          
+            dOrgInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAF_Org_ID")));          
             dTForm.append(dOrg);
 
             var dUTenant = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
@@ -95,7 +95,7 @@
             txtUTenant = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('TenantAdmin') + '">');
             dUTenant.append(dUTenantInner);
             dUTenantInner.append(txtUTenant);
-            dUTenantInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @AD_Client_ID@")));           
+            dUTenantInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @VAF_Client_ID@")));           
             dTForm.append(dUTenant);
 
             var dUOrg = $("<div class='input-group vis-input-wrap vis-intial-form-data'>");
@@ -103,7 +103,7 @@
             txtUOrg = $('<input type="text" name="tenant" placeholder="' + VIS.Msg.getMsg('TenantUser') + '">');
             dUOrg.append(dUOrgInner);
             dUOrgInner.append(txtUOrg);
-            dUOrgInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @AD_Org_ID@")));          
+            dUOrgInner.append($('<label>').append(VIS.Msg.parseTranslation(VIS.context, "@AD_User_ID@ @VAF_Org_ID@")));          
             dTForm.append(dUOrg);
 
 

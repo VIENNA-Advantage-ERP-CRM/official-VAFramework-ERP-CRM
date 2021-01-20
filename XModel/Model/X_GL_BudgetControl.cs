@@ -80,7 +80,7 @@ static X_GL_BudgetControl()
 //static long serialVersionUID 27562514376278L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059489L;
-/** AD_Table_ID=822 */
+/** VAF_TableView_ID=822 */
 public static int Table_ID;
  // =822;
 

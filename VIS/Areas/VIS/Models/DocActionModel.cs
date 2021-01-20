@@ -42,7 +42,7 @@ namespace VIS.Models
 
 
 
-        public DocAtions GetActions(int AD_Table_ID, int Record_ID, string docStatus, bool processing, string orderType, bool isSOTrx, string docAction, string tableName, List<string> _values, List<string> _names)
+        public DocAtions GetActions(int VAF_TableView_ID, int Record_ID, string docStatus, bool processing, string orderType, bool isSOTrx, string docAction, string tableName, List<string> _values, List<string> _names)
         {
             DocAtions action = new DocAtions();
             string[] options = null;
@@ -53,9 +53,9 @@ namespace VIS.Models
             VLogger.Get().Fine("DocStatus=" + docStatus
                + ", DocAction=" + docAction + ", OrderType=" + orderType
                + ", IsSOTrx=" + isSOTrx + ", Processing=" + processing
-               + ", AD_Table_ID=" + AD_Table_ID + ", Record_ID=" + Record_ID);
+               + ", VAF_TableView_ID=" + VAF_TableView_ID + ", Record_ID=" + Record_ID);
             options = new String[_values.Count()];
-            String wfStatus = MWFActivity.GetActiveInfo(ctx, AD_Table_ID, Record_ID);
+            String wfStatus = MWFActivity.GetActiveInfo(ctx, VAF_TableView_ID, Record_ID);
             if (wfStatus != null)
             {
                 VLogger.Get().SaveError("WFActiveForRecord", wfStatus);
@@ -76,7 +76,7 @@ namespace VIS.Models
                 if (!locked && processing.GetType() == typeof(Boolean))
                     locked = ((Boolean)processing);
                 // do not show Unlock action on Production execution
-                if (locked && !(AD_Table_ID == ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.Table_ID))
+                if (locked && !(VAF_TableView_ID == ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.Table_ID))
                     options[index++] = DocumentEngine.ACTION_UNLOCK;
             }
 
@@ -122,7 +122,7 @@ namespace VIS.Models
 
             int refIndex = index;
             bool indexFromModule = true;
-            GetActionFromModuleClass(AD_Table_ID, docStatus, out index, options);
+            GetActionFromModuleClass(VAF_TableView_ID, docStatus, out index, options);
 
             if (index == 0)
             {
@@ -133,7 +133,7 @@ namespace VIS.Models
             /********************
              *  Order
              */
-            if (AD_Table_ID == MOrder.Table_ID)
+            if (VAF_TableView_ID == MOrder.Table_ID)
             {
                 //	Draft                       ..  DR/IP/IN
                 if (docStatus.Equals(DocumentEngine.STATUS_DRAFTED)
@@ -165,7 +165,7 @@ namespace VIS.Models
             /********************
              *  Shipment
              */
-            else if (AD_Table_ID == MInOut.Table_ID)
+            else if (VAF_TableView_ID == MInOut.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -177,7 +177,7 @@ namespace VIS.Models
             /********************
              *  Invoice
              */
-            else if (AD_Table_ID == MInvoice.Table_ID)
+            else if (VAF_TableView_ID == MInvoice.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -189,7 +189,7 @@ namespace VIS.Models
             /********************
              *  Payment
              */
-            else if (AD_Table_ID == MPayment.Table_ID)
+            else if (VAF_TableView_ID == MPayment.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -201,7 +201,7 @@ namespace VIS.Models
             /********************
              *  GL Journal
              */
-            else if (AD_Table_ID == MJournal.Table_ID || AD_Table_ID == MJournalBatch.Table_ID)
+            else if (VAF_TableView_ID == MJournal.Table_ID || VAF_TableView_ID == MJournalBatch.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -213,7 +213,7 @@ namespace VIS.Models
             /********************
              *  Allocation
              */
-            else if (AD_Table_ID == MAllocationHdr.Table_ID)
+            else if (VAF_TableView_ID == MAllocationHdr.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -225,7 +225,7 @@ namespace VIS.Models
             /********************
              *  Bank Statement
              */
-            else if (AD_Table_ID == MBankStatement.Table_ID)
+            else if (VAF_TableView_ID == MBankStatement.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -236,15 +236,15 @@ namespace VIS.Models
             /********************
              *  Inventory Movement, Physical Inventory
              */
-            else if (AD_Table_ID == MMovement.Table_ID
-                || AD_Table_ID == MInventory.Table_ID)
+            else if (VAF_TableView_ID == MMovement.Table_ID
+                || VAF_TableView_ID == MInventory.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
                     // SI_0622 : not to show VOID and REVERSE_CORRECT action on Physical Inventory
                     bool isPhysicalInventory = false;
-                    if (AD_Table_ID == MInventory.Table_ID)
+                    if (VAF_TableView_ID == MInventory.Table_ID)
                     {
                         MInventory inventory = MInventory.Get(ctx, Record_ID);
                         isPhysicalInventory = !inventory.IsInternalUse();
@@ -258,7 +258,7 @@ namespace VIS.Models
             }
 
             // Added By Arpit
-            else if (AD_Table_ID == MMovementConfirm.Table_ID)
+            else if (VAF_TableView_ID == MMovementConfirm.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -272,8 +272,8 @@ namespace VIS.Models
             //    /********************
             //*  Warehouse Task  New Add by raghu 11 april,2011
             //*/
-            //    else if (AD_Table_ID == X_M_WarehouseTask.Table_ID
-            //        || AD_Table_ID == X_M_TaskList.Table_ID)
+            //    else if (VAF_TableView_ID == X_M_WarehouseTask.Table_ID
+            //        || VAF_TableView_ID == X_M_TaskList.Table_ID)
             //    {
             //        //	Draft                       ..  DR/IP/IN
             //        if (docStatus.Equals(DocActionVariables.STATUS_DRAFTED)
@@ -292,7 +292,7 @@ namespace VIS.Models
             /********************
          *  Work Order New Add by raghu 11 april,2011
          */
-            else if (AD_Table_ID == ViennaAdvantage.Model.X_VAMFG_M_WorkOrder.Table_ID)
+            else if (VAF_TableView_ID == ViennaAdvantage.Model.X_VAMFG_M_WorkOrder.Table_ID)
             {
                 //	Draft                       ..  DR/IP/IN
                 if (docStatus.Equals(DocActionVariables.STATUS_DRAFTED)
@@ -311,7 +311,7 @@ namespace VIS.Models
             /********************
              *  Work Order Transaction New Add by raghu 11 april,2011
              */
-            else if (AD_Table_ID == ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.Table_ID)
+            else if (VAF_TableView_ID == ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.Table_ID)
             {
                 //	Draft                       ..  DR/IP/IN
                 if (docStatus.Equals(DocActionVariables.STATUS_DRAFTED)
@@ -372,7 +372,7 @@ namespace VIS.Models
             // and the setting "Check Document Action Access" on Role window
             int C_DocType_ID = 0;
             int C_DocTypeTarget_ID = 0;
-            MTable table = MTable.Get(ctx, AD_Table_ID);
+            MTable table = MTable.Get(ctx, VAF_TableView_ID);
             PO po = table.GetPO(ctx, Record_ID, null);
             if (Util.GetValueOfInt(po.Get_Value("C_DocType_ID")) > 0)
             {
@@ -389,9 +389,9 @@ namespace VIS.Models
                 String[] docActionHolder = new String[] { docAction };
                 if (po is DocOptions)
                     index = ((DocOptions)po).customizeValidActions(docStatus, processing, orderType, isSOTrx ? "Y" : "N",
-                            AD_Table_ID, docActionHolder, options, index);
+                            VAF_TableView_ID, docActionHolder, options, index);
 
-                options = DocumentEngine.checkActionAccess(ctx, ctx.GetAD_Client_ID(), ctx.GetAD_Role_ID(), C_DocType_ID, options, ref index);
+                options = DocumentEngine.checkActionAccess(ctx, ctx.GetVAF_Client_ID(), ctx.GetAD_Role_ID(), C_DocType_ID, options, ref index);
             }
 
             for (int i = 0; i < _values.Count() && defaultV.Equals(""); i++)
@@ -440,14 +440,14 @@ namespace VIS.Models
         }
 
 
-        public void GetActionFromModuleClass(int AD_Table_ID, string docStatus, out int index, string[] options)
+        public void GetActionFromModuleClass(int VAF_TableView_ID, string docStatus, out int index, string[] options)
         {
             /*********** Module Section  **************/
 
 
             #region GetActionFromModuleClass
 
-            MTable mTable = new MTable(ctx, AD_Table_ID, null);
+            MTable mTable = new MTable(ctx, VAF_TableView_ID, null);
             //	Strip table name prefix (e.g. AD_) Customizations are 3/4
             String classNm = "DocActionSpecification";
 
@@ -498,7 +498,7 @@ namespace VIS.Models
                                 if (mi != null)
                                 {
                                     object[] input = new object[2];
-                                    input[0] = AD_Table_ID;
+                                    input[0] = VAF_TableView_ID;
                                     input[1] = docStatus;
 
                                     object res = mi.Invoke(o, input);
@@ -517,7 +517,7 @@ namespace VIS.Models
                             }
                             //if (o is ModuleDocAction)
                             //{
-                            //    string[] opt = ((ModuleDocAction)o).GetDocAtion(AD_Table_ID, docStatus);// .Invoke(new object[] { AD_Table_ID, docStatus });
+                            //    string[] opt = ((ModuleDocAction)o).GetDocAtion(VAF_TableView_ID, docStatus);// .Invoke(new object[] { VAF_TableView_ID, docStatus });
                             //    if (opt.Length > 0)
                             //    {
                             //        index = 0;
@@ -603,7 +603,7 @@ namespace VIS.Models
 
     public interface ModuleDocAction
     {
-        String[] GetDocAtion(int AD_Table_ID, String docStatus);
+        String[] GetDocAtion(int VAF_TableView_ID, String docStatus);
 
     }
 

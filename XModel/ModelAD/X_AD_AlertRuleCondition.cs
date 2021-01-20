@@ -1,34 +1,34 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for AD_AlertRuleCondition
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAF_AlertSettingCondition
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AlertRuleCondition : PO{public X_AD_AlertRuleCondition (Context ctx, int AD_AlertRuleCondition_ID, Trx trxName) : base (ctx, AD_AlertRuleCondition_ID, trxName){/** if (AD_AlertRuleCondition_ID == 0){SetAD_AlertRuleCondition_ID (0);SetAD_AlertRule_ID (0);SetOperator (null);SetReturnValueType (null);SetSequence (0);SetSqlQuery (null);} */
-}public X_AD_AlertRuleCondition (Ctx ctx, int AD_AlertRuleCondition_ID, Trx trxName) : base (ctx, AD_AlertRuleCondition_ID, trxName){/** if (AD_AlertRuleCondition_ID == 0){SetAD_AlertRuleCondition_ID (0);SetAD_AlertRule_ID (0);SetOperator (null);SetReturnValueType (null);SetSequence (0);SetSqlQuery (null);} */
+public class X_VAF_AlertSettingCondition : PO{public X_VAF_AlertSettingCondition (Context ctx, int VAF_AlertSettingCondition_ID, Trx trxName) : base (ctx, VAF_AlertSettingCondition_ID, trxName){/** if (VAF_AlertSettingCondition_ID == 0){SetVAF_AlertSettingCondition_ID (0);SetVAF_AlertSetting_ID (0);SetOperator (null);SetReturnValueType (null);SetSequence (0);SetSqlQuery (null);} */
+}public X_VAF_AlertSettingCondition (Ctx ctx, int VAF_AlertSettingCondition_ID, Trx trxName) : base (ctx, VAF_AlertSettingCondition_ID, trxName){/** if (VAF_AlertSettingCondition_ID == 0){SetVAF_AlertSettingCondition_ID (0);SetVAF_AlertSetting_ID (0);SetOperator (null);SetReturnValueType (null);SetSequence (0);SetSqlQuery (null);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertRuleCondition (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_AlertSettingCondition (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertRuleCondition (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_AlertSettingCondition (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AlertRuleCondition (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAF_AlertSettingCondition (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AlertRuleCondition(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAF_AlertSettingCondition(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27757102828158L;/** Last Updated Timestamp 9/27/2016 5:28:31 PM */
-public static long updatedMS = 1474977511369L;/** AD_Table_ID=1000764 */
+public static long updatedMS = 1474977511369L;/** VAF_TableView_ID=1000764 */
 public static int Table_ID; // =1000764;
-/** TableName=AD_AlertRuleCondition */
-public static String Table_Name="AD_AlertRuleCondition";
+/** TableName=VAF_AlertSettingCondition */
+public static String Table_Name="VAF_AlertSettingCondition";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(7);/** AccessLevel
 @return 7 - System - Client - Org 
 */
@@ -43,15 +43,15 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_AD_AlertRuleCondition[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set AD_AlertRuleCondition_ID.
-@param AD_AlertRuleCondition_ID AD_AlertRuleCondition_ID */
-public void SetAD_AlertRuleCondition_ID (int AD_AlertRuleCondition_ID){if (AD_AlertRuleCondition_ID < 1) throw new ArgumentException ("AD_AlertRuleCondition_ID is mandatory.");Set_ValueNoCheck ("AD_AlertRuleCondition_ID", AD_AlertRuleCondition_ID);}/** Get AD_AlertRuleCondition_ID.
-@return AD_AlertRuleCondition_ID */
-public int GetAD_AlertRuleCondition_ID() {Object ii = Get_Value("AD_AlertRuleCondition_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Alert Rule.
-@param AD_AlertRule_ID Definition of the alert element */
-public void SetAD_AlertRule_ID (int AD_AlertRule_ID){if (AD_AlertRule_ID < 1) throw new ArgumentException ("AD_AlertRule_ID is mandatory.");Set_ValueNoCheck ("AD_AlertRule_ID", AD_AlertRule_ID);}/** Get Alert Rule.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAF_AlertSettingCondition[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set VAF_AlertSettingCondition_ID.
+@param VAF_AlertSettingCondition_ID VAF_AlertSettingCondition_ID */
+public void SetVAF_AlertSettingCondition_ID (int VAF_AlertSettingCondition_ID){if (VAF_AlertSettingCondition_ID < 1) throw new ArgumentException ("VAF_AlertSettingCondition_ID is mandatory.");Set_ValueNoCheck ("VAF_AlertSettingCondition_ID", VAF_AlertSettingCondition_ID);}/** Get VAF_AlertSettingCondition_ID.
+@return VAF_AlertSettingCondition_ID */
+public int GetVAF_AlertSettingCondition_ID() {Object ii = Get_Value("VAF_AlertSettingCondition_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Alert Rule.
+@param VAF_AlertSetting_ID Definition of the alert element */
+public void SetVAF_AlertSetting_ID (int VAF_AlertSetting_ID){if (VAF_AlertSetting_ID < 1) throw new ArgumentException ("VAF_AlertSetting_ID is mandatory.");Set_ValueNoCheck ("VAF_AlertSetting_ID", VAF_AlertSetting_ID);}/** Get Alert Rule.
 @return Definition of the alert element */
-public int GetAD_AlertRule_ID() {Object ii = Get_Value("AD_AlertRule_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Value.
+public int GetVAF_AlertSetting_ID() {Object ii = Get_Value("VAF_AlertSetting_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Value.
 @param AlphaNumValue Value */
 public void SetAlphaNumValue (String AlphaNumValue){if (AlphaNumValue != null && AlphaNumValue.Length > 100){log.Warning("Length > 100 - truncated");AlphaNumValue = AlphaNumValue.Substring(0,100);}Set_Value ("AlphaNumValue", AlphaNumValue);}/** Get Value.
 @return Value */

@@ -328,16 +328,16 @@ namespace VAdvantage.Model
             DateTime? shipDate = billDate;
             log.Fine("Ship Date=" + shipDate);
 
-            int AD_Org_ID = GetAD_Org_ID();
-            log.Fine("Org=" + AD_Org_ID);
-            MOrg org = MOrg.Get(GetCtx(), AD_Org_ID);
+            int VAF_Org_ID = GetVAF_Org_ID();
+            log.Fine("Org=" + VAF_Org_ID);
+            MOrg org = MOrg.Get(GetCtx(), VAF_Org_ID);
             int M_Warehouse_ID = org.GetM_Warehouse_ID();
             log.Fine("Warehouse=" + M_Warehouse_ID);
 
             Boolean isSOTrx = GetCtx().IsSOTrx(windowNo);
             //
             int C_Tax_ID = Tax.Get(GetCtx(), 0, C_Charge_ID, billDate, shipDate,
-                AD_Org_ID, M_Warehouse_ID, C_BPartner_Location_ID, C_BPartner_Location_ID,
+                VAF_Org_ID, M_Warehouse_ID, C_BPartner_Location_ID, C_BPartner_Location_ID,
                 isSOTrx);
             log.Info("Tax ID=" + C_Tax_ID + " - SOTrx=" + isSOTrx);
 

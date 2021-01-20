@@ -25,7 +25,7 @@ public X_C_CurrCrossRate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, 
  added by ->Harwinder */
 static X_C_CurrCrossRate(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27881088188083L;/** Last Updated Timestamp 9/1/2020 12:21:11 PM */
-public static long updatedMS = 1598962871294L;/** AD_Table_ID=1000545 */
+public static long updatedMS = 1598962871294L;/** VAF_TableView_ID=1000545 */
 public static int Table_ID; // =1000545;
 /** TableName=C_CurrCrossRate */
 public static String Table_Name="C_CurrCrossRate";

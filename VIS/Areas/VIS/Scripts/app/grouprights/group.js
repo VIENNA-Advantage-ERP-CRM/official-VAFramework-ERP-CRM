@@ -379,21 +379,21 @@
         function groupTemplate() {
             var script = ' <script type="text/x-handlebars-template">' +
                 '{{#each this}}' +
-                '<div class="vis-group-user-wrap vis-group-groupss vis-group-role-pad" data-UID="{{AD_Group_ID}}">' +
+                '<div class="vis-group-user-wrap vis-group-groupss vis-group-role-pad" data-UID="{{VAF_Group_ID}}">' +
                 '<div class="vis-group-user-profile">' +
                     '{{#if IsAssignedToUser}}' +
-                        	'<input type="checkbox" data-UID="{{AD_Group_ID}}" checked="">' +
+                        	'<input type="checkbox" data-UID="{{VAF_Group_ID}}" checked="">' +
                             '<label style="color: rgba(var(--v-c-on-secondary), 1);font-weight: bold;">{{Name}}</label>' +
                             '{{else}}' +
-                            '<input type="checkbox" data-UID="{{AD_Group_ID}}" >' +
+                            '<input type="checkbox" data-UID="{{VAF_Group_ID}}" >' +
                             '<label>{{Name}}</label>' +
                             '{{/if}}' +
 
                 '</div>' +
                 '<div class="vis-group-user-right">' +
                     '<ul>' +
-                        '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="margin-right: 10px" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
-                        '<li><span class="vis-group-user-ico vis-group-info vis vis-info"   data-UID="{{AD_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                        '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" style="margin-right: 10px" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{VAF_Group_ID}}-{{GroupWindowID}}"></span></li>' +
+                        '<li><span class="vis-group-user-ico vis-group-info vis vis-info"   data-UID="{{VAF_Group_ID}}-{{GroupWindowID}}"></span></li>' +
                     '</ul>                           ' +
                 '</div>' +
             '</div>' +
@@ -445,7 +445,7 @@
             }
 
             var zoomQuery = new VIS.Query();
-            zoomQuery.addRestriction("AD_GroupInfo_ID", VIS.Query.prototype.EQUAL, 0);
+            zoomQuery.addRestriction("VAF_GroupInfo_ID", VIS.Query.prototype.EQUAL, 0);
             VIS.viewManager.startWindow(groupWindowID, zoomQuery);
             $bsyDiv[0].style.visibility = "hidden";
         };
@@ -694,7 +694,7 @@
                         if (i == 0) {
                             groupWindowID = data[i].GroupWindowID;
                         }
-                        groupAssigned.push({ AD_Group_ID: data[i].AD_Group_ID, IsAssignedToUser: data[i].IsAssignedToUser })
+                        groupAssigned.push({ VAF_Group_ID: data[i].VAF_Group_ID, IsAssignedToUser: data[i].IsAssignedToUser })
                     }
 
                     $($divRightGroupDataContainer.find('input')).off("click");
@@ -776,7 +776,7 @@
                 groupID = target.data("uid");
                 groupID = groupID.split('-');
                 var zoomQuery = new VIS.Query();
-                zoomQuery.addRestriction("AD_GroupInfo_ID", VIS.Query.prototype.EQUAL, groupID[0]);
+                zoomQuery.addRestriction("VAF_GroupInfo_ID", VIS.Query.prototype.EQUAL, groupID[0]);
                 VIS.viewManager.startWindow(groupID[1], zoomQuery);
             }
             else if (target.hasClass('vis-group-user-ico vis-group-info')) {
@@ -877,7 +877,7 @@
 
             //this is used to set if Group is assigned or assigned to role.
             var element = $.grep(groupAssigned, function (ele, index) {
-                return ele.AD_Group_ID == target.data('uid');
+                return ele.VAF_Group_ID == target.data('uid');
             });
             if (element != null && element.length > 0) {
                 element[0].IsAssignedToUser = target.prop('checked');
@@ -935,7 +935,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/UpdateUserGroups",
                 type: "Post",
-                data: { AD_Role_ID: roleID, AD_Group_ID: groupID, groups: JSON.stringify(groupAssigned) },
+                data: { AD_Role_ID: roleID, VAF_Group_ID: groupID, groups: JSON.stringify(groupAssigned) },
                 success: function () {
                     $($($rightPanel.find('h7'))[0]).show();
                     $($($rightPanel.find('h7'))[0]).fadeOut(1600, "linear");

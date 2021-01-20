@@ -277,7 +277,7 @@ namespace VIS.Models
                         if (WarehouseToID > 0)
                             sqlWhere.Append(" AND M_Warehouse_ID = " + WarehouseToID);
                     }
-                    sql += " AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND IsActive = 'Y' AND DocStatus IN ('CO') "
+                    sql += " AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND IsActive = 'Y' AND DocStatus IN ('CO') "
                         + sqlWhere.ToString() + ")";
                 }
                 else if (!isCart && windowID == 168)  // JID_1030: on physical inventory system does not check that the locator is of selected warehouse on Physiacl inventory header or not.
@@ -378,8 +378,8 @@ namespace VIS.Models
             bool isSOTrx = true;
             int _Version_ID = 0;
 
-            int AD_Client_ID = 0;
-            int AD_Org_ID = 0;
+            int VAF_Client_ID = 0;
+            int VAF_Org_ID = 0;
             int C_BPartner_ID = 0;
             int M_DiscountSchema_ID = 0;
             Decimal? bpFlatDiscount = 0;
@@ -398,8 +398,8 @@ namespace VIS.Models
                 {
                     MOrder ord = new MOrder(ctx, recordID, null);
                     _Version_ID = GetPLVID(ord.GetM_PriceList_ID());
-                    AD_Client_ID = ord.GetAD_Client_ID();
-                    AD_Org_ID = ord.GetAD_Org_ID();
+                    VAF_Client_ID = ord.GetVAF_Client_ID();
+                    VAF_Org_ID = ord.GetVAF_Org_ID();
                     isSOTrx = ord.IsSOTrx();
                     C_BPartner_ID = ord.GetC_BPartner_ID();
                 }
@@ -407,8 +407,8 @@ namespace VIS.Models
                 {
                     MInvoice inv = new MInvoice(ctx, recordID, null);
                     _Version_ID = GetPLVID(inv.GetM_PriceList_ID());
-                    AD_Client_ID = inv.GetAD_Client_ID();
-                    AD_Org_ID = inv.GetAD_Org_ID();
+                    VAF_Client_ID = inv.GetVAF_Client_ID();
+                    VAF_Org_ID = inv.GetVAF_Org_ID();
                     isSOTrx = inv.IsSOTrx();
                     C_BPartner_ID = inv.GetC_BPartner_ID();
                 }
@@ -416,8 +416,8 @@ namespace VIS.Models
                 {
                     MRequisition req = new MRequisition(ctx, recordID, null);
                     _Version_ID = GetPLVID(req.GetM_PriceList_ID());
-                    AD_Client_ID = req.GetAD_Client_ID();
-                    AD_Org_ID = req.GetAD_Org_ID();
+                    VAF_Client_ID = req.GetVAF_Client_ID();
+                    VAF_Org_ID = req.GetVAF_Org_ID();
                     if (req.Get_ColumnIndex("C_BPartner_ID") > 0 && Util.GetValueOfInt(req.Get_Value("C_BPartner_ID")) > 0)
                     {
                         C_BPartner_ID = Util.GetValueOfInt(req.Get_Value("C_BPartner_ID"));
@@ -426,9 +426,9 @@ namespace VIS.Models
                 else if (keyColName.ToUpper().Trim() == "C_PROJECT_ID")
                 {
                     MProject proj = new MProject(ctx, recordID, null);
-                    AD_Client_ID = proj.GetAD_Client_ID();
+                    VAF_Client_ID = proj.GetVAF_Client_ID();
                     _Version_ID = proj.GetM_PriceList_Version_ID();
-                    AD_Org_ID = proj.GetAD_Org_ID();
+                    VAF_Org_ID = proj.GetVAF_Org_ID();
                     C_BPartner_ID = proj.GetC_BPartner_ID();
                 }
 
@@ -444,7 +444,7 @@ namespace VIS.Models
                 {
                     if (dsProPO == null && !fetchedProPurchasing)
                     {
-                        dsProPO = GetPurchaingProduct(AD_Client_ID);
+                        dsProPO = GetPurchaingProduct(VAF_Client_ID);
                         fetchedProPurchasing = true;
                         if (dsProPO != null && dsProPO.Tables[0].Rows.Count > 0)
                             hasProdsPurch = true;
@@ -455,7 +455,7 @@ namespace VIS.Models
                 {
                     if (!fetchedUOMConv)
                     {
-                        dsUOMConv = GetUOMConversions(AD_Client_ID);
+                        dsUOMConv = GetUOMConversions(VAF_Client_ID);
                         fetchedUOMConv = true;
                     }
                 }
@@ -464,14 +464,14 @@ namespace VIS.Models
             // Fetch Products and Product Prices 
             if (!fetchedRecords)
             {
-                if (AD_Client_ID == 0)
-                    AD_Client_ID = ctx.GetAD_Client_ID();
-                dsProducts = GetProducts(AD_Client_ID);
+                if (VAF_Client_ID == 0)
+                    VAF_Client_ID = ctx.GetVAF_Client_ID();
+                dsProducts = GetProducts(VAF_Client_ID);
                 if (dsProducts != null && dsProducts.Tables[0].Rows.Count > 0)
                     hasProducts = true;
 
                 if (_Version_ID > 0)
-                    dsProPrice = GetProductsPrice(AD_Client_ID, _Version_ID);
+                    dsProPrice = GetProductsPrice(VAF_Client_ID, _Version_ID);
 
                 fetchedRecords = true;
             }
@@ -487,8 +487,8 @@ namespace VIS.Models
                     int _m_Product_ID = Util.GetValueOfInt(product[i]);
                     int _attribute_ID = Util.GetValueOfInt(attribute[i]);
                     po = tbl.GetPO(ctx, lineID, null);
-                    po.Set_ValueNoCheck("AD_Client_ID", AD_Client_ID);
-                    po.Set_ValueNoCheck("AD_Org_ID", AD_Org_ID);
+                    po.Set_ValueNoCheck("VAF_Client_ID", VAF_Client_ID);
+                    po.Set_ValueNoCheck("VAF_Org_ID", VAF_Org_ID);
                     po.Set_Value("M_Product_ID", _m_Product_ID);
                     po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
                     po.Set_Value("QtyOrdered", Util.GetValueOfDecimal(qty[i]));
@@ -521,7 +521,7 @@ namespace VIS.Models
 
                     if (Env.IsModuleInstalled("ED011_"))
                     {
-                        SetPrices(po, GetPrices(dsProPrice, dsUOMConv, AD_Client_ID, _m_Product_ID,
+                        SetPrices(po, GetPrices(dsProPrice, dsUOMConv, VAF_Client_ID, _m_Product_ID,
                             _attribute_ID, Util.GetValueOfInt(po.Get_Value("C_UOM_ID")), dsProducts,
                             Util.GetValueOfDecimal(po.Get_Value("QtyEntered")), M_DiscountSchema_ID, bpFlatDiscount));
                     }
@@ -545,8 +545,8 @@ namespace VIS.Models
                     int _m_Product_ID = Util.GetValueOfInt(product[i]);
                     int _attribute_ID = Util.GetValueOfInt(attribute[i]);
                     po = tbl.GetPO(ctx, lineID, null);
-                    po.Set_ValueNoCheck("AD_Client_ID", AD_Client_ID);
-                    po.Set_ValueNoCheck("AD_Org_ID", AD_Org_ID);
+                    po.Set_ValueNoCheck("VAF_Client_ID", VAF_Client_ID);
+                    po.Set_ValueNoCheck("VAF_Org_ID", VAF_Org_ID);
                     po.Set_Value("M_Product_ID", _m_Product_ID);
                     po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
                     po.Set_Value("QtyInvoiced", Util.GetValueOfDecimal(qty[i]));
@@ -579,7 +579,7 @@ namespace VIS.Models
 
                     if (Env.IsModuleInstalled("ED011_"))
                     {
-                        SetPrices(po, GetPrices(dsProPrice, dsUOMConv, AD_Client_ID, _m_Product_ID,
+                        SetPrices(po, GetPrices(dsProPrice, dsUOMConv, VAF_Client_ID, _m_Product_ID,
                             _attribute_ID, Util.GetValueOfInt(po.Get_Value("C_UOM_ID")), dsProducts,
                             Util.GetValueOfDecimal(po.Get_Value("QtyEntered")), M_DiscountSchema_ID, bpFlatDiscount));
                     }
@@ -622,11 +622,11 @@ namespace VIS.Models
                         if (RefNo != "")
                         {
                             if (WindowID == Util.GetValueOfInt(Windows.Shipment))
-                                _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'Y' AND AD_Client_ID =" + ctx.GetAD_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
+                                _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'Y' AND VAF_Client_ID =" + ctx.GetVAF_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
                             else if (WindowID == Util.GetValueOfInt(Windows.MaterialReceipt))
-                                _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'N' AND AD_Client_ID =" + ctx.GetAD_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
+                                _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'N' AND VAF_Client_ID =" + ctx.GetVAF_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
                             else
-                                _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND AD_Client_ID =" + ctx.GetAD_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
+                                _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND VAF_Client_ID =" + ctx.GetVAF_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
                         }
                         else if (WindowID == Util.GetValueOfInt(Windows.Shipment))
                             _sqlQuery.Append("SELECT C_Order_ID FROM M_InOut WHERE IsActive = 'Y' AND IsSOTrx = 'Y' AND M_InOut_ID = " + recordID);
@@ -670,13 +670,13 @@ namespace VIS.Models
                                 if (RefNo != "")
                                 {
                                     if (WindowID == Util.GetValueOfInt(Windows.Shipment))
-                                        _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'Y' AND AD_Client_ID =" + ctx.GetAD_Client_ID()
+                                        _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'Y' AND VAF_Client_ID =" + ctx.GetVAF_Client_ID()
                                             + " AND DocumentNo = '" + RefNo + "'");
                                     else if (WindowID == Util.GetValueOfInt(Windows.MaterialReceipt))
-                                        _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'N' AND AD_Client_ID =" + ctx.GetAD_Client_ID()
+                                        _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND IsSOTrx= 'N' AND VAF_Client_ID =" + ctx.GetVAF_Client_ID()
                                             + " AND DocumentNo = '" + RefNo + "'");
                                     else
-                                        _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND AD_Client_ID =" + ctx.GetAD_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
+                                        _sqlQuery.Append("SELECT C_Order_ID FROM C_Order WHERE IsActive = 'Y' AND VAF_Client_ID =" + ctx.GetVAF_Client_ID() + " AND DocumentNo = '" + RefNo + "'");
                                 }
                                 else if (WindowID == Util.GetValueOfInt(Windows.Shipment))
                                     _sqlQuery.Append("SELECT C_Order_ID FROM M_InOut WHERE IsActive = 'Y' AND IsSOTrx = 'Y' AND M_InOut_ID = " + recordID);
@@ -707,8 +707,8 @@ namespace VIS.Models
                             }
 
                             po = tbl.GetPO(ctx, lineID, null);
-                            po.Set_ValueNoCheck("AD_Client_ID", io.GetAD_Client_ID());
-                            po.Set_ValueNoCheck("AD_Org_ID", io.GetAD_Org_ID());
+                            po.Set_ValueNoCheck("VAF_Client_ID", io.GetVAF_Client_ID());
+                            po.Set_ValueNoCheck("VAF_Org_ID", io.GetVAF_Org_ID());
                             po.Set_Value("M_Product_ID", Util.GetValueOfInt(product[i]));
                             po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
                             po.Set_Value("MovementQty", Util.GetValueOfDecimal(qty[i]));
@@ -720,7 +720,7 @@ namespace VIS.Models
                                 {
                                     if (Env.IsModuleInstalled("DTD001_"))
                                         drOL = dsOrderLines.Tables[0].Select(" M_Product_ID = " + Util.GetValueOfInt(product[i]) + " AND M_AttributeSetInstance_ID = " + Util.GetValueOfInt(attribute[i])
-                                            + "AND C_UOM_ID = " + Util.GetValueOfInt(uoms[i]) + " AND DTD001_Org_ID = " + ctx.GetAD_Org_ID());
+                                            + "AND C_UOM_ID = " + Util.GetValueOfInt(uoms[i]) + " AND DTD001_Org_ID = " + ctx.GetVAF_Org_ID());
                                 }
                                 if (!(drOL != null && drOL.Length > 0))
                                 {
@@ -745,7 +745,7 @@ namespace VIS.Models
                             {
                                 if (dsProPO == null && !fetchedProPurchasing)
                                 {
-                                    dsProPO = GetPurchaingProduct(ctx.GetAD_Client_ID());
+                                    dsProPO = GetPurchaingProduct(ctx.GetVAF_Client_ID());
                                     fetchedProPurchasing = true;
                                     if (dsProPO != null && dsProPO.Tables[0].Rows.Count > 0)
                                         hasProdsPurch = true;
@@ -766,7 +766,7 @@ namespace VIS.Models
                                     {
                                         if (!fetchedUOMConv)
                                         {
-                                            dsUOMConv = GetUOMConversions(ctx.GetAD_Client_ID());
+                                            dsUOMConv = GetUOMConversions(ctx.GetVAF_Client_ID());
                                             fetchedUOMConv = true;
                                             if (dsUOMConv != null && dsUOMConv.Tables[0].Rows.Count > 0)
                                                 hasConversions = true;
@@ -844,8 +844,8 @@ namespace VIS.Models
                 for (int i = 0; i < product.Count; i++)
                 {
                     po = tbl.GetPO(ctx, lineID, null);
-                    po.Set_ValueNoCheck("AD_Client_ID", pkg.GetAD_Client_ID());
-                    po.Set_ValueNoCheck("AD_Org_ID", pkg.GetAD_Org_ID());
+                    po.Set_ValueNoCheck("VAF_Client_ID", pkg.GetVAF_Client_ID());
+                    po.Set_ValueNoCheck("VAF_Org_ID", pkg.GetVAF_Org_ID());
                     po.Set_Value("M_Product_ID", Util.GetValueOfInt(product[i]));
                     po.Set_Value("Qty", Util.GetValueOfDecimal(qty[i]));
                     po.Set_ValueNoCheck("M_Package_ID", recordID);
@@ -913,7 +913,7 @@ namespace VIS.Models
                     bool hasInvLines = false;
                     bool hasStock = false;
                     DataSet dsStockedQty = null;
-                    DataSet dsInvLine = DB.ExecuteDataset("SELECT M_InventoryLine_ID, M_Product_ID, M_AttributeSetInstance_ID FROM M_InventoryLine WHERE IsActive ='Y' AND AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND M_Inventory_ID = " + recordID);
+                    DataSet dsInvLine = DB.ExecuteDataset("SELECT M_InventoryLine_ID, M_Product_ID, M_AttributeSetInstance_ID FROM M_InventoryLine WHERE IsActive ='Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND M_Inventory_ID = " + recordID);
                     if (dsInvLine != null && dsInvLine.Tables[0].Rows.Count > 0)
                         hasInvLines = true;
                     #endregion Physical Inventory
@@ -926,14 +926,14 @@ namespace VIS.Models
                         _sqlQuery.Clear();
                         if (RefNo != "")
                         {
-                            _sqlQuery.Append("SELECT M_Locator_ID FROM M_Locator WHERE IsActive = 'Y' AND AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND Value = '" + RefNo + "'");
+                            _sqlQuery.Append("SELECT M_Locator_ID FROM M_Locator WHERE IsActive = 'Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND Value = '" + RefNo + "'");
                             RefLocatorID = Util.GetValueOfInt(DB.ExecuteScalar(_sqlQuery.ToString()));
                         }
 
                         if (RefLocatorID > 0)
                             Locator_ID = RefLocatorID;
 
-                        dsStockedQty = DB.ExecuteDataset("SELECT QtyOnHand, M_Product_ID, M_AttributeSetInstance_ID FROM M_Storage WHERE M_Locator_ID = " + Locator_ID + " AND AD_Client_ID = " + ctx.GetAD_Client_ID());
+                        dsStockedQty = DB.ExecuteDataset("SELECT QtyOnHand, M_Product_ID, M_AttributeSetInstance_ID FROM M_Storage WHERE M_Locator_ID = " + Locator_ID + " AND VAF_Client_ID = " + ctx.GetVAF_Client_ID());
                         if (dsStockedQty != null && dsStockedQty.Tables[0].Rows.Count > 0)
                             hasStock = true;
                     }
@@ -941,7 +941,7 @@ namespace VIS.Models
                     else if (WindowID == Util.GetValueOfInt(Windows.InternalUse))
                     {
                         _sqlQuery.Clear();
-                        _sqlQuery.Append("SELECT C_Charge_ID FROM C_Charge WHERE IsActive = 'Y' AND AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND DTD001_ChargeType = 'INV'");
+                        _sqlQuery.Append("SELECT C_Charge_ID FROM C_Charge WHERE IsActive = 'Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND DTD001_ChargeType = 'INV'");
                         Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sqlQuery.ToString()));
 
                         if (Util.GetValueOfString(RefNo) != "")
@@ -982,8 +982,8 @@ namespace VIS.Models
                         }
                         else
                         {
-                            po.Set_ValueNoCheck("AD_Client_ID", inv.GetAD_Client_ID());
-                            po.Set_ValueNoCheck("AD_Org_ID", inv.GetAD_Org_ID());
+                            po.Set_ValueNoCheck("VAF_Client_ID", inv.GetVAF_Client_ID());
+                            po.Set_ValueNoCheck("VAF_Org_ID", inv.GetVAF_Org_ID());
                             if (Util.GetValueOfInt(Locator_ID) > 0)
                                 po.Set_Value("M_Locator_ID", Util.GetValueOfInt(Locator_ID));
                             else
@@ -1090,14 +1090,14 @@ namespace VIS.Models
                     int _m_Product_ID = Util.GetValueOfInt(product[i]);
                     int _attribute_ID = 0;
                     po = tbl.GetPO(ctx, lineID, null);
-                    po.Set_ValueNoCheck("AD_Client_ID", AD_Client_ID);
-                    po.Set_ValueNoCheck("AD_Org_ID", proj.GetAD_Org_ID());
+                    po.Set_ValueNoCheck("VAF_Client_ID", VAF_Client_ID);
+                    po.Set_ValueNoCheck("VAF_Org_ID", proj.GetVAF_Org_ID());
                     po.Set_Value("M_Product_ID", _m_Product_ID);
                     po.Set_Value("PLANNEDQTY", Util.GetValueOfDecimal(qty[i]));
                     po.Set_Value("INVOICEDQTY", Util.GetValueOfDecimal(qty[i]));
                     po.Set_ValueNoCheck("C_Project_ID", recordID);
 
-                    Dictionary<string, Decimal?> pPrice = GetPrices(dsProPrice, dsUOMConv, AD_Client_ID, _m_Product_ID,
+                    Dictionary<string, Decimal?> pPrice = GetPrices(dsProPrice, dsUOMConv, VAF_Client_ID, _m_Product_ID,
                         _attribute_ID, Util.GetValueOfInt(po.Get_Value("C_UOM_ID")), dsProducts,
                         Util.GetValueOfDecimal(po.Get_Value("QtyEntered")), M_DiscountSchema_ID, bpFlatDiscount);
 
@@ -1185,8 +1185,8 @@ namespace VIS.Models
                 for (int i = 0; i < product.Count; i++)
                 {
                     po = tbl.GetPO(ctx, lineID, null);
-                    po.Set_ValueNoCheck("AD_Client_ID", AD_Client_ID);
-                    po.Set_ValueNoCheck("AD_Org_ID", AD_Org_ID);
+                    po.Set_ValueNoCheck("VAF_Client_ID", VAF_Client_ID);
+                    po.Set_ValueNoCheck("VAF_Org_ID", VAF_Org_ID);
                     po.Set_Value("M_Product_ID", Util.GetValueOfInt(product[i]));
                     // check if new column found on Requisition Line, added in framework on 7 Dec 2018
                     if (po.Get_ColumnIndex("QtyEntered") > 0)
@@ -1218,7 +1218,7 @@ namespace VIS.Models
 
                     if (Env.IsModuleInstalled("ED011_"))
                     {
-                        Dictionary<string, Decimal?> pPrice = GetPrices(dsProPrice, dsUOMConv, AD_Client_ID, Util.GetValueOfInt(product[i]),
+                        Dictionary<string, Decimal?> pPrice = GetPrices(dsProPrice, dsUOMConv, VAF_Client_ID, Util.GetValueOfInt(product[i]),
                             Util.GetValueOfInt(attribute[i]), Util.GetValueOfInt(po.Get_Value("C_UOM_ID")), dsProducts,
                             Util.GetValueOfDecimal(po.Get_Value("QtyEntered")), M_DiscountSchema_ID, bpFlatDiscount);
 
@@ -1264,14 +1264,14 @@ namespace VIS.Models
                     if (Util.GetValueOfString(RefNo) != "")
                     {
                         _sqlQuery.Clear();
-                        _sqlQuery.Append("SELECT A_Asset_ID, M_Product_ID, NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID FROM A_Asset WHERE IsActive = 'Y' AND AD_Client_ID = "
-                            + ctx.GetAD_Client_ID());
+                        _sqlQuery.Append("SELECT A_Asset_ID, M_Product_ID, NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID FROM A_Asset WHERE IsActive = 'Y' AND VAF_Client_ID = "
+                            + ctx.GetVAF_Client_ID());
                         dsAssets = DB.ExecuteDataset(_sqlQuery.ToString());
                         if (dsAssets != null && dsAssets.Tables[0].Rows.Count > 0)
                             hasAssets = true;
                     }
 
-                    AD_Client_ID = mov.GetAD_Client_ID();
+                    VAF_Client_ID = mov.GetVAF_Client_ID();
 
                     if (Util.GetValueOfString(RefNo) != "")
                     {
@@ -1316,8 +1316,8 @@ namespace VIS.Models
                         int M_AttributeSetInstance_ID = Util.GetValueOfInt(attribute[i]);
                         int M_Product_ID = Util.GetValueOfInt(product[i]);
 
-                        po.Set_ValueNoCheck("AD_Client_ID", AD_Client_ID);
-                        po.Set_ValueNoCheck("AD_Org_ID", mov.GetAD_Org_ID());
+                        po.Set_ValueNoCheck("VAF_Client_ID", VAF_Client_ID);
+                        po.Set_ValueNoCheck("VAF_Org_ID", mov.GetVAF_Org_ID());
                         po.Set_Value("M_Locator_ID", Util.GetValueOfInt(Locator_ID));
                         po.Set_Value("M_LocatorTo_ID", LocToID);
                         po.Set_Value("M_Product_ID", M_Product_ID);
@@ -1481,7 +1481,7 @@ namespace VIS.Models
         //            if (keyColName.ToUpper().Trim() == "M_INVENTORY_ID")
         //            {
         //                _sqlQuery.Clear();
-        //                _sqlQuery.Append("SELECT C_Charge_ID FROM C_Charge WHERE IsActive = 'Y' AND AD_Client_ID = " + ctx.GetAD_Client_ID() + " AND DTD001_ChargeType = 'INV'");
+        //                _sqlQuery.Append("SELECT C_Charge_ID FROM C_Charge WHERE IsActive = 'Y' AND VAF_Client_ID = " + ctx.GetVAF_Client_ID() + " AND DTD001_ChargeType = 'INV'");
 
         //                int Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sqlQuery.ToString()));
 
@@ -1519,8 +1519,8 @@ namespace VIS.Models
         //                    for (int i = 0; i < product.Count; i++)
         //                    {
         //                        po = tbl.GetPO(ctx, lineID, null);
-        //                        po.Set_ValueNoCheck("AD_Client_ID", inv.GetAD_Client_ID());
-        //                        po.Set_ValueNoCheck("AD_Org_ID", inv.GetAD_Org_ID());
+        //                        po.Set_ValueNoCheck("VAF_Client_ID", inv.GetVAF_Client_ID());
+        //                        po.Set_ValueNoCheck("VAF_Org_ID", inv.GetVAF_Org_ID());
         //                        po.Set_Value("M_Product_ID", Util.GetValueOfInt(product[i]));
         //                        po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
         //                        po.Set_Value("QtyInternalUse", Util.GetValueOfDecimal(qty[i]));
@@ -1575,17 +1575,17 @@ namespace VIS.Models
         //            return info;
         //        }
 
-        public bool SetProductQtyStockTrasfer(int recordID, string keyColName, int AD_Table_ID, List<string> product, List<string> uom, List<string> attribute, List<string> qty, List<string> locID, int LocToID, int lineID, int ContainerID, VAdvantage.Utility.Ctx ctx)
+        public bool SetProductQtyStockTrasfer(int recordID, string keyColName, int VAF_TableView_ID, List<string> product, List<string> uom, List<string> attribute, List<string> qty, List<string> locID, int LocToID, int lineID, int ContainerID, VAdvantage.Utility.Ctx ctx)
         {
             MTable tbl = null;
             PO po = null;
 
-            tbl = new MTable(ctx, AD_Table_ID, null);
+            tbl = new MTable(ctx, VAF_TableView_ID, null);
             for (int i = 0; i < product.Count; i++)
             {
                 po = tbl.GetPO(ctx, lineID, null);
-                po.Set_ValueNoCheck("AD_Client_ID", ctx.GetAD_Client_ID());
-                po.Set_ValueNoCheck("AD_Org_ID", ctx.GetAD_Org_ID());
+                po.Set_ValueNoCheck("VAF_Client_ID", ctx.GetVAF_Client_ID());
+                po.Set_ValueNoCheck("VAF_Org_ID", ctx.GetVAF_Org_ID());
                 po.Set_Value("M_Locator_ID", Util.GetValueOfInt(locID[i]));
                 po.Set_Value("M_LocatorTo_ID", LocToID);
                 po.Set_Value("M_Product_ID", Util.GetValueOfInt(product[i]));
@@ -1713,7 +1713,7 @@ namespace VIS.Models
             // Is flat Discount
             query.Clear();
             query.Append("SELECT  DiscountType  FROM M_DiscountSchema WHERE "
-                      + "M_DiscountSchema_ID = " + DiscountSchemaId + " AND IsActive='Y'  AND AD_Client_ID=" + ClientId);
+                      + "M_DiscountSchema_ID = " + DiscountSchemaId + " AND IsActive='Y'  AND VAF_Client_ID=" + ClientId);
             string discountType = Util.GetValueOfString(DB.ExecuteScalar(query.ToString()));
 
             if (discountType == "F")
@@ -1729,7 +1729,7 @@ namespace VIS.Models
                 query.Clear();
                 query.Append(@"SELECT M_Product_Category_ID , M_Product_ID , BreakValue , IsBPartnerFlatDiscount , BreakDiscount FROM M_DiscountSchemaBreak WHERE 
                                                                    M_DiscountSchema_ID = " + DiscountSchemaId + " AND M_Product_ID = " + ProductId
-                                                                           + " AND IsActive='Y'  AND AD_Client_ID=" + ClientId + "Order BY BreakValue DESC");
+                                                                           + " AND IsActive='Y'  AND VAF_Client_ID=" + ClientId + "Order BY BreakValue DESC");
                 DataSet dsDiscountBreak = new DataSet();
                 dsDiscountBreak = DB.ExecuteDataset(query.ToString(), null, null);
                 if (dsDiscountBreak != null)
@@ -1774,7 +1774,7 @@ namespace VIS.Models
                 query.Clear();
                 query.Append(@"SELECT M_Product_Category_ID , M_Product_ID , BreakValue , IsBPartnerFlatDiscount , BreakDiscount FROM M_DiscountSchemaBreak WHERE 
                                                                    M_DiscountSchema_ID = " + DiscountSchemaId + " AND M_Product_Category_ID = " + productCategoryId
-                                                                           + " AND IsActive='Y'  AND AD_Client_ID=" + ClientId + "Order BY BreakValue DESC");
+                                                                           + " AND IsActive='Y'  AND VAF_Client_ID=" + ClientId + "Order BY BreakValue DESC");
                 dsDiscountBreak.Clear();
                 dsDiscountBreak = DB.ExecuteDataset(query.ToString(), null, null);
                 if (dsDiscountBreak != null)
@@ -1819,7 +1819,7 @@ namespace VIS.Models
                 query.Clear();
                 query.Append(@"SELECT M_Product_Category_ID , M_Product_ID , BreakValue , IsBPartnerFlatDiscount , BreakDiscount FROM M_DiscountSchemaBreak WHERE 
                                                                    M_DiscountSchema_ID = " + DiscountSchemaId + " AND M_Product_Category_ID IS NULL AND m_product_id IS NULL "
-                                                                           + " AND IsActive='Y'  AND AD_Client_ID=" + ClientId + "Order BY BreakValue DESC");
+                                                                           + " AND IsActive='Y'  AND VAF_Client_ID=" + ClientId + "Order BY BreakValue DESC");
                 dsDiscountBreak.Clear();
                 dsDiscountBreak = DB.ExecuteDataset(query.ToString(), null, null);
                 if (dsDiscountBreak != null)
@@ -1946,7 +1946,7 @@ namespace VIS.Models
         {
             int window_ID = 0;
             int tab_ID = Util.GetValueOfInt(fields);
-            string sql = "SELECT AD_Window_ID FROM AD_Tab WHERE AD_Tab_ID = " + Util.GetValueOfInt(tab_ID);
+            string sql = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + Util.GetValueOfInt(tab_ID);
             window_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             return window_ID;
         }
@@ -2113,21 +2113,21 @@ namespace VIS.Models
                     if (Util.GetValueOfInt(Windows.MaterialReceipt) == WindowID)
                     {
                         sqlSB.Append(@"SELECT ol.M_Product_ID, ol.C_UOM_ID, ol.M_AttributeSetInstance_ID, o.DocumentNo, ol.c_OrderLine_ID AS LineID
-                                    FROM C_Order o INNER JOIN C_OrderLine ol ON (ol.C_Order_ID = o.C_Order_ID) WHERE o.IsActive = 'Y' AND o.AD_Client_ID = " + ctx.GetAD_Client_ID()
+                                    FROM C_Order o INNER JOIN C_OrderLine ol ON (ol.C_Order_ID = o.C_Order_ID) WHERE o.IsActive = 'Y' AND o.VAF_Client_ID = " + ctx.GetVAF_Client_ID()
                                     + @" AND o.IsSOTrx = 'N' AND o.DocStatus IN ('CO', 'CL') AND o.DocumentNo IN (
                                     SELECT VAICNT_ReferenceNo FROM VAICNT_InventoryCount WHERE VAICNT_InventoryCount_ID IN (" + countID + "))");
                     }
                     else if (Util.GetValueOfInt(Windows.Shipment) == WindowID)
                     {
                         sqlSB.Append(@"SELECT ol.M_Product_ID, ol.C_UOM_ID, ol.M_AttributeSetInstance_ID, o.DocumentNo, ol.c_OrderLine_ID AS LineID
-                                    FROM C_Order o INNER JOIN C_OrderLine ol ON (ol.C_Order_ID = o.C_Order_ID) WHERE o.IsActive = 'Y' AND o.AD_Client_ID = " + ctx.GetAD_Client_ID()
+                                    FROM C_Order o INNER JOIN C_OrderLine ol ON (ol.C_Order_ID = o.C_Order_ID) WHERE o.IsActive = 'Y' AND o.VAF_Client_ID = " + ctx.GetVAF_Client_ID()
                                     + @" AND o.IsSOTrx = 'Y' AND o.DocStatus IN ('CO') AND o.DocumentNo IN (
                                     SELECT VAICNT_ReferenceNo FROM VAICNT_InventoryCount WHERE VAICNT_InventoryCount_ID IN (" + countID + "))");
                     }
                     else if (Util.GetValueOfInt(Windows.InternalUse) == WindowID || Util.GetValueOfInt(Windows.InventoryMove) == WindowID)
                     {
                         sqlSB.Append(@"SELECT ol.M_RequisitionLine_ID AS LineID, o.DocumentNo  ol.M_Product_ID, ol.M_AttributeSetInstance_ID, ol.C_UOM_ID FROM M_RequisitionLine ol INNER JOIN M_Requisition o
-                                    ON ol.M_Requisition_ID =o.M_Requisition_ID WHERE o.IsActive = 'Y' AND o.AD_Client_ID = " + ctx.GetAD_Client_ID()
+                                    ON ol.M_Requisition_ID =o.M_Requisition_ID WHERE o.IsActive = 'Y' AND o.VAF_Client_ID = " + ctx.GetVAF_Client_ID()
                                     + @" AND o.DocStatus IN ('CO') AND o.DocumentNo IN (
                                     SELECT VAICNT_ReferenceNo FROM VAICNT_InventoryCount WHERE VAICNT_InventoryCount_ID IN (" + countID + "))");
                     }
@@ -2174,12 +2174,12 @@ namespace VIS.Models
         /// Returns dataset of Products from Purchasing Tab
         /// </summary>
         /// <returns>Dataset</returns>
-        public DataSet GetPurchaingProduct(int AD_Client_ID)
+        public DataSet GetPurchaingProduct(int VAF_Client_ID)
         {
             DataSet dsProPurch = null;
             _sqlQuery.Clear();
             _sqlQuery.Append(@"SELECT vdr.C_UOM_ID, vdr.C_BPartner_ID, p.M_Product_ID FROM M_Product p LEFT JOIN 
-                            M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.AD_Client_ID = " + AD_Client_ID);
+                            M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID);
             dsProPurch = DB.ExecuteDataset(_sqlQuery.ToString());
             return dsProPurch;
         }
@@ -2202,13 +2202,13 @@ namespace VIS.Models
         /// <summary>
         /// function to fetch Products with UOM IDs for tenant
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
         /// <returns>Dataset of Products with UOM</returns>
-        public DataSet GetProducts(int AD_Client_ID)
+        public DataSet GetProducts(int VAF_Client_ID)
         {
             DataSet dsProds = null;
             _sqlQuery.Clear();
-            _sqlQuery.Append(@"SELECT M_Product_ID, C_UOM_ID, Name FROM M_Product WHERE AD_Client_ID = " + AD_Client_ID);
+            _sqlQuery.Append(@"SELECT M_Product_ID, C_UOM_ID, Name FROM M_Product WHERE VAF_Client_ID = " + VAF_Client_ID);
             dsProds = DB.ExecuteDataset(_sqlQuery.ToString());
             return dsProds;
         }
@@ -2216,16 +2216,16 @@ namespace VIS.Models
         /// <summary>
         /// function to return product prices based on Tenant and Pricelist version
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
         /// <param name="M_PriceList_Version_ID"></param>
         /// <returns>Dataset of Product Prices</returns>
-        public DataSet GetProductsPrice(int AD_Client_ID, int M_PriceList_Version_ID)
+        public DataSet GetProductsPrice(int VAF_Client_ID, int M_PriceList_Version_ID)
         {
             DataSet dsProdPrices = null;
 
             _sqlQuery.Clear();
             _sqlQuery.Append(@"SELECT PriceList , PriceStd , PriceLimit, M_Product_ID, NVL(M_AttributeSetInstance_ID,0) AS M_AttributeSetInstance_ID, C_UOM_ID
-                            FROM M_ProductPrice WHERE Isactive='Y' AND AD_Client_ID = " + AD_Client_ID + " AND M_PriceList_Version_ID = " + M_PriceList_Version_ID);
+                            FROM M_ProductPrice WHERE Isactive='Y' AND VAF_Client_ID = " + VAF_Client_ID + " AND M_PriceList_Version_ID = " + M_PriceList_Version_ID);
             dsProdPrices = DB.ExecuteDataset(_sqlQuery.ToString());
             return dsProdPrices;
         }
@@ -2233,13 +2233,13 @@ namespace VIS.Models
         /// <summary>
         /// function to fetch UOM Conversions for the specified Tenant
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
         /// <returns>Dataset of UOM Conversions</returns>
-        public DataSet GetUOMConversions(int AD_Client_ID)
+        public DataSet GetUOMConversions(int VAF_Client_ID)
         {
             DataSet dsConvs = null;
             _sqlQuery.Clear();
-            _sqlQuery.Append(@"SELECT con.DivideRate, TRUNC(con.multiplyrate,4) AS MultiplyRate, con.C_UOM_ID, con.C_UOM_To_ID, con.M_Product_ID FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' AND con.AD_Client_ID = " + AD_Client_ID);
+            _sqlQuery.Append(@"SELECT con.DivideRate, TRUNC(con.multiplyrate,4) AS MultiplyRate, con.C_UOM_ID, con.C_UOM_To_ID, con.M_Product_ID FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' AND con.VAF_Client_ID = " + VAF_Client_ID);
             dsConvs = DB.ExecuteDataset(_sqlQuery.ToString());
             return dsConvs;
         }
@@ -2250,7 +2250,7 @@ namespace VIS.Models
         /// </summary>
         /// <param name="dsProdPrice"></param>
         /// <param name="dsUOMCon"></param>
-        /// <param name="AD_Client_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
         /// <param name="M_Product_ID"></param>
         /// <param name="M_ASI_ID"></param>
         /// <param name="C_UOM_ID"></param>
@@ -2259,7 +2259,7 @@ namespace VIS.Models
         /// <param name="M_DiscountSchema_ID"></param>
         /// <param name="bpFlatDiscount"></param>
         /// <returns>Dictionary of Prices (PriceList, PriceLimit, PriceActual, PriceEntered)</returns>
-        public Dictionary<string, Decimal?> GetPrices(DataSet dsProdPrice, DataSet dsUOMCon, int AD_Client_ID, int M_Product_ID, int M_ASI_ID, int C_UOM_ID, DataSet dsProducts,
+        public Dictionary<string, Decimal?> GetPrices(DataSet dsProdPrice, DataSet dsUOMCon, int VAF_Client_ID, int M_Product_ID, int M_ASI_ID, int C_UOM_ID, DataSet dsProducts,
             Decimal? QtyEntered, int M_DiscountSchema_ID, Decimal? bpFlatDiscount)
         {
             Dictionary<string, Decimal?> prodPrice = new Dictionary<string, decimal?>();
@@ -2329,7 +2329,7 @@ namespace VIS.Models
             // if Price found then calcluate prices with Conversion
             if (drPrice != null && drPrice.Length > 0)
             {
-                convertedprice = FlatDiscount(M_Product_ID, AD_Client_ID, Util.GetValueOfDecimal(drPrice[0]["PriceStd"]), M_DiscountSchema_ID, bpFlatDiscount, QtyEntered);
+                convertedprice = FlatDiscount(M_Product_ID, VAF_Client_ID, Util.GetValueOfDecimal(drPrice[0]["PriceStd"]), M_DiscountSchema_ID, bpFlatDiscount, QtyEntered);
                 PriceList = Util.GetValueOfDecimal(drPrice[0]["PriceList"]);
                 PriceLimit = Util.GetValueOfDecimal(drPrice[0]["PriceLimit"]);
                 if (convertPrice && conversionRate > 0)
@@ -2364,7 +2364,7 @@ namespace VIS.Models
 
     public class InfoProduct
     {
-        public int AD_Table_ID
+        public int VAF_TableView_ID
         {
             get;
             set;

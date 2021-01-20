@@ -42,7 +42,7 @@ namespace VAdvantage.Utility
       /// <summary>
       ///	Context
       /// </summary>
-        /// <param name="stringRepresentation"> stringRepresentation example {AD_Org_ID=11}</param>
+        /// <param name="stringRepresentation"> stringRepresentation example {VAF_Org_ID=11}</param>
         public Ctx(String stringRepresentation) : this()
         {
             Load(stringRepresentation);
@@ -59,7 +59,7 @@ namespace VAdvantage.Utility
     /// <summary>
     ///	Load list from string representaion
     /// </summary>
-    /// <param name="stringRepresentation">stringRepresentation example {AD_Org_ID=11, IsDefault=N, IsActive=Y, Greeting=Mr, Name=Mr, C_Greeting_ID=100, AD_Client_ID=11, IsFirstNameOnly=N}</param>
+    /// <param name="stringRepresentation">stringRepresentation example {VAF_Org_ID=11, IsDefault=N, IsActive=Y, Greeting=Mr, Name=Mr, C_Greeting_ID=100, VAF_Client_ID=11, IsFirstNameOnly=N}</param>
        protected void Load(String stringRepresentation)
        {
            if (stringRepresentation == null
@@ -681,60 +681,60 @@ namespace VAdvantage.Utility
         }
 
      /// <summary>
-     ///Get Login AD_Client_ID
+     ///Get Login VAF_Client_ID
      /// </summary>
      /// <returns></returns>
-        public int GetAD_Client_ID()
+        public int GetVAF_Client_ID()
         {
-            return GetContextAsInt("#AD_Client_ID");
+            return GetContextAsInt("#VAF_Client_ID");
         }
 	
         /// <summary>
-        ///Set Login AD_Client_ID
+        ///Set Login VAF_Client_ID
         /// </summary>
-        /// <param name="AD_Client_ID"></param>
-        public void SetAD_Client_ID(int AD_Client_ID)
+        /// <param name="VAF_Client_ID"></param>
+        public void SetVAF_Client_ID(int VAF_Client_ID)
         {
-            SetContext("#AD_Client_ID", AD_Client_ID);
+            SetContext("#VAF_Client_ID", VAF_Client_ID);
         }	
 
         /// <summary>
-        ///Get Login AD_Org_ID
+        ///Get Login VAF_Org_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Org_ID()
+        public int GetVAF_Org_ID()
         {
-            return GetContextAsInt("#AD_Org_ID");
+            return GetContextAsInt("#VAF_Org_ID");
         }
 
         /// <summary>
-        ///	Set Login AD_Org_ID
+        ///	Set Login VAF_Org_ID
         /// </summary>
-        /// <param name="AD_Org_ID"></param>
-        public void SetAD_Org_ID(int AD_Org_ID)
+        /// <param name="VAF_Org_ID"></param>
+        public void SetVAF_Org_ID(int VAF_Org_ID)
         {
-            SetContext("#AD_Org_ID", AD_Org_ID);
+            SetContext("#VAF_Org_ID", VAF_Org_ID);
         }	
 
         /// <summary>
-        ///Get Window AD_Org_ID
+        ///Get Window VAF_Org_ID
         /// </summary>
         /// <param name="WindowNo"></param>
         /// <returns></returns>
-        public int GetAD_Org_ID(int windowNo)
+        public int GetVAF_Org_ID(int windowNo)
         {
-            return GetContextAsInt(windowNo, "AD_Org_ID");
+            return GetContextAsInt(windowNo, "VAF_Org_ID");
         }	
 
         /// <summary>
-        ///Get Tab AD_Org_ID
+        ///Get Tab VAF_Org_ID
         /// </summary>
         /// <param name="WindowNo"></param>
         /// <param name="TabNo"></param>
         /// <returns></returns>
-        public int GetAD_Org_ID(int windowNo, int tabNo)
+        public int GetVAF_Org_ID(int windowNo, int tabNo)
         {
-            return GetContextAsInt(windowNo, tabNo, "AD_Org_ID");
+            return GetContextAsInt(windowNo, tabNo, "VAF_Org_ID");
         }	
 
         /// <summary>
@@ -1211,21 +1211,21 @@ namespace VAdvantage.Utility
         }
 
         /// <summary>
-        ///	Get Login AD_Client_ID
+        ///	Get Login VAF_Client_ID
         /// </summary>
         /// <returns></returns>
-        public string GetAD_Client_Name()
+        public string GetVAF_Client_Name()
         {
-            return GetContext("#AD_Client_Name");
+            return GetContext("#VAF_Client_Name");
         }
 
         /// <summary>
-        ///	Get Login AD_Client_ID
+        ///	Get Login VAF_Client_ID
         /// </summary>
         /// <returns></returns>
-        public string GetAD_Org_Name()
+        public string GetVAF_Org_Name()
         {
-            return GetContext("#AD_Org_Name");
+            return GetContext("#VAF_Org_Name");
         }
 
         /// <summary>
@@ -1287,13 +1287,13 @@ namespace VAdvantage.Utility
         }
 
         /// <summary>
-        /// Get AD_Client_ID
+        /// Get VAF_Client_ID
         /// </summary>
         /// <param name="WindowNo">Window</param>
-        /// <returns>AD_Client_ID</returns>
-        public int GetAD_Client_ID(int windowNo)
+        /// <returns>VAF_Client_ID</returns>
+        public int GetVAF_Client_ID(int windowNo)
         {
-            return GetContextAsInt(windowNo, "AD_Client_ID");
+            return GetContextAsInt(windowNo, "VAF_Client_ID");
         }
 
         //private bool _isVisualEditor = false;
@@ -1362,7 +1362,7 @@ namespace VAdvantage.Utility
         //}
 
         /// <summary>
-        ///Get Tab AD_Org_ID
+        ///Get Tab VAF_Org_ID
         /// </summary>
         /// <param name="WindowNo"></param>
         /// <param name="TabNo"></param>

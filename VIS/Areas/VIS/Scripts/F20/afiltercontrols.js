@@ -1,7 +1,7 @@
 ﻿; (function (VIS, $) {
 
     VIS.FilterPanel.Controls = VIS.FilterPanel.Controls || {};
-    VIS.FilterPanel.Controls.CheckBoxList = function (SelectedValues, columnName, AD_Column_ID, displayType, container, data, isSearch, infoWinID, colName, tableName, windowNo, isMultiSearch) {
+    VIS.FilterPanel.Controls.CheckBoxList = function (SelectedValues, columnName, VAF_Column_ID, displayType, container, data, isSearch, infoWinID, colName, tableName, windowNo, isMultiSearch) {
         var datasource = [];
         var self = this;
         var values = [];
@@ -79,7 +79,7 @@
                 url: url,
                 dataType: "json",
                 data: {
-                    AD_Column_ID: AD_Column_ID, ColumnName: columnName,
+                    VAF_Column_ID: VAF_Column_ID, ColumnName: columnName,
                     name_startsWith: text
                 },
                 success: function (data) {
@@ -196,7 +196,7 @@
                 datatype: "json",
                 type: "get",
                 cache: false,
-                data: { AD_Column_ID: AD_Column_ID, ColumnName: columnName },
+                data: { VAF_Column_ID: VAF_Column_ID, ColumnName: columnName },
                 success: function (data) {
                     var result = JSON.parse(data);
                     datasource = [];

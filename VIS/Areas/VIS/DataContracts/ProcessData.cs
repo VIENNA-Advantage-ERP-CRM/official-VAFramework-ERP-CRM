@@ -17,7 +17,7 @@ namespace VIS.DataContracts
         public String Description { get; set; }
         public String Help { get; set; }
         public int AD_Process_ID { get; set; }
-        public int AD_CtxArea_ID { get; set; }
+        public int VAF_ContextScope_ID { get; set; }
         public String IsSOTrx { get; set; }
         public String MessageText { get; set; }
         public bool IsBackground { get; set; }
@@ -45,7 +45,7 @@ namespace VIS.DataContracts
         public object Result2 { get; set; }
         public bool LoadRecursiveData { get;set; }
         public bool ShowChildOfSelected { get; set; }
-        public int AD_Column_ID { get; set; }
+        public int VAF_Column_ID { get; set; }
     }
 
 
@@ -120,7 +120,7 @@ namespace VIS.DataContracts
             get;
             set;
         }
-        public int AD_Table_ID
+        public int VAF_TableView_ID
         {
             get;
             set;

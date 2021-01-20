@@ -25,7 +25,7 @@ public X_AD_Theme (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName
  added by ->Harwinder */
 static X_AD_Theme(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27870350834848L;/** Last Updated Timestamp 4/30/2020 5:45:18 AM */
-public static long updatedMS = 1588225518059L;/** AD_Table_ID=1001056 */
+public static long updatedMS = 1588225518059L;/** VAF_TableView_ID=1001056 */
 public static int Table_ID; // =1001056;
 /** TableName=AD_Theme */
 public static String Table_Name="AD_Theme";

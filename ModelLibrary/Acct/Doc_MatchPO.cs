@@ -135,7 +135,7 @@ namespace VAdvantage.Acct
                 Decimal rate = MConversionRate.GetRate(
                     order.GetC_Currency_ID(), as1.GetC_Currency_ID(),
                     order.GetDateAcct(), order.GetC_ConversionType_ID(),
-                    _oLine.GetAD_Client_ID(), _oLine.GetAD_Org_ID());
+                    _oLine.GetVAF_Client_ID(), _oLine.GetVAF_Org_ID());
                 if (rate.ToString() == null)
                 {
                     _error = "Purchase Order not convertible - " + as1.GetName();
@@ -155,7 +155,7 @@ namespace VAdvantage.Acct
             if (!IsPosted())
             {
                 //	Create PO Cost Detail Record firs
-                MCostDetail.CreateOrder(as1, _oLine.GetAD_Org_ID(),
+                MCostDetail.CreateOrder(as1, _oLine.GetVAF_Org_ID(),
                         GetM_Product_ID(), _M_AttributeSetInstance_ID,
                         _C_OrderLine_ID, 0,		//	no cost element
                         isReturnTrx ? Decimal.Negate(poCost) : poCost, isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),			//	Delivered
@@ -172,7 +172,7 @@ namespace VAdvantage.Acct
             {
                 costingMethod = pca.GetCostingMethod();
             }
-            Decimal? costs = _pc.GetProductCosts(as1, GetAD_Org_ID(), costingMethod, _C_OrderLine_ID, false);	//	non-zero costs
+            Decimal? costs = _pc.GetProductCosts(as1, GetVAF_Org_ID(), costingMethod, _C_OrderLine_ID, false);	//	non-zero costs
 
             //	No Costs yet - no PPV
             if (costs == null || Env.Signum(Utility.Util.GetValueOfDecimal(costs)) == 0)

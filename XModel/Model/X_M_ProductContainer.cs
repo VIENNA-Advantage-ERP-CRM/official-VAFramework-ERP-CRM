@@ -29,7 +29,7 @@ public X_M_ProductContainer (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, d
  added by ->Harwinder */
 static X_M_ProductContainer(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27817490194683L;/** Last Updated Timestamp 8/27/2018 3:44:38 PM */
-public static long updatedMS = 1535364877894L;/** AD_Table_ID=1000524 */
+public static long updatedMS = 1535364877894L;/** VAF_TableView_ID=1000524 */
 public static int Table_ID; // =1000524;
 /** TableName=M_ProductContainer */
 public static String Table_Name="M_ProductContainer";

@@ -15,9 +15,9 @@
         var _comb = null;
         var f_Description = new VIS.Controls.VLabel();
         //  Editors for Query
-        var f_Alias = null, f_Combination = null, f_AD_Org_ID = null, f_Account_ID = null, f_SubAcct_ID = null,
+        var f_Alias = null, f_Combination = null, f_VAF_Org_ID = null, f_Account_ID = null, f_SubAcct_ID = null,
             f_M_Product_ID = null, f_C_BPartner_ID = null, f_C_Campaign_ID = null, f_C_LocFrom_ID = null, f_C_LocTo_ID = null,
-            f_C_Project_ID = null, f_C_SalesRegion_ID = null, f_AD_OrgTrx_ID = null, f_C_Activity_ID = null,
+            f_C_Project_ID = null, f_C_SalesRegion_ID = null, f_VAF_OrgTrx_ID = null, f_C_Activity_ID = null,
             f_User1_ID = null, f_User2_ID = null, f_UserElement1_ID = null, f_UserElement2_ID = null, f_UserElement3_ID = null,
             f_UserElement4_ID = null, f_UserElement5_ID = null, f_UserElement6_ID = null, f_UserElement7_ID = null, f_UserElement8_ID = null, f_UserElement9_ID = null;
 
@@ -378,7 +378,7 @@
                     _mTab.getField("Alias").setDisplayLength(15);
                     _mTab.getField("Combination").setDisplayLength(15);
                     //  Grid restrictions
-                    _mTab.getField("AD_Client_ID").setDisplayed(false);
+                    _mTab.getField("VAF_Client_ID").setDisplayed(false);
                     _mTab.getField("C_AcctSchema_ID").setDisplayed(false);
                     _mTab.getField("IsActive").setDisplayed(false);
                     _mTab.getField("IsFullyQualified").setDisplayed(false);
@@ -435,14 +435,14 @@
                         var isHeavyData = returnValue.Elements[i].IsHeavyData;
                         var lblNames = returnValue.Elements[i].Name;
                         if (type.equals(eLEMENTTYPE_Organization)) {
-                            var field = _mTab.getField("AD_Org_ID");
-                            f_AD_Org_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_AD_Org_ID, isMandatory, lblNames, eLEMENTTYPE_Organization);
+                            var field = _mTab.getField("VAF_Org_ID");
+                            f_VAF_Org_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAF_Org_ID, isMandatory, lblNames, eLEMENTTYPE_Organization);
 
                             // On Change of Organization validate Trx Organization based on organization 
-                            f_AD_Org_ID.fireValueChanged = locationChangedOrg;
+                            f_VAF_Org_ID.fireValueChanged = locationChangedOrg;
                             function locationChangedOrg() {
-                                var org_ID = f_AD_Org_ID.getValue();
+                                var org_ID = f_VAF_Org_ID.getValue();
                                 VIS.Env.getCtx().setContext(windowNo, "AcctOrg_ID", org_ID);
                             };
                         }
@@ -495,9 +495,9 @@
                             addLine(field, f_C_SalesRegion_ID, isMandatory, lblNames, eLEMENTTYPE_SalesRegion);
                         }
                         else if (type.equals(eLEMENTTYPE_OrgTrx)) {
-                            var field = _mTab.getField("AD_OrgTrx_ID");
-                            f_AD_OrgTrx_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_AD_OrgTrx_ID, isMandatory, lblNames, eLEMENTTYPE_OrgTrx);
+                            var field = _mTab.getField("VAF_OrgTrx_ID");
+                            f_VAF_OrgTrx_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAF_OrgTrx_ID, isMandatory, lblNames, eLEMENTTYPE_OrgTrx);
                         }
                         else if (type.equals(eLEMENTTYPE_Activity)) {
                             var field = _mTab.getField("C_Activity_ID");
@@ -517,18 +517,18 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement1)) {
                             var field = _mTab.getField("UserElement1_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 // var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
 
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement1_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement1_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement1);
 
@@ -539,7 +539,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement1_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement1_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement1);
                                     eleFlag1 = false;
@@ -551,17 +551,17 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement2)) {
                             var field = _mTab.getField("UserElement2_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement2_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement2_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement2);
 
@@ -572,7 +572,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement2_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement2_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement2);
                                     eleFlag2 = false;
@@ -584,17 +584,17 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement3)) {
                             var field = _mTab.getField("UserElement3_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement3_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement3_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement3);
 
@@ -605,7 +605,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement3_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement3_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement3);
                                     eleFlag3 = false;
@@ -617,17 +617,17 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement4)) {
                             var field = _mTab.getField("UserElement4_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement4_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement4_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement4);
 
@@ -638,7 +638,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement4_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement4_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement4);
                                     eleFlag4 = false;
@@ -650,17 +650,17 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement5)) {
                             var field = _mTab.getField("UserElement5_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement5_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement5_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement5);
 
@@ -671,7 +671,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement5_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement5_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement5);
                                     eleFlag5 = false;
@@ -683,17 +683,17 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement6)) {
                             var field = _mTab.getField("UserElement6_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement6_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement6_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement6);
 
@@ -704,7 +704,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement6_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement6_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement6);
                                     eleFlag6 = false;
@@ -716,17 +716,17 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement7)) {
                             var field = _mTab.getField("UserElement7_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement7_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement7_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement7);
 
@@ -737,7 +737,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement7_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement7_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement7);
                                     eleFlag7 = false;
@@ -749,17 +749,17 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement8)) {
                             var field = _mTab.getField("UserElement8_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement8_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement8_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement8);
 
@@ -770,7 +770,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement8_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement8_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement8);
                                     eleFlag8 = false;
@@ -782,18 +782,18 @@
                         }
                         else if (type.equals(eLEMENTTYPE_UserElement9)) {
                             var field = _mTab.getField("UserElement9_ID");
-                            if (obj.Elements[i].AD_Column_ID > 0) {
-                                //var qry = "SELECT ColumnName FROM AD_Column WHERE AD_Column_ID = " + obj.Elements[i].AD_Column_ID;
+                            if (obj.Elements[i].VAF_Column_ID > 0) {
+                                //var qry = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + obj.Elements[i].VAF_Column_ID;
                                 //var column = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(qry));
 
                                 var qry = "VIS_125";
                                 var param = [];
-                                param[0] = new VIS.DB.SqlParam("@AD_Column_ID", obj.Elements[i].AD_Column_ID);
+                                param[0] = new VIS.DB.SqlParam("@VAF_Column_ID", obj.Elements[i].VAF_Column_ID);
                                 var column = executeScalar(qry, param);
 
 
                                 if (isHeavyData) {
-                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.Search);
+                                    var value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.Search);
                                     f_UserElement9_ID = new VIS.Controls.VTextBoxButton(column, isMandatory, false, true, VIS.DisplayType.Search, value);
                                     addLine(field, f_UserElement9_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement9);
 
@@ -804,7 +804,7 @@
                                     };
                                 }
                                 else {
-                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].AD_Column_ID, VIS.DisplayType.TableDir);
+                                    var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), windowNo, obj.Elements[i].VAF_Column_ID, VIS.DisplayType.TableDir);
                                     f_UserElement9_ID = new VIS.Controls.VComboBox(column, false, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
                                     addLine(field, f_UserElement9_ID, isMandatory, lblNames, eLEMENTTYPE_UserElement9);
                                     eleFlag9 = false;
@@ -836,7 +836,7 @@
                     query.addRestriction("C_AcctSchema_ID", VIS.Query.prototype.EQUAL, C_AcctSchema_ID);
 
                     // Manish 17/03/2017, Requested By Mukesh sir
-                    //var sqlQry = "SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + tblID_s;
+                    //var sqlQry = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + tblID_s;
                     //var wIDName = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(sqlQry));
 
                     var qry = "VIS_126";
@@ -864,7 +864,7 @@
                     lblbottumMsg.text(obj.Description);
                     //lblCount.val("?");
 
-                    var getOrgDiv = tableSArea.find('[name="AD_Org_ID"]');
+                    var getOrgDiv = tableSArea.find('[name="VAF_Org_ID"]');
                     window.setTimeout(function () {
                         // if (window.innerHeight <= 700) {
                         accDiv.css("width", "73%");
@@ -881,7 +881,7 @@
                         //    parameterDiv.parent().css({ "width": "27%", "padding": "0 10px 0 0" });
                         //}
 
-                        //var sqlQry = "SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + tblID_s;
+                        //var sqlQry = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + tblID_s;
                         //var wIDName = VIS.Utility.Util.getValueOfString(VIS.DB.executeScalar(sqlQry));
 
                         var qry = "VIS_126";
@@ -992,8 +992,8 @@
                     localquery.addRestriction("UPPER(Combination)", localquery.LIKE, value);
                 }
                 //	Org (mandatory)
-                if (f_AD_Org_ID != null && f_AD_Org_ID.getValue() != null)// && !isNull(f_AD_Org_ID.getValue()))
-                    localquery.addRestriction("AD_Org_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_AD_Org_ID.getValue()));
+                if (f_VAF_Org_ID != null && f_VAF_Org_ID.getValue() != null)// && !isNull(f_VAF_Org_ID.getValue()))
+                    localquery.addRestriction("VAF_Org_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAF_Org_ID.getValue()));
                 //	Account (mandatory)
                 if (f_Account_ID != null && !isNull(f_Account_ID.getValue()))
                     localquery.addRestriction("Account_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_Account_ID.getValue()));
@@ -1023,8 +1023,8 @@
                 if (f_C_SalesRegion_ID != null && !isNull(f_C_SalesRegion_ID.getValue()))
                     localquery.addRestriction("C_SalesRegion_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_SalesRegion_ID.getValue()));
                 //	Org Trx
-                if (f_AD_OrgTrx_ID != null && !isNull(f_AD_OrgTrx_ID.getValue()))
-                    localquery.addRestriction("AD_OrgTrx_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_AD_OrgTrx_ID.getValue()));
+                if (f_VAF_OrgTrx_ID != null && !isNull(f_VAF_OrgTrx_ID.getValue()))
+                    localquery.addRestriction("VAF_OrgTrx_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAF_OrgTrx_ID.getValue()));
                 //	Activity
                 if (f_C_Activity_ID != null && !isNull(f_C_Activity_ID.getValue()))
                     localquery.addRestriction("C_Activity_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_Activity_ID.getValue()));
@@ -1078,7 +1078,7 @@
 
                 //
                 //	Org (mandatory)
-                f_AD_Org_ID.setValue(null);
+                f_VAF_Org_ID.setValue(null);
                 //	Account (mandatory)
                 f_Account_ID.setValue(null);
                 if (f_SubAcct_ID != null)
@@ -1106,8 +1106,8 @@
                 if (f_C_SalesRegion_ID != null)
                     f_C_SalesRegion_ID.setValue(null);
                 //	Org Trx
-                if (f_AD_OrgTrx_ID != null)
-                    f_AD_OrgTrx_ID.setValue(null);
+                if (f_VAF_OrgTrx_ID != null)
+                    f_VAF_OrgTrx_ID.setValue(null);
                 //	Activity
                 if (f_C_Activity_ID != null)
                     f_C_Activity_ID.setValue(null);
@@ -1168,8 +1168,8 @@
                 //    var type = accountSchemaElements.Elements[i].Type;
                 //    //
                 //    if (type.equals(eLEMENTTYPE_Organization)) {
-                //        value = f_AD_Org_ID.getValue();
-                //        sql = sql.concat("AD_Org_ID");
+                //        value = f_VAF_Org_ID.getValue();
+                //        sql = sql.concat("VAF_Org_ID");
                 //        if (value != null) {
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //        }
@@ -1251,8 +1251,8 @@
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_OrgTrx)) {
-                //        value = f_AD_OrgTrx_ID.getValue();
-                //        sql = sql.concat("AD_OrgTrx_ID");
+                //        value = f_VAF_OrgTrx_ID.getValue();
+                //        sql = sql.concat("VAF_OrgTrx_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
@@ -1385,8 +1385,8 @@
                     VIS.ADialog.info("FillMandatory", true, sb.ToString().Substring(0, sb.Length - 2), null);
                     return;
                 }
-                if (f_AD_Org_ID == null || f_AD_Org_ID.getValue() == null) {// || isNull(f_AD_Org_ID.getValue())) {
-                    VIS.ADialog.info("FillMandatory", true, VIS.Msg.getElement(VIS.Env.getCtx(), "AD_Org_ID"), null);
+                if (f_VAF_Org_ID == null || f_VAF_Org_ID.getValue() == null) {// || isNull(f_VAF_Org_ID.getValue())) {
+                    VIS.ADialog.info("FillMandatory", true, VIS.Msg.getElement(VIS.Env.getCtx(), "VAF_Org_ID"), null);
                     return;
                 }
                 if (f_Account_ID == null || isNull(f_Account_ID.getValue())) {
@@ -1396,7 +1396,7 @@
                 }
 
                 //Check if already exists
-                sql = sql.concat("AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID() + " AND C_AcctSchema_ID=" + C_AcctSchema_ID);
+                sql = sql.concat("VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID() + " AND C_AcctSchema_ID=" + C_AcctSchema_ID);
                 $self.log.fine("Check = " + sql.toString());
 
                 //Check Alies Value
@@ -1481,9 +1481,9 @@
                 var C_BPartner_ID = 0;
                 if (f_C_BPartner_ID != null && !isNull(f_C_BPartner_ID.getValue()))
                     C_BPartner_ID = f_C_BPartner_ID.getValue();
-                var AD_OrgTrx_ID = 0;
-                if (f_AD_OrgTrx_ID != null && !isNull(f_AD_OrgTrx_ID.getValue()))
-                    AD_OrgTrx_ID = f_AD_OrgTrx_ID.getValue();
+                var VAF_OrgTrx_ID = 0;
+                if (f_VAF_OrgTrx_ID != null && !isNull(f_VAF_OrgTrx_ID.getValue()))
+                    VAF_OrgTrx_ID = f_VAF_OrgTrx_ID.getValue();
                 var C_LocFrom_ID = 0;
                 if (f_C_LocFrom_ID != null && !isNull(f_C_LocFrom_ID.getValue()))
                     C_LocFrom_ID = f_C_LocFrom_ID.getValue();
@@ -1536,7 +1536,7 @@
                 if (f_UserElement9_ID != null && !isNull(f_UserElement9_ID.getValue()))
                     UserElement9_ID = f_UserElement9_ID.getValue();
 
-                var AD_Org_ID = f_AD_Org_ID.getValue();
+                var VAF_Org_ID = f_VAF_Org_ID.getValue();
                 var AD_Account_ID = f_Account_ID.getValue();
 
 
@@ -1574,14 +1574,14 @@
                     url: VIS.Application.contextUrl + "AccountForm/Save",
                     dataType: "json",
                     data: {
-                        AD_Client_ID: VIS.Env.getCtx().getAD_Client_ID(),
-                        AD_Org_ID: AD_Org_ID,
+                        VAF_Client_ID: VIS.Env.getCtx().getVAF_Client_ID(),
+                        VAF_Org_ID: VAF_Org_ID,
                         C_AcctSchema_ID: C_AcctSchema_ID,
                         AD_Account_ID: AD_Account_ID,
                         C_SubAcct_ID: C_SubAcct_ID,
                         M_Product_ID: M_Product_ID,
                         C_BPartner_ID: C_BPartner_ID,
-                        AD_OrgTrx_ID: AD_OrgTrx_ID,
+                        VAF_OrgTrx_ID: VAF_OrgTrx_ID,
                         C_LocFrom_ID: C_LocFrom_ID,
                         C_LocTo_ID: C_LocTo_ID,
                         C_SRegion_ID: C_SRegion_ID,
@@ -1627,8 +1627,8 @@
                             f_Alias.setValue(dr.getString("Alias"));
                         if (f_Combination != null)
                             f_Combination.setValue(dr.getString("Combination"));
-                        if (f_AD_Org_ID != null)
-                            f_AD_Org_ID.setValue(dr.getInt("AD_Org_ID"));
+                        if (f_VAF_Org_ID != null)
+                            f_VAF_Org_ID.setValue(dr.getInt("VAF_Org_ID"));
                         if (f_Account_ID != null)
                             f_Account_ID.setValue(dr.getInt("Account_ID"));
                         if (f_SubAcct_ID != null)
@@ -1653,8 +1653,8 @@
                             f_C_Project_ID.setValue(dr.getInt("C_Project_ID"));
                         if (f_C_SalesRegion_ID != null)
                             f_C_SalesRegion_ID.setValue(dr.getInt("C_SalesRegion_ID"));
-                        if (f_AD_OrgTrx_ID != null)
-                            f_AD_OrgTrx_ID.setValue(dr.getInt("AD_OrgTrx_ID"));
+                        if (f_VAF_OrgTrx_ID != null)
+                            f_VAF_OrgTrx_ID.setValue(dr.getInt("VAF_OrgTrx_ID"));
                         if (f_C_Activity_ID != null)
                             f_C_Activity_ID.setValue(dr.getInt("C_Activity_ID"));
                         if (f_User1_ID != null)
@@ -1812,9 +1812,9 @@
             f_Description = null;
             f_Alias = null;
             f_Combination = null;
-            f_AD_Org_ID = null; f_Account_ID = null; f_SubAcct_ID = null;
+            f_VAF_Org_ID = null; f_Account_ID = null; f_SubAcct_ID = null;
             f_M_Product_ID = null; f_C_BPartner_ID = null; f_C_Campaign_ID = null; f_C_LocFrom_ID = null; f_C_LocTo_ID = null;
-            f_C_Project_ID = null; f_C_SalesRegion_ID = null; f_AD_OrgTrx_ID = null; f_C_Activity_ID = null;
+            f_C_Project_ID = null; f_C_SalesRegion_ID = null; f_VAF_OrgTrx_ID = null; f_C_Activity_ID = null;
             f_User1_ID = null; f_User2_ID = null;
             this.log = null;
             eLEMENTTYPE_AD_Reference_ID = null;

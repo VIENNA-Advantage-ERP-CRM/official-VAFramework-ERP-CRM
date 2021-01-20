@@ -133,15 +133,15 @@ namespace VAdvantage.Process
                 MBPartner bp = new MBPartner(GetCtx(), pos[0].GetC_BPartner_ID(), Get_TrxName());
                 //	New Order
                 order = new MOrder(project, false, null);
-                int AD_Org_ID = projectLine.GetAD_Org_ID();
-                if (AD_Org_ID == 0)
+                int VAF_Org_ID = projectLine.GetVAF_Org_ID();
+                if (VAF_Org_ID == 0)
                 {
-                    log.Warning("createPOfromProjectLine - AD_Org_ID=0");
-                    AD_Org_ID = GetCtx().GetAD_Org_ID();
-                    if (AD_Org_ID != 0)
-                        projectLine.SetAD_Org_ID(AD_Org_ID);
+                    log.Warning("createPOfromProjectLine - VAF_Org_ID=0");
+                    VAF_Org_ID = GetCtx().GetVAF_Org_ID();
+                    if (VAF_Org_ID != 0)
+                        projectLine.SetVAF_Org_ID(VAF_Org_ID);
                 }
-                order.SetClientOrg(projectLine.GetAD_Client_ID(), AD_Org_ID);
+                order.SetClientOrg(projectLine.GetVAF_Client_ID(), VAF_Org_ID);
                 order.SetBPartner(bp);
                 order.SetC_Project_ID(project.Get_ID());
                 order.Save();
@@ -175,7 +175,7 @@ namespace VAdvantage.Process
                         poPrice = VAdvantage.Model.MConversionRate.Convert(GetCtx(), poPrice,
                             C_Currency_ID, order.GetC_Currency_ID(),
                             order.GetDateAcct(), order.GetC_ConversionType_ID(),
-                            order.GetAD_Client_ID(), order.GetAD_Org_ID());
+                            order.GetVAF_Client_ID(), order.GetVAF_Org_ID());
                     orderLine.SetPrice(poPrice);
                 }
             }

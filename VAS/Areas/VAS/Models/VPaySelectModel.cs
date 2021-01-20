@@ -53,12 +53,12 @@ namespace VIS.Models
                  + "INNER JOIN C_Currency c ON (ba.C_Currency_ID=c.C_Currency_ID) "
                  + " AND ba.IsActive = 'Y'"
                  + " AND EXISTS (SELECT * FROM C_BankAccountDoc d WHERE d.C_BankAccount_ID=ba.C_BankAccount_ID) "
-                 + " AND (ba.AD_Org_ID IN (SELECT ro.AD_Org_ID FROM AD_Role_OrgAccess ro"
+                 + " AND (ba.VAF_Org_ID IN (SELECT ro.VAF_Org_ID FROM AD_Role_OrgAccess ro"
                  + " WHERE ro.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND ro.IsActive = 'Y')"
-                 + " OR (ba.AD_Org_ID = 0 AND EXISTS (SELECT ro.AD_Org_ID FROM AD_Role_OrgAccess ro"
+                 + " OR (ba.VAF_Org_ID = 0 AND EXISTS (SELECT ro.VAF_Org_ID FROM AD_Role_OrgAccess ro"
                  + " WHERE ro.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND ro.IsActive = 'Y')) "
                  + " OR EXISTS (SELECT NULL FROM AD_Role WHERE AD_Role_ID=" + ctx.GetAD_Role_ID() + " AND IsAccessAllOrgs='Y'))"
-                 //+ " AND ba.ad_org_id = " + ctx.GetAD_Org_ID()
+                 //+ " AND ba.vaf_org_id = " + ctx.GetVAF_Org_ID()
                  + " ORDER BY 2";
             ds = DB.ExecuteDataset(sqlBankAccount, null, null);
             if (ds != null)
@@ -92,7 +92,7 @@ namespace VIS.Models
             DataSet ds = new DataSet();
             string sqlBPartner = "select bp.C_BPartner_ID, bp.Name from c_bpartner bp where exists (SELECT * FROM C_Invoice i WHERE "
             + " bp.C_BPartner_ID=i.C_BPartner_ID AND (i.IsSOTrx='N' OR (i.IsSOTrx='Y' AND i.PaymentRule='D'))AND i.IsPaid <>'Y') and "
-            + " bp.AD_Client_ID IN (0, " + ctx.GetAD_Client_ID() + ") AND (COALESCE(bp.AD_Org_ID,0) IN(0," + ctx.GetAD_Org_ID() + ")) ORDER BY 2";
+            + " bp.VAF_Client_ID IN (0, " + ctx.GetVAF_Client_ID() + ") AND (COALESCE(bp.VAF_Org_ID,0) IN(0," + ctx.GetVAF_Org_ID() + ")) ORDER BY 2";
             ds = DB.ExecuteDataset(sqlBPartner, null, null);
             if (ds != null)
             {
@@ -154,18 +154,18 @@ namespace VIS.Models
             List<GridRecords> lstGridRecords = new List<GridRecords>();
             string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, adddays(i.DateInvoiced, p.NetDays) AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.C_BPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.C_CURRENCY_ID, i.GRANDTOTAL, "
             + " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, adddays(SYSDATE, -1 * PaymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate)) as DISCOUNTDATE, "
-            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.C_Currency_ID, @param2, @param3,i.C_ConversionType_ID, i.AD_Client_ID,i.AD_Org_ID) as AMOUNTDUE, "
+            + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.C_Currency_ID, @param2, @param3,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
             + " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
-            + " i.C_Currency_ID, @param5, @param6,i.C_ConversionType_ID, i.AD_Client_ID,i.AD_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN C_BPartner bp ON "
+            + " i.C_Currency_ID, @param5, @param6,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN C_BPartner bp ON "
             + " (i.C_BPartner_ID=bp.C_BPartner_ID) INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) INNER JOIN C_PaymentTerm p ON "
             + " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)"
             + "   WHERE i.IsSOTrx= @param7 AND IsPaid='N' AND "
-            + " i.DocStatus IN ('CO','CL') AND i.AD_Client_ID= @param8 AND i.AD_Client_ID IN(0," + ctx.GetAD_Client_ID() + ") AND (COALESCE(i.AD_Org_ID,0) IN(0," + ctx.GetAD_Org_ID() + "))";
+            + " i.DocStatus IN ('CO','CL') AND i.VAF_Client_ID= @param8 AND i.VAF_Client_ID IN(0," + ctx.GetVAF_Client_ID() + ") AND (COALESCE(i.VAF_Org_ID,0) IN(0," + ctx.GetVAF_Org_ID() + "))";
             //   string m_sql = "SELECT 'false' as SELECTROW, i.C_INVOICE_ID, i.DateInvoiced+p.NetDays AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.C_BPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.C_CURRENCY_ID, i.GRANDTOTAL, "
             //+ " paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null) as DISCOUNTAMOUNT, SysDate-paymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate) as DISCOUNTDATE, "
-            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.C_Currency_ID, null, null,i.C_ConversionType_ID, i.AD_Client_ID,i.AD_Org_ID) as AMOUNTDUE, "
+            //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID),i.C_Currency_ID, null, null,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
             //+ " currencyConvert(invoiceOpen(i.C_Invoice_ID,i.C_InvoicePaySchedule_ID)-paymentTermDiscount(i.GrandTotal,i.C_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null)  , "
-            //+ " i.C_Currency_ID, null, null,i.C_ConversionType_ID, i.AD_Client_ID,i.AD_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN C_BPartner bp ON "
+            //+ " i.C_Currency_ID, null, null,i.C_ConversionType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM C_Invoice_v i INNER JOIN C_BPartner bp ON "
             //+ " (i.C_BPartner_ID=bp.C_BPartner_ID) INNER JOIN C_Currency c ON (i.C_Currency_ID=c.C_Currency_ID) INNER JOIN C_PaymentTerm p ON "
             //+ " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)";
             String sql = m_sql;
@@ -206,7 +206,7 @@ namespace VIS.Models
             para[index++] = new SqlParameter("@param5", C_Currency_ID);
             para[index++] = new SqlParameter("@param6", paymentDate);
             para[index++] = new SqlParameter("@param7", isSOTrx);
-            para[index++] = new SqlParameter("@param8", ctx.GetAD_Client_ID());
+            para[index++] = new SqlParameter("@param8", ctx.GetVAF_Client_ID());
 
             if (chkDue)
             {
@@ -302,8 +302,8 @@ namespace VIS.Models
             _C_PaySelection_ID = m_ps.GetC_PaySelection_ID();
             string name = m_ps.GetName();
 
-            //string sqlTableID = "select ad_table_id from ad_table where tablename = 'C_PaySelection'";
-            //int AD_Table_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlTableID, null, null));
+            //string sqlTableID = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelection'";
+            //int VAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlTableID, null, null));
 
             // log.Config(m_ps.ToString());
             bool isSOTrx = false;
@@ -384,14 +384,14 @@ namespace VIS.Models
             psel.Save();
 
             //string sql = "select ad_form_id from ad_form where classname = 'VAdvantage.Apps.AForms.VPayPrint'";
-            //int AD_Form_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            //int VAF_Page_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
             return "@C_PaySelectionCheck_ID@ - #" + _list.Count;
 
             //SetBusy(false);
             //Dispose();
             //FormFrame ff = new FormFrame();
-            //ff.OpenForm(AD_Form_ID);
+            //ff.OpenForm(VAF_Page_ID);
 
 
 

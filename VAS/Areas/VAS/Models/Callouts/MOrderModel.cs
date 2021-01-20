@@ -53,12 +53,12 @@ namespace VIS.Models
             retDic["DateOrdered"] = DateTime.SpecifyKind(order.GetDateOrdered().Value, DateTimeKind.Utc);
             retDic["DateAcct"] = Util.GetValueOfString(order.GetDateAcct());
             retDic["POReference"] = order.GetPOReference();
-            retDic["AD_Org_ID"] = Util.GetValueOfString(order.GetAD_Org_ID());
+            retDic["VAF_Org_ID"] = Util.GetValueOfString(order.GetVAF_Org_ID());
             retDic["DeliveryRule"] = order.GetDeliveryRule();
             retDic["DeliveryViaRule"] = order.GetDeliveryViaRule();
             retDic["M_Shipper_ID"] = Util.GetValueOfString(order.GetM_Shipper_ID());
             retDic["FreightAmt"] = Util.GetValueOfString(order.GetFreightAmt());
-            retDic["AD_OrgTrx_ID"] = Util.GetValueOfString(order.GetAD_OrgTrx_ID());
+            retDic["VAF_OrgTrx_ID"] = Util.GetValueOfString(order.GetVAF_OrgTrx_ID());
             retDic["C_Activity_ID"] = Util.GetValueOfString(order.GetC_Activity_ID());
             retDic["C_Campaign_ID"] = Util.GetValueOfString(order.GetC_Campaign_ID());
             retDic["C_Project_ID"] = Util.GetValueOfString(order.GetC_Project_ID());
@@ -251,20 +251,20 @@ namespace VIS.Models
             Dictionary<String, object> retDir = null;
             if (_Order_ID > 0)
             {
-                sql.Append("SELECT AD_CLIENT_ID, AD_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, C_DOCTYPETARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, C_BPARTNER_ID, BILL_BPARTNER_ID, C_BPARTNER_LOCATION_ID, BILL_LOCATION_ID, AD_USER_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, C_INCOTERM_ID, C_CURRENCY_ID, C_CONVERSIONTYPE_ID, SALESREP_ID,");
+                sql.Append("SELECT VAF_CLIENT_ID, VAF_ORG_ID, DOCUMENTNO, POREFERENCE, DESCRIPTION, C_DOCTYPETARGET_ID, DATEORDERED, DATEPROMISED, ORDERVALIDFROM, ORDERVALIDTO, C_BPARTNER_ID, BILL_BPARTNER_ID, C_BPARTNER_LOCATION_ID, BILL_LOCATION_ID, AD_USER_ID, BILL_USER_ID, M_WAREHOUSE_ID, PRIORITYRULE, M_PRICELIST_ID, C_INCOTERM_ID, C_CURRENCY_ID, C_CONVERSIONTYPE_ID, SALESREP_ID,");
                 if (_PrefixVA009)
                 {
                     sql.Append("VA009_PAYMENTMETHOD_ID,");
                 }
-                sql.Append("C_PAYMENTTERM_ID, C_CAMPAIGN_ID, C_ACTIVITY_ID, AD_ORGTRX_ID, USER1_ID, USER2_ID,");
+                sql.Append("C_PAYMENTTERM_ID, C_CAMPAIGN_ID, C_ACTIVITY_ID, VAF_ORGTRX_ID, USER1_ID, USER2_ID,");
                 sql.Append("TOTALLINES, GRANDTOTAL FROM C_ORDER WHERE C_ORDER_ID= " + _Order_ID);
                 DataSet ds = DB.ExecuteDataset(sql.ToString(), null, null);
                 sql.Clear();
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     retDir = new Dictionary<string, object>();
-                    retDir["AD_Client_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Client_ID"]);
-                    retDir["AD_Org_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Org_ID"]);
+                    retDir["VAF_Client_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Client_ID"]);
+                    retDir["VAF_Org_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Org_ID"]);
                     retDir["Description"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Description"]);
                     retDir["C_DocTypeTarget_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_DocTypeTarget_ID"]);
                     retDir["DateOrdered"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["DateOrdered"]);
@@ -291,7 +291,7 @@ namespace VIS.Models
                     retDir["C_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_PaymentTerm_ID"]);
                     retDir["C_Campaign_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Campaign_ID"]);
                     retDir["C_Activity_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_Activity_ID"]);
-                    retDir["AD_OrgTrx_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_OrgTrx_ID"]);
+                    retDir["VAF_OrgTrx_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_OrgTrx_ID"]);
                     retDir["User1_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["User1_ID"]);
                     retDir["User2_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["User2_ID"]);
                     retDir["TotalLines"] = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["TotalLines"]);

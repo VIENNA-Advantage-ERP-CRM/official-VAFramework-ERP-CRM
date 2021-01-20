@@ -74,7 +74,7 @@ static X_C_CampaignTask()
 //static long serialVersionUID 27610475616266L;
 /** Last Updated Timestamp 2/4/2012 3:41:39 PM */
 public static long updatedMS = 1328350299477L;
-/** AD_Table_ID=1000260 */
+/** VAF_TableView_ID=1000260 */
 public static int Table_ID;
  // =1000260;
 

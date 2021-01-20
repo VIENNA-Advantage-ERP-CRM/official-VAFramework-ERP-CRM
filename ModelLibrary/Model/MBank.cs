@@ -130,7 +130,7 @@ namespace VAdvantage.Model
             {
                 String className = GetBankVerificationClass();
                 if (className == null || className.Length == 0)
-                    className = MClientInfo.Get(GetCtx(), GetAD_Client_ID()).GetBankVerificationClass();
+                    className = MClientInfo.Get(GetCtx(), GetVAF_Client_ID()).GetBankVerificationClass();
                 if (className != null && className.Length > 0)
                 {
                     try

@@ -28,8 +28,8 @@ namespace VIS.Models
     public class DefaultLoginData
     {
         public int AD_Role_ID { get; set; }
-        public int AD_Client_ID { get; set; }
-        public int AD_Org_ID { get; set; }
+        public int VAF_Client_ID { get; set; }
+        public int VAF_Org_ID { get; set; }
         public int M_Warehouse_ID { get; set; }
     }
     public class UserPreferenceModel
@@ -154,7 +154,7 @@ namespace VIS.Models
         }
         //save user settings
         public UserSetting SaveUserSettings(Ctx ctx, int AD_User_ID, string currentPws, string newPws, bool chkEmail, bool chkNotice,
-           bool chkSMS, bool chkFax, string emailUserName, string emailPws, int AD_Role_ID, int AD_Client_ID, int AD_Org_ID, int M_Warehouse_ID)
+           bool chkSMS, bool chkFax, string emailUserName, string emailPws, int AD_Role_ID, int VAF_Client_ID, int VAF_Org_ID, int M_Warehouse_ID)
         {
             UserSetting obj = new UserSetting();
             obj.Msg = Msg.GetMsg(ctx, "RecordSaved");
@@ -264,7 +264,7 @@ namespace VIS.Models
                 StringBuilder sql = new StringBuilder("");
                 if (AD_LoginSetting_ID > 0)//UPdate
                 {
-                    sql.Append("UPDATE AD_LoginSetting SET AD_Role_ID=" + AD_Role_ID + ",AD_Client_ID=" + AD_Client_ID + ",AD_Org_ID=" + AD_Org_ID + " ,M_Warehouse_ID=");
+                    sql.Append("UPDATE AD_LoginSetting SET AD_Role_ID=" + AD_Role_ID + ",VAF_Client_ID=" + VAF_Client_ID + ",VAF_Org_ID=" + VAF_Org_ID + " ,M_Warehouse_ID=");
                     if (M_Warehouse_ID == 0)
                         sql.Append("NULL");
                     else
@@ -275,9 +275,9 @@ namespace VIS.Models
                 }
                 else//Insert
                 {
-                    AD_LoginSetting_ID = MSequence.GetNextID(ctx.GetAD_Client_ID(), "AD_LoginSetting", null);
-                    sql.Append("INSERT INTO AD_LoginSetting (AD_CLIENT_ID,AD_LOGINSETTING_ID,AD_ORG_ID,AD_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
-                    sql.Append(" VALUES (" + AD_Client_ID + "," + AD_LoginSetting_ID + "," + AD_Org_ID + "," + AD_Role_ID + "," + AD_User_ID + ",");
+                    AD_LoginSetting_ID = MSequence.GetNextID(ctx.GetVAF_Client_ID(), "AD_LoginSetting", null);
+                    sql.Append("INSERT INTO AD_LoginSetting (VAF_CLIENT_ID,AD_LOGINSETTING_ID,VAF_ORG_ID,AD_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
+                    sql.Append(" VALUES (" + VAF_Client_ID + "," + AD_LoginSetting_ID + "," + VAF_Org_ID + "," + AD_Role_ID + "," + AD_User_ID + ",");
                     sql.Append(GlobalVariable.TO_DATE(DateTime.Now, false) + "," + ctx.GetAD_User_ID() + ",NULL,");
                     if (M_Warehouse_ID == 0)
                         sql.Append("NULL");
@@ -312,7 +312,7 @@ namespace VIS.Models
 
             string sql = @"Select WSP_GmailConfiguration_ID from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID() +
             //sql = MRole.GetDefault().AddAccessSQL(sql, "WS_GmailConfiguration", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
-            " and AD_Client_ID=" + ctx.GetAD_Client_ID();// +" and AD_Org_ID=" + Envs.GetCtx().GetAD_Org_ID();
+            " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();// +" and VAF_Org_ID=" + Envs.GetCtx().GetVAF_Org_ID();
             DataSet ds = DB.ExecuteDataset(sql, null);
             if (ds == null || ds.Tables[0].Rows.Count == 0)
             {
@@ -379,7 +379,7 @@ namespace VIS.Models
         {
             Dictionary<string, string> retDic = new Dictionary<string, string>();
             string sql = @"Select WSP_isSyncTaskBackground,WSP_IsSyncCalendarBackground,WSP_TaskRefreshToken,WSP_CalendarRefreshToken,WSP_ContactRefreshToken from WSP_GmailConfiguration where isActive='Y' and AD_User_ID=" + ctx.GetAD_User_ID()
-                     + " and AD_Client_ID=" + ctx.GetAD_Client_ID();
+                     + " and VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             DataSet ds = DB.ExecuteDataset(sql, null);
 
             if (ds == null || ds.Tables[0].Rows.Count == 0)
@@ -458,15 +458,15 @@ namespace VIS.Models
 
         public DefaultLoginData GetDefaultLogin(int AD_User_ID)
         {
-            string sql = "SELECT AD_Role_ID,AD_Client_ID,AD_Org_ID,M_Warehouse_ID FROM AD_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID;
+            string sql = "SELECT AD_Role_ID,VAF_Client_ID,VAF_Org_ID,M_Warehouse_ID FROM AD_LoginSetting WHERE IsActive='Y' AND AD_User_ID=" + AD_User_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             DefaultLoginData dfd = null;
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 dfd = new DefaultLoginData();
                 dfd.AD_Role_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][0]);
-                dfd.AD_Client_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
-                dfd.AD_Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
+                dfd.VAF_Client_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
+                dfd.VAF_Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
                 dfd.M_Warehouse_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][3]);
             }
             return dfd;

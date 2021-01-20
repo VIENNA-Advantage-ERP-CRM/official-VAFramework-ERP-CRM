@@ -72,7 +72,7 @@ static X_C_ProjectIssueMA()
 //static long serialVersionUID 27562514374272L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057483L;
-/** AD_Table_ID=761 */
+/** VAF_TableView_ID=761 */
 public static int Table_ID;
  // =761;
 

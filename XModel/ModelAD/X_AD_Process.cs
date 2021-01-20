@@ -87,7 +87,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27562514363175L;
         /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
         public static long updatedMS = 1280389046386L;
-        /** AD_Table_ID=284 */
+        /** VAF_TableView_ID=284 */
         public static int Table_ID;
         // =284;
 
@@ -130,18 +130,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Context Area.
-        @param AD_CtxArea_ID Business Domain Area Terminology */
-        public void SetAD_CtxArea_ID(int AD_CtxArea_ID)
+        @param VAF_ContextScope_ID Business Domain Area Terminology */
+        public void SetVAF_ContextScope_ID(int VAF_ContextScope_ID)
         {
-            if (AD_CtxArea_ID <= 0) Set_Value("AD_CtxArea_ID", null);
+            if (VAF_ContextScope_ID <= 0) Set_Value("VAF_ContextScope_ID", null);
             else
-                Set_Value("AD_CtxArea_ID", AD_CtxArea_ID);
+                Set_Value("VAF_ContextScope_ID", VAF_ContextScope_ID);
         }
         /** Get Context Area.
         @return Business Domain Area Terminology */
-        public int GetAD_CtxArea_ID()
+        public int GetVAF_ContextScope_ID()
         {
-            Object ii = Get_Value("AD_CtxArea_ID");
+            Object ii = Get_Value("VAF_ContextScope_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

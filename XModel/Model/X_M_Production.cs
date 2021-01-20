@@ -78,7 +78,7 @@ static X_M_Production()
 //static long serialVersionUID 27562514380948L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064159L;
-/** AD_Table_ID=325 */
+/** VAF_TableView_ID=325 */
 public static int Table_ID;
  // =325;
 
@@ -121,21 +121,21 @@ StringBuilder sb = new StringBuilder ("X_M_Production[").Append(Get_ID()).Append
 return sb.ToString();
 }
 
-/** AD_OrgTrx_ID AD_Reference_ID=130 */
-public static int AD_ORGTRX_ID_AD_Reference_ID=130;
+/** VAF_OrgTrx_ID AD_Reference_ID=130 */
+public static int VAF_ORGTRX_ID_AD_Reference_ID=130;
 /** Set Trx Organization.
-@param AD_OrgTrx_ID Performing or initiating organization */
-public void SetAD_OrgTrx_ID (int AD_OrgTrx_ID)
+@param VAF_OrgTrx_ID Performing or initiating organization */
+public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID)
 {
-if (AD_OrgTrx_ID <= 0) Set_Value ("AD_OrgTrx_ID", null);
+if (VAF_OrgTrx_ID <= 0) Set_Value ("VAF_OrgTrx_ID", null);
 else
-Set_Value ("AD_OrgTrx_ID", AD_OrgTrx_ID);
+Set_Value ("VAF_OrgTrx_ID", VAF_OrgTrx_ID);
 }
 /** Get Trx Organization.
 @return Performing or initiating organization */
-public int GetAD_OrgTrx_ID() 
+public int GetVAF_OrgTrx_ID() 
 {
-Object ii = Get_Value("AD_OrgTrx_ID");
+Object ii = Get_Value("VAF_OrgTrx_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

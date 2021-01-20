@@ -75,7 +75,7 @@ static X_C_BankAccountLine()
 static long serialVersionUID = 27629568992807L;
 /** Last Updated Timestamp 9/12/2012 3:24:36 PM */
 public static long updatedMS = 1347443676018L;
-/** AD_Table_ID=1000372 */
+/** VAF_TableView_ID=1000372 */
 public static int Table_ID;
  // =1000372;
 

@@ -247,7 +247,7 @@
         var displaySearchCol = function () {
 
             //Change by mohit-to handle translation in general info. Added 2 new parametere- AD_Language, IsBaseLangage. Asked by mukesh sir - 09/03/2018
-            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "AD_Table_ID": schema[0].AD_Table_ID, "AD_Language": VIS.context.getAD_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
+            displayCols = (VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoGeneral/GetDispalyColumns", { "VAF_TableView_ID": schema[0].VAF_TableView_ID, "AD_Language": VIS.context.getAD_Language(), "IsBaseLangage": VIS.Env.isBaseLanguage(VIS.context), "TableName": tableName })).result;
 
             if (displayCols == null) {
                 alert(VIS.Msg.getMsg('ERRORGettingDisplayCols'));

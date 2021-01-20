@@ -524,17 +524,17 @@ namespace VAdvantage.Report
         ///	Copy
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">parent</param>
-        /// <param name="AD_Org_ID">parent</param>
+        /// <param name="VAF_Client_ID">parent</param>
+        /// <param name="VAF_Org_ID">parent</param>
         /// <param name="PA_ReportLineSet_ID">parent</param>
         /// <param name="source">copy source</param>
         /// <param name="trxName">transaction</param>
         /// <returns>report line</returns>
-        public static MReportLine Copy(Ctx ctx, int AD_Client_ID, int AD_Org_ID,
+        public static MReportLine Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
             int PA_ReportLineSet_ID, MReportLine source, Trx trxName)
         {
             MReportLine retValue = new MReportLine(ctx, 0, trxName);
-            MReportLine.CopyValues(source, retValue, AD_Client_ID, AD_Org_ID);
+            MReportLine.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
             //
             retValue.SetPA_ReportLineSet_ID(PA_ReportLineSet_ID);
             retValue.SetOper_1_ID(0);

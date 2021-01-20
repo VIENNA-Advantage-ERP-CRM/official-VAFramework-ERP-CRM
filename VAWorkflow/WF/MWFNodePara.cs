@@ -64,7 +64,7 @@ namespace VAdvantage.WF
             String sql = "SELECT * FROM AD_WF_Node_Para "
                 + "WHERE AD_WF_Node_ID=" + AD_WF_Node_ID;
 
-            //String sql = "SELECT * FROM AD_Org WHERE AD_Client_ID=" + AD_WF_Node_ID;
+            //String sql = "SELECT * FROM VAF_Org WHERE VAF_Client_ID=" + AD_WF_Node_ID;
             DataSet ds = null;
 
             try

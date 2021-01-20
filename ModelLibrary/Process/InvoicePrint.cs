@@ -158,10 +158,10 @@ namespace VAdvantage.Process
 			+ "FROM C_Invoice i"
 			+ " INNER JOIN C_BPartner bp ON (i.C_BPartner_ID=bp.C_BPartner_ID)"
 			+ " LEFT OUTER JOIN AD_User bpc ON (i.AD_User_ID=bpc.AD_User_ID)"
-			+ " INNER JOIN AD_Client c ON (i.AD_Client_ID=c.AD_Client_ID)"
-			+ " INNER JOIN AD_PrintForm pf ON (i.AD_Client_ID=pf.AD_Client_ID)"
+			+ " INNER JOIN VAF_Client c ON (i.VAF_Client_ID=c.VAF_Client_ID)"
+			+ " INNER JOIN AD_PrintForm pf ON (i.VAF_Client_ID=pf.VAF_Client_ID)"
 			+ " INNER JOIN C_DocType dt ON (i.C_DocType_ID=dt.C_DocType_ID)")
-			.Append(" WHERE pf.AD_Org_ID IN (0,i.AD_Org_ID) AND ");	//	more them 1 PF
+			.Append(" WHERE pf.VAF_Org_ID IN (0,i.VAF_Org_ID) AND ");	//	more them 1 PF
         if (_C_Invoice_ID != 0)
         {
             sql.Append("i.C_Invoice_ID=").Append(_C_Invoice_ID);
@@ -224,7 +224,7 @@ namespace VAdvantage.Process
                 }
             }
         }
-		sql.Append(" ORDER BY i.C_Invoice_ID, pf.AD_Org_ID DESC");	//	more than 1 PF record
+		sql.Append(" ORDER BY i.C_Invoice_ID, pf.VAF_Org_ID DESC");	//	more than 1 PF record
 		log.Finer(sql.ToString());
 
 		MPrintFormat format = null;

@@ -1,46 +1,46 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for AD_Tab
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAF_Tab
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Tab : PO{public X_AD_Tab (Context ctx, int AD_Tab_ID, Trx trxName) : base (ctx, AD_Tab_ID, trxName){/** if (AD_Tab_ID == 0){SetAD_Tab_ID (0);SetAD_Table_ID (0);SetAD_Window_ID (0);SetEntityType (null);// U
+public class X_VAF_Tab : PO{public X_VAF_Tab (Context ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetAD_Window_ID (0);SetEntityType (null);// U
 SetHasTree (false);SetIsAdvancedTab (false);// N
 SetIsDisplayed (true);// Y
 SetIsInsertRecord (true);// Y
 SetIsReadOnly (false);SetIsSingleRow (false);SetIsSortTab (false);// N
-SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_Tab WHERE AD_Window_ID=@AD_Window_ID@
+SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Tab WHERE AD_Window_ID=@AD_Window_ID@
 SetTabLevel (0);} */
-}public X_AD_Tab (Ctx ctx, int AD_Tab_ID, Trx trxName) : base (ctx, AD_Tab_ID, trxName){/** if (AD_Tab_ID == 0){SetAD_Tab_ID (0);SetAD_Table_ID (0);SetAD_Window_ID (0);SetEntityType (null);// U
+}public X_VAF_Tab (Ctx ctx, int VAF_Tab_ID, Trx trxName) : base (ctx, VAF_Tab_ID, trxName){/** if (VAF_Tab_ID == 0){SetVAF_Tab_ID (0);SetVAF_TableView_ID (0);SetAD_Window_ID (0);SetEntityType (null);// U
 SetHasTree (false);SetIsAdvancedTab (false);// N
 SetIsDisplayed (true);// Y
 SetIsInsertRecord (true);// Y
 SetIsReadOnly (false);SetIsSingleRow (false);SetIsSortTab (false);// N
-SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_Tab WHERE AD_Window_ID=@AD_Window_ID@
+SetIsTranslationTab (false);SetName (null);SetSeqNo (0);// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_Tab WHERE AD_Window_ID=@AD_Window_ID@
 SetTabLevel (0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Tab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_Tab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Tab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAF_Tab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Tab (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAF_Tab (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Tab(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAF_Tab(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27858186539576L;/** Last Updated Timestamp 12/11/2019 4:17:02 PM */
-public static long updatedMS = 1576061222787L;/** AD_Table_ID=106 */
+public static long updatedMS = 1576061222787L;/** VAF_TableView_ID=106 */
 public static int Table_ID; // =106;
-/** TableName=AD_Tab */
-public static String Table_Name="AD_Tab";
+/** TableName=VAF_Tab */
+public static String Table_Name="VAF_Tab";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(4);/** AccessLevel
 @return 4 - System 
 */
@@ -55,54 +55,54 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_AD_Tab[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** AD_ColumnSortOrder_ID AD_Reference_ID=257 */
-public static int AD_COLUMNSORTORDER_ID_AD_Reference_ID=257;/** Set Order Column.
-@param AD_ColumnSortOrder_ID Column determining the order */
-public void SetAD_ColumnSortOrder_ID (int AD_ColumnSortOrder_ID){if (AD_ColumnSortOrder_ID <= 0) Set_Value ("AD_ColumnSortOrder_ID", null);else
-Set_Value ("AD_ColumnSortOrder_ID", AD_ColumnSortOrder_ID);}/** Get Order Column.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAF_Tab[").Append(Get_ID()).Append("]");return sb.ToString();}
+/** VAF_ColumnSortOrder_ID AD_Reference_ID=257 */
+public static int VAF_COLUMNSORTORDER_ID_AD_Reference_ID=257;/** Set Order Column.
+@param VAF_ColumnSortOrder_ID Column determining the order */
+public void SetVAF_ColumnSortOrder_ID (int VAF_ColumnSortOrder_ID){if (VAF_ColumnSortOrder_ID <= 0) Set_Value ("VAF_ColumnSortOrder_ID", null);else
+Set_Value ("VAF_ColumnSortOrder_ID", VAF_ColumnSortOrder_ID);}/** Get Order Column.
 @return Column determining the order */
-public int GetAD_ColumnSortOrder_ID() {Object ii = Get_Value("AD_ColumnSortOrder_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** AD_ColumnSortYesNo_ID AD_Reference_ID=258 */
-public static int AD_COLUMNSORTYESNO_ID_AD_Reference_ID=258;/** Set Included Column.
-@param AD_ColumnSortYesNo_ID Column determining if a Table Column is included in Ordering */
-public void SetAD_ColumnSortYesNo_ID (int AD_ColumnSortYesNo_ID){if (AD_ColumnSortYesNo_ID <= 0) Set_Value ("AD_ColumnSortYesNo_ID", null);else
-Set_Value ("AD_ColumnSortYesNo_ID", AD_ColumnSortYesNo_ID);}/** Get Included Column.
+public int GetVAF_ColumnSortOrder_ID() {Object ii = Get_Value("VAF_ColumnSortOrder_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+/** VAF_ColumnSortYesNo_ID AD_Reference_ID=258 */
+public static int VAF_COLUMNSORTYESNO_ID_AD_Reference_ID=258;/** Set Included Column.
+@param VAF_ColumnSortYesNo_ID Column determining if a Table Column is included in Ordering */
+public void SetVAF_ColumnSortYesNo_ID (int VAF_ColumnSortYesNo_ID){if (VAF_ColumnSortYesNo_ID <= 0) Set_Value ("VAF_ColumnSortYesNo_ID", null);else
+Set_Value ("VAF_ColumnSortYesNo_ID", VAF_ColumnSortYesNo_ID);}/** Get Included Column.
 @return Column determining if a Table Column is included in Ordering */
-public int GetAD_ColumnSortYesNo_ID() {Object ii = Get_Value("AD_ColumnSortYesNo_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID){if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);else
-Set_Value ("AD_Column_ID", AD_Column_ID);}/** Get Column.
+public int GetVAF_ColumnSortYesNo_ID() {Object ii = Get_Value("VAF_ColumnSortYesNo_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Column.
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID){if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);else
+Set_Value ("VAF_Column_ID", VAF_Column_ID);}/** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() {Object ii = Get_Value("AD_Column_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Context Area.
-@param AD_CtxArea_ID Business Domain Area Terminology */
-public void SetAD_CtxArea_ID (int AD_CtxArea_ID){if (AD_CtxArea_ID <= 0) Set_Value ("AD_CtxArea_ID", null);else
-Set_Value ("AD_CtxArea_ID", AD_CtxArea_ID);}/** Get Context Area.
+public int GetVAF_Column_ID() {Object ii = Get_Value("VAF_Column_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Context Area.
+@param VAF_ContextScope_ID Business Domain Area Terminology */
+public void SetVAF_ContextScope_ID (int VAF_ContextScope_ID){if (VAF_ContextScope_ID <= 0) Set_Value ("VAF_ContextScope_ID", null);else
+Set_Value ("VAF_ContextScope_ID", VAF_ContextScope_ID);}/** Get Context Area.
 @return Business Domain Area Terminology */
-public int GetAD_CtxArea_ID() {Object ii = Get_Value("AD_CtxArea_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Header Layout.
-@param AD_HeaderLayout_ID Header Layout */
-public void SetAD_HeaderLayout_ID (int AD_HeaderLayout_ID){if (AD_HeaderLayout_ID <= 0) Set_Value ("AD_HeaderLayout_ID", null);else
-Set_Value ("AD_HeaderLayout_ID", AD_HeaderLayout_ID);}/** Get Header Layout.
+public int GetVAF_ContextScope_ID() {Object ii = Get_Value("VAF_ContextScope_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Header Layout.
+@param VAF_HeaderLayout_ID Header Layout */
+public void SetVAF_HeaderLayout_ID (int VAF_HeaderLayout_ID){if (VAF_HeaderLayout_ID <= 0) Set_Value ("VAF_HeaderLayout_ID", null);else
+Set_Value ("VAF_HeaderLayout_ID", VAF_HeaderLayout_ID);}/** Get Header Layout.
 @return Header Layout */
-public int GetAD_HeaderLayout_ID() {Object ii = Get_Value("AD_HeaderLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID){if (AD_Image_ID <= 0) Set_Value ("AD_Image_ID", null);else
-Set_Value ("AD_Image_ID", AD_Image_ID);}/** Get Image.
+public int GetVAF_HeaderLayout_ID() {Object ii = Get_Value("VAF_HeaderLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Image.
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID){if (VAF_Image_ID <= 0) Set_Value ("VAF_Image_ID", null);else
+Set_Value ("VAF_Image_ID", VAF_Image_ID);}/** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() {Object ii = Get_Value("AD_Image_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Process.
+public int GetVAF_Image_ID() {Object ii = Get_Value("VAF_Image_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Process.
 @param AD_Process_ID Process or Report */
 public void SetAD_Process_ID (int AD_Process_ID){if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);else
 Set_Value ("AD_Process_ID", AD_Process_ID);}/** Get Process.
 @return Process or Report */
 public int GetAD_Process_ID() {Object ii = Get_Value("AD_Process_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Tab.
-@param AD_Tab_ID Tab within a Window */
-public void SetAD_Tab_ID (int AD_Tab_ID){if (AD_Tab_ID < 1) throw new ArgumentException ("AD_Tab_ID is mandatory.");Set_ValueNoCheck ("AD_Tab_ID", AD_Tab_ID);}/** Get Tab.
+@param VAF_Tab_ID Tab within a Window */
+public void SetVAF_Tab_ID (int VAF_Tab_ID){if (VAF_Tab_ID < 1) throw new ArgumentException ("VAF_Tab_ID is mandatory.");Set_ValueNoCheck ("VAF_Tab_ID", VAF_Tab_ID);}/** Get Tab.
 @return Tab within a Window */
-public int GetAD_Tab_ID() {Object ii = Get_Value("AD_Tab_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID){if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");Set_Value ("AD_Table_ID", AD_Table_ID);}/** Get Table.
+public int GetVAF_Tab_ID() {Object ii = Get_Value("VAF_Tab_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Table.
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID){if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");Set_Value ("VAF_TableView_ID", VAF_TableView_ID);}/** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() {Object ii = Get_Value("AD_Table_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Window.
+public int GetVAF_TableView_ID() {Object ii = Get_Value("VAF_TableView_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Window.
 @param AD_Window_ID Data entry or display window */
 public void SetAD_Window_ID (int AD_Window_ID){if (AD_Window_ID < 1) throw new ArgumentException ("AD_Window_ID is mandatory.");Set_ValueNoCheck ("AD_Window_ID", AD_Window_ID);}/** Get Window.
 @return Data entry or display window */

@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ChangeLogProcess:ProcessEngine.SvrProcess
     {
     /** The Change Log (when applied directly)		*/
-	private int	_AD_ChangeLog_ID = 0;
+	private int	_VAF_AlterLog_ID = 0;
 	
 	/** UnDo - Check New Value			*/
 	private Boolean? _CheckNewValue = null;
@@ -98,7 +98,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
 		}
-		_AD_ChangeLog_ID = GetRecord_ID();
+		_VAF_AlterLog_ID = GetRecord_ID();
 	}	//	prepare
 
 	
@@ -113,16 +113,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
              return SetCustomization();
          }
 		
-		log.Info("AD_ChangeLog_ID=" + _AD_ChangeLog_ID
+		log.Info("VAF_AlterLog_ID=" + _VAF_AlterLog_ID
 			+ ", CheckOldValue=" + _CheckOldValue + ", CheckNewValue=" + _CheckNewValue);
 		
 		//	Single Change or All Customizations
-		String sql = "SELECT * FROM AD_ChangeLog WHERE AD_ChangeLog_ID=@param "
-			+ "ORDER BY AD_Table_ID, Record_ID, AD_Column_ID";
-        if (_AD_ChangeLog_ID == 0)
+		String sql = "SELECT * FROM VAF_AlterLog WHERE VAF_AlterLog_ID=@param "
+			+ "ORDER BY VAF_TableView_ID, Record_ID, VAF_Column_ID";
+        if (_VAF_AlterLog_ID == 0)
         {
-            sql = "SELECT * FROM AD_ChangeLog WHERE IsCustomization='Y' AND IsActive='Y' "
-                + "ORDER BY AD_Table_ID, AD_ChangeLog_ID, Record_ID, AD_Column_ID";
+            sql = "SELECT * FROM VAF_AlterLog WHERE IsCustomization='Y' AND IsActive='Y' "
+                + "ORDER BY VAF_TableView_ID, VAF_AlterLog_ID, Record_ID, VAF_Column_ID";
         }
         SqlParameter[] param = null;
         IDataReader idr = null;
@@ -130,11 +130,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		try
 		{
 			//pstmt = DataBase.prepareStatement (sql, Get_Trx());
-            if (_AD_ChangeLog_ID != 0)
+            if (_VAF_AlterLog_ID != 0)
             {
                 param = new SqlParameter[1];
-                //pstmt.setInt (1, _AD_ChangeLog_ID);
-                param[0] = new SqlParameter("@param", _AD_ChangeLog_ID);
+                //pstmt.setInt (1, _VAF_AlterLog_ID);
+                param[0] = new SqlParameter("@param", _VAF_AlterLog_ID);
             }
             idr = DataBase.DB.ExecuteReader(sql, param, Get_Trx());
             dt = new DataTable();
@@ -175,7 +175,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	New Table 
 		if (_table != null)
 		{
-			if (cLog.GetAD_Table_ID() != _table.GetAD_Table_ID())
+			if (cLog.GetVAF_TableView_ID() != _table.GetVAF_TableView_ID())
 			{
 				ExecuteStatement();
 				_table = null;
@@ -183,7 +183,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
         if (_table == null)
         {
-            _table = new MTable(GetCtx(), cLog.GetAD_Table_ID(), trxName);
+            _table = new MTable(GetCtx(), cLog.GetVAF_TableView_ID(), trxName);
         }
 		//	New Record
         if (_sqlUpdate != null
@@ -193,7 +193,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             ExecuteStatement();
         }
 		//	Column Info
-		_column = new MColumn (GetCtx(), cLog.GetAD_Column_ID(), Get_Trx());
+		_column = new MColumn (GetCtx(), cLog.GetVAF_Column_ID(), Get_Trx());
 		//	Same Column twice
         if (_columns.Contains(_column.GetColumnName()))
         {
@@ -391,18 +391,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	private String SetCustomization()
 	{
 		log.Info("");
-		String sql = "UPDATE AD_ChangeLog SET IsCustomization='N' WHERE IsCustomization='Y'";
+		String sql = "UPDATE VAF_AlterLog SET IsCustomization='N' WHERE IsCustomization='Y'";
 		int resetNo = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
 		
 		int updateNo = 0;
 		//	Get Tables
-		sql = "SELECT * FROM AD_Table t "
+		sql = "SELECT * FROM VAF_TableView t "
 		//	Table with EntityType
-			+ "WHERE EXISTS (SELECT * FROM AD_Column c "
-				+ "WHERE t.AD_Table_ID=c.AD_Table_ID AND c.ColumnName='EntityType')"
+			+ "WHERE EXISTS (SELECT * FROM VAF_Column c "
+				+ "WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='EntityType')"
 		//	Changed Tables
-			+ " AND EXISTS (SELECT * FROM AD_ChangeLog l "
-				+ "WHERE t.AD_Table_ID=l.AD_Table_ID)";
+			+ " AND EXISTS (SELECT * FROM VAF_AlterLog l "
+				+ "WHERE t.VAF_TableView_ID=l.VAF_TableView_ID)";
 		StringBuilder update = null;
         IDataReader idr = null;
         DataTable dt = null;
@@ -422,8 +422,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				String columnName = tableName + "_ID";
 				if (tableName.Equals("AD_Ref_Table"))
 					columnName = "AD_Reference_ID";
-				update = new StringBuilder ("UPDATE AD_ChangeLog SET IsCustomization='Y' "
-					+ "WHERE AD_Table_ID=").Append(table.GetAD_Table_ID());
+				update = new StringBuilder ("UPDATE VAF_AlterLog SET IsCustomization='Y' "
+					+ "WHERE VAF_TableView_ID=").Append(table.GetVAF_TableView_ID());
 				update.Append (" AND Record_ID IN (SELECT ")
 					.Append (columnName)
 					.Append (" FROM ").Append(tableName)

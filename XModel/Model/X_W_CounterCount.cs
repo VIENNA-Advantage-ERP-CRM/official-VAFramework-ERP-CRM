@@ -72,7 +72,7 @@ static X_W_CounterCount()
 //static long serialVersionUID 27562514385007L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068218L;
-/** AD_Table_ID=552 */
+/** VAF_TableView_ID=552 */
 public static int Table_ID;
  // =552;
 

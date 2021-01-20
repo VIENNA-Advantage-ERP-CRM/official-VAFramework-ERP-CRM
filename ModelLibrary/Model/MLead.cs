@@ -230,7 +230,7 @@ namespace VAdvantage.Model
          */
         private int GetR_RequestType_ID()
         {
-            MClientInfo ci = MClientInfo.Get(GetCtx(), GetAD_Client_ID());
+            MClientInfo ci = MClientInfo.Get(GetCtx(), GetVAF_Client_ID());
             int R_RequestType_ID = ci.GetR_RequestType_ID();
             if (R_RequestType_ID != 0)
                 return R_RequestType_ID;
@@ -349,7 +349,7 @@ namespace VAdvantage.Model
                 }
                 //
                 _bp = new MBPartner(GetCtx(), Get_TrxName());	//	Template
-                _bp.SetAD_Org_ID(GetAD_Org_ID());
+                _bp.SetVAF_Org_ID(GetVAF_Org_ID());
                 //_bp.SetValue(GetBPName());
                 _bp.SetName(GetBPName());
                 _bp.SetIsCustomer(false);
@@ -576,7 +576,7 @@ namespace VAdvantage.Model
                     return retValue;
             }
             _project = new MProject(GetCtx(), 0, Get_TrxName());
-            _project.SetAD_Org_ID(GetAD_Org_ID());
+            _project.SetVAF_Org_ID(GetVAF_Org_ID());
             _project.SetProjectLineLevel(MProject.PROJECTLINELEVEL_Project);
             _project.SetName(GetName());
             _project.SetDescription(GetDescription());
@@ -613,7 +613,7 @@ namespace VAdvantage.Model
         {
             int R_RequestType_ID = GetR_RequestType_ID();
             if (R_RequestType_ID == 0)
-                return "@NotFound@: @R_RequestType_ID@ (@AD_Client_ID@)";
+                return "@NotFound@: @R_RequestType_ID@ (@VAF_Client_ID@)";
             return CreateRequest(R_RequestType_ID);
         }
 
@@ -633,7 +633,7 @@ namespace VAdvantage.Model
                     return retValue;
             }
             _request = new MRequest(GetCtx(), 0, Get_TrxName());
-            _request.SetAD_Org_ID(GetAD_Org_ID());
+            _request.SetVAF_Org_ID(GetVAF_Org_ID());
             String summary = GetName();
             if (summary == null)
                 summary = GetHelp();

@@ -408,7 +408,7 @@ namespace VAdvantage.Model
             MCash parent = GetParent();
             if (parent.IsProcessed())
             {	//	saved
-                parent = MCash.Get(GetCtx(), parent.GetAD_Org_ID(),
+                parent = MCash.Get(GetCtx(), parent.GetVAF_Org_ID(),
                     parent.GetStatementDate(), parent.GetC_Currency_ID(), Get_TrxName());
             }
             //
@@ -680,14 +680,14 @@ namespace VAdvantage.Model
 
                 //	Set Organization
                 if (CASHTYPE_BankAccountTransfer.Equals(GetCashType()))
-                    SetAD_Org_ID(GetBankAccount().GetAD_Org_ID());
+                    SetVAF_Org_ID(GetBankAccount().GetVAF_Org_ID());
                 //	Cash Book
                 else if (CASHTYPE_Invoice.Equals(GetCashType()))
-                    SetAD_Org_ID(GetCashBook().GetAD_Org_ID());
+                    SetVAF_Org_ID(GetCashBook().GetVAF_Org_ID());
                 //	otherwise (charge) - leave it
                 //	Enforce Org
-                if (GetAD_Org_ID() == 0)
-                    SetAD_Org_ID(GetParent().GetAD_Org_ID());
+                if (GetVAF_Org_ID() == 0)
+                    SetVAF_Org_ID(GetParent().GetVAF_Org_ID());
             }
 
             /**	General fix of Currency 
@@ -715,7 +715,7 @@ namespace VAdvantage.Model
             //{
             //    if (GetVSS_RECEIPTNO() == null || GetVSS_RECEIPTNO() == "")
             //    {
-            //        MOrg mo = new MOrg(GetCtx(), GetAD_Org_ID(), Get_TrxName());
+            //        MOrg mo = new MOrg(GetCtx(), GetVAF_Org_ID(), Get_TrxName());
             //        String org_name = mo.GetName();
             //        //modified by ashish.bisht on 04-feb-10
             //        String paymenttype = GetVSS_PAYMENTTYPE();
@@ -825,7 +825,7 @@ namespace VAdvantage.Model
             {
                 MCash csh = new MCash(GetCtx(), GetC_Cash_ID(), Get_TrxName());
                 Decimal amt = MConversionRate.ConvertBase(GetCtx(), GetAmount(),	//	CM adjusted 
-                    GetC_Currency_ID(), csh.GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    GetC_Currency_ID(), csh.GetDateAcct(), 0, GetVAF_Client_ID(), GetVAF_Org_ID());
 
                 MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
                 string retMsg = "";
@@ -877,7 +877,7 @@ namespace VAdvantage.Model
 
             string sql = "SELECT C_CASHBOOKLINE_ID FROM C_CASHBOOKLINE WHERE C_CASHBOOK_ID="
                             + cashbook.GetC_CashBook_ID() + " AND DATEACCT="
-                            + DB.TO_DATE(parent.GetDateAcct()) + " AND AD_ORG_ID=" + GetAD_Org_ID();
+                            + DB.TO_DATE(parent.GetDateAcct()) + " AND VAF_ORG_ID=" + GetVAF_Org_ID();
 
             dtCashbookLine = DB.ExecuteDataset(sql, null, null).Tables[0];
 
@@ -893,8 +893,8 @@ namespace VAdvantage.Model
             {
                 cashbookLine.SetC_CashBook_ID(cashbook.GetC_CashBook_ID());
                 // SI_0419 : Update org/client as on cash line
-                cashbookLine.SetAD_Org_ID(GetAD_Org_ID());
-                cashbookLine.SetAD_Client_ID(GetAD_Client_ID());
+                cashbookLine.SetVAF_Org_ID(GetVAF_Org_ID());
+                cashbookLine.SetVAF_Client_ID(GetVAF_Client_ID());
                 cashbookLine.SetEndingBalance
                     (Decimal.Add(Decimal.Add(Decimal.Subtract(cashbookLine.GetEndingBalance(), old_ebAmt), new_ebAmt), cashbook.GetCompletedBalance()));
             }
@@ -932,7 +932,7 @@ namespace VAdvantage.Model
                 sql += "0";
             else
                 sql += "NULL";
-            sql += ", c.AD_Client_ID, c.AD_Org_ID)),0) "
+            sql += ", c.VAF_Client_ID, c.VAF_Org_ID)),0) "
                     + "FROM C_CashLine cl, C_CashBook cb "
                     + "WHERE cb.C_CashBook_ID=c.C_CashBook_ID"
                     + " AND cl.C_Cash_ID=c.C_Cash_ID) "
@@ -945,7 +945,7 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("C_ConversionType_ID") > 0)
             {
                 sql = "SELECT COALESCE(SUM(currencyConvert(cl.Amount, cl.C_Currency_ID, cb.C_Currency_ID, c.DateAcct, cl.C_ConversionType_ID"
-                        + ", c.AD_Client_ID, c.AD_Org_ID)),0) "
+                        + ", c.VAF_Client_ID, c.VAF_Org_ID)),0) "
                     + "FROM C_CashLine cl, C_CashBook cb, C_Cash c "
                     + "WHERE cb.C_CashBook_ID=c.C_CashBook_ID"
                     + " AND cl.C_Cash_ID=c.C_Cash_ID AND "
@@ -954,7 +954,7 @@ namespace VAdvantage.Model
             else
             {
                 sql = "SELECT COALESCE(SUM(currencyConvert(cl.Amount, cl.C_Currency_ID, cb.C_Currency_ID, c.DateAcct, 0"
-                            + ", c.AD_Client_ID, c.AD_Org_ID)),0) "
+                            + ", c.VAF_Client_ID, c.VAF_Org_ID)),0) "
                         + "FROM C_CashLine cl, C_CashBook cb, C_Cash c "
                         + "WHERE cb.C_CashBook_ID=c.C_CashBook_ID"
                         + " AND cl.C_Cash_ID=c.C_Cash_ID AND "

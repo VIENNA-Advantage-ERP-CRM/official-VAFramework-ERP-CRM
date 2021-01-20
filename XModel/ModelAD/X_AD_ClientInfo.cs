@@ -11,25 +11,25 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_ClientInfo
+    /** Generated Model for VAF_ClientDetail
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ClientInfo : PO
+    public class X_VAF_ClientDetail : PO
     {
-        public X_AD_ClientInfo(Context ctx, int AD_ClientInfo_ID, Trx trxName)
-            : base(ctx, AD_ClientInfo_ID, trxName)
+        public X_VAF_ClientDetail(Context ctx, int VAF_ClientDetail_ID, Trx trxName)
+            : base(ctx, VAF_ClientDetail_ID, trxName)
         {
-            /** if (AD_ClientInfo_ID == 0)
+            /** if (VAF_ClientDetail_ID == 0)
             {
             SetAD_Tree_Product_ID (0);
             SetIsDiscountLineAmt (false);
             }
              */
         }
-        public X_AD_ClientInfo(Ctx ctx, int AD_ClientInfo_ID, Trx trxName)
-            : base(ctx, AD_ClientInfo_ID, trxName)
+        public X_VAF_ClientDetail(Ctx ctx, int VAF_ClientDetail_ID, Trx trxName)
+            : base(ctx, VAF_ClientDetail_ID, trxName)
         {
-            /** if (AD_ClientInfo_ID == 0)
+            /** if (VAF_ClientDetail_ID == 0)
             {
             SetAD_Tree_Product_ID (0);
             SetIsDiscountLineAmt (false);
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ClientInfo(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_ClientDetail(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ClientInfo(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_ClientDetail(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ClientInfo(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_ClientDetail(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_ClientInfo()
+        static X_VAF_ClientDetail()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -75,12 +75,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID = 27562514360872L;
         /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
         public static long updatedMS = 1280389044083L;
-        /** AD_Table_ID=227 */
+        /** VAF_TableView_ID=227 */
         public static int Table_ID;
         // =227;
 
-        /** TableName=AD_ClientInfo */
-        public static String Table_Name = "AD_ClientInfo";
+        /** TableName=VAF_ClientDetail */
+        public static String Table_Name = "VAF_ClientDetail";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_ClientInfo[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_ClientDetail[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 

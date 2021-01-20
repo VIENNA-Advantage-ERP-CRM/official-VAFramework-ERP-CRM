@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                     //email.AddAttachment(attachment);
                     //
                     // Get report that is bound on the dunning entry tab of dunning run window.
-                    int ReportProcess_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Process_ID FROM ad_tab WHERE  export_id='VIS_634'"));
+                    int ReportProcess_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Process_ID FROM vaf_tab WHERE  export_id='VIS_634'"));
                     if (ReportProcess_ID > 0)
                     {
                         

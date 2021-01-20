@@ -463,7 +463,7 @@ namespace VAdvantage.DataBase
         //        throw new ArgumentException("Context missing");
         //    if (tableName == null || tableName.Length == 0)
         //        throw new ArgumentException("TableName missing");
-        //    return GetNextID(ctx.GetAD_Client_ID(), tableName, trxName);
+        //    return GetNextID(ctx.GetVAF_Client_ID(), tableName, trxName);
         //}	//	getNextID
 
         ///// <summary>
@@ -479,29 +479,29 @@ namespace VAdvantage.DataBase
         //        throw new ArgumentException("Context missing");
         //    if (tableName == null || tableName.Length == 0)
         //        throw new ArgumentException("TableName missing");
-        //    return GetNextID(ctx.GetAD_Client_ID(), tableName, trxName);
+        //    return GetNextID(ctx.GetVAF_Client_ID(), tableName, trxName);
         //}	//	getNextID
 
         ///// <summary>
         /////Get next number for Key column = 0 is Error.
         ///// </summary>
-        ///// <param name="AD_Client_ID">client</param>
+        ///// <param name="VAF_Client_ID">client</param>
         ///// <param name="tableName">table name</param>
         ///// <param name="trxName">optional Transaction Name</param>
         ///// <returns>Next no</returns>
-        //public static int GetNextID(int AD_Client_ID, string tableName, Trx trxName)
+        //public static int GetNextID(int VAF_Client_ID, string tableName, Trx trxName)
         //{
         //    int no = 0;
         //    try
         //    {
         //        if (DatabaseType.IsOracle)
-        //            no = MSequence.GetNextIDOracle(AD_Client_ID, tableName, trxName);
+        //            no = MSequence.GetNextIDOracle(VAF_Client_ID, tableName, trxName);
         //        else if (DatabaseType.IsPostgre)
-        //            no = MSequence.GetNextIDPostgre(AD_Client_ID, tableName, trxName);
+        //            no = MSequence.GetNextIDPostgre(VAF_Client_ID, tableName, trxName);
         //        else if (DatabaseType.IsMySql)
-        //            no = MSequence.GetNextIDMySql(AD_Client_ID, tableName);
+        //            no = MSequence.GetNextIDMySql(VAF_Client_ID, tableName);
         //        else if (DatabaseType.IsMSSql)
-        //            no = MSequence.GetNextIDMSSql(AD_Client_ID, tableName);
+        //            no = MSequence.GetNextIDMSSql(VAF_Client_ID, tableName);
         //    }
         //    catch
         //    {
@@ -533,12 +533,12 @@ namespace VAdvantage.DataBase
         //private int _postCount = 0;
 
         //public String PostImmediate(Context ctx,
-        //    int AD_Client_ID, int AD_Table_ID, int Record_ID, bool force, Trx trxName)
+        //    int VAF_Client_ID, int VAF_TableView_ID, int Record_ID, bool force, Trx trxName)
         //{
-        //    //log.info("[" + m_no + "] Table=" + AD_Table_ID + ", Record=" + Record_ID);
+        //    //log.info("[" + m_no + "] Table=" + VAF_TableView_ID + ", Record=" + Record_ID);
         //    _postCount++;
-        //    MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, AD_Client_ID);
-        //    return Doc.postImmediate(ass, AD_Table_ID, Record_ID, force, trxName);
+        //    MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
+        //    return Doc.postImmediate(ass, VAF_TableView_ID, Record_ID, force, trxName);
         //}	//	postImmediate
 
         /**

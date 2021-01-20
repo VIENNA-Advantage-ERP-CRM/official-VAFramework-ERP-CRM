@@ -78,7 +78,7 @@ static X_B_TopicType()
 //static long serialVersionUID 27562514367579L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050790L;
-/** AD_Table_ID=690 */
+/** VAF_TableView_ID=690 */
 public static int Table_ID;
  // =690;
 

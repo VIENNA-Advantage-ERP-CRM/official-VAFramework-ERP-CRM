@@ -41,7 +41,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_AD_DefaultCardView() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27748096393125L;/** Last Updated Timestamp 6/15/2016 11:41:16 AM */
-        public static long updatedMS = 1465971076336L;/** AD_Table_ID=1000597 */
+        public static long updatedMS = 1465971076336L;/** VAF_TableView_ID=1000597 */
         public static int Table_ID; // =1000597;
         /** TableName=AD_DefaultCardView */
         public static String Table_Name = "AD_DefaultCardView";
@@ -59,16 +59,16 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_AD_DefaultCardView[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set AD_CardView_ID.
-@param AD_CardView_ID AD_CardView_ID */
-        public void SetAD_CardView_ID(int AD_CardView_ID)
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_AD_DefaultCardView[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set VAF_CardView_ID.
+@param VAF_CardView_ID VAF_CardView_ID */
+        public void SetVAF_CardView_ID(int VAF_CardView_ID)
         {
-            if (AD_CardView_ID <= 0) Set_Value("AD_CardView_ID", null);
+            if (VAF_CardView_ID <= 0) Set_Value("VAF_CardView_ID", null);
             else
-                Set_Value("AD_CardView_ID", AD_CardView_ID);
-        }/** Get AD_CardView_ID.
-@return AD_CardView_ID */
-        public int GetAD_CardView_ID() { Object ii = Get_Value("AD_CardView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set AD_DefaultCardView_ID.
+                Set_Value("VAF_CardView_ID", VAF_CardView_ID);
+        }/** Get VAF_CardView_ID.
+@return VAF_CardView_ID */
+        public int GetVAF_CardView_ID() { Object ii = Get_Value("VAF_CardView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set AD_DefaultCardView_ID.
 @param AD_DefaultCardView_ID AD_DefaultCardView_ID */
         public void SetAD_DefaultCardView_ID(int AD_DefaultCardView_ID) { if (AD_DefaultCardView_ID < 1) throw new ArgumentException("AD_DefaultCardView_ID is mandatory."); Set_ValueNoCheck("AD_DefaultCardView_ID", AD_DefaultCardView_ID); }/** Get AD_DefaultCardView_ID.
 @return AD_DefaultCardView_ID */
@@ -88,15 +88,15 @@ namespace VAdvantage.Model
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }
 
         /** Set Tab.
-@param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+@param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }/** Get Tab.
 @return Tab within a Window */
-        public int GetAD_Tab_ID() { Object ii = Get_Value("AD_Tab_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAF_Tab_ID() { Object ii = Get_Value("VAF_Tab_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
     }
 }

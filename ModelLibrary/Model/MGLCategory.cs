@@ -41,11 +41,11 @@ namespace VAdvantage.Model
         {
             MGLCategory retValue = null;
             String sql = "SELECT * FROM GL_Category "
-                + "WHERE AD_Client_ID=@clientid AND IsDefault='Y'";
+                + "WHERE VAF_Client_ID=@clientid AND IsDefault='Y'";
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@clientid", ctx.GetAD_Client_ID());
+                param[0] = new SqlParameter("@clientid", ctx.GetVAF_Client_ID());
                 DataSet rs = DataBase.DB.ExecuteDataset(sql, param);
                 foreach(DataRow dr in rs.Tables[0].Rows)
                 {

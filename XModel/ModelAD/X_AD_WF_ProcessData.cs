@@ -72,7 +72,7 @@ static X_AD_WF_ProcessData()
 //static long serialVersionUID 27562514366341L;
 /** Last Updated Timestamp 7/29/2010 1:07:29 PM */
 public static long updatedMS = 1280389049552L;
-/** AD_Table_ID=648 */
+/** VAF_TableView_ID=648 */
 public static int Table_ID;
  // =648;
 

@@ -166,7 +166,7 @@ namespace VAdvantage.Print
 
         static public ReportEngine_N StartFinReport(Ctx ctx, ProcessInfo pi)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
             //  Create Query from Parameters
             String TableName = pi.GetAD_Process_ID() == 202 ? "T_Report" : "T_ReportStatement";

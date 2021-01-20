@@ -9,10 +9,10 @@ using ViennaAdvantage.Model;
 
 namespace VAdvantage.Model
 {
-   public class MCardView : X_AD_CardView
+   public class MCardView : X_VAF_CardView
     {
-        public MCardView(Ctx ctx, int AD_CardView_ID, Trx trxName)
-            : base(ctx, AD_CardView_ID, trxName)
+        public MCardView(Ctx ctx, int VAF_CardView_ID, Trx trxName)
+            : base(ctx, VAF_CardView_ID, trxName)
         {
 
 

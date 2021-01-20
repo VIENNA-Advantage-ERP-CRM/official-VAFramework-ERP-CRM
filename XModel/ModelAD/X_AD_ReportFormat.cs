@@ -68,7 +68,7 @@ static X_AD_ReportFormat()
 //static long serialVersionUID = 27657404034406L;
 /** Last Updated Timestamp 7/31/2013 7:21:57 PM */
 public static long updatedMS = 1375278717617L;
-/** AD_Table_ID=1000726 */
+/** VAF_TableView_ID=1000726 */
 public static int Table_ID;
  // =1000726;
 

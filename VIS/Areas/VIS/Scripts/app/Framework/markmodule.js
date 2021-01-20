@@ -90,7 +90,7 @@
                 }
             }
             if (_recordID.length == 1) {
-                //dr = VIS.DB.executeReader("select AD_moduleinfo_id  from ad_exportdata e  where e.record_id=" + _recordID[0] + " and e.ad_table_id=" + _tableID);
+                //dr = VIS.DB.executeReader("select AD_moduleinfo_id  from VAF_ExportData e  where e.record_id=" + _recordID[0] + " and e.vaf_tableview_id=" + _tableID);
                 //while (dr.read()) {
                 //    lstExistingRec.push(dr.getInt(0));
                 //}

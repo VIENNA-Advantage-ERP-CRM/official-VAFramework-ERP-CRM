@@ -70,7 +70,7 @@ static X_AD_User_OrgAccess()
 //static long serialVersionUID 27562514365620L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048831L;
-/** AD_Table_ID=769 */
+/** VAF_TableView_ID=769 */
 public static int Table_ID;
  // =769;
 

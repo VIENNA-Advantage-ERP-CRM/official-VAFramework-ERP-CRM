@@ -70,7 +70,7 @@ static X_I_BankStatement()
 //static long serialVersionUID 27562514376889L;
 /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
 public static long updatedMS = 1280389060100L;
-/** AD_Table_ID=600 */
+/** VAF_TableView_ID=600 */
 public static int Table_ID;
  // =600;
 

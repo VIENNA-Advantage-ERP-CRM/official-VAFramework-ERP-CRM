@@ -16,7 +16,7 @@
         var movingNode = null;
         var targetNode = null;
         var AD_Tree_ID = 0;
-        var AD_Tab_ID = 0;
+        var VAF_Tab_ID = 0;
 
         this.onDemandTree = onDemandTrees;
         this.currentNode = 0;
@@ -102,7 +102,7 @@
         };
 
         this.setTabID = function (tabID) {
-            AD_Tab_ID = tabID;
+            VAF_Tab_ID = tabID;
         };
 
         this.initTree = function (_AD_Tree_ID) {
@@ -112,7 +112,7 @@
                 this.onDemandTree = false;
             }
 
-            var data = { AD_Tree_ID: AD_Tree_ID, editable: editable, windowNo: windowNo, onDemandTree: this.onDemandTree, AD_Tab_ID: AD_Tab_ID };
+            var data = { AD_Tree_ID: AD_Tree_ID, editable: editable, windowNo: windowNo, onDemandTree: this.onDemandTree, VAF_Tab_ID: VAF_Tab_ID };
             AD_Tree_ID = AD_Tree_ID;
             VIS.dataContext.getTreeAsString(data, function (str) {
                 $treeRoot.html(str);

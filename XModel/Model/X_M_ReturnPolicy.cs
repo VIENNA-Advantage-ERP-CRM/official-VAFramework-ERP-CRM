@@ -72,7 +72,7 @@ static X_M_ReturnPolicy()
 //static long serialVersionUID 27562514381246L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064457L;
-/** AD_Table_ID=985 */
+/** VAF_TableView_ID=985 */
 public static int Table_ID;
  // =985;
 

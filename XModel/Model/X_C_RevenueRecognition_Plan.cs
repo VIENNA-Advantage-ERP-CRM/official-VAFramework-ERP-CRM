@@ -84,7 +84,7 @@ static X_C_RevenueRecognition_Plan()
 //static long serialVersionUID 27562514374616L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057827L;
-/** AD_Table_ID=443 */
+/** VAF_TableView_ID=443 */
 public static int Table_ID;
  // =443;
 

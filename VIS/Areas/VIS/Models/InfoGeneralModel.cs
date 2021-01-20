@@ -28,15 +28,15 @@ namespace VIS.Models
                     sql = @"SELECT c.ColumnName,
                             c.name,
                             c.IsIdentifier,
-                            t.AD_Table_ID,
+                            t.VAF_TableView_ID,
                             t.TableName,
                             C.IsTranslated 
-                         FROM AD_Table t
-                            INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID)
+                         FROM VAF_TableView t
+                            INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)
                             WHERE c.AD_Reference_ID=10
                             AND t.TableName='" + tableName + @"'
-                           AND EXISTS (SELECT * FROM AD_Field f 
-                     WHERE f.AD_Column_ID=c.AD_Column_ID
+                           AND EXISTS (SELECT * FROM VAF_Field f 
+                     WHERE f.VAF_Column_ID=c.VAF_Column_ID
                      AND f.IsDisplayed='Y' AND f.IsEncrypted='N' AND f.ObscureType IS NULL)                    
                  ORDER BY c.IsIdentifier DESC, c.SeqNo";
                 }
@@ -45,19 +45,19 @@ namespace VIS.Models
                     sql = @"SELECT c.ColumnName,  
                           trl.name,
                           c.IsIdentifier,
-                          t.AD_Table_ID,
+                          t.VAF_TableView_ID,
                           t.TableName,
                           C.IsTranslated
-                        FROM AD_Table t
-                        INNER JOIN AD_Column c
-                        ON (t.AD_Table_ID      =c.AD_Table_ID)
-                        INNER JOIN AD_Column_Trl trl
-                        ON (c.AD_Column_ID=trl.AD_Column_ID)
+                        FROM VAF_TableView t
+                        INNER JOIN VAF_Column c
+                        ON (t.VAF_TableView_ID      =c.VAF_TableView_ID)
+                        INNER JOIN VAF_Column_TL trl
+                        ON (c.VAF_Column_ID=trl.VAF_Column_ID)
                         WHERE c.AD_Reference_ID=10
                         AND t.TableName        ='" + tableName + @"'
                         AND trl.AD_Language='" + ad_Language + @"'
-                        AND EXISTS(SELECT * FROM AD_Field f
-                          WHERE f.AD_Column_ID=c.AD_Column_ID
+                        AND EXISTS(SELECT * FROM VAF_Field f
+                          WHERE f.VAF_Column_ID=c.VAF_Column_ID
                           AND f.IsDisplayed   ='Y' AND f.IsEncrypted   ='N' AND f.ObscureType  IS NULL)
                         ORDER BY c.IsIdentifier DESC,c.SeqNo";
                 }
@@ -76,7 +76,7 @@ namespace VIS.Models
                         break;
                     }
                     item = new InfoGenral();
-                    item.AD_Table_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Table_ID"]);
+                    item.VAF_TableView_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]);
                     item.ColumnName = ds.Tables[0].Rows[i]["ColumnName"].ToString();
                     item.Name = ds.Tables[0].Rows[i]["Name"].ToString();
                     item.IsIdentifier = ds.Tables[0].Rows[i]["IsIdentifier"].ToString() == "Y" ? true : false;
@@ -94,7 +94,7 @@ namespace VIS.Models
             }
         }
 
-        public List<InfoColumn> GetDisplayCol(int AD_Table_ID, string AD_Language, bool IsBaseLangage,string _tableName)
+        public List<InfoColumn> GetDisplayCol(int VAF_TableView_ID, string AD_Language, bool IsBaseLangage,string _tableName)
         {
             try
             {
@@ -124,15 +124,15 @@ namespace VIS.Models
                               c.AD_Reference_Value_ID,
                               c.ColumnSQL,
                               C.IsTranslated
-                            FROM AD_Column c
-                            INNER JOIN AD_Table t
-                            ON (c.AD_Table_ID=t.AD_Table_ID)                            
-                            INNER JOIN AD_Tab tab
+                            FROM VAF_Column c
+                            INNER JOIN VAF_TableView t
+                            ON (c.VAF_TableView_ID=t.VAF_TableView_ID)                            
+                            INNER JOIN VAF_Tab tab
                             ON (t.AD_Window_ID=tab.AD_Window_ID)
-                            INNER JOIN AD_Field f
-                            ON (tab.AD_Tab_ID  =f.AD_Tab_ID
-                            AND f.AD_Column_ID =c.AD_Column_ID)
-                            WHERE t.AD_Table_ID=" + AD_Table_ID + @"
+                            INNER JOIN VAF_Field f
+                            ON (tab.VAF_Tab_ID  =f.VAF_Tab_ID
+                            AND f.VAF_Column_ID =c.VAF_Column_ID)
+                            WHERE t.VAF_TableView_ID=" + VAF_TableView_ID + @"
                             AND (c.IsKey       ='Y'
                             OR (f.IsEncrypted  ='N'
                             AND f.ObscureType IS NULL))                            
@@ -148,17 +148,17 @@ namespace VIS.Models
                               c.AD_Reference_Value_ID,
                               c.ColumnSQL,
                               C.IsTranslated
-                            FROM AD_Column c
-                            INNER JOIN AD_Table t
-                            ON (c.AD_Table_ID=t.AD_Table_ID)
-                            INNER JOIN AD_Column_Trl trl
-                            ON (c.ad_column_ID=trl.AD_Column_ID)
-                            INNER JOIN AD_Tab tab
+                            FROM VAF_Column c
+                            INNER JOIN VAF_TableView t
+                            ON (c.VAF_TableView_ID=t.VAF_TableView_ID)
+                            INNER JOIN VAF_Column_TL trl
+                            ON (c.vaf_column_ID=trl.VAF_Column_ID)
+                            INNER JOIN VAF_Tab tab
                             ON (t.AD_Window_ID=tab.AD_Window_ID)
-                            INNER JOIN AD_Field f
-                            ON (tab.AD_Tab_ID  =f.AD_Tab_ID
-                            AND f.AD_Column_ID =c.AD_Column_ID)
-                            WHERE t.AD_Table_ID=" + AD_Table_ID + @"
+                            INNER JOIN VAF_Field f
+                            ON (tab.VAF_Tab_ID  =f.VAF_Tab_ID
+                            AND f.VAF_Column_ID =c.VAF_Column_ID)
+                            WHERE t.VAF_TableView_ID=" + VAF_TableView_ID + @"
                             AND trl.AD_Language='" + AD_Language + @"'
                             AND (c.IsKey       ='Y'
                             OR (f.IsEncrypted  ='N'
@@ -329,7 +329,7 @@ namespace VIS.Models
     }
     public class InfoGenral
     {
-        public int AD_Table_ID
+        public int VAF_TableView_ID
         {
             get;
             set;

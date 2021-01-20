@@ -20,7 +20,7 @@ public X_C_GenAttributeSetExclude (Context ctx, int C_GenAttributeSetExclude_ID,
 {
 /** if (C_GenAttributeSetExclude_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetC_GenAttributeSetExclude_ID (0);
 SetC_GenAttributeSet_ID (0);
 SetIsSOTrx (false);
@@ -31,7 +31,7 @@ public X_C_GenAttributeSetExclude (Ctx ctx, int C_GenAttributeSetExclude_ID, Trx
 {
 /** if (C_GenAttributeSetExclude_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetC_GenAttributeSetExclude_ID (0);
 SetC_GenAttributeSet_ID (0);
 SetIsSOTrx (false);
@@ -74,7 +74,7 @@ static X_C_GenAttributeSetExclude()
 //static long serialVersionUID 27667169105344L;
 /** Last Updated Timestamp 11/21/2013 7:53:08 PM */
 public static long updatedMS = 1385043788555L;
-/** AD_Table_ID=1000422 */
+/** VAF_TableView_ID=1000422 */
 public static int Table_ID;
  // =1000422;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_C_GenAttributeSetExclude[").Append(Get_
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -84,8 +84,8 @@ namespace BaseLibrary.CloudService {
                     int C_Region_ID, 
                     int CreatedBy, 
                     int salesrep_id, 
-                    int ad_org_id, 
-                    int ad_client_id, 
+                    int vaf_org_id, 
+                    int vaf_client_id, 
                     int UpdatedBy, 
                     string AccessKey);
         
@@ -432,7 +432,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetBIUserCredential", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BaseLibrary.CloudService.CustomerBISetting GetBIUserCredential(string Url, int AD_Client_ID, string accessKey);
+        BaseLibrary.CloudService.CustomerBISetting GetBIUserCredential(string Url, int VAF_Client_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetNews", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -634,7 +634,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetVideosFromDMS", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetVideosFromDMS(string AD_Client_ID, string AD_User_ID, string C_BPartner_ID, int C_Lead_ID, string accessKey);
+        string GetVideosFromDMS(string VAF_Client_ID, string AD_User_ID, string C_BPartner_ID, int C_Lead_ID, string accessKey);
         
         // CODEGEN: Parameter 'countryid' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegisterTempInfo", ReplyAction="*")]
@@ -4977,7 +4977,7 @@ namespace BaseLibrary.CloudService {
         
         private string modtypeField;
         
-        private int[] aD_Client_IDsField;
+        private int[] vaf_client_IDsField;
         
         private string[] langIDsField;
         
@@ -5047,13 +5047,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=5)]
-        public int[] AD_Client_IDs {
+        public int[] VAF_Client_IDs {
             get {
-                return this.aD_Client_IDsField;
+                return this.vaf_client_IDsField;
             }
             set {
-                this.aD_Client_IDsField = value;
-                this.RaisePropertyChanged("AD_Client_IDs");
+                this.vaf_client_IDsField = value;
+                this.RaisePropertyChanged("VAF_Client_IDs");
             }
         }
         
@@ -6326,11 +6326,11 @@ namespace BaseLibrary.CloudService {
                     int C_Region_ID, 
                     int CreatedBy, 
                     int salesrep_id, 
-                    int ad_org_id, 
-                    int ad_client_id, 
+                    int vaf_org_id, 
+                    int vaf_client_id, 
                     int UpdatedBy, 
                     string AccessKey) {
-            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, c_Currency_id, r_source_id, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, C_Campaign_ID, R_STATUS_ID, C_Region_ID, CreatedBy, salesrep_id, ad_org_id, ad_client_id, UpdatedBy, AccessKey);
+            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, c_Currency_id, r_source_id, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, C_Campaign_ID, R_STATUS_ID, C_Region_ID, CreatedBy, salesrep_id, vaf_org_id, vaf_client_id, UpdatedBy, AccessKey);
         }
         
         public System.Data.DataSet GetTopicInfo(out string error, string url, bool isInitConfig, string langCode, string searchText, string option) {
@@ -6715,8 +6715,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetUserInfoOfTokenKey(tokenKey, msg, accessKey);
         }
         
-        public BaseLibrary.CloudService.CustomerBISetting GetBIUserCredential(string Url, int AD_Client_ID, string accessKey) {
-            return base.Channel.GetBIUserCredential(Url, AD_Client_ID, accessKey);
+        public BaseLibrary.CloudService.CustomerBISetting GetBIUserCredential(string Url, int VAF_Client_ID, string accessKey) {
+            return base.Channel.GetBIUserCredential(Url, VAF_Client_ID, accessKey);
         }
         
         public string GetNews(string accessKey) {
@@ -7004,8 +7004,8 @@ namespace BaseLibrary.CloudService {
             return retVal.RegisterInfoFromModuleResult;
         }
         
-        public string GetVideosFromDMS(string AD_Client_ID, string AD_User_ID, string C_BPartner_ID, int C_Lead_ID, string accessKey) {
-            return base.Channel.GetVideosFromDMS(AD_Client_ID, AD_User_ID, C_BPartner_ID, C_Lead_ID, accessKey);
+        public string GetVideosFromDMS(string VAF_Client_ID, string AD_User_ID, string C_BPartner_ID, int C_Lead_ID, string accessKey) {
+            return base.Channel.GetVideosFromDMS(VAF_Client_ID, AD_User_ID, C_BPartner_ID, C_Lead_ID, accessKey);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

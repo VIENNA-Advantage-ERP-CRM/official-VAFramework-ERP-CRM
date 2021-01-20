@@ -39,7 +39,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_C_AllocationLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27884379430766L;/** Last Updated Timestamp 10/9/2020 2:35:14 PM */
-        public static long updatedMS = 1602254113977L;/** AD_Table_ID=390 */
+        public static long updatedMS = 1602254113977L;/** VAF_TableView_ID=390 */
         public static int Table_ID; // =390;
         /** TableName=C_AllocationLine */
         public static String Table_Name = "C_AllocationLine";

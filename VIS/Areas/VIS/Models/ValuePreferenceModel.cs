@@ -17,8 +17,8 @@ namespace VIS.Controllers
         public String DisplayValue { get; set; }
         public int DisplayType { get; set; }
 
-        public int AD_Client_ID { get; set; }
-        public int AD_Org_ID { get; set; }
+        public int VAF_Client_ID { get; set; }
+        public int VAF_Org_ID { get; set; }
         public int AD_User_ID { get; set; }
         public int AD_Window_ID { get; set; }
         public int AD_Reference_ID { get; set; }

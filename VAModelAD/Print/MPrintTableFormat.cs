@@ -513,12 +513,12 @@ namespace VAdvantage.Print
         /// <returns>Default Table Format (need to set standard font)</returns>
         static public MPrintTableFormat GetDefault(Ctx ctx)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
             MPrintTableFormat tf = null;
             String sql = "SELECT * FROM AD_PrintTableFormat "
-                + "WHERE AD_Client_ID IN (0," + AD_Client_ID + ") AND IsActive='Y' "
-                + "ORDER BY IsDefault DESC, AD_Client_ID DESC";
+                + "WHERE VAF_Client_ID IN (0," + VAF_Client_ID + ") AND IsActive='Y' "
+                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC";
             try
             {
                 DataSet ds = SqlExec.ExecuteQuery.ExecuteDataset(sql);

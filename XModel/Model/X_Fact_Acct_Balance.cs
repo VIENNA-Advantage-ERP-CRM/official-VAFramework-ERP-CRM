@@ -25,7 +25,7 @@ public X_Fact_Acct_Balance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr
  added by ->Harwinder */
 static X_Fact_Acct_Balance(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27741383653181L;/** Last Updated Timestamp 3/29/2016 7:02:17 PM */
-public static long updatedMS = 1459258336392L;/** AD_Table_ID=547 */
+public static long updatedMS = 1459258336392L;/** VAF_TableView_ID=547 */
 public static int Table_ID; // =547;
 /** TableName=Fact_Acct_Balance */
 public static String Table_Name="Fact_Acct_Balance";
@@ -44,13 +44,13 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_Fact_Acct_Balance[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** AD_OrgTrx_ID AD_Reference_ID=276 */
-public static int AD_ORGTRX_ID_AD_Reference_ID=276;/** Set Trx Organization.
-@param AD_OrgTrx_ID Performing or initiating organization */
-public void SetAD_OrgTrx_ID (int AD_OrgTrx_ID){if (AD_OrgTrx_ID <= 0) Set_Value ("AD_OrgTrx_ID", null);else
-Set_Value ("AD_OrgTrx_ID", AD_OrgTrx_ID);}/** Get Trx Organization.
+/** VAF_OrgTrx_ID AD_Reference_ID=276 */
+public static int VAF_ORGTRX_ID_AD_Reference_ID=276;/** Set Trx Organization.
+@param VAF_OrgTrx_ID Performing or initiating organization */
+public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID){if (VAF_OrgTrx_ID <= 0) Set_Value ("VAF_OrgTrx_ID", null);else
+Set_Value ("VAF_OrgTrx_ID", VAF_OrgTrx_ID);}/** Get Trx Organization.
 @return Performing or initiating organization */
-public int GetAD_OrgTrx_ID() {Object ii = Get_Value("AD_OrgTrx_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+public int GetVAF_OrgTrx_ID() {Object ii = Get_Value("VAF_OrgTrx_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
 /** Account_ID AD_Reference_ID=182 */
 public static int ACCOUNT_ID_AD_Reference_ID=182;/** Set Account.
 @param Account_ID Account used */

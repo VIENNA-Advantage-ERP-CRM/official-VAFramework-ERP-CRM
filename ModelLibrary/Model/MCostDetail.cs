@@ -68,7 +68,7 @@ namespace VAdvantage.Model
         /// New Constructor
         /// </summary>
         /// <param name="mas">accounting schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID"></param>
         /// <param name="M_CostElement_ID">optional cost element for Freight</param>
@@ -76,11 +76,11 @@ namespace VAdvantage.Model
         /// <param name="Qty">quantity</param>
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
-        public MCostDetail(MAcctSchema mas, int AD_Org_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
+        public MCostDetail(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
             int M_CostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName)
             : this(mas.GetCtx(), 0, trxName)
         {
-            SetClientOrg(mas.GetAD_Client_ID(), AD_Org_ID);
+            SetClientOrg(mas.GetVAF_Client_ID(), VAF_Org_ID);
             SetC_AcctSchema_ID(mas.GetC_AcctSchema_ID());
             SetM_Product_ID(M_Product_ID);
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
@@ -96,7 +96,7 @@ namespace VAdvantage.Model
         /// Is used to create Cost detail with respective reference
         /// </summary>
         /// <param name="mas">Accounting SChema</param>
-        /// <param name="AD_Org_ID">Organization</param>
+        /// <param name="VAF_Org_ID">Organization</param>
         /// <param name="M_Product_ID">Product</param>
         /// <param name="M_AttributeSetInstance_ID">AttributeSetInstance</param>
         /// <param name="WindowName">calling window</param>
@@ -112,14 +112,14 @@ namespace VAdvantage.Model
         /// <param name="trxName">trasnaction</param>
         /// <param name="M_Warehouse_ID">Optional parameter -- Warehouse ID</param>
         /// <returns>MCostDetail Object</returns>
-        public static MCostDetail CreateCostDetail(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        public static MCostDetail CreateCostDetail(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, string WindowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
             MInvoiceLine invoiceline, PO po, int M_CostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName, int M_Warehouse_ID = 0)
         {
             try
             {
                 Amt = Decimal.Round(Amt, mas.GetCostingPrecision());
-                MCostDetail cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                MCostDetail cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID, Amt, Qty, Description, trxName);
                 cd.SetProcessed(true);
                 cd.SetM_Warehouse_ID(M_Warehouse_ID);
@@ -208,15 +208,15 @@ namespace VAdvantage.Model
             }
         }
 
-        public bool UpdateProductCost(String windowName, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_AD_Org_ID, string optionalStrCd = "process")
+        public bool UpdateProductCost(String windowName, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string optionalStrCd = "process")
         {
-            int AD_Org_ID = 0;
+            int VAF_Org_ID = 0;
             // Get Org based on Costing Level
             dynamic pc = null;
             String cl = null;
             string costingMethod = null;
             int costElementId = 0;
-            MClient client = MClient.Get(GetCtx(), cd.GetAD_Client_ID());
+            MClient client = MClient.Get(GetCtx(), cd.GetVAF_Client_ID());
             int M_Warehouse_ID = 0; // is used to calculate cost with warehouse level or not
 
             if (product != null)
@@ -251,11 +251,11 @@ namespace VAdvantage.Model
             // set Organization for product costs
             if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_BatchLot)
             {
-                AD_Org_ID = 0;
+                VAF_Org_ID = 0;
             }
             else
             {
-                AD_Org_ID = cd.GetAD_Org_ID();
+                VAF_Org_ID = cd.GetVAF_Org_ID();
             }
             // set ASI as ZERO in case of costing levele either "Client" or "Organization" or "Warehouse"
             if (cl != MProductCategory.COSTINGLEVEL_BatchLot && cl != MProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
@@ -271,13 +271,13 @@ namespace VAdvantage.Model
             if (costingMethod != "C")
             {
                 costElementId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT DISTINCT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' 
-                            AND CostingMethod = '" + costingMethod + "' AND AD_Client_ID = " + product.GetAD_Client_ID()));
+                            AND CostingMethod = '" + costingMethod + "' AND VAF_Client_ID = " + product.GetVAF_Client_ID()));
             }
             else if (costingMethod == "C") // costing method on cost combination - Element line
             {
                 string sql = @"SELECT  cel.M_Ref_CostElement
                                     FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID  = cel.M_CostElement_ID
-                                    WHERE ce.AD_Client_ID   =" + product.GetAD_Client_ID() + @" 
+                                    WHERE ce.VAF_Client_ID   =" + product.GetVAF_Client_ID() + @" 
                                     AND ce.IsActive         ='Y' AND ce.CostElementType  ='C'
                                     AND cel.IsActive        ='Y' AND ce.M_CostElement_ID = " + costElementId + @"
                                     AND  CAST(cel.M_Ref_CostElement AS INTEGER) IN (SELECT M_CostElement_ID FROM M_CostELEMENT WHERE costingmethod IS NOT NULL  )
@@ -297,14 +297,14 @@ namespace VAdvantage.Model
                         MCostElement ce = ces[i];
                         if (ce.GetM_CostElement_ID() != costElementId)
                         {
-                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                            if (!UpdateCost(acctSchema, product, ce, VAF_Org_ID, M_ASI_ID, 0, cq_VAF_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                             {
                                 return false;
                             }
                         }
                         else if (!client.IsCostImmediate())
                         {
-                            if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                            if (!UpdateCost(acctSchema, product, ce, VAF_Org_ID, M_ASI_ID, 0, cq_VAF_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                             {
                                 return false;
                             }
@@ -352,7 +352,7 @@ namespace VAdvantage.Model
                             }
                             if (isCostImmediate == "N")
                             {
-                                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                                if (!UpdateCost(acctSchema, product, ce, VAF_Org_ID, M_ASI_ID, 0, cq_VAF_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                                 {
                                     return false;
                                 }
@@ -377,7 +377,7 @@ namespace VAdvantage.Model
                 {
                     ce = MCostElement.Get(GetCtx(), GetM_CostElement_ID());
                 }
-                if (!UpdateCost(acctSchema, product, ce, AD_Org_ID, M_ASI_ID, 0, cq_AD_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
+                if (!UpdateCost(acctSchema, product, ce, VAF_Org_ID, M_ASI_ID, 0, cq_VAF_Org_ID, windowName, cd, costingMethod, costElementId, M_Warehouse_ID))
                 {
                     return false;
                 }
@@ -385,7 +385,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        private bool UpdateCost(MAcctSchema mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int A_Asset_ID, int cq_AD_Org_ID,
+        private bool UpdateCost(MAcctSchema mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int A_Asset_ID, int cq_VAF_Org_ID,
                                 string windowName, MCostDetail cd, string costingMethod = "", int costCominationelement = 0, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
@@ -402,7 +402,7 @@ namespace VAdvantage.Model
             {
                 if (windowName == "Inventory Move")
                 {
-                    cost = MCost.Get(product, M_ASI_ID, mas, cq_AD_Org_ID, ce.GetM_CostElement_ID(), M_Warehouse_ID);
+                    cost = MCost.Get(product, M_ASI_ID, mas, cq_VAF_Org_ID, ce.GetM_CostElement_ID(), M_Warehouse_ID);
                     //change 10-5-2016
                     if (cd.GetM_MovementLine_ID() > 0)
                     {
@@ -413,7 +413,7 @@ namespace VAdvantage.Model
                         {
                             M_SourceWarehouse_ID = MLocator.Get(GetCtx(), movementlineFrom.GetM_Locator_ID()).GetM_Warehouse_ID();
                         }
-                        costFrom = MCost.Get(product, M_ASI_ID, mas, movementlineFrom.GetAD_Org_ID(), ce.GetM_CostElement_ID(), M_SourceWarehouse_ID);
+                        costFrom = MCost.Get(product, M_ASI_ID, mas, movementlineFrom.GetVAF_Org_ID(), ce.GetM_CostElement_ID(), M_SourceWarehouse_ID);
                     }
                     //end
                 }
@@ -476,7 +476,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    //MClient client = MClient.Get(GetCtx(), cd.GetAD_Client_ID());
+                    //MClient client = MClient.Get(GetCtx(), cd.GetVAF_Client_ID());
                     if (ce.IsFifo() || ce.IsLifo())
                     {
                         sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
@@ -484,7 +484,7 @@ namespace VAdvantage.Model
                                      AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
                                      @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
-                                     @" AND ced.AD_Client_ID = " + cd.GetAD_Client_ID();
+                                     @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                         MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         if (MRPrice == 0)
                         {
@@ -493,7 +493,7 @@ namespace VAdvantage.Model
                                      AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) =  " + cd.GetC_OrderLine_ID() +
                                      @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
-                                     @" AND ced.AD_Client_ID = " + cd.GetAD_Client_ID();
+                                     @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         }
                         if (MRPrice == 0)
@@ -504,7 +504,7 @@ namespace VAdvantage.Model
                                      AND ced.C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                         @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
                                         @" AND NVL(ced.C_InvoiceLine_ID , 0) = 0 AND NVL(cq.M_CostElement_ID , 0)  = 0 " +
-                                        @" AND ced.AD_Client_ID = " + cd.GetAD_Client_ID();
+                                        @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         }
                     }
@@ -535,13 +535,13 @@ namespace VAdvantage.Model
                         {
                             if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                          " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " +
-                                         " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND AD_Client_ID = " + ce.GetAD_Client_ID() + ")" +
+                                         " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                          " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                          " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                             {
                                 sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                              " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " +
-                                             " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND AD_Client_ID = " + ce.GetAD_Client_ID() + ")" +
+                                             " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                              " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                              " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = 0";
                             }
@@ -549,7 +549,7 @@ namespace VAdvantage.Model
                             {
                                 sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                                  " AND C_AcctSchema_ID = " + mas.GetC_AcctSchema_ID() + " AND M_CostElement_ID = " +
-                                                 " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND AD_Client_ID = " + ce.GetAD_Client_ID() + ")" +
+                                                 " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                                  " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
                                                  " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(C_InvoiceLine_ID , 0) = " + cd.GetC_InvoiceLine_ID();
                             }
@@ -637,7 +637,7 @@ namespace VAdvantage.Model
                                            inner join c_invoice i on i.c_invoice_id = il.c_invoice_id 
                                            WHERE ced.c_invoiceline_id > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.C_AcctSchema_ID = " + GetC_AcctSchema_ID() +
-                                           @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.AD_Org_ID = " + Org_ID +
+                                           @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                            @" AND NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @"
                                            ORDER BY ced.m_costelementdetail_id DESC ) where rnm <=1";
                             DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -741,11 +741,11 @@ namespace VAdvantage.Model
                 //change 3-5-2016
                 if (ce.IsLifo() || ce.IsFifo() || ce.IsAverageInvoice() || ce.IsLastInvoice() || ce.IsStandardCosting() || ce.IsWeightedAverageCost())
                 {
-                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                             mas, ce.GetM_CostElement_ID(), windowName, cd, GetAmt(), GetQty());
-                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                             mas, ce.GetM_CostElement_ID(), windowName, cd, amtWithSurcharge, GetQty());
-                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
 
@@ -889,7 +889,7 @@ namespace VAdvantage.Model
                 }
                 if (ce.IsLifo() || ce.IsFifo() || ce.IsAverageInvoice() || ce.IsLastInvoice() || ce.IsStandardCosting() || ce.IsWeightedAverageCost())
                 {
-                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
 
@@ -933,7 +933,7 @@ namespace VAdvantage.Model
             //                        if (invoice.GetC_Currency_ID() != mas.GetC_Currency_ID())
             //                        {
             //                            amt = MConversionRate.Convert(GetCtx(), amt, invoice.GetC_Currency_ID(), mas.GetC_Currency_ID(),
-            //                                                                        invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), cd.GetAD_Client_ID(), cd.GetAD_Org_ID());
+            //                                                                        invoice.GetDateAcct(), invoice.GetC_ConversionType_ID(), cd.GetVAF_Client_ID(), cd.GetVAF_Org_ID());
             //                        }
             //                        amt = Decimal.Multiply(amt, qty);
             //                        price = Decimal.Round(Decimal.Divide(
@@ -947,7 +947,7 @@ namespace VAdvantage.Model
             //                        cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
             //                        log.Finer("Inv - WeightedAverageCost - " + cost);
 
-            //                        MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+            //                        MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
             //                                                           mas, ce.GetM_CostElement_ID(), "Invoice(Vendor)", cd, cost.GetCurrentCostPrice() * qty, qty);
 
             //                        DB.ExecuteQuery("UPDATE M_MatchInv SET IsCostCalculated = 'Y' WHERE C_InvoiceLine_ID = " + invLineId +
@@ -1072,7 +1072,7 @@ namespace VAdvantage.Model
                                            inner join m_inout i on i.m_inout_id = il.m_inout_id 
                                            WHERE ced.m_inoutline_id > 0 AND ced.C_Orderline_ID > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.C_AcctSchema_ID = " + GetC_AcctSchema_ID() +
-                                           @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.AD_Org_ID = " + Org_ID +
+                                           @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                            @" AND NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @"
                                            ORDER BY ced.m_costelementdetail_id DESC ) where rnm <=1";
                             DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -1121,7 +1121,7 @@ namespace VAdvantage.Model
                         decimal totalPrice = 0;
                         decimal totalQty = 0;
                         //MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                        //    mas, cq_AD_Org_ID, ce, Get_TrxName());
+                        //    mas, cq_VAF_Org_ID, ce, Get_TrxName());
                         MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
                         mas, Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                         if (cQueue != null && cQueue.Length > 0)
@@ -1142,9 +1142,9 @@ namespace VAdvantage.Model
                 //change 3-5-2016
                 if (ce.IsAveragePO() || ce.IsLastPOPrice() || ce.IsWeightedAveragePO())
                 {
-                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                             mas, ce.GetM_CostElement_ID(), windowName, cd, amt, qty);
-                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 #endregion
@@ -1193,7 +1193,7 @@ namespace VAdvantage.Model
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
                             }
                             //change 3-5-2016
-                            MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                            MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                             mas, ce.GetM_CostElement_ID(), "Invoice(APC)", cd, cost.GetCurrentCostPrice() * qty, qty);
                         }
                         return cost.Save();
@@ -1476,7 +1476,7 @@ namespace VAdvantage.Model
                                            inner join c_invoice i on i.c_invoice_id = il.c_invoice_id 
                                            WHERE ced.c_invoiceline_id > 0 AND ced.M_Inoutline_ID > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.C_AcctSchema_ID = " + GetC_AcctSchema_ID() +
-                                                   @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.AD_Org_ID = " + Org_ID +
+                                                   @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                                    @" AND NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @"
                                            ORDER BY ced.m_costelementdetail_id DESC ) where rnm <=1";
                                     DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -1591,7 +1591,7 @@ namespace VAdvantage.Model
                     // when expected cost already calculated, then not to add qty 
                     //Decimal qty1 = Decimal.Add(cost.GetCurrentQty(), GetExpectedCostCalculated() ? 0 : qty);
 
-                    Decimal qty1 = MCost.GetproductCostAndQtyMaterial(cd.GetAD_Client_ID(), cost.GetAD_Org_ID(), cost.GetM_Product_ID()
+                    Decimal qty1 = MCost.GetproductCostAndQtyMaterial(cd.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), cost.GetM_Product_ID()
                         , cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID(), true);
                     if (qty1.CompareTo(Decimal.Zero) == 0)
                     {
@@ -1613,15 +1613,15 @@ namespace VAdvantage.Model
                 //change 3-5-2016
                 if (ce.IsWeightedAverageCost() && windowName != "Invoice(Customer)")
                 {
-                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 else if ((ce.IsFifo() || ce.IsLifo() || ce.IsStandardCosting() || ce.IsLastInvoice() || ce.IsAverageInvoice()) && windowName != "Invoice(Customer)")
                 {
-                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    //MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                     //                                mas, ce.GetM_CostElement_ID(), windowName, cd, amt, qty);
 
-                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 #endregion
@@ -1789,12 +1789,12 @@ namespace VAdvantage.Model
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
                                 // get cost based on Accounting Schema
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 //if (primaryActSchemaCurrencyID != mas.GetC_Currency_ID())
                                 //{
                                 //    costCombination = MConversionRate.Convert(movement.GetCtx(), costCombination, primaryActSchemaCurrencyID, mas.GetC_Currency_ID(),
-                                //                                     movement.GetMovementDate(), 0, movement.GetAD_Client_ID(), movement.GetAD_Org_ID());
+                                //                                     movement.GetMovementDate(), 0, movement.GetVAF_Client_ID(), movement.GetVAF_Org_ID());
                                 //}
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -1862,7 +1862,7 @@ namespace VAdvantage.Model
                         // now we will get cost(CurrentCostPrice) from the document line itself - product come with that price on To Warehouse
                         //if (ce.GetM_CostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
                         //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -1879,7 +1879,7 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             Decimal convertAmount = MConversionRate.Convert(GetCtx(), movementline.GetCurrentCostPrice(),
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(convertAmount, qty)));
                         }
 
@@ -2062,7 +2062,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
@@ -2190,7 +2190,7 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
 
@@ -2212,7 +2212,7 @@ namespace VAdvantage.Model
 
                         //if (ce.GetM_CostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
                         //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
@@ -2385,7 +2385,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -2459,13 +2459,13 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
 
                         //if (ce.GetM_CostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
                         //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -2666,7 +2666,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
 
@@ -2786,7 +2786,7 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
 
@@ -2931,7 +2931,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -2999,13 +2999,13 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
 
                         //if (ce.GetM_CostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetAD_Client_ID(), cost.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(cost.GetVAF_Client_ID(), cost.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), cost.GetM_Product_ID(),
                         //       cost.GetM_AttributeSetInstance_ID(), cost.Get_Trx(), cost.GetM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3049,7 +3049,7 @@ namespace VAdvantage.Model
                     if (windowName == "Inventory Move")
                     {
                         cQueue = MCostQueue.GetQueue(product, M_ASI_ID,
-                            mas, cq_AD_Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
+                            mas, cq_VAF_Org_ID, ce, Get_TrxName(), cost.GetM_Warehouse_ID());
                     }
                     else
                     {
@@ -3174,7 +3174,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -3227,13 +3227,13 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
 
                         //if (ce.GetM_CostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                         //       costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3364,7 +3364,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -3418,13 +3418,13 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
 
                         //if (ce.GetM_CostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                         //       costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3572,7 +3572,7 @@ namespace VAdvantage.Model
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             if (ce.GetM_CostElement_ID() == costCominationelement)
                             {
-                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                                decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                                    costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                             }
@@ -3643,13 +3643,13 @@ namespace VAdvantage.Model
                             // convert currenctCostPrice on movementline in accounting schema currency
                             affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$C_Currency_ID"), mas.GetC_Currency_ID(), movement.GetMovementDate(),
-                                0, movement.GetAD_Client_ID(), cost.GetAD_Org_ID());
+                                0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
                         }
 
                         //if (ce.GetM_CostElement_ID() == costCominationelement)
                         //{
-                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetAD_Client_ID(), costFrom.GetAD_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
+                        //    decimal costCombination = MCost.GetproductCostBasedonAcctSchema(costFrom.GetVAF_Client_ID(), costFrom.GetVAF_Org_ID(), mas.GetC_AcctSchema_ID(), costFrom.GetM_Product_ID(),
                         //       costFrom.GetM_AttributeSetInstance_ID(), costFrom.Get_Trx(), costFrom.GetM_Warehouse_ID());
                         //    cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(costCombination, qty)));
                         //}
@@ -3734,12 +3734,12 @@ namespace VAdvantage.Model
 
                 if (ce.IsLastInvoice() || ce.IsLastPOPrice() || ce.IsWeightedAverageCost() || ce.IsWeightedAveragePO())
                 {
-                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, (cost.GetCurrentCostPrice() * qty), qty);
                 }
                 else if (!ce.IsWeightedAverageCost())
                 {
-                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                    MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                     mas, ce.GetM_CostElement_ID(), windowName, cd, amt, qty);
                 }
             }
@@ -3762,14 +3762,14 @@ namespace VAdvantage.Model
         /// <param name="acctSchema">accounting schema</param>
         /// <param name="product">product</param>
         /// <param name="M_ASI_ID">attribute set instance</param>
-        /// <param name="cq_AD_Org_ID">org</param>
+        /// <param name="cq_VAF_Org_ID">org</param>
         /// <param name="windowName">window name</param>
         /// <param name="optionalStrcc">optional para : process or window</param>
         /// <returns>true, when calculated</returns>
-        public bool CreateCostForCombination(MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_AD_Org_ID, string windowName, string optionalStrcc = "process")
+        public bool CreateCostForCombination(MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string windowName, string optionalStrcc = "process")
         {
             string sql;
-            int AD_Org_ID = 0;
+            int VAF_Org_ID = 0;
             // Get Org based on Costing Level
             dynamic pc = null;
             String cl = null;
@@ -3805,14 +3805,14 @@ namespace VAdvantage.Model
             }
             if (cl == MProductCategory.COSTINGLEVEL_Client || cl == MProductCategory.COSTINGLEVEL_BatchLot)
             {
-                AD_Org_ID = 0;
+                VAF_Org_ID = 0;
                 // during Inventory Move, not to calculate cost combination
                 if (windowName.Equals("Inventory Move"))
                     return true;
             }
             else
             {
-                AD_Org_ID = cd.GetAD_Org_ID();
+                VAF_Org_ID = cd.GetVAF_Org_ID();
             }
             if (cl != MProductCategory.COSTINGLEVEL_BatchLot && cl != MProductCategory.COSTINGLEVEL_OrgPlusBatch && cl != MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
             {
@@ -3824,7 +3824,7 @@ namespace VAdvantage.Model
             }
 
             // Freight Distribution
-            if (!FreightDistribution(windowName, cd, acctSchema, AD_Org_ID, product, M_ASI_ID, M_Warehouse_ID))
+            if (!FreightDistribution(windowName, cd, acctSchema, VAF_Org_ID, product, M_ASI_ID, M_Warehouse_ID))
             {
                 return false;
             }
@@ -3839,7 +3839,7 @@ namespace VAdvantage.Model
             sql = @"SELECT ce.M_CostElement_ID ,  ce.Name ,  cel.lineno ,  cel.m_ref_costelement , 
                       (SELECT CASE  WHEN costingmethod IS NOT NULL THEN 1  ELSE 0 END  FROM m_costelement WHERE m_costelement_id = CAST(cel.M_Ref_CostElement AS INTEGER) ) AS iscostMethod 
                             FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID = cel.M_CostElement_ID "
-                          + "WHERE ce.AD_Client_ID=" + GetAD_Client_ID()
+                          + "WHERE ce.VAF_Client_ID=" + GetVAF_Client_ID()
                           + " AND ce.IsActive='Y' AND ce.CostElementType='C' AND cel.IsActive='Y' ";
             if (optionalStrcc == "window" && costingMethod == "C")
             {
@@ -3884,13 +3884,13 @@ namespace VAdvantage.Model
                     //    }
                     //    else
                     //    {
-                    //        // UpdateFreightWithActualQty(ds, AD_Org_ID, cd, acctSchema, product, M_ASI_ID, windowName, M_Warehouse_ID);
+                    //        // UpdateFreightWithActualQty(ds, VAF_Org_ID, cd, acctSchema, product, M_ASI_ID, windowName, M_Warehouse_ID);
                     //    }
                     //}
 
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
+                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
 
                         //If cost combination is already calculated on completion, then not to re-calculate through process
                         if (windowName.Equals("LandedCostAllocation"))
@@ -3923,12 +3923,12 @@ namespace VAdvantage.Model
                             }
                             else if (windowName.Equals("LandedCostAllocation") && (cl == "C" || cl == "B"))
                             {
-                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), 0, product, M_ASI_ID,
+                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), 0, product, M_ASI_ID,
                                               acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                             else
                             {
-                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                                acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                         }
@@ -3943,8 +3943,8 @@ namespace VAdvantage.Model
                         // created object of Cost elemnt for checking iscalculated = true/ false
                         ce = MCostElement.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]));
 
-                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
-                        cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), M_Warehouse_ID);
+                        costCombination = MCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
+                        cost = MCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_ref_costelement"]), M_Warehouse_ID);
                         if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["iscostMethod"]) == 1)
                         {
                             AccQty = cost.GetCurrentQty();
@@ -3978,12 +3978,12 @@ namespace VAdvantage.Model
                             }
                             else if (windowName == "LandedCostAllocation" && (cl == "C" || cl == "B"))
                             {
-                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), 0, product, M_ASI_ID,
+                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), 0, product, M_ASI_ID,
                                               acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                             else
                             {
-                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetAD_Client_ID(), GetAD_Org_ID(), product, M_ASI_ID,
+                                MCostElementDetail.CreateCostElementDetail(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product, M_ASI_ID,
                                            acctSchema, costElementId, "Cost Comination", cd, (costCombination.GetCurrentCostPrice() * cd.GetQty()), cd.GetQty());
                             }
                         }
@@ -4004,15 +4004,15 @@ namespace VAdvantage.Model
         /// <param name="windowName">window Name</param>
         /// <param name="cd">cost detail object</param>
         /// <param name="acctSchema">accounting schema object</param>
-        /// <param name="AD_Org_ID">organization</param>
+        /// <param name="VAF_Org_ID">organization</param>
         /// <param name="product">product object</param>
         /// <param name="M_ASI_ID">Attribute set instance</param>
         /// <param name="M_Warehouse_ID">warehouse reference</param>
         /// <returns>true when success</returns>
-        public bool FreightDistribution(String windowName, MCostDetail cd, MAcctSchema acctSchema, int AD_Org_ID, MProduct product, int M_ASI_ID, int M_Warehouse_ID)
+        public bool FreightDistribution(String windowName, MCostDetail cd, MAcctSchema acctSchema, int VAF_Org_ID, MProduct product, int M_ASI_ID, int M_Warehouse_ID)
         {
             // is used to get current qty of defined costing method on Product category or Accounting schema
-            Decimal Qty = MCost.GetproductCostAndQtyMaterial(cd.GetAD_Client_ID(), AD_Org_ID, product.GetM_Product_ID(), M_ASI_ID, cd.Get_Trx(), M_Warehouse_ID, true);
+            Decimal Qty = MCost.GetproductCostAndQtyMaterial(cd.GetVAF_Client_ID(), VAF_Org_ID, product.GetM_Product_ID(), M_ASI_ID, cd.Get_Trx(), M_Warehouse_ID, true);
             if (Qty == 0 && cd.GetM_CostElement_ID() > 0)
             {
                 // check, is this kind of Custome or Freight (bypass)
@@ -4033,7 +4033,7 @@ namespace VAdvantage.Model
 
             // Get Element which belongs to Landed Cost
             String sql = "SELECT M_CostElement_ID , Name FROM M_CostElement WHERE CostElementType = '" + MCostElement.COSTELEMENTTYPE_Material +
-                        @"' AND CostingMethod IS NULL AND IsActive = 'Y' AND AD_Client_ID = " + cd.GetAD_Client_ID();
+                        @"' AND CostingMethod IS NULL AND IsActive = 'Y' AND VAF_Client_ID = " + cd.GetVAF_Client_ID();
             DataSet ds = DB.ExecuteDataset(sql, null, cd.Get_Trx());
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -4041,7 +4041,7 @@ namespace VAdvantage.Model
                 Decimal currentCost = 0.0M;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, Convert.ToInt32(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
+                    cost = MCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, Convert.ToInt32(ds.Tables[0].Rows[i]["M_CostElement_ID"]), M_Warehouse_ID);
                     if ((cd.GetQty() < 0 ||
                         windowName.Equals("Internal Use Inventory") ||
                         windowName.Equals("AssetDisposal") ||
@@ -4095,14 +4095,14 @@ namespace VAdvantage.Model
         /// but when we REVERSE record, qty will increase, then we check FREIGHT qty is affected -- if YES, then increase the current qty for landed cost.
         /// </summary>
         /// <param name="dsCostElementLine">dataset of cost element against cost combination for which we are calculate cost</param>
-        /// <param name="AD_Org_ID">Org for geeting Product cost entry</param>
+        /// <param name="VAF_Org_ID">Org for geeting Product cost entry</param>
         /// <param name="cd">cost detail of transaction</param>
         /// <param name="acctSchema">Accounting schema</param>
         /// <param name="product">Product, whose cost is to be calculated</param>
         /// <param name="M_ASI_ID">Attribute Set Instance, whose cost is to be calculated</param>
         /// <param name="windowName">consume/Increase by which window</param>
         /// <returns>true or false</returns>
-        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int AD_Org_ID, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, string windowName, int M_Warehouse_ID = 0)
+        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int VAF_Org_ID, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, string windowName, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
             for (int i = 0; i < dsCostElementLine.Tables[0].Rows.Count; i++)
@@ -4121,7 +4121,7 @@ namespace VAdvantage.Model
                 }
 
                 // object of Landed cost allocation - cost element
-                cost = MCost.Get(product, M_ASI_ID, acctSchema, AD_Org_ID, landedM_CostElement_ID, M_Warehouse_ID);
+                cost = MCost.Get(product, M_ASI_ID, acctSchema, VAF_Org_ID, landedM_CostElement_ID, M_Warehouse_ID);
                 if (cost.GetCumulatedQty() <= 0)
                 {
                     cost.Save();
@@ -4200,8 +4200,8 @@ namespace VAdvantage.Model
             }
 
             X_M_FreightImpact freightImpact = new X_M_FreightImpact(GetCtx(), 0, Get_Trx());
-            freightImpact.SetAD_Org_ID(cd.GetAD_Org_ID());
-            freightImpact.SetAD_Table_ID(tableId);
+            freightImpact.SetVAF_Org_ID(cd.GetVAF_Org_ID());
+            freightImpact.SetVAF_TableView_ID(tableId);
             freightImpact.SetRecord_ID(recordId);
             freightImpact.SetC_AcctSchema_ID(cd.GetC_AcctSchema_ID());
             freightImpact.SetM_CostElement_ID(landedM_CostElement_ID);
@@ -4236,25 +4236,25 @@ namespace VAdvantage.Model
             if (windowName == "Shipment")
             {
                 tableId = MTable.Get_Table_ID("M_InOut");
-                sql = @"SELECT Qty FROM M_FreightImpact WHERE AD_Table_ID = " + tableId +
+                sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                       @" AND Record_ID = (SELECT ReversalDoc_ID FROM M_InOutline WHERE M_InOutLine_ID =" + cd.GetM_InOutLine_ID() + " )";
             }
             else if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
             {
                 tableId = MTable.Get_Table_ID("M_Inventory");
-                sql = @"SELECT Qty FROM M_FreightImpact WHERE AD_Table_ID = " + tableId +
+                sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                      @" AND Record_ID = (SELECT ReversalDoc_ID FROM M_Inventoryline WHERE M_InventoryLine_ID =" + cd.GetM_InventoryLine_ID() + " )";
             }
             else if (windowName == "Production Execution") // not handled its reverse
             {
                 tableId = MTable.Get_Table_ID("VAMFG_M_WrkOdrTransaction");
-                sql = @"SELECT Qty FROM M_FreightImpact WHERE AD_Table_ID = " + tableId +
+                sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                       @" AND Record_ID = (SELECT ReversalDoc_ID FROM VAMFG_M_WrkOdrTrnsctionLine WHERE VAMFG_M_WrkOdrTrnsctionLine_ID =" + cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID() + " )";
             }
             else if (windowName == "Inventory Move")
             {
                 tableId = MTable.Get_Table_ID("M_Movement");
-                sql = @"SELECT Qty FROM M_FreightImpact WHERE AD_Table_ID = " + tableId +
+                sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                     @" AND Record_ID = (SELECT ReversalDoc_ID FROM M_Movementline WHERE M_MovementLine_ID =" + cd.GetM_MovementLine_ID() + " )";
             }
             if (!String.IsNullOrEmpty(sql))
@@ -4323,7 +4323,7 @@ namespace VAdvantage.Model
                 }
             }
             int freightImpactId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_FreightImpact_ID FROM M_FreightImpact WHERE Record_ID = " + recordId +
-                                                    @" AND AD_Table_ID = " + tableId + @" AND C_AcctSchema_ID = " + cd.GetC_AcctSchema_ID() +
+                                                    @" AND VAF_TableView_ID = " + tableId + @" AND C_AcctSchema_ID = " + cd.GetC_AcctSchema_ID() +
                                                     @" AND M_CostElement_ID = " + landedM_CostElement_ID, null, Get_Trx()));
 
             return freightImpactId;
@@ -4353,7 +4353,7 @@ namespace VAdvantage.Model
         /// Called from Doc_Inventory
         /// </summary>
         /// <param name="mas">accounting schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
         /// <param name="M_InventoryLine_ID">order</param>
@@ -4363,7 +4363,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateInventory(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        public static bool CreateInventory(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_InventoryLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4382,7 +4382,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(mas, AD_Org_ID,
+                cd = new MCostDetail(mas, VAF_Org_ID,
                     M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4395,10 +4395,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
-                    //CostSetByProcess(cd, mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
+                    //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
                     cd.SetM_InventoryLine_ID(M_InventoryLine_ID);
                     /*****************************************/
                     cd.SetC_AcctSchema_ID(mas.GetC_AcctSchema_ID());
@@ -4422,7 +4422,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetAD_Client_ID());
+                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4435,7 +4435,7 @@ namespace VAdvantage.Model
         /// Called from Doc_Invoice - for Invoice Adjustments
         /// </summary>
         /// <param name="mas">accounting schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
         /// <param name="C_InvoiceLine_ID">invoice</param>
@@ -4445,7 +4445,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if created</returns>
-        public static bool CreateInvoice(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        public static bool CreateInvoice(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int C_InvoiceLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4464,7 +4464,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(mas, AD_Org_ID,
+                cd = new MCostDetail(mas, VAF_Org_ID,
                     M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4477,10 +4477,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
-                    //CostSetByProcess(cd, mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,                              M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
+                    //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,                              M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
                     cd.SetC_InvoiceLine_ID(C_InvoiceLine_ID);
                     /*****************************************/
                     cd.SetC_AcctSchema_ID(mas.GetC_AcctSchema_ID());
@@ -4502,7 +4502,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetAD_Client_ID());
+                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4515,7 +4515,7 @@ namespace VAdvantage.Model
         /// Called from Doc_Movement
         /// </summary>
         /// <param name="mas">accounting schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
         /// <param name="M_MovementLine_ID">movement</param>
@@ -4526,7 +4526,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateMovement(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        public static bool CreateMovement(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_MovementLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, bool from, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4547,7 +4547,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(mas, AD_Org_ID,
+                cd = new MCostDetail(mas, VAF_Org_ID,
                     M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4561,10 +4561,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
-                    //CostSetByProcess(cd, mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,                        M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
+                    //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,                        M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
                     cd.SetM_MovementLine_ID(M_MovementLine_ID);
                     cd.SetIsSOTrx(from);
                     /*****************************************/
@@ -4587,7 +4587,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetAD_Client_ID());
+                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4600,7 +4600,7 @@ namespace VAdvantage.Model
         /// Called from Doc_MatchPO
         /// </summary>
         /// <param name="mas">accounting schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
         /// <param name="C_OrderLine_ID">order</param>
@@ -4610,7 +4610,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if created</returns>
-        public static bool CreateOrder(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        public static bool CreateOrder(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int C_OrderLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4630,7 +4630,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew cost deatil for selected product
             {
-                cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID, Amt, Qty, Description, trxName);
                 cd.SetC_OrderLine_ID(C_OrderLine_ID);
             }
@@ -4641,10 +4641,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
-                    //CostSetByProcess(cd, mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
+                    //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
                     cd.SetC_OrderLine_ID(C_OrderLine_ID);
                     /*****************************************/
                     cd.SetC_AcctSchema_ID(mas.GetC_AcctSchema_ID());
@@ -4666,7 +4666,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetAD_Client_ID());
+                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                 {
                     try
@@ -4685,7 +4685,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="cd"></param>
         /// <param name="mas"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="M_Product_ID"></param>
         /// <param name="M_AttributeSetInstance_ID"></param>
         /// <param name="M_CostElement_ID"></param>
@@ -4695,7 +4695,7 @@ namespace VAdvantage.Model
         /// <param name="trxName"></param>
         /// <param name="RectifyPostedRecords"></param>
         /// <param name="Id"></param>
-        //private static void CostSetByProcess(MCostDetail cd, MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        //private static void CostSetByProcess(MCostDetail cd, MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
         //    int M_AttributeSetInstance_ID, int M_CostElement_ID, Decimal Amt, Decimal Qty,
         //    String Description, Trx trx, bool RectifyPostedRecords)
         //{
@@ -4704,7 +4704,7 @@ namespace VAdvantage.Model
         //        cd.SetProcessed(false);
         //        if (cd.Delete(true, trxName))
         //        {
-        //            cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+        //            cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
         //                M_CostElement_ID, Amt, Qty, Description, trxName);
         //        }
         //    }
@@ -4715,7 +4715,7 @@ namespace VAdvantage.Model
         ///	Called from Doc_Production
         /// </summary>
         /// <param name="mas">accounting schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
         /// <param name="M_ProductionLine_ID">production line</param>
@@ -4725,7 +4725,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateProduction(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        public static bool CreateProduction(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_ProductionLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4744,7 +4744,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(mas, AD_Org_ID,
+                cd = new MCostDetail(mas, VAF_Org_ID,
                     M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4757,10 +4757,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
-                    //CostSetByProcess(cd, mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
+                    //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
 
                     cd.SetM_ProductionLine_ID(M_ProductionLine_ID);
                     /*****************************************/
@@ -4782,7 +4782,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetAD_Client_ID());
+                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4795,7 +4795,7 @@ namespace VAdvantage.Model
         ///	Called from Doc_MInOut - for SO Shipments
         /// </summary>
         /// <param name="mas">accounting schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
         /// <param name="M_InOutLine_ID">shipment</param>
@@ -4806,7 +4806,7 @@ namespace VAdvantage.Model
         /// <param name="IsSOTrx">is sales order</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateShipment(MAcctSchema mas, int AD_Org_ID, int M_Product_ID,
+        public static bool CreateShipment(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_InOutLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, bool IsSOTrx, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4825,7 +4825,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(mas, AD_Org_ID,
+                cd = new MCostDetail(mas, VAF_Org_ID,
                     M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID,
                     Amt, Qty, Description, trxName);
@@ -4839,10 +4839,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trxName))
                     {
-                        cd = new MCostDetail(mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
-                    //CostSetByProcess(cd, mas, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
+                    //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
                     cd.SetM_InOutLine_ID(M_InOutLine_ID);
                     cd.SetIsSOTrx(IsSOTrx);
                     /*****************************************/
@@ -4865,7 +4865,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetAD_Client_ID());
+                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4919,7 +4919,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM M_CostDetail "
                 + "WHERE M_Product_ID=" + product.GetM_Product_ID()
                 + " AND Processed='N' "
-                + "ORDER BY C_AcctSchema_ID, M_CostElement_ID, AD_Org_ID, M_AttributeSetInstance_ID, Created";
+                + "ORDER BY C_AcctSchema_ID, M_CostElement_ID, VAF_Org_ID, M_AttributeSetInstance_ID, Created";
             int counterOK = 0;
             int counterError = 0;
             try
@@ -5050,7 +5050,7 @@ namespace VAdvantage.Model
             }
 
             //	Org Element
-            int Org_ID = GetAD_Org_ID();
+            int Org_ID = GetVAF_Org_ID();
             int M_ASI_ID = GetM_AttributeSetInstance_ID();
             if (MAcctSchema.COSTINGLEVEL_Client.Equals(CostingLevel))
             {
@@ -5880,7 +5880,7 @@ namespace VAdvantage.Model
        * 	Create New Work Order Resource Transaction Cost detail
        * 	Called from Doc_WorkOrderTransaction - for Work Order Transactions  
        *	@param as1 accounting schema
-       *	@param AD_Org_ID org
+       *	@param VAF_Org_ID org
        *	@param M_Product_ID product
        *	@param M_AttributeSetInstance_ID asi
        *	@param M_InOutLine_ID shipment
@@ -5892,7 +5892,7 @@ namespace VAdvantage.Model
        *	@param trx transaction
        *	@return true if no error
        */
-        public static Boolean CreateWorkOrderResourceTransaction(MAcctSchema as1, int AD_Org_ID,
+        public static Boolean CreateWorkOrderResourceTransaction(MAcctSchema as1, int VAF_Org_ID,
             int M_Product_ID, int M_AttributeSetInstance_ID,
             int M_WorkOrderResourceTransactionLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
@@ -5913,7 +5913,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(as1, AD_Org_ID,
+                cd = new MCostDetail(as1, VAF_Org_ID,
                     M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trx);
                 cd.SetM_WorkOrderResourceTxnLine_ID(M_WorkOrderResourceTransactionLine_ID);
                 cd.SetIsSOTrx(IsSOTrx);
@@ -5925,10 +5925,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trx))
                     {
-                        cd = new MCostDetail(as1, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(as1, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trx);
                     }
-                    // CostSetByProcess(cd, as1, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
+                    // CostSetByProcess(cd, as1, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
 
                     cd.SetM_WorkOrderResourceTxnLine_ID(M_WorkOrderResourceTransactionLine_ID);
                     cd.SetIsSOTrx(IsSOTrx);
@@ -5953,7 +5953,7 @@ namespace VAdvantage.Model
             Boolean ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(as1.GetCtx(), as1.GetAD_Client_ID());
+                MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -5966,7 +5966,7 @@ namespace VAdvantage.Model
         /// Called from Doc_WorkOrderTransaction - for Work Order Transactions  
         /// </summary>
         /// <param name="as1"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="M_Product_ID"></param>
         /// <param name="M_AttributeSetInstance_ID"></param>
         /// <param name="M_WorkOrderTransactionLine_ID"></param>
@@ -5977,7 +5977,7 @@ namespace VAdvantage.Model
         /// <param name="IsSOTrx">sales order</param>
         /// <param name="trx">transaction</param>
         /// <returns>true if no error</returns>
-        public static Boolean CreateWorkOrderTransaction(MAcctSchema as1, int AD_Org_ID,
+        public static Boolean CreateWorkOrderTransaction(MAcctSchema as1, int VAF_Org_ID,
             int M_Product_ID, int M_AttributeSetInstance_ID,
             int M_WorkOrderTransactionLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
@@ -5999,7 +5999,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(as1, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                cd = new MCostDetail(as1, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID, Amt, Qty, Description, trx);
 
                 cd.SetM_WorkOrderTransactionLine_ID(M_WorkOrderTransactionLine_ID);
@@ -6012,10 +6012,10 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trx))
                     {
-                        cd = new MCostDetail(as1, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(as1, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trx);
                     }
-                    //CostSetByProcess(cd, as1, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
+                    //CostSetByProcess(cd, as1, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trx, RectifyPostedRecords);
 
                     cd.SetM_WorkOrderTransactionLine_ID(M_WorkOrderTransactionLine_ID);
                     cd.SetIsSOTrx(IsSOTrx);
@@ -6039,7 +6039,7 @@ namespace VAdvantage.Model
             Boolean ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(as1.GetCtx(), as1.GetAD_Client_ID());
+                MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -6052,7 +6052,7 @@ namespace VAdvantage.Model
         /// against the accounting schema and CostElement defind on the current record
         /// </summary>
         /// <param name="as1">account schema</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute instance set on product</param>
         /// <param name="costLineColName">Column name of M_CostDetail table to which value is to be set</param>
@@ -6067,7 +6067,7 @@ namespace VAdvantage.Model
         /// <returns>on success true else false</returns>
         /// <Created by>Raghu</Created>
         /// <date>25-09-2015</date>
-        public static Boolean CreateCostTransaction(MAcctSchema as1, int AD_Org_ID,
+        public static Boolean CreateCostTransaction(MAcctSchema as1, int VAF_Org_ID,
             int M_Product_ID, int M_AttributeSetInstance_ID, string costLineColName, int ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
         {
@@ -6087,7 +6087,7 @@ namespace VAdvantage.Model
             //
             if (cd == null)		//	createNew
             {
-                cd = new MCostDetail(as1, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trx);
+                cd = new MCostDetail(as1, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trx);
                 cd.Set_CustomColumn(costLineColName, ID);
                 cd.SetIsSOTrx(IsSOTrx);
             }
@@ -6098,7 +6098,7 @@ namespace VAdvantage.Model
                     cd.SetProcessed(false);
                     if (cd.Delete(true, trx))
                     {
-                        cd = new MCostDetail(as1, AD_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                        cd = new MCostDetail(as1, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             M_CostElement_ID, Amt, Qty, Description, trx);
                     }
                     cd.Set_CustomColumn(costLineColName, ID);
@@ -6120,7 +6120,7 @@ namespace VAdvantage.Model
             Boolean ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(as1.GetCtx(), as1.GetAD_Client_ID());
+                MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }

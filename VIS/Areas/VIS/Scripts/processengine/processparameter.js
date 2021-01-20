@@ -552,7 +552,7 @@
             para.Result2 = result2;
             para.LoadRecursiveData = mField.getLoadRecursiveData();
             para.ShowChildOfSelected = mField.getShowChildOfSelected();
-            para.AD_Column_ID = mField.getAD_Column_ID();
+            para.VAF_Column_ID = mField.getVAF_Column_ID();
             ////	Date
             //if ((result instanceof Timestamp) || (result2 instanceof Timestamp))
             //{

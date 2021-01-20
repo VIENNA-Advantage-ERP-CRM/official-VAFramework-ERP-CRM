@@ -70,7 +70,7 @@ static X_AD_User_Roles()
 //static long serialVersionUID 27562514365652L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048863L;
-/** AD_Table_ID=157 */
+/** VAF_TableView_ID=157 */
 public static int Table_ID;
  // =157;
 

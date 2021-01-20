@@ -82,7 +82,7 @@ static X_C_RfQLineQty()
 //static long serialVersionUID 27562514374773L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057984L;
-/** AD_Table_ID=675 */
+/** VAF_TableView_ID=675 */
 public static int Table_ID;
  // =675;
 

@@ -72,7 +72,7 @@ static X_WSP_GmailConfiguration()
 static long serialVersionUID = 27715892032840L;
 /** Last Updated Timestamp 6/8/2015 6:01:56 PM */
 public static long updatedMS = 1433766716051L;
-/** AD_Table_ID=1000388 */
+/** VAF_TableView_ID=1000388 */
 public static int Table_ID;
  // =1000388;
 

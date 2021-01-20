@@ -26,7 +26,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportBPartner : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /**	Delete old Imported				*/
         private bool _deleteOldImported = false;
 
@@ -42,8 +42,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < para.Length; i++)
             {
                 String name = para[i].GetParameterName();
-                if (name.Equals("AD_Client_ID"))
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                if (name.Equals("VAF_Client_ID"))
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
                     _deleteOldImported = "Y".Equals(para[i].GetParameter());
                 else
@@ -62,7 +62,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	****	Prepare	****
 
@@ -77,8 +77,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_BPartner "
-                + "SET AD_Client_ID = COALESCE (AD_Client_ID, ").Append(_AD_Client_ID).Append("),"
-                + " AD_Org_ID = COALESCE (AD_Org_ID, 0),"
+                + "SET VAF_Client_ID = COALESCE (VAF_Client_ID, ").Append(_VAF_Client_ID).Append("),"
+                + " VAF_Org_ID = COALESCE (VAF_Org_ID, 0),"
                 + " IsActive = COALESCE (IsActive, 'Y'),"
                 + " Created = COALESCE (Created, SysDate),"
                 + " CreatedBy = COALESCE (CreatedBy, 0),"
@@ -93,7 +93,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set BP_Group
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET GroupValue=(SELECT MAX(Value) FROM C_BP_Group g WHERE g.IsDefault='Y'"
-                + " AND g.AD_Client_ID=i.AD_Client_ID) ");
+                + " AND g.VAF_Client_ID=i.VAF_Client_ID) ");
             sql.Append("WHERE GroupValue IS NULL AND C_BP_Group_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -101,7 +101,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET C_BP_Group_ID=(SELECT C_BP_Group_ID FROM C_BP_Group g"
-                + " WHERE i.GroupValue=g.Value AND g.AD_Client_ID=i.AD_Client_ID) "
+                + " WHERE i.GroupValue=g.Value AND g.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE C_BP_Group_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -119,7 +119,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             /**
             sql = new StringBuilder ("UPDATE I_BPartner i "
                 + "SET CountryCode=(SELECT CountryCode FROM C_Country c WHERE c.IsDefault='Y'"
-                + " AND c.AD_Client_ID IN (0, i.AD_Client_ID) AND ROWNUM=1) "
+                + " AND c.VAF_Client_ID IN (0, i.VAF_Client_ID) AND ROWNUM=1) "
                 + "WHERE CountryCode IS NULL AND C_Country_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
@@ -128,7 +128,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET C_Country_ID=(SELECT C_Country_ID FROM C_Country c"
-                + " WHERE i.CountryCode=c.CountryCode AND c.IsSummary='N' AND c.AD_Client_ID IN (0, i.AD_Client_ID)) "
+                + " WHERE i.CountryCode=c.CountryCode AND c.IsSummary='N' AND c.VAF_Client_ID IN (0, i.VAF_Client_ID)) "
                 + "WHERE C_Country_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -145,7 +145,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "Set RegionName=(SELECT Name FROM C_Region r"
                 + " WHERE r.IsDefault='Y' AND r.C_Country_ID=i.C_Country_ID"
-                + " AND r.AD_Client_ID IN (0, i.AD_Client_ID)) ");
+                + " AND r.VAF_Client_ID IN (0, i.VAF_Client_ID)) ");
             /*
             if (DataBase.isOracle()) //jz
             {
@@ -154,7 +154,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             else 
                 sql.Append(" AND r.UPDATED IN (SELECT MAX(UPDATED) FROM C_Region r1"
                 + " WHERE r1.IsDefault='Y' AND r1.C_Country_ID=i.C_Country_ID"
-                + " AND r1.AD_Client_ID IN (0, i.AD_Client_ID) ");
+                + " AND r1.VAF_Client_ID IN (0, i.VAF_Client_ID) ");
                 */
             sql.Append("WHERE RegionName IS NULL AND C_Region_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -164,7 +164,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "Set C_Region_ID=(SELECT C_Region_ID FROM C_Region r"
                 + " WHERE r.Name=i.RegionName AND r.C_Country_ID=i.C_Country_ID"
-                + " AND r.AD_Client_ID IN (0, i.AD_Client_ID)) "
+                + " AND r.VAF_Client_ID IN (0, i.VAF_Client_ID)) "
                 + "WHERE C_Region_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -182,7 +182,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Greeting
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET C_Greeting_ID=(SELECT C_Greeting_ID FROM C_Greeting g"
-                + " WHERE i.BPContactGreeting=g.Name AND g.AD_Client_ID IN (0, i.AD_Client_ID)) "
+                + " WHERE i.BPContactGreeting=g.Name AND g.VAF_Client_ID IN (0, i.VAF_Client_ID)) "
                 + "WHERE C_Greeting_ID IS NULL AND BPContactGreeting IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -199,7 +199,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET (C_BPartner_ID,AD_User_ID)="
                     + "(SELECT C_BPartner_ID,AD_User_ID FROM AD_User u "
-                    + "WHERE i.EMail=u.EMail AND u.AD_Client_ID=i.AD_Client_ID) "
+                    + "WHERE i.EMail=u.EMail AND u.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE i.EMail IS NOT NULL AND I_IsImported='N'").Append(clientCheck);
 
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -208,7 +208,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Existing BPartner ? Match Value
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET C_BPartner_ID=(SELECT C_BPartner_ID FROM C_BPartner p"
-                + " WHERE i.Value=p.Value AND p.AD_Client_ID=i.AD_Client_ID) "
+                + " WHERE i.Value=p.Value AND p.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE C_BPartner_ID IS NULL AND Value IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -217,7 +217,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Existing Contact ? Match Name
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET AD_User_ID=(SELECT AD_User_ID FROM AD_User c"
-                + " WHERE i.ContactName=c.Name AND i.C_BPartner_ID=c.C_BPartner_ID AND c.AD_Client_ID=i.AD_Client_ID) "
+                + " WHERE i.ContactName=c.Name AND i.C_BPartner_ID=c.C_BPartner_ID AND c.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE C_BPartner_ID IS NOT NULL AND AD_User_ID IS NULL AND ContactName IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -227,7 +227,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET C_BPartner_Location_ID=(SELECT C_BPartner_Location_ID"
                 + " FROM C_BPartner_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
-                + " WHERE i.C_BPartner_ID=bpl.C_BPartner_ID AND bpl.AD_Client_ID=i.AD_Client_ID"
+                + " WHERE i.C_BPartner_ID=bpl.C_BPartner_ID AND bpl.VAF_Client_ID=i.VAF_Client_ID"
                 + " AND DUMP(i.Address1)=DUMP(l.Address1) AND DUMP(i.Address2)=DUMP(l.Address2)"
                 + " AND DUMP(i.City)=DUMP(l.City) AND DUMP(i.Postal)=DUMP(l.Postal) AND DUMP(i.Postal_Add)=DUMP(l.Postal_Add)"
                 + " AND DUMP(i.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(i.C_Country_ID)=DUMP(l.C_Country_ID)) "
@@ -239,7 +239,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Interest Area
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET R_InterestArea_ID=(SELECT R_InterestArea_ID FROM R_InterestArea ia "
-                    + "WHERE i.InterestAreaName=ia.Name AND ia.AD_Client_ID=i.AD_Client_ID) "
+                    + "WHERE i.InterestAreaName=ia.Name AND ia.VAF_Client_ID=i.VAF_Client_ID) "
                 + "WHERE R_InterestArea_ID IS NULL AND InterestAreaName IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());

@@ -80,7 +80,7 @@ static X_PA_ColorSchema()
 //static long serialVersionUID 27562514381653L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064864L;
-/** AD_Table_ID=831 */
+/** VAF_TableView_ID=831 */
 public static int Table_ID;
  // =831;
 

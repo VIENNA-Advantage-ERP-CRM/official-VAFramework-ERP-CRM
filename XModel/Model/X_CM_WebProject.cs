@@ -28,8 +28,8 @@ SetCM_WebProject_ID (0);
 SetMeta_Author (null);	// @AD_User_Name@
 SetMeta_Content (null);	// 'text/html;
  charset=UTF-8'
-SetMeta_Copyright (null);	// @AD_Client_Name@
-SetMeta_Publisher (null);	// @AD_Client_Name@
+SetMeta_Copyright (null);	// @VAF_Client_Name@
+SetMeta_Publisher (null);	// @VAF_Client_Name@
 SetMeta_RobotsTag (null);	// 'INDEX,FOLLOW'
 SetName (null);
 }
@@ -47,8 +47,8 @@ SetCM_WebProject_ID (0);
 SetMeta_Author (null);	// @AD_User_Name@
 SetMeta_Content (null);	// 'text/html;
  charset=UTF-8'
-SetMeta_Copyright (null);	// @AD_Client_Name@
-SetMeta_Publisher (null);	// @AD_Client_Name@
+SetMeta_Copyright (null);	// @VAF_Client_Name@
+SetMeta_Publisher (null);	// @VAF_Client_Name@
 SetMeta_RobotsTag (null);	// 'INDEX,FOLLOW'
 SetName (null);
 }
@@ -90,7 +90,7 @@ static X_CM_WebProject()
 //static long serialVersionUID 27562514369256L;
 /** Last Updated Timestamp 7/29/2010 1:07:32 PM */
 public static long updatedMS = 1280389052467L;
-/** AD_Table_ID=853 */
+/** VAF_TableView_ID=853 */
 public static int Table_ID;
  // =853;
 

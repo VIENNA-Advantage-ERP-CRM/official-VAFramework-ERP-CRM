@@ -146,7 +146,7 @@
 
         //function getTable() {
         //    try {
-        //        var strQuery = "select Name, AD_TABLE_ID,TableName from AD_TABLE order by name";
+        //        var strQuery = "select Name, VAF_TABLEVIEW_ID,TableName from VAF_TABLEVIEW order by name";
         //        var dr = VIS.DB.executeReader(strQuery, null, null);
         //        while (dr.read()) {
         //            cmbAllTable.append("<option value='" + dr.getString(1) + "'>" + dr.getString(0) + '</option>');
@@ -168,7 +168,7 @@
                     var res = data.result;
                     if (res) {
                         for (var i = 0; i < res.length; i++) {
-                            cmbAllTable.append("<option value='" + res[i].AD_Table_ID + "'>" + VIS.Utility.encodeText(res[i].Name) + '</option>');
+                            cmbAllTable.append("<option value='" + res[i].VAF_TableView_ID + "'>" + VIS.Utility.encodeText(res[i].Name) + '</option>');
                         }
                     }
                 },

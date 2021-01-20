@@ -20,7 +20,7 @@ namespace VAdvantage.Process
     public class ValidateTableColumns : SvrProcess
     {
         #region Private Variables
-        private string p_AD_Table_ID = "";
+        private string p_VAF_TableView_ID = "";
         List<string> standardColumns = new List<string>();
         private StringBuilder sbHTML = new StringBuilder("");
         bool fromMenu = false;
@@ -39,9 +39,9 @@ namespace VAdvantage.Process
                 {
 
                 }
-                else if (name == "AD_Table_ID")
+                else if (name == "VAF_TableView_ID")
                 {
-                    p_AD_Table_ID = para[i].GetParameter().ToString();
+                    p_VAF_TableView_ID = para[i].GetParameter().ToString();
                 }
                 else
                 {
@@ -50,13 +50,13 @@ namespace VAdvantage.Process
                 fromMenu = true;
             }
 
-            if (p_AD_Table_ID.Trim().ToString() == "")
+            if (p_VAF_TableView_ID.Trim().ToString() == "")
             {
-                p_AD_Table_ID = GetRecord_ID().ToString();
+                p_VAF_TableView_ID = GetRecord_ID().ToString();
             }
 
-            standardColumns.Add("AD_CLIENT_ID");
-            standardColumns.Add("AD_ORG_ID");
+            standardColumns.Add("VAF_CLIENT_ID");
+            standardColumns.Add("VAF_ORG_ID");
             standardColumns.Add("CREATED");
             standardColumns.Add("CREATEDBY");
             standardColumns.Add("EXPORT_ID");
@@ -73,22 +73,22 @@ namespace VAdvantage.Process
         {
             // if table not found, in case if run from menu 
             // or from table, then return with message
-            if (p_AD_Table_ID.Trim() == "")
+            if (p_VAF_TableView_ID.Trim() == "")
             {
                 return Msg.GetMsg(GetCtx(), "VIS_TableNotSelected");
             }
 
             DataSet dsDT = DB.ExecuteDataset("SELECT AD_Reference_ID, Name FROM AD_Reference WHERE IsActive = 'Y' AND ValidationType = 'D'");
 
-            string[] tableIDs = p_AD_Table_ID.Split(',');
+            string[] tableIDs = p_VAF_TableView_ID.Split(',');
 
             // loop through tables selected in parameter or 
             // if run from window then single table ID
             for (int i = 0; i < tableIDs.Length; i++)
             {
-                int AD_Table_ID = Util.GetValueOfInt(tableIDs[i]);
+                int VAF_TableView_ID = Util.GetValueOfInt(tableIDs[i]);
 
-                MTable table = MTable.Get(GetCtx(), AD_Table_ID);
+                MTable table = MTable.Get(GetCtx(), VAF_TableView_ID);
 
                 // Check on table whether it has single or multiple keys
                 bool hasSingleKey = true;
@@ -100,7 +100,7 @@ namespace VAdvantage.Process
 
                 // create HTML for tables
                 sbHTML.Append("<div class='vis-val-tc-parCtr'> "
-                                + "<div class='vis-val-tc-hdr'><label>" + Msg.Translate(GetCtx(), "AD_Table_ID") + ": </label>" + table.GetTableName() + "</div>"
+                                + "<div class='vis-val-tc-hdr'><label>" + Msg.Translate(GetCtx(), "VAF_TableView_ID") + ": </label>" + table.GetTableName() + "</div>"
                                 + "<div class='vis-val-tc-colCtr'>"
                                     + "<div class='vis-val-tc-colHdrs'>" + Msg.GetMsg(GetCtx(), "VIS_ADCols") + "</div>"
                                     + "<div class='vis-val-tc-colHdrs'>" + Msg.GetMsg(GetCtx(), "VIS_DBCols") + "</div>"

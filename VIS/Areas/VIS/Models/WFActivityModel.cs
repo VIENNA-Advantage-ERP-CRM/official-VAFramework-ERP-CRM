@@ -27,7 +27,7 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ctx">Context</param>
         /// <param name="AD_User_ID">Login User ID</param>
-        /// <param name="AD_Client_ID"> Login Client ID </param>
+        /// <param name="VAF_Client_ID"> Login Client ID </param>
         /// <param name="pageNo"> Current Page Number </param>
         /// <param name="pageSize"> Sepcify number of records per page</param>
         /// <param name="refresh"> Refresh Data? </param>
@@ -37,7 +37,7 @@ namespace VIS.Models
         /// <param name="dateTo"> Activities Date To </param>
         /// <param name="AD_Node_ID">Window ID based on which serach Activities</param>
         /// <returns></returns>
-        public WFInfo GetActivities(Ctx ctx, int AD_User_ID, int AD_Client_ID, int pageNo, int pageSize, bool refresh, string searchText, int AD_Window_ID, DateTime? dateFrom, DateTime? dateTo, int AD_Node_ID)
+        public WFInfo GetActivities(Ctx ctx, int AD_User_ID, int VAF_Client_ID, int pageNo, int pageSize, bool refresh, string searchText, int AD_Window_ID, DateTime? dateFrom, DateTime? dateTo, int AD_Node_ID)
         {
             string sql = "";
             List<MTable> mtable = new List<MTable>();
@@ -46,11 +46,11 @@ namespace VIS.Models
             // If window is selected or search text is available..
             if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
             {
-                sql = @"SELECT DISTINCT tabl.AD_table_ID,Tab.AD_Tab_ID FROM Ad_Window Wind Join Ad_Tab Tab 
-                    ON Wind.Ad_Window_Id=Tab.Ad_Window_Id JOIN  Ad_Table Tabl On Tab.Ad_Table_Id=Tabl.Ad_Table_Id 
+                sql = @"SELECT DISTINCT tabl.vaf_tableview_ID,Tab.VAF_Tab_ID FROM Ad_Window Wind Join vaf_tab Tab 
+                    ON Wind.Ad_Window_Id=Tab.Ad_Window_Id JOIN  vaf_tableview Tabl On Tab.vaf_tableview_Id=Tabl.vaf_tableview_Id 
                     WHERE Tab.IsActive    ='Y'";
 
-                sql += " AND wind.AD_Window_ID=" + AD_Window_ID + " and tab.AD_table_ID IN (Select Distinct AD_Table_ID FROM AD_WF_Activity where AD_Window_ID=" + AD_Window_ID + ") ORDER BY Tab.AD_Tab_ID Asc";
+                sql += " AND wind.AD_Window_ID=" + AD_Window_ID + " and tab.vaf_tableview_ID IN (Select Distinct VAF_TableView_ID FROM AD_WF_Activity where AD_Window_ID=" + AD_Window_ID + ") ORDER BY Tab.VAF_Tab_ID Asc";
 
                 //if window is selected then search for tables associated with window.
                 DataSet ds = DB.ExecuteDataset(sql);
@@ -61,7 +61,7 @@ namespace VIS.Models
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         count++;
-                        MTable table = new MTable(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Table_ID"]), null);
+                        MTable table = new MTable(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
 
                         GetFromClause(ctx, table.GetTableName(), "", "", "");
                         GetWhereClause(ctx, table, searchText, AD_Window_ID, AD_Node_ID);
@@ -98,9 +98,9 @@ FROM VADMS_Document
 WHERE VADMS_Document_ID = 
 (SELECT VADMS_Document_ID FROM VADMS_MetaData WHERE VADMS_MetaData_ID = a.Record_ID AND 
 (
-(SELECT VADMS_WindowDocLink_ID FROM VADMS_WindowDocLink WHERE AD_Table_ID = a.AD_Table_ID AND Record_ID = a.Record_ID) > 0 
+(SELECT VADMS_WindowDocLink_ID FROM VADMS_WindowDocLink WHERE VAF_TableView_ID = a.VAF_TableView_ID AND Record_ID = a.Record_ID) > 0 
 OR
-(SELECT TableName FROM AD_Table WHERE AD_Table_ID = a.AD_Table_ID) = 'VADMS_MetaData'
+(SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = a.VAF_TableView_ID) = 'VADMS_MetaData'
 ))
 ) AS DocumentNameValue
 ";
@@ -112,7 +112,7 @@ OR
                             FROM AD_WF_Activity a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
-                            AND a.AD_Client_ID =" + AD_Client_ID + @" 
+                            AND a.VAF_Client_ID =" + VAF_Client_ID + @" 
                             AND ( (a.AD_User_ID=" + AD_User_ID + @" 
                             OR a.AD_User_ID   IN
                               (SELECT AD_User_ID
@@ -200,7 +200,7 @@ OR
             try
             {
                 //SqlParameter[] param = new SqlParameter[2];
-                //param[0] = new SqlParameter("@clientid", AD_Client_ID);
+                //param[0] = new SqlParameter("@clientid", VAF_Client_ID);
                 //param[1] = new SqlParameter("@userid", AD_User_ID);
                 VLogger.Get().Log(Level.SEVERE, sql);
                 DataSet ds = VIS.DBase.DB.ExecuteDatasetPaging(sql, pageNo, pageSize);
@@ -214,7 +214,7 @@ OR
                 {
                     itm = new WFActivityInfo();
 
-                    itm.AD_Table_ID = Util.GetValueOfInt(dr["AD_Table_ID"]);
+                    itm.VAF_TableView_ID = Util.GetValueOfInt(dr["VAF_TableView_ID"]);
                     itm.AD_User_ID = Util.GetValueOfInt(dr["AD_User_ID"]);
                     itm.AD_WF_Activity_ID = Util.GetValueOfInt(dr["AD_WF_Activity_ID"]);
 
@@ -265,7 +265,7 @@ OR
                             FROM AD_WF_Activity a
                             WHERE a.Processed  ='N'
                             AND a.WFState      ='OS'
-                            AND a.AD_Client_ID =" + ctx.GetAD_Client_ID() + @"
+                            AND a.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @"
                             AND ( (a.AD_User_ID=" + ctx.GetAD_User_ID() + @"
                             OR a.AD_User_ID   IN
                               (SELECT AD_User_ID
@@ -595,7 +595,7 @@ OR
                 if (MWFNode.ACTION_UserChoice.Equals(node.GetAction()))
                 {
                     MColumn col = node.GetColumn();
-                    info.ColID = col.GetAD_Column_ID();
+                    info.ColID = col.GetVAF_Column_ID();
                     info.ColReference = col.GetAD_Reference_ID();
                     info.ColReferenceValue = col.GetAD_Reference_Value_ID();
                     info.ColName = col.GetColumnName();
@@ -608,7 +608,7 @@ OR
                 }
                 else if (MWFNode.ACTION_UserForm.Equals(node.GetAction()))
                 {
-                    info.AD_Form_ID = node.GetAD_Form_ID();
+                    info.VAF_Page_ID = node.GetVAF_Page_ID();
                 }
 
 
@@ -786,7 +786,7 @@ OR
                                 int parentOrg_ID = -1;
                                 if (resp.IsOrganization())
                                 {
-                                    parentOrg_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Parent_Org_Id FROM ad_OrgInfo WHERE AD_Org_ID = " + activity.GetResponsibleOrg_ID()));
+                                    parentOrg_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Parent_Org_Id FROM vaf_orgInfo WHERE VAF_Org_ID = " + activity.GetResponsibleOrg_ID()));
                                     superVisiorID = (new MOrgInfo(ctx, parentOrg_ID, null).GetSupervisor_ID());
                                     if (superVisiorID > 0)
                                         setRespOrg = true;
@@ -918,7 +918,7 @@ OR
             {
                 AttributeInfo aInfo = new AttributeInfo();
                 DataSet ds = DB.ExecuteDataset(@"SELECT 
-                                                            WFP.AD_Table_ID,
+                                                            WFP.VAF_TableView_ID,
                                                             WFP.Record_ID
                                                             FROM AD_WF_Process WFP
                                                             INNER JOIN AD_WF_Activity WFA
@@ -950,7 +950,7 @@ OR
         private PO GetPO(string tableName, int recordID, Ctx ctx)
         {
             //throw new NotImplementedException();
-            MTable table = MTable.Get(ctx, Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName='" + tableName + "'")));
+            MTable table = MTable.Get(ctx, Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='" + tableName + "'")));
             return table.GetPO(ctx, recordID, null);
         }
 
@@ -970,7 +970,7 @@ OR
                             JOIN AD_Window AD_Window ON AD_WF_Activity.Ad_Window_Id = AD_Window.Ad_Window_Id
                             JOIN AD_WF_NODE AD_WF_NODE ON AD_WF_NODE.AD_WF_NODE_ID=Ad_Wf_Activity.AD_WF_NODE_ID
                             WHERE AD_Window.IsActive ='Y'  AND Ad_Wf_Activity.Processed = 'N'  AND Ad_Wf_Activity.WFState      ='OS' ";
-                sql += " AND Ad_Wf_Activity.AD_Client_ID =" + ctx.GetAD_Client_ID() + @" 
+                sql += " AND Ad_Wf_Activity.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
                             AND  ((Ad_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
                             OR Ad_Wf_Activity.AD_User_ID   IN
                               (SELECT AD_User_ID
@@ -1041,7 +1041,7 @@ OR
                         WHERE AD_Window.IsActive     ='Y'
                         AND Ad_Wf_Activity.Processed = 'N'
                         AND Ad_Wf_Activity.WFState   ='OS' AND AD_Language='" + Env.GetAD_Language(ctx) + "'";
-                sql += " AND Ad_Wf_Activity.AD_Client_ID =" + ctx.GetAD_Client_ID() + @" 
+                sql += " AND Ad_Wf_Activity.VAF_Client_ID =" + ctx.GetVAF_Client_ID() + @" 
                             AND  ((Ad_Wf_Activity.AD_User_ID=" + ctx.GetAD_User_ID() + @" 
                             OR Ad_Wf_Activity.AD_User_ID   IN
                               (SELECT AD_User_ID
@@ -1144,7 +1144,7 @@ OR
     public class WFActivityInfo
     {
 
-        public int AD_Table_ID
+        public int VAF_TableView_ID
         {
             get;
             set;
@@ -1302,7 +1302,7 @@ OR
             get;
             set;
         }
-        public int AD_Form_ID
+        public int VAF_Page_ID
         {
             get;
             set;

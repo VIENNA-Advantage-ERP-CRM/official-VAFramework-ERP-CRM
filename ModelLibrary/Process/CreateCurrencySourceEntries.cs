@@ -19,7 +19,7 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             //throw new NotImplementedException();
-            string sql=@"DELETE C_CURRENCYSOURCE WHERE AD_CLIENT_ID="+GetCtx().GetAD_Client_ID();
+            string sql=@"DELETE C_CURRENCYSOURCE WHERE VAF_CLIENT_ID="+GetCtx().GetVAF_Client_ID();
             if (DB.ExecuteQuery(sql) == -1)
             {
                 return "ErrorInDeleteEntries";
@@ -47,8 +47,8 @@ namespace VAdvantage.Process
                 for (int i = 0; i < urlInfo.IDs.Count; i++)
                 {
                     MCurrencySource src = new MCurrencySource(GetCtx(), 0, null);
-                    src.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                    src.SetAD_Org_ID(0);
+                    src.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                    src.SetVAF_Org_ID(0);
                     src.SetName(urlInfo.Names[i]);
                     src.SetDescription(urlInfo.Descriptions[i]);
                     src.SetIsActive(true);

@@ -54,7 +54,7 @@ namespace ViennaAdvantageServer.Process
                 contact = new VAdvantage.Model.X_C_Contract(GetCtx(), 0, Get_TrxName());
                 //Neha---Commented code because object created but not used in further class---17 Sep,2018
 
-                //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetAD_Client_ID(), GetCtx().GetAD_Org_ID(),
+                //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
                 //    line.GetM_Product_ID(), order.GetC_BPartner_ID(), line.GetQtyOrdered(), true);
                 int M_PriceList_ID = Util.GetValueOfInt(order.GetM_PriceList_ID());
                 //pp.SetM_PriceList_ID(M_PriceList_ID);
@@ -86,8 +86,8 @@ namespace ViennaAdvantageServer.Process
                 //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
 
                 //Neha---Set Tenant,Organization from Sales Order---19 Sep,2018
-                contact.SetAD_Client_ID(order.GetAD_Client_ID());
-                contact.SetAD_Org_ID(order.GetAD_Org_ID());
+                contact.SetVAF_Client_ID(order.GetVAF_Client_ID());
+                contact.SetVAF_Org_ID(order.GetVAF_Org_ID());
                 //---------------------End ------------------
                 contact.SetDescription(order.GetDescription());
                 contact.SetC_Order_ID(order.GetC_Order_ID());

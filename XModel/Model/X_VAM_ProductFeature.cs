@@ -76,7 +76,7 @@ static X_VAM_ProductFeature()
 //static long serialVersionUID 27562514378237L;
 /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
 public static long updatedMS = 1280389061448L;
-/** AD_Table_ID=562 */
+/** VAF_TableView_ID=562 */
 public static int Table_ID;
  // =562;
 

@@ -34,15 +34,15 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">AD_Table_ID</param>
+        /// <param name="VAF_TableView_ID">VAF_TableView_ID</param>
         /// <param name="Record_ID">Record_ID</param>
         /// <param name="trxName">transaction</param>
-        public MMailAttachment1(Ctx ctx, int AD_Table_ID, int Record_ID, Trx trxName)
+        public MMailAttachment1(Ctx ctx, int VAF_TableView_ID, int Record_ID, Trx trxName)
             : base(ctx, 0, trxName)
         {
             //this(ctx, 0, trxName);
             // set table id
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             // set record id
             SetRecord_ID(Record_ID);
         }
@@ -51,10 +51,10 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Attachment_ID">AD_Attachment_ID</param>
+        /// <param name="VAF_Attachment_ID">VAF_Attachment_ID</param>
         /// <param name="trxName">transaction</param>
-        public MMailAttachment1(Ctx ctx, int AD_Attachment_ID, Trx trxName)
-            : base(ctx, AD_Attachment_ID, trxName)
+        public MMailAttachment1(Ctx ctx, int VAF_Attachment_ID, Trx trxName)
+            : base(ctx, VAF_Attachment_ID, trxName)
         {
             //GetLines();
         }
@@ -74,13 +74,13 @@ namespace VAdvantage.Model
         /// Get Attachment
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <returns>attachment or null</returns>
-        public static MMailAttachment1 Get(Ctx ctx, int AD_Table_ID, int Record_ID)
+        public static MMailAttachment1 Get(Ctx ctx, int VAF_TableView_ID, int Record_ID)
         {
             MMailAttachment1 retValue = null;
-            String sql = "SELECT * FROM mailattachment1 WHERE AD_Table_ID=" + AD_Table_ID + " AND Record_ID=" + Record_ID + "";
+            String sql = "SELECT * FROM mailattachment1 WHERE VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID + "";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -574,7 +574,7 @@ namespace VAdvantage.Model
 
         //public void GetLines()
         //{
-        //    string sql = @"SELECT * FROM AD_AttachmentLine WHERE AD_Attachment_ID=" + GetMailAttachment1_ID();
+        //    string sql = @"SELECT * FROM VAF_AttachmentLine WHERE VAF_Attachment_ID=" + GetMailAttachment1_ID();
         //    DataSet ds = DB.ExecuteDataset(sql);
         //    if (ds == null || ds.Tables[0].Rows.Count == 0)
         //    {
@@ -585,7 +585,7 @@ namespace VAdvantage.Model
         //    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
         //    {
         //        item = new AttachmentLineInfo();
-        //        item.Line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_AttachmentLine_ID"]);
+        //        item.Line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_AttachmentLine_ID"]);
         //        item.FileName = Util.GetValueOfString(ds.Tables[0].Rows[i]["FileName"]);
         //        item.Filetype = Util.GetValueOfString(ds.Tables[0].Rows[i]["FileType"]);
         //        item.Size = Util.GetValueOfDecimal(Util.GetValueOfString(ds.Tables[0].Rows[i]["FileSize"]));

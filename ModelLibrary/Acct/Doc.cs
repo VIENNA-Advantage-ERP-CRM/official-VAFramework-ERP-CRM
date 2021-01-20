@@ -220,17 +220,17 @@ namespace VAdvantage.Acct
         /// Create Posting document
         /// </summary>
         /// <param name="ass">accounting schema</param>
-        /// <param name="AD_Table_ID">Table ID of Documents</param>
+        /// <param name="VAF_TableView_ID">Table ID of Documents</param>
         /// <param name="Record_ID">record ID to load</param>
         /// <param name="trxName">transaction name</param>
         /// <returns>Document or null</returns>
-        public static Doc Get(MAcctSchema[] ass, int AD_Table_ID, int Record_ID, Trx trxName)
+        public static Doc Get(MAcctSchema[] ass, int VAF_TableView_ID, int Record_ID, Trx trxName)
         {
             Ctx ctx = ass[0].GetCtx();
-            MDocBaseType dbt = MDocBaseType.GetForTable(ctx, AD_Table_ID);
+            MDocBaseType dbt = MDocBaseType.GetForTable(ctx, VAF_TableView_ID);
             if (dbt == null)
             {
-                _log.Log(Level.SEVERE, "No DocType for AD_Table_ID=" + AD_Table_ID);
+                _log.Log(Level.SEVERE, "No DocType for VAF_TableView_ID=" + VAF_TableView_ID);
                 return null;
             }
             String TableName = dbt.GetTableName();
@@ -254,7 +254,7 @@ namespace VAdvantage.Acct
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    doc = Get(ass, AD_Table_ID, dr, trxName);
+                    doc = Get(ass, VAF_TableView_ID, dr, trxName);
                 }
                 if (dt.Rows.Count <= 0)
                 {
@@ -282,17 +282,17 @@ namespace VAdvantage.Acct
         /// Create Posting document
         /// </summary>
         /// <param name="ass">accounting schema</param>
-        /// <param name="AD_Table_ID">Table ID of Documents</param>
+        /// <param name="VAF_TableView_ID">Table ID of Documents</param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         /// <returns>Document</returns>
-        public static Doc Get(MAcctSchema[] ass, int AD_Table_ID, DataRow idr, Trx trxName)
+        public static Doc Get(MAcctSchema[] ass, int VAF_TableView_ID, DataRow idr, Trx trxName)
         {
             Ctx ctx = ass[0].GetCtx();
-            MDocBaseType dbt = MDocBaseType.GetForTable(ctx, AD_Table_ID);
+            MDocBaseType dbt = MDocBaseType.GetForTable(ctx, VAF_TableView_ID);
             if (dbt == null)
             {
-                _log.Log(Level.SEVERE, "No DocType for AD_Table_ID=" + AD_Table_ID);
+                _log.Log(Level.SEVERE, "No DocType for VAF_TableView_ID=" + VAF_TableView_ID);
                 return null;
             }
             try
@@ -311,14 +311,14 @@ namespace VAdvantage.Acct
         /// Post Document
         /// </summary>
         /// <param name="ass">accounting schemata</param>
-        /// <param name="AD_Table_ID">Transaction table</param>
+        /// <param name="VAF_TableView_ID">Transaction table</param>
         /// <param name="Record_ID">Record ID of this document</param>
         /// <param name="force">force posting</param>
         /// <param name="trxName">transaction</param>
         /// <returns>null if the document was posted or error message</returns>
-        public static String PostImmediate(MAcctSchema[] ass, int AD_Table_ID, int Record_ID, bool force, Trx trxName)
+        public static String PostImmediate(MAcctSchema[] ass, int VAF_TableView_ID, int Record_ID, bool force, Trx trxName)
         {
-            Doc doc = Get(ass, AD_Table_ID, Record_ID, trxName);
+            Doc doc = Get(ass, VAF_TableView_ID, Record_ID, trxName);
             if (doc != null)
             {
                 return doc.Post(force, true);	//	repost
@@ -342,7 +342,7 @@ namespace VAdvantage.Acct
             _status = STATUS_Error;
             _ass = ass;
             _ctx = new Ctx(_ass[0].GetCtx().GetMap());
-            _ctx.SetContext("#AD_Client_ID", Utility.Util.GetValueOfString(_ass[0].GetAD_Client_ID()));
+            _ctx.SetContext("#VAF_Client_ID", Utility.Util.GetValueOfString(_ass[0].GetVAF_Client_ID()));
             String className = clazz.GetType().Name;//.getName();
             className = className.Substring(className.LastIndexOf('.') + 1);
             try
@@ -392,7 +392,7 @@ namespace VAdvantage.Acct
             _status = STATUS_Error;
             _ass = ass;
             _ctx = new Ctx(_ass[0].GetCtx().GetMap());
-            _ctx.SetContext("#AD_Client_ID", Utility.Util.GetValueOfString(_ass[0].GetAD_Client_ID()));
+            _ctx.SetContext("#VAF_Client_ID", Utility.Util.GetValueOfString(_ass[0].GetVAF_Client_ID()));
             String className = clazz.GetType().Name;//.getName();
             className = className.Substring(className.LastIndexOf('.') + 1);
             try
@@ -510,10 +510,10 @@ namespace VAdvantage.Acct
                 return "Invalid DocStatus='" + _DocStatus + "' for DocumentNo=" + GetDocumentNo();
             }
             //
-            if (_po.GetAD_Client_ID() != _ass[0].GetAD_Client_ID())
+            if (_po.GetVAF_Client_ID() != _ass[0].GetVAF_Client_ID())
             {
-                String error = "AD_Client_ID Conflict - Document=" + _po.GetAD_Client_ID()
-                    + ", AcctSchema=" + _ass[0].GetAD_Client_ID();
+                String error = "VAF_Client_ID Conflict - Document=" + _po.GetVAF_Client_ID()
+                    + ", AcctSchema=" + _ass[0].GetVAF_Client_ID();
                 log.Severe(error);
                 return error;
             }
@@ -593,19 +593,19 @@ namespace VAdvantage.Acct
                     }
                     //	if acct schema has "only" org, skip
                     bool skip = false;
-                    if (_ass[i].GetAD_OrgOnly_ID() != 0)
+                    if (_ass[i].GetVAF_OrgOnly_ID() != 0)
                     {
                         if (_ass[i].GetOnlyOrgs() == null)
-                            _ass[i].SetOnlyOrgs(MReportTree.GetChildIDs(GetCtx(), 0, MAcctSchemaElement.ELEMENTTYPE_Organization, _ass[i].GetAD_OrgOnly_ID()));
+                            _ass[i].SetOnlyOrgs(MReportTree.GetChildIDs(GetCtx(), 0, MAcctSchemaElement.ELEMENTTYPE_Organization, _ass[i].GetVAF_OrgOnly_ID()));
 
                         //	Header Level Org
-                        skip = _ass[i].IsSkipOrg(GetAD_Org_ID());
+                        skip = _ass[i].IsSkipOrg(GetVAF_Org_ID());
                         //	Line Level Org
                         if (_lines != null)
                         {
                             for (int line = 0; skip && line < _lines.Length; line++)
                             {
-                                skip = _ass[i].IsSkipOrg(_lines[line].GetAD_Org_ID());
+                                skip = _ass[i].IsSkipOrg(_lines[line].GetVAF_Org_ID());
                                 if (!skip)
                                 {
                                     break;
@@ -644,7 +644,7 @@ namespace VAdvantage.Acct
                 String AD_MessageValue = "PostingError-" + _status;
                 int AD_User_ID = _po.GetUpdatedBy();
                 MNote note = new MNote(GetCtx(), AD_MessageValue, AD_User_ID,
-                    GetAD_Client_ID(), GetAD_Org_ID(), null);
+                    GetVAF_Client_ID(), GetVAF_Org_ID(), null);
                 note.SetRecord(_po.Get_Table_ID(), _po.Get_ID());
                 //  Reference
                 note.SetReference(ToString());	//	Document
@@ -691,7 +691,7 @@ namespace VAdvantage.Acct
         /// <returns>number of records</returns>
         private int DeleteAcct(int accountingSchema_ID)
         {
-            StringBuilder sql = new StringBuilder("DELETE FROM Fact_Acct WHERE AD_Table_ID=")
+            StringBuilder sql = new StringBuilder("DELETE FROM Fact_Acct WHERE VAF_TableView_ID=")
                 .Append(Get_Table_ID())
                 .Append(" AND Record_ID=").Append(_po.Get_ID());
             if (accountingSchema_ID > 0)
@@ -771,8 +771,8 @@ namespace VAdvantage.Acct
                 }
 
                 //  balanceSegments
-                int columnExist = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM ad_column WHERE ad_table_id =  
-                                  (SELECT ad_table_id   FROM ad_table   WHERE UPPER(TableName) LIKE UPPER('C_AcctSchema'))
+                int columnExist = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM vaf_column WHERE vaf_tableview_id =  
+                                  (SELECT vaf_tableview_id   FROM vaf_tableview   WHERE UPPER(TableName) LIKE UPPER('C_AcctSchema'))
                                   AND UPPER(ColumnName) LIKE UPPER('FRPT_IsNotPostInterCompany') "));
                 string isPostInterCompany = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT FRPT_IsNotPostInterCompany FROM C_AcctSchema 
                                             WHERE IsActive = 'Y' AND C_AcctSchema_ID =  " + fact.GetAcctSchema().GetC_AcctSchema_ID()));
@@ -976,13 +976,13 @@ namespace VAdvantage.Acct
             if (_GL_Category_ID == 0)
             {
                 String sql = "SELECT GL_Category_ID FROM C_DocType "
-                    + "WHERE AD_Client_ID=@param1 AND DocBaseType=@param2";
+                    + "WHERE VAF_Client_ID=@param1 AND DocBaseType=@param2";
 
                 IDataReader idr = null;
                 try
                 {
                     SqlParameter[] param = new SqlParameter[2];
-                    param[0] = new SqlParameter("@param1", GetAD_Client_ID());
+                    param[0] = new SqlParameter("@param1", GetVAF_Client_ID());
                     param[1] = new SqlParameter("@param2", _DocumentType);
                     idr = DataBase.DB.ExecuteReader(sql, param, null);
                     if (idr.Read())
@@ -1003,7 +1003,7 @@ namespace VAdvantage.Acct
             if (_GL_Category_ID == 0)
             {
                 String sql = "SELECT GL_Category_ID FROM GL_Category "
-                    + "WHERE AD_Client_ID=" + GetAD_Client_ID()
+                    + "WHERE VAF_Client_ID=" + GetVAF_Client_ID()
                     + "ORDER BY IsDefault DESC";
                 IDataReader idr = null;
                 try
@@ -1101,7 +1101,7 @@ namespace VAdvantage.Acct
                 if (C_Currency_ID != acctSchema.GetC_Currency_ID())
                 {
                     Decimal amt = MConversionRate.GetRate(C_Currency_ID, acctSchema.GetC_Currency_ID(),
-                        GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+                        GetDateAcct(), GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     //if (amt == null)
                     //{
                     //    convertible = false;
@@ -1143,10 +1143,10 @@ namespace VAdvantage.Acct
             }
             if (_period == null)
             {
-                _period = MPeriod.Get(GetCtx(), GetDateAcct(), GetAD_Org_ID());
+                _period = MPeriod.Get(GetCtx(), GetDateAcct(), GetVAF_Org_ID());
             }
             //	Is Period Open?
-            if (_period != null && MPeriod.IsOpen(GetCtx(), GetDateAcct(), GetDocumentType(), GetAD_Org_ID()))
+            if (_period != null && MPeriod.IsOpen(GetCtx(), GetDateAcct(), GetDocumentType(), GetVAF_Org_ID()))
             {
                 _C_Period_ID = _period.GetC_Period_ID();
             }
@@ -1155,7 +1155,7 @@ namespace VAdvantage.Acct
                 _C_Period_ID = -1;
             }
             //
-            log.Fine(	// + AD_Client_ID + " - " 
+            log.Fine(	// + VAF_Client_ID + " - " 
                 GetDateAcct() + " - " + GetDocumentType() + " => " + _C_Period_ID);
         }
 
@@ -2103,21 +2103,21 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get AD_Client_ID
+        /// Get VAF_Client_ID
         /// </summary>
         /// <returns>client</returns>
-        public int GetAD_Client_ID()
+        public int GetVAF_Client_ID()
         {
-            return _po.GetAD_Client_ID();
+            return _po.GetVAF_Client_ID();
         }
 
         /// <summary>
-        /// 	Get AD_Org_ID
+        /// 	Get VAF_Org_ID
         /// </summary>
         /// <returns>org</returns>
-        public int GetAD_Org_ID()
+        public int GetVAF_Org_ID()
         {
-            return _po.GetAD_Org_ID();
+            return _po.GetVAF_Org_ID();
         }
 
         /// <summary>
@@ -2747,12 +2747,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get AD_OrgTrx_ID
+        /// Get VAF_OrgTrx_ID
         /// </summary>
         /// <returns>Trx Org</returns>
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            int index = _po.Get_ColumnIndex("AD_OrgTrx_ID");
+            int index = _po.Get_ColumnIndex("VAF_OrgTrx_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);

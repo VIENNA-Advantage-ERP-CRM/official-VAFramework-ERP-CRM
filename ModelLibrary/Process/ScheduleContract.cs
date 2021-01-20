@@ -40,8 +40,8 @@ namespace ViennaAdvantageServer.Process
 
                 VAdvantage.Model.X_C_ContractSchedule CSchedule = new VAdvantage.Model.X_C_ContractSchedule(GetCtx(), 0, Get_TrxName());
                 //Neha ---Set Tenant, Organization On Invoice Schedule when we create Invoice Schedule from Schedule Contract button on header--12 Sep,2018
-                CSchedule.SetAD_Client_ID(contract.GetAD_Client_ID());
-                CSchedule.SetAD_Org_ID(contract.GetAD_Org_ID());
+                CSchedule.SetVAF_Client_ID(contract.GetVAF_Client_ID());
+                CSchedule.SetVAF_Org_ID(contract.GetVAF_Org_ID());
                 //-----------------------End--------------------
                 CSchedule.SetC_Contract_ID(contractID);
                 CSchedule.SetC_BPartner_ID(contract.GetC_BPartner_ID());

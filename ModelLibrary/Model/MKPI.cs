@@ -30,7 +30,7 @@ namespace VAdvantage.Model
 
             if (IsView())
             {
-                SetAD_Table_ID(-1);
+                SetVAF_TableView_ID(-1);
             }
             else
             {

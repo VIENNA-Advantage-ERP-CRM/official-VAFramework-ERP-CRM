@@ -74,7 +74,7 @@ static X_M_CostElementLine()
 static long serialVersionUID = 27742135977027L;
 /** Last Updated Timestamp 4/7/2016 12:01:00 PM */
 public static long updatedMS = 1460010660238L;
-/** AD_Table_ID=1000479 */
+/** VAF_TableView_ID=1000479 */
 public static int Table_ID;
  // =1000479;
 

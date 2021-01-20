@@ -26,8 +26,8 @@ namespace VAdvantage.Model
         /// <summary>
         ///Get Client
         /// </summary>
-        /// <returns>AD_Client_ID</returns>
-         int GetAD_Client_ID();
+        /// <returns>VAF_Client_ID</returns>
+         int GetVAF_Client_ID();
 
         /// <summary>
         ///	Get Name

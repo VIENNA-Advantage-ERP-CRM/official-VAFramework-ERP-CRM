@@ -80,7 +80,7 @@
         var savedProduct = [];
         var refreshUI = false;
         var updating = false;
-        var AD_Column_ID = 0;
+        var VAF_Column_ID = 0;
         var ismobile = /ipad|iphone|ipod/i.test(navigator.userAgent.toLowerCase());
         var chkDelCart = false;
         var invCount_ID = 0;
@@ -544,12 +544,12 @@
 
         InitInfo(M_Warehouse_ID, M_PriceList_ID);
 
-        //var winQry = "SELECT AD_Window_ID FROM AD_Tab WHERE AD_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "AD_Tab_ID"));
+        //var winQry = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "VAF_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry));
 
         // Added by Bharat on 31 May 2017 to remove client side queries
-        var AD_tab_ID = VIS.context.getWindowTabContext(WindowNo, 0, "AD_Tab_ID");
-        window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", AD_tab_ID.toString());
+        var vaf_tab_ID = VIS.context.getWindowTabContext(WindowNo, 0, "VAF_Tab_ID");
+        window_ID = VIS.dataContext.getJSONRecord("InfoProduct/GetWindowID", vaf_tab_ID.toString());
         // Bharat
         if (window_ID == 146) {
 
@@ -1391,10 +1391,10 @@
                     }
                     else if (event.column == 4 && dGrid.records.length > 0) {
                         //debugger;
-                        //var productWindow = AD_Column_ID == 8418;		//	HARDCODED
+                        //var productWindow = VAF_Column_ID == 8418;		//	HARDCODED
                         //var M_Locator_ID = VIS.context.getContextAsInt(WindowNo, "M_Locator_ID");
                         //var C_BPartner_ID = VIS.context.getContextAsInt(WindowNo, "C_BPartner_ID");
-                        //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].Attribute), VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].M_Product_ID1), M_Locator_ID, C_BPartner_ID, productWindow, AD_Column_ID, WindowNo);
+                        //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].Attribute), VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].M_Product_ID1), M_Locator_ID, C_BPartner_ID, productWindow, VAF_Column_ID, WindowNo);
                         //if (obj.hasAttribute) {
                         //    obj.showDialog();
                         //}
@@ -1668,7 +1668,7 @@
                         data: {
                             id: id,
                             keyColumn: keycolName,
-                            AD_Table_ID: VIS.context.getWindowTabContext(WindowNo, 1, "AD_Table_ID"),
+                            VAF_TableView_ID: VIS.context.getWindowTabContext(WindowNo, 1, "VAF_TableView_ID"),
                             prod: JSON.stringify(prodID),
                             C_UOM_ID: JSON.stringify(uoms),
                             listAst: JSON.stringify(listAst),
@@ -1767,7 +1767,7 @@
                     data: {
                         id: id,
                         keyColumn: keycolName,
-                        AD_Table_ID: VIS.context.getWindowTabContext(WindowNo, 1, "AD_Table_ID"),
+                        VAF_TableView_ID: VIS.context.getWindowTabContext(WindowNo, 1, "VAF_TableView_ID"),
                         prod: JSON.stringify(prodID.splice(0, saveCount)),
                         C_UOM_ID: JSON.stringify(uoms.splice(0, saveCount)),
                         listAst: JSON.stringify(listAst.splice(0, saveCount)),
@@ -1994,7 +1994,7 @@
 
             if (requery == true) {
                 //var whereClause = " rownum <= " + (ismobile ? 50 : 100);
-                var whereClause = " w.AD_Client_ID = " + VIS.context.getAD_Client_ID();
+                var whereClause = " w.VAF_Client_ID = " + VIS.context.getVAF_Client_ID();
                 var name = "";
                 var value = "";
                 var upc = "";

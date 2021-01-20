@@ -80,7 +80,7 @@ static X_AD_Sequence()
 ////static long serialVersionUID = 27562514364053L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047264L;
-/** AD_Table_ID=115 */
+/** VAF_TableView_ID=115 */
 public static int Table_ID;
  // =115;
 
@@ -350,7 +350,7 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Org Column.
-@param OrgColumn Fully qualified Organization column (AD_Org_ID) */
+@param OrgColumn Fully qualified Organization column (VAF_Org_ID) */
 public void SetOrgColumn(String OrgColumn)
 {
     if (OrgColumn != null && OrgColumn.Length > 60)
@@ -361,7 +361,7 @@ public void SetOrgColumn(String OrgColumn)
     Set_Value("OrgColumn", OrgColumn);
 }
 /** Get Org Column.
-@return Fully qualified Organization column (AD_Org_ID) */
+@return Fully qualified Organization column (VAF_Org_ID) */
 public String GetOrgColumn()
 {
     return (String)Get_Value("OrgColumn");

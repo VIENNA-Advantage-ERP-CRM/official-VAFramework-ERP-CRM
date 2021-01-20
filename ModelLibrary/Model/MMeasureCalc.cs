@@ -185,7 +185,7 @@ namespace VAdvantage.Model
         public Query GetQuery(MGoalRestriction[] restrictions,
             String measureDisplay, DateTime? date, MRole role)
         {
-            Query query = new Query(GetAD_Table_ID().ToString());
+            Query query = new Query(GetVAF_TableView_ID().ToString());
             //
             StringBuilder sql = new StringBuilder("SELECT ").Append(GetKeyColumn()).Append(" ");
             String from = GetSelectClause();
@@ -421,7 +421,7 @@ namespace VAdvantage.Model
          */
         public String GetTableName()
         {
-            return MTable.GetTableName(GetCtx(), GetAD_Table_ID());
+            return MTable.GetTableName(GetCtx(), GetVAF_TableView_ID());
         }
 
         /**

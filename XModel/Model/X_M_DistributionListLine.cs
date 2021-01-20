@@ -76,7 +76,7 @@ static X_M_DistributionListLine()
 //static long serialVersionUID 27562514379256L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062467L;
-/** AD_Table_ID=665 */
+/** VAF_TableView_ID=665 */
 public static int Table_ID;
  // =665;
 

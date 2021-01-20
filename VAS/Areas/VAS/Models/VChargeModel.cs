@@ -23,20 +23,20 @@ namespace VIS.Controllers
         /// Create element for the new account
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="m_AD_Org_ID"></param>
+        /// <param name="m_VAF_Org_ID"></param>
         /// <param name="value"></param>
         /// <param name="name"></param>
         /// <param name="isExpenseType"></param>
         /// <param name="m_C_Element_ID"></param>
         /// <returns></returns>
-        public int CreateElementValue(Ctx ctx, int m_AD_Org_ID, String value, String name, Boolean isExpenseType, int m_C_Element_ID)
+        public int CreateElementValue(Ctx ctx, int m_VAF_Org_ID, String value, String name, Boolean isExpenseType, int m_C_Element_ID)
         {
             MElementValue ev = new MElementValue(ctx, value, name, null,
                 isExpenseType ? X_C_ElementValue.ACCOUNTTYPE_Expense : X_C_ElementValue.ACCOUNTTYPE_Revenue,
                     X_C_ElementValue.ACCOUNTSIGN_Natural,
                     false, false, null);
             ev.SetC_Element_ID(m_C_Element_ID);
-            ev.SetAD_Org_ID(m_AD_Org_ID);
+            ev.SetVAF_Org_ID(m_VAF_Org_ID);
             if (!ev.Save())
             {
                 //log.Log(Level.WARNING, "C_ElementValue_ID not created");
@@ -83,7 +83,7 @@ namespace VIS.Controllers
             MAcctSchemaElement primary_ase = m_acctSchema.GetAcctSchemaElement(X_C_AcctSchema_Element.ELEMENTTYPE_Account);
 
             //	Get All
-            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, charge.GetAD_Client_ID());
+            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, charge.GetVAF_Client_ID());
             foreach (MAcctSchema ac in ass)
             {
                 //	Target Account
@@ -119,10 +119,10 @@ namespace VIS.Controllers
                 }
 
                 MAccount acct = MAccount.Get(ctx,
-                    charge.GetAD_Client_ID(), charge.GetAD_Org_ID(),
+                    charge.GetVAF_Client_ID(), charge.GetVAF_Org_ID(),
                     ac.GetC_AcctSchema_ID(),
                     C_ElementValue_ID, defaultAcct.GetC_SubAcct_ID(),
-                    defaultAcct.GetM_Product_ID(), defaultAcct.GetC_BPartner_ID(), defaultAcct.GetAD_OrgTrx_ID(),
+                    defaultAcct.GetM_Product_ID(), defaultAcct.GetC_BPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
                     defaultAcct.GetC_LocFrom_ID(), defaultAcct.GetC_LocTo_ID(), defaultAcct.GetC_SalesRegion_ID(),
                     defaultAcct.GetC_Project_ID(), defaultAcct.GetC_Campaign_ID(), defaultAcct.GetC_Activity_ID(),
                     defaultAcct.GetUser1_ID(), defaultAcct.GetUser2_ID(),
@@ -215,7 +215,7 @@ namespace VIS.Controllers
         private List<VchargeMCElementTaxCategoryID> VchargeMCElemTaxCatID(int MCElement_ID, int mADClientId)
         {
             List<VchargeMCElementTaxCategoryID> obj = new List<VchargeMCElementTaxCategoryID>();
-            string sql = "SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y' AND AD_Client_ID=" + mADClientId;
+            string sql = "SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y' AND VAF_Client_ID=" + mADClientId;
             int mCTaxCategoryID = 0;
 
             object mtaxcatid = DB.ExecuteScalar(sql);

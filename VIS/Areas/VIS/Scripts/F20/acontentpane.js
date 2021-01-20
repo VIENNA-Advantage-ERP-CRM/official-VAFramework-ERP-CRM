@@ -727,7 +727,7 @@
         var ids = this.curGC.canDeleteRecords()
 
 
-        // if (!VIS.MRole.getDefault().getIsClientAccess(this.curTab.getAD_Client_ID(), true))
+        // if (!VIS.MRole.getDefault().getIsClientAccess(this.curTab.getVAF_Client_ID(), true))
         if (ids.length > 0) {
             VIS.ADialog.error("CannotDelete", true, " [ " + ids.join(",") + "]");
             return;

@@ -70,7 +70,7 @@ static X_RC_TabPanels()
 //static long serialVersionUID 27634578416249L;
 /** Last Updated Timestamp 11/9/2012 2:55:00 PM */
 public static long updatedMS = 1352453099460L;
-/** AD_Table_ID=1000234 */
+/** VAF_TableView_ID=1000234 */
 public static int Table_ID;
  // =1000234;
 

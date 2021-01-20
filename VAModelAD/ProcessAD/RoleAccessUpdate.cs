@@ -32,7 +32,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	Update Role
         private int _AD_Role_ID = 0;
         //	Update Roles of Client	
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /// <summary>
         ///	Prepare
         /// </summary>
@@ -50,9 +50,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _AD_Role_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("AD_Client_ID"))
+                else if (name.Equals("VAF_Client_ID"))
                 {
-                    _AD_Client_ID = para[i].GetParameterAsInt();
+                    _VAF_Client_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -68,7 +68,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             int lenth = 0;
-            log.Info("AD_Client_ID=" + _AD_Client_ID + ", AD_Role_ID=" + _AD_Role_ID);
+            log.Info("VAF_Client_ID=" + _VAF_Client_ID + ", AD_Role_ID=" + _AD_Role_ID);
             //
             if (_AD_Role_ID != 0 && _AD_Role_ID != -1)
             {
@@ -78,12 +78,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             else
             {
                 String sql = "SELECT * FROM AD_Role ";
-                if (_AD_Client_ID != 0)
+                if (_VAF_Client_ID != 0)
                 {
                     lenth = 1;
-                    sql += "WHERE AD_Client_ID=@Param1 ";
+                    sql += "WHERE VAF_Client_ID=@Param1 ";
                 }
-                sql += "ORDER BY AD_Client_ID, Name";
+                sql += "ORDER BY VAF_Client_ID, Name";
                 SqlParameter[] Param = new SqlParameter[lenth];
                 IDataReader idr = null;
                 DataTable dt = null;
@@ -92,12 +92,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     //pstmt = DataBase.prepareStatement(sql, get_TrxName());
 
-                    if (_AD_Client_ID != 0)
+                    if (_VAF_Client_ID != 0)
                     {
-                        Param[0] = new SqlParameter("@Param1", _AD_Client_ID);
+                        Param[0] = new SqlParameter("@Param1", _VAF_Client_ID);
                     }
                     idr = DataBase.DB.ExecuteReader(sql, Param, Get_TrxName());
-                    //pstmt.setInt(1, _AD_Client_ID);
+                    //pstmt.setInt(1, _VAF_Client_ID);
                     //ResultSet rs = pstmt.executeQuery();
 
                     dt = new DataTable();

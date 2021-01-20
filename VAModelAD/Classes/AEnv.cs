@@ -55,7 +55,7 @@ namespace VAdvantage.Classes
         {
             log.Config("Window=" + windowNo + ", AD_Window_ID=" + AD_Window_ID);
             GridWindowVO mWindowVO = null;
-            string format = string.Format("{0}{1}{2}{3}", AD_Window_ID, ctx.GetAD_Client_ID(), ctx.GetAD_Role_ID(), ctx.GetAD_Language());          //JID_1238: Addedd language to reset cache
+            string format = string.Format("{0}{1}{2}{3}", AD_Window_ID, ctx.GetVAF_Client_ID(), ctx.GetAD_Role_ID(), ctx.GetAD_Language());          //JID_1238: Addedd language to reset cache
             if (AD_Window_ID != 0)// && Ini.IsCacheWindow())	//	try cache always
             {
 

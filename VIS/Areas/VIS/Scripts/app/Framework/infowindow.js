@@ -5,7 +5,7 @@
  * Date           :     2-Aug-2014
   ******************************************************/
 ; (function (VIS, $) {
-    function InfoWindow(_AD_InfoWindow_ID, ctrlValue, windowNo, validationCode, multiSelection) {
+    function InfoWindow(_VAF_QuickSearchWindow_ID, ctrlValue, windowNo, validationCode, multiSelection) {
 
         this.onClose = null;
 
@@ -173,7 +173,7 @@
         this.show = function () {
             var InfoObj = self;// cached self object into variable
             $.ajax({
-                url: VIS.Application.contextUrl + "InfoWindow/GetSearchColumn/?Ad_InfoWindow_ID=" + _AD_InfoWindow_ID,
+                url: VIS.Application.contextUrl + "InfoWindow/GetSearchColumn/?VAF_QuickSearchWindow_ID=" + _VAF_QuickSearchWindow_ID,
                 dataType: "json",
                 error: function () {
                     alert(VIS.Msg.getMsg('ERRORGettingSchema'));

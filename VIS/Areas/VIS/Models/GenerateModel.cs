@@ -52,15 +52,15 @@ namespace VAdvantage.Tool
         /// <summary>+
         /// GenerateModel
         /// </summary>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="directory">directory name</param>
         /// <param name="namespaceName">namespace name</param>
 
-        public GenerateModel(int AD_Table_ID, String directory, String namespaceName)
+        public GenerateModel(int VAF_TableView_ID, String directory, String namespaceName)
         {
             StringBuilder mandatory = new StringBuilder("");
-            StringBuilder sbText = CreateColumns(AD_Table_ID, mandatory);
-            String tableName = CreateHeader(AD_Table_ID, sbText, mandatory, namespaceName);
+            StringBuilder sbText = CreateColumns(VAF_TableView_ID, mandatory);
+            String tableName = CreateHeader(VAF_TableView_ID, sbText, mandatory, namespaceName);
             //WriteToFile(sbText, directory + "\\"+tableName + ".cs");
             sbTextCopy1 = sbText;
             fileName1 = tableName + ".cs";
@@ -69,10 +69,10 @@ namespace VAdvantage.Tool
         /// <summary>
         /// Creates Column
         /// </summary>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="mandatory">mandatory string</param>
         /// <returns>created columns in string</returns>
-        private StringBuilder CreateColumns(int AD_Table_ID, StringBuilder mandatory)
+        private StringBuilder CreateColumns(int VAF_TableView_ID, StringBuilder mandatory)
         {
 
             StringBuilder sb = new StringBuilder();
@@ -80,18 +80,18 @@ namespace VAdvantage.Tool
                 + " c.AD_Reference_ID, c.AD_Reference_Value_ID, DefaultValue, SeqNo, "	//	4..7
                 + " c.FieldLength, c.valueMin, c.valueMax, c.vFormat, c.callOut, "	//	8..12
                 + " c.name, c.description, c.columnSQL, c.isEncrypted, c.IsKey "
-                + "FROM AD_Column c "
-                + "WHERE c.AD_Table_ID=@tableid"
+                + "FROM VAF_Column c "
+                + "WHERE c.VAF_TableView_ID=@tableid"
                 + " AND c.IsActive='Y'"
-                + " AND c.ColumnName <> 'AD_Client_ID'"
-                + " AND c.ColumnName <> 'AD_Org_ID'"
+                + " AND c.ColumnName <> 'VAF_Client_ID'"
+                + " AND c.ColumnName <> 'VAF_Org_ID'"
                 + " AND c.ColumnName <> 'IsActive'"
                 + " AND c.ColumnName NOT LIKE 'Created%'"
                 + " AND c.ColumnName NOT LIKE 'Updated%' "
                 + "ORDER BY c.ColumnName";
 
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@tableid", AD_Table_ID);
+            param[0] = new SqlParameter("@tableid", VAF_TableView_ID);
             IDataReader dr = null;
             try
             {
@@ -149,21 +149,21 @@ namespace VAdvantage.Tool
         /// <summary>
         /// CreateHeader
         /// </summary>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="sbText">generated text</param>
         /// <param name="mandatory">mandatory text</param>
         /// <param name="packageName">name of the package</param>
         /// <returns>created header in string</returns>
-        private String CreateHeader(int AD_Table_ID, StringBuilder sb, StringBuilder mandatory, String packageName)
+        private String CreateHeader(int VAF_TableView_ID, StringBuilder sb, StringBuilder mandatory, String packageName)
         {
             String tableName = "";
             int accessLevel = 0;
             long updatedMS = _createdMS;
             String sql = "SELECT TableName, AccessLevel, "
-                + "(SELECT MAX(Updated) FROM AD_Column c WHERE t.AD_Table_ID=c.AD_Table_ID) as MaxUpdate, Updated "
-                + "FROM AD_Table t WHERE AD_Table_ID=@tableid";
+                + "(SELECT MAX(Updated) FROM VAF_Column c WHERE t.VAF_TableView_ID=c.VAF_TableView_ID) as MaxUpdate, Updated "
+                + "FROM VAF_TableView t WHERE VAF_TableView_ID=@tableid";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@tableid", AD_Table_ID);
+            param[0] = new SqlParameter("@tableid", VAF_TableView_ID);
             IDataReader dr = null;
             try
             {
@@ -185,11 +185,11 @@ namespace VAdvantage.Tool
                 {
                     dr.Close();
                 }
-                log.Log(Level.SEVERE, sql + " - " + AD_Table_ID, e);
+                log.Log(Level.SEVERE, sql + " - " + VAF_TableView_ID, e);
             }
 
             if (tableName == null)
-                throw new Exception("TableName not found for ID=" + AD_Table_ID);
+                throw new Exception("TableName not found for ID=" + VAF_TableView_ID);
             //
             String accessLevelInfo = accessLevel + " ";
             if (accessLevel >= 4)
@@ -277,12 +277,12 @@ namespace VAdvantage.Tool
                 + "static long serialVersionUID = " + serialVersionUID + "L;"
                 + "/** Last Updated Timestamp " + DateTime.Now + " */\n"
                 + "public static long updatedMS = " + updatedMS + "L;"
-                + "/** AD_Table_ID=").Append(AD_Table_ID).Append(" */\n"
-                + "public static int Table_ID; // =").Append(AD_Table_ID).Append(";\n"
+                + "/** VAF_TableView_ID=").Append(VAF_TableView_ID).Append(" */\n"
+                + "public static int Table_ID; // =").Append(VAF_TableView_ID).Append(";\n"
                 //	
                 + "/** TableName=").Append(tableName).Append(" */\n"
                 + "public static String Table_Name=\"").Append(tableName).Append("\";\n"
-                + "protected static KeyNamePair model;"// = new KeyNamePair(Table_ID").Append(",\"").Append(tableName).Append("\");\n"   // ).Append(AD_Table_ID).Append(",\"").Append(tableName).Append("\");\n"
+                + "protected static KeyNamePair model;"// = new KeyNamePair(Table_ID").Append(",\"").Append(tableName).Append("\");\n"   // ).Append(VAF_TableView_ID).Append(",\"").Append(tableName).Append("\");\n"
                 //	
                 + "protected Decimal accessLevel = new Decimal(").Append(accessLevel).Append(");"
                 + "/** AccessLevel\n@return ").Append(accessLevelInfo).Append("\n*/\n"
@@ -474,7 +474,7 @@ namespace VAdvantage.Tool
                     if (isMandatory)	//	check mandatory ID
                     {
                         int firstOK = 1;	//	Valid ID 0
-                        if (columnName.Equals("AD_Client_ID") || columnName.Equals("AD_Org_ID")
+                        if (columnName.Equals("VAF_Client_ID") || columnName.Equals("VAF_Org_ID")
                             || columnName.Equals("Record_ID") || columnName.Equals("C_DocType_ID")
                             || columnName.Equals("Node_ID") || columnName.Equals("AD_Role_ID")
                             || columnName.Equals("M_AttributeSet_ID") || columnName.Equals("M_AttributeSetInstance_ID"))
@@ -849,12 +849,12 @@ namespace VAdvantage.Tool
             {
                 //MessageBox.Show(GlobalVariable.GetChekboxStatus.ToString());
                 //MessageBox.Show(GlobalVariable.GetTableId.ToString());
-                //sql.Insert(0, "SELECT AD_Table_ID "
-                //    + "FROM AD_Table "
+                //sql.Insert(0, "SELECT VAF_TableView_ID "
+                //    + "FROM VAF_TableView "
                 //    + "WHERE (TableName IN ('RV_WarehousePrice','RV_BPartner')"	//	special views
                 //        + " OR IsView='N')"
                 //    + " AND Referenced_Table_ID IS NULL"
-                //    + " AND TableName NOT LIKE '%_Trl' and AD_Table_ID =" + GlobalVariable.GetTableId); // TableName NOT LIKE 'T%' AND ");
+                //    + " AND TableName NOT LIKE '%_Trl' and VAF_TableView_ID =" + GlobalVariable.GetTableId); // TableName NOT LIKE 'T%' AND ");
                 //sql.Append(" ORDER BY TableName");
 
                 new GenerateModel(int.Parse(getTableId), directory, namespaceName);
@@ -863,8 +863,8 @@ namespace VAdvantage.Tool
             else
             {
                 // MessageBox.Show(GlobalVariable.GetChekboxStatus.ToString());
-                sql.Insert(0, "SELECT AD_Table_ID "
-                    + "FROM AD_Table "
+                sql.Insert(0, "SELECT VAF_TableView_ID "
+                    + "FROM VAF_TableView "
                     + "WHERE (TableName IN ('RV_WarehousePrice','RV_BPartner')"	//	special views
                         + " OR IsView='N')"
                     + " AND Referenced_Table_ID IS NULL"
@@ -879,7 +879,7 @@ namespace VAdvantage.Tool
                     while (dr.Read())
                     {
 
-                        new GenerateModel(int.Parse(dr["AD_Table_ID"].ToString()), directory, namespaceName);
+                        new GenerateModel(int.Parse(dr["VAF_TableView_ID"].ToString()), directory, namespaceName);
                         count++;
                     }
                     dr.Close();
@@ -903,7 +903,7 @@ namespace VAdvantage.Tool
 
             //    while (dr.Read())
             //    {
-            //        new GenerateModelcls(int.Parse(dr["AD_Table_ID"].ToString()), directory, namespaceName);
+            //        new GenerateModelcls(int.Parse(dr["VAF_TableView_ID"].ToString()), directory, namespaceName);
             //        count++;
             //    }
             //    dr.Close();

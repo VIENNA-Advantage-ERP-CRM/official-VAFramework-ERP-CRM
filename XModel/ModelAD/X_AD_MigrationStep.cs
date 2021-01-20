@@ -80,7 +80,7 @@ static X_AD_MigrationStep()
 //static long serialVersionUID = 27562514362235L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045446L;
-/** AD_Table_ID=922 */
+/** VAF_TableView_ID=922 */
 public static int Table_ID;
  // =922;
 

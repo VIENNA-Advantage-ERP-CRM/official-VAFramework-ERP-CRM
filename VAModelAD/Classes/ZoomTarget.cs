@@ -51,8 +51,8 @@ namespace VAdvantage.Classes
             // Find windows where the first tab is based on the table
             string sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
                     "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
-                + "FROM AD_Table t "
-                + "INNER JOIN AD_Tab tt ON (tt.AD_Table_ID = t.AD_Table_ID) ";
+                + "FROM VAF_TableView t "
+                + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
 
             bool baseLanguage = Utility.Env.IsBaseLanguage(ctx, "");// GlobalVariable.IsBaseLanguage();
             if (baseLanguage)
@@ -71,7 +71,7 @@ namespace VAdvantage.Classes
                 + "' AND w.AD_Window_ID <>" + curWindow_ID
                 + " AND tt.SeqNo=10"
                 + " AND (wp.AD_Window_ID IS NOT NULL "
-                        + "OR EXISTS (SELECT 1 FROM AD_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.AD_Table_ID=t.AD_Table_ID AND tt2.SeqNo=10))"
+                        + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
                 + " ORDER BY 2";
 
 
@@ -337,7 +337,7 @@ namespace VAdvantage.Classes
             int PO_zoomWindow_ID = 0;
             // Find windows where the first tab is based on the table
             string sql = "SELECT DISTINCT AD_Window_ID, PO_Window_ID "
-                + "FROM AD_Table t "
+                + "FROM VAF_TableView t "
                 + "WHERE TableName ='" + targetTableName + "'";
             IDataReader dr = null;
             try

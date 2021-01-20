@@ -38,7 +38,7 @@ namespace VAdvantage.Model
                 SetProcessing(false);
             }
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
             : base(ctx, rs, trxName)
         {
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
             : this(ctx, MMessage.GetAD_Message_ID(ctx, AD_MessageValue), AD_User_ID, trxName)
         {
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
         }
 
         /// <summary>
@@ -88,20 +88,20 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="AD_Message_ID">message</param>
         /// <param name="AD_User_ID">user</param>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <param name="Record_ID">record</param>
         /// <param name="Reference">reference</param>
         /// <param name="TextMsg">text message</param>
         /// <param name="trxName">transaction</param>
         public MNote(Ctx ctx, int AD_Message_ID, int AD_User_ID,
-            int AD_Table_ID, int Record_ID, String Reference, String TextMsg, Trx trxName)
+            int VAF_TableView_ID, int Record_ID, String Reference, String TextMsg, Trx trxName)
             : this(ctx, AD_Message_ID, AD_User_ID, trxName)
         {
-            SetRecord(AD_Table_ID, Record_ID);
+            SetRecord(VAF_TableView_ID, Record_ID);
             SetReference(Reference);
             SetTextMsg(TextMsg);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
         }
 
 
@@ -111,19 +111,19 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="AD_Message_ID"></param>
         /// <param name="AD_User_ID"></param>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="Reference"></param>
         /// <param name="trxName"></param>
-        public MNote(Ctx ctx, int AD_Message_ID, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int AD_Table_ID, int Record_ID, String Reference, Trx trxName)
+        public MNote(Ctx ctx, int AD_Message_ID, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int VAF_TableView_ID, int Record_ID, String Reference, Trx trxName)
             : this(ctx,AD_Message_ID, AD_User_ID, trxName)
         {
-            SetClientOrg(AD_Client_ID, AD_Org_ID);
-            SetRecord(AD_Table_ID, Record_ID);
+            SetClientOrg(VAF_Client_ID, VAF_Org_ID);
+            SetRecord(VAF_TableView_ID, Record_ID);
             SetReference(Reference);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
         }
 
         /// <summary>
@@ -132,16 +132,16 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="AD_MessageValue">message</param>
         /// <param name="AD_User_ID">targeteduser</param>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="trxName">transaction</param>
         public MNote(Ctx ctx, string AD_MessageValue, int AD_User_ID,
-            int AD_Client_ID, int AD_Org_ID, Trx trxName)
+            int VAF_Client_ID, int VAF_Org_ID, Trx trxName)
             : this(ctx, MMessage.GetAD_Message_ID(ctx, AD_MessageValue), AD_User_ID, trxName)
         {
-            SetClientOrg(AD_Client_ID, AD_Org_ID);
+            SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
-            SetAD_Org_ID(0);
+            SetVAF_Org_ID(0);
         }
 
         /// <summary>
@@ -194,21 +194,21 @@ namespace VAdvantage.Model
         /// <summary>
         ///Set Client Org
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
-        public new void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        public new void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         {
-            base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+            base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         }
 
         /// <summary>
         ///	Set Record
         /// </summary>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <param name="Record_ID">record</param>
-        public void SetRecord(int AD_Table_ID, int Record_ID)
+        public void SetRecord(int VAF_TableView_ID, int Record_ID)
         {
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             SetRecord_ID(Record_ID);
         }
 

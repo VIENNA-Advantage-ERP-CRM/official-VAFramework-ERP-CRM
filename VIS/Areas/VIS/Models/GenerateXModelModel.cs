@@ -18,7 +18,7 @@ namespace ViennaAdvantage.Tool.Model
         /// <returns></returns>
         public DataSet GetTable()
         {
-            string strQuery = "select Name, AD_TABLE_ID,TableName from AD_TABLE order by name";
+            string strQuery = "select Name, VAF_TABLEVIEW_ID,TableName from VAF_TABLEVIEW order by name";
             //execute
             return DB.ExecuteDataset(strQuery, null);
         }
@@ -28,7 +28,7 @@ namespace ViennaAdvantage.Tool.Model
         /// <returns></returns>
         public DataSet GetEntity()
         {
-            string strQuery = "select ad_entitytype_id, entitytype, name from ad_entitytype";
+            string strQuery = "select VAF_RecrodType_id, entitytype, name from VAF_RecrodType";
             //execute
             return DB.ExecuteDataset(strQuery, null);
         }
@@ -42,7 +42,7 @@ namespace ViennaAdvantage.Tool.Model
         {
             List<GenXModelGetTableClass> obj = new List<GenXModelGetTableClass>();
 
-            string strQuery = "select Name, AD_TABLE_ID,TableName from AD_TABLE order by name";
+            string strQuery = "select Name, VAF_TABLEVIEW_ID,TableName from VAF_TABLEVIEW order by name";
             DataSet ds = DB.ExecuteDataset(strQuery, null);
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -50,7 +50,7 @@ namespace ViennaAdvantage.Tool.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     GenXModelGetTableClass tb = new GenXModelGetTableClass();
-                    tb.AD_Table_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_TABLE_ID"]);
+                    tb.VAF_TableView_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TABLEVIEW_ID"]);
                     tb.Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
                     obj.Add(tb);
                 }
@@ -63,7 +63,7 @@ namespace ViennaAdvantage.Tool.Model
 
     public class GenXModelGetTableClass
     {
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public string Name { get; set; }
     }
 

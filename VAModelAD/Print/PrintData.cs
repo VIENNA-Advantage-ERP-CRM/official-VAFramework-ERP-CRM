@@ -406,12 +406,12 @@ namespace VAdvantage.Print
         /// <summary>
         /// Get Node with index in row
         /// </summary>
-        /// <param name="AD_Column_ID">Column ID</param>
+        /// <param name="VAF_Column_ID">Column ID</param>
         /// <param name="fls">Always false : just to overload the other function</param>
         /// <returns>PrintData(Element) of index or null</returns>
-        public Object GetNode(int AD_Column_ID, bool fls)
+        public Object GetNode(int VAF_Column_ID, bool fls)
         {
-            int index = GetIndex(AD_Column_ID);
+            int index = GetIndex(VAF_Column_ID);
             if (index < 0)
                 return null;
             return _nodes[index];
@@ -471,19 +471,19 @@ namespace VAdvantage.Print
         /// <summary>
         /// Get Index of Node in Structure (not recursing) row
         /// </summary>
-        /// <param name="AD_Column_ID">AD_Column_ID</param>
+        /// <param name="VAF_Column_ID">VAF_Column_ID</param>
         /// <returns>index or -1</returns>
-        public int GetIndex(int AD_Column_ID)
+        public int GetIndex(int VAF_Column_ID)
         {
             if (_columnInfo == null)
                 return -1;
             for (int i = 0; i < _columnInfo.Length; i++)
             {
-                if (_columnInfo[i].GetAD_Column_ID() == AD_Column_ID)
+                if (_columnInfo[i].GetVAF_Column_ID() == VAF_Column_ID)
                     return GetIndex(_columnInfo[i].GetColumnName());
             }
             //	OK for virtual Columns with TableDirect, Search
-            MColumn col = MColumn.Get(GetCtx(), AD_Column_ID);
+            MColumn col = MColumn.Get(GetCtx(), VAF_Column_ID);
             if (col != null && col.IsVirtualColumn())
                 return -1;		//	not found, but OK		
 

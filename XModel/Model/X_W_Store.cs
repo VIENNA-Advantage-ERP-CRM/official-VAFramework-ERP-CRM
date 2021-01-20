@@ -102,7 +102,7 @@ static X_W_Store()
 //static long serialVersionUID 27562514385101L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068312L;
-/** AD_Table_ID=778 */
+/** VAF_TableView_ID=778 */
 public static int Table_ID;
  // =778;
 

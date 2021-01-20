@@ -74,7 +74,7 @@ static X_VAFAM_AssetHistory()
 static long serialVersionUID = 27715977413553L;
 /** Last Updated Timestamp 6/9/2015 5:44:56 PM */
 public static long updatedMS = 1433852096764L;
-/** AD_Table_ID=1000747 */
+/** VAF_TableView_ID=1000747 */
 public static int Table_ID;
  // =1000747;
 

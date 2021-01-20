@@ -103,7 +103,7 @@ namespace VAdvantage.Model
             //SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -218,7 +218,7 @@ namespace VAdvantage.Model
             //    }
             //    Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
             //        GetGrandTotal(), GetC_Currency_ID(), GetDateOrdered(),
-            //        GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
+            //        GetC_ConversionType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
             //    if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
             //    {
             //        _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
@@ -447,7 +447,7 @@ namespace VAdvantage.Model
 
             sql.Append("SELECT distinct CP.* FROM C_ProfitLoss CP INNER JOIN Fact_Acct ft ON ft.C_AcctSchema_ID = Cp.C_AcctSchema_ID                             "
                        + " INNER JOIN c_elementvalue ev ON ft.account_id         = ev.c_elementvalue_id                                                           "
-                       + " WHERE CP.ad_client_id    = " + +GetAD_Client_ID());
+                       + " WHERE CP.vaf_client_id    = " + +GetVAF_Client_ID());
 
             if (prof.Get_Value("PostingType") != null)
             {
@@ -458,8 +458,8 @@ namespace VAdvantage.Model
                      + " OR " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateFrom "
                      + " AND " + GlobalVariable.TO_DATE(prof.GetDateTo(), true) + " <= CP.DateTo ))  "
                      + " AND (ev.accounttype      ='E' OR ev.accounttype        ='R')     "
-                     + " AND ev.isintermediatecode='N' AND CP.AD_Org_ID        IN (    (SELECT Ad_Org_ID   FROM AD_Org   WHERE isactive      = 'Y'             "
-                     + " AND (" + DBFunctionCollection.TypecastColumnAsInt("legalentityorg") + " =" + PL.GetAD_Org_ID() + "  OR Ad_Org_ID = " + PL.GetAD_Org_ID() + ")  )) AND DOCstatus in ('CO', 'CL') ");
+                     + " AND ev.isintermediatecode='N' AND CP.VAF_Org_ID        IN (    (SELECT vaf_org_ID   FROM VAF_Org   WHERE isactive      = 'Y'             "
+                     + " AND (" + DBFunctionCollection.TypecastColumnAsInt("legalentityorg") + " =" + PL.GetVAF_Org_ID() + "  OR vaf_org_ID = " + PL.GetVAF_Org_ID() + ")  )) AND DOCstatus in ('CO', 'CL') ");
 
             if (Util.GetValueOfInt(PL.Get_Value("C_AcctSchema_ID")) > 0)
             {
@@ -819,7 +819,7 @@ namespace VAdvantage.Model
                                                                  + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
                                                                  + "    WHERE P.PERIODNO  ='1'             "
                                                                  + "    AND P.C_YEAR_ID   = " + GetC_Year_ID()
-                                                                 + "    AND Y.AD_CLIENT_ID= " + GetAD_Client_ID()));
+                                                                 + "    AND Y.VAF_CLIENT_ID= " + GetVAF_Client_ID()));
 
                 eDate = Util.GetValueOfDateTime(DB.ExecuteScalar(" SELECT P.ENDDATE AS ENDDATE    "
                                                                  + "    FROM C_PERIOD P  "
@@ -827,7 +827,7 @@ namespace VAdvantage.Model
                                                                  + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
                                                                  + "    WHERE P.PERIODNO  ='12'             "
                                                                  + "    AND P.C_YEAR_ID   = " + GetC_Year_ID()
-                                                                 + "    AND Y.AD_CLIENT_ID= " + GetAD_Client_ID()));
+                                                                 + "    AND Y.VAF_CLIENT_ID= " + GetVAF_Client_ID()));
 
                 if (GetDateFrom() != null && GetDateTo() != null)
                 {

@@ -20,7 +20,7 @@ public X_M_SerNoCtlExclude (Context ctx, int M_SerNoCtlExclude_ID, Trx trxName) 
 {
 /** if (M_SerNoCtlExclude_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetIsSOTrx (false);
 SetM_SerNoCtlExclude_ID (0);
 SetM_SerNoCtl_ID (0);
@@ -31,7 +31,7 @@ public X_M_SerNoCtlExclude (Ctx ctx, int M_SerNoCtlExclude_ID, Trx trxName) : ba
 {
 /** if (M_SerNoCtlExclude_ID == 0)
 {
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetIsSOTrx (false);
 SetM_SerNoCtlExclude_ID (0);
 SetM_SerNoCtl_ID (0);
@@ -74,7 +74,7 @@ static X_M_SerNoCtlExclude()
 //static long serialVersionUID 27562514381309L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064520L;
-/** AD_Table_ID=811 */
+/** VAF_TableView_ID=811 */
 public static int Table_ID;
  // =811;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_M_SerNoCtlExclude[").Append(Get_ID()).A
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

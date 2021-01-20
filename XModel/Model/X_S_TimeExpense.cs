@@ -91,7 +91,7 @@ using System.Data;
         //static long serialVersionUID 27617992279669L;
         /** Last Updated Timestamp 5/1/2012 3:39:23 PM */
         public static long updatedMS = 1335866962880L;
-        /** AD_Table_ID=486 */
+        /** VAF_TableView_ID=486 */
         public static int Table_ID;
         // =486;
 

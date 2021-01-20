@@ -86,7 +86,7 @@ static X_C_GenAttributeSet()
 //static long serialVersionUID 27667169099943L;
 /** Last Updated Timestamp 11/21/2013 7:53:03 PM */
 public static long updatedMS = 1385043783154L;
-/** AD_Table_ID=1000421 */
+/** VAF_TableView_ID=1000421 */
 public static int Table_ID;
  // =1000421;
 

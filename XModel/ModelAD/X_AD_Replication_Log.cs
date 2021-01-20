@@ -72,7 +72,7 @@ static X_AD_Replication_Log()
 //static long serialVersionUID = 27562514363552L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046763L;
-/** AD_Table_ID=604 */
+/** VAF_TableView_ID=604 */
 public static int Table_ID;
  // =604;
 

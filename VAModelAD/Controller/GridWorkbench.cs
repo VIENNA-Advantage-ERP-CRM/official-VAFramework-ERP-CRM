@@ -47,9 +47,9 @@ namespace VAdvantage.Model
         private String Name = "";
         private String Description = "";
         private String Help = "";
-        private int AD_Column_ID = 0;
-        private int AD_Image_ID = 0;
-        private int AD_Color_ID = 0;
+        private int VAF_Column_ID = 0;
+        private int VAF_Image_ID = 0;
+        private int VAF_Colour_ID = 0;
         private int PA_Goal_ID = 0;
         private String ColumnName = "";
 
@@ -68,22 +68,22 @@ namespace VAdvantage.Model
             String sql = null;
             if (Env.IsBaseLanguage(_ctx, "AD_Workbench"))
                 sql = "SELECT w.Name,w.Description,w.Help,"                         //  1..3
-                    + " w.AD_Column_ID,w.AD_Image_ID,w.AD_Color_ID,w.PA_Goal_ID,"   //  4..7
+                    + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.PA_Goal_ID,"   //  4..7
                     + " c.ColumnName "                                              //  8
-                    + "FROM AD_Workbench w, AD_Column c "
+                    + "FROM AD_Workbench w, VAF_Column c "
                     + "WHERE w.AD_Workbench_ID=" + AD_Workbench_ID.ToString()                   //  #1
                     + " AND w.IsActive='Y'"
-                    + " AND w.AD_Column_ID=c.AD_Column_ID";
+                    + " AND w.VAF_Column_ID=c.VAF_Column_ID";
             else
                 sql = "SELECT t.Name,t.Description,t.Help,"
-                    + " w.AD_Column_ID,w.AD_Image_ID,w.AD_Color_ID,w.PA_Goal_ID,"
+                    + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.PA_Goal_ID,"
                     + " c.ColumnName "
-                    + "FROM AD_Workbench w, AD_Workbench_Trl t, AD_Column c "
+                    + "FROM AD_Workbench w, AD_Workbench_Trl t, VAF_Column c "
                     + "WHERE w.AD_Workbench_ID=" + AD_Workbench_ID.ToString()                   //  #1
                     + " AND w.IsActive='Y'"
                     + " AND w.AD_Workbench_ID=t.AD_Workbench_ID"
                     + " AND t.AD_Language='" + Env.GetAD_Language(_ctx) + "'"
-                    + " AND w.AD_Column_ID=c.AD_Column_ID";
+                    + " AND w.VAF_Column_ID=c.VAF_Column_ID";
 
             IDataReader dr = null;
             try
@@ -99,9 +99,9 @@ namespace VAdvantage.Model
                     if (Help == null)
                         Help = "";
                     //
-                    AD_Column_ID = Utility.Util.GetValueOfInt(dr[3]);
-                    AD_Image_ID = Utility.Util.GetValueOfInt(dr[4]);
-                    AD_Color_ID = Utility.Util.GetValueOfInt(dr[5]);
+                    VAF_Column_ID = Utility.Util.GetValueOfInt(dr[3]);
+                    VAF_Image_ID = Utility.Util.GetValueOfInt(dr[4]);
+                    VAF_Colour_ID = Utility.Util.GetValueOfInt(dr[5]);
                     PA_Goal_ID = Utility.Util.GetValueOfInt(dr[6]);
                     ColumnName = Utility.Util.GetValueOfString(dr[7]);
                 }
@@ -195,30 +195,30 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        ///	Get Link AD_Column_ID
+        ///	Get Link VAF_Column_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Column_ID()
+        public int GetVAF_Column_ID()
         {
-            return AD_Column_ID;
+            return VAF_Column_ID;
         }
 
         /// <summary>
-        ///	Get AD_Image_ID
+        ///	Get VAF_Image_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Image_ID()
+        public int GetVAF_Image_ID()
         {
-            return AD_Image_ID;
+            return VAF_Image_ID;
         }
 
         /// <summary>
-        /// Get AD_Color_ID
+        /// Get VAF_Colour_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Color_ID()
+        public int GetVAF_Colour_ID()
         {
-            return AD_Color_ID;
+            return VAF_Colour_ID;
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         private bool InitWorkbenchWindows()
         {
-            String sql = "SELECT AD_Window_ID, AD_Form_ID, AD_Process_ID, AD_Task_ID "
+            String sql = "SELECT AD_Window_ID, VAF_Page_ID, AD_Process_ID, AD_Task_ID "
                 + "FROM AD_WorkbenchWindow "
                 + "WHERE AD_Workbench_ID=" + AD_Workbench_ID.ToString() + " AND IsActive='Y'"
                 + "ORDER BY SeqNo";
@@ -258,14 +258,14 @@ namespace VAdvantage.Model
                 while (dr.Read())
                 {
                     int AD_Window_ID = Utility.Util.GetValueOfInt(dr[0]);
-                    int AD_Form_ID = Utility.Util.GetValueOfInt(dr[1]);
+                    int VAF_Page_ID = Utility.Util.GetValueOfInt(dr[1]);
                     int AD_Process_ID = Utility.Util.GetValueOfInt(dr[2]);
                     int AD_Task_ID = Utility.Util.GetValueOfInt(dr[3]);
                     //
                     if (AD_Window_ID > 0)
                         _windows.Add(new WBWindow(TYPE_WINDOW, AD_Window_ID));
-                    else if (AD_Form_ID > 0)
-                        _windows.Add(new WBWindow(TYPE_FORM, AD_Form_ID));
+                    else if (VAF_Page_ID > 0)
+                        _windows.Add(new WBWindow(TYPE_FORM, VAF_Page_ID));
                     else if (AD_Process_ID > 0)
                         _windows.Add(new WBWindow(TYPE_PROCESS, AD_Process_ID));
                     else if (AD_Task_ID > 0)
@@ -423,20 +423,20 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get AD_Color_ID of Window
+        /// Get VAF_Colour_ID of Window
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public int GetAD_Color_ID(int index)
+        public int GetVAF_Colour_ID(int index)
         {
             if (index < 0 || index > _windows.Count)
                 throw new ArgumentException("Index invalid: " + index);
             WBWindow win = _windows[index];
             int retValue = -1;
             //	if (win.mWindow != null && win.Type == TYPE_WINDOW)
-            //		return win.mWindow.getAD_Color_ID();
+            //		return win.mWindow.getVAF_Colour_ID();
             if (retValue == -1)
-                return GetAD_Color_ID();
+                return GetVAF_Colour_ID();
             return retValue;
         }
 

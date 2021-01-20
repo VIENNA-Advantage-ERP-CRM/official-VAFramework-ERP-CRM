@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721080414376L;
         /** Last Updated Timestamp 8/7/2015 7:14:58 PM */
         public static long updatedMS = 1438955097587L;
-        /** AD_Table_ID=265 */
+        /** VAF_TableView_ID=265 */
         public static int Table_ID;
         // =265;
 
@@ -152,21 +152,21 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_OrgOnly_ID AD_Reference_ID=322 */
-        public static int AD_ORGONLY_ID_AD_Reference_ID = 322;
+        /** VAF_OrgOnly_ID AD_Reference_ID=322 */
+        public static int VAF_ORGONLY_ID_AD_Reference_ID = 322;
         /** Set Only Organization.
-        @param AD_OrgOnly_ID Create posting entries only for this organization */
-        public void SetAD_OrgOnly_ID(int AD_OrgOnly_ID)
+        @param VAF_OrgOnly_ID Create posting entries only for this organization */
+        public void SetVAF_OrgOnly_ID(int VAF_OrgOnly_ID)
         {
-            if (AD_OrgOnly_ID <= 0) Set_Value("AD_OrgOnly_ID", null);
+            if (VAF_OrgOnly_ID <= 0) Set_Value("VAF_OrgOnly_ID", null);
             else
-                Set_Value("AD_OrgOnly_ID", AD_OrgOnly_ID);
+                Set_Value("VAF_OrgOnly_ID", VAF_OrgOnly_ID);
         }
         /** Get Only Organization.
         @return Create posting entries only for this organization */
-        public int GetAD_OrgOnly_ID()
+        public int GetVAF_OrgOnly_ID()
         {
-            Object ii = Get_Value("AD_OrgOnly_ID");
+            Object ii = Get_Value("VAF_OrgOnly_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

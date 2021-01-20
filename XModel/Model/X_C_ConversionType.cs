@@ -74,7 +74,7 @@ static X_C_ConversionType()
 //static long serialVersionUID 27562514371451L;
 /** Last Updated Timestamp 7/29/2010 1:07:34 PM */
 public static long updatedMS = 1280389054662L;
-/** AD_Table_ID=637 */
+/** VAF_TableView_ID=637 */
 public static int Table_ID;
  // =637;
 

@@ -74,7 +74,7 @@ static X_CM_CStageTTable()
 //static long serialVersionUID 27562514368426L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051637L;
-/** AD_Table_ID=881 */
+/** VAF_TableView_ID=881 */
 public static int Table_ID;
  // =881;
 

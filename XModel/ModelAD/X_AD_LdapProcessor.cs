@@ -76,7 +76,7 @@ static X_AD_LdapProcessor()
 //static long serialVersionUID = 27562514362094L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045305L;
-/** AD_Table_ID=902 */
+/** VAF_TableView_ID=902 */
 public static int Table_ID;
  // =902;
 

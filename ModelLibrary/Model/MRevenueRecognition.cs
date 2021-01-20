@@ -89,7 +89,7 @@ namespace VAdvantage.Model
 
                 PO assetGroupAcct = null;
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where IsActive = 'Y' AND AD_CLIENT_ID=" + GetAD_Client_ID());
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where IsActive = 'Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID());
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + GetAD_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -112,14 +112,14 @@ namespace VAdvantage.Model
                                     _sql.Append(@"Select count(*) From C_RevenueRecognition Bp
                                                        Left Join FRPT_RevenueRecognition_Acct  ca On Bp.C_RevenueRecognition_ID=ca.C_RevenueRecognition_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
-                                                   + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + GetAD_Client_ID() +
+                                                   + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + GetVAF_Client_ID() +
                                                    " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) +
                                                    " AND Bp.C_RevenueRecognition_ID = " + GetC_RevenueRecognition_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
                                         assetGroupAcct = MTable.GetPO(GetCtx(), "FRPT_RevenueRecognition_Acct", 0, null);
-                                        assetGroupAcct.Set_ValueNoCheck("AD_Org_ID", 0);
+                                        assetGroupAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         assetGroupAcct.Set_ValueNoCheck("C_RevenueRecognition_ID", Util.GetValueOfInt(GetC_RevenueRecognition_ID()));
                                         assetGroupAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         assetGroupAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
         public static MRevenueRecognition[] GetRecognitions(Ctx ctx, Trx trx)
         {
             List<MRevenueRecognition> list = new List<MRevenueRecognition>();
-            string sql = "Select * From C_RevenueRecognition Where AD_Client_ID=" + ctx.GetAD_Client_ID();
+            string sql = "Select * From C_RevenueRecognition Where VAF_Client_ID=" + ctx.GetVAF_Client_ID();
 
             DataTable dt = null;
             IDataReader idr = null;
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
                 DateTime? RecognizationDate = null;
                 int NoofMonths = 0;
                 MRevenueRecognition revenueRecognition = new MRevenueRecognition(Invoice.GetCtx(), C_RevenueRecognition_ID, Invoice.Get_Trx());
-                int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetAD_Client_ID(), Invoice.GetAD_Org_ID());
+                int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetVAF_Client_ID(), Invoice.GetVAF_Org_ID());
                 int ToCurrency = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Currency_ID FROM C_AcctSchema WHERE C_AcctSchema_ID=" + defaultAccSchemaOrg_ID));
 
                 MInvoiceLine invoiceLine = new MInvoiceLine(Invoice.GetCtx(), C_InvoiceLine_ID, Invoice.Get_Trx());
@@ -339,10 +339,10 @@ namespace VAdvantage.Model
                             int calendar_ID = 0;
                             DataSet ds = new DataSet();
 
-                            calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM AD_OrgInfo WHERE ad_org_id = " + Invoice.GetAD_Org_ID()));
+                            calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM VAF_OrgInfo WHERE vaf_org_id = " + Invoice.GetVAF_Org_ID()));
                             if (calendar_ID == 0)
                             {
-                                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM AD_ClientInfo WHERE ad_client_id = " + Invoice.GetAD_Client_ID()));
+                                calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE vaf_client_id = " + Invoice.GetVAF_Client_ID()));
                             }
                             sql = "SELECT startdate , enddate FROM c_period WHERE " +
                                 "c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON c_year.c_year_id = C_period.c_year_id " +
@@ -426,19 +426,19 @@ namespace VAdvantage.Model
         /// This function is used to get Accounting Schema either binded on Organization or Primary Accounting SChema
         /// </summary>
         /// <param name="ctx">ctx</param>
-        /// <param name="Ad_Client_ID">AD_Client_ID</param>
-        /// <param name="AD_Org_ID">Org ID</param>
+        /// <param name="vaf_client_ID">VAF_Client_ID</param>
+        /// <param name="VAF_Org_ID">Org ID</param>
         /// <returns>C_AcctSchema ID</returns>
-        public static int GetDefaultActSchema(Ctx ctx, int Ad_Client_ID, int AD_Org_ID)
+        public static int GetDefaultActSchema(Ctx ctx, int vaf_client_ID, int VAF_Org_ID)
         {
             MAcctSchema acctSchema = null;
-            if (AD_Org_ID > 0)
+            if (VAF_Org_ID > 0)
             {
-                acctSchema = MOrg.Get(ctx, AD_Org_ID).GetAcctSchema();
+                acctSchema = MOrg.Get(ctx, VAF_Org_ID).GetAcctSchema();
             }
             if (acctSchema == null)
             {
-                acctSchema = MClient.Get(ctx, Ad_Client_ID).GetAcctSchema();
+                acctSchema = MClient.Get(ctx, vaf_client_ID).GetAcctSchema();
             }
             return acctSchema.GetC_AcctSchema_ID();
         }

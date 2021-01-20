@@ -74,7 +74,7 @@ static X_AD_ModuleField()
 //static long serialVersionUID = 27622811900152L;
 /** Last Updated Timestamp 6/26/2012 10:26:23 AM */
 public static long updatedMS = 1340686583363L;
-/** AD_Table_ID=1000059 */
+/** VAF_TableView_ID=1000059 */
 public static int Table_ID;
  // =1000059;
 
@@ -117,18 +117,18 @@ StringBuilder sb = new StringBuilder ("X_AD_ModuleField[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Field.
-@param AD_Field_ID Field on a tab in a window */
-public void SetAD_Field_ID (int AD_Field_ID)
+@param VAF_Field_ID Field on a tab in a window */
+public void SetVAF_Field_ID (int VAF_Field_ID)
 {
-if (AD_Field_ID <= 0) Set_Value ("AD_Field_ID", null);
+if (VAF_Field_ID <= 0) Set_Value ("VAF_Field_ID", null);
 else
-Set_Value ("AD_Field_ID", AD_Field_ID);
+Set_Value ("VAF_Field_ID", VAF_Field_ID);
 }
 /** Get Field.
 @return Field on a tab in a window */
-public int GetAD_Field_ID() 
+public int GetVAF_Field_ID() 
 {
-Object ii = Get_Value("AD_Field_ID");
+Object ii = Get_Value("VAF_Field_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

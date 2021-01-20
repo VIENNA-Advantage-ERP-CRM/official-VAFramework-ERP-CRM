@@ -75,7 +75,7 @@ namespace VAdvantage.Process
                 opp.SetC_Campaign_ID ( lead.GetC_Campaign_ID());
                // opp.SetR_Source_ID (lead.GetR_Source_ID());
                 //opp.SetOpportunityStatus ("N");
-               // opp.SetAD_Client_ID(GetAD_Client_ID());
+               // opp.SetVAF_Client_ID(GetVAF_Client_ID());
                 opp.SetAD_User_ID(lead.GetAD_User_ID());
                 VAdvantage.Model.X_C_BPartner bp = new VAdvantage.Model.X_C_BPartner(GetCtx(), Pospect, Get_TrxName());
                 //X_C_BPartner_Location loc = new X_C_BPartner_Location(GetCtx(), Pospect, Get_TrxName());

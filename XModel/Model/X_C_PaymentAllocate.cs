@@ -80,7 +80,7 @@ static X_C_PaymentAllocate()
 //static long serialVersionUID 27562514373943L;
 /** Last Updated Timestamp 7/29/2010 1:07:37 PM */
 public static long updatedMS = 1280389057154L;
-/** AD_Table_ID=812 */
+/** VAF_TableView_ID=812 */
 public static int Table_ID;
  // =812;
 

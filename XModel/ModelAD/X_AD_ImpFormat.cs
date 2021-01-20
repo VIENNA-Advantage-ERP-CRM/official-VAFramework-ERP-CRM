@@ -21,7 +21,7 @@ public X_AD_ImpFormat (Context ctx, int AD_ImpFormat_ID, Trx trxName) : base (ct
 /** if (AD_ImpFormat_ID == 0)
 {
 SetAD_ImpFormat_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetFormatType (null);
 SetName (null);
 SetProcessing (false);	// N
@@ -33,7 +33,7 @@ public X_AD_ImpFormat (Ctx ctx, int AD_ImpFormat_ID, Trx trxName) : base (ctx, A
 /** if (AD_ImpFormat_ID == 0)
 {
 SetAD_ImpFormat_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetFormatType (null);
 SetName (null);
 SetProcessing (false);	// N
@@ -76,7 +76,7 @@ static X_AD_ImpFormat()
 //static long serialVersionUID = 27562514361467L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044678L;
-/** AD_Table_ID=381 */
+/** VAF_TableView_ID=381 */
 public static int Table_ID;
  // =381;
 
@@ -134,17 +134,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

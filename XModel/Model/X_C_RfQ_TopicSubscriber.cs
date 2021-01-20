@@ -74,7 +74,7 @@ static X_C_RfQ_TopicSubscriber()
 //static long serialVersionUID 27562514375055L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058266L;
-/** AD_Table_ID=670 */
+/** VAF_TableView_ID=670 */
 public static int Table_ID;
  // =670;
 

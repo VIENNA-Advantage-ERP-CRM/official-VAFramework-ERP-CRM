@@ -17,7 +17,7 @@ namespace VAdvantage.Model
         public static MArchive[] Get(Ctx ctx, String whereClause)
         {
             List<MArchive> list = new List<MArchive>();
-            String sql = "SELECT * FROM AD_Archive WHERE AD_Client_ID=@param1";
+            String sql = "SELECT * FROM AD_Archive WHERE VAF_Client_ID=@param1";
             if (whereClause != null && whereClause.Length > 0)
                 sql += whereClause;
             sql += " ORDER BY Created";
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param1", ctx.GetAD_Client_ID());
+                param[0] = new SqlParameter("@param1", ctx.GetVAF_Client_ID());
                 DataSet ds = DB.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
             SetIsReport(info.IsReport());
             //
             SetAD_Process_ID(info.GetAD_Process_ID());
-            SetAD_Table_ID(info.GetAD_Table_ID());
+            SetVAF_TableView_ID(info.GetVAF_TableView_ID());
             SetRecord_ID(info.GetRecord_ID());
             SetC_BPartner_ID(info.GetC_BPartner_ID());
         }	//	MArchive

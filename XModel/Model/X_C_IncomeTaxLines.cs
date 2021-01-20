@@ -70,7 +70,7 @@ static X_C_IncomeTaxLines()
 //static long serialVersionUID 27681667617660L;
 /** Last Updated Timestamp 5/8/2014 3:15:00 PM */
 public static long updatedMS = 1399542300871L;
-/** AD_Table_ID=1000442 */
+/** VAF_TableView_ID=1000442 */
 public static int Table_ID;
  // =1000442;
 

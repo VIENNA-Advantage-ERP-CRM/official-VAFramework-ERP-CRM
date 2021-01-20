@@ -273,8 +273,8 @@ namespace VAdvantage.Model
                 log.Warning(error);
                 return ldapUser;
             }
-            int AD_Client_ID = FindClient(o);
-            if (AD_Client_ID == 0)
+            int VAF_Client_ID = FindClient(o);
+            if (VAF_Client_ID == 0)
             {
                 error = "@NotFound@ O=" + o;
                 ldapUser.SetErrorString(error);
@@ -299,7 +299,7 @@ namespace VAdvantage.Model
                     }
                 }
                 else
-                    R_InterestArea_ID = FindInterestArea(AD_Client_ID, ou);
+                    R_InterestArea_ID = FindInterestArea(VAF_Client_ID, ou);
                 if (R_InterestArea_ID == 0 && M_Product_ID == 0)
                 {
                     error = "@NotFound@ OU=" + ou;
@@ -325,14 +325,14 @@ namespace VAdvantage.Model
             String sql = "SELECT AD_User_ID, Value, LdapUser, EMail,"	//	1..4
                 + " Name, Password, IsActive, EMailVerify "
                 + "FROM AD_User "
-                + "WHERE AD_Client_ID=@param1 AND (EMail=@param2 OR Value=@param3 OR LdapUser=@param4)";
+                + "WHERE VAF_Client_ID=@param1 AND (EMail=@param2 OR Value=@param3 OR LdapUser=@param4)";
             IDataReader idr = null;
             SqlParameter[] param = new SqlParameter[4];
             try
             {
                 //pstmt = DataBase.prepareStatement (sql, null);
-                //pstmt.setInt (1, AD_Client_ID);
-                param[0] = new SqlParameter("@param1", AD_Client_ID);
+                //pstmt.setInt (1, VAF_Client_ID);
+                param[0] = new SqlParameter("@param1", VAF_Client_ID);
                 //pstmt.setString (2, usr);
                 param[1] = new SqlParameter("@param2", usr);
                 //pstmt.setString (3, usr);
@@ -407,7 +407,7 @@ namespace VAdvantage.Model
             //	Error
             if (error != null)	//	should use Language of the User
             {
-                LogAccess(AD_Client_ID, AD_User_ID, R_InterestArea_ID, 0, info, error,
+                LogAccess(VAF_Client_ID, AD_User_ID, R_InterestArea_ID, 0, info, error,
                             remoteHost, remoteAddr);
                 ldapUser.SetErrorString(Msg.Translate(GetCtx(), error));
                 return ldapUser;
@@ -420,7 +420,7 @@ namespace VAdvantage.Model
             //	Done
             if (R_InterestArea_ID == 0 && M_Product_ID == 0)
             {
-                LogAccess(AD_Client_ID, AD_User_ID, 0, 0, info, null,
+                LogAccess(VAF_Client_ID, AD_User_ID, 0, 0, info, null,
                             remoteHost, remoteAddr);
                 return ldapUser;
             }
@@ -428,11 +428,11 @@ namespace VAdvantage.Model
             if (M_Product_ID != 0)
                 return AuthenticateAsset(ldapUser,
                         AD_User_ID, usr, M_Product_ID,
-                        AD_Client_ID, remoteHost, remoteAddr);
+                        VAF_Client_ID, remoteHost, remoteAddr);
 
             return AuthenticateSubscription(ldapUser,
                     AD_User_ID, usr, R_InterestArea_ID,
-                    AD_Client_ID, remoteHost, remoteAddr);
+                    VAF_Client_ID, remoteHost, remoteAddr);
         }	//	authenticate
 
         /// <summary>
@@ -442,13 +442,13 @@ namespace VAdvantage.Model
         /// <param name="AD_User_ID">id</param>
         /// <param name="usr">user authentification (email, ...)</param>
         /// <param name="R_InterestArea_ID">interested area</param>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <param name="remoteHost">remote info</param>
         /// <param name="remoteAddr">remote info</param>
         /// <returns> user with error message set if error</returns>
         private MLdapUser AuthenticateSubscription(MLdapUser ldapUser,
                 int AD_User_ID, String usr, int R_InterestArea_ID,
-                int AD_Client_ID, String remoteHost, String remoteAddr)
+                int VAF_Client_ID, String remoteHost, String remoteAddr)
         {
             String error = null;
             String info = null;
@@ -518,13 +518,13 @@ namespace VAdvantage.Model
 
             if (error != null)	//	should use Language of the User
             {
-                LogAccess(AD_Client_ID, AD_User_ID, R_InterestArea_ID, 0, info, error,
+                LogAccess(VAF_Client_ID, AD_User_ID, R_InterestArea_ID, 0, info, error,
                             remoteHost, remoteAddr);
                 ldapUser.SetErrorString(Msg.Translate(GetCtx(), error));
                 return ldapUser;
             }
             //	Done
-            LogAccess(AD_Client_ID, AD_User_ID, R_InterestArea_ID, 0, info, null,
+            LogAccess(VAF_Client_ID, AD_User_ID, R_InterestArea_ID, 0, info, null,
                         remoteHost, remoteAddr);
             return ldapUser;
         }	//	authenticateSubscription
@@ -536,13 +536,13 @@ namespace VAdvantage.Model
         /// <param name="AD_User_ID">id</param>
         /// <param name="usr">user authentification (email, ...)</param>
         /// <param name="M_Product_ID">product</param>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <param name="remoteHost">remote info</param>
         /// <param name="remoteAddr">remote info</param>
         /// <returns>user with error message set if error</returns>
         private MLdapUser AuthenticateAsset(MLdapUser ldapUser,
                 int AD_User_ID, String usr, int M_Product_ID,
-                int AD_Client_ID, String remoteHost, String remoteAddr)
+                int VAF_Client_ID, String remoteHost, String remoteAddr)
         {
             String error = null;
             String info = null;
@@ -612,13 +612,13 @@ namespace VAdvantage.Model
 
             if (error != null)	//	should use Language of the User
             {
-                LogAccess(AD_Client_ID, AD_User_ID, 0, A_Asset_ID, info, error,
+                LogAccess(VAF_Client_ID, AD_User_ID, 0, A_Asset_ID, info, error,
                             remoteHost, remoteAddr);
                 ldapUser.SetErrorString(Msg.Translate(GetCtx(), error));
                 return ldapUser;
             }
             //	Done OK
-            MLdapAccess log = LogAccess(AD_Client_ID, AD_User_ID, 0, asset.GetA_Asset_ID(), info, null,
+            MLdapAccess log = LogAccess(VAF_Client_ID, AD_User_ID, 0, asset.GetA_Asset_ID(), info, null,
                         remoteHost, remoteAddr);
             MAssetDelivery ad = new MAssetDelivery(asset, null, log.ToString(), AD_User_ID);
             ad.SetRemote_Host(remoteHost);
@@ -632,7 +632,7 @@ namespace VAdvantage.Model
         /// Find Client
         /// </summary>
         /// <param name="client">client name</param>
-        /// <returns>AD_Client_ID</returns>
+        /// <returns>VAF_Client_ID</returns>
         private int FindClient(String client)
         {
             if (_clients == null)
@@ -642,7 +642,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < _clients.Length; i++)
             {
                 if (client.ToLower().Equals(_clients[i].GetValue().ToLower()))// client.equalsIgnoreCase (_clients[i].GetValue())))
-                    return _clients[i].GetAD_Client_ID();
+                    return _clients[i].GetVAF_Client_ID();
             }
             return 0;
         }	//	findClient
@@ -650,10 +650,10 @@ namespace VAdvantage.Model
         /// <summary>
         /// Find Interest Area
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <param name="interestArea">interset Name client name</param>
-        /// <returns>AD_Client_ID</returns>
-        private int FindInterestArea(int AD_Client_ID, String interestArea)
+        /// <returns>VAF_Client_ID</returns>
+        private int FindInterestArea(int VAF_Client_ID, String interestArea)
         {
             if (_interests == null)
             {
@@ -661,7 +661,7 @@ namespace VAdvantage.Model
             }
             for (int i = 0; i < _interests.Length; i++)
             {
-                if (AD_Client_ID == _interests[i].GetAD_Client_ID()
+                if (VAF_Client_ID == _interests[i].GetVAF_Client_ID()
                     && interestArea.ToLower().Equals(_interests[i].GetValue().ToLower()))  //  interestArea.equalsIgnoreCase(_interests[i].GetValue()))
                 {
                     return _interests[i].GetR_InterestArea_ID();
@@ -673,7 +673,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Log Access
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
+        /// <param name="VAF_Client_ID">client</param>
         /// <param name="AD_User_ID">user</param>
         /// <param name="R_InterestArea_ID">interested area</param>
         /// <param name="A_Asset_ID">id</param>
@@ -682,7 +682,7 @@ namespace VAdvantage.Model
         /// <param name="remoteHost">remote info</param>
         /// <param name="remoteAddr">remote info</param>
         /// <returns></returns>
-        private MLdapAccess LogAccess(int AD_Client_ID,
+        private MLdapAccess LogAccess(int VAF_Client_ID,
             int AD_User_ID, int R_InterestArea_ID, int A_Asset_ID,
             String info, String error,
             String remoteHost, String remoteAddr)
@@ -699,8 +699,8 @@ namespace VAdvantage.Model
             }
             //
             MLdapAccess access = new MLdapAccess(GetCtx(), 0, null);
-            access.SetAD_Client_ID(AD_Client_ID);
-            access.SetAD_Org_ID(0);
+            access.SetVAF_Client_ID(VAF_Client_ID);
+            access.SetVAF_Org_ID(0);
             access.SetAD_LdapProcessor_ID(GetAD_LdapProcessor_ID());
             access.SetAD_User_ID(AD_User_ID);
             access.SetR_InterestArea_ID(R_InterestArea_ID);

@@ -25,7 +25,7 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 // check if same record is inserting again
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleForm WHERE AD_Form_ID=" + GetAD_Form_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleForm WHERE VAF_Page_ID=" + GetVAF_Page_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "FormExist"));
                     return false;
@@ -34,10 +34,10 @@ namespace VAdvantage.Model
             else
             {
                 // check if form value changed for previous record
-                if (Is_ValueChanged("AD_Form_ID"))
+                if (Is_ValueChanged("VAF_Page_ID"))
                 {
                     // check if same record is inserting again
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleForm WHERE AD_Form_ID=" + GetAD_Form_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleForm WHERE VAF_Page_ID=" + GetVAF_Page_ID() + " AND AD_ModuleInfo_ID=" + GetAD_ModuleInfo_ID())) > 0)
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "FormExist"));
                         return false;

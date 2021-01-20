@@ -252,7 +252,7 @@ namespace VAdvantage.Model
                     // payment mode of "Cash" type having currency is null on "Payment Method" window & update here
                     DataSet dsPaymentMethod = (DB.ExecuteDataset(@"SELECT VA009_PaymentMethod_ID, VA009_PaymentMode, VA009_PaymentType, VA009_PaymentTrigger 
                                        FROM VA009_PaymentMethod WHERE IsActive = 'Y' 
-                                       AND AD_Client_ID = " + GetAD_Client_ID() + @" AND VA009_PaymentBaseType = 'B' AND NVL(C_Currency_ID , 0) = 0", null, Get_Trx()));
+                                       AND VAF_Client_ID = " + GetVAF_Client_ID() + @" AND VA009_PaymentBaseType = 'B' AND NVL(C_Currency_ID , 0) = 0", null, Get_Trx()));
                     if (dsPaymentMethod != null && dsPaymentMethod.Tables.Count > 0 && dsPaymentMethod.Tables[0].Rows.Count > 0)
                     {
                         SetVA009_PaymentMethod_ID(Util.GetValueOfInt(dsPaymentMethod.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -265,12 +265,12 @@ namespace VAdvantage.Model
                     else
                     {
                         #region when we not found record of "Cash" then we will create a new rcord on Payment Method for Cash
-                        string sql = @"SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename LIKE 'VA009_PaymentMethod' AND IsActive = 'Y'";
+                        string sql = @"SELECT VAF_TABLEVIEW_ID  FROM VAF_TABLEVIEW WHERE tablename LIKE 'VA009_PaymentMethod' AND IsActive = 'Y'";
                         int tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                         MTable tbl = new MTable(GetCtx(), tableId, Get_Trx());
                         PO po = tbl.GetPO(GetCtx(), 0, Get_Trx());
-                        po.SetAD_Client_ID(GetAD_Client_ID());
-                        po.SetAD_Org_ID(0); // Recod will be created in (*) Organization
+                        po.SetVAF_Client_ID(GetVAF_Client_ID());
+                        po.SetVAF_Org_ID(0); // Recod will be created in (*) Organization
                         po.Set_Value("Value", "By Cash");
                         po.Set_Value("VA009_Name", "By Cash");
                         po.Set_Value("IsActive", true);

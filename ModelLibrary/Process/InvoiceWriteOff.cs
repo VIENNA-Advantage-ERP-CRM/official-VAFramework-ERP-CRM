@@ -274,7 +274,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			_m_alloc = new MAllocationHdr (GetCtx(), true, 
 				_DateAcct, C_Currency_ID,
 				GetProcessInfo().GetTitle() + " #" + GetAD_PInstance_ID(), Get_TrxName());
-			_m_alloc.SetAD_Org_ID(invoice.GetAD_Org_ID());
+			_m_alloc.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
 			if (!_m_alloc.Save())
 			{
 				log.Log(Level.SEVERE, "Cannot create allocation header");
@@ -289,7 +289,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		{
 			ProcessPayment();
 			_m_payment = new MPayment(GetCtx(), 0, Get_TrxName());
-			_m_payment.SetAD_Org_ID(invoice.GetAD_Org_ID());
+			_m_payment.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
 			_m_payment.SetC_BankAccount_ID(_C_BankAccount_ID);
 			_m_payment.SetTenderType(MPayment.TENDERTYPE_Check);
 			_m_payment.SetDateTrx(_DateAcct);

@@ -48,7 +48,7 @@ namespace VAdvantage.Model
             String sql = MRole.GetDefault(ctx, false).AddAccessSQL(
                 "SELECT * FROM C_BankStatementMatcher ORDER BY SeqNo",
                 "C_BankStatementMatcher", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             DataTable dt = null;
             IDataReader idr = null;
             try

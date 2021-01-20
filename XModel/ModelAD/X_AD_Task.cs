@@ -78,7 +78,7 @@ static X_AD_Task()
 //static long serialVersionUID 27562514364476L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047687L;
-/** AD_Table_ID=118 */
+/** VAF_TableView_ID=118 */
 public static int Table_ID;
  // =118;
 

@@ -135,7 +135,7 @@ namespace VAdvantage.Process
         private void CreateModuleSchemaFiles()
         {
             //1. Create DB_Schema xml
-            DataSet ds = DB.ExecuteDataset(" SELECT AD_Table_ID,TableName,Record_ID FROM AD_Module_DB_Schema WHERE AD_ModuleInfo_ID =" + AD_ModuleInfo_ID + " ORDER BY AD_Module_DB_Schema_ID desc");
+            DataSet ds = DB.ExecuteDataset(" SELECT VAF_TableView_ID,TableName,Record_ID FROM AD_Module_DB_Schema WHERE AD_ModuleInfo_ID =" + AD_ModuleInfo_ID + " ORDER BY AD_Module_DB_Schema_ID desc");
             StreamWriter sw = new StreamWriter(pathFolder + "\\" + "AD_Module_DB_Schema.xml");
             if (ds.Tables.Count > 0)
             {

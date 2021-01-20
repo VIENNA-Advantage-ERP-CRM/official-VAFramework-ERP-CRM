@@ -181,7 +181,7 @@ namespace VAdvantage.Model
                 list.Add(new KeyNamePair(-1, ""));
             //
             StringBuilder sql = new StringBuilder("SELECT C_ValidCombination_ID, Combination, Description "
-                + "FROM C_ValidCombination WHERE AD_Client_ID=" + GetCtx().GetAD_Client_ID());
+                + "FROM C_ValidCombination WHERE VAF_Client_ID=" + GetCtx().GetVAF_Client_ID());
             if (onlyActive)
                 sql.Append(" AND IsActive='Y'");
             sql.Append(" ORDER BY 2");

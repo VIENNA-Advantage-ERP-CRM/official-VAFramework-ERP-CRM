@@ -28,7 +28,7 @@ namespace VAdvantage.Process
         /** Export Scope		*/
         private String _ExportScope = ExportScope_System;
         /** Optional Specific Table		*/
-        private int _AD_Table_ID = 0;
+        private int _VAF_TableView_ID = 0;
 
         public static String TranslationLevel_All = "A";
         public static String TranslationLevel_LabelOnly = "L";
@@ -61,8 +61,8 @@ namespace VAdvantage.Process
                 }
                 else if (name.Equals("AD_Language"))
                     _AD_Language = (String)element.GetParameter();
-                else if (name.Equals("AD_Table_ID"))
-                    _AD_Table_ID = element.GetParameterAsInt();
+                else if (name.Equals("VAF_TableView_ID"))
+                    _VAF_TableView_ID = element.GetParameterAsInt();
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
@@ -122,7 +122,7 @@ namespace VAdvantage.Process
             log.Info("AD_Language=" + _AD_Language
                 + ",Mode=" + _ImportExport
                 + ",Scope=" + _ExportScope
-                + ",AD_Table_ID=" + _AD_Table_ID
+                + ",VAF_TableView_ID=" + _VAF_TableView_ID
                 + ",Level=" + _TranslationLevel
                 + ",Directory=" + _Directory);
 
@@ -150,10 +150,10 @@ namespace VAdvantage.Process
             //	Mode
             bool imp = Mode_Import.Equals(_ImportExport);
             //	Client
-            int AD_Client_ID = 0;
+            int VAF_Client_ID = 0;
             if (ExportScope_Tenant.Equals(_ExportScope))
-                AD_Client_ID = _ctx.GetAD_Client_ID();
-            t.SetExportScope(_ExportScope, AD_Client_ID);
+                VAF_Client_ID = _ctx.GetVAF_Client_ID();
+            t.SetExportScope(_ExportScope, VAF_Client_ID);
 
             //	Directory
             if (Util.IsEmpty(_Directory))
@@ -161,10 +161,10 @@ namespace VAdvantage.Process
 
             int noWords = 0;
             //	All Tables
-            if (_AD_Table_ID == 0)
+            if (_VAF_TableView_ID == 0)
             {
-                String sql = "SELECT * FROM AD_Table WHERE IsActive='Y' AND IsView='N'"
-                    + " AND TableName LIKE '%_Trl' AND TableName<>'AD_Column_Trl'";
+                String sql = "SELECT * FROM VAF_TableView WHERE IsActive='Y' AND IsView='N'"
+                    + " AND TableName LIKE '%_Trl' AND TableName<>'VAF_Column_TL'";
                 if (ExportScope_Tenant.Equals(_ExportScope))
                     sql += " AND AccessLevel<>'4'";	//	System Only
                 else
@@ -184,7 +184,7 @@ namespace VAdvantage.Process
             }
             else	//	single table
             {
-                MTable table = MTable.Get(_ctx, _AD_Table_ID);
+                MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
                 msg = null;
                 msg = imp
                     ? t.ImportTrl(_Directory, table.GetTableName())

@@ -28,19 +28,19 @@ namespace VIS.Helpers
             ProcessDataOut outt = new ProcessDataOut();
 
             bool trl = !Env.IsBaseLanguage(ctx, "AD_Process");
-            String sql = "SELECT p.Name, p.Description, p.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
+            String sql = "SELECT p.Name, p.Description, p.Help, p.IsReport, p.VAF_ContextScope_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
                 + " ,img.FontName ,    img.ImageURl   AS ImageUrl"
                     + " FROM AD_Process p "
-                    + "LEFT OUTER JOIN AD_CtxArea ca ON (p.AD_CtxArea_ID=ca.AD_CtxArea_ID) "
-                    + " Left Outer Join Ad_Image Img On  p.AD_Image_ID=img.AD_Image_ID "
+                    + "LEFT OUTER JOIN VAF_ContextScope ca ON (p.VAF_ContextScope_ID=ca.VAF_ContextScope_ID) "
+                    + " Left Outer Join VAF_Image Img On  p.VAF_Image_ID=img.VAF_Image_ID "
                     + "WHERE AD_Process_ID=" + AD_Process_ID;
             if (trl)
-                sql = "SELECT t.Name, t.Description, t.Help, p.IsReport, p.AD_CtxArea_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
+                sql = "SELECT t.Name, t.Description, t.Help, p.IsReport, p.VAF_ContextScope_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
                     + " ,img.FontName ,   img.ImageURl      AS ImageUrl"
                     + " FROM AD_Process p "
-                    + "LEFT OUTER JOIN AD_CtxArea ca ON (p.AD_CtxArea_ID=ca.AD_CtxArea_ID) "
+                    + "LEFT OUTER JOIN VAF_ContextScope ca ON (p.VAF_ContextScope_ID=ca.VAF_ContextScope_ID) "
                     + " INNER JOIN AD_Process_Trl t ON (p.AD_Process_ID=t.AD_Process_ID) "
-                    + " Left Outer Join Ad_Image Img On  p.AD_Image_ID=img.AD_Image_ID "
+                    + " Left Outer Join VAF_Image Img On  p.VAF_Image_ID=img.VAF_Image_ID "
                     + "WHERE p.AD_Process_ID=" + AD_Process_ID + " AND t.AD_Language='" + Env.GetAD_Language(ctx) + "'";
 
             IDataReader dr = null;
@@ -216,7 +216,7 @@ namespace VIS.Helpers
             if (pi.GetIsReport())
                 VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(), pi.GetOriginName(), pi.GetTable_ID(), pi.GetRecord_ID(), pi.GetAD_Process_ID(), pi.GetTitle(), pi.GetFileType(), "", "");
             pi.SetAD_User_ID(ctx.GetAD_User_ID());
-            pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             if (pi.GetAD_PInstance_ID() == 0)
             {
                 MPInstance instance = null;
@@ -344,7 +344,7 @@ namespace VIS.Helpers
                             para.SetP_String_To(pp.Result.ToString());
                         }
                     }
-                    para.SetAD_Process_Para_ID(pp.AD_Column_ID);
+                    para.SetAD_Process_Para_ID(pp.VAF_Column_ID);
 
                     para.SetInfo(pp.Info);
 
@@ -365,9 +365,9 @@ namespace VIS.Helpers
             ProcessReportInfo rep = new ProcessReportInfo();
             try
             {
-                //ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, AD_Table_ID, Record_ID);
+                //ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID);
                 //pi.SetAD_User_ID(ctx.GetAD_User_ID());
-                //pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                //pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 //pi.SetAD_PInstance_ID(AD_PInstance_ID);
                 //pi.SetAD_Window_ID(AD_Window_ID);
                 //pi.FileType = fileType;
@@ -413,7 +413,7 @@ namespace VIS.Helpers
 
                 // Change Lokesh Chauhan
                 rep.CustomHTML = pi.GetCustomHTML();
-                //rep.AD_Table_ID = ctl.GetReprortTableID();
+                //rep.VAF_TableView_ID = ctl.GetReprortTableID();
 
 
                 //Env.GetCtx().Clear();
@@ -439,7 +439,7 @@ namespace VIS.Helpers
         /// <param name="ctx"></param>
         /// <param name="AD_Process_ID"></param>
         /// <param name="Name"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="WindowNo"></param>
         /// <param name="fileType"></param>
@@ -510,7 +510,7 @@ namespace VIS.Helpers
             {
                 parentIDs.Append(",").Append(currentnode);
             }
-            string adtableName = MTable.GetTableName(ctx, tree.GetAD_Table_ID());
+            string adtableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
 
             string tableName = tree.GetNodeTableName();
 
@@ -541,11 +541,11 @@ namespace VIS.Helpers
             ReportEngine_N re = null;
             Query _query = null;
             int Record_ID = 0;
-            object AD_tab_ID = 0;
+            object vaf_tab_ID = 0;
 
             //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, Util.GetValueOfString(nProcessInfo["ActionOrigin"]), Util.GetValueOfString(nProcessInfo["OriginName"]),
-                Util.GetValueOfInt(nProcessInfo["AD_Table_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]), Util.GetValueOfInt(nProcessInfo["Process_ID"]),
+                Util.GetValueOfInt(nProcessInfo["VAF_TableView_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]), Util.GetValueOfInt(nProcessInfo["Process_ID"]),
                 MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(), fileType, "", "");
 
 
@@ -592,7 +592,7 @@ namespace VIS.Helpers
                 if (nodeID > 0)
                 {
                     MTree tree = new MTree(_ctx, Convert.ToInt32(treeID), null);
-                    string tableName = MTable.GetTableName(_ctx, tree.GetAD_Table_ID());
+                    string tableName = MTable.GetTableName(_ctx, tree.GetVAF_TableView_ID());
 
                     _query = new Query(tableName);
 
@@ -621,7 +621,7 @@ namespace VIS.Helpers
             {
                 if (queryInfo[2] != null && queryInfo[2] != "" && Convert.ToInt32(queryInfo[2]) > 0)
                 {
-                    AD_tab_ID = Convert.ToInt32(queryInfo[2]);
+                    vaf_tab_ID = Convert.ToInt32(queryInfo[2]);
                 }
             }
             //Context _ctx = new Context(ctxDic);
@@ -659,9 +659,9 @@ namespace VIS.Helpers
                 else
                 {
                     //   pf = MPrintFormat.CreateFromTable(_ctx, id);
-                    if (Convert.ToInt32(AD_tab_ID) > 0)
+                    if (Convert.ToInt32(vaf_tab_ID) > 0)
                     {
-                        pf = MPrintFormat.CreateFromTable(_ctx, id, AD_tab_ID, true);
+                        pf = MPrintFormat.CreateFromTable(_ctx, id, vaf_tab_ID, true);
                     }
                     else
                     {
@@ -680,7 +680,7 @@ namespace VIS.Helpers
                 if (nProcessInfo == null || pageNo > 0 || (Util.GetValueOfInt(nProcessInfo["Record_ID"]) == 0 && Util.GetValueOfInt(nProcessInfo["Process_ID"]) == 0 &&
                     Util.GetValueOfInt(nProcessInfo["AD_PInstance_ID"]) == 0))
                 {
-                    PrintInfo info = new PrintInfo(pf.GetName(), pf.GetAD_Table_ID(), Record_ID);
+                    PrintInfo info = new PrintInfo(pf.GetName(), pf.GetVAF_TableView_ID(), Record_ID);
                     info.SetDescription(_query == null ? "" : _query.GetInfo());
                     re = new ReportEngine_N(_ctx, pf, _query, info);
                 }
@@ -739,18 +739,18 @@ namespace VIS.Helpers
         /// <param name="ctx"></param>
         /// <param name="AD_Process_ID"></param>
         /// <param name="Name"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="WindowNo"></param>
         /// <param name="recIDs"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int WindowNo, string recIDs, string fileType, string actionOrigin, string originName)
+        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string recIDs, string fileType, string actionOrigin, string originName)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
             //Saved Action Log
-            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, AD_Table_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType, "", "");
+            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, VAF_TableView_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType, "", "");
 
             try
             {
@@ -784,12 +784,12 @@ namespace VIS.Helpers
 
 
             ////////log/////
-            //string clientName = ctx.GetAD_Org_Name() + "_" + ctx.GetAD_User_Name();
+            //string clientName = ctx.GetVAF_Org_Name() + "_" + ctx.GetAD_User_Name();
             //string storedPath = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "");
             //storedPath += clientName;
             //VLogMgt.Initialize(true, storedPath);
             ////////////////
-            ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, AD_Table_ID, Record_ID, recIDs);
+            ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID, recIDs);
             pi.SetFileType(fileType);
             TryPrintFromDocType(pi);
             //if (ret != null)
@@ -807,7 +807,7 @@ namespace VIS.Helpers
             {
 
                 pi.SetAD_User_ID(ctx.GetAD_User_ID());
-                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 pi.SetAD_PInstance_ID(ret.AD_PInstance_ID);
 
                 //report = null;
@@ -827,7 +827,7 @@ namespace VIS.Helpers
                 ret.TotalRecords = pi.GetTotalRecords();
                 ret.IsReportFormat = pi.GetIsReportFormat();
                 ret.IsTelerikReport = pi.GetIsTelerik();
-                ret.AD_Table_ID = pi.GetTable_ID();
+                ret.VAF_TableView_ID = pi.GetTable_ID();
                 ret.RecordID = pi.GetRecord_ID();
                 ret.AD_Process_ID = pi.GetAD_Process_ID();
                 ret.RecordIDs = pi.GetRecIds();
@@ -846,7 +846,7 @@ namespace VIS.Helpers
             System.Threading.Thread.CurrentThread.CurrentUICulture = original;
 
             //return ret;
-            //ret = ExecuteProcess(ctx, AD_Process_ID, Name, ret.AD_PInstance_ID, AD_Table_ID, Record_ID, null,true);
+            //ret = ExecuteProcess(ctx, AD_Process_ID, Name, ret.AD_PInstance_ID, VAF_TableView_ID, Record_ID, null,true);
             // VAdvantage.Classes.CleanUp.Get().Start();
             return ret;
         }
@@ -861,19 +861,19 @@ namespace VIS.Helpers
             try
             {
                 string colName = "C_DocTypeTarget_ID";
-                string sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
+                string sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocTypeTarget_ID'";
                 int id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)
                 {
                     colName = "C_DocType_ID";
-                    sql = "SELECT COUNT(*) FROM AD_Column WHERE AD_Table_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocType_ID'";
+                    sql = "SELECT COUNT(*) FROM VAF_Column WHERE VAF_TableView_ID=" + _pi.GetTable_ID() + " AND ColumnName   ='C_DocType_ID'";
                     id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                     if (id < 1)
                     {
                         return;
                     }
                 }
-                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID=" + _pi.GetTable_ID()));
+                string tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=" + _pi.GetTable_ID()));
                 sql = "SELECT " + colName + " FROM " + tableName + " WHERE " + tableName + "_ID =" + _pi.GetRecord_ID();
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id < 1)
@@ -890,9 +890,9 @@ namespace VIS.Helpers
                 //string reportFilePath = null;
                 //byte[] report = null;
                 //string ReportString = null;
-                //ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, AD_Table_ID, Record_ID, recIDs);
+                //ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID, recIDs);
                 //pi.SetAD_User_ID(ctx.GetAD_User_ID());
-                //pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                //pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 //pi.SetAD_PInstance_ID(AD_PInstance_ID);
                 //pi.IsArabicReportFromOutside = false;
                 //pi.SetFileType(fileType);
@@ -946,20 +946,20 @@ namespace VIS.Helpers
         /// <param name="ctx"></param>
         /// <param name="AD_Process_ID"></param>
         /// <param name="Name"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="C_BPartner_ID"></param>
         /// <param name="isReport"></param>
         /// <param name="binaryData"></param>
         /// <param name="reportPath"></param>
         /// <returns></returns>
-        public static bool ArchiveDoc(Ctx ctx, int AD_Process_ID, string Name, int AD_Table_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
+        public static bool ArchiveDoc(Ctx ctx, int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
         {
             MArchive archive = new MArchive(ctx, 0, null);
             archive.SetName(Name);
             archive.SetIsReport(isReport);
             archive.SetAD_Process_ID(AD_Process_ID);
-            archive.SetAD_Table_ID(AD_Table_ID);
+            archive.SetVAF_TableView_ID(VAF_TableView_ID);
             archive.SetRecord_ID(Record_ID);
             archive.SetC_BPartner_ID(C_BPartner_ID);
 
@@ -1143,7 +1143,7 @@ namespace VIS.Helpers
                         //}
 
                         // Fetch child records from tree hierarchy based on ID selected.
-                        if (columnName.Equals("AD_Org_ID", StringComparison.OrdinalIgnoreCase))
+                        if (columnName.Equals("VAF_Org_ID", StringComparison.OrdinalIgnoreCase))
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, Convert.ToInt32(values[i]));
                         }
@@ -1159,7 +1159,7 @@ namespace VIS.Helpers
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Project, Convert.ToInt32(values[i]));
                         }
-                        else if (columnName.Equals("AD_OrgTrx_ID", StringComparison.OrdinalIgnoreCase))
+                        else if (columnName.Equals("VAF_OrgTrx_ID", StringComparison.OrdinalIgnoreCase))
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_OrgTrx, Convert.ToInt32(values[i]));
                         }

@@ -101,8 +101,8 @@ namespace VAdvantage.Model
         public static MChart[] GetCharts(Ctx ctx)
         {
             List<MChart> list = new List<MChart>();
-            String sql = "SELECT pfi.AD_CLIENT_ID, " +
-                            "pfi.AD_ORG_ID, " +
+            String sql = "SELECT pfi.VAF_CLIENT_ID, " +
+                            "pfi.VAF_ORG_ID, " +
                             "pfi.CHARTTYPE, " +
                             "pfi.D_CHART_ID, " +
                             "pfi.ENABLE3D , " +
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         MChart pfi = new MChart(ctx, dr, null);
-                        //if (role.IsColumnAccess(GetAD_Table_ID(), pfi.GetAD_Column_ID(), true))
+                        //if (role.IsColumnAccess(GetVAF_TableView_ID(), pfi.GetVAF_Column_ID(), true))
                         list.Add(pfi);
                     }
                 }

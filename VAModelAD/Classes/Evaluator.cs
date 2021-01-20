@@ -63,7 +63,7 @@ namespace VAdvantage.Classes
        ///context		:= any global or window context
        ///value		:= strings can be with ' or "
        ///logic operators	:= AND or OR with the prevoius result from left to right
-       ///Example	'@AD_Table@=Test | @Language@=GERGER
+       ///Example	'@VAF_TableView@=Test | @Language@=GERGER
        /// </code>
        /// </summary>
        /// <param name="source">class implementing get_ValueAsString(variable)</param>

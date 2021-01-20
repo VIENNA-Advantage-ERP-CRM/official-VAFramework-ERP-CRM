@@ -76,7 +76,7 @@ namespace VAdvantage.Model
     /** Process ID      */
     private int         AD_Process_ID;
     /** Form ID         */
-    private int         AD_Form_ID;
+    private int         VAF_Page_ID;
     /** Workflow ID     */
     private int         AD_Workflow_ID;
     /** Task ID         */
@@ -174,18 +174,18 @@ namespace VAdvantage.Model
     /**
      * Get Form ID
      */
-    public int GetAD_Form_ID()
+    public int GetVAF_Page_ID()
     {
-        return AD_Form_ID;
+        return VAF_Page_ID;
     }
     
     /**
      * Set Form ID
      * @param int formID
      */
-    public void SetAD_Form_ID(int formID)
+    public void SetVAF_Page_ID(int formID)
     {
-        this.AD_Form_ID = formID;
+        this.VAF_Page_ID = formID;
     }
     
     /**

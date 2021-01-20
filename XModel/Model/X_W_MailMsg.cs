@@ -78,7 +78,7 @@ static X_W_MailMsg()
 //static long serialVersionUID 27562514385023L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068234L;
-/** AD_Table_ID=780 */
+/** VAF_TableView_ID=780 */
 public static int Table_ID;
  // =780;
 

@@ -122,7 +122,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                sql.Append(" AND AD_Client_ID=" + GetCtx().GetAD_Client_ID());
+                sql.Append(" AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID());
             }
             if (_DateAcct_From != null)
             {

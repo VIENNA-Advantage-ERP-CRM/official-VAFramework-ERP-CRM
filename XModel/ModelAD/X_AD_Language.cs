@@ -82,7 +82,7 @@ static X_AD_Language()
 //static long serialVersionUID = 27562514362031L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045242L;
-/** AD_Table_ID=111 */
+/** VAF_TableView_ID=111 */
 public static int Table_ID;
  // =111;
 

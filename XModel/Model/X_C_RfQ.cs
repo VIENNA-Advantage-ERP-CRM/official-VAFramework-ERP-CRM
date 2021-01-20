@@ -51,7 +51,7 @@ SetSalesRep_ID (0);} */
  added by ->Harwinder */
         static X_C_RfQ() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27867938076683L;/** Last Updated Timestamp 4/2/2020 1:02:40 PM */
-        public static long updatedMS = 1585812759894L;/** AD_Table_ID=677 */
+        public static long updatedMS = 1585812759894L;/** VAF_TableView_ID=677 */
         public static int Table_ID; // =677;
         /** TableName=C_RfQ */
         public static String Table_Name = "C_RfQ";

@@ -11,7 +11,7 @@ namespace VIS.Areas.VIS.Models
 {
     public class RecordAccessModel
     {
-        public bool SaveAccess(Ctx ctx,int AD_Role_ID, int AD_Table_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities,bool isUpdate)
+        public bool SaveAccess(Ctx ctx,int AD_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities,bool isUpdate)
         {
             if (isUpdate)
             {
@@ -21,7 +21,7 @@ namespace VIS.Areas.VIS.Models
                               IsDependentEntities='" + (isDependentEntities ? 'Y' : 'N') + @"'
                               WHERE AD_Role_ID=" + AD_Role_ID + @"
                               AND Record_ID=" + Record_ID + @"
-                              AND AD_Table_ID=" + AD_Table_ID ;
+                              AND VAF_TableView_ID=" + VAF_TableView_ID ;
                 int res = VAdvantage.DataBase.DB.ExecuteQuery(sql);
                 if (res > -1)
                 {
@@ -30,7 +30,7 @@ namespace VIS.Areas.VIS.Models
                 return false;
             }
 
-            MRecordAccess recData = new MRecordAccess(ctx, AD_Role_ID, AD_Table_ID, Record_ID, null);
+            MRecordAccess recData = new MRecordAccess(ctx, AD_Role_ID, VAF_TableView_ID, Record_ID, null);
             recData.SetIsActive(isActive);
             recData.SetIsExclude(isExclude);
             recData.SetIsReadOnly(isReadOnly);
@@ -38,11 +38,11 @@ namespace VIS.Areas.VIS.Models
             bool success = recData.Save();
             return success;
         }
-        public bool DeleteRecordAccess( int AD_Role_ID, int AD_Table_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities)
+        public bool DeleteRecordAccess( int AD_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities)
         {
             string sql = "DELETE FROM  AD_Record_Access WHERE AD_Role_ID=" + AD_Role_ID + @"
                         AND Record_ID=" + Record_ID + @"
-                        AND AD_Table_ID=" + AD_Table_ID + @"
+                        AND VAF_TableView_ID=" + VAF_TableView_ID + @"
                         AND IsActive='" + (isActive ? 'Y' : 'N') + @"'
                         AND IsExclude='" + (isExclude ? 'Y' : 'N') + @"'
                         AND IsReadOnly='" + (isReadOnly ? 'Y' : 'N') + @"'
@@ -76,11 +76,11 @@ namespace VIS.Areas.VIS.Models
         }
 
         // Added by Bharat on 06 June 2017
-        public List<Dictionary<string, object>> GetRecordAccess(int _AD_Table_ID, int _Record_ID, Ctx ctx)
+        public List<Dictionary<string, object>> GetRecordAccess(int _VAF_TableView_ID, int _Record_ID, Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = @"SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE AD_Table_ID=" + _AD_Table_ID 
-                + " AND Record_ID=" + _Record_ID + " AND AD_Client_ID=" + ctx.GetAD_Client_ID();
+            string sql = @"SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE VAF_TableView_ID=" + _VAF_TableView_ID 
+                + " AND Record_ID=" + _Record_ID + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

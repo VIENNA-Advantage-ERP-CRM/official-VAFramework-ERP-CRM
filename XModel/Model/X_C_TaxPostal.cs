@@ -72,7 +72,7 @@ static X_C_TaxPostal()
 //static long serialVersionUID 27562514375525L;
 /** Last Updated Timestamp 7/29/2010 1:07:38 PM */
 public static long updatedMS = 1280389058736L;
-/** AD_Table_ID=701 */
+/** VAF_TableView_ID=701 */
 public static int Table_ID;
  // =701;
 

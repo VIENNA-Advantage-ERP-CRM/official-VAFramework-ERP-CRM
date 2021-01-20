@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ExcelImport
+/** Generated Model for VAF_ExcelImport
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ExcelImport : PO
+public class X_VAF_ExcelImport : PO
 {
-public X_AD_ExcelImport (Context ctx, int AD_ExcelImport_ID, Trx trxName) : base (ctx, AD_ExcelImport_ID, trxName)
+public X_VAF_ExcelImport (Context ctx, int VAF_ExcelImport_ID, Trx trxName) : base (ctx, VAF_ExcelImport_ID, trxName)
 {
-/** if (AD_ExcelImport_ID == 0)
+/** if (VAF_ExcelImport_ID == 0)
 {
-SetAD_ExcelImport_ID (0);
+SetVAF_ExcelImport_ID (0);
 SetAD_Window_ID (0);
 SetFileName (null);
 SetName (null);
 }
  */
 }
-public X_AD_ExcelImport (Ctx ctx, int AD_ExcelImport_ID, Trx trxName) : base (ctx, AD_ExcelImport_ID, trxName)
+public X_VAF_ExcelImport (Ctx ctx, int VAF_ExcelImport_ID, Trx trxName) : base (ctx, VAF_ExcelImport_ID, trxName)
 {
-/** if (AD_ExcelImport_ID == 0)
+/** if (VAF_ExcelImport_ID == 0)
 {
-SetAD_ExcelImport_ID (0);
+SetVAF_ExcelImport_ID (0);
 SetAD_Window_ID (0);
 SetFileName (null);
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExcelImport (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExcelImport (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_ExcelImport (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExcelImport (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ExcelImport (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_ExcelImport (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ExcelImport (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ExcelImport (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ExcelImport()
+static X_VAF_ExcelImport()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_ExcelImport()
 //static long serialVersionUID = 27622995518994L;
 /** Last Updated Timestamp 6/28/2012 1:26:42 PM */
 public static long updatedMS = 1340870202205L;
-/** AD_Table_ID=1000042 */
+/** VAF_TableView_ID=1000042 */
 public static int Table_ID;
  // =1000042;
 
-/** TableName=AD_ExcelImport */
-public static String Table_Name="AD_ExcelImport";
+/** TableName=VAF_ExcelImport */
+public static String Table_Name="VAF_ExcelImport";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ExcelImport[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ExcelImport[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Excel Import.
-@param AD_ExcelImport_ID Excel Import */
-public void SetAD_ExcelImport_ID (int AD_ExcelImport_ID)
+@param VAF_ExcelImport_ID Excel Import */
+public void SetVAF_ExcelImport_ID (int VAF_ExcelImport_ID)
 {
-if (AD_ExcelImport_ID < 1) throw new ArgumentException ("AD_ExcelImport_ID is mandatory.");
-Set_ValueNoCheck ("AD_ExcelImport_ID", AD_ExcelImport_ID);
+if (VAF_ExcelImport_ID < 1) throw new ArgumentException ("VAF_ExcelImport_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ExcelImport_ID", VAF_ExcelImport_ID);
 }
 /** Get Excel Import.
 @return Excel Import */
-public int GetAD_ExcelImport_ID() 
+public int GetVAF_ExcelImport_ID() 
 {
-Object ii = Get_Value("AD_ExcelImport_ID");
+Object ii = Get_Value("VAF_ExcelImport_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

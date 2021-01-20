@@ -116,7 +116,7 @@ namespace VAdvantage.Process
                 //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
                 if (bp.GetVA009_PO_PaymentMethod_ID() == 0)
                 {
-                    result = GetPaymentMethod(rfq.GetAD_Org_ID());
+                    result = GetPaymentMethod(rfq.GetVAF_Org_ID());
                     if (result != null && result.Tables[0].Rows.Count > 0)
                     {
                         order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -219,12 +219,12 @@ namespace VAdvantage.Process
                         order.SetBPartner(bp);
                         order.SetC_BPartner_Location_ID(response.GetC_BPartner_Location_ID());
                         order.SetSalesRep_ID(rfq.GetSalesRep_ID());
-                        order.SetAD_Org_ID(rfq.GetAD_Org_ID());
+                        order.SetVAF_Org_ID(rfq.GetVAF_Org_ID());
                         //Added by Neha Thakur--To set Payment Method,Payment Rule and Payment Method(Button)
                         if (bp.GetVA009_PO_PaymentMethod_ID() == 0)
                         {
                             result = null;
-                            result = GetPaymentMethod(rfq.GetAD_Org_ID());
+                            result = GetPaymentMethod(rfq.GetVAF_Org_ID());
                             if (result != null && result.Tables[0].Rows.Count > 0)
                             {
                                 order.SetVA009_PaymentMethod_ID(Util.GetValueOfInt(result.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]));
@@ -291,7 +291,7 @@ namespace VAdvantage.Process
         {
             VA009_PaymentMethod_ID = 0;
             //get organisation default 
-            string _sql = "SELECT VA009_PaymentMethod_ID, VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PaymentBaseType='S' AND IsActive='Y' AND AD_ORG_ID IN(@param1,0) ORDER BY AD_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
+            string _sql = "SELECT VA009_PaymentMethod_ID, VA009_PAYMENTBASETYPE FROM VA009_PaymentMethod WHERE VA009_PaymentBaseType='S' AND IsActive='Y' AND VAF_ORG_ID IN(@param1,0) ORDER BY VAF_ORG_ID DESC, VA009_PAYMENTMETHOD_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", Org_ID);
             DataSet _ds = DB.ExecuteDataset(_sql, param, Get_TrxName());

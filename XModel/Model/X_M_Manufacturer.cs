@@ -70,7 +70,7 @@ static X_M_Manufacturer()
 static long serialVersionUID = 27709584990499L;
 /** Last Updated Timestamp 3/27/2015 6:04:33 PM */
 public static long updatedMS = 1427459673710L;
-/** AD_Table_ID=1000451 */
+/** VAF_TableView_ID=1000451 */
 public static int Table_ID;
  // =1000451;
 

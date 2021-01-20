@@ -121,7 +121,7 @@ namespace VIS.Models
             isVendor = _partner.IsVendor();
             isEmployee = _partner.IsEmployee();
             _readOnly = !MRole.GetDefault(Env.GetCtx()).CanUpdate(
-                Env.GetCtx().GetAD_Client_ID(), Env.GetCtx().GetAD_Org_ID(),
+                Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                 MBPartner.Table_ID, 0, false);
             log.Info("R/O=" + _readOnly);
 
@@ -136,11 +136,11 @@ namespace VIS.Models
             ro = _readOnly;
             if (!ro)
                 ro = !MRole.GetDefault(Env.GetCtx()).CanUpdate(
-                    Env.GetCtx().GetAD_Client_ID(), Env.GetCtx().GetAD_Org_ID(),
+                    Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                     MBPartnerLocation.Table_ID, 0, false);
             if (!ro)
                 ro = !MRole.GetDefault(Env.GetCtx()).CanUpdate(
-                    Env.GetCtx().GetAD_Client_ID(), Env.GetCtx().GetAD_Org_ID(),
+                    Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                     MLocation.Table_ID, 0, false);
 
             ds = DB.ExecuteDataset("Select C_BPartnerRelation_ID, c_bpartnerrelation_location_id from C_BP_Relation where c_bpartner_id=" + _partner.GetC_BPartner_ID());
@@ -200,7 +200,7 @@ namespace VIS.Models
                 phoneNo2 = _user.GetPhone2() ?? "";
                 mobile = _user.GetMobile() ?? "";
                 fax = _user.GetFax() ?? "";
-                userImage = GetUserImage(_user.GetAD_Image_ID());
+                userImage = GetUserImage(_user.GetVAF_Image_ID());
 
             }
             bpGroupID = _partner.GetC_BP_Group_ID();
@@ -435,14 +435,14 @@ namespace VIS.Models
         public string AddBPartner(string searchKey, string name, string name2, string greeting, string bpGroup, string bpRelation, string bpLocation, string contact, string greeting1, string title, string email, string address, string phoneNo, string phoneNo2, string fax, Ctx ctx, int _windowNo, string BPtype, int C_BPartner_ID, bool isCustomer, bool isVendor, bool isProspect, string fileUrl, string umobile, string webUrl, bool isEmployee)
         {
             StringBuilder strError = new StringBuilder();
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             if (C_BPartner_ID > 0)
             {
                 _partner = new MBPartner(ctx, C_BPartner_ID, null);
             }
             else
             {
-                _partner = MBPartner.GetTemplate(ctx, AD_Client_ID);
+                _partner = MBPartner.GetTemplate(ctx, VAF_Client_ID);
             }
             bool isSOTrx = ctx.IsSOTrx(_windowNo);
             _partner.SetIsCustomer(isSOTrx);
@@ -525,7 +525,7 @@ namespace VIS.Models
             if (searchKey == null || searchKey.Length == 0)
             {
                 //	get Table Documet No
-                searchKey = MSequence.GetDocumentNo(ctx.GetAD_Client_ID(), "C_BPartner", null, ctx);
+                searchKey = MSequence.GetDocumentNo(ctx.GetVAF_Client_ID(), "C_BPartner", null, ctx);
                 //Dispatcher.BeginInvoke(() => { txtValue.Text = value; });
             }
             _partner.SetValue(searchKey);
@@ -641,11 +641,11 @@ namespace VIS.Models
                 {
                     if (fileUrl != null && fileUrl != string.Empty)
                     {
-                        _user.SetAD_Image_ID(SaveUserImage(ctx, fileUrl, _user.GetAD_User_ID()));
+                        _user.SetVAF_Image_ID(SaveUserImage(ctx, fileUrl, _user.GetAD_User_ID()));
                     }
                     if (_user.Save())
                     {
-                        log.Fine("AD_User_ID(AD_Image_ID)=" + _user.GetAD_User_ID() + "(" + _user.GetAD_Image_ID() + ")");
+                        log.Fine("AD_User_ID(VAF_Image_ID)=" + _user.GetAD_User_ID() + "(" + _user.GetVAF_Image_ID() + ")");
                     }
                     log.Fine("AD_User_ID=" + _user.GetAD_User_ID());
                 }
@@ -679,8 +679,8 @@ namespace VIS.Models
                         {
                             _bprelation = new X_C_BP_Relation(ctx, 0, null);
                         }
-                        _bprelation.SetAD_Client_ID(_partner.GetAD_Client_ID());
-                        _bprelation.SetAD_Org_ID(_partner.GetAD_Org_ID());
+                        _bprelation.SetVAF_Client_ID(_partner.GetVAF_Client_ID());
+                        _bprelation.SetVAF_Org_ID(_partner.GetVAF_Org_ID());
                         _bprelation.SetName(_partner.GetName());
                         _bprelation.SetDescription(_partner.GetDescription());
                         _bprelation.SetC_BPartner_ID(_partner.GetC_BPartner_ID());
@@ -773,7 +773,7 @@ namespace VIS.Models
         /// <returns></returns>
         public int GetTableID(string TableName)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TABLENAME='" + TableName + "' AND ISACTIVE='Y'", null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TABLENAME='" + TableName + "' AND ISACTIVE='Y'", null, null));
 
         }
     }

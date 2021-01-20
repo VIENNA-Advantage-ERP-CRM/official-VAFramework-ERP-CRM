@@ -11,7 +11,7 @@ namespace VAdvantage.Controller
     public class HeaderPanelItemsVO
     {
 
-        public int AD_GridLayoutItems_ID = 0;
+        public int VAF_GridLayoutItems_ID = 0;
 
         /// <summary>
         /// Align Header Items to Top, Bottom or center.
@@ -85,7 +85,7 @@ namespace VAdvantage.Controller
         public string HeaderPadding = "";
 
         /******   Grid Layout ID   *****/
-        public int AD_GridLayout_ID = 0;
+        public int VAF_GridLayout_ID = 0;
 
         /****   Header Items   ***/
         public Dictionary<int, object> HeaderItems = null;

@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_FieldGroup
+/** Generated Model for VAF_FieldSection
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_FieldGroup : PO
+public class X_VAF_FieldSection : PO
 {
-public X_AD_FieldGroup (Context ctx, int AD_FieldGroup_ID, Trx trxName) : base (ctx, AD_FieldGroup_ID, trxName)
+public X_VAF_FieldSection (Context ctx, int VAF_FieldSection_ID, Trx trxName) : base (ctx, VAF_FieldSection_ID, trxName)
 {
-/** if (AD_FieldGroup_ID == 0)
+/** if (VAF_FieldSection_ID == 0)
 {
-SetAD_FieldGroup_ID (0);
+SetVAF_FieldSection_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 }
  */
 }
-public X_AD_FieldGroup (Ctx ctx, int AD_FieldGroup_ID, Trx trxName) : base (ctx, AD_FieldGroup_ID, trxName)
+public X_VAF_FieldSection (Ctx ctx, int VAF_FieldSection_ID, Trx trxName) : base (ctx, VAF_FieldSection_ID, trxName)
 {
-/** if (AD_FieldGroup_ID == 0)
+/** if (VAF_FieldSection_ID == 0)
 {
-SetAD_FieldGroup_ID (0);
+SetVAF_FieldSection_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 }
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_FieldGroup (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_FieldSection (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_FieldGroup (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_FieldGroup (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_FieldSection (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_FieldGroup (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_FieldGroup (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_FieldSection (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_FieldGroup()
+static X_VAF_FieldSection()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,12 +72,12 @@ static X_AD_FieldGroup()
 //static long serialVersionUID = 27562514361326L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044537L;
-/** AD_Table_ID=414 */
+/** VAF_TableView_ID=414 */
 public static int Table_ID;
  // =414;
 
-/** TableName=AD_FieldGroup */
-public static String Table_Name="AD_FieldGroup";
+/** TableName=VAF_FieldSection */
+public static String Table_Name="VAF_FieldSection";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_FieldGroup[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_FieldSection[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Field Group.
-@param AD_FieldGroup_ID Logical grouping of fields */
-public void SetAD_FieldGroup_ID (int AD_FieldGroup_ID)
+@param VAF_FieldSection_ID Logical grouping of fields */
+public void SetVAF_FieldSection_ID (int VAF_FieldSection_ID)
 {
-if (AD_FieldGroup_ID < 1) throw new ArgumentException ("AD_FieldGroup_ID is mandatory.");
-Set_ValueNoCheck ("AD_FieldGroup_ID", AD_FieldGroup_ID);
+if (VAF_FieldSection_ID < 1) throw new ArgumentException ("VAF_FieldSection_ID is mandatory.");
+Set_ValueNoCheck ("VAF_FieldSection_ID", VAF_FieldSection_ID);
 }
 /** Get Field Group.
 @return Logical grouping of fields */
-public int GetAD_FieldGroup_ID() 
+public int GetVAF_FieldSection_ID() 
 {
-Object ii = Get_Value("AD_FieldGroup_ID");
+Object ii = Get_Value("VAF_FieldSection_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

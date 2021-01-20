@@ -127,9 +127,9 @@ namespace VAdvantage.Process
             }
             else
             {
-                if (GetAD_Org_ID() > 0)
+                if (GetVAF_Org_ID() > 0)
                 {
-                    sql += " AND o.AD_Org_ID=" + GetAD_Org_ID();
+                    sql += " AND o.VAF_Org_ID=" + GetVAF_Org_ID();
                 }
 
                 if (_C_BPartner_ID != 0)
@@ -420,7 +420,7 @@ namespace VAdvantage.Process
         public MOrder CreatePOForVendor(int C_BPartner_ID, MOrder so, string _shipDrop)
         {
             MOrder po = new MOrder(GetCtx(), 0, Get_TrxName());
-            po.SetClientOrg(so.GetAD_Client_ID(), so.GetAD_Org_ID());
+            po.SetClientOrg(so.GetVAF_Client_ID(), so.GetVAF_Org_ID());
             po.SetRef_Order_ID(so.GetC_Order_ID());
             po.SetIsSOTrx(false);
             // method edited to set unreleased document type for PO
@@ -511,7 +511,7 @@ namespace VAdvantage.Process
                 po.SetIsDropShip(true);
                 po.SetShipToPartner_ID(so.GetC_BPartner_ID());
                 po.SetShipToLocation_ID(so.GetC_BPartner_Location_ID());
-                int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_WareHouse_ID From M_Warehouse Where AD_Org_ID=" + so.GetAD_Org_ID() + " AND Isdropship='Y' AND IsActive='Y'"));
+                int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_WareHouse_ID From M_Warehouse Where VAF_Org_ID=" + so.GetVAF_Org_ID() + " AND Isdropship='Y' AND IsActive='Y'"));
                 if (_Warehouse_ID >= 0)
                 {
                     po.SetM_Warehouse_ID(_Warehouse_ID);

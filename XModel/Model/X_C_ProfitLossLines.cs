@@ -25,7 +25,7 @@ public X_C_ProfitLossLines (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr
  added by ->Harwinder */
 static X_C_ProfitLossLines(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27764013083488L;/** Last Updated Timestamp 12/16/2016 4:59:30 PM */
-public static long updatedMS = 1481887766699L;/** AD_Table_ID=1000457 */
+public static long updatedMS = 1481887766699L;/** VAF_TableView_ID=1000457 */
 public static int Table_ID; // =1000457;
 /** TableName=C_ProfitLossLines */
 public static String Table_Name="C_ProfitLossLines";
@@ -44,13 +44,13 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_ProfitLossLines[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** AD_OrgTrx_ID AD_Reference_ID=276 */
-public static int AD_ORGTRX_ID_AD_Reference_ID=276;/** Set Trx Organization.
-@param AD_OrgTrx_ID Performing or initiating organization */
-public void SetAD_OrgTrx_ID (int AD_OrgTrx_ID){if (AD_OrgTrx_ID <= 0) Set_Value ("AD_OrgTrx_ID", null);else
-Set_Value ("AD_OrgTrx_ID", AD_OrgTrx_ID);}/** Get Trx Organization.
+/** VAF_OrgTrx_ID AD_Reference_ID=276 */
+public static int VAF_ORGTRX_ID_AD_Reference_ID=276;/** Set Trx Organization.
+@param VAF_OrgTrx_ID Performing or initiating organization */
+public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID){if (VAF_OrgTrx_ID <= 0) Set_Value ("VAF_OrgTrx_ID", null);else
+Set_Value ("VAF_OrgTrx_ID", VAF_OrgTrx_ID);}/** Get Trx Organization.
 @return Performing or initiating organization */
-public int GetAD_OrgTrx_ID() {Object ii = Get_Value("AD_OrgTrx_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Account Credit.
+public int GetVAF_OrgTrx_ID() {Object ii = Get_Value("VAF_OrgTrx_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Account Credit.
 @param AccountCredit Account Credit */
 public void SetAccountCredit (Decimal? AccountCredit){Set_Value ("AccountCredit", (Decimal?)AccountCredit);}/** Get Account Credit.
 @return Account Credit */

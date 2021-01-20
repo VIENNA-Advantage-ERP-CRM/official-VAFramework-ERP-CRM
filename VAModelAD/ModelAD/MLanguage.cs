@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         /// <returns>number of records deleted/inserted</returns>
         public int Maintain(bool add)
         {
-            String sql = "SELECT TableName FROM AD_Table WHERE TableName LIKE '%_Trl' ORDER BY 1";
+            String sql = "SELECT TableName FROM VAF_TableView WHERE TableName LIKE '%_Trl' ORDER BY 1";
             DataSet ds = null;
             int retNo = 0;
             try
@@ -194,8 +194,8 @@ namespace VAdvantage.Model
         {
             String baseTable = tableName.Substring(0, tableName.Length - 4);
             String sql = "SELECT c.ColumnName "
-                + "FROM AD_Column c"
-                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                + "FROM VAF_Column c"
+                + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE t.TableName='" + baseTable
                 + "'  AND c.IsTranslated='Y' AND c.IsActive='Y' "
                 + "ORDER BY 1";
@@ -243,13 +243,13 @@ namespace VAdvantage.Model
             int AD_User_ID = GetCtx().GetAD_User_ID();
             String keyColumn = baseTable + "_ID";
             String insert = "";
-            if (baseTable == "AD_Client" || baseTable == "AD_Org")
+            if (baseTable == "VAF_Client" || baseTable == "VAF_Org")
             {
                 insert = "INSERT INTO " + tableName
-                    + "(AD_Language,IsTranslated, AD_Client_ID,AD_Org_ID, "
+                    + "(AD_Language,IsTranslated, VAF_Client_ID,VAF_Org_ID, "
                     + "CreatedBy,UpdatedBy "
                     + cols.ToString() + ") "
-                    + "SELECT '" + GetAD_Language() + "','N', AD_Client_ID,AD_Org_ID, "
+                    + "SELECT '" + GetAD_Language() + "','N', VAF_Client_ID,VAF_Org_ID, "
                     + AD_User_ID + "," + AD_User_ID
                     + cols.ToString()
                     + " FROM " + baseTable
@@ -260,10 +260,10 @@ namespace VAdvantage.Model
             else
             {
                 insert = "INSERT INTO " + tableName
-                    + "(AD_Language,IsTranslated, AD_Client_ID,AD_Org_ID, "
+                    + "(AD_Language,IsTranslated, VAF_Client_ID,VAF_Org_ID, "
                     + "CreatedBy,UpdatedBy, "
                     + keyColumn + cols.ToString() + ") "
-                    + "SELECT '" + GetAD_Language() + "','N', AD_Client_ID,AD_Org_ID, "
+                    + "SELECT '" + GetAD_Language() + "','N', VAF_Client_ID,VAF_Org_ID, "
                     + AD_User_ID + "," + AD_User_ID + ", "
                     + keyColumn + cols.ToString()
                     + " FROM " + baseTable

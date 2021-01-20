@@ -88,7 +88,7 @@ static X_AD_Process_Para()
 //static long serialVersionUID = 27562514363238L;
 /** Last Updated Timestamp 7/29/2010 1:07:26 PM */
 public static long updatedMS = 1280389046449L;
-/** AD_Table_ID=285 */
+/** VAF_TableView_ID=285 */
 public static int Table_ID;
  // =285;
 
@@ -131,18 +131,18 @@ StringBuilder sb = new StringBuilder ("X_AD_Process_Para[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set System Element.
-@param AD_Element_ID System Element enables the central maintenance of column description and help. */
-public void SetAD_Element_ID (int AD_Element_ID)
+@param VAF_ColumnDic_ID System Element enables the central maintenance of column description and help. */
+public void SetVAF_ColumnDic_ID (int VAF_ColumnDic_ID)
 {
-if (AD_Element_ID <= 0) Set_Value ("AD_Element_ID", null);
+if (VAF_ColumnDic_ID <= 0) Set_Value ("VAF_ColumnDic_ID", null);
 else
-Set_Value ("AD_Element_ID", AD_Element_ID);
+Set_Value ("VAF_ColumnDic_ID", VAF_ColumnDic_ID);
 }
 /** Get System Element.
 @return System Element enables the central maintenance of column description and help. */
-public int GetAD_Element_ID() 
+public int GetVAF_ColumnDic_ID() 
 {
-Object ii = Get_Value("AD_Element_ID");
+Object ii = Get_Value("VAF_ColumnDic_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -214,18 +214,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Dynamic Validation.
-@param AD_Val_Rule_ID Dynamic Validation Rule */
-public void SetAD_Val_Rule_ID (int AD_Val_Rule_ID)
+@param VAF_DataVal_Rule_ID Dynamic Validation Rule */
+public void SetVAF_DataVal_Rule_ID (int VAF_DataVal_Rule_ID)
 {
-if (AD_Val_Rule_ID <= 0) Set_Value ("AD_Val_Rule_ID", null);
+if (VAF_DataVal_Rule_ID <= 0) Set_Value ("VAF_DataVal_Rule_ID", null);
 else
-Set_Value ("AD_Val_Rule_ID", AD_Val_Rule_ID);
+Set_Value ("VAF_DataVal_Rule_ID", VAF_DataVal_Rule_ID);
 }
 /** Get Dynamic Validation.
 @return Dynamic Validation Rule */
-public int GetAD_Val_Rule_ID() 
+public int GetVAF_DataVal_Rule_ID() 
 {
-Object ii = Get_Value("AD_Val_Rule_ID");
+Object ii = Get_Value("VAF_DataVal_Rule_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -521,18 +521,18 @@ public String GetValueMin()
 return (String)Get_Value("ValueMin");
 }
 /** Set Info Window.
-@param AD_InfoWindow_ID Info and search/select Window */
-public void SetAD_InfoWindow_ID(int AD_InfoWindow_ID)
+@param VAF_QuickSearchWindow_ID Info and search/select Window */
+public void SetVAF_QuickSearchWindow_ID(int VAF_QuickSearchWindow_ID)
 {
-    if (AD_InfoWindow_ID <= 0) Set_Value("AD_InfoWindow_ID", null);
+    if (VAF_QuickSearchWindow_ID <= 0) Set_Value("VAF_QuickSearchWindow_ID", null);
     else
-        Set_Value("AD_InfoWindow_ID", AD_InfoWindow_ID);
+        Set_Value("VAF_QuickSearchWindow_ID", VAF_QuickSearchWindow_ID);
 }
 /** Get Info Window.
 @return Info and search/select Window */
-public int GetAD_InfoWindow_ID()
+public int GetVAF_QuickSearchWindow_ID()
 {
-    Object ii = Get_Value("AD_InfoWindow_ID");
+    Object ii = Get_Value("VAF_QuickSearchWindow_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

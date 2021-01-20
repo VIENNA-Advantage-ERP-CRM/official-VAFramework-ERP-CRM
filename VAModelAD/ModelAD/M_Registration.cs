@@ -31,8 +31,8 @@ namespace VAdvantage.Model
         public M_Registration(Ctx ctx, int AD_Registration_ID, Trx trxName)
             : base(ctx, AD_Registration_ID, trxName)
         {
-            SetAD_Client_ID(0);
-            SetAD_Org_ID(0);
+            SetVAF_Client_ID(0);
+            SetVAF_Org_ID(0);
         }
 
         /// <summary>

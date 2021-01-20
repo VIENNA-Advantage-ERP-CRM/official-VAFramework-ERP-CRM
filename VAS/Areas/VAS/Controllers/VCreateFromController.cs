@@ -845,7 +845,7 @@ namespace VIS.Controllers
             // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on payment.
             sql.Append("SELECT p.DateAcct AS DateTrx, p.C_Payment_ID, p.DocumentNo, ba.C_Currency_ID, c.ISO_Code, p.PayAmt,"
                 // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
-                + " currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,p.DateAcct,p.C_ConversionType_ID,p.AD_Client_ID,p.AD_Org_ID) AS ConvertedAmt,"   //  #1
+                + " currencyConvert(p.PayAmt,p.C_Currency_ID,ba.C_Currency_ID,p.DateAcct,p.C_ConversionType_ID,p.VAF_Client_ID,p.VAF_Org_ID) AS ConvertedAmt,"   //  #1
                 + " pay.Description, bp.Name, 'P' AS Type");
 
             if (countVA034)
@@ -895,7 +895,7 @@ namespace VIS.Controllers
             {
                 // JID_0084: Create line from is always picking curreny type that is default. It should pick currency type that is on Cash Journal.
                 sql.Append(" UNION SELECT cs.DateAcct AS DateTrx, cl.C_CashLine_ID AS C_Payment_ID, cs.DocumentNo, ba.C_Currency_ID, c.ISO_Code, (-1)*cl.Amount AS PayAmt,"
-                + " currencyConvert((-1)*cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,cs.DateAcct,cl.C_ConversionType_ID,cs.AD_Client_ID,cs.AD_Org_ID) AS ConvertedAmt,"   //  #1
+                + " currencyConvert((-1)*cl.Amount,cl.C_Currency_ID,ba.C_Currency_ID,cs.DateAcct,cl.C_ConversionType_ID,cs.VAF_Client_ID,cs.VAF_Org_ID) AS ConvertedAmt,"   //  #1
                 + " cl.Description, Null AS Name, 'C' AS Type");
 
                 if (countVA034)

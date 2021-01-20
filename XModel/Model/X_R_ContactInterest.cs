@@ -70,7 +70,7 @@ static X_R_ContactInterest()
 //static long serialVersionUID 27562514382719L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065930L;
-/** AD_Table_ID=528 */
+/** VAF_TableView_ID=528 */
 public static int Table_ID;
  // =528;
 

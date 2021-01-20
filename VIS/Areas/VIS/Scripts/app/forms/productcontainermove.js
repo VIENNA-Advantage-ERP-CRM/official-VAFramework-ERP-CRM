@@ -602,7 +602,7 @@
             pageNoContainer = 1, gridPgnoContainer = 1, containerRecord = 0;
             isContainerGridLoaded = false;
             //var container = ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val());
-            var AD_Org_ID = parseInt(VIS.context.getWindowContext($self.windowNo, "AD_Org_ID", true)); // windowNo, context, onlyWindow
+            var VAF_Org_ID = parseInt(VIS.context.getWindowContext($self.windowNo, "VAF_Org_ID", true)); // windowNo, context, onlyWindow
             var date = VIS.context.getWindowContext($self.windowNo, "MovementDate", true); // windowNo, context, onlyWindow
             var locator = ($cmbFromLocator.val() == "0" || $cmbFromLocator.val() == null) ? 0 : parseInt($cmbFromLocator.val());
             //if grid is reloading than store the value of page combo in pageNoContainer
@@ -625,7 +625,7 @@
             $.ajax({
                 type: "POST",
                 url: VIS.Application.contextUrl + "ProductContainer/MoveContainer",
-                data: { container: containerId, movementDate: date, AD_Org_ID: AD_Org_ID, locator: locator, page: pageNoContainer, size: PAGESIZE },
+                data: { container: containerId, movementDate: date, VAF_Org_ID: VAF_Org_ID, locator: locator, page: pageNoContainer, size: PAGESIZE },
                 dataType: "json",
                 success: function (data) {
                     var result = JSON.parse(data);

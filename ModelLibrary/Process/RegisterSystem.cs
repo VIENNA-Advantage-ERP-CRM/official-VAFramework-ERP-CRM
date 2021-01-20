@@ -127,9 +127,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		if (reg.IsAllowStatistics())
 		{
 			urlString.Append("&NumClient=").Append(HttpUtility.UrlEncode(Convert.ToString(
-					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM AD_Client")), UTF8Encoding.UTF8))
+					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAF_Client")), UTF8Encoding.UTF8))
 				.Append("&NumOrg=").Append(HttpUtility.UrlEncode(Convert.ToString(
-					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM AD_Org")), UTF8Encoding.UTF8))
+					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM VAF_Org")), UTF8Encoding.UTF8))
 				.Append("&NumBPartner=").Append(HttpUtility.UrlEncode(Convert.ToString(
 					DataBase.DB.GetSQLValue(null, "SELECT Count(*) FROM C_BPartner")),UTF8Encoding.UTF8))
 				.Append("&NumUser=").Append(HttpUtility.UrlEncode(Convert.ToString(

@@ -39,7 +39,7 @@ namespace VAdvantage.Model
             List<MGoal> list = new List<MGoal>();
             String sql = "SELECT * FROM PA_Goal g "
                 + "WHERE IsActive='Y'"
-                + " AND AD_Client_ID=@ADClientID"		//	#1
+                + " AND VAF_Client_ID=@ADClientID"		//	#1
                 + " AND ((AD_User_ID IS NULL AND AD_Role_ID IS NULL)"
                     + " OR AD_User_ID=@ADUserID"	//	#2
                     + " OR EXISTS (SELECT * FROM AD_User_Roles ur "
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@ADClientID", ctx.GetAD_Client_ID());
+                param[0] = new SqlParameter("@ADClientID", ctx.GetVAF_Client_ID());
                 param[1] = new SqlParameter("@ADUserID", AD_User_ID);
 
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
@@ -563,7 +563,7 @@ namespace VAdvantage.Model
                 && GetAD_User_ID() != 0)
             {
                 MUser user = MUser.Get(GetCtx(), GetAD_User_ID());
-                MRole[] roles = user.GetRoles(GetAD_Org_ID());
+                MRole[] roles = user.GetRoles(GetVAF_Org_ID());
                 if (roles.Length == 0)		//	No Role
                     SetAD_Role_ID(0);
                 else if (roles.Length == 1)	//	One

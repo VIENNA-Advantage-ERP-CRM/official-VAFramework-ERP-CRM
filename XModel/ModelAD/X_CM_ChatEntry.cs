@@ -74,7 +74,7 @@ static X_CM_ChatEntry()
 //static long serialVersionUID 27562514368504L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051715L;
-/** AD_Table_ID=877 */
+/** VAF_TableView_ID=877 */
 public static int Table_ID;
  // =877;
 

@@ -70,7 +70,7 @@ static X_RC_ViewAccess()
 //static long serialVersionUID 27634335704681L;
 /** Last Updated Timestamp 11/6/2012 7:29:47 PM */
 public static long updatedMS = 1352210387892L;
-/** AD_Table_ID=1000236 */
+/** VAF_TableView_ID=1000236 */
 public static int Table_ID;
  // =1000236;
 

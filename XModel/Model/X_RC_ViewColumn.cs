@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27706188629143L;
         /** Last Updated Timestamp 2/16/2015 10:38:32 AM */
         public static long updatedMS = 1424063312354L;
-        /** AD_Table_ID=1000237 */
+        /** VAF_TableView_ID=1000237 */
         public static int Table_ID;
         // =1000237;
 
@@ -118,18 +118,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Field.
-        @param AD_Field_ID Field on a tab in a window */
-        public void SetAD_Field_ID(int AD_Field_ID)
+        @param VAF_Field_ID Field on a tab in a window */
+        public void SetVAF_Field_ID(int VAF_Field_ID)
         {
-            if (AD_Field_ID <= 0) Set_Value("AD_Field_ID", null);
+            if (VAF_Field_ID <= 0) Set_Value("VAF_Field_ID", null);
             else
-                Set_Value("AD_Field_ID", AD_Field_ID);
+                Set_Value("VAF_Field_ID", VAF_Field_ID);
         }
         /** Get Field.
         @return Field on a tab in a window */
-        public int GetAD_Field_ID()
+        public int GetVAF_Field_ID()
         {
-            Object ii = Get_Value("AD_Field_ID");
+            Object ii = Get_Value("VAF_Field_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -125,14 +125,14 @@ namespace VAdvantage.Model
             //	Try client
             if (wstore == null)
             {
-                sql = "SELECT * FROM W_Store WHERE AD_Client_ID=@Param1 AND IsActive='Y' ORDER BY W_Store_ID";
+                sql = "SELECT * FROM W_Store WHERE VAF_Client_ID=@Param1 AND IsActive='Y' ORDER BY W_Store_ID";
 
                 SqlParameter[] Param1 = new SqlParameter[1];
                 DataTable dt1 = null;
                 IDataReader idr1 = null;
                 try
                 {
-                    Param[0] = new SqlParameter("@Param1", ctx.GetAD_Client_ID());
+                    Param[0] = new SqlParameter("@Param1", ctx.GetVAF_Client_ID());
                     idr = DataBase.DB.ExecuteReader(sql, Param1, null);
                     dt = new DataTable();
                     dt.Load(idr1);
@@ -141,19 +141,19 @@ namespace VAdvantage.Model
                     {
                         wstore = new MStore(ctx, dr, null);
                         _log.Warning("Ctx " + contextPath
-                            + " Not found - Found via AD_Client_ID=" + ctx.GetAD_Client_ID());
+                            + " Not found - Found via VAF_Client_ID=" + ctx.GetVAF_Client_ID());
 
 
                     }
 
                     //pstmt = DataBase.prepareStatement (sql, null);
-                    //pstmt.setInt (1, ctx.getAD_Client_ID());
+                    //pstmt.setInt (1, ctx.getVAF_Client_ID());
                     //ResultSet rs = pstmt.executeQuery ();
                     //if (rs.next ())
                     //{
                     //    wstore = new MStore (ctx, rs, null);
                     //    s_log.warning("Ctx " + contextPath 
-                    //        + " Not found - Found via AD_Client_ID=" + ctx.getAD_Client_ID());
+                    //        + " Not found - Found via VAF_Client_ID=" + ctx.getVAF_Client_ID());
                     //}
                     //rs.close ();
                     //pstmt.close ();
@@ -200,14 +200,14 @@ namespace VAdvantage.Model
         {
             //ArrayList<MStore> list = new ArrayList<MStore>();
             List<MStore> list = new List<MStore>();
-            String sql = "SELECT * FROM W_Store WHERE AD_Client_ID=@Param1 AND IsActive='Y'";
+            String sql = "SELECT * FROM W_Store WHERE VAF_Client_ID=@Param1 AND IsActive='Y'";
 
             SqlParameter[] Param = new SqlParameter[1];
             DataTable dt = null;
             IDataReader idr = null;
             try
             {
-                Param[0] = new SqlParameter("@Param1", client.GetAD_Client_ID());
+                Param[0] = new SqlParameter("@Param1", client.GetVAF_Client_ID());
                 idr = DataBase.DB.ExecuteReader(sql, Param, client.Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
             //try
             //{
             //    pstmt = DataBase.prepareStatement (sql, client.get_TrxName());
-            //    pstmt.setInt (1, client.getAD_Client_ID());
+            //    pstmt.setInt (1, client.getVAF_Client_ID());
             //    ResultSet rs = pstmt.executeQuery ();
             //    while (rs.next ())
             //        list.add (new MStore (client.getCtx(), rs, client.get_TrxName()));
@@ -399,10 +399,10 @@ namespace VAdvantage.Model
                 SetWebContext("/" + GetWebContext());
             }
             //	Org to Warehouse
-            if (newRecord || Is_ValueChanged("M_Warehouse_ID") || GetAD_Org_ID() == 0)
+            if (newRecord || Is_ValueChanged("M_Warehouse_ID") || GetVAF_Org_ID() == 0)
             {
                 MWarehouse wh = new MWarehouse(GetCtx(), GetM_Warehouse_ID(), Get_TrxName());
-                SetAD_Org_ID(wh.GetAD_Org_ID());
+                SetVAF_Org_ID(wh.GetVAF_Org_ID());
             }
 
             String url = GetURL();
@@ -441,7 +441,7 @@ namespace VAdvantage.Model
 
             //
             EMail email = null;
-            MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
             if (client.IsServerEMail() && Ini.IsClient())
             {
                 //MessageBox.Show("Get Connection Problem");
@@ -456,7 +456,7 @@ namespace VAdvantage.Model
                     }
 
                     //{	//	See ServerBean
-                    //    email = server.CreateEMail(GetCtx(), GetAD_Client_ID(),
+                    //    email = server.CreateEMail(GetCtx(), GetVAF_Client_ID(),
                     //        toEMail, toName, subject, message);
 
                     //}

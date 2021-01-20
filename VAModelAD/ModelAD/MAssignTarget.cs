@@ -23,10 +23,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAssignTarget : X_AD_AssignTarget
+    public class MAssignTarget : X_VAF_AllotTarget
     {
-        public MAssignTarget(Ctx ctx, int AD_AssignTarget_ID, Trx trxName)
-            : base(ctx, AD_AssignTarget_ID, trxName)
+        public MAssignTarget(Ctx ctx, int VAF_AllotTarget_ID, Trx trxName)
+            : base(ctx, VAF_AllotTarget_ID, trxName)
         {
 
         }	//	MAssignTarget
@@ -52,12 +52,12 @@ namespace VAdvantage.Model
             if (m_criteria != null && !reload)
                 return m_criteria;
             String sql = "SELECT * FROM AD_AssignCriteria "
-                + "WHERE AD_AssignTarget_ID=@AD_AssignTarget_ID ORDER BY SeqNo";
+                + "WHERE VAF_AllotTarget_ID=@VAF_AllotTarget_ID ORDER BY SeqNo";
             List<MAssignCriteria> list = new List<MAssignCriteria>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_AssignTarget_ID", GetAD_AssignTarget_ID());
+                param[0] = new SqlParameter("@VAF_AllotTarget_ID", GetVAF_AllotTarget_ID());
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         /// <returns>target column</returns>
         public MColumn GetTargetColumn()
         {
-            if (m_column == null || m_column.GetAD_Column_ID() != GetAD_TargetColumn_ID())
+            if (m_column == null || m_column.GetVAF_Column_ID() != GetAD_TargetColumn_ID())
                 m_column = MColumn.Get(GetCtx(), GetAD_TargetColumn_ID());
             return m_column;
         }	//	getTargetColumn
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
             String columnName = column.GetColumnName();
             int index = po.Get_ColumnIndex(columnName);
             if (index == -1)
-                throw new Exception(ToString() + ": AD_Column_ID not found");
+                throw new Exception(ToString() + ": VAF_Column_ID not found");
             //	Check Value
             Object value = po.Get_Value(index);
             String assignRule = GetAssignRule();

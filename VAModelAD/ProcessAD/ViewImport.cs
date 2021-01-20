@@ -62,7 +62,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
         private String SQLfile = null;
         private String entityType = null;
-        private int _AD_Table_ID = 0;
+        private int _VAF_TableView_ID = 0;
 
         /// <summary>
         /// process Parameters
@@ -172,10 +172,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //InputStream iin = null;
             StreamReader inn = null;
             String targetViewName = null;
-            _AD_Table_ID = (GetProcessInfo() != null) ? GetRecord_ID() : 0;
-            if (_AD_Table_ID > 0)
+            _VAF_TableView_ID = (GetProcessInfo() != null) ? GetRecord_ID() : 0;
+            if (_VAF_TableView_ID > 0)
             {
-                MTable targetTable = MTable.Get(Env.GetCtx(), _AD_Table_ID);
+                MTable targetTable = MTable.Get(Env.GetCtx(), _VAF_TableView_ID);
                 targetViewName = targetTable.GetTableName();
                 entityType = targetTable.GetEntityType();
             }
@@ -265,14 +265,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             log.Severe("No view name from the SQL: " + command);
                             continue;
                         }
-                        if (_AD_Table_ID != 0 && !(targetViewName.Equals(tableName) || targetViewName.Equals(tableName.ToUpper())))
+                        if (_VAF_TableView_ID != 0 && !(targetViewName.Equals(tableName) || targetViewName.Equals(tableName.ToUpper())))
                         {
                             log.Fine("Skipping view " + targetViewName);
                             continue;
                         }
                         //int itc = tc.substring(tc.length()-1).hashCode();
 
-                        //insert into/update ad_table for each view
+                        //insert into/update vaf_tableview for each view
                         MTable mt = MTable.Get(Env.GetCtx(), tableName);
                         if (mt != null && !mt.IsView())
                         {
@@ -290,9 +290,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             //mt = new MTable(Env.getCtx(), 0, myTrx.getTrxName());
                             //MTable mt = MTable.get(Env.getCtx(), 0);
                             mt.SetTableName(tableName);
-                            //mt.setAD_Org_ID(0);
-                            //mt.setAD_Client_ID(0); also updatedby, createdby. jz: all default is 0 in PO
-                            mt.SetAccessLevel(X_AD_Table.ACCESSLEVEL_ClientPlusOrganization);
+                            //mt.setVAF_Org_ID(0);
+                            //mt.setVAF_Client_ID(0); also updatedby, createdby. jz: all default is 0 in PO
+                            mt.SetAccessLevel(X_VAF_TableView.ACCESSLEVEL_ClientPlusOrganization);
                             mt.SetEntityType(entityType);
                             mt.SetIsActive(true);
                             mt.SetIsView(true);
@@ -301,16 +301,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             mt.SetImportTable(null);
                             if (!mt.Save())
                             {
-                                log.Severe("Unable to insert into AD_Table for the SQL: " + command);
+                                log.Severe("Unable to insert into VAF_TableView for the SQL: " + command);
                                 //myTrx.rollback();
                                 //eachSQL;
                                 break;
                             }
-                            log.Info("Add " + tableName + " into AD_Table for the SQL: " + command);
+                            log.Info("Add " + tableName + " into VAF_TableView for the SQL: " + command);
                         }
 
                         //clean view components and their columns
-                        String vcdel = "DELETE FROM AD_ViewComponent WHERE (AD_Table_ID, AD_Client_ID) IN (SELECT AD_Table_ID, AD_Client_ID FROM AD_Table WHERE TableName = '" + tableName + "')";
+                        String vcdel = "DELETE FROM AD_ViewComponent WHERE (VAF_TableView_ID, VAF_Client_ID) IN (SELECT VAF_TableView_ID, VAF_Client_ID FROM VAF_TableView WHERE TableName = '" + tableName + "')";
                         try
                         {
                             DataBase.DB.ExecuteQuery(vcdel, null);
@@ -438,11 +438,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             //MViewComponent mvc = new MViewComponent(Env.getCtx(), 0, myTrx.getTrxName());
                             MViewComponent mvc = new MViewComponent(Env.GetCtx(), 0, null);
                             mvc.SetName("VC_" + tableName);
-                            mvc.SetAD_Table_ID(mt.Get_ID());
+                            mvc.SetVAF_TableView_ID(mt.Get_ID());
                             mvc.SetSeqNo((i + 1) * 10);
                             mvc.SetIsActive(true);
                             mvc.SetEntityType(entityType);
-                            //mvc.setAD_Org_ID(0);
+                            //mvc.setVAF_Org_ID(0);
                             //mvc.setReferenced_Table_ID(mt.get_ID());
                             String from1 = from.Substring(5);
                             from1 = Trim(from1);
@@ -474,7 +474,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             {
                                 //mvcol = new MViewColumn(Env.getCtx(), 0, myTrx.getTrxName());
                                 mvcol = new MViewColumn(Env.GetCtx(), 0, null);
-                                //mvcol.setAD_Org_ID(0);
+                                //mvcol.setVAF_Org_ID(0);
                                 mvcol.SetAD_ViewComponent_ID(mvc.Get_ID());
                                 mvcol.SetIsActive(true);
                                 mvcol.SetEntityType(entityType);
@@ -518,7 +518,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
             }
 
-            if (_AD_Table_ID > 0)
+            if (_VAF_TableView_ID > 0)
             {
                 if (viewNum == 0)
                     return ("Not able to import view " + targetViewName + " from " + SQLfile);

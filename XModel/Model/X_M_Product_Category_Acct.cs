@@ -90,7 +90,7 @@ static X_M_Product_Category_Acct()
 //static long serialVersionUID 27562514380838L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064049L;
-/** AD_Table_ID=401 */
+/** VAF_TableView_ID=401 */
 public static int Table_ID;
  // =401;
 

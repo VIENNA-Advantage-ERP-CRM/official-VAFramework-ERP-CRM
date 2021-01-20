@@ -6,8 +6,8 @@
 
         // Change By Lokesh Chauhan 2-Sep
         // To Handle Doc Action's at child Tab
-        //var AD_Table_ID = ctx.getContextAsInt(windowNo, "BaseTable_ID");
-        var AD_Table_ID = tabObj.getAD_Table_ID();
+        //var VAF_TableView_ID = ctx.getContextAsInt(windowNo, "BaseTable_ID");
+        var VAF_TableView_ID = tabObj.getVAF_TableView_ID();
 
         var _values = [];
         var _names = [];
@@ -141,10 +141,10 @@
             //   log.Fine("DocStatus=" + docStatus
             //       + ", DocAction=" + docAction + ", OrderType=" + orderType
             //       + ", IsSOTrx=" + isSOTrx + ", Processing=" + processing
-            //       + ", AD_Table_ID=" + AD_Table_ID + ", Record_ID=" + Record_ID);
+            //       + ", VAF_TableView_ID=" + VAF_TableView_ID + ", Record_ID=" + Record_ID);
             //
             //options = new Array(_values.Length);
-            //  VIS.dataContext.getDocActions(AD_Table_ID, Record_ID, docStatus, processing, orderType, isSOTrx, docAction, tabObj.getTableName(), _values, _names, generateActions);
+            //  VIS.dataContext.getDocActions(VAF_TableView_ID, Record_ID, docStatus, processing, orderType, isSOTrx, docAction, tabObj.getTableName(), _values, _names, generateActions);
 
 
             $.ajax({
@@ -153,7 +153,7 @@
                 dataType: 'Json',
                 data: {
 
-                    AD_Table_ID: AD_Table_ID, Record_ID: Record_ID, docStatus: docStatus, processing: processing, orderType: orderType, isSOTrx: isSOTrx, docAction: docAction,
+                    VAF_TableView_ID: VAF_TableView_ID, Record_ID: Record_ID, docStatus: docStatus, processing: processing, orderType: orderType, isSOTrx: isSOTrx, docAction: docAction,
 
                     tableName: tabObj.getTableName(), values: JSON.stringify(_values), names: JSON.stringify(_names), C_DocType_ID: tabObj.getValue("C_DocType_ID"), C_DocTypeTarget_ID: tabObj.getValue("C_DocTypeTarget_ID")
                 },
@@ -424,7 +424,7 @@
         this.dispose = function () {
             ch.close();
             ch = null;
-            AD_Table_ID = null;
+            VAF_TableView_ID = null;
             _values = null;
             _names = null;
             _descriptions = null;

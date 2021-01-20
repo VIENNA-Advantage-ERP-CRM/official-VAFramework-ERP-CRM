@@ -103,7 +103,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27721587398306L;
         /** Last Updated Timestamp 8/13/2015 4:04:42 PM */
         public static long updatedMS = 1439462081517L;
-        /** AD_Table_ID=291 */
+        /** VAF_TableView_ID=291 */
         public static int Table_ID;
         // =291;
 
@@ -166,24 +166,24 @@ namespace VAdvantage.Model
             return (String)Get_Value("AD_Language");
         }
 
-        /** AD_OrgBP_ID AD_Reference_ID=417 */
-        public static int AD_ORGBP_ID_AD_Reference_ID = 417;
+        /** VAF_OrgBP_ID AD_Reference_ID=417 */
+        public static int VAF_ORGBP_ID_AD_Reference_ID = 417;
         /** Set Linked Organization.
-        @param AD_OrgBP_ID The Business Partner is another Organization for explicit Inter-Org transactions */
-        public void SetAD_OrgBP_ID(String AD_OrgBP_ID)
+        @param VAF_OrgBP_ID The Business Partner is another Organization for explicit Inter-Org transactions */
+        public void SetVAF_OrgBP_ID(String VAF_OrgBP_ID)
         {
-            if (AD_OrgBP_ID != null && AD_OrgBP_ID.Length > 22)
+            if (VAF_OrgBP_ID != null && VAF_OrgBP_ID.Length > 22)
             {
                 log.Warning("Length > 22 - truncated");
-                AD_OrgBP_ID = AD_OrgBP_ID.Substring(0, 22);
+                VAF_OrgBP_ID = VAF_OrgBP_ID.Substring(0, 22);
             }
-            Set_Value("AD_OrgBP_ID", AD_OrgBP_ID);
+            Set_Value("VAF_OrgBP_ID", VAF_OrgBP_ID);
         }
         /** Get Linked Organization.
         @return The Business Partner is another Organization for explicit Inter-Org transactions */
-        public String GetAD_OrgBP_ID()
+        public String GetVAF_OrgBP_ID()
         {
-            return (String)Get_Value("AD_OrgBP_ID");
+            return (String)Get_Value("VAF_OrgBP_ID");
         }
         /** Set Acquisition Cost.
         @param AcqusitionCost The cost of gaining the prospect as a customer */

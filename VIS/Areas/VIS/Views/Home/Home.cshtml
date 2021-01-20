@@ -209,7 +209,7 @@
                         </div>
                         <div id="@divfllcmntID" data-fll="divfllupscmntdata" class="vis-feedDetails">
                             <div class="vis-feedDetails-cmnt" data-fll="fll-cmnt">
-                                @if (item.AD_Image_ID == 0)
+                                @if (item.VAF_Image_ID == 0)
                                 {
                                    
                                         <i class="fa fa-user"  data-fll="UID" data-UID="@item.AD_User_ID"></i>
@@ -219,7 +219,7 @@
                                 {
                                     foreach (var uitem in Model.HomeFolloUpsInfo.lstUserImg)
                                     {
-                                        if (uitem.AD_Image_ID == item.AD_Image_ID)
+                                        if (uitem.VAF_Image_ID == item.VAF_Image_ID)
                                         {
                                             if (uitem.UserImg != "NoRecordFound" && uitem.UserImg != "FileDoesn'tExist")
                                             {

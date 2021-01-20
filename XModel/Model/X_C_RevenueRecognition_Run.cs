@@ -39,7 +39,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_C_RevenueRecognition_Run() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27889642906645L;/** Last Updated Timestamp 12/9/2020 12:39:49 PM */
-        public static long updatedMS = 1607517589856L;/** AD_Table_ID=444 */
+        public static long updatedMS = 1607517589856L;/** VAF_TableView_ID=444 */
         public static int Table_ID; // =444;
         /** TableName=C_RevenueRecognition_Run */
         public static String Table_Name = "C_RevenueRecognition_Run";

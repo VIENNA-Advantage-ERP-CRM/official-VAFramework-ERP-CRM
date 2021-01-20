@@ -131,10 +131,10 @@ namespace VAdvantage.ProcessEngine
                     }
                 }
 
-                ctxContext.SetAD_Client_ID(GetAD_Client_ID());
+                ctxContext.SetVAF_Client_ID(GetVAF_Client_ID());
                 if (_pi.GetAD_User_ID().HasValue)
                 {
-                    ctxContext.SetAD_Client_ID(GetAD_Client_ID());
+                    ctxContext.SetVAF_Client_ID(GetVAF_Client_ID());
                 }
 
             }
@@ -187,9 +187,9 @@ namespace VAdvantage.ProcessEngine
         /// <returns>return user id</returns>
         protected int GetAD_User_ID()
         {
-            if (_pi.GetAD_User_ID() == null || _pi.GetAD_Client_ID() == null)
+            if (_pi.GetAD_User_ID() == null || _pi.GetVAF_Client_ID() == null)
             {
-                String sql = "SELECT AD_User_ID, AD_Client_ID FROM AD_PInstance WHERE AD_PInstance_ID=@instanceid";
+                String sql = "SELECT AD_User_ID, VAF_Client_ID FROM AD_PInstance WHERE AD_PInstance_ID=@instanceid";
                 IDataReader dr = null;
                 try
                 {
@@ -199,7 +199,7 @@ namespace VAdvantage.ProcessEngine
                     while (dr.Read())
                     {
                         _pi.SetAD_User_ID(Utility.Util.GetValueOfInt(dr[0].ToString()));
-                        _pi.SetAD_Client_ID(Utility.Util.GetValueOfInt(dr[1].ToString()));
+                        _pi.SetVAF_Client_ID(Utility.Util.GetValueOfInt(dr[1].ToString()));
                     }
                     dr.Close();
                 }
@@ -221,24 +221,24 @@ namespace VAdvantage.ProcessEngine
         /// Gets the client id
         /// </summary>
         /// <returns>return client id </returns>
-        protected int GetAD_Client_ID()
+        protected int GetVAF_Client_ID()
         {
-            if (_pi.GetAD_Client_ID() == null)
+            if (_pi.GetVAF_Client_ID() == null)
             {
                 GetAD_User_ID();	//	Sets also Client
-                if (_pi.GetAD_Client_ID() == null)
+                if (_pi.GetVAF_Client_ID() == null)
                     return 0;
             }
-            return (int)_pi.GetAD_Client_ID();
+            return (int)_pi.GetVAF_Client_ID();
         }
 
-        protected int GetAD_Org_ID()
+        protected int GetVAF_Org_ID()
         {
-            if (_pi.GetAD_Org_ID() == null)
+            if (_pi.GetVAF_Org_ID() == null)
             {
-                return ctxContext.GetAD_Org_ID();
+                return ctxContext.GetVAF_Org_ID();
             }
-            return (int)_pi.GetAD_Org_ID();
+            return (int)_pi.GetVAF_Org_ID();
         }
 
 
@@ -381,7 +381,7 @@ namespace VAdvantage.ProcessEngine
                 string connectionName = DataBase.VConnection.Get().Db_uid.ToUpper();
                 if (val.Contains("."))
                 {
-                    tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM AD_Table WHERE AD_Table_ID =" + po.Get_Table_ID()));
+                    tableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT Name FROM VAF_TableView WHERE VAF_TableView_ID =" + po.Get_Table_ID()));
                     val = val.Replace(connectionName, string.Empty).Replace(po.Get_TableName().ToUpper(), string.Empty).Replace('"', ' ').Trim();
                     val = val.Substring(val.IndexOf(":") + 1).Replace(".", string.Empty).Replace(@")(", string.Empty);
                 }

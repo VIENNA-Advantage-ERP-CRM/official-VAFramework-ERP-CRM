@@ -64,13 +64,13 @@ namespace VIS.Controllers
         /// <param name="pref"></param>
         /// <returns></returns>
         public JsonResult SaveUserSettings(int AD_User_ID, string currentPws, string newPws, bool chkEmail, bool chkNotice,
-            bool chkSMS, bool chkFax, string emailUserName, string emailPws,int AD_Role_ID,int AD_Client_ID,int AD_Org_ID, int M_Warehouse_ID)
+            bool chkSMS, bool chkFax, string emailUserName, string emailPws,int AD_Role_ID,int VAF_Client_ID,int VAF_Org_ID, int M_Warehouse_ID)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 UserPreferenceModel obj = new UserPreferenceModel();
-                var val = obj.SaveUserSettings(ctx, AD_User_ID, currentPws, newPws, chkEmail, chkNotice, chkSMS, chkFax, emailUserName, emailPws,AD_Role_ID,AD_Client_ID,AD_Org_ID, M_Warehouse_ID);
+                var val = obj.SaveUserSettings(ctx, AD_User_ID, currentPws, newPws, chkEmail, chkNotice, chkSMS, chkFax, emailUserName, emailPws,AD_Role_ID,VAF_Client_ID,VAF_Org_ID, M_Warehouse_ID);
                 return Json(new { result = val }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
@@ -113,7 +113,7 @@ namespace VIS.Controllers
                 VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo("ChangePassword", AD_Process_ID);
                 pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
                 pi.SetAD_User_ID(AD_User_ID);
-                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 // Add Parameter - CurrentPassword
                 MPInstancePara para = new MPInstancePara(instance, 10);
 
@@ -250,8 +250,8 @@ namespace VIS.Controllers
            
 
              int AD_User_ID=ctx.GetAD_User_ID();
-             int AD_Client_ID=ctx.GetAD_Client_ID();
-             int AD_Org_ID = ctx.GetAD_Org_ID();
+             int VAF_Client_ID=ctx.GetVAF_Client_ID();
+             int VAF_Org_ID = ctx.GetVAF_Org_ID();
              if (isRemoveLink)
              {
                  UserPreferenceModel objUPModel1 = new UserPreferenceModel();
@@ -259,7 +259,7 @@ namespace VIS.Controllers
                  retJSON = JsonConvert.SerializeObject(message);
                  return Json(retJSON, JsonRequestBehavior.AllowGet);
              }
-             GmailConfig objGmailConfig = new GmailConfig(AD_User_ID, AD_Client_ID, AD_Org_ID, authCodes, isTask,isContact);
+             GmailConfig objGmailConfig = new GmailConfig(AD_User_ID, VAF_Client_ID, VAF_Org_ID, authCodes, isTask,isContact);
              message = objGmailConfig.Start(ctx);
              if (message.Contains("error"))
              {

@@ -76,7 +76,7 @@ static X_AD_Scheduler()
 ////static long serialVersionUID = 27562514363943L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047154L;
-/** AD_Table_ID=688 */
+/** VAF_TableView_ID=688 */
 public static int Table_ID;
  // =688;
 
@@ -330,17 +330,17 @@ return Convert.ToInt32(ii);
 }
 
 /** Set Form.
-@param AD_Form_ID Form or Report */
-public void SetAD_Form_ID(int AD_Form_ID)
+@param VAF_Page_ID Form or Report */
+public void SetVAF_Page_ID(int VAF_Page_ID)
 {
-    if (AD_Form_ID < 1) throw new ArgumentException("AD_Form_ID is mandatory.");
-    Set_ValueNoCheck("AD_Form_ID", AD_Form_ID);
+    if (VAF_Page_ID < 1) throw new ArgumentException("VAF_Page_ID is mandatory.");
+    Set_ValueNoCheck("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Form.
 @return Form or Report */
-public int GetAD_Form_ID()
+public int GetVAF_Page_ID()
 {
-    Object ii = Get_Value("AD_Form_ID");
+    Object ii = Get_Value("VAF_Page_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

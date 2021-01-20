@@ -161,7 +161,7 @@ namespace VAdvantage.Acct
             //  Header -- there may be different currency amounts
 
             FactLine fl = null;
-            int AD_Org_ID = GetBank_Org_ID();	//	Bank Account Org
+            int VAF_Org_ID = GetBank_Org_ID();	//	Bank Account Org
             bool addPost = false;
             //Check For Module
             Tuple<String, String, String> aInfo = null;
@@ -185,9 +185,9 @@ namespace VAdvantage.Acct
                     fl = fact.CreateLine(line,
                         GetAccount(Doc.ACCTTYPE_BankAsset, as1), line.GetC_Currency_ID(), line.GetStmtAmt());
 
-                    if (fl != null && AD_Org_ID != 0)
+                    if (fl != null && VAF_Org_ID != 0)
                     {
-                        fl.SetAD_Org_ID(AD_Org_ID);
+                        fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
                     if (fl != null && C_BPartner_ID != 0)
                     {
@@ -197,11 +197,11 @@ namespace VAdvantage.Acct
                     //  BankInTransit   DR      CR              (Payment)
                     MAccount acct = null;
 
-                    string tenderType = Util.GetValueOfString(DB.ExecuteScalar("SELECT tendertype FROM C_Payment WHERE C_Payment_ID=" + C_Payment_ID + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                    string tenderType = Util.GetValueOfString(DB.ExecuteScalar("SELECT tendertype FROM C_Payment WHERE C_Payment_ID=" + C_Payment_ID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                     // Tender Type RIBA
                     if ("R".Equals(tenderType))
                     {
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -209,14 +209,14 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
                     // Tender Type MAV
                     else if ("M".Equals(tenderType))
                     {
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -224,14 +224,14 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
                     // Tender Type RID
                     else if ("I".Equals(tenderType))
                     {
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -239,7 +239,7 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
@@ -255,13 +255,13 @@ namespace VAdvantage.Acct
                         {
                             fl.SetC_BPartner_ID(C_BPartner_ID);
                         }
-                        if (AD_Org_ID != 0)
+                        if (VAF_Org_ID != 0)
                         {
-                            fl.SetAD_Org_ID(AD_Org_ID);
+                            fl.SetVAF_Org_ID(VAF_Org_ID);
                         }
                         else
                         {
-                            fl.SetAD_Org_ID(line.GetAD_Org_ID(true)); // from payment
+                            fl.SetVAF_Org_ID(line.GetVAF_Org_ID(true)); // from payment
                         }
                     }
                     //  Charge          DR          (Charge)
@@ -301,9 +301,9 @@ namespace VAdvantage.Acct
                     fl = fact.CreateLine(line,
                         GetAccount(Doc.ACCTTYPE_BankAsset, as1), line.GetC_Currency_ID(), line.GetStmtAmt());
 
-                    if (fl != null && AD_Org_ID != 0)
+                    if (fl != null && VAF_Org_ID != 0)
                     {
-                        fl.SetAD_Org_ID(AD_Org_ID);
+                        fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
                     if (fl != null && C_BPartner_ID != 0)
                     {
@@ -319,13 +319,13 @@ namespace VAdvantage.Acct
                         {
                             fl.SetC_BPartner_ID(C_BPartner_ID);
                         }
-                        if (AD_Org_ID != 0)
+                        if (VAF_Org_ID != 0)
                         {
-                            fl.SetAD_Org_ID(AD_Org_ID);
+                            fl.SetVAF_Org_ID(VAF_Org_ID);
                         }
                         else
                         {
-                            fl.SetAD_Org_ID(line.GetAD_Org_ID(true)); // from payment
+                            fl.SetVAF_Org_ID(line.GetVAF_Org_ID(true)); // from payment
                         }
                     }
                     //  Charge          DR          (Charge)
@@ -361,9 +361,9 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get AD_Org_ID from Bank Account
+        /// Get VAF_Org_ID from Bank Account
         /// </summary>
-        /// <returns>AD_Org_ID or 0</returns>
+        /// <returns>VAF_Org_ID or 0</returns>
         private int GetBank_Org_ID()
         {
             if (_C_BankAccount_ID == 0)
@@ -372,7 +372,7 @@ namespace VAdvantage.Acct
             }
             //
             MBankAccount ba = MBankAccount.Get(GetCtx(), _C_BankAccount_ID);
-            return ba.GetAD_Org_ID();
+            return ba.GetVAF_Org_ID();
         }
 
     }

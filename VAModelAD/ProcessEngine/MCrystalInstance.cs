@@ -8,7 +8,7 @@ using System.Data;
 
 namespace VAdvantage.ProcessEngine
 {
-    public class MCrystalInstance : X_AD_CrystalInstance
+    public class MCrystalInstance : X_VAF_CrystalInstance
     {
         /// <summary>
         /// 	Standard Constructor
@@ -46,11 +46,11 @@ namespace VAdvantage.ProcessEngine
         ///// <param name="ctx">context</param>
         ///// <param name="AD_Process_ID">Process ID</param>
         ///// <param name="Record_ID">record</param>
-        public MCrystalInstance(Ctx ctx, int AD_Form_ID, int Record_ID)
+        public MCrystalInstance(Ctx ctx, int VAF_Page_ID, int Record_ID)
             : this(ctx, 0, null)
         {
             //SetAD_Process_ID(AD_Process_ID);
-            SetAD_Form_ID(AD_Form_ID);
+            SetVAF_Page_ID(VAF_Page_ID);
             SetRecord_ID(Record_ID);
             //SetAD_User_ID(ctx.GetAD_User_ID());
             SetIsProcessing(false);
@@ -75,7 +75,7 @@ namespace VAdvantage.ProcessEngine
                 //    throw new Exception("Cannot access Process " + AD_CrytalProcess_ID
                 //        + " with Role: " + role.Get_Value("Name"));
             }
-            base.SetAD_CrystalInstance_ID(AD_CrytalProcess_ID);
+            base.SetVAF_CrystalInstance_ID(AD_CrytalProcess_ID);
         }
 
         /// <summary>

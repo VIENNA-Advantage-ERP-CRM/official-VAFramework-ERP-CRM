@@ -9,7 +9,7 @@
         /** Archive Index		*/
         var index = 0;
         /** Table direct		*/
-        var gAD_Table_ID = 0;
+        var gVAF_TableView_ID = 0;
         /** Record direct		*/
         var gRecord_ID = 0;
 
@@ -451,7 +451,7 @@
 
             //chkReportQ.find("label").text(VIS.Msg.translate(VIS.Env.getCtx(), "IsReport"));
             lblProcessQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "AD_Process_ID"));
-            lblTableQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "AD_Table_ID"));
+            lblTableQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAF_TableView_ID"));
             lblBPartnerQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "C_BPartner_ID"));
             lblNameQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Name"));
             lblDescriptionQ.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "Description"));
@@ -494,8 +494,8 @@
             cmbProcess.getControl().prop('selectedIndex', 0);
 
             //	Tables
-            sql = "SELECT DISTINCT t.AD_Table_ID, t.Name "
-                + "FROM AD_Table t INNER JOIN AD_Tab tab ON (tab.AD_Table_ID=t.AD_Table_ID)"
+            sql = "SELECT DISTINCT t.VAF_TableView_ID, t.Name "
+                + "FROM VAF_TableView t INNER JOIN VAF_Tab tab ON (tab.VAF_TableView_ID=t.VAF_TableView_ID)"
                 + " INNER JOIN AD_Window_Access wa ON (tab.AD_Window_ID=wa.AD_Window_ID) "
                 + "WHERE wa.AD_Role_ID=" + AD_Role_ID
                 + " AND t.IsActive='Y' AND tab.IsActive='Y' "
@@ -539,17 +539,17 @@
             defaultItem = true;
             cmbCreatedByQ.getControl().prop('selectedIndex', 0);
 
-            if (gAD_Table_ID > 0) {
+            if (gVAF_TableView_ID > 0) {
                 //reportField.IsChecked = true;
                 chkReportQ.find('input').prop("checked", true);
                 cmdQuery();
             }
         }
 
-        function query(isReport, AD_Table_ID, Record_ID) {
-            $self.log.config("Report=" + isReport + ", AD_Table_ID=" + AD_Table_ID + ",Record_ID=" + Record_ID);
+        function query(isReport, VAF_TableView_ID, Record_ID) {
+            $self.log.config("Report=" + isReport + ", VAF_TableView_ID=" + VAF_TableView_ID + ",Record_ID=" + Record_ID);
             chkReportQ.find('input').prop("checked", isReport);
-            gAD_Table_ID = AD_Table_ID;
+            gVAF_TableView_ID = VAF_TableView_ID;
             gRecord_ID = Record_ID;
             cmdQuery();
 
@@ -619,27 +619,27 @@
                 }
 
                 //	Table
-                if (gAD_Table_ID > 0) {
-                    sql = sql.concat(" AND ((AD_Table_ID=").concat(gAD_Table_ID);
+                if (gVAF_TableView_ID > 0) {
+                    sql = sql.concat(" AND ((VAF_TableView_ID=").concat(gVAF_TableView_ID);
 
                     if (gRecord_ID > 0)
                         sql = sql.concat(" AND Record_ID=").concat(gRecord_ID);
 
                     sql = sql.concat(")");
 
-                    if (gAD_Table_ID == X_C_BPartner.Table_ID && gRecord_ID > 0)
+                    if (gVAF_TableView_ID == X_C_BPartner.Table_ID && gRecord_ID > 0)
                         sql = sql.concat(" OR C_BPartner_ID=").concat(gRecord_ID);
 
                     sql = sql.concat(")");
                     //	Reset for query
-                    gAD_Table_ID = 0;
+                    gVAF_TableView_ID = 0;
                     gRecord_ID = 0;
                 }
                 else {
                     var nn = cmbTableQ.getControl().find('option:selected').val();
 
                     if (nn != "" && nn != null)
-                        sql = sql.concat(" AND AD_Table_ID=").concat(nn);
+                        sql = sql.concat(" AND VAF_TableView_ID=").concat(nn);
                 }
 
                 //	Business Partner
@@ -699,10 +699,10 @@
                     + "(SELECT AD_Process_ID FROM AD_Process_Access WHERE AD_Role_ID=")
                     .concat(VIS.context.getAD_Role_ID()).concat("))");
                 //	Table Access
-                sql = sql.concat(" AND (AD_Table_ID IS NULL "
-                    + "OR (AD_Table_ID IS NOT NULL AND AD_Process_ID IS NOT NULL) "	//	Menu Reports 
-                    + "OR AD_Table_ID IN "
-                    + "(SELECT t.AD_Table_ID FROM AD_Tab t"
+                sql = sql.concat(" AND (VAF_TableView_ID IS NULL "
+                    + "OR (VAF_TableView_ID IS NOT NULL AND AD_Process_ID IS NOT NULL) "	//	Menu Reports 
+                    + "OR VAF_TableView_ID IN "
+                    + "(SELECT t.VAF_TableView_ID FROM VAF_Tab t"
                     + " INNER JOIN AD_Window_Access wa ON (t.AD_Window_ID=wa.AD_Window_ID) "
                     + "WHERE wa.AD_Role_ID=").concat(VIS.context.getAD_Role_ID()).concat("))");
                 $self.log.finest(sql.toString());
@@ -712,8 +712,8 @@
 
             var whereClause = sql;
 
-            var sqlMain = "SELECT AD_ARCHIVE_ID,AD_CLIENT_ID,AD_ORG_ID,AD_PROCESS_ID,AD_TABLE_ID,C_BPARTNER_ID,CREATED,CREATEDBY,DESCRIPTION,HELP," +
-                " ISACTIVE,ISREPORT,NAME,RECORD_ID,UPDATED,UPDATEDBY,EXPORT_ID FROM AD_Archive WHERE AD_Client_ID=" + VIS.Env.getCtx().getAD_Client_ID();
+            var sqlMain = "SELECT AD_ARCHIVE_ID,VAF_CLIENT_ID,VAF_ORG_ID,AD_PROCESS_ID,VAF_TABLEVIEW_ID,C_BPARTNER_ID,CREATED,CREATEDBY,DESCRIPTION,HELP," +
+                " ISACTIVE,ISREPORT,NAME,RECORD_ID,UPDATED,UPDATEDBY,EXPORT_ID FROM AD_Archive WHERE VAF_Client_ID=" + VIS.Env.getCtx().getVAF_Client_ID();
             if (whereClause != null && whereClause.length > 0)
                 sqlMain += whereClause;
             sqlMain += " ORDER BY Created desc";
@@ -800,7 +800,7 @@
 
                 arrListColumns.push({ field: "AD_ARCHIVE_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "AD_ARCHIVE_ID"), hidden: true });
                 //arrListColumns.push({ field: "AD_PROCESS_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "AD_PROCESS_ID"), hidden: true });
-                //arrListColumns.push({ field: "AD_TABLE_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "AD_TABLE_ID"), hidden: true });
+                //arrListColumns.push({ field: "VAF_TABLEVIEW_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAF_TABLEVIEW_ID"), hidden: true });
                 //arrListColumns.push({ field: "C_BPARTNER_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_BPARTNER_ID"), hidden: true });
                 //arrListColumns.push({ field: "RECORD_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "RECORD_ID"), hidden: true });
                 //arrListColumns.push({ field: "EXPORT_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "EXPORT_ID"), hidden: true });
@@ -894,7 +894,7 @@
                     line['CREATED'] = CreatedOn;
                     line['AD_ARCHIVE_ID'] = dr.getInt('AD_ARCHIVE_ID');
                     //line['AD_PROCESS_ID'] = dr.getInt('AD_PROCESS_ID');
-                    //line['AD_TABLE_ID'] = dr.getInt('AD_TABLE_ID');
+                    //line['VAF_TABLEVIEW_ID'] = dr.getInt('VAF_TABLEVIEW_ID');
                     //line['C_BPARTNER_ID'] = dr.getInt('C_BPARTNER_ID');
                     //line['RECORD_ID'] = dr.getInt('RECORD_ID');
                     //line['EXPORT_ID'] = dr.getInt('EXPORT_ID');

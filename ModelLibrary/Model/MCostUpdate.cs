@@ -53,9 +53,9 @@ namespace VAdvantage.Model
          */
         protected override Boolean BeforeSave(Boolean newRecord)
         {
-            if (GetAD_Org_ID() != 0)
+            if (GetVAF_Org_ID() != 0)
             {
-                SetAD_Org_ID(0);
+                SetVAF_Org_ID(0);
             }
             SetProcessed(true);
             SetDocStatus(DocActionConstants.STATUS_Completed);

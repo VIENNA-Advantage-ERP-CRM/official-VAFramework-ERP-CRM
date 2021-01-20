@@ -65,10 +65,10 @@ namespace VAdvantage.Acct
             MInOut inout = (MInOut)GetPO();
             SetDateDoc(inout.GetMovementDate());
             //
-            _MatchRequirementR = X_AD_ClientInfo.MATCHREQUIREMENTR_None;
+            _MatchRequirementR = X_VAF_ClientDetail.MATCHREQUIREMENTR_None;
             if (!inout.IsSOTrx())
             {
-                _MatchRequirementR = MClientInfo.Get(GetCtx(), inout.GetAD_Client_ID())
+                _MatchRequirementR = MClientInfo.Get(GetCtx(), inout.GetVAF_Client_ID())
                     .GetMatchRequirementR();
                 String mr = inout.GetMatchRequirementR();
                 if (mr == null)
@@ -213,12 +213,12 @@ namespace VAdvantage.Acct
                         // Change if Cost not found against Asset then get Product Cost
                         if (Env.Signum(costs) == 0)	//	zero costs OK
                         {
-                            costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), true);
+                            costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), true);
                         }
                     }
                     else
                     {
-                        costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), true);
+                        costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), true);
                     }
 
                     if (Env.Signum(costs) == 0)	//	zero costs OK
@@ -251,7 +251,7 @@ namespace VAdvantage.Acct
                         dr.SetM_Locator_ID(line.GetM_Locator_ID());
                         dr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    //  from Loc
                         dr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
-                        dr.SetAD_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
+                        dr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         dr.SetQty(Decimal.Negate(line.GetQty().Value));
 
                         //  Inventory               CR
@@ -282,7 +282,7 @@ namespace VAdvantage.Acct
                         cr.SetM_Locator_ID(line.GetM_Locator_ID());
                         cr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    //  from Loc
                         cr.SetLocationFromBPartner(GetC_BPartner_Location_ID(), false);  //  to Loc
-                        cr.SetAD_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
+                        cr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         cr.SetQty(Decimal.Negate(line.GetQty().Value));
 
                         //  Inventory               DR
@@ -304,7 +304,7 @@ namespace VAdvantage.Acct
                     {
                         if (!IsPosted())
                         {
-                            MCostDetail.CreateShipment(as1, line.GetAD_Org_ID(),
+                            MCostDetail.CreateShipment(as1, line.GetVAF_Org_ID(),
                                 line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                                 line.Get_ID(), 0,
                                 costs, IsReturnTrx() ? Decimal.Negate(line.GetQty().Value) : line.GetQty().Value,
@@ -342,24 +342,24 @@ namespace VAdvantage.Acct
                             Decimal convertedCost = MConversionRate.Convert(product.GetCtx(),
                                 oLine.GetPriceEntered(), order.GetC_Currency_ID(), as1.GetC_Currency_ID(),
                                 line.GetDateAcct(), order.GetC_ConversionType_ID(),
-                                oLine.GetAD_Client_ID(), line.GetAD_Org_ID());
+                                oLine.GetVAF_Client_ID(), line.GetVAF_Org_ID());
 
                             costs = Decimal.Multiply(convertedCost, oLine.GetQtyEntered());
 
                         }
                         else
                         {
-                            costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), false);	//	non-zero costs
+                            costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), false);	//	non-zero costs
                         }
                     }
                     catch (Exception ex)
                     {
                         log.SaveError("AccountSchemaColumnError", ex);
-                        costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), false);	//	non-zero costs
+                        costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), false);	//	non-zero costs
                     }
                     /***********************************************************/
 
-                    //Decimal costs = costs = line.GetProductCosts(as1, line.GetAD_Org_ID(), false);	//	non-zero costs
+                    //Decimal costs = costs = line.GetProductCosts(as1, line.GetVAF_Org_ID(), false);	//	non-zero costs
 
                     if ( Env.Signum(costs) == 0)
                     {

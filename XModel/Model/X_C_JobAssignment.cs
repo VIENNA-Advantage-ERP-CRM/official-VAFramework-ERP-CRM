@@ -76,7 +76,7 @@ static X_C_JobAssignment()
 //static long serialVersionUID 27562514372704L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055915L;
-/** AD_Table_ID=791 */
+/** VAF_TableView_ID=791 */
 public static int Table_ID;
  // =791;
 

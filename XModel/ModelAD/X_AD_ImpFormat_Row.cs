@@ -20,7 +20,7 @@ public X_AD_ImpFormat_Row (Context ctx, int AD_ImpFormat_Row_ID, Trx trxName) : 
 {
 /** if (AD_ImpFormat_Row_ID == 0)
 {
-SetAD_Column_ID (0);
+SetVAF_Column_ID (0);
 SetAD_ImpFormat_ID (0);
 SetAD_ImpFormat_Row_ID (0);
 SetDataType (null);
@@ -35,7 +35,7 @@ public X_AD_ImpFormat_Row (Ctx ctx, int AD_ImpFormat_Row_ID, Trx trxName) : base
 {
 /** if (AD_ImpFormat_Row_ID == 0)
 {
-SetAD_Column_ID (0);
+SetVAF_Column_ID (0);
 SetAD_ImpFormat_ID (0);
 SetAD_ImpFormat_Row_ID (0);
 SetDataType (null);
@@ -82,7 +82,7 @@ static X_AD_ImpFormat_Row()
 //static long serialVersionUID = 27562514361640L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044851L;
-/** AD_Table_ID=382 */
+/** VAF_TableView_ID=382 */
 public static int Table_ID;
  // =382;
 
@@ -125,17 +125,17 @@ StringBuilder sb = new StringBuilder ("X_AD_ImpFormat_Row[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID < 1) throw new ArgumentException ("AD_Column_ID is mandatory.");
-Set_Value ("AD_Column_ID", AD_Column_ID);
+if (VAF_Column_ID < 1) throw new ArgumentException ("VAF_Column_ID is mandatory.");
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

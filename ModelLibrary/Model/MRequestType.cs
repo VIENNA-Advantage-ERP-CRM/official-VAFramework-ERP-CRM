@@ -51,10 +51,10 @@ namespace VAdvantage.Model
         public static MRequestType GetDefault(Ctx ctx)
         {
             MRequestType retValue = null;
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             String sql = "SELECT * FROM R_RequestType "
-                + "WHERE AD_Client_ID IN (0,11) AND IsActive='Y'"
-                + "ORDER BY IsDefault DESC, AD_Client_ID DESC, R_Request_ID DESC";
+                + "WHERE VAF_Client_ID IN (0,11) AND IsActive='Y'"
+                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC, R_Request_ID DESC";
             DataSet ds;
             try
             {
@@ -332,7 +332,7 @@ namespace VAdvantage.Model
             String measureDataType, DateTime? reportDate, MRole role)
         {
             String dateColumn = "Created";
-            String orgColumn = "AD_Org_ID";
+            String orgColumn = "VAF_Org_ID";
             String bpColumn = "C_BPartner_ID";
             String pColumn = "M_Product_ID";
             //	PlannedAmt -> PlannedQty -> Count
@@ -383,7 +383,7 @@ namespace VAdvantage.Model
             String measureDataType, DateTime? startDate, MRole role)
         {
             String dateColumn = "Created";
-            String orgColumn = "AD_Org_ID";
+            String orgColumn = "VAF_Org_ID";
             String bpColumn = "C_BPartner_ID";
             String pColumn = "M_Product_ID";
             //
@@ -454,7 +454,7 @@ namespace VAdvantage.Model
             DateTime? date, int R_Status_ID, MRole role)
         {
             String dateColumn = "Created";
-            String orgColumn = "AD_Org_ID";
+            String orgColumn = "VAF_Org_ID";
             String bpColumn = "C_BPartner_ID";
             String pColumn = "M_Product_ID";
             //

@@ -113,10 +113,10 @@ namespace VAdvantage.Classes
         /// <summary>
         ///Constructor get TableNAme from Table
         /// </summary>
-        /// <param name="AD_Table_ID"></param>
-        public Query(int AD_Table_ID)
+        /// <param name="VAF_TableView_ID"></param>
+        public Query(int VAF_TableView_ID)
         {	//	Use Client Ctx as r/o
-            _tableName = Model.MTable.GetTableName(Utility.Env.GetCtx(), AD_Table_ID);
+            _tableName = Model.MTable.GetTableName(Utility.Env.GetCtx(), VAF_TableView_ID);
         }	//	MQ
         /// <summary>
         ///Create simple Equal Query.

@@ -72,7 +72,7 @@ static X_AD_TreeBar()
 //static long serialVersionUID 27562514364602L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047813L;
-/** AD_Table_ID=456 */
+/** VAF_TableView_ID=456 */
 public static int Table_ID;
  // =456;
 

@@ -49,7 +49,7 @@ namespace VAdvantage.Process
         /// <returns></returns>
         protected override string DoIt()
         {
-            sql = "select tablename from ad_table where ad_table_id = " + GetTable_ID();
+            sql = "select tablename from vaf_tableview where vaf_tableview_id = " + GetTable_ID();
             string tableName = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
             if (tableName.ToUpper() == "C_PROJECTTASK")
             {
@@ -135,8 +135,8 @@ namespace VAdvantage.Process
                     if (AD_User_ID != 0)
                     {
                         VAdvantage.Model.X_AppointmentsInfo appoint = new VAdvantage.Model.X_AppointmentsInfo(GetCtx(), 0, Get_Trx());
-                        appoint.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                        appoint.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+                        appoint.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                        appoint.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         appoint.SetSubject(subject);
                         appoint.SetStartDate(task.GetStartDate());
                         appoint.SetEndDate(task.GetEndDate());
@@ -176,8 +176,8 @@ namespace VAdvantage.Process
                     if (AD_User_ID != 0)
                     {
                         VAdvantage.Model.X_AppointmentsInfo appoint = new VAdvantage.Model.X_AppointmentsInfo(GetCtx(), Util.GetValueOfInt(task.GetAppointmentsInfo_ID()), Get_Trx());
-                        appoint.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                        appoint.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+                        appoint.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                        appoint.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         appoint.SetSubject(subject);
                         appoint.SetStartDate(task.GetStartDate());
                         appoint.SetEndDate(task.GetEndDate());

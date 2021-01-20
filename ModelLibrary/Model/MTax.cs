@@ -48,14 +48,14 @@ namespace VAdvantage.Model
         /// <returns>array list</returns>
         public static MTax[] GetAll(Ctx ctx)
         {
-            int AD_Client_ID = ctx.GetAD_Client_ID();
-            int key = AD_Client_ID;
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
+            int key = VAF_Client_ID;
             MTax[] retValue = (MTax[])_cacheAll[key];
             if (retValue != null)
                 return retValue;
 
             //	Create it
-            String sql = "SELECT * FROM C_Tax WHERE AD_Client_ID=@AD_Client_ID"
+            String sql = "SELECT * FROM C_Tax WHERE VAF_Client_ID=@VAF_Client_ID"
                 + " ORDER BY C_Country_ID, C_Region_ID, To_Country_ID, To_Region_ID";
             List<MTax> list = new List<MTax>();
             //PreparedStatement pstmt = null;
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_Client_ID", AD_Client_ID);
+                param[0] = new SqlParameter("@VAF_Client_ID", VAF_Client_ID);
                 ds = new DataSet();
                 ds = DataBase.DB.ExecuteDataset(sql, param);
 
@@ -449,7 +449,7 @@ namespace VAdvantage.Model
             PO tax = null;
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
-            //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_TaxRate_Acct'");
+            //_sql.Append("Select count(*) from  vaf_tableview where tablename like 'FRPT_TaxRate_Acct'");
             //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_TaxRate_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_TaxRate_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
@@ -458,9 +458,9 @@ namespace VAdvantage.Model
                 _sql.Clear();
                 _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Tax Rate'");
                 var relatedtoTax = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
-                _client_ID = GetAD_Client_ID();
+                _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -469,7 +469,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -479,12 +479,12 @@ namespace VAdvantage.Model
                                 if (_relatedTo != "" && (_relatedTo == relatedtoTax))
                                 {
                                     _sql.Clear();
-                                    _sql.Append("Select COUNT(*) From C_Tax Bp Left Join FRPT_TaxRate_Acct ca On Bp.C_Tax_ID=ca.C_Tax_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Tax_ID = " + GetC_Tax_ID());
+                                    _sql.Append("Select COUNT(*) From C_Tax Bp Left Join FRPT_TaxRate_Acct ca On Bp.C_Tax_ID=ca.C_Tax_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Tax_ID = " + GetC_Tax_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
                                         tax = MTable.GetPO(GetCtx(), "FRPT_TaxRate_Acct", 0, null);
-                                        tax.Set_ValueNoCheck("AD_Org_ID", 0);
+                                        tax.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         tax.Set_ValueNoCheck("C_Tax_ID", Util.GetValueOfInt(GetC_Tax_ID()));
                                         tax.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         tax.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));

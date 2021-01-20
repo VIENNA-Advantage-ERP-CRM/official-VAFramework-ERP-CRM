@@ -212,7 +212,7 @@
         };
 
         var elements = [
-            "AD_Org_ID",
+            "VAF_Org_ID",
             "C_BPartner_ID",
             "C_Currency_ID",
             "C_Payment_ID ",
@@ -248,7 +248,7 @@
             "CreditOrDebit",
             "Account",
             "VIS_Check",
-            "AD_OrgTrx_ID"
+            "VAF_OrgTrx_ID"
         ];
 
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
@@ -1621,8 +1621,8 @@
         //        multiSelect: true,
         //        columns: [
         //            { field: "SelectRow", caption: 'check', size: '50px', editable: { type: 'checkbox' } },
-        //            { field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true },
-        //            { field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false, sortable: false },
+        //            { field: "VAF_Org_ID", caption: VIS.translatedTexts.VAF_Org_ID, size: '85px', hidden: true },
+        //            { field: "OrgName", caption: VIS.translatedTexts.VAF_Org_ID, size: '105px', hidden: false, sortable: false },
         //            {
         //                field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, render: function (record, index, col_index) {
         //                    var val = record["DATEACCT"];
@@ -2131,7 +2131,7 @@
         //-----Load Invoice Grid----Neha
         function loadInvoice() {
             if (_C_BPartner_ID > 0) {
-                AD_Org_ID = $OrgFilter.val();
+                VAF_Org_ID = $OrgFilter.val();
                 _C_Currency_ID = $cmbCurrency.val();
                 if (_C_Currency_ID == 0) {
                     return VIS.ADialog.info("Message", true, "select currency", "");
@@ -2171,7 +2171,7 @@
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "PaymentAllocation/GetInvoice",
-                    data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
+                    data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
                     async: true,
                     success: function (result) {
                         var data = JSON.parse(result);
@@ -2241,7 +2241,7 @@
             //to do design
             var $divOrg = $('<div class="vis-allocation-leftControls">');
 
-            $divOrg.append('<div class="input-group vis-input-wrap"><div class="vis-control-wrap"><select class="vis-allocation-currencycmb" id=VIS_Org_' + $self.windowNo + '></select><label title="View organization" >' + VIS.translatedTexts.AD_Org_ID + '</label>');
+            $divOrg.append('<div class="input-group vis-input-wrap"><div class="vis-control-wrap"><select class="vis-allocation-currencycmb" id=VIS_Org_' + $self.windowNo + '></select><label title="View organization" >' + VIS.translatedTexts.VAF_Org_ID + '</label>');
             var $divBp = $('<div class="vis-allocation-leftControls">');
 
             var $Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
@@ -2386,7 +2386,7 @@
             //    + '<span class="vis-allocation-lbldifferenceAmt" style="float:right;">'
             //    + '</span>');
 
-            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title="View allocation will be created in this organization" >' + VIS.translatedTexts.AD_OrgTrx_ID + '</label>');
+            $resultDiv.append('<div class="vis-allocation-leftControls"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"> <select class="vis-allocation-currencycmb" id=VIS_cmbOrg_' + $self.windowNo + '></select><label title="View allocation will be created in this organization" >' + VIS.translatedTexts.VAF_OrgTrx_ID + '</label>');
 
             $resultDiv.append('<div class="vis-allocation-leftControls">'
                 + '<div class="input-group vis-input-wrap">'
@@ -2487,22 +2487,22 @@
                         $OrgFilter.empty();
                         //$OrgFilter.addClass('vis-ev-col-mandatory');
                         //$OrgFilter.addClass('vis-ev-col-mandatory');
-                        if (VIS.Env.getCtx().getAD_Org_ID() != 0) {
-                            $OrgFilter.append("<option value=" + VIS.Env.getCtx().getAD_Org_ID() + ">" + VIS.Env.getCtx().ctx["#AD_Org_Name"] + "</option>");
+                        if (VIS.Env.getCtx().getVAF_Org_ID() != 0) {
+                            $OrgFilter.append("<option value=" + VIS.Env.getCtx().getVAF_Org_ID() + ">" + VIS.Env.getCtx().ctx["#VAF_Org_Name"] + "</option>");
                         }
                         for (var i = 0; i < result.length; i++) {
-                            if (result[i].Value != VIS.Env.getCtx().getAD_Org_ID()) {
+                            if (result[i].Value != VIS.Env.getCtx().getVAF_Org_ID()) {
                                 OrgName = VIS.Utility.Util.getValueOfString(result[i].Name);
-                                AD_Org_ID = VIS.Utility.Util.getValueOfInt(result[i].Value);
-                                $OrgFilter.append(" <option value=" + AD_Org_ID + ">" + OrgName + "</option>");
+                                VAF_Org_ID = VIS.Utility.Util.getValueOfInt(result[i].Value);
+                                $OrgFilter.append(" <option value=" + VAF_Org_ID + ">" + OrgName + "</option>");
                             }
                         }
                     }
                     else {
                         $OrgFilter.append("<option value=0></option>");
                     }
-                    if (VIS.context.getContextAsInt("#AD_Org_ID") > 0) {
-                        $OrgFilter.val(VIS.context.getContextAsInt("#AD_Org_ID"));
+                    if (VIS.context.getContextAsInt("#VAF_Org_ID") > 0) {
+                        $OrgFilter.val(VIS.context.getContextAsInt("#VAF_Org_ID"));
                         //$OrgFilter.removeClass('vis-ev-col-mandatory');
                         $OrgFilter.removeClass('vis-ev-col-mandatory');
                     }
@@ -2532,15 +2532,15 @@
                         $cmbOrg.append("<option value=0></option>");
                         for (var i = 0; i < result.length; i++) {
                             OrgName = VIS.Utility.Util.getValueOfString(result[i].Name);
-                            AD_Org_ID = VIS.Utility.Util.getValueOfInt(result[i].Value);
-                            $cmbOrg.append(" <option value=" + AD_Org_ID + ">" + OrgName + "</option>");
+                            VAF_Org_ID = VIS.Utility.Util.getValueOfInt(result[i].Value);
+                            $cmbOrg.append(" <option value=" + VAF_Org_ID + ">" + OrgName + "</option>");
                         }
                     }
                     else {
                         $cmbOrg.append("<option value=0></option>");
                     }
-                    if (VIS.context.getContextAsInt("#AD_Org_ID") > 0) {
-                        $cmbOrg.val(VIS.context.getContextAsInt("#AD_Org_ID"));
+                    if (VIS.context.getContextAsInt("#VAF_Org_ID") > 0) {
+                        $cmbOrg.val(VIS.context.getContextAsInt("#VAF_Org_ID"));
                         $cmbOrg.removeClass('vis-ev-col-mandatory');
                     }
                     else
@@ -2641,7 +2641,7 @@
 *      5-ConvAmt, 6-ConvOpen, 7-Allocated
 */
         function loadUnallocatedPayments() {
-            AD_Org_ID = $OrgFilter.val();
+            VAF_Org_ID = $OrgFilter.val();
             _C_Currency_ID = $cmbCurrency.val();
             if (_C_BPartner_ID == 0 || _C_Currency_ID == 0) {
                 return;
@@ -2671,7 +2671,7 @@
             }
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetPayments",
-                data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2724,7 +2724,7 @@
             }
             pageNoCashJournal = 1, gridPgnoCashJounal = 1, CashRecord = 0;
             isCashGridLoaded = false;
-            AD_Org_ID = $OrgFilter.val();
+            VAF_Org_ID = $OrgFilter.val();
             fromDate = $cfromDate.val();
             toDate = $ctoDate.val();
             paymentType = $cashPayType.val();
@@ -2746,7 +2746,7 @@
             $bsyDiv[0].style.visibility = "visible";
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetCashJounral",
-                data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2853,7 +2853,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "VIS/PaymentAllocation/GetGLData",
                 dataType: "json",
-                data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
+                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2926,7 +2926,7 @@
             }
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetPayments",
-                data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoPayment, size: PAGESIZE, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -2995,7 +2995,7 @@
             }
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetCashJounral",
-                data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, page: pageNoCashJournal, size: PAGESIZE, fromDate: fromDate, toDate: toDate, paymentType_ID: paymentType, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -3067,7 +3067,7 @@
 
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/GetInvoice",
-                data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
+                data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, isInterBPartner: _isInterBPartner, chk: chk, date: getDate, page: pageNoInvoice, size: PAGESIZE, docNo: docNo, c_docType_ID: c_docType_ID, docBaseType: docBaseType, fromDate: fromDate, toDate: toDate, conversionDate: conversionDate, srchText: srchText },
                 async: true,
                 success: function (result) {
                     var data = JSON.parse(result);
@@ -3165,8 +3165,8 @@
         function bindGLGrid(data, chk) {
             var columns = [];
             columns.push({ field: "SelectRow", caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
-            columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
-            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false, sortable: false });
+            columns.push({ field: "VAF_Org_ID", caption: VIS.translatedTexts.VAF_Org_ID, size: '85px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.VAF_Org_ID, size: '105px', hidden: false, sortable: false });
             columns.push({
                 field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, render: function (record, index, col_index) {
                     var val = record["DATEACCT"];
@@ -3318,8 +3318,8 @@
         function bindPaymentGrid(data, chk) {
             var columns = [];
             columns.push({ field: 'SelectRow', caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
-            columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
-            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: false });
+            columns.push({ field: "VAF_Org_ID", caption: VIS.translatedTexts.VAF_Org_ID, size: '85px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.VAF_Org_ID, size: '85px', hidden: false });
             columns.push({
                 field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '85px', hidden: false, render: function (record, index, col_index) {
                     var val = record["DATEACCT"];
@@ -3535,8 +3535,8 @@
         function bindCashline(data, chk) {
             var columns = [];
             columns.push({ field: 'SelectRow', caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
-            columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
-            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false });
+            columns.push({ field: "VAF_Org_ID", caption: VIS.translatedTexts.VAF_Org_ID, size: '85px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.VAF_Org_ID, size: '105px', hidden: false });
             columns.push({
                 field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '105px', hidden: false, render: function (record, index, col_index) {
                     var val = record["DATEACCT"];
@@ -3753,8 +3753,8 @@
         function bindInvoiceGrid(data, chk) {
             var columns = [];
             columns.push({ field: 'SelectRow', caption: VIS.translatedTexts.VIS_Check, size: '50px', editable: { type: 'checkbox' } });
-            columns.push({ field: "AD_Org_ID", caption: VIS.translatedTexts.AD_Org_ID, size: '85px', hidden: true });
-            columns.push({ field: "OrgName", caption: VIS.translatedTexts.AD_Org_ID, size: '105px', hidden: false });
+            columns.push({ field: "VAF_Org_ID", caption: VIS.translatedTexts.VAF_Org_ID, size: '85px', hidden: true });
+            columns.push({ field: "OrgName", caption: VIS.translatedTexts.VAF_Org_ID, size: '105px', hidden: false });
             columns.push({
                 field: "DATEACCT", caption: VIS.translatedTexts.DateAcct, size: '105px', hidden: false, render: function (record, index, col_index) {
                     var val = record["DATEACCT"];
@@ -5449,7 +5449,7 @@
                             C_ConversionType_ID: record.C_ConversionType_ID,
                             ConversionName: record.ConversionName,
                             DATEACCT: record.DATEACCT,
-                            AD_Org_ID: record.AD_Org_ID,
+                            VAF_Org_ID: record.VAF_Org_ID,
                             OrgName: record.OrgName
                         };
                         selectedPayments.push(rcdRow);
@@ -5568,7 +5568,7 @@
                             C_ConversionType_ID: record.C_ConversionType_ID,
                             ConversionName: record.ConversionName,
                             DATEACCT: record.DATEACCT,
-                            AD_Org_ID: record.AD_Org_ID,
+                            VAF_Org_ID: record.VAF_Org_ID,
                             OrgName: record.OrgName
                         };
                         selectedCashlines.push(rcdRow);
@@ -5682,7 +5682,7 @@
                         C_ConversionType_ID: record.C_ConversionType_ID,
                         ConversionName: record.ConversionName,
                         DATEACCT: record.DATEACCT,
-                        AD_Org_ID: record.AD_Org_ID,
+                        VAF_Org_ID: record.VAF_Org_ID,
                         OrgName: record.OrgName
                     };
                     selectedInvoices.push(rcdRow);
@@ -5844,7 +5844,7 @@
                         C_ConversionType_ID: record.C_ConversionType_ID,
                         ConversionName: record.ConversionName,
                         DATEACCT: record.DATEACCT,
-                        AD_Org_ID: record.AD_Org_ID,
+                        VAF_Org_ID: record.VAF_Org_ID,
                         OrgName: record.OrgName
                     };
                     SelectedGL.push(rcdRow);
@@ -6078,7 +6078,7 @@
                 if (_C_Currency_ID == 0) {
                     return VIS.ADialog.info("Message", true, "select currency", "");
                 }
-                AD_Org_ID = $OrgFilter.val();
+                VAF_Org_ID = $OrgFilter.val();
                 fromDate = $gfromDate.val();
                 toDate = $gtoDate.val();
                 srchText = $srchGL.val();
@@ -6101,7 +6101,7 @@
                 $.ajax({
                     url: VIS.Application.contextUrl + "VIS/PaymentAllocation/GetGLData",
                     dataType: "json",
-                    data: { AD_Org_ID: AD_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
+                    data: { VAF_Org_ID: VAF_Org_ID, _C_Currency_ID: _C_Currency_ID, _C_BPartner_ID: _C_BPartner_ID, page: pageNoGL, size: PAGESIZE, fromDate: fromDate, toDate: toDate, srchText: srchText, chk: chk },
                     async: true,
                     success: function (result) {
                         //if (result) {
@@ -6198,7 +6198,7 @@
                     if ($gridPayment.getChanges()[i].SelectRow == true) {
                         var row = $gridPayment.records[$gridPayment.getChanges()[i].recid].Date1;
                         // check org matched or not 
-                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridPayment.records[$gridPayment.getChanges()[i].recid].AD_Org_ID)) {
+                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridPayment.records[$gridPayment.getChanges()[i].recid].VAF_Org_ID)) {
                             isOrgMatched = false;
                         }
                         _allDates.push(new Date(row));
@@ -6212,7 +6212,7 @@
                     if ($gridInvoice.getChanges()[i].SelectRow == true) {
                         var row = $gridInvoice.records[$gridInvoice.getChanges()[i].recid].Date1; //changed schedule date to invoice date suggested by Mukesh sir, ravi and amit.
                         // check org matched or not 
-                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridInvoice.records[$gridInvoice.getChanges()[i].recid].AD_Org_ID)) {
+                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridInvoice.records[$gridInvoice.getChanges()[i].recid].VAF_Org_ID)) {
                             isOrgMatched = false;
                         }
                         _allDates.push(new Date(row));
@@ -6226,7 +6226,7 @@
                     if ($gridCashline.getChanges()[i].SelectRow == true) {
                         var row = $gridCashline.records[$gridCashline.getChanges()[i].recid].DATEACCT;
                         // check org matched or not 
-                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridCashline.records[$gridCashline.getChanges()[i].recid].AD_Org_ID)) {
+                        if (isOrgMatched && parseInt($cmbOrg.val()) != parseInt($gridCashline.records[$gridCashline.getChanges()[i].recid].VAF_Org_ID)) {
                             isOrgMatched = false;
                         }
                         _allDates.push(new Date(row));
@@ -6630,7 +6630,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
+                data: { DateTrx: $date.val(), VAF_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -6776,7 +6776,7 @@
             // also check is Non Business Day?
             $.ajax({
                 url: VIS.Application.contextUrl + "PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
+                data: { DateTrx: $date.val(), VAF_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -6922,7 +6922,7 @@
         function glData(rowsPayment, rowsInvoice, rowsCash, rowsGLVoucher, DateTrx, DateAcct) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VIS/PaymentAllocation/CheckPeriodState",
-                data: { DateTrx: $date.val(), AD_Org_ID: $cmbOrg.val() },
+                data: { DateTrx: $date.val(), VAF_Org_ID: $cmbOrg.val() },
                 async: false,
                 success: function (result) {
                     if (result != "") {
@@ -7068,7 +7068,7 @@
                 type: 'POST',
                 data: {
                     paymentData: rowsPayment, invoiceData: rowsInvoice, cashData: rowsCash, glData: rowsGLVoucher, DateTrx: DateTrx, _windowNo: self.windowNo,
-                    C_Currency_ID: _C_Currency_ID, C_BPartner_ID: _C_BPartner_ID, AD_Org_ID: $cmbOrg.val(), C_CurrencyType_ID: C_CurrencyType_ID,
+                    C_Currency_ID: _C_Currency_ID, C_BPartner_ID: _C_BPartner_ID, VAF_Org_ID: $cmbOrg.val(), C_CurrencyType_ID: C_CurrencyType_ID,
                     DateAcct: $dateAcct.val(), applied: applied, discount: discount, open: open, payment: payment, writeOff: writeOff, conversionDate: conversionDate, chk: chk
                 },
                 async: false,

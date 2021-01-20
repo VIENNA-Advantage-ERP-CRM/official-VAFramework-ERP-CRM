@@ -78,7 +78,7 @@ static X_M_Freight()
 //static long serialVersionUID 27562514379365L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062576L;
-/** AD_Table_ID=596 */
+/** VAF_TableView_ID=596 */
 public static int Table_ID;
  // =596;
 

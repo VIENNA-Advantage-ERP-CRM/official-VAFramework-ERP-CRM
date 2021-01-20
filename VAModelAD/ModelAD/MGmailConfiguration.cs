@@ -9,7 +9,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    class MGmailConfiguration : X_AD_GmailConfiguration
+    class MGmailConfiguration : X_VAF_GmailConfiguration
     {
 
 

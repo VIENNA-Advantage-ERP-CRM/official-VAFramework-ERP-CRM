@@ -74,7 +74,7 @@ static X_CM_Media_Server()
 //static long serialVersionUID 27562514369053L;
 /** Last Updated Timestamp 7/29/2010 1:07:32 PM */
 public static long updatedMS = 1280389052264L;
-/** AD_Table_ID=859 */
+/** VAF_TableView_ID=859 */
 public static int Table_ID;
  // =859;
 

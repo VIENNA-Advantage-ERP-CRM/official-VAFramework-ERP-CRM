@@ -112,15 +112,15 @@ namespace VAdvantage.Model
         public MAccount GetAccount()
         {
             MAccount acct = MAccount.Get(GetCtx(),
-                _account.GetAD_Client_ID(),
-                IsOverwriteOrg() && GetOrg_ID() != 0 ? GetOrg_ID() : _account.GetAD_Org_ID(),
+                _account.GetVAF_Client_ID(),
+                IsOverwriteOrg() && GetOrg_ID() != 0 ? GetOrg_ID() : _account.GetVAF_Org_ID(),
                 _account.GetC_AcctSchema_ID(),
                 IsOverwriteAcct() && GetAccount_ID() != 0 ? GetAccount_ID() : _account.GetAccount_ID(),
                     _account.GetC_SubAcct_ID(),
                 //	
                 IsOverwriteProduct() ? GetM_Product_ID() : _account.GetM_Product_ID(),
                 IsOverwriteBPartner() ? GetC_BPartner_ID() : _account.GetC_BPartner_ID(),
-                IsOverwriteOrgTrx() ? GetAD_OrgTrx_ID() : _account.GetAD_OrgTrx_ID(),
+                IsOverwriteOrgTrx() ? GetVAF_OrgTrx_ID() : _account.GetVAF_OrgTrx_ID(),
                 IsOverwriteLocFrom() ? GetC_LocFrom_ID() : _account.GetC_LocFrom_ID(),
                 IsOverwriteLocTo() ? GetC_LocTo_ID() : _account.GetC_LocTo_ID(),
                 IsOverwriteSalesRegion() ? GetC_SalesRegion_ID() : _account.GetC_SalesRegion_ID(),
@@ -210,9 +210,9 @@ namespace VAdvantage.Model
             {
                 SetOrg_ID(0);
             }
-            if (!IsOverwriteOrgTrx() && GetAD_OrgTrx_ID() != 0)
+            if (!IsOverwriteOrgTrx() && GetVAF_OrgTrx_ID() != 0)
             {
-                SetAD_OrgTrx_ID(0);
+                SetVAF_OrgTrx_ID(0);
             }
             if (!IsOverwriteProduct() && GetM_Product_ID() != 0)
             {

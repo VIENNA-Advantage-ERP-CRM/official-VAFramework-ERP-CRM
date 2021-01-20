@@ -70,7 +70,7 @@ static X_C_POSKeyLayout()
 //static long serialVersionUID 27562514373535L;
 /** Last Updated Timestamp 7/29/2010 1:07:36 PM */
 public static long updatedMS = 1280389056746L;
-/** AD_Table_ID=749 */
+/** VAF_TableView_ID=749 */
 public static int Table_ID;
  // =749;
 

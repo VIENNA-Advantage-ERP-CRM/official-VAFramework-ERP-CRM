@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             }
 
             //	Std Period open? - AP (Reimbursement) Invoice
-            if (!MPeriod.IsOpen(GetCtx(), GetDateReport(), VAdvantage.Model.MDocBaseType.DOCBASETYPE_APINVOICE, GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateReport(), VAdvantage.Model.MDocBaseType.DOCBASETYPE_APINVOICE, GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -353,7 +353,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateReport(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateReport(), GetVAF_Org_ID()))
             {
                 m_processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;

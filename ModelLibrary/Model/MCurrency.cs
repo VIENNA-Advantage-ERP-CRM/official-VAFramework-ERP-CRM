@@ -95,7 +95,7 @@ namespace VAdvantage.Model
             //	Create it
             retValue = new MCurrency(ctx, C_Currency_ID, null);
             //	Save in System
-            if (retValue.GetAD_Client_ID() == 0)
+            if (retValue.GetVAF_Client_ID() == 0)
                 currencies.Add(key, retValue);
             return retValue;
         }

@@ -668,7 +668,7 @@ namespace VAdvantage.Utility
             if (AD_Language == null || AD_Language.Length == 0)
                 AD_Language = Language.GetBaseAD_Language();
 
-            //	Check AD_Element
+            //	Check VAF_ColumnDic
             String retStr = "";
             string sqlQry = "";
 
@@ -679,17 +679,17 @@ namespace VAdvantage.Utility
 
                 try
                 {
-                    if (AD_Language == null || AD_Language.Length == 0 || Env.IsBaseLanguage(AD_Language, "AD_Element"))
+                    if (AD_Language == null || AD_Language.Length == 0 || Env.IsBaseLanguage(AD_Language, "VAF_ColumnDic"))
                     {
-                        sqlQry = "SELECT Name, PO_Name FROM AD_Element WHERE UPPER(ColumnName)=@ColumnName";
+                        sqlQry = "SELECT Name, PO_Name FROM VAF_ColumnDic WHERE UPPER(ColumnName)=@ColumnName";
                         SqlParameter[] param = new SqlParameter[1];
                         param[0] = new SqlParameter("@ColumnName", ColumnName.ToUpper());
                         dr = DataBase.DB.ExecuteReader(sqlQry, param);
                     }
                     else
                     {
-                        sqlQry = "SELECT t.Name, t.PO_Name FROM AD_Element_Trl t, AD_Element e "
-                            + "WHERE t.AD_Element_ID=e.AD_Element_ID AND UPPER(e.ColumnName)=@ColumnName "
+                        sqlQry = "SELECT t.Name, t.PO_Name FROM VAF_ColumnDic_TL t, VAF_ColumnDic e "
+                            + "WHERE t.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND UPPER(e.ColumnName)=@ColumnName "
                             + "AND t.AD_Language=@AD_Language";
                         SqlParameter[] param = new SqlParameter[2];
                         param[0] = new SqlParameter("@ColumnName", ColumnName.ToUpper());
@@ -770,10 +770,10 @@ namespace VAdvantage.Utility
         /**************************************************************************
          *	"Translate" text.
          *  <pre>
-         *		- Check AD_Element.ColumnName	->	Name
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
          *		- Check AD_Message.AD_Message 	->	MsgText
          *  </pre>
-         *  If checking AD_Element, the SO terminology is used.
+         *  If checking VAF_ColumnDic, the SO terminology is used.
          *  @param ad_language  Language
          *  @param isSOTrx sales order context
          *  @param text	Text - MsgText or Element Name
@@ -787,7 +787,7 @@ namespace VAdvantage.Utility
             if (AD_Language == null || AD_Language.Length == 0)
                 AD_Language = Language.GetBaseAD_Language();
 
-            //	Check AD_Element
+            //	Check VAF_ColumnDic
             String retStr = GetElement(AD_Language, text, isSOTrx);
             if (!retStr.Equals(""))
                 return retStr.Trim();
@@ -816,9 +816,9 @@ namespace VAdvantage.Utility
          *  <pre>
          *  	- Check Context
          *		- Check AD_Message.AD_Message 	->	MsgText
-         *		- Check AD_Element.ColumnName	->	Name
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
          *  </pre>
-         *  If checking AD_Element, the SO terminology is used.
+         *  If checking VAF_ColumnDic, the SO terminology is used.
          *  @param ad_language  Language
          *  @param text	Text - MsgText or Element Name
          *  @return translated text or original text if not found
@@ -832,7 +832,7 @@ namespace VAdvantage.Utility
          *	"Translate" text.
          *  <pre>
          *  	- Check Context
-         *		- Check AD_Element.ColumnName	->	Name
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
          *		- Check AD_Message.AD_Message 	->	MsgText
          *  </pre>
          *  @param ctx  Context
@@ -862,7 +862,7 @@ namespace VAdvantage.Utility
         /**
          *	"Translate" text.
          *  <pre>
-         *		- Check AD_Element.ColumnName	->	Name
+         *		- Check VAF_ColumnDic.ColumnName	->	Name
          *		- Check AD_Message.AD_Message 	->	MsgText
          *  </pre>
          *  @param language Language

@@ -86,7 +86,7 @@ static X_M_InOutConfirm()
 //static long serialVersionUID 27562514379600L;
 /** Last Updated Timestamp 7/29/2010 1:07:42 PM */
 public static long updatedMS = 1280389062811L;
-/** AD_Table_ID=727 */
+/** VAF_TableView_ID=727 */
 public static int Table_ID;
  // =727;
 

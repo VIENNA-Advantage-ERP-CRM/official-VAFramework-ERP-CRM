@@ -74,7 +74,7 @@ static X_M_RelatedProduct()
 //static long serialVersionUID 27562514381074L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064285L;
-/** AD_Table_ID=662 */
+/** VAF_TableView_ID=662 */
 public static int Table_ID;
  // =662;
 

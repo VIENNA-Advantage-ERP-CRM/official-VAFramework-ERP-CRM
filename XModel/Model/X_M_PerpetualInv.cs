@@ -80,7 +80,7 @@ static X_M_PerpetualInv()
 //static long serialVersionUID 27562514380337L;
 /** Last Updated Timestamp 7/29/2010 1:07:43 PM */
 public static long updatedMS = 1280389063548L;
-/** AD_Table_ID=342 */
+/** VAF_TableView_ID=342 */
 public static int Table_ID;
  // =342;
 

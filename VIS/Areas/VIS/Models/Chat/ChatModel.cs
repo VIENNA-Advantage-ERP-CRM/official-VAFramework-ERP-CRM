@@ -42,7 +42,7 @@ namespace VIS.Models
 
         #region Parametrised Constructor
 
-        public ChatModel(Ctx ct, int Chat_ID, int AD_Table_ID, int Record_ID, string description)
+        public ChatModel(Ctx ct, int Chat_ID, int VAF_TableView_ID, int Record_ID, string description)
         {
             // _chat = new MChat(ct, Chat_ID, null);
             //ctx = ct;
@@ -50,7 +50,7 @@ namespace VIS.Models
             if (Chat_ID == 0)
             {
                 //set chat from MChat class first time
-                _chat = new MChat(ct, AD_Table_ID, Record_ID, description, null);
+                _chat = new MChat(ct, VAF_TableView_ID, Record_ID, description, null);
             }
             else
             {
@@ -71,11 +71,11 @@ namespace VIS.Models
         /// </summary>
         /// <param name="windowNo">window no</param>
         /// <param name="CM_Chat_ID">chat</param>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <param name="Record_ID">record key</param>
         /// <param name="description">description</param>
         /// <param name="trxName">transaction</param>
-        public ChatModel(Ctx ct, int windowNo, int CM_Chat_ID, int AD_Table_ID, int Record_ID, String description, Trx trxName, int page, int pageSize)
+        public ChatModel(Ctx ct, int windowNo, int CM_Chat_ID, int VAF_TableView_ID, int Record_ID, String description, Trx trxName, int page, int pageSize)
         // : base(false, false, false, false, "Chat")
         {
             //set current window
@@ -90,7 +90,7 @@ namespace VIS.Models
             if (CM_Chat_ID == 0)
             {
                 //set chat from MChat class first time
-                _chat = new MChat(ct, AD_Table_ID, Record_ID, description, trxName);
+                _chat = new MChat(ct, VAF_TableView_ID, Record_ID, description, trxName);
             }
             else
             {
@@ -194,8 +194,8 @@ namespace VIS.Models
                 if (!entry.IsActive() || !entry.IsConfidentialTypeValid(confidentialType))
                     continue;
                 //status for first chat
-                string sql = "SELECT au.name, aimg.ad_image_id FROM ad_user au LEFT OUTER JOIN ad_image aimg";
-                sql += " ON(au.ad_image_id= aimg.ad_image_id) where au.ad_user_id =" + entry.GetCreatedBy();
+                string sql = "SELECT au.name, aimg.VAF_Image_id FROM ad_user au LEFT OUTER JOIN VAF_Image aimg";
+                sql += " ON(au.VAF_Image_id= aimg.VAF_Image_id) where au.ad_user_id =" + entry.GetCreatedBy();
                 ds = DB.ExecuteDataset(sql, null);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -205,13 +205,13 @@ namespace VIS.Models
                     //{
                     //    img = Convert.ToBase64String((Byte[])ds.Tables[0].Rows[0]["BINARYDATA"]);
                     //}
-                    imgID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["ad_image_id"]);
+                    imgID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Image_id"]);
 
 
-                    if (imgIds.Where(a => a.AD_Image_ID == imgID).Count() == 0)
+                    if (imgIds.Where(a => a.VAF_Image_ID == imgID).Count() == 0)
                     {
                         UserImages uimsg = new UserImages();
-                        uimsg.AD_Image_ID = imgID;
+                        uimsg.VAF_Image_ID = imgID;
                         MImage mimg = new MImage(ctx, imgID, null);
                         uimsg.UserImg = mimg.GetThumbnailURL(46, 46);
                         imgIds.Add(uimsg);
@@ -223,7 +223,7 @@ namespace VIS.Models
                     UserName = strName.ToString(),
                     ChatData = entry.GetCharacterData(),
                     ChatDate = _createdDate,
-                    AD_Image_ID = imgID,
+                    VAF_Image_ID = imgID,
                     AD_User_ID = entry.GetCreatedBy()
                 }
                 );
@@ -314,7 +314,7 @@ namespace VIS.Models
 
     public class ChatProperties
     {
-        public int AD_Table_ID { get; set; }
+        public int VAF_TableView_ID { get; set; }
         public int Record_ID { get; set; }
         public int ChatID { get; set; }
         public string Description { get; set; }
@@ -332,14 +332,14 @@ namespace VIS.Models
         public string ChatData { get; set; }
         public Object ChatDate { get; set; }
         public string UserName { get; set; }
-        public int AD_Image_ID { get; set; }
+        public int VAF_Image_ID { get; set; }
         public int AD_User_ID { get; set; }
     }
 
     public class UserImages
     {
         public string UserImg { get; set; }
-        public int AD_Image_ID { get; set; }
+        public int VAF_Image_ID { get; set; }
     }
 
 

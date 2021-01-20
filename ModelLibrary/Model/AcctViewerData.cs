@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         //Window              
         public int windowNo;
         //Client				
-        public int AD_Client_ID;
+        public int VAF_Client_ID;
         //All Acct Schema		
         public MAcctSchema[] ASchemas = null;
         //This Acct Schema	
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
         //Posting Type		
         public String PostingType = "";
         // Organization		
-        public int AD_Org_ID = 0;
+        public int VAF_Org_ID = 0;
         // Date From		
         public DateTime? DateFrom = null;
         // Date To			
@@ -53,14 +53,14 @@ namespace VAdvantage.Model
 
         //  Dodument Table Selection Info
         // Table ID			
-        public int AD_Table_ID;
+        public int VAF_TableView_ID;
         // Record			
         public int Record_ID;
 
         //Containing Column and Query
         //public HashMap<String,String>	whereInfo = new HashMap<String,String>();
         public Dictionary<String, String> whereInfo = new Dictionary<String, String>();
-        //Containing TableName and AD_Table_ID    
+        //Containing TableName and VAF_TableView_ID    
         //public HashMap<String,Integer>	tableInfo = new HashMap<String,Integer>();
         public Dictionary<String, int> tableInfo = new Dictionary<String, int>();
 
@@ -98,23 +98,23 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="windowNo"></param>
-        /// <param name="ad_Client_ID"></param>
-        /// <param name="ad_Table_ID"></param>
-        public AcctViewerData(Ctx ctx, int windowNo1, int ad_Client_ID, int ad_Table_ID)
+        /// <param name="vaf_client_ID"></param>
+        /// <param name="vaf_tableview_ID"></param>
+        public AcctViewerData(Ctx ctx, int windowNo1, int vaf_client_ID, int vaf_tableview_ID)
         {
             windowNo = windowNo1;
-            AD_Client_ID = ad_Client_ID;
-            if (AD_Client_ID == 0)
+            VAF_Client_ID = vaf_client_ID;
+            if (VAF_Client_ID == 0)
             {
-                AD_Client_ID = ctx.GetContextAsInt(windowNo, "AD_Client_ID");
+                VAF_Client_ID = ctx.GetContextAsInt(windowNo, "VAF_Client_ID");
             }
-            if (AD_Client_ID == 0)
+            if (VAF_Client_ID == 0)
             {
-                AD_Client_ID = ctx.GetContextAsInt("AD_Client_ID");
+                VAF_Client_ID = ctx.GetContextAsInt("VAF_Client_ID");
             }
-            AD_Table_ID = ad_Table_ID;
+            VAF_TableView_ID = vaf_tableview_ID;
             //
-            ASchemas = MAcctSchema.GetClientAcctSchema(ctx, AD_Client_ID);
+            ASchemas = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
             ASchema = ASchemas[0];
             _ctx = ctx;
         }
@@ -163,7 +163,7 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Get Table with ValueNamePair (TableName, translatedKeyColumnName) and
-        /// tableInfo with (TableName, AD_Table_ID) and select the entry for AD_Table_ID
+        /// tableInfo with (TableName, VAF_TableView_ID) and select the entry for VAF_TableView_ID
         /// </summary>
         /// <returns></returns>
         public ListBoxVO GetTable()
@@ -171,9 +171,9 @@ namespace VAdvantage.Model
             List<NamePair> options = new List<NamePair>();
             String defaultKey = null;
             //
-            String sql = "SELECT AD_Table_ID, TableName FROM AD_Table t "
-                + "WHERE EXISTS (SELECT * FROM AD_Column c"
-                + " WHERE t.AD_Table_ID=c.AD_Table_ID AND c.ColumnName='Posted')"
+            String sql = "SELECT VAF_TableView_ID, TableName FROM VAF_TableView t "
+                + "WHERE EXISTS (SELECT * FROM VAF_Column c"
+                + " WHERE t.VAF_TableView_ID=c.VAF_TableView_ID AND c.ColumnName='Posted')"
                 + " AND IsView='N'";
             IDataReader idr = null;
             try
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
                     options.Add(pp);
                     //tableInfo.put(tableName, new Integer(id));
                     tableInfo.Add(tableName.ToString(), id);
-                    if (id == AD_Table_ID)
+                    if (id == VAF_TableView_ID)
                     {
                         defaultKey = pp.GetValue();
                     }
@@ -218,7 +218,7 @@ namespace VAdvantage.Model
             List<NamePair> options = new List<NamePair>();
             KeyNamePair pp = new KeyNamePair(0, "");
             options.Add(pp);
-            String sql = "SELECT AD_Org_ID, Name FROM AD_Org WHERE AD_Client_ID=" + AD_Client_ID + " ORDER BY Value";
+            String sql = "SELECT VAF_Org_ID, Name FROM VAF_Org WHERE VAF_Client_ID=" + VAF_Client_ID + " ORDER BY Value";
             IDataReader idr = null;
             try
             {
@@ -302,7 +302,7 @@ namespace VAdvantage.Model
                 {
                     whereClause.Append(" AND ");
                 }
-                whereClause.Append(RModel.TABLE_ALIAS).Append(".AD_Table_ID=").Append(AD_Table_ID)
+                whereClause.Append(RModel.TABLE_ALIAS).Append(".VAF_TableView_ID=").Append(VAF_TableView_ID)
                     .Append(" AND ").Append(RModel.TABLE_ALIAS).Append(".Record_ID=").Append(Record_ID);
             }
             else
@@ -346,13 +346,13 @@ namespace VAdvantage.Model
                     }
                 }
                 //  Add Organization
-                if (AD_Org_ID != 0)
+                if (VAF_Org_ID != 0)
                 {
                     if (whereClause.Length > 0)
                     {
                         whereClause.Append(" AND ");
                     }
-                    whereClause.Append(RModel.TABLE_ALIAS).Append(".AD_Org_ID=").Append(AD_Org_ID);
+                    whereClause.Append(RModel.TABLE_ALIAS).Append(".VAF_Org_ID=").Append(VAF_Org_ID);
                 }
             }
 
@@ -503,7 +503,7 @@ namespace VAdvantage.Model
             }
             if (displayDocumentInfo)
             {
-                rm.AddColumn(new RColumn(ctx, "AD_Table_ID", DisplayType.TableDir));
+                rm.AddColumn(new RColumn(ctx, "VAF_TableView_ID", DisplayType.TableDir));
                 rm.AddColumn(new RColumn(ctx, "Record_ID", DisplayType.ID));
                 rm.AddColumn(new RColumn(ctx, "Description", DisplayType.String));
             }
@@ -542,7 +542,7 @@ namespace VAdvantage.Model
             MAcctSchemaElement[] elements = ASchema.GetAcctSchemaElements();
             for (int i = 0; i < elements.Length; i++)
             {
-                if (_leadingColumns == 0 && columns.Contains("AD_Org_ID") && columns.Contains("Account_ID"))
+                if (_leadingColumns == 0 && columns.Contains("VAF_Org_ID") && columns.Contains("Account_ID"))
                 {
                     _leadingColumns = columns.Count;
                 }
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
 
                 }
             }
-            if (_leadingColumns == 0 && columns.Contains("AD_Org_ID") && columns.Contains("Account_ID"))
+            if (_leadingColumns == 0 && columns.Contains("VAF_Org_ID") && columns.Contains("Account_ID"))
             {
                 _leadingColumns = columns.Count;
             }

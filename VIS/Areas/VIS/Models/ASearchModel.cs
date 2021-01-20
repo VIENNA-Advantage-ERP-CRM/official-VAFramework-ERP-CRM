@@ -15,12 +15,12 @@ namespace VIS.Models
     public class ASearchModel
     {
         // Added by Bharat on 05 June 2017
-        public List<Dictionary<string, object>> GetData(string valueColumnName, int AD_Tab_ID, int AD_Table_ID, Ctx ctx)
+        public List<Dictionary<string, object>> GetData(string valueColumnName, int VAF_Tab_ID, int VAF_TableView_ID, Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
             string sql = "SELECT Name," + valueColumnName + ", AD_UserQuery_ID FROM AD_UserQuery WHERE"
-                + " AD_Client_ID=" + ctx.GetAD_Client_ID() + " AND IsActive='Y'"
-                + " AND (AD_Tab_ID=" + AD_Tab_ID + " OR AD_Table_ID=" + AD_Table_ID + ")"
+                + " VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND IsActive='Y'"
+                + " AND (VAF_Tab_ID=" + VAF_Tab_ID + " OR VAF_TableView_ID=" + VAF_TableView_ID + ")"
                 + " ORDER BY Upper(Name), AD_UserQuery_ID";
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -72,7 +72,7 @@ namespace VIS.Models
         // Added by Bharat on 05 June 2017
         public int GetQueryDefault(int AD_UserQuery_ID, Ctx ctx)
         {
-            string sql = "SELECT Count(*) FROM AD_DefaultUserQuery WHERE AD_UserQuery_ID=" + AD_UserQuery_ID + " AND AD_User_ID!=" + ctx.GetAD_User_ID();
+            string sql = "SELECT Count(*) FROM VAF_DefaultUserQuery WHERE AD_UserQuery_ID=" + AD_UserQuery_ID + " AND AD_User_ID!=" + ctx.GetAD_User_ID();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             return count;
         }

@@ -53,23 +53,23 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="AD_Session_ID"></param>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="AD_Window_ID"></param>
-        /// <param name="AD_Form_ID"></param>
+        /// <param name="VAF_Page_ID"></param>
         public MWindowLog(Ctx ctx, int AD_Session_ID,
-        int AD_Client_ID, int AD_Org_ID,
-        int AD_Window_ID, int AD_Form_ID)
+        int VAF_Client_ID, int VAF_Org_ID,
+        int AD_Window_ID, int VAF_Page_ID)
             : this(ctx, 0, null)
         {
 
             SetAD_Session_ID(AD_Session_ID);
-            SetClientOrg(AD_Client_ID, AD_Org_ID);
+            SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             //
             if (AD_Window_ID != 0)
                 SetAD_Window_ID(AD_Window_ID);
-            else if (AD_Form_ID != 0)
-                SetAD_Form_ID(AD_Form_ID);
+            else if (VAF_Page_ID != 0)
+                SetVAF_Page_ID(VAF_Page_ID);
             else
             log.Severe("No Window/Form");
         }

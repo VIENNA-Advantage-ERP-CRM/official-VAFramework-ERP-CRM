@@ -139,16 +139,16 @@ namespace VAdvantage.DBPort
             }
 
             /** Single column
-                SELECT t.TableName, w.Name FROM AD_Table t, AD_Window w
+                SELECT t.TableName, w.Name FROM VAF_TableView t, AD_Window w
                 WHERE t.AD_Window_ID=w.AD_Window_ID(+)
                 --	275 rows
-                SELECT t.TableName, w.Name FROM AD_Table t
+                SELECT t.TableName, w.Name FROM VAF_TableView t
                 LEFT OUTER JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)
 
-                SELECT t.TableName, w.Name FROM AD_Table t, AD_Window w
+                SELECT t.TableName, w.Name FROM VAF_TableView t, AD_Window w
                 WHERE t.AD_Window_ID(+)=w.AD_Window_ID
                 --	239 rows
-                SELECT t.TableName, w.Name FROM AD_Table t
+                SELECT t.TableName, w.Name FROM VAF_TableView t
                 RIGHT OUTER JOIN AD_Window w ON (t.AD_Window_ID=w.AD_Window_ID)
 
             **  Multiple columns
@@ -239,8 +239,8 @@ namespace VAdvantage.DBPort
                     {
                         if (trace)
                             log.Info("-Second/dep: " + second);
-                        //   FROM (AD_Field f LEFT OUTER JOIN AD_Column c ON (f.AD_Column_ID = c.AD_Column_ID))
-                        //  LEFT OUTER JOIN AD_FieldGroup fg ON (f.AD_FieldGroup_ID = fg.AD_FieldGroup_ID),
+                        //   FROM (VAF_Field f LEFT OUTER JOIN VAF_Column c ON (f.VAF_Column_ID = c.VAF_Column_ID))
+                        //  LEFT OUTER JOIN VAF_FieldSection fg ON (f.VAF_FieldSection_ID = fg.VAF_FieldSection_ID),
                         newFrom.Insert(6, '(');     //  _FROM ...
                         newFrom.Append(')');        //  add parantesis on previous relation
                                                     //

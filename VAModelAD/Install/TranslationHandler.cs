@@ -11,13 +11,13 @@ namespace VAdvantage.Install
 {
     public class TranslationHandler
     {
-        public TranslationHandler(int AD_Client_ID)
+        public TranslationHandler(int VAF_Client_ID)
         {
-            _AD_Client_ID = AD_Client_ID;
+            _VAF_Client_ID = VAF_Client_ID;
         }
 
         /**	Client							*/
-        private int _AD_Client_ID = -1;
+        private int _VAF_Client_ID = -1;
         /** Language						*/
         private String _AD_Language = null;
         /** Is Base Language				*/
@@ -162,8 +162,8 @@ namespace VAdvantage.Install
 
                 if (!_isBaseLanguage)
                     _sql.Append(" AND AD_Language='").Append(_AD_Language).Append("'");
-                if (_AD_Client_ID >= 0)
-                    _sql.Append(" AND AD_Client_ID=").Append(_AD_Client_ID);
+                if (_VAF_Client_ID >= 0)
+                    _sql.Append(" AND VAF_Client_ID=").Append(_VAF_Client_ID);
                 //	Update section
                 _sql.Insert(0, _updateSQL);
 

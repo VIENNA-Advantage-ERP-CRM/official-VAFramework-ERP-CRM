@@ -75,14 +75,14 @@ namespace VAdvantage.Login
             //
             String sql = "SELECT u.AD_User_ID, r.AD_Role_ID, u.Name "
                 + "FROM AD_User u"
-                + " INNER JOIN W_Store ws ON (u.AD_Client_ID=ws.AD_Client_ID) "
+                + " INNER JOIN W_Store ws ON (u.VAF_Client_ID=ws.VAF_Client_ID) "
                 + " INNER JOIN AD_Role r ON (ws.AD_Role_ID=r.AD_Role_ID) "
                 + "WHERE u.EMail='" + eMail + "'"
                 + " AND (u.Password='" + password + "' OR u.Password='" + password + "')"
                 + " AND ws.W_Store_ID='" + W_Store_ID + "'"
                 + " AND (r.IsActive='Y' OR r.IsActive IS NULL)"
                 + " AND u.isActive='Y' AND ws.IsActive='Y'"
-                + " AND u.AD_Client_ID=ws.AD_Client_ID "
+                + " AND u.VAF_Client_ID=ws.VAF_Client_ID "
                 + "ORDER BY r.Name";
             m_roles.Clear();
             m_users.Clear();
@@ -157,12 +157,12 @@ namespace VAdvantage.Login
         /// Load Preferences into Context for selected client.
         /// <para>
         /// Sets Org info in context and loads relevant field from
-        /// - AD_Client/Info,
+        /// - VAF_Client/Info,
         /// - C_AcctSchema,
         /// - C_AcctSchema_Elements
         /// - AD_Preference
         /// </para>
-        /// Assumes that the context is set for #AD_Client_ID, ##AD_User_ID, #AD_Role_ID
+        /// Assumes that the context is set for #VAF_Client_ID, ##AD_User_ID, #AD_Role_ID
         /// </summary>
         /// <param name="org">org information</param>
         /// <param name="warehouse">optional warehouse information</param>
@@ -176,8 +176,8 @@ namespace VAdvantage.Login
 
             if (m_ctx == null || org == null)
                 throw new ArgumentException("Required parameter missing");
-            if (m_ctx.GetContext("#AD_Client_ID").Length == 0)
-                throw new Exception("Missing Context #AD_Client_ID");
+            if (m_ctx.GetContext("#VAF_Client_ID").Length == 0)
+                throw new Exception("Missing Context #VAF_Client_ID");
             if (m_ctx.GetContext("##AD_User_ID").Length == 0)
                 throw new Exception("Missing Context ##AD_User_ID");
             if (m_ctx.GetContext("#AD_Role_ID").Length == 0)
@@ -185,8 +185,8 @@ namespace VAdvantage.Login
 
 
             //  Org Info - assumes that it is valid
-            m_ctx.SetAD_Org_ID(org.GetKey());
-            m_ctx.SetContext("#AD_Org_Name", org.GetName());
+            m_ctx.SetVAF_Org_ID(org.GetKey());
+            m_ctx.SetContext("#VAF_Org_Name", org.GetName());
             Ini.SetProperty(Ini.P_ORG, org.GetName());
 
             //  Warehouse Info
@@ -227,8 +227,8 @@ namespace VAdvantage.Login
             m_ctx.SetContext("#ShowAdvanced", preference.IsShowAdvanced());
 
             String retValue = "";
-            int AD_Client_ID = m_ctx.GetAD_Client_ID();
-            //	int AD_Org_ID =  org.getKey();
+            int VAF_Client_ID = m_ctx.GetVAF_Client_ID();
+            //	int VAF_Org_ID =  org.getKey();
             //	int AD_User_ID =  Env.getAD_User_ID (m_ctx);
             int AD_Role_ID = m_ctx.GetAD_Role_ID();
 
@@ -238,10 +238,10 @@ namespace VAdvantage.Login
             //	AccountSchema Info (first)
             String sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "    // Get AutoArchive from Tenant header
                 + "FROM C_AcctSchema a"
-                + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
-                + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
+                + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                + " INNER JOIN VAF_Client t ON (ci.VAF_Client_ID=t.VAF_Client_ID)"
                 + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
-                + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
+                + "WHERE ci.VAF_Client_ID='" + VAF_Client_ID + "'";
             IDataReader dr = null;
             try
             {
@@ -283,11 +283,11 @@ namespace VAdvantage.Login
                 //	overwriting superseeded ones.  Window specific is read in Maintain
                 sql = "SELECT Attribute, Value, AD_Window_ID "
                     + "FROM AD_Preference "
-                    + "WHERE AD_Client_ID IN (0, @#AD_Client_ID@)"
-                    + " AND AD_Org_ID IN (0, @#AD_Org_ID@)"
+                    + "WHERE VAF_Client_ID IN (0, @#VAF_Client_ID@)"
+                    + " AND VAF_Org_ID IN (0, @#VAF_Org_ID@)"
                     + " AND (AD_User_ID IS NULL OR AD_User_ID=0 OR AD_User_ID=@##AD_User_ID@)"
                     + " AND IsActive='Y' "
-                    + "ORDER BY Attribute, AD_Client_ID, AD_User_ID DESC, AD_Org_ID";
+                    + "ORDER BY Attribute, VAF_Client_ID, AD_User_ID DESC, VAF_Org_ID";
                 //	the last one overwrites - System - Client - User - Org - Window
                 sql = Utility.Env.ParseContext(m_ctx, 0, sql, false);
                 if (sql.Length == 0)
@@ -311,11 +311,11 @@ namespace VAdvantage.Login
 
                 //	Default Values
                 sql = "SELECT t.TableName, c.ColumnName "
-                    + "FROM AD_Column c "
-                    + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                    + "FROM VAF_Column c "
+                    + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                     + "WHERE c.IsKey='Y' AND t.IsActive='Y'"
-                    + " AND EXISTS (SELECT * FROM AD_Column cc "
-                    + " WHERE ColumnName = 'IsDefault' AND t.AD_Table_ID=cc.AD_Table_ID AND cc.IsActive='Y')";
+                    + " AND EXISTS (SELECT * FROM VAF_Column cc "
+                    + " WHERE ColumnName = 'IsDefault' AND t.VAF_TableView_ID=cc.VAF_TableView_ID AND cc.IsActive='Y')";
 
                 dr = DataBase.DB.ExecuteReader(sql);
                 while (dr.Read())
@@ -349,7 +349,7 @@ namespace VAdvantage.Login
             String value = null;
             //
             String sql = "SELECT " + ColumnName + " FROM " + TableName	//	most specific first
-                + " WHERE IsDefault='Y' AND IsActive='Y' ORDER BY AD_Client_ID DESC, AD_Org_ID DESC";
+                + " WHERE IsDefault='Y' AND IsActive='Y' ORDER BY VAF_Client_ID DESC, VAF_Org_ID DESC";
             sql = MRole.GetDefault(m_ctx, false).AddAccessSQL(sql, TableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             IDataReader dr = null;
             try
@@ -391,20 +391,20 @@ namespace VAdvantage.Login
         public String ValidateLogin(KeyNamePair org)
         {
             String info = m_user + ",R:" + m_role.ToString() + ",O=" + m_org.ToString();
-            int AD_Client_ID = m_ctx.GetAD_Client_ID();
-            int AD_Org_ID = org.GetKey();
+            int VAF_Client_ID = m_ctx.GetVAF_Client_ID();
+            int VAF_Org_ID = org.GetKey();
             int AD_Role_ID = m_ctx.GetAD_Role_ID();
             int AD_User_ID = m_ctx.GetAD_User_ID();
             //
             MSession session = MSession.Get(m_ctx, true);
-            if (AD_Client_ID != session.GetAD_Client_ID())
-                session.SetAD_Client_ID(AD_Client_ID);
-            if (AD_Org_ID != session.GetAD_Org_ID())
-                session.SetAD_Org_ID(AD_Org_ID);
+            if (VAF_Client_ID != session.GetVAF_Client_ID())
+                session.SetVAF_Client_ID(VAF_Client_ID);
+            if (VAF_Org_ID != session.GetVAF_Org_ID())
+                session.SetVAF_Org_ID(VAF_Org_ID);
             if (AD_Role_ID != session.GetAD_Role_ID())
                 session.SetAD_Role_ID(AD_Role_ID);
             //
-            String error = ModelValidationEngine.Get().LoginComplete(AD_Client_ID, AD_Org_ID, AD_Role_ID, AD_User_ID);
+            String error = ModelValidationEngine.Get().LoginComplete(VAF_Client_ID, VAF_Org_ID, AD_Role_ID, AD_User_ID);
             if (error != null && error.Length > 0)
             {
                 session.SetDescription(error);
@@ -455,8 +455,8 @@ namespace VAdvantage.Login
                 .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ")
                 .Append("WHERE COALESCE(u.LDAPUser,u.Name)=@username")		//	#1
                 .Append(" AND u.IsActive='Y'")
-                .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE u.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')")
-                .Append(" AND EXISTS (SELECT * FROM AD_Client c WHERE r.AD_Client_ID=c.AD_Client_ID AND c.IsActive='Y')");
+                .Append(" AND EXISTS (SELECT * FROM VAF_Client c WHERE u.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')")
+                .Append(" AND EXISTS (SELECT * FROM VAF_Client c WHERE r.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')");
             if (app_pwd != null)
                 sql.Append(" AND (u.Password='" + app_pwd + "' OR u.Password='" + app_pwd + "')");	//  #2/3
             sql.Append(" ORDER BY r.Name");
@@ -555,7 +555,7 @@ namespace VAdvantage.Login
             m_role = role;
             //	Web Store Login
            // if (m_store != null)
-            //    return new KeyNamePair[] { new KeyNamePair(m_store.GetAD_Client_ID(), m_store.GetName() + " Tenant") };
+            //    return new KeyNamePair[] { new KeyNamePair(m_store.GetVAF_Client_ID(), m_store.GetName() + " Tenant") };
 
             //	Set User for Role
             int AD_Role_ID = role.GetKey();
@@ -575,9 +575,9 @@ namespace VAdvantage.Login
             List<KeyNamePair> list = new List<KeyNamePair>();
             KeyNamePair[] retValue = null;
             String sql = "SELECT DISTINCT r.UserLevel, r.ConnectionProfile, "	//	1..2
-                + " c.AD_Client_ID,c.Name "								//	3..4 
+                + " c.VAF_Client_ID,c.Name "								//	3..4 
                 + "FROM AD_Role r"
-                + " INNER JOIN AD_Client c ON (r.AD_Client_ID=c.AD_Client_ID) "
+                + " INNER JOIN VAF_Client c ON (r.VAF_Client_ID=c.VAF_Client_ID) "
                 + "WHERE r.AD_Role_ID=@roleid"		//	#1
                 + " AND r.IsActive='Y' AND c.IsActive='Y'";
 
@@ -605,9 +605,9 @@ namespace VAdvantage.Login
                 //  load Clients
                 do
                 {
-                    int AD_Client_ID = Utility.Util.GetValueOfInt(dr[2].ToString());
+                    int VAF_Client_ID = Utility.Util.GetValueOfInt(dr[2].ToString());
                     String Name = dr[3].ToString();
-                    KeyNamePair p = new KeyNamePair(AD_Client_ID, Name);
+                    KeyNamePair p = new KeyNamePair(VAF_Client_ID, Name);
                     list.Add(p);
                 }
                 while (dr.Read());
@@ -638,7 +638,7 @@ namespace VAdvantage.Login
                 throw new ArgumentException("Client missing");
             //	Web Store Login
             if (m_store != null)
-                return new KeyNamePair[] { new KeyNamePair(m_store.GetAD_Org_ID(), m_store.GetName() + " Org") };
+                return new KeyNamePair[] { new KeyNamePair(m_store.GetVAF_Org_ID(), m_store.GetName() + " Org") };
 
             if (m_ctx.GetContext("#AD_Role_ID").Length == 0)	//	could be number 0
                 throw new Exception("Missing Context #AD_Role_ID");
@@ -651,16 +651,16 @@ namespace VAdvantage.Login
             List<KeyNamePair> list = new List<KeyNamePair>();
             KeyNamePair[] retValue = null;
             //
-            String sql = "SELECT o.AD_Org_ID,o.Name,o.IsSummary "	//	1..3
-                + "FROM AD_Role r, AD_Client c"
-                + " INNER JOIN AD_Org o ON (c.AD_Client_ID=o.AD_Client_ID OR o.AD_Org_ID=0) "
+            String sql = "SELECT o.VAF_Org_ID,o.Name,o.IsSummary "	//	1..3
+                + "FROM AD_Role r, VAF_Client c"
+                + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID OR o.VAF_Org_ID=0) "
                 + "WHERE r.AD_Role_ID='" + AD_Role_ID + "'" 	//	#1
-                + " AND c.AD_Client_ID='" + client.GetKey() + "'"	//	#2
+                + " AND c.VAF_Client_ID='" + client.GetKey() + "'"	//	#2
                 + " AND o.IsActive='Y' AND o.IsSummary='N'"
                 + " AND (r.IsAccessAllOrgs='Y' "
-                    + "OR (r.IsUseUserOrgAccess='N' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_Role_OrgAccess ra "
+                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_Role_OrgAccess ra "
                         + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
-                    + "OR (r.IsUseUserOrgAccess='Y' AND o.AD_Org_ID IN (SELECT AD_Org_ID FROM AD_User_OrgAccess ua "
+                    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
                         + "WHERE ua.AD_User_ID='" + AD_User_ID + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
                 + "ORDER BY o.Name";
@@ -674,18 +674,18 @@ namespace VAdvantage.Login
                 //  load Orgs
                 while (dr.Read())
                 {
-                    int AD_Org_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    int VAF_Org_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                     String Name = dr[1].ToString();
                     bool summary = "Y".Equals(dr[2].ToString());
                     if (summary)
                     {
                         if (role == null)
                             role = MRole.Get(m_ctx, AD_Role_ID, AD_User_ID, false);
-                        GetOrgsAddSummary(list, AD_Org_ID, Name, role);
+                        GetOrgsAddSummary(list, VAF_Org_ID, Name, role);
                     }
                     else
                     {
-                        KeyNamePair p = new KeyNamePair(AD_Org_ID, Name);
+                        KeyNamePair p = new KeyNamePair(VAF_Org_ID, Name);
                         if (!list.Contains(p))
                             list.Add(p);
                     }
@@ -712,8 +712,8 @@ namespace VAdvantage.Login
             }
 
             //  Client Info
-            m_ctx.SetContext("#AD_Client_ID", client.GetKey());
-            m_ctx.SetContext("#AD_Client_Name", client.GetName());
+            m_ctx.SetContext("#VAF_Client_ID", client.GetKey());
+            m_ctx.SetContext("#VAF_Client_Name", client.GetName());
             Ini.SetProperty(Ini.P_CLIENT, client.GetName());
             return retValue;
         }   //  getOrgs
@@ -739,8 +739,8 @@ namespace VAdvantage.Login
             }
             //	Summary Org - Get Dependents
             MTree tree = MTree.Get(m_ctx, role.GetAD_Tree_Org_ID(), null);
-            String sql = "SELECT AD_Client_ID, AD_Org_ID, Name, IsSummary FROM AD_Org "
-                + "WHERE IsActive='Y' AND AD_Org_ID IN (SELECT Node_ID FROM "
+            String sql = "SELECT VAF_Client_ID, VAF_Org_ID, Name, IsSummary FROM VAF_Org "
+                + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
                 + " WHERE AD_Tree_ID='" + tree.GetAD_Tree_ID() + "' AND Parent_ID='" + Summary_Org_ID + "' AND IsActive='Y') "
                 + "ORDER BY Name";
@@ -750,16 +750,16 @@ namespace VAdvantage.Login
             {
                 while (dr.Read())
                 {
-                    //	int AD_Client_ID = rs.getInt(1);
-                    int AD_Org_ID = Utility.Util.GetValueOfInt(dr[1].ToString());
+                    //	int VAF_Client_ID = rs.getInt(1);
+                    int VAF_Org_ID = Utility.Util.GetValueOfInt(dr[1].ToString());
                     String Name = dr[2].ToString();
                     bool summary = "Y".Equals(dr[3].ToString());
                     //
                     if (summary)
-                        GetOrgsAddSummary(list, AD_Org_ID, Name, role);
+                        GetOrgsAddSummary(list, VAF_Org_ID, Name, role);
                     else
                     {
-                        KeyNamePair p = new KeyNamePair(AD_Org_ID, Name);
+                        KeyNamePair p = new KeyNamePair(VAF_Org_ID, Name);
                         if (!list.Contains(p))
                             list.Add(p);
                     }
@@ -802,7 +802,7 @@ namespace VAdvantage.Login
             List<KeyNamePair> list = new List<KeyNamePair>();
             KeyNamePair[] retValue = null;
             String sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse "
-                + "WHERE AD_Org_ID=@p1 AND IsActive='Y' "
+                + "WHERE VAF_Org_ID=@p1 AND IsActive='Y' "
                 + "ORDER BY Name";
             IDataReader dr = null;
             try
@@ -852,12 +852,12 @@ namespace VAdvantage.Login
         /// Load Preferences into Context for selected client.
         /// <para>
         /// Sets Org info in context and loads relevant field from
-        /// - AD_Client/Info,
+        /// - VAF_Client/Info,
         /// - C_AcctSchema,
         /// - C_AcctSchema_Elements
         /// - AD_Preference
         /// </para>
-        /// Assumes that the context is set for #AD_Client_ID, ##AD_User_ID, #AD_Role_ID
+        /// Assumes that the context is set for #VAF_Client_ID, ##AD_User_ID, #AD_Role_ID
         /// </summary>
         /// <param name="org">org information</param>
         /// <param name="warehouse">optional warehouse information</param>
@@ -866,8 +866,8 @@ namespace VAdvantage.Login
         /// <returns>AD_Message of error (NoValidAcctInfo) or ""</returns>
         public String LoadPreferences(string date, String printerName)
         {
-            if (m_ctx.GetContext("#AD_Client_ID").Length == 0)
-                throw new Exception("Missing Context #AD_Client_ID");
+            if (m_ctx.GetContext("#VAF_Client_ID").Length == 0)
+                throw new Exception("Missing Context #VAF_Client_ID");
             if (m_ctx.GetContext("##AD_User_ID").Length == 0)
                 throw new Exception("Missing Context ##AD_User_ID");
             if (m_ctx.GetContext("#AD_Role_ID").Length == 0)
@@ -910,8 +910,8 @@ namespace VAdvantage.Login
             m_ctx.SetContext("#ShowAdvanced", preference.IsShowAdvanced());
 
             String retValue = "";
-            int AD_Client_ID = m_ctx.GetAD_Client_ID();
-            //	int AD_Org_ID =  org.getKey();
+            int VAF_Client_ID = m_ctx.GetVAF_Client_ID();
+            //	int VAF_Org_ID =  org.getKey();
             //	int AD_User_ID =  Env.getAD_User_ID (m_ctx);
             int AD_Role_ID = m_ctx.GetAD_Role_ID();
 
@@ -929,10 +929,10 @@ namespace VAdvantage.Login
             {
                 sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive, t.IsAllowNonItem "  // 6. Get "Alloe Non Item on Ship/Receipt" from Tenant header
                     + "FROM C_AcctSchema a"
-                    + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
-                    + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
+                    + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                    + " INNER JOIN VAF_Client t ON (ci.VAF_Client_ID=t.VAF_Client_ID)"
                     + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
-                    + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
+                    + "WHERE ci.VAF_Client_ID='" + VAF_Client_ID + "'";
 
                 dr = DataBase.DB.ExecuteReader(sql);
             }
@@ -941,10 +941,10 @@ namespace VAdvantage.Login
                 checkNonItem = false;
                 sql = "SELECT a.C_AcctSchema_ID, a.C_Currency_ID, a.HasAlias, c.ISO_Code, c.StdPrecision, t.AutoArchive "       // 5. Get AutoArchive from Tenant header
                     + "FROM C_AcctSchema a"
-                    + " INNER JOIN AD_ClientInfo ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
-                    + " INNER JOIN AD_Client t ON (ci.AD_Client_ID=t.AD_Client_ID)"
+                    + " INNER JOIN VAF_ClientDetail ci ON (a.C_AcctSchema_ID=ci.C_AcctSchema1_ID)"
+                    + " INNER JOIN VAF_Client t ON (ci.VAF_Client_ID=t.VAF_Client_ID)"
                     + " INNER JOIN C_Currency c ON (a.C_Currency_ID=c.C_Currency_ID) "
-                    + "WHERE ci.AD_Client_ID='" + AD_Client_ID + "'";
+                    + "WHERE ci.VAF_Client_ID='" + VAF_Client_ID + "'";
             }
 
             try
@@ -996,11 +996,11 @@ namespace VAdvantage.Login
                 //	overwriting superseeded ones.  Window specific is read in Maintain
                 sql = "SELECT Attribute, Value, AD_Window_ID "
                     + "FROM AD_Preference "
-                    + "WHERE AD_Client_ID IN (0, @#AD_Client_ID@)"
-                    + " AND AD_Org_ID IN (0, @#AD_Org_ID@)"
+                    + "WHERE VAF_Client_ID IN (0, @#VAF_Client_ID@)"
+                    + " AND VAF_Org_ID IN (0, @#VAF_Org_ID@)"
                     + " AND (AD_User_ID IS NULL OR AD_User_ID=0 OR AD_User_ID=@##AD_User_ID@)"
                     + " AND IsActive='Y' "
-                    + "ORDER BY Attribute, AD_Client_ID, AD_User_ID DESC, AD_Org_ID";
+                    + "ORDER BY Attribute, VAF_Client_ID, AD_User_ID DESC, VAF_Org_ID";
                 //	the last one overwrites - System - Client - User - Org - Window
                 sql = Utility.Env.ParseContext(m_ctx, 0, sql, false);
                 if (sql.Length == 0)
@@ -1024,11 +1024,11 @@ namespace VAdvantage.Login
 
                 //	Default Values
                 sql = "SELECT t.TableName, c.ColumnName "
-                    + "FROM AD_Column c "
-                    + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                    + "FROM VAF_Column c "
+                    + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                     + "WHERE c.IsKey='Y' AND t.IsActive='Y'"
-                    + " AND EXISTS (SELECT * FROM AD_Column cc "
-                    + " WHERE ColumnName = 'IsDefault' AND t.AD_Table_ID=cc.AD_Table_ID AND cc.IsActive='Y')";
+                    + " AND EXISTS (SELECT * FROM VAF_Column cc "
+                    + " WHERE ColumnName = 'IsDefault' AND t.VAF_TableView_ID=cc.VAF_TableView_ID AND cc.IsActive='Y')";
 
                 dr = DataBase.DB.ExecuteReader(sql);
                 while (dr.Read())

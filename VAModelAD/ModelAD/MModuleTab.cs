@@ -26,7 +26,7 @@ namespace VAdvantage.Model
            if (newRecord)
            {
                // check if same record is inserting again
-               if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleTab WHERE AD_Tab_ID=" + GetAD_Tab_ID() + " AND AD_ModuleWindow_ID=" + GetAD_ModuleWindow_ID())) > 0)
+               if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleTab WHERE VAF_Tab_ID=" + GetVAF_Tab_ID() + " AND AD_ModuleWindow_ID=" + GetAD_ModuleWindow_ID())) > 0)
                {
                    log.SaveError("Error", Msg.GetMsg(GetCtx(), "TabExist"));
                    return false;
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
            else
            {
                // check if tab value changed for previous record
-               if (Is_ValueChanged("AD_Tab_ID"))
+               if (Is_ValueChanged("VAF_Tab_ID"))
                {
                    // check if child record exist for same tab
                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleField WHERE AD_ModuleTab_ID=" + GetAD_ModuleTab_ID())) > 0)
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
                        return false;
                    }
                    // check if same record is inserting again
-                   if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleTab WHERE AD_Tab_ID=" + GetAD_Tab_ID() + " AND AD_ModuleWindow_ID=" + GetAD_ModuleWindow_ID())) > 0)
+                   if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_ModuleTab WHERE VAF_Tab_ID=" + GetVAF_Tab_ID() + " AND AD_ModuleWindow_ID=" + GetAD_ModuleWindow_ID())) > 0)
                    {
                        log.SaveError("Error", Msg.GetMsg(GetCtx(), "TabExist"));
                        return false;

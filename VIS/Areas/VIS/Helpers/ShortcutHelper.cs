@@ -22,9 +22,9 @@ namespace VIS.Helpers
             bool isBaseLang = Env.IsBaseLanguage(ctx, "AD_Shortcut");
 
 
-            int AD_Client_ID = ctx.GetAD_Client_ID();
+            int VAF_Client_ID = ctx.GetVAF_Client_ID();
             StringBuilder sql = new StringBuilder(@" SELECT o.Name AS Name, 
-                                    o.AD_Image_ID AS AD_Image_ID,
+                                    o.VAF_Image_ID AS VAF_Image_ID,
                                   o.Classname AS ClassName  ,
                                    o.AD_ShortCut_ID,
                                   o.Action  AS Action   ,
@@ -40,7 +40,7 @@ namespace VIS.Helpers
                                     WHEN o.Action = 'T'
                                     THEN o.AD_Task_ID
                                     WHEN o.Action = 'X'
-                                    THEN o.AD_Form_ID
+                                    THEN o.VAF_Page_ID
                                     WHEN o.Action ='F'
                                     THEN o.AD_Workflow_ID
                                     ELSE 0
@@ -73,10 +73,10 @@ namespace VIS.Helpers
                 .Append("'").Append(Env.GetAD_Language(ctx)).Append("'");
             }
 
-            sql.Append(" WHERE o.AD_Client_ID = 0 AND o.IsActive ='Y' AND o.IsChild = 'N' ");
+            sql.Append(" WHERE o.VAF_Client_ID = 0 AND o.IsActive ='Y' AND o.IsChild = 'N' ");
 
             sql.Append(@"AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM Ad_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
-                        AND (o.AD_Form_ID IS NULL OR EXISTS (SELECT * FROM ad_Form_access f WHERE f.ad_form_id=o.AD_Form_ID AND f.isreadwrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
+                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.ad_form_id=o.VAF_Page_ID AND f.isreadwrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
                         AND (o.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM ad_process_access p WHERE p.ad_process_id=o.AD_Process_ID AND p.isreadwrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))");
             sql.Append("  ORDER BY SeqNo");
 
@@ -239,10 +239,10 @@ namespace VIS.Helpers
                 }
 
                 itm.KeyID = Util.GetValueOfInt(dr["ID"]);
-                int AD_Image_ID = Util.GetValueOfInt(dr["AD_Image_ID"]);
-                if (AD_Image_ID > 0)
+                int VAF_Image_ID = Util.GetValueOfInt(dr["VAF_Image_ID"]);
+                if (VAF_Image_ID > 0)
                 {
-                    var img = new VAdvantage.Model.MImage(ctx, AD_Image_ID, null);
+                    var img = new VAdvantage.Model.MImage(ctx, VAF_Image_ID, null);
 
                     if (img.GetFontName() != null && img.GetFontName().Length > 0)
                     {
@@ -277,7 +277,7 @@ namespace VIS.Helpers
 
 
             string sql = @"SELECT o.Name AS Name,
-                                  o.AD_Image_ID AS AD_Image_ID,
+                                  o.VAF_Image_ID AS VAF_Image_ID,
                                   o.Classname AS ClassName  ,
                                   o.Action  AS Action   ,
                                   (
@@ -308,12 +308,12 @@ namespace VIS.Helpers
                 sql += " trl.Name as Name2 FROM AD_Shortcut o INNER JOIN AD_Shortcut_Trl trl ON o.AD_Shortcut_ID = trl.AD_Shortcut_ID "
                          + " AND trl.AD_Language =  '" + Env.GetAD_Language(ctx) + "' ";
             }
-            sql += @" WHERE o.AD_Client_ID = 0
+            sql += @" WHERE o.VAF_Client_ID = 0
                                   AND o.IsActive         ='Y'
                                   AND o.IsChild          = 'Y'
                                  AND o.Parent_ID =  " + AD_Shortcut_ID + @"
                         AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
-                        AND (o.AD_Form_ID IS NULL OR EXISTS (SELECT * FROM AD_Form_Access f WHERE f.AD_Form_ID=o.AD_Form_ID AND f.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
+                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.VAF_Page_ID=o.VAF_Page_ID AND f.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
                         AND (o.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM AD_Process_Access p WHERE p.AD_Process_ID=o.AD_Process_ID AND p.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
                         ORDER BY SeqNo";
 

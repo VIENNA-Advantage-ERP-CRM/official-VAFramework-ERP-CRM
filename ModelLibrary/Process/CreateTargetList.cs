@@ -49,9 +49,9 @@ namespace ViennaAdvantageServer.Process
 
         protected override String DoIt()
         {
-            string sql = "Select ad_table_id from ad_table where tablename='C_Lead'";
+            string sql = "Select vaf_tableview_id from vaf_tableview where tablename='C_Lead'";
             int leadTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
-            sql = "Select ad_table_id from ad_table where tablename='C_BPartner'";
+            sql = "Select vaf_tableview_id from vaf_tableview where tablename='C_BPartner'";
             int BPartnerTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
             VAdvantage.Model.X_C_TargetList TList = new VAdvantage.Model.X_C_TargetList(GetCtx(), 0, null);

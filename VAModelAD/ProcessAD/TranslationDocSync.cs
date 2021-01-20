@@ -59,11 +59,11 @@ namespace VAdvantage.Process
 		MClient client = MClient.Get(GetCtx());
         if (client.IsMultiLingualDocument())
         {
-            throw new Exception("@AD_Client_ID@: @IsMultiLingualDocument@");
+            throw new Exception("@VAF_Client_ID@: @IsMultiLingualDocument@");
         }
 		//
 		log.Info("" + client);
-		String sql = "SELECT * FROM AD_Table "
+		String sql = "SELECT * FROM VAF_TableView "
 			+ "WHERE TableName LIKE '%_Trl' AND TableName NOT LIKE 'AD%' "
 			+ "ORDER BY TableName";
 		//PreparedStatement pstmt = null;
@@ -78,7 +78,7 @@ namespace VAdvantage.Process
             dt.Load(idr);
             foreach (DataRow dr in dt.Rows)
             {
-                ProcessTable(new MTable(GetCtx(), dr, null), client.GetAD_Client_ID());
+                ProcessTable(new MTable(GetCtx(), dr, null), client.GetVAF_Client_ID());
             }
 
         }
@@ -98,8 +98,8 @@ namespace VAdvantage.Process
 	/// Process Translation Table
 	/// </summary>
 	/// <param name="table">table</param>
-	/// <param name="AD_Client_ID">AD_Client_ID</param>
-	private void ProcessTable (MTable table, int AD_Client_ID)
+	/// <param name="VAF_Client_ID">VAF_Client_ID</param>
+	private void ProcessTable (MTable table, int VAF_Client_ID)
 	{
 		StringBuilder sql = new StringBuilder();
 		MColumn[] columns = table.GetColumns(false);
@@ -127,8 +127,8 @@ namespace VAdvantage.Process
 		sql.Append("UPDATE ").Append(table.GetTableName()).Append(" t SET (")
 			.Append(columnNames).Append(") = (SELECT ").Append(columnNames)
 			.Append(" FROM ").Append(baseTable).Append(" b WHERE t.")
-			.Append(baseTable).Append("_ID=b.").Append(baseTable).Append("_ID) WHERE AD_Client_ID=")
-			.Append(AD_Client_ID);
+			.Append(baseTable).Append("_ID=b.").Append(baseTable).Append("_ID) WHERE VAF_Client_ID=")
+			.Append(VAF_Client_ID);
 		int no = DataBase.DB.ExecuteQuery(sql.ToString(),null,Get_Trx());
 		AddLog(0, null, new Decimal(no), baseTable);
 	}	//	processTable

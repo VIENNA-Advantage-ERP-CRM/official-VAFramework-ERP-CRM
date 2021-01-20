@@ -29,15 +29,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int from_ID = 0;
         private int to_ID = 0;
 
-        static private String AD_ORG_ID = "AD_Org_ID";
+        static private String VAF_ORG_ID = "VAF_Org_ID";
         static private String C_BPARTNER_ID = "C_BPartner_ID";
         static private String AD_USER_ID = "AD_User_ID";
         static private String M_PRODUCT_ID = "M_Product_ID";
 
         private String columnName = null;
 
-        /** Tables to delete (not update) for AD_Org	*/
-        static private String[] s_delete_Org = new String[] { "AD_OrgInfo" };
+        /** Tables to delete (not update) for VAF_Org	*/
+        static private String[] s_delete_Org = new String[] { "VAF_OrgInfo" };
         /** Tables to delete (not update) for AD_User	*/
         static private String[] s_delete_User = new String[] { "AD_User_Roles" };
         /** Tables to delete (not update) for C_BPartner	*/
@@ -74,16 +74,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
 
                     from_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();					
                 }
 
-                else if (name.Equals("AD_Org_To_ID"))
+                else if (name.Equals("VAF_Org_To_ID"))
                 {
                     to_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
-                    columnName = AD_ORG_ID;
+                    columnName = VAF_ORG_ID;
                     m_deleteTables = s_delete_Org;
                 }
                 else if (name.Equals("AD_User_ID"))
@@ -243,8 +243,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             m_totalCount = 0;
             m_errorLog = new StringBuilder();
             String sql = "SELECT t.TableName, c.ColumnName "
-                + "FROM AD_Table t"
-                + " INNER JOIN AD_Column c ON (t.AD_Table_ID=c.AD_Table_ID) "
+                + "FROM VAF_TableView t"
+                + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE t.IsView='N'"
                     + " AND t.TableName NOT IN ('C_TaxDeclarationAcct')"
                     + " AND c.ColumnSQL is NULL AND ("              // No Virtual Column
@@ -252,7 +252,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " OR "
                     + "c.AD_Reference_Value_ID IN "				//	Table Reference
                         + "(SELECT rt.AD_Reference_ID FROM AD_Ref_Table rt"
-                        + " INNER JOIN AD_Column cc ON (rt.AD_Table_ID=cc.AD_Table_ID AND rt.Column_Key_ID=cc.AD_Column_ID) "
+                        + " INNER JOIN VAF_Column cc ON (rt.VAF_TableView_ID=cc.VAF_TableView_ID AND rt.Column_Key_ID=cc.VAF_Column_ID) "
                         + "WHERE cc.IsKey='Y' AND cc.ColumnName=@param2)"	//	#2
                 + ") "
                 + "ORDER BY t.LoadSeq DESC";
@@ -418,7 +418,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="to_ID">ID</param>
         private void PostMerge(String ColumnName, int to_ID)
         {
-            if (ColumnName.Equals(AD_ORG_ID))
+            if (ColumnName.Equals(VAF_ORG_ID))
             {
 
             }

@@ -26,7 +26,7 @@ public X_C_PaymentTerm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, tr
  added by ->Harwinder */
 static X_C_PaymentTerm(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27745177343589L;/** Last Updated Timestamp 5/12/2016 4:50:26 PM */
-public static long updatedMS = 1463052026800L;/** AD_Table_ID=113 */
+public static long updatedMS = 1463052026800L;/** VAF_TableView_ID=113 */
 public static int Table_ID; // =113;
 /** TableName=C_PaymentTerm */
 public static String Table_Name="C_PaymentTerm";

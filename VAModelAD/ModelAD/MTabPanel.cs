@@ -11,7 +11,7 @@ using System.Data;
 using VAdvantage.Utility;
 namespace VAdvantage.Model
 {
-   public class MTabPanel:X_AD_TabPanel
+   public class MTabPanel:X_VAF_TabPanel
     {
 
         /// <summary>
@@ -32,8 +32,8 @@ namespace VAdvantage.Model
        /// <param name="ctx">context</param>
        /// <param name="rs">Data row</param>
        /// <param name="trxName">transaction</param>
-       public MTabPanel(Ctx ctx, int AD_TabPanel_ID, Trx trxName)
-           : base(ctx, AD_TabPanel_ID, trxName)
+       public MTabPanel(Ctx ctx, int VAF_TabPanel_ID, Trx trxName)
+           : base(ctx, VAF_TabPanel_ID, trxName)
        {
            //super(ctx, rs, trxName);
        }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         {
             //this(parent.GetCtx(), 0, parent.Get_TrxName());
             SetClientOrg(parent);
-            SetAD_Tab_ID(parent.GetAD_Tab_ID());
+            SetVAF_Tab_ID(parent.GetVAF_Tab_ID());
         }
 
     }

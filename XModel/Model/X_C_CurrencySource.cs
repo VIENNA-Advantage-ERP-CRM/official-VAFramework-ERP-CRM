@@ -72,7 +72,7 @@ static X_C_CurrencySource()
 //static long serialVersionUID 27628278561903L;
 /** Last Updated Timestamp 8/28/2012 4:57:25 PM */
 public static long updatedMS = 1346153245114L;
-/** AD_Table_ID=1000045 */
+/** VAF_TableView_ID=1000045 */
 public static int Table_ID;
  // =1000045;
 

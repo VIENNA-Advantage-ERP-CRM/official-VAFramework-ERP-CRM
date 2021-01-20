@@ -215,7 +215,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            Id = model.DimnesionValue("AD_Org_ID", "AD_Org", dt.Rows[i][1].ToString());
+                            Id = model.DimnesionValue("VAF_Org_ID", "VAF_Org", dt.Rows[i][1].ToString());
                             dt.Rows[i]["Record_ID"] = Id;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }
@@ -337,9 +337,9 @@ namespace VIS.Controllers
                 {
                     string columName = "";
                     string tableName = "";
-                    var sql = "select adt.columnname,adtab.TableName from c_acctschema_element ac inner join ad_column ad on ac.ad_column_id=ad.ad_column_id " +
-                " inner join ad_column adt on ad.ad_table_ID=adt.ad_table_ID and adt.isactive='Y' " +
-                "  inner join ad_table adtab on adtab.ad_table_id=ad.ad_table_ID " +
+                    var sql = "select adt.columnname,adtab.TableName from c_acctschema_element ac inner join vaf_column ad on ac.vaf_column_id=ad.vaf_column_id " +
+                " inner join vaf_column adt on ad.vaf_tableview_ID=adt.vaf_tableview_ID and adt.isactive='Y' " +
+                "  inner join vaf_tableview adtab on adtab.vaf_tableview_id=ad.vaf_tableview_ID " +
                 " where ac.c_acctschema_id=" + (Util.GetValueOfInt(param[2]) == 0 ? ctx.GetContextAsInt("$C_AcctSchema_ID") : Util.GetValueOfInt(param[2])) + " and ac.elementtype='" + param[1].ToString() + "' and adt.isidentifier='Y' order by adt.seqno ASC ";
                     DataSet dsColumnDetail = (DB.ExecuteDataset(sql, null, null));
                     if (dsColumnDetail != null && dsColumnDetail.Tables.Count > 0 && dsColumnDetail.Tables[0].Rows.Count > 0)

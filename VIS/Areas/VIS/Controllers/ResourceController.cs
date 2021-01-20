@@ -136,7 +136,7 @@ namespace VIS.Controllers
 
                 //Update Login Time
 
-                var r = new ResourceManager(fullUrl, ctx.GetAD_Client_ID());
+                var r = new ResourceManager(fullUrl, ctx.GetVAF_Client_ID());
                 r.RunAsync();
                 r = null;
             }
@@ -172,7 +172,7 @@ namespace VIS.Controllers
 
             //1 first user and client 
 
-            string qry = "SELECT COALESCE(u.AD_Theme_ID,c.AD_Theme_ID) FROM AD_User u INNER JOIN AD_Client c ON c.AD_Client_ID = u.AD_Client_ID " +
+            string qry = "SELECT COALESCE(u.AD_Theme_ID,c.AD_Theme_ID) FROM AD_User u INNER JOIN VAF_Client c ON c.VAF_Client_ID = u.VAF_Client_ID " +
                          " WHERE u.AD_User_ID ="+_ctx.GetAD_User_ID();
 
             int id = Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry,null,null));
@@ -204,13 +204,13 @@ namespace VIS.Controllers
     public class ResourceManager
     {
         string _url = "";
-        int _AD_Client_ID = 0;
+        int _VAF_Client_ID = 0;
         Thread _thread = null;
 
-        public ResourceManager(string url,int AD_Client_ID)
+        public ResourceManager(string url,int VAF_Client_ID)
         {
             _url = url;
-            _AD_Client_ID = AD_Client_ID;
+            _VAF_Client_ID = VAF_Client_ID;
         }
 
 
@@ -224,7 +224,7 @@ namespace VIS.Controllers
         {
             try
             {
-                UpdateLoginTime(_AD_Client_ID, _url, VAdvantage.DataBase.GlobalVariable.TO_DATE(DateTime.Now, false));
+                UpdateLoginTime(_VAF_Client_ID, _url, VAdvantage.DataBase.GlobalVariable.TO_DATE(DateTime.Now, false));
             }
             catch
             {
@@ -233,7 +233,7 @@ namespace VIS.Controllers
             _thread = null;
         }
 
-        public string UpdateLoginTime(int AD_Client_ID, String url, string loginTime)
+        public string UpdateLoginTime(int VAF_Client_ID, String url, string loginTime)
         {
             var client = VAdvantage.Classes.ServerEndPoint.GetCloudClient();
             string retStr = "";
@@ -244,7 +244,7 @@ namespace VIS.Controllers
                 try
                 {
                     System.Net.ServicePointManager.Expect100Continue = false;
-                    retStr = client.SetLastLogin(AD_Client_ID, url, loginTime, key);
+                    retStr = client.SetLastLogin(VAF_Client_ID, url, loginTime, key);
                     VAdvantage.Logging.VLogger.Get().Info("Update Login =>" + retStr);
                     client.Close();
                 }

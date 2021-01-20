@@ -76,8 +76,8 @@ namespace VAdvantage.Model
             SetQty(line.GetMovementQty());
             //Edited :Arpit Rai ,13 Sept,2017 
             //to Set Client,Org,Confirm Date,Confirm Date, Scrapped Qty, Difference Qty & Reference No
-            SetAD_Client_ID(Client_ID);
-            SetAD_Org_ID(Org_ID);
+            SetVAF_Client_ID(Client_ID);
+            SetVAF_Org_ID(Org_ID);
             SetM_Product_ID(line.GetM_Product_ID());
             SetM_AttributeSetInstance_ID(line.GetM_AttributeSetInstance_ID());
             if (Util.GetValueOfInt(DB.ExecuteQuery("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'")) > 0

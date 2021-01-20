@@ -24,9 +24,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportOrder : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /**	Organization to be imported to		*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /**	Delete old Imported				*/
         private bool _deleteOldImported = false;
         /**	Document Action					*/
@@ -45,10 +45,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             for (int i = 0; i < para.Length; i++)
             {
                 String name = para[i].GetParameterName();
-                if (name.Equals("AD_Client_ID"))
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
-                else if (name.Equals("AD_Org_ID"))
-                    _AD_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                if (name.Equals("VAF_Client_ID"))
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAF_Org_ID"))
+                    _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
                     _deleteOldImported = "Y".Equals(para[i].GetParameter());
                 else if (name.Equals("DocAction"))
@@ -69,7 +69,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	****	Prepare	****
 
@@ -84,8 +84,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_Order "
-                  + "SET AD_Client_ID = COALESCE (AD_Client_ID,").Append(_AD_Client_ID).Append("),"
-                  + " AD_Org_ID = COALESCE (AD_Org_ID,").Append(_AD_Org_ID).Append("),"
+                  + "SET VAF_Client_ID = COALESCE (VAF_Client_ID,").Append(_VAF_Client_ID).Append("),"
+                  + " VAF_Org_ID = COALESCE (VAF_Org_ID,").Append(_VAF_Org_ID).Append("),"
                   + " IsActive = COALESCE (IsActive, 'Y'),"
                   + " Created = COALESCE (Created, SysDate),"
                   + " CreatedBy = COALESCE (CreatedBy, 0),"
@@ -103,8 +103,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Order o "
                 //jz	+ "SET I_IsImported='E', I_ErrorMsg=I_ErrorMsg||'ERR=Invalid Org, '"
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Org, '"
-                + "WHERE (AD_Org_ID IS NULL OR AD_Org_ID=0"
-                + " OR EXISTS (SELECT * FROM AD_Org oo WHERE o.AD_Org_ID=oo.AD_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
+                + "WHERE (VAF_Org_ID IS NULL OR VAF_Org_ID=0"
+                + " OR EXISTS (SELECT * FROM VAF_Org oo WHERE o.VAF_Org_ID=oo.VAF_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -113,19 +113,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Document Type - PO - SO
             sql = new StringBuilder("UPDATE I_Order o "	//	PO Document Type Name
                   + "SET C_DocType_ID=(SELECT C_DocType_ID FROM C_DocType d WHERE d.Name=o.DocTypeName"
-                  + " AND d.DocBaseType='POO' AND o.AD_Client_ID=d.AD_Client_ID) "
+                  + " AND d.DocBaseType='POO' AND o.VAF_Client_ID=d.VAF_Client_ID) "
                   + "WHERE C_DocType_ID IS NULL AND IsSOTrx='N' AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set PO DocType=" + no);
             sql = new StringBuilder("UPDATE I_Order o "	//	SO Document Type Name
                   + "SET C_DocType_ID=(SELECT C_DocType_ID FROM C_DocType d WHERE d.Name=o.DocTypeName"
-                  + " AND d.DocBaseType='SOO' AND o.AD_Client_ID=d.AD_Client_ID) "
+                  + " AND d.DocBaseType='SOO' AND o.VAF_Client_ID=d.VAF_Client_ID) "
                   + "WHERE C_DocType_ID IS NULL AND IsSOTrx='Y' AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set SO DocType=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_DocType_ID=(SELECT C_DocType_ID FROM C_DocType d WHERE d.Name=o.DocTypeName"
-                  + " AND d.DocBaseType IN ('SOO','POO') AND o.AD_Client_ID=d.AD_Client_ID) "
+                  + " AND d.DocBaseType IN ('SOO','POO') AND o.VAF_Client_ID=d.VAF_Client_ID) "
                 //+ "WHERE C_DocType_ID IS NULL AND IsSOTrx IS NULL AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append (clientCheck);
                   + "WHERE C_DocType_ID IS NULL AND DocTypeName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -140,19 +140,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	DocType Default
             sql = new StringBuilder("UPDATE I_Order o "	//	Default PO
                   + "SET C_DocType_ID=(SELECT MAX(C_DocType_ID) FROM C_DocType d WHERE d.IsDefault='Y'"
-                  + " AND d.DocBaseType='POO' AND o.AD_Client_ID=d.AD_Client_ID) "
+                  + " AND d.DocBaseType='POO' AND o.VAF_Client_ID=d.VAF_Client_ID) "
                   + "WHERE C_DocType_ID IS NULL AND IsSOTrx='N' AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set PO Default DocType=" + no);
             sql = new StringBuilder("UPDATE I_Order o "	//	Default SO
                   + "SET C_DocType_ID=(SELECT MAX(C_DocType_ID) FROM C_DocType d WHERE d.IsDefault='Y'"
-                  + " AND d.DocBaseType='SOO' AND o.AD_Client_ID=d.AD_Client_ID) "
+                  + " AND d.DocBaseType='SOO' AND o.VAF_Client_ID=d.VAF_Client_ID) "
                   + "WHERE C_DocType_ID IS NULL AND IsSOTrx='Y' AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set SO Default DocType=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_DocType_ID=(SELECT MAX(C_DocType_ID) FROM C_DocType d WHERE d.IsDefault='Y'"
-                  + " AND d.DocBaseType IN('SOO','POO') AND o.AD_Client_ID=d.AD_Client_ID) "
+                  + " AND d.DocBaseType IN('SOO','POO') AND o.VAF_Client_ID=d.VAF_Client_ID) "
                   + "WHERE C_DocType_ID IS NULL AND IsSOTrx IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default DocType=" + no);
@@ -166,13 +166,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set IsSOTrx
             sql = new StringBuilder("UPDATE I_Order o SET IsSOTrx='Y' "
-                  + "WHERE EXISTS (SELECT * FROM C_DocType d WHERE o.C_DocType_ID=d.C_DocType_ID AND d.DocBaseType='SOO' AND o.AD_Client_ID=d.AD_Client_ID)"
+                  + "WHERE EXISTS (SELECT * FROM C_DocType d WHERE o.C_DocType_ID=d.C_DocType_ID AND d.DocBaseType='SOO' AND o.VAF_Client_ID=d.VAF_Client_ID)"
                   + " AND C_DocType_ID IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set IsSOTrx=Y=" + no);
             sql = new StringBuilder("UPDATE I_Order o SET IsSOTrx='N' "
-                  + "WHERE EXISTS (SELECT * FROM C_DocType d WHERE o.C_DocType_ID=d.C_DocType_ID AND d.DocBaseType='POO' AND o.AD_Client_ID=d.AD_Client_ID)"
+                  + "WHERE EXISTS (SELECT * FROM C_DocType d WHERE o.C_DocType_ID=d.C_DocType_ID AND d.DocBaseType='POO' AND o.VAF_Client_ID=d.VAF_Client_ID)"
                   + " AND C_DocType_ID IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -181,25 +181,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Price List
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p WHERE p.IsDefault='Y'"
-                  + " AND p.C_Currency_ID=o.C_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " AND p.C_Currency_ID=o.C_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default Currency PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p WHERE p.IsDefault='Y'"
-                  + " AND p.IsSOPriceList=o.IsSOTrx AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_PriceList_ID IS NULL AND C_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p "
-                  + " WHERE p.C_Currency_ID=o.C_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE p.C_Currency_ID=o.C_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Currency PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p "
-                  + " WHERE p.IsSOPriceList=o.IsSOTrx AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_PriceList_ID IS NULL AND C_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set PriceList=" + no);
@@ -236,13 +236,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Payment Term
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_PaymentTerm_ID=(SELECT C_PaymentTerm_ID FROM C_PaymentTerm p"
-                  + " WHERE o.PaymentTermValue=p.Value AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE o.PaymentTermValue=p.Value AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE C_PaymentTerm_ID IS NULL AND PaymentTermValue IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set PaymentTerm=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_PaymentTerm_ID=(SELECT MAX(C_PaymentTerm_ID) FROM C_PaymentTerm p"
-                  + " WHERE p.IsDefault='Y' AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE p.IsDefault='Y' AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE C_PaymentTerm_ID IS NULL AND o.PaymentTermValue IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default PaymentTerm=" + no);
@@ -258,16 +258,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Warehouse
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_Warehouse_ID=(SELECT MAX(M_Warehouse_ID) FROM M_Warehouse w"
-                  + " WHERE o.AD_Client_ID=w.AD_Client_ID AND o.AD_Org_ID=w.AD_Org_ID) "
+                  + " WHERE o.VAF_Client_ID=w.VAF_Client_ID AND o.VAF_Org_ID=w.VAF_Org_ID) "
                   + "WHERE M_Warehouse_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());	//	Warehouse for Org
             if (no != 0)
                 log.Fine("Set Warehouse=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_Warehouse_ID=(SELECT M_Warehouse_ID FROM M_Warehouse w"
-                  + " WHERE o.AD_Client_ID=w.AD_Client_ID) "
+                  + " WHERE o.VAF_Client_ID=w.VAF_Client_ID) "
                   + "WHERE M_Warehouse_ID IS NULL"
-                  + " AND EXISTS (SELECT AD_Client_ID FROM M_Warehouse w WHERE w.AD_Client_ID=o.AD_Client_ID GROUP BY AD_Client_ID HAVING COUNT(*)=1)"
+                  + " AND EXISTS (SELECT VAF_Client_ID FROM M_Warehouse w WHERE w.VAF_Client_ID=o.VAF_Client_ID GROUP BY VAF_Client_ID HAVING COUNT(*)=1)"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -284,7 +284,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	BP from EMail
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET (C_BPartner_ID,AD_User_ID)=(SELECT C_BPartner_ID,AD_User_ID FROM AD_User u"
-                  + " WHERE o.EMail=u.EMail AND o.AD_Client_ID=u.AD_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
+                  + " WHERE o.EMail=u.EMail AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
                   + "WHERE C_BPartner_ID IS NULL AND EMail IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -292,24 +292,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	BP from ContactName
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET (C_BPartner_ID,AD_User_ID)=(SELECT C_BPartner_ID,AD_User_ID FROM AD_User u"
-                  + " WHERE o.ContactName=u.Name AND o.AD_Client_ID=u.AD_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
+                  + " WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL) "
                   + "WHERE C_BPartner_ID IS NULL AND ContactName IS NOT NULL"
-                  + " AND EXISTS (SELECT Name FROM AD_User u WHERE o.ContactName=u.Name AND o.AD_Client_ID=u.AD_Client_ID AND u.C_BPartner_ID IS NOT NULL GROUP BY Name HAVING COUNT(*)=1)"
+                  + " AND EXISTS (SELECT Name FROM AD_User u WHERE o.ContactName=u.Name AND o.VAF_Client_ID=u.VAF_Client_ID AND u.C_BPartner_ID IS NOT NULL GROUP BY Name HAVING COUNT(*)=1)"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BP from ContactName=" + no);
             //	BP from Value
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_BPartner_ID=(SELECT MAX(C_BPartner_ID) FROM C_BPartner bp"
-                  + " WHERE o.BPartnerValue=bp.Value AND o.AD_Client_ID=bp.AD_Client_ID) "
+                  + " WHERE o.BPartnerValue=bp.Value AND o.VAF_Client_ID=bp.VAF_Client_ID) "
                   + "WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BP from Value=" + no);
             //	Default BP
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET C_BPartner_ID=(SELECT C_BPartnerCashTrx_ID FROM AD_ClientInfo c"
-                  + " WHERE o.AD_Client_ID=c.AD_Client_ID) "
+                  + "SET C_BPartner_ID=(SELECT C_BPartnerCashTrx_ID FROM VAF_ClientDetail c"
+                  + " WHERE o.VAF_Client_ID=c.VAF_Client_ID) "
                   + "WHERE C_BPartner_ID IS NULL AND BPartnerValue IS NULL AND Name IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -319,7 +319,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET (BillTo_ID,C_BPartner_Location_ID)=(SELECT C_BPartner_Location_ID,C_BPartner_Location_ID"
                   + " FROM C_BPartner_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
-                  + " WHERE o.C_BPartner_ID=bpl.C_BPartner_ID AND bpl.AD_Client_ID=o.AD_Client_ID"
+                  + " WHERE o.C_BPartner_ID=bpl.C_BPartner_ID AND bpl.VAF_Client_ID=o.VAF_Client_ID"
                   + " AND DUMP(o.Address1)=DUMP(l.Address1) AND DUMP(o.Address2)=DUMP(l.Address2)"
                   + " AND DUMP(o.City)=DUMP(l.City) AND DUMP(o.Postal)=DUMP(l.Postal)"
                   + " AND DUMP(o.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(o.C_Country_ID)=DUMP(l.C_Country_ID)) "
@@ -330,7 +330,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Bill Location from BPartner
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET BillTo_ID=(SELECT MAX(C_BPartner_Location_ID) FROM C_BPartner_Location l"
-                  + " WHERE l.C_BPartner_ID=o.C_BPartner_ID AND o.AD_Client_ID=l.AD_Client_ID"
+                  + " WHERE l.C_BPartner_ID=o.C_BPartner_ID AND o.VAF_Client_ID=l.VAF_Client_ID"
                   + " AND ((l.IsBillTo='Y' AND o.IsSOTrx='Y') OR (l.IsPayFrom='Y' AND o.IsSOTrx='N'))"
                   + ") "
                   + "WHERE C_BPartner_ID IS NOT NULL AND BillTo_ID IS NULL"
@@ -340,7 +340,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Set Location from BPartner
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_BPartner_Location_ID=(SELECT MAX(C_BPartner_Location_ID) FROM C_BPartner_Location l"
-                  + " WHERE l.C_BPartner_ID=o.C_BPartner_ID AND o.AD_Client_ID=l.AD_Client_ID"
+                  + " WHERE l.C_BPartner_ID=o.C_BPartner_ID AND o.VAF_Client_ID=l.VAF_Client_ID"
                   + " AND ((l.IsShipTo='Y' AND o.IsSOTrx='Y') OR o.IsSOTrx='N')"
                   + ") "
                   + "WHERE C_BPartner_ID IS NOT NULL AND C_BPartner_Location_ID IS NULL"
@@ -360,7 +360,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             /**
             sql = new StringBuilder ("UPDATE I_Order o "
                   + "SET CountryCode=(SELECT CountryCode FROM C_Country c WHERE c.IsDefault='Y'"
-                  + " AND c.AD_Client_ID IN (0, o.AD_Client_ID) AND ROWNUM=1) "
+                  + " AND c.VAF_Client_ID IN (0, o.VAF_Client_ID) AND ROWNUM=1) "
                   + "WHERE C_BPartner_ID IS NULL AND CountryCode IS NULL AND C_Country_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append (clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
@@ -368,7 +368,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             **/
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_Country_ID=(SELECT C_Country_ID FROM C_Country c"
-                  + " WHERE o.CountryCode=c.CountryCode AND c.IsSummary='N' AND c.AD_Client_ID IN (0, o.AD_Client_ID)) "
+                  + " WHERE o.CountryCode=c.CountryCode AND c.IsSummary='N' AND c.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
                   + "WHERE C_BPartner_ID IS NULL AND C_Country_ID IS NULL AND CountryCode IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -386,7 +386,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Order o "
                   + "Set RegionName=(SELECT MAX(Name) FROM C_Region r"
                   + " WHERE r.IsDefault='Y' AND r.C_Country_ID=o.C_Country_ID"
-                  + " AND r.AD_Client_ID IN (0, o.AD_Client_ID)) "
+                  + " AND r.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
                   + "WHERE C_BPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -395,7 +395,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Order o "
                   + "Set C_Region_ID=(SELECT C_Region_ID FROM C_Region r"
                   + " WHERE r.Name=o.RegionName AND r.C_Country_ID=o.C_Country_ID"
-                  + " AND r.AD_Client_ID IN (0, o.AD_Client_ID)) "
+                  + " AND r.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
                   + "WHERE C_BPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -414,21 +414,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Product
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
-                  + " WHERE o.ProductValue=p.Value AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE o.ProductValue=p.Value AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_Product_ID IS NULL AND ProductValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from Value=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
-                  + " WHERE o.UPC=p.UPC AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE o.UPC=p.UPC AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_Product_ID IS NULL AND UPC IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from UPC=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
-                  + " WHERE o.SKU=p.SKU AND o.AD_Client_ID=p.AD_Client_ID) "
+                  + " WHERE o.SKU=p.SKU AND o.VAF_Client_ID=p.VAF_Client_ID) "
                   + "WHERE M_Product_ID IS NULL AND SKU IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -444,7 +444,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Tax
             sql = new StringBuilder("UPDATE I_Order o "
                   + "SET C_Tax_ID=(SELECT MAX(C_Tax_ID) FROM C_Tax t"
-                  + " WHERE o.TaxIndicator=t.TaxIndicator AND o.AD_Client_ID=t.AD_Client_ID) "
+                  + " WHERE o.TaxIndicator=t.TaxIndicator AND o.VAF_Client_ID=t.VAF_Client_ID) "
                   + "WHERE C_Tax_ID IS NULL AND TaxIndicator IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -493,7 +493,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (bp == null)
                     {
                         bp = new MBPartner(GetCtx(), -1, Get_TrxName());
-                        bp.SetClientOrg(imp.GetAD_Client_ID(), imp.GetAD_Org_ID());
+                        bp.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
                         bp.SetValue(imp.GetBPartnerValue());
                         bp.SetName(imp.GetName());
                         if (!bp.Save())
@@ -647,7 +647,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             oldDocumentNo = "";
                         //
                         order = new MOrder(GetCtx(), 0, Get_TrxName());
-                        order.SetClientOrg(imp.GetAD_Client_ID(), imp.GetAD_Org_ID());
+                        order.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
                         order.SetC_DocTypeTarget_ID(imp.GetC_DocType_ID());
                         order.SetIsSOTrx(imp.IsSOTrx());
                         if (imp.GetDocumentNo() != null)
@@ -676,8 +676,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (order.GetSalesRep_ID() == 0)
                             order.SetSalesRep_ID(GetAD_User_ID());
                         //
-                        if (imp.GetAD_OrgTrx_ID() != 0)
-                            order.SetAD_OrgTrx_ID(imp.GetAD_OrgTrx_ID());
+                        if (imp.GetVAF_OrgTrx_ID() != 0)
+                            order.SetVAF_OrgTrx_ID(imp.GetVAF_OrgTrx_ID());
                         if (imp.GetC_Activity_ID() != 0)
                             order.SetC_Activity_ID(imp.GetC_Activity_ID());
                         if (imp.GetC_Campaign_ID() != 0)

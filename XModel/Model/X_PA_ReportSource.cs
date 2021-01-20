@@ -41,7 +41,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_PA_ReportSource() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621498829L;/** Last Updated Timestamp 4/1/2016 1:06:22 PM */
-        public static long updatedMS = 1459496182040L;/** AD_Table_ID=450 */
+        public static long updatedMS = 1459496182040L;/** VAF_TableView_ID=450 */
         public static int Table_ID; // =450;
         /** TableName=PA_ReportSource */
         public static String Table_Name = "PA_ReportSource";

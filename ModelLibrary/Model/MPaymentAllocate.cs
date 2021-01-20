@@ -386,7 +386,7 @@ namespace VAdvantage.Model
             {
                 GetInvoice();
                 if (_invoice != null)
-                    SetAD_Org_ID(_invoice.GetAD_Org_ID());
+                    SetVAF_Org_ID(_invoice.GetVAF_Org_ID());
             }
 
             return true;

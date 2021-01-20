@@ -29,7 +29,7 @@ namespace VAdvantage.Interface
         /// <summary>
         /// User Pricing
         /// </summary>
-        /// <param name="AD_Org_ID">org of document</param>
+        /// <param name="VAF_Org_ID">org of document</param>
         /// <param name="isSOTrx">sales order</param>
         /// <param name="M_PriceList_ID">price list selected</param>
         /// <param name="C_BPartner_ID">business partner</param>
@@ -37,7 +37,7 @@ namespace VAdvantage.Interface
         /// <param name="Qty">quantity</param>
         /// <param name="PriceDate">date for pricing</param>
         /// <returns>null if Vienna should price it or pricing info</returns>
-        UserPricingVO Price(int AD_Org_ID, bool isSOTrx, int M_PriceList_ID, int C_BPartner_ID,
+        UserPricingVO Price(int VAF_Org_ID, bool isSOTrx, int M_PriceList_ID, int C_BPartner_ID,
             int M_Product_ID, Decimal Qty, DateTime? PriceDate);
     }
 }

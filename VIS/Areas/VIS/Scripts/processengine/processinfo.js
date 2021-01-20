@@ -8,7 +8,7 @@
         this.tableName = "";
         this.record_ID = Record_ID;
         this.AD_User_ID = 0;
-        this.AD_Client_ID = 0;
+        this.VAF_Client_ID = 0;
         this.className = null;
 
         this.AD_PInstance_ID = 0;
@@ -54,10 +54,10 @@
             "Summary": this.getSummary(),
             "ClassName": this.className,
 
-            "AD_Table_ID": this.table_ID,
-            "AD_TableName": this.tableName,
+            "VAF_TableView_ID": this.table_ID,
+            "VAF_TableViewName": this.tableName,
             "AD_User_ID": this.AD_User_ID,
-            "AD_Client_ID": this.AD_Client_ID,
+            "VAF_Client_ID": this.VAF_Client_ID,
             "Batch": this.batch,
             "TimeOut": this.timeout,
             "AD_PrintFormat_Table_ID": this.AD_PrintFormat_Table_ID,
@@ -102,10 +102,10 @@
         info.error = o.Error;
         info.AD_PInstance_ID = o.AD_PInstance_ID;
         info.summary = o.Summary;
-        info.table_ID = o.AD_Table_ID;
-        info.tableName = o.AD_TableName;
+        info.table_ID = o.VAF_TableView_ID;
+        info.tableName = o.VAF_TableViewName;
         info.AD_User_ID = o.AD_User_ID;
-        info.AD_Client_ID = o.AD_Client_ID;;
+        info.VAF_Client_ID = o.VAF_Client_ID;;
         info.batch = o.Batch;
         info.timeout = o.TimeOut;
         info.AD_PrintFormat_Table_ID = o.AD_PrintFormat_Table_ID;
@@ -219,8 +219,8 @@
         return this.table_ID;
     };
 
-    ProcessInfo.prototype.setTable_ID = function (AD_Table_ID) {
-        this.table_ID = AD_Table_ID;
+    ProcessInfo.prototype.setTable_ID = function (VAF_TableView_ID) {
+        this.table_ID = VAF_TableView_ID;
     };
 
     ProcessInfo.prototype.setTable_Name = function (tableName) {
@@ -256,12 +256,12 @@
         this.title = title;
     };
 
-    ProcessInfo.prototype.setAD_Client_ID = function (AD_Client_ID) {
-        this.AD_Client_ID = AD_Client_ID;
+    ProcessInfo.prototype.setVAF_Client_ID = function (VAF_Client_ID) {
+        this.VAF_Client_ID = VAF_Client_ID;
     };
 
-    ProcessInfo.prototype.getAD_Client_ID = function () {
-        return this.AD_Client_ID;
+    ProcessInfo.prototype.getVAF_Client_ID = function () {
+        return this.VAF_Client_ID;
     };
 
     ProcessInfo.prototype.setAD_User_ID = function (AD_User_ID) {
@@ -567,7 +567,7 @@
         this.tableName = null;
         this.record_ID = null;
         this.AD_User_ID = null;
-        this.AD_Client_ID == null;
+        this.VAF_Client_ID == null;
         this.className = null;
 
         this.AD_PInstance_ID = null;

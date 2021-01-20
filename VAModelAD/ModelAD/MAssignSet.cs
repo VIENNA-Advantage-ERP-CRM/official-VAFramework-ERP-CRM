@@ -23,7 +23,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAssignSet : X_AD_AssignSet
+    public class MAssignSet : X_VAF_AllotSet
     {
         	/**	Logger			*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MAssignSet).FullName);
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
         static public MAssignSet[] GetAll(Ctx ctx)
         {
             List<MAssignSet> list = new List<MAssignSet>();
-            String sql = "SELECT * FROM AD_AssignSet";
+            String sql = "SELECT * FROM VAF_AllotSet";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql);
@@ -71,9 +71,9 @@ namespace VAdvantage.Model
                 if (!set.IsActive())
                     continue;
                 //	Check IDs
-                if (po.Get_Table_ID() == set.GetAD_Table_ID()
-                    && (po.GetAD_Client_ID() == set.GetAD_Client_ID()
-                        || set.GetAD_Client_ID() == 0))
+                if (po.Get_Table_ID() == set.GetVAF_TableView_ID()
+                    && (po.GetVAF_Client_ID() == set.GetVAF_Client_ID()
+                        || set.GetVAF_Client_ID() == 0))
                 {
                     //	Check Timing
                     String rule = set.GetAutoAssignRule();
@@ -110,8 +110,8 @@ namespace VAdvantage.Model
         private MAssignTarget[] m_targets = null;
 
 
-        public MAssignSet(Ctx ctx, int AD_AssignSet_ID, Trx trxName)
-            : base(ctx, AD_AssignSet_ID, trxName)
+        public MAssignSet(Ctx ctx, int VAF_AllotSet_ID, Trx trxName)
+            : base(ctx, VAF_AllotSet_ID, trxName)
         {
             
         }	//	MAssignSet
@@ -131,14 +131,14 @@ namespace VAdvantage.Model
         {
             if (m_targets != null && !reload)
                 return m_targets;
-            String sql = "SELECT * FROM AD_AssignTarget "
-                + "WHERE AD_AssignSet_ID=@AD_AssignSet_ID ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_AllotTarget "
+                + "WHERE VAF_AllotSet_ID=@VAF_AllotSet_ID ORDER BY SeqNo";
             List<MAssignTarget> list = new List<MAssignTarget>();
             
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_AssignSet_ID", GetAD_AssignSet_ID());
+                param[0] = new SqlParameter("@VAF_AllotSet_ID", GetVAF_AllotSet_ID());
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -173,9 +173,9 @@ namespace VAdvantage.Model
                     continue;
                 //	Chck consistency
                 MColumn tColumn = target.GetTargetColumn();
-                if (tColumn.GetAD_Table_ID() != GetAD_Table_ID())
+                if (tColumn.GetVAF_TableView_ID() != GetVAF_TableView_ID())
                     throw new Exception(ToString()
-                        + ": AD_Table_ID inconsistent for " + target);
+                        + ": VAF_TableView_ID inconsistent for " + target);
                 //
                 try
                 {
@@ -198,7 +198,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MAssignSet[")
                 .Append(Get_ID()).Append("-").Append(GetName())
-                .Append(",AD_Table_ID=").Append(GetAD_Table_ID())
+                .Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID())
                 .Append("]");
             return sb.ToString();            
         }

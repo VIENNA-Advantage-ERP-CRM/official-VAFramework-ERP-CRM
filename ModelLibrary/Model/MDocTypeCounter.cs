@@ -402,8 +402,8 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
 
             if (!newRecord
                 && (Is_ValueChanged("C_DocType_ID") || Is_ValueChanged("Counter_C_DocType_ID")))

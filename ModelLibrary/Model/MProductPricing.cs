@@ -28,8 +28,8 @@ namespace VAdvantage.Model
     public class MProductPricing
     {
         #region Private variables
-        private int _AD_Client_ID;
-        private int _AD_Org_ID;
+        private int _VAF_Client_ID;
+        private int _VAF_Org_ID;
         private int _M_Product_ID;
         private int _C_BPartner_ID;
         private Decimal _qty = Env.ONE;
@@ -69,13 +69,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="AD_Client_ID">product</param>
-        /// <param name="AD_Org_ID">partner</param>
+        /// <param name="VAF_Client_ID">product</param>
+        /// <param name="VAF_Org_ID">partner</param>
         /// <param name="M_Product_ID"></param>
         /// <param name="C_BPartner_ID"></param>
         /// <param name="Qty">quantity</param>
         /// <param name="isSOTrx">SO or PO</param>
-        public MProductPricing(int AD_Client_ID, int AD_Org_ID,
+        public MProductPricing(int VAF_Client_ID, int VAF_Org_ID,
             int M_Product_ID, int C_BPartner_ID,
             Decimal? qty, bool isSOTrx)
         {
@@ -83,8 +83,8 @@ namespace VAdvantage.Model
             {
                 log = VLogger.GetVLogger(this.GetType().FullName);
             }
-            _AD_Client_ID = AD_Client_ID;
-            _AD_Org_ID = AD_Org_ID;
+            _VAF_Client_ID = VAF_Client_ID;
+            _VAF_Org_ID = VAF_Org_ID;
             _M_Product_ID = M_Product_ID;
             _C_BPartner_ID = C_BPartner_ID;
             if (qty != null && Env.ZERO.CompareTo(qty) != 0)
@@ -131,7 +131,7 @@ namespace VAdvantage.Model
         {
             if (_userPricing == null)
             {
-                MClientInfo client = MClientInfo.Get(Env.GetContext(), _AD_Client_ID);
+                MClientInfo client = MClientInfo.Get(Env.GetContext(), _VAF_Client_ID);
                 String userClass = client.GetPricingEngineClass();
                 try
                 {
@@ -163,7 +163,7 @@ namespace VAdvantage.Model
             {
                 try
                 {
-                    vo = _api.Price(_AD_Org_ID, _isSOTrx, _M_PriceList_ID,
+                    vo = _api.Price(_VAF_Org_ID, _isSOTrx, _M_PriceList_ID,
                         _C_BPartner_ID, _M_Product_ID, _qty, _PriceDate);
                 }
                 catch (Exception ex)
@@ -310,7 +310,7 @@ namespace VAdvantage.Model
             {
                 String sql = "SELECT M_PriceList_ID, IsTaxIncluded "
                     + "FROM M_PriceList pl"
-                    + " INNER JOIN M_Product p ON (pl.AD_Client_ID=p.AD_Client_ID) "
+                    + " INNER JOIN M_Product p ON (pl.VAF_Client_ID=p.VAF_Client_ID) "
                     + "WHERE M_Product_ID=? "
                     + "ORDER BY IsDefault DESC";
                 PreparedStatement pstmt = null;

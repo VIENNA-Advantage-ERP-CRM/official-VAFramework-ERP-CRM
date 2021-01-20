@@ -35,9 +35,9 @@ namespace VAdvantage.Print
             Layout();
         }
 
-        public LayoutEngine(MPrintFormat format, PrintData data, Query query, int AD_Org_ID)
+        public LayoutEngine(MPrintFormat format, PrintData data, Query query, int VAF_Org_ID)
         {
-            _ad_org_id = AD_Org_ID;
+            _vaf_org_id = VAF_Org_ID;
             log.Info(format + " - " + data + " - " + query);
             SetPrintFormat(format, false);
             SetPrintData(data, query, false);
@@ -132,7 +132,7 @@ namespace VAdvantage.Print
         /*************************************************************************/
 
 
-        private int _ad_org_id = 0;
+        private int _vaf_org_id = 0;
 
         /// <summary>
         /// Set Print Format
@@ -518,10 +518,10 @@ namespace VAdvantage.Print
                         else
                         {
                             ///////////change To pickImage on the Bases of Organisations////////
-                            //object logo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + GetCtx().GetAD_Org_ID());
-                            if (_ad_org_id > -1)
+                            //object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + GetCtx().GetVAF_Org_ID());
+                            if (_vaf_org_id > -1)
                             {
-                                object logo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ad_org_id);
+                                object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _vaf_org_id);
                                 if (logo != null && logo != DBNull.Value)
                                 {
                                     MemoryStream ms = new MemoryStream((Byte[])logo);
@@ -648,7 +648,7 @@ namespace VAdvantage.Print
         /// <returns>image element</returns>
         private PrintElement CreateImageElement(MPrintFormatItem item)
         {
-            Object obj = m_data.GetNode(item.GetAD_Column_ID());
+            Object obj = m_data.GetNode(item.GetVAF_Column_ID());
             if (obj == null)
                 return null;
             else if (obj is PrintDataElement)
@@ -711,7 +711,7 @@ namespace VAdvantage.Print
             String FieldAlignmentType, bool isForm)
         {
             //	Get Data
-            Object obj = m_data.GetNode(item.GetAD_Column_ID(), false);
+            Object obj = m_data.GetNode(item.GetVAF_Column_ID(), false);
             if (obj == null)
                 return null;
             else if (obj is PrintDataElement)
@@ -815,16 +815,16 @@ namespace VAdvantage.Print
             format.SetLanguage(m_format.GetLanguage());
             if (m_format.IsTranslationView())
                 format.SetTranslationLanguage(m_format.GetLanguage());
-            int AD_Column_ID = item.GetAD_Column_ID();
-            log.Info(format + " - Item=" + item.GetName() + " (" + AD_Column_ID + ")");
+            int VAF_Column_ID = item.GetVAF_Column_ID();
+            log.Info(format + " - Item=" + item.GetName() + " (" + VAF_Column_ID + ")");
             //
-            Object obj = data.GetNode(AD_Column_ID, false);
+            Object obj = data.GetNode(VAF_Column_ID, false);
             //	Object obj = data.getNode(item.getColumnName());	//	slower
             if (obj == null)
             {
                 data.DumpHeader();
                 data.DumpCurrentRow();
-                log.Log(Level.SEVERE, "No Node - AD_Column_ID=" + AD_Column_ID + " - " + item + " - " + data);
+                log.Log(Level.SEVERE, "No Node - VAF_Column_ID=" + VAF_Column_ID + " - " + item + " - " + data);
                 return null;
             }
             PrintDataElement dataElement = (PrintDataElement)obj;
@@ -834,7 +834,7 @@ namespace VAdvantage.Print
                 data.DumpHeader();
                 data.DumpCurrentRow();
                 log.Log(Level.SEVERE, "No Record Key - " + dataElement
-                    + " - AD_Column_ID=" + AD_Column_ID + " - " + item);
+                    + " - VAF_Column_ID=" + VAF_Column_ID + " - " + item);
                 return null;
             }
             int Record_ID = 0;
@@ -847,10 +847,10 @@ namespace VAdvantage.Print
                 data.DumpCurrentRow();
                 log.Log(Level.SEVERE, "Invalid Record Key - " + recordString
                     + " (" + e.Message
-                    + ") - AD_Column_ID=" + AD_Column_ID + " - " + item);
+                    + ") - VAF_Column_ID=" + VAF_Column_ID + " - " + item);
                 return null;
             }
-            Query query = new Query(format.GetAD_Table_ID());
+            Query query = new Query(format.GetVAF_TableView_ID());
             query.AddRestriction(item.GetColumnName(), Query.EQUAL, Record_ID);
             format.SetTranslationViewQuery(query);
             log.Fine(query.ToString());
@@ -1232,7 +1232,7 @@ namespace VAdvantage.Print
             /** Removing/modifying the Vienna logo/trademark/copyright is a violation of the license	*/
 
             /////////change To pickImage on the Bases of Organisations////////
-            //object logo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + GetCtx().GetAD_Org_ID());
+            //object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + GetCtx().GetVAF_Org_ID());
             //Image img = null;
             //if (logo != null)
             //{
@@ -1547,7 +1547,7 @@ namespace VAdvantage.Print
                 {
                     MPrintFormatItem item = format.GetItem(c);
                     Object dataElement = null;
-                    if (item.IsPrinted() && item.GetAD_Column_ID() > 0)	//	Text Columns
+                    if (item.IsPrinted() && item.GetVAF_Column_ID() > 0)	//	Text Columns
                     {
                         if (item.IsTypePrintFormat())
                         {
@@ -1557,7 +1557,7 @@ namespace VAdvantage.Print
                         {
                             if (item.IsImageField())
                             {
-                                Object obj = printData.GetNode(item.GetAD_Column_ID());
+                                Object obj = printData.GetNode(item.GetVAF_Column_ID());
                                 if (obj == null)
                                 {
                                 }
@@ -1574,7 +1574,7 @@ namespace VAdvantage.Print
                         }
                         else if (item.IsBarcode())
                         {
-                            Object obj = printData.GetNode(item.GetAD_Column_ID());
+                            Object obj = printData.GetNode(item.GetVAF_Column_ID());
                             if (obj == null)
                             { }
                             else if (obj is PrintDataElement)
@@ -1587,7 +1587,7 @@ namespace VAdvantage.Print
                         }
                         else
                         {
-                            Object obj = printData.GetNode(item.GetAD_Column_ID(), false);
+                            Object obj = printData.GetNode(item.GetVAF_Column_ID(), false);
                             if (obj == null)
                             { }
                             else if (obj is PrintDataElement)
@@ -1600,7 +1600,7 @@ namespace VAdvantage.Print
                             }
                             else
                                 log.Log(Level.SEVERE, "Element not PrintDataElement " + obj.GetType().FullName);
-                            //	System.out.println("  row=" + row + ",col=" + col + " - " + item.getAD_Column_ID() + " => " + dataElement);
+                            //	System.out.println("  row=" + row + ",col=" + col + " - " + item.getVAF_Column_ID() + " => " + dataElement);
                             data[row, col] = dataElement;
                         }
                         col++;

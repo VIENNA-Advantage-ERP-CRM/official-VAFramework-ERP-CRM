@@ -84,7 +84,7 @@ namespace VAdvantage.WF
             //		return true;
             if (RESPONSIBLETYPE_Role.Equals(GetResponsibleType())
                 && GetAD_Role_ID() == 0
-                && GetAD_Client_ID() > 0)
+                && GetVAF_Client_ID() > 0)
             {
                 log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@RequiredEnter@ @AD_Role_ID@"));
                 return false;
@@ -141,7 +141,7 @@ namespace VAdvantage.WF
         public bool IsOrganization()
         {
             return RESPONSIBLETYPE_Organization.Equals(GetResponsibleType());
-            //&& GetAD_Org_ID() != 0;
+            //&& GetVAF_Org_ID() != 0;
         }
 
         /// <summary>

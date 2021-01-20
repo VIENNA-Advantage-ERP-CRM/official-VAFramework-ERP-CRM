@@ -15,7 +15,7 @@
     var windowWidth = $(document).width();
     var windowHeight = $(document).height();
     VIS.ContactInfo = function (userID, winNo) {
-        var sql = "SELECT COUNT(*) FROM AD_Table WHERE TableName='C_BPartner'";
+        var sql = "SELECT COUNT(*) FROM VAF_TableView WHERE TableName='C_BPartner'";
         var dr = VIS.DB.executeReader(sql, null);
         while (dr.read()) {
             if (parseInt(dr.getString(0)) == 0) {

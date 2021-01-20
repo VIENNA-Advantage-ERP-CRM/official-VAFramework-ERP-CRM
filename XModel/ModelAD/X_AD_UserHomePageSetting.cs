@@ -68,7 +68,7 @@ static X_AD_UserHomePageSetting()
 //static long serialVersionUID 27693491989134L;
 /** Last Updated Timestamp 2014-09-22 11:47:52 AM */
 public static long updatedMS = 1411366672345L;
-/** AD_Table_ID=1000544 */
+/** VAF_TableView_ID=1000544 */
 public static int Table_ID;
  // =1000544;
 
@@ -111,18 +111,18 @@ StringBuilder sb = new StringBuilder ("X_AD_UserHomePageSetting[").Append(Get_ID
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

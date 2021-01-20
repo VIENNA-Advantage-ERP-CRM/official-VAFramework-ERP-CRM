@@ -24,7 +24,7 @@ namespace VAdvantage.Model
     public class MElement : X_C_Element
     {
         //Cache						
-        private static CCache<int, MElement> s_cache = new CCache<int, MElement>("AD_Element", 20);
+        private static CCache<int, MElement> s_cache = new CCache<int, MElement>("VAF_ColumnDic", 20);
         // Tree Used		
         private X_AD_Tree _tree = null;
 
@@ -32,15 +32,15 @@ namespace VAdvantage.Model
         ///Get Accounting Element from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Element_ID">id</param>
+        /// <param name="VAF_ColumnDic_ID">id</param>
         /// <returns>MElement</returns>
-        public static MElement Get(Ctx ctx, int AD_Element_ID)
+        public static MElement Get(Ctx ctx, int VAF_ColumnDic_ID)
         {
-            int key = (int)AD_Element_ID;
+            int key = (int)VAF_ColumnDic_ID;
             MElement retValue = (MElement)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MElement(ctx, AD_Element_ID, null);
+            retValue = new MElement(ctx, VAF_ColumnDic_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -112,8 +112,8 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             String elementType = GetElementType();
             //	Natural Account
             if (ELEMENTTYPE_UserDefined.Equals(elementType) && IsNaturalAccount())

@@ -60,9 +60,9 @@ namespace VAdvantage.Controller
         /** Window Type			*/
         public String WindowType = "";
         /** Image				*/
-        public int AD_Image_ID = 0;
+        public int VAF_Image_ID = 0;
         /** Color				*/
-        public int AD_Color_ID = 0;
+        public int VAF_Colour_ID = 0;
         /** Read Write			*/
         public String IsReadWrite = null;
         /** Window Width		*/
@@ -75,7 +75,7 @@ namespace VAdvantage.Controller
         /** Tabs contains MTabVO elements   */
         private List<GridTabVO> Tabs = null;
         /** Base Table		*/
-        public int AD_Table_ID = 0;
+        public int VAF_TableView_ID = 0;
 
         public bool hasPanel = false;
 
@@ -182,7 +182,7 @@ namespace VAdvantage.Controller
             int AD_Role_ID = vo.ctx.GetAD_Role_ID();
 
             StringBuilder sql01 = new StringBuilder("SELECT Name,Description,Help,WindowType, "
-             + "AD_Color_ID,AD_Image_ID, IsReadWrite, WinHeight,WinWidth, "
+             + "VAF_Colour_ID,VAF_Image_ID, IsReadWrite, WinHeight,WinWidth, "
              + "IsSOTrx, AD_UserDef_Win_ID,IsAppointment,IsTask,IsEmail,IsLetter,IsSms,IsFaxEmail,Name2, "
              + "ISCHAT, ISATTACHMENT,ISHISTORY,ISCHECKREQUEST,ISCOPYRECORD,ISSUBSCRIBERECORD,ISZOOMACROSS,ISCREATEDOCUMENT,ISUPLOADDOCUMENT,ISVIEWDOCUMENT,IsAttachDocumentFrom, "
              + " ISIMPORTMAP,ISMARKTOEXPORT,ISARCHIVE,ISATTACHEMAIL,ISROLECENTERVIEW , FontName, ImageUrl, IsCompositeView ");
@@ -206,7 +206,7 @@ namespace VAdvantage.Controller
 
             // Commented BY Karan 21 Dec 2018.. To imrove performance
             //StringBuilder sql = new StringBuilder("SELECT Name,Description,Help,WindowType, "
-            //    + "AD_Color_ID,AD_Image_ID, IsReadWrite, WinHeight,WinWidth, "
+            //    + "VAF_Colour_ID,VAF_Image_ID, IsReadWrite, WinHeight,WinWidth, "
             //    + "IsSOTrx, AD_UserDef_Win_ID,IsAppointment,IsTask,IsEmail,IsLetter,IsSms,IsFaxEmail,Name2 ");
 
             //if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
@@ -226,7 +226,7 @@ namespace VAdvantage.Controller
 
             ////Without Name2 Field
             //StringBuilder sql2 = new StringBuilder("SELECT Name,Description,Help,WindowType, "
-            //    + "AD_Color_ID,AD_Image_ID, IsReadWrite, WinHeight,WinWidth, "
+            //    + "VAF_Colour_ID,VAF_Image_ID, IsReadWrite, WinHeight,WinWidth, "
             //    + "IsSOTrx, AD_UserDef_Win_ID, IsAppointment,IsTask,IsEmail,IsLetter,IsSms ");
 
             //if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
@@ -246,7 +246,7 @@ namespace VAdvantage.Controller
 
             ////Default Query [ Window + Web]
             //StringBuilder sql3 = new StringBuilder("SELECT Name,Description,Help,WindowType, "
-            //   + "AD_Color_ID,AD_Image_ID, IsReadWrite, WinHeight,WinWidth, "
+            //   + "VAF_Colour_ID,VAF_Image_ID, IsReadWrite, WinHeight,WinWidth, "
             //   + "IsSOTrx, AD_UserDef_Win_ID ");
 
             //if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
@@ -263,7 +263,7 @@ namespace VAdvantage.Controller
             //    .Append(Utility.Env.GetAD_Language(vo.ctx)).Append("'");
             //}
 
-            //int AD_Client_ID = vo.ctx.getAD_Client_ID();
+            //int VAF_Client_ID = vo.ctx.getVAF_Client_ID();
 
             int AD_UserDef_Win_ID = 0;
             //IDataReader dr = null;
@@ -306,8 +306,8 @@ namespace VAdvantage.Controller
                         vo.Help = "";
                     vo.WindowType = dr[3].ToString();
                     //
-                    vo.AD_Color_ID = Utility.Util.GetValueOfInt(dr[4]);
-                    vo.AD_Image_ID = Utility.Util.GetValueOfInt(dr[5]);
+                    vo.VAF_Colour_ID = Utility.Util.GetValueOfInt(dr[4]);
+                    vo.VAF_Image_ID = Utility.Util.GetValueOfInt(dr[5]);
                     vo.IsReadWrite = dr[6].ToString();
                     //
                     vo.WinHeight = Utility.Util.GetValueOfInt(dr[7]);
@@ -432,13 +432,13 @@ namespace VAdvantage.Controller
             StringBuilder sql = new StringBuilder("SELECT ");
 
 
-            //w.ad_window_id, u.ad_client_id, u.ad_role_id AS userdef_role_id, u.ad_user_id,u.ad_userdef_win_id, u.customizationname, COALESCE(u.name, w.name) AS name,")
-            // .Append("COALESCE(u.description, w.description) AS description, COALESCE(u.help, w.help) AS help, w.windowtype, w.ad_color_id, w.ad_image_id, COALESCE(u.winheight, w.winheight) AS winheight,")
-            // .Append("COALESCE(u.winwidth, w.winwidth) AS winwidth, w.ad_ctxarea_id,'Y' AS IsSOTrx,'Y' AS IsReadWrite, w.isdefault ");
+            //w.ad_window_id, u.vaf_client_id, u.ad_role_id AS userdef_role_id, u.ad_user_id,u.ad_userdef_win_id, u.customizationname, COALESCE(u.name, w.name) AS name,")
+            // .Append("COALESCE(u.description, w.description) AS description, COALESCE(u.help, w.help) AS help, w.windowtype, w.ad_color_id, w.VAF_Image_id, COALESCE(u.winheight, w.winheight) AS winheight,")
+            // .Append("COALESCE(u.winwidth, w.winwidth) AS winwidth, w.VAF_ContextScope_id,'Y' AS IsSOTrx,'Y' AS IsReadWrite, w.isdefault ");
 
 
             sql.Append(" w.AD_Window_ID                          AS AD_Window_ID      , ")
-               .Append(" u.AD_Client_ID                            AS AD_Client_ID      , ")
+               .Append(" u.VAF_Client_ID                            AS VAF_Client_ID      , ")
                .Append(" u.AD_Role_ID                            AS userdef_role_id   , ")
                .Append(" u.AD_user_ID                            AS AD_User_ID        , ")
                .Append(" u.AD_UserDef_Win_ID                     AS AD_UserDef_Win_ID , ")
@@ -458,12 +458,12 @@ namespace VAdvantage.Controller
             }
 
             sql.Append(" w.WindowType                            AS WindowType        , ")
-            .Append(" w.AD_Color_ID                           AS AD_Color_ID       , ")
-            .Append(" w.AD_Image_ID                           AS AD_Image_ID       , ")
+            .Append(" w.VAF_Colour_ID                           AS VAF_Colour_ID       , ")
+            .Append(" w.VAF_Image_ID                           AS VAF_Image_ID       , ")
             .Append(" COALESCE(u.WinHeight,w.WinHeight)       AS WinHeight         , ")
             .Append(" COALESCE(u.WinWidth,w.WinWidth)         AS WinWidth          , ")
-            .Append(" w.AD_CtxArea_ID                         AS AD_CtxArea_ID     , ")
-            .Append(" COALESCE((SELECT IsSOTrx FROM AD_CtxArea ctx WHERE w.AD_CtxArea_ID=ctx.AD_CtxArea_ID ),'Y')        AS IsSOTrx    , ")
+            .Append(" w.VAF_ContextScope_ID                         AS VAF_ContextScope_ID     , ")
+            .Append(" COALESCE((SELECT IsSOTrx FROM VAF_ContextScope ctx WHERE w.VAF_ContextScope_ID=ctx.VAF_ContextScope_ID ),'Y')        AS IsSOTrx    , ")
             .Append(" a.AD_Role_ID                            AS AD_Role_ID        , ")
             .Append(" a.IsReadWrite                           AS IsReadWrite       , ")
             .Append(" w.IsDefault                             AS IsDefault           ");
@@ -490,7 +490,7 @@ namespace VAdvantage.Controller
             }
 
 
-            //int AD_Client_ID = vo.ctx.getAD_Client_ID();
+            //int VAF_Client_ID = vo.ctx.getVAF_Client_ID();
 
             int AD_UserDef_Win_ID = 0;
             //IDataReader dr = null;
@@ -511,8 +511,8 @@ namespace VAdvantage.Controller
                         vo.Help = "";
                     vo.WindowType = dr["WindowType"].ToString();
                     //
-                    vo.AD_Color_ID = Utility.Util.GetValueOfInt(dr["AD_Color_ID"]);
-                    vo.AD_Image_ID = Utility.Util.GetValueOfInt(dr["Ad_Image_ID"]);
+                    vo.VAF_Colour_ID = Utility.Util.GetValueOfInt(dr["VAF_Colour_ID"]);
+                    vo.VAF_Image_ID = Utility.Util.GetValueOfInt(dr["VAF_Image_ID"]);
                     vo.IsReadWrite = dr["IsReadWrite"].ToString();
                     //
                     vo.WinHeight = Utility.Util.GetValueOfInt(dr["WinHeight"]);
@@ -576,16 +576,16 @@ namespace VAdvantage.Controller
 
             bool isBase = false;
 
-            if (Utility.Env.IsBaseLanguage(mWindowVO.ctx, "AD_Tab"))
+            if (Utility.Env.IsBaseLanguage(mWindowVO.ctx, "VAF_Tab"))
             {
                 isBase = true;
             }
 
             StringBuilder sql = new StringBuilder(" SELECT ")
-            .Append(" t.AD_Tab_ID                                 AS AD_Tab_ID            , ")
+            .Append(" t.VAF_Tab_ID                                 AS VAF_Tab_ID            , ")
             .Append(" t.AD_Window_ID                              AS AD_Window_ID         , ")
-            .Append(" t.AD_Table_ID                               AS AD_Table_ID          , ")
-            .Append(" t.AD_CtxArea_ID                             AS AD_CtxArea_ID        , ")
+            .Append(" t.VAF_TableView_ID                               AS VAF_TableView_ID          , ")
+            .Append(" t.VAF_ContextScope_ID                             AS VAF_ContextScope_ID        , ")
             .Append(" uw.AD_Role_ID                               AS UserDef_Role_ID      , ")
             .Append(" uw.AD_User_ID                               AS AD_User_ID           , ")
             .Append(" uw.AD_UserDef_Win_ID                        AS AD_UserDef_Win_ID    , ")
@@ -619,7 +619,7 @@ namespace VAdvantage.Controller
             .Append(" tbl.IsView                                  AS IsView               , ")
             .Append(" t.IsTranslationTab                          AS IsTranslationTab     , ")
             .Append(" COALESCE(u.IsReadOnly,t.IsReadOnly)         AS IsReadOnly           , ")
-            .Append(" t.AD_Image_ID                               AS AD_Image_ID          , ")
+            .Append(" t.VAF_Image_ID                               AS VAF_Image_ID          , ")
             .Append(" t.TabLevel                                  AS TabLevel             , ")
             .Append(" t.WhereClause                               AS WhereClause          , ")
             .Append(" t.OrderByClause                             AS OrderByClause        , ")
@@ -627,30 +627,30 @@ namespace VAdvantage.Controller
             .Append(" COALESCE(u.ReadOnlyLogic,t.ReadOnlyLogic)   AS ReadOnlyLogic        , ")
             .Append(" COALESCE(u.IsDisplayed,t.IsDisplayed)       AS IsDisplayed          , ")
             .Append(" COALESCE(u.DisplayLogic,t.DisplayLogic)     AS DisplayLogic         , ")
-            .Append(" t.AD_Column_ID                              AS AD_Column_ID         , ")
+            .Append(" t.VAF_Column_ID                              AS VAF_Column_ID         , ")
             .Append(" c.ColumnName                                AS LinkColumnName       , ")
             .Append(" t.AD_Process_ID                             AS AD_Process_ID        , ")
             .Append(" t.IsSortTab                                 AS IsSortTab            , ")
             .Append(" t.IsAdvancedTab                             AS IsAdvancedTab        , ")
             .Append(" COALESCE(u.IsInsertRecord,t.IsInsertRecord) AS IsInsertRecord       , ")
-            .Append(" t.AD_ColumnSortOrder_ID                     AS AD_ColumnSortOrder_ID, ")
-            .Append(" t.AD_ColumnSortYesNo_ID                     AS AD_ColumnSortYesNo_ID, ")
+            .Append(" t.VAF_ColumnSortOrder_ID                     AS VAF_ColumnSortOrder_ID, ")
+            .Append(" t.VAF_ColumnSortYesNo_ID                     AS VAF_ColumnSortYesNo_ID, ")
             .Append(" t.Included_Tab_ID                           AS Included_Tab_ID, ")
             .Append(" t.ShowSummaryLevelNodes As ShowSummaryLevelNodes ");
             if (isBase)
             {
-                sql.Append(" FROM AD_Tab t ");
+                sql.Append(" FROM VAF_Tab t ");
             }
             else
             {
-                sql.Append(" FROM AD_Tab t ")
-               .Append("  INNER JOIN AD_Tab_Trl trl ON t.AD_Tab_ID = trl.AD_Tab_ID ");
+                sql.Append(" FROM VAF_Tab t ")
+               .Append("  INNER JOIN VAF_Tab_Trl trl ON t.VAF_Tab_ID = trl.VAF_Tab_ID ");
                 isBase = true;
             }
 
-            sql.Append(" INNER JOIN AD_Table tbl ON (t.AD_Table_ID = tbl.AD_Table_ID) ")
-            .Append(" LEFT OUTER JOIN AD_Column c ON (t.AD_Column_ID=c.AD_Column_ID) ")
-            .Append(" LEFT OUTER JOIN AD_UserDef_Tab u ON (u.AD_Tab_ID=t.AD_Tab_ID) ")
+            sql.Append(" INNER JOIN VAF_TableView tbl ON (t.VAF_TableView_ID = tbl.VAF_TableView_ID) ")
+            .Append(" LEFT OUTER JOIN VAF_Column c ON (t.VAF_Column_ID=c.VAF_Column_ID) ")
+            .Append(" LEFT OUTER JOIN AD_UserDef_Tab u ON (u.VAF_Tab_ID=t.VAF_Tab_ID) ")
             .Append(" LEFT OUTER JOIN AD_UserDef_Win uw  ON (uw.AD_UserDef_Win_ID=u.AD_UserDef_Win_ID) ")
 
             .Append(" WHERE t.AD_Window_ID = @windowID ");
@@ -679,8 +679,8 @@ namespace VAdvantage.Controller
                 bool firstTab = true;
                 while (dr.Read())
                 {
-                    if (mWindowVO.AD_Table_ID == 0)
-                        mWindowVO.AD_Table_ID = Utility.Util.GetValueOfInt(dr["AD_Table_ID"]);
+                    if (mWindowVO.VAF_TableView_ID == 0)
+                        mWindowVO.VAF_TableView_ID = Utility.Util.GetValueOfInt(dr["VAF_TableView_ID"]);
                     //  Create TabVO
                     int onlyCurrentDays = 0;
                     if (mWindowVO.WindowType.Equals(WINDOWTYPE_TRX))
@@ -723,7 +723,7 @@ namespace VAdvantage.Controller
             }
 
             //	Put base table of window in ctx (for VDocAction)
-            mWindowVO.ctx.SetContext(mWindowVO.windowNo, "BaseTable_ID", mWindowVO.AD_Table_ID);
+            mWindowVO.ctx.SetContext(mWindowVO.windowNo, "BaseTable_ID", mWindowVO.VAF_TableView_ID);
             return true;
         }
 
@@ -754,8 +754,8 @@ namespace VAdvantage.Controller
                 bool firstTab = true;
                 while (dr.Read())
                 {
-                    if (mWindowVO.AD_Table_ID == 0)
-                        mWindowVO.AD_Table_ID = Utility.Util.GetValueOfInt(dr["AD_Table_ID"]);
+                    if (mWindowVO.VAF_TableView_ID == 0)
+                        mWindowVO.VAF_TableView_ID = Utility.Util.GetValueOfInt(dr["VAF_TableView_ID"]);
                     //  Create TabVO
                     int onlyCurrentDays = 0;
                     if (mWindowVO.WindowType.Equals(WINDOWTYPE_TRX))
@@ -798,7 +798,7 @@ namespace VAdvantage.Controller
             }
 
             //	Put base table of window in ctx (for VDocAction)
-            mWindowVO.ctx.SetContext(mWindowVO.windowNo, "BaseTable_ID", mWindowVO.AD_Table_ID);
+            mWindowVO.ctx.SetContext(mWindowVO.windowNo, "BaseTable_ID", mWindowVO.VAF_TableView_ID);
             return true;
         }
 
@@ -832,15 +832,15 @@ namespace VAdvantage.Controller
                 clone.Description = Description;
                 clone.Help = Help;
                 clone.WindowType = WindowType;
-                clone.AD_Image_ID = AD_Image_ID;
-                clone.AD_Color_ID = AD_Color_ID;
+                clone.VAF_Image_ID = VAF_Image_ID;
+                clone.VAF_Colour_ID = VAF_Colour_ID;
                 clone.IsReadWrite = IsReadWrite;
                 clone.WinWidth = WinWidth;
                 clone.WinHeight = WinHeight;
                 clone.IsSOTrx = IsSOTrx;
                 ctx.SetContext(windowNo, "IsSOTrx", clone.IsSOTrx);
-                clone.AD_Table_ID = AD_Table_ID;
-                ctx.SetContext(windowNo, "BaseTable_ID", clone.AD_Table_ID);
+                clone.VAF_TableView_ID = VAF_TableView_ID;
+                ctx.SetContext(windowNo, "BaseTable_ID", clone.VAF_TableView_ID);
 
                 clone.IsAppointment = IsAppointment;
                 clone.IsTask = IsTask;

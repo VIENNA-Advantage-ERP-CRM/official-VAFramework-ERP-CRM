@@ -78,7 +78,7 @@ static X_C_Element()
 //static long serialVersionUID 27562514372109L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055320L;
-/** AD_Table_ID=142 */
+/** VAF_TableView_ID=142 */
 public static int Table_ID;
  // =142;
 

@@ -27,7 +27,7 @@ namespace VIS.Models
         public string Name { get; set; }
         public int DefaultValue { get; set; }
         public int SeqNo { get; set; }
-        public int AD_Column_ID { get; set; }
+        public int VAF_Column_ID { get; set; }
         public bool IsHeavyData { get; set; }
     }
 
@@ -68,7 +68,7 @@ namespace VIS.Models
                 obj.Name = ase.GetName();
                 obj.DefaultValue = ase.GetDefaultValue();
                 obj.SeqNo = ase.GetSeqNo();
-                obj.AD_Column_ID = ase.GetAD_Column_ID();
+                obj.VAF_Column_ID = ase.GetVAF_Column_ID();
                 obj.IsHeavyData = Util.GetValueOfBool(ase.Get_Value("IsHeavyData"));
                 objSchema.Elements.Add(obj);                
             }
@@ -94,14 +94,14 @@ namespace VIS.Models
         /// Save account
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Client_ID"></param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="C_AcctSchema_ID"></param>
         /// <param name="AD_Account_ID"></param>
         /// <param name="C_SubAcct_ID"></param>
         /// <param name="M_Product_ID"></param>
         /// <param name="C_BPartner_ID"></param>
-        /// <param name="AD_OrgTrx_ID"></param>
+        /// <param name="VAF_OrgTrx_ID"></param>
         /// <param name="C_LocFrom_ID"></param>
         /// <param name="C_LocTo_ID"></param>
         /// <param name="C_SRegion_ID"></param>
@@ -112,23 +112,23 @@ namespace VIS.Models
         /// <param name="User2_ID"></param>
         /// <param name="Alias"></param>
         /// <returns></returns>
-        public AccountingObjects SaveAccount(Ctx ctx, int AD_Client_ID, int AD_Org_ID, int C_AcctSchema_ID, int AD_Account_ID, int C_SubAcct_ID, int M_Product_ID,
-            int C_BPartner_ID, int AD_OrgTrx_ID, int C_LocFrom_ID, int C_LocTo_ID, int C_SRegion_ID, int C_Project_ID, int C_Campaign_ID,
+        public AccountingObjects SaveAccount(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int C_AcctSchema_ID, int AD_Account_ID, int C_SubAcct_ID, int M_Product_ID,
+            int C_BPartner_ID, int VAF_OrgTrx_ID, int C_LocFrom_ID, int C_LocTo_ID, int C_SRegion_ID, int C_Project_ID, int C_Campaign_ID,
             int C_Activity_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID, int UserElement3_ID, int UserElement4_ID,
             int UserElement5_ID, int UserElement6_ID, int UserElement7_ID, int UserElement8_ID, int UserElement9_ID, string Alias)
         {
             AccountingObjects obj = new AccountingObjects();
             MAccount acct = null;
-            string qry = "SELECT Count(*) FROM AD_Column WHERE ColumnName = 'UserElement3_ID' AND AD_Table_ID = 176";
+            string qry = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'UserElement3_ID' AND VAF_TableView_ID = 176";
             if (Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry, null, null)) > 0)
             {
-                acct = MAccount.Get(ctx, AD_Client_ID, AD_Org_ID, C_AcctSchema_ID, AD_Account_ID, C_SubAcct_ID, M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID,
+                acct = MAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, C_AcctSchema_ID, AD_Account_ID, C_SubAcct_ID, M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID,
                    C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID, C_Project_ID, C_Campaign_ID, C_Activity_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID,
                    UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID, UserElement9_ID);
             }
             else
             {
-                acct = MAccount.Get(ctx, AD_Client_ID, AD_Org_ID, C_AcctSchema_ID, AD_Account_ID, C_SubAcct_ID, M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID,
+                acct = MAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, C_AcctSchema_ID, AD_Account_ID, C_SubAcct_ID, M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID,
                     C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID, C_Project_ID, C_Campaign_ID, C_Activity_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
             }
 
@@ -195,7 +195,7 @@ namespace VIS.Models
                 {
                     //obj.Alias = Convert.ToString(dr["Alias"]);
                     //obj.Combination = Convert.ToString(dr["Combination"]);
-                    //obj.AD_Org_ID = Convert.ToInt32(dr["AD_Org_ID"]);
+                    //obj.VAF_Org_ID = Convert.ToInt32(dr["VAF_Org_ID"]);
                     //obj.Account_ID = Convert.ToInt32(dr["Account_ID"]);
                     //obj.C_SubAcct_ID = Convert.ToInt32(dr["C_SubAcct_ID"]);
                     //obj.M_Product_ID = Convert.ToInt32(dr["M_Product_ID"]);
@@ -205,7 +205,7 @@ namespace VIS.Models
                     //obj.C_LocTo_ID = Convert.ToInt32(dr["C_LocTo_ID"]);
                     //obj.C_Project_ID = Convert.ToInt32(dr["C_Project_ID"]);
                     //obj.C_SalesRegion_ID = Convert.ToInt32(dr["C_SalesRegion_ID"]);
-                    //obj.AD_OrgTrx_ID = Convert.ToInt32(dr["AD_OrgTrx_ID"]);
+                    //obj.VAF_OrgTrx_ID = Convert.ToInt32(dr["VAF_OrgTrx_ID"]);
                     //obj.C_Activity_ID = Convert.ToInt32(dr["C_Activity_ID"]);
                     //obj.User1_ID = Convert.ToInt32(dr["User1_ID"]);
                     //obj.User2_ID = Convert.ToInt32(dr["User2_ID"]);

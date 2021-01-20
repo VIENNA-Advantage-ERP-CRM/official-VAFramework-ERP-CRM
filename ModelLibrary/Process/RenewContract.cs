@@ -39,24 +39,24 @@ namespace ViennaAdvantageServer.Process
 
             if (Record_id != 0)
             {
-                Sql.Append("SELECT RenewalType FROM C_Contract WHERE C_Contract_ID = " + Record_id + " AND RenewContract = 'N' AND IsActive = 'Y' AND AD_Client_ID = " + GetAD_Client_ID());
+                Sql.Append("SELECT RenewalType FROM C_Contract WHERE C_Contract_ID = " + Record_id + " AND RenewContract = 'N' AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 string renewType = Util.GetValueOfString(DB.ExecuteScalar(Sql.ToString(), null, Get_TrxName()));
                 if (renewType == "M")
                 {
                     Sql.Clear();
-                    Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE C_Contract_ID=" + Record_id + " AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
+                    Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE C_Contract_ID=" + Record_id + " AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 }
                 else
                 {
                     Sql.Clear();
                     Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= SYSDATE AND C_Contract_ID=" + Record_id
-                        + " AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
+                        + " AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 }
             }
             else
             {
                 Sql.Clear();
-                Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= SYSDATE AND RenewalType='A' AND RenewContract = 'N' AND AD_Client_ID = " + GetAD_Client_ID());
+                Sql.Append("SELECT C_Contract_ID FROM C_Contract WHERE (EndDate- NVL(CancelBeforeDays,0)) <= SYSDATE AND RenewalType='A' AND RenewContract = 'N' AND VAF_Client_ID = " + GetVAF_Client_ID());
             }
 
             IDataReader dr = DB.ExecuteReader(Sql.ToString(), null, Get_TrxName());

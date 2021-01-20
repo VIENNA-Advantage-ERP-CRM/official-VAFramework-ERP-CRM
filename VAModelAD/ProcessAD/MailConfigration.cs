@@ -62,7 +62,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (p_AD_UserMailConfigration_ID == 0)
             {
                 //    return "";
-                throw new Exception("@No@ @AD_Column_ID@");
+                throw new Exception("@No@ @VAF_Column_ID@");
             }
             //IDbTransaction trx = ExecuteQuery.GerServerTransaction();
 

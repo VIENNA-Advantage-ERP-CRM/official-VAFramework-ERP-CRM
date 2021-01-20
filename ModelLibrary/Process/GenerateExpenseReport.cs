@@ -86,11 +86,11 @@ namespace ViennaAdvantage.Process
         private int GenerateTimeExpense()
         {
             VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), 0, Get_TrxName());
-            tExp.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-            tExp.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+            tExp.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+            tExp.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             tExp.SetDateReport(Util.GetValueOfDateTime(System.DateTime.Now));
 
-            sql = "select M_Pricelist_ID from m_Pricelist where isdefault ='Y' and issopricelist = 'Y' and isactive= 'Y' and AD_org_id = " + GetCtx().GetAD_Org_ID();
+            sql = "select M_Pricelist_ID from m_Pricelist where isdefault ='Y' and issopricelist = 'Y' and isactive= 'Y' and vaf_org_id = " + GetCtx().GetVAF_Org_ID();
             int M_Pricelist_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (M_Pricelist_ID == 0)
             {
@@ -117,8 +117,8 @@ namespace ViennaAdvantage.Process
         private void GenerateExpenseReportLine(int S_TimeExpence_ID, VAdvantage.Model.X_C_ResourceTime rTime)
         {
             VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), 0, Get_TrxName());
-            tLine.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-            tLine.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
+            tLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+            tLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             tLine.SetS_TimeExpense_ID(S_TimeExpence_ID);
             tLine.SetDateExpense(rTime.GetDate1());
             tLine.SetM_Product_ID(rTime.GetM_Product_ID());

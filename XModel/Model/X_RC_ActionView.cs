@@ -68,7 +68,7 @@ static X_RC_ActionView()
 //static long serialVersionUID 27590165827889L;
 /** Last Updated Timestamp 6/14/2011 2:05:11 PM */
 public static long updatedMS = 1308040511100L;
-/** AD_Table_ID=1000189 */
+/** VAF_TableView_ID=1000189 */
 public static int Table_ID;
  // =1000189;
 
@@ -111,34 +111,34 @@ StringBuilder sb = new StringBuilder ("X_RC_ActionView[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set Field.
-@param AD_Field_ID Field on a tab in a window */
-public void SetAD_Field_ID (int AD_Field_ID)
+@param VAF_Field_ID Field on a tab in a window */
+public void SetVAF_Field_ID (int VAF_Field_ID)
 {
-if (AD_Field_ID <= 0) Set_Value ("AD_Field_ID", null);
+if (VAF_Field_ID <= 0) Set_Value ("VAF_Field_ID", null);
 else
-Set_Value ("AD_Field_ID", AD_Field_ID);
+Set_Value ("VAF_Field_ID", VAF_Field_ID);
 }
 /** Get Field.
 @return Field on a tab in a window */
-public int GetAD_Field_ID() 
+public int GetVAF_Field_ID() 
 {
-Object ii = Get_Value("AD_Field_ID");
+Object ii = Get_Value("VAF_Field_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Image.
-@param AD_Image_ID Image or Icon */
-public void SetAD_Image_ID (int AD_Image_ID)
+@param VAF_Image_ID Image or Icon */
+public void SetVAF_Image_ID (int VAF_Image_ID)
 {
-if (AD_Image_ID <= 0) Set_Value ("AD_Image_ID", null);
+if (VAF_Image_ID <= 0) Set_Value ("VAF_Image_ID", null);
 else
-Set_Value ("AD_Image_ID", AD_Image_ID);
+Set_Value ("VAF_Image_ID", VAF_Image_ID);
 }
 /** Get Image.
 @return Image or Icon */
-public int GetAD_Image_ID() 
+public int GetVAF_Image_ID() 
 {
-Object ii = Get_Value("AD_Image_ID");
+Object ii = Get_Value("VAF_Image_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

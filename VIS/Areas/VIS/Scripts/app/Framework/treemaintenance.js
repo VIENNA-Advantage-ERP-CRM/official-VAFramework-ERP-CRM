@@ -476,13 +476,13 @@
         };
 
         function GetCountOnTreeChanges() {
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
-            var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -2058,13 +2058,13 @@
 
         var tbnameofTree = null;
         function getTreeTableName() {
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
-            var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -2722,13 +2722,13 @@
 
                     var getAllChildNodeID = [];
                     if (issummary == "true") {
-                        //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                        //var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
                         //table_id = VIS.DB.executeDataSet(table_id, null, null);
                         //if (table_id.tables[0].rows.length > 0) {
-                        //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                        //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                         //}
 
-                        //var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                        //var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                         //tablename = VIS.DB.executeDataSet(tablename, null, null);
                         //if (tablename.tables[0].rows.length > 0) {
                         //    tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -3176,13 +3176,13 @@
                             //    getNodeIDForIcon.find("span").addClass("glyphicon glyphicon-link");
                             //}
 
-                            //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                            //var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
                             //table_id = VIS.DB.executeDataSet(table_id, null, null);
                             //if (table_id.tables[0].rows.length > 0) {
-                            //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                            //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                             //}
 
-                            //var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                            //var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                             //tablename = VIS.DB.executeDataSet(tablename, null, null);
                             //if (tablename.tables[0].rows.length > 0) {
                             //    tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -3775,13 +3775,13 @@
         var msgShowforbindingWindow = null;
         function CreateRestrictionforDelete() {
             menuArray = [];
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
-            var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             tablename = executeDataSet(tablename, null, null);
             if (tablename.tables[0].rows.length > 0) {
                 tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -3796,7 +3796,7 @@
                     bindornot = "false";
                 }
                 else {
-                    var tenantCheck = "SELECT count(*) FROM AD_ClientInfo WHERE ad_tree_menu_id=" + $treeID;
+                    var tenantCheck = "SELECT count(*) FROM VAF_ClientDetail WHERE ad_tree_menu_id=" + $treeID;
                     var checktenant = executeScalar(tenantCheck);
                     if (checktenant > 0) {
                         bindornot = "false";
@@ -4809,10 +4809,10 @@
         function DeleteNodeFromBottom($treeID, selectedItemArray) {
             $bsyDiv[0].style.visibility = "visible";
 
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
             var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
             tree = executeDataSet(tree, null, null);
@@ -5379,13 +5379,13 @@
                 flagDelete = false;
                 $bsyDiv[0].style.visibility = "visible";
 
-                var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
                 table_id = executeDataSet(table_id, null, null);
                 if (table_id.tables[0].rows.length > 0) {
-                    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                 }
 
-                var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                 tablename = executeDataSet(tablename, null, null);
                 if (tablename.tables[0].rows.length > 0) {
                     tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -6972,10 +6972,10 @@
             $bsyDiv[0].style.visibility = "visible";
 
 
-            var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
             table_id = executeDataSet(table_id, null, null);
             if (table_id.tables[0].rows.length > 0) {
-                table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             }
 
             var tree = " SELECT treetype FROM ad_tree WHERE ad_tree_id=" + $treeID;
@@ -7102,13 +7102,13 @@
                                     $ulMid.find("li").find("li[data-id='" + selectedItemArray + "']").parent().remove();
 
 
-                                    //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                                    //var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
                                     //table_id = VIS.DB.executeDataSet(table_id, null, null);
                                     //if (table_id.tables[0].rows.length > 0) {
-                                    //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                                    //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                                     //}
 
-                                    ////var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                                    ////var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                                     ////tablename = VIS.DB.executeDataSet(tablename, null, null);
                                     ////if (tablename.tables[0].rows.length > 0) {
                                     ////    tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -7301,13 +7301,13 @@
                             $ulMid.find("li").find("li[data-id='" + selectedItemArray + "']").parent().remove();
 
 
-                            //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+                            //var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
                             //table_id = VIS.DB.executeDataSet(table_id, null, null);
                             //if (table_id.tables[0].rows.length > 0) {
-                            //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+                            //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
                             //}
 
-                            ////var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+                            ////var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
                             ////tablename = VIS.DB.executeDataSet(tablename, null, null);
                             ////if (tablename.tables[0].rows.length > 0) {
                             ////    tablename = tablename.tables[0].rows[0].cells["tablename"];
@@ -7455,13 +7455,13 @@
 
 
 
-            //            //var table_id = "SELECT ad_table_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
+            //            //var table_id = "SELECT vaf_tableview_id FROM ad_tree WHERE ad_tree_id=" + $treeID;
             //            //table_id = VIS.DB.executeDataSet(table_id, null, null);
             //            //if (table_id.tables[0].rows.length > 0) {
-            //            //    table_id = table_id.tables[0].rows[0].cells["ad_table_id"];
+            //            //    table_id = table_id.tables[0].rows[0].cells["vaf_tableview_id"];
             //            //}
 
-            //            ////var tablename = "SELECT tablename FROM ad_table WHERE ad_table_id=" + table_id;
+            //            ////var tablename = "SELECT tablename FROM vaf_tableview WHERE vaf_tableview_id=" + table_id;
             //            ////tablename = VIS.DB.executeDataSet(tablename, null, null);
             //            ////if (tablename.tables[0].rows.length > 0) {
             //            ////    tablename = tablename.tables[0].rows[0].cells["tablename"];

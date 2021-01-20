@@ -72,7 +72,7 @@ static X_CM_AccessProfile()
 //static long serialVersionUID 27562514368144L;
 /** Last Updated Timestamp 7/29/2010 1:07:31 PM */
 public static long updatedMS = 1280389051355L;
-/** AD_Table_ID=885 */
+/** VAF_TableView_ID=885 */
 public static int Table_ID;
  // =885;
 

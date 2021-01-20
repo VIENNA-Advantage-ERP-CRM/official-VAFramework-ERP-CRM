@@ -78,7 +78,7 @@ static X_M_Warehouse_Acct()
 //static long serialVersionUID 27562514381512L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064723L;
-/** AD_Table_ID=191 */
+/** VAF_TableView_ID=191 */
 public static int Table_ID;
  // =191;
 

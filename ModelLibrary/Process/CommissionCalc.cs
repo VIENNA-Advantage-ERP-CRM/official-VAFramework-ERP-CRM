@@ -116,7 +116,7 @@ namespace VAdvantage.Process
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
                             + " AND h.IsSOTrx='Y'"
-                            + " AND p.AD_Client_ID = @clientid"
+                            + " AND p.VAF_Client_ID = @clientid"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND p.DateTrx BETWEEN @sdate AND @edate");
                     }
@@ -131,7 +131,7 @@ namespace VAdvantage.Process
                             + " INNER JOIN C_InvoiceLine l ON (h.C_Invoice_ID = l.C_Invoice_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
                             + " AND h.IsSOTrx='Y'"
-                            + " AND p.AD_Client_ID = @clientid"
+                            + " AND p.VAF_Client_ID = @clientid"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND p.DateTrx BETWEEN @sdate AND @edate");
                     }
@@ -148,7 +148,7 @@ namespace VAdvantage.Process
                             + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND l.IsCommissionCalculated = 'N' "
                             + " AND h.DateOrdered BETWEEN @sdate AND @edate");
                     }
@@ -162,7 +162,7 @@ namespace VAdvantage.Process
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND h.DateOrdered BETWEEN @sdate AND @edate");
                     }
                 }
@@ -179,7 +179,7 @@ namespace VAdvantage.Process
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND h.DateInvoiced BETWEEN @sdate AND @edate");
                     }
                     else
@@ -192,7 +192,7 @@ namespace VAdvantage.Process
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
-                            + " AND h.AD_Client_ID = @clientid"
+                            + " AND h.VAF_Client_ID = @clientid"
                             + " AND h.DateInvoiced BETWEEN @sdate AND @edate");
                     }
                 }
@@ -241,7 +241,7 @@ namespace VAdvantage.Process
 
                 //	Organization
                 if (lines[i].GetOrg_ID() != 0)
-                    sql.Append(" AND h.AD_Org_ID=").Append(lines[i].GetOrg_ID());
+                    sql.Append(" AND h.VAF_Org_ID=").Append(lines[i].GetOrg_ID());
                 //	BPartner
                 if (lines[i].GetC_BPartner_ID() != 0)
                     sql.Append(" AND h.C_BPartner_ID=").Append(lines[i].GetC_BPartner_ID());
@@ -373,7 +373,7 @@ namespace VAdvantage.Process
             try
             {
                 SqlParameter[] param = new SqlParameter[3];
-                param[0] = new SqlParameter("@clientid", m_com.GetAD_Client_ID());
+                param[0] = new SqlParameter("@clientid", m_com.GetVAF_Client_ID());
                 param[1] = new SqlParameter("@sdate", p_StartDate.Date);
                 param[2] = new SqlParameter("@edate", m_EndDate.Date);
 

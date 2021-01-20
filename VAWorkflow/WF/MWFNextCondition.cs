@@ -68,7 +68,7 @@ namespace VAdvantage.WF
         public bool Evaluate(MWFActivity activity)
         {
             AD_WF_Activity_ID = activity.GetAD_WF_Activity_ID();
-            if (GetAD_Column_ID() == 0)
+            if (GetVAF_Column_ID() == 0)
             {
                 //throw new IllegalStateException("No Column defined - " + this);
                 throw new Exception("No Column defined - " + this);
@@ -83,7 +83,7 @@ namespace VAdvantage.WF
                 throw new Exception("Could not evaluate " + po + " - " + this);
             }
             //
-            Object valueObj = po.Get_ValueOfColumn(GetAD_Column_ID());
+            Object valueObj = po.Get_ValueOfColumn(GetVAF_Column_ID());
             if (valueObj == null)
                 valueObj = "";
             String value1 = GetValue();
@@ -94,7 +94,7 @@ namespace VAdvantage.WF
                 value2 = "";
 
             // If column is of bool type and user insert y or n in condition, then convert them to true or false to match with value got from PO.
-            if (MColumn.Get(GetCtx(), GetAD_Column_ID()).GetAD_Reference_ID().Equals(DisplayType.YesNo))
+            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetAD_Reference_ID().Equals(DisplayType.YesNo))
             {
                 if (value1.ToLower().Equals("y"))
                 {
@@ -126,7 +126,7 @@ namespace VAdvantage.WF
             bool result = false;
 
             //Lakhwinder
-            if (MColumn.Get(GetCtx(), GetAD_Column_ID()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
+            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetColumnName().ToUpper().Equals("C_GENATTRIBUTESETINSTANCE_ID"))
             {
                 return EvaluateAttributeCondition(po);
             }
@@ -175,9 +175,9 @@ namespace VAdvantage.WF
             //   return valueObjS.CompareTo(value1S) == 0;
 
             //specific for DMS
-            DataSet ds = DB.ExecuteDataset(@"SELECT col.ColumnName,tab.TableName FROM AD_Column col
-                                                                    INNER JOIN AD_Table tab ON (tab.AD_Table_ID=col.AD_Table_ID)
-                                                                    WHERE col.IsActive='Y' AND col.AD_Column_ID=" + GetAD_Column_ID());
+            DataSet ds = DB.ExecuteDataset(@"SELECT col.ColumnName,tab.TableName FROM VAF_Column col
+                                                                    INNER JOIN VAF_TableView tab ON (tab.VAF_TableView_ID=col.VAF_TableView_ID)
+                                                                    WHERE col.IsActive='Y' AND col.VAF_Column_ID=" + GetVAF_Column_ID());
             if (ds != null
                 && ds.Tables[0].Rows.Count > 0
                 && ds.Tables[0].Rows[0]["TableName"].ToString().Equals("VADMS_MetaData"))

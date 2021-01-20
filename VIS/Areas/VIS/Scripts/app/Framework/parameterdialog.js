@@ -55,7 +55,7 @@
             //var data = {
             //    Process_ID: id, 
             //    Name: name,
-            //    AD_Table_ID: 0,
+            //    VAF_TableView_ID: 0,
             //    Record_ID: 0,
             //    WindowNo: windowNo,
             //    csv: false,
@@ -200,7 +200,7 @@
                 //    Process_ID: self.processId,
                 //    AD_PInstance_ID: self.pInstanceId,
                 //    Name: self.name,
-                //    AD_Table_ID: 0,
+                //    VAF_TableView_ID: 0,
                 //    Record_ID: 0,
                 //    ParameterList: paraList,
                 //    csv: false,

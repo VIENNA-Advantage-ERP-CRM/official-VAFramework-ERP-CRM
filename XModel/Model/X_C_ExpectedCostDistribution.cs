@@ -39,7 +39,7 @@ namespace VAdvantage.Model
  added by ->Harwinder */
         static X_C_ExpectedCostDistribution() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27857572242045L;/** Last Updated Timestamp 12/4/2019 1:38:45 PM */
-        public static long updatedMS = 1575446925256L;/** AD_Table_ID=1000536 */
+        public static long updatedMS = 1575446925256L;/** VAF_TableView_ID=1000536 */
         public static int Table_ID; // =1000536;
                                     /** TableName=C_ExpectedCostDistribution */
         public static String Table_Name = "C_ExpectedCostDistribution";

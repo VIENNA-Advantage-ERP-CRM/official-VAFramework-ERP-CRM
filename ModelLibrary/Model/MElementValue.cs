@@ -193,8 +193,8 @@ namespace VAdvantage.Model
         /// <returns>true if ir can be saved</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             //
             if (!newRecord && IsSummary()
                 && Is_ValueChanged("IsSummary"))

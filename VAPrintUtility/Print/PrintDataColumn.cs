@@ -14,9 +14,9 @@ namespace VAdvantage.Print
     public class PrintDataColumn
     {
         
-        public PrintDataColumn(int AD_Column_ID, String columnName, int displayType, int columnSize, String alias, bool isPageBreak)
+        public PrintDataColumn(int VAF_Column_ID, String columnName, int displayType, int columnSize, String alias, bool isPageBreak)
         {
-            _AD_Column_ID = AD_Column_ID;
+            _VAF_Column_ID = VAF_Column_ID;
             _columnName = columnName;
             //
             _displayType = displayType;
@@ -28,7 +28,7 @@ namespace VAdvantage.Print
             _pageBreak = isPageBreak;
         }	//	PrintDataColumn
 
-        private int _AD_Column_ID;
+        private int _VAF_Column_ID;
         private String _columnName;
         private int _displayType;
         private int _columnSize;
@@ -36,10 +36,10 @@ namespace VAdvantage.Print
         private bool _pageBreak;
 
 
-        public int GetAD_Column_ID()
+        public int GetVAF_Column_ID()
         {
-            return _AD_Column_ID;
-        }	//	getAD_Column_ID
+            return _VAF_Column_ID;
+        }	//	getVAF_Column_ID
 
 
         public String GetColumnName()

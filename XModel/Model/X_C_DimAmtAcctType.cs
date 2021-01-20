@@ -25,7 +25,7 @@ public X_C_DimAmtAcctType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr,
  added by ->Harwinder */
 static X_C_DimAmtAcctType(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27755354003673L;/** Last Updated Timestamp 9/7/2016 11:41:26 AM */
-public static long updatedMS = 1473228686884L;/** AD_Table_ID=1000760 */
+public static long updatedMS = 1473228686884L;/** VAF_TableView_ID=1000760 */
 public static int Table_ID; // =1000760;
 /** TableName=C_DimAmtAcctType */
 public static String Table_Name="C_DimAmtAcctType";

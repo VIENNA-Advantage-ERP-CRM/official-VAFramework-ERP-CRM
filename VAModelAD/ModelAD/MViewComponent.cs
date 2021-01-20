@@ -57,7 +57,7 @@ namespace VAdvantage.Model
 	public MViewComponent(MTable parent):this (parent.GetCtx(), 0, parent.Get_TrxName())
 	{		       
 		SetClientOrg (parent);
-		SetAD_Table_ID (parent.GetAD_Table_ID());
+		SetVAF_TableView_ID (parent.GetVAF_TableView_ID());
 	}	//	MViewComponent
 
 	//The Columns

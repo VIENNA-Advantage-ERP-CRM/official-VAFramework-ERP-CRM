@@ -70,7 +70,7 @@ static X_AD_Module_DB_Schema()
 //static long serialVersionUID = 27622812283665L;
 /** Last Updated Timestamp 6/26/2012 10:32:46 AM */
 public static long updatedMS = 1340686966876L;
-/** AD_Table_ID=1000060 */
+/** VAF_TableView_ID=1000060 */
 public static int Table_ID;
  // =1000060;
 
@@ -143,18 +143,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

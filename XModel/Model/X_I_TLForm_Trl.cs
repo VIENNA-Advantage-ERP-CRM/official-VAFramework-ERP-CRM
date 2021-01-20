@@ -20,7 +20,7 @@ public X_I_TLForm_Trl (Context ctx, int I_TLForm_Trl_ID, Trx trxName) : base (ct
 {
 /** if (I_TLForm_Trl_ID == 0)
 {
-SetAD_Form_ID (0);
+SetVAF_Page_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -31,7 +31,7 @@ public X_I_TLForm_Trl (Ctx ctx, int I_TLForm_Trl_ID, Trx trxName) : base (ctx, I
 {
 /** if (I_TLForm_Trl_ID == 0)
 {
-SetAD_Form_ID (0);
+SetVAF_Page_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -74,7 +74,7 @@ static X_I_TLForm_Trl()
 //static long serialVersionUID 27638799885442L;
 /** Last Updated Timestamp 12/28/2012 11:32:48 AM */
 public static long updatedMS = 1356674568653L;
-/** AD_Table_ID=1000411 */
+/** VAF_TableView_ID=1000411 */
 public static int Table_ID;
  // =1000411;
 
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLForm_Trl[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID < 1) throw new ArgumentException ("AD_Form_ID is mandatory.");
-Set_ValueNoCheck ("AD_Form_ID", AD_Form_ID);
+if (VAF_Page_ID < 1) throw new ArgumentException ("VAF_Page_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

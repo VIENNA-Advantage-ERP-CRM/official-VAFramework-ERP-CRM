@@ -867,7 +867,7 @@ namespace VAdvantage.SqlExec
         //        npgcon.Open();
 
         //        string[] restrictions = new string[4];
-        //        restrictions[2] = "ad_table";
+        //        restrictions[2] = "vaf_tableview";
         //        DataTable dt = npgcon.GetSchema("Columns", restrictions);
         //        NpgsqlTransaction psgrTrx = npgcon.BeginTransaction(IsolationLevel.ReadCommitted);
 

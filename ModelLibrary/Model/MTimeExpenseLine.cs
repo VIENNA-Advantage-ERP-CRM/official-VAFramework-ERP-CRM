@@ -273,7 +273,7 @@ namespace VAdvantage.Model
             int C_BPartner_ID = hdr.GetC_BPartner_ID();
             Decimal Qty = GetQty();
             Boolean IsSOTrx = true;
-            MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+            MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     M_Product_ID, C_BPartner_ID, Qty, IsSOTrx);
             //
             int M_PriceList_ID = hdr.GetM_PriceList_ID();
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             {
                 ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
                     ConvertedAmt, C_Currency_From_ID, C_Currency_To_ID,
-                    DateExpense, 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    DateExpense, 0, GetVAF_Client_ID(), GetVAF_Org_ID());
             }
             SetConvertedAmt(ConvertedAmt);
             log.Fine("ConvertedAmt=" + ConvertedAmt);
@@ -370,7 +370,7 @@ namespace VAdvantage.Model
                     // did changes to give error message when conversion is not found.-Mohit
                     decimal convertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
                         GetExpenseAmt(), GetC_Currency_ID(), GetC_Currency_Report_ID(), 
-                        GetDateExpense(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                        GetDateExpense(), 0, GetVAF_Client_ID(), GetVAF_Org_ID());
                     if (convertedAmt.Equals(0))
                     {
                         log.SaveError("ConversionNotFound", "");

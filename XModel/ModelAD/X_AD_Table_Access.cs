@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Table_Access
+/** Generated Model for VAF_TableView_Access
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Table_Access : PO
+public class X_VAF_TableView_Access : PO
 {
-public X_AD_Table_Access (Context ctx, int AD_Table_Access_ID, Trx trxName) : base (ctx, AD_Table_Access_ID, trxName)
+public X_VAF_TableView_Access (Context ctx, int VAF_TableView_Access_ID, Trx trxName) : base (ctx, VAF_TableView_Access_ID, trxName)
 {
-/** if (AD_Table_Access_ID == 0)
+/** if (VAF_TableView_Access_ID == 0)
 {
 SetAD_Role_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetAccessTypeRule (null);	// A
 SetIsCanExport (false);
 SetIsCanReport (false);
@@ -30,12 +30,12 @@ SetIsReadOnly (false);
 }
  */
 }
-public X_AD_Table_Access (Ctx ctx, int AD_Table_Access_ID, Trx trxName) : base (ctx, AD_Table_Access_ID, trxName)
+public X_VAF_TableView_Access (Ctx ctx, int VAF_TableView_Access_ID, Trx trxName) : base (ctx, VAF_TableView_Access_ID, trxName)
 {
-/** if (AD_Table_Access_ID == 0)
+/** if (VAF_TableView_Access_ID == 0)
 {
 SetAD_Role_ID (0);
-SetAD_Table_ID (0);
+SetVAF_TableView_ID (0);
 SetAccessTypeRule (null);	// A
 SetIsCanExport (false);
 SetIsCanReport (false);
@@ -49,7 +49,7 @@ SetIsReadOnly (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Table_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TableView_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_AD_Table_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Table_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TableView_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_AD_Table_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Table_Access (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_TableView_Access (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Table_Access()
+static X_VAF_TableView_Access()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,12 +80,12 @@ static X_AD_Table_Access()
 //static long serialVersionUID 27562514364398L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047609L;
-/** AD_Table_ID=565 */
+/** VAF_TableView_ID=565 */
 public static int Table_ID;
  // =565;
 
-/** TableName=AD_Table_Access */
-public static String Table_Name="AD_Table_Access";
+/** TableName=VAF_TableView_Access */
+public static String Table_Name="VAF_TableView_Access";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Table_Access[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_TableView_Access[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -144,17 +144,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetAD_Role_ID().ToString());
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_ValueNoCheck ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

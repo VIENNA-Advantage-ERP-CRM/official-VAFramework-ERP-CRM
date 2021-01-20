@@ -78,7 +78,7 @@ namespace ViennaAdvantage.Model
         public static long updatedMS = 1530876521245L;
 
         ///<summary>
-        /// AD_Table_ID=1000668
+        /// VAF_TableView_ID=1000668
         ///</summary>
         public static int Table_ID; // =1000668;
 
@@ -173,21 +173,21 @@ namespace ViennaAdvantage.Model
         ///<summary>
         /// SetTable
         ///</summary>
-        ///<param name="AD_Table_ID">Database Table information</param>
-        public void SetAD_Table_ID(int AD_Table_ID)
+        ///<param name="VAF_TableView_ID">Database Table information</param>
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID <= 0) Set_Value("AD_Table_ID", null);
+            if (VAF_TableView_ID <= 0) Set_Value("VAF_TableView_ID", null);
             else
-                Set_Value("AD_Table_ID", AD_Table_ID);
+                Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
 
         ///<summary>
         /// GetTable
         ///</summary>
         ///<returns> Database Table information</returns>
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0; return Convert.ToInt32(ii);
         }
 

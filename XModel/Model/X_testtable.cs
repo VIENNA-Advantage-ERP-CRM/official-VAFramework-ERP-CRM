@@ -35,7 +35,7 @@ public X_testtable (Context ctx, DataRow rs, Trx trx) : base(ctx, rs, trx)
 //static long serialVersionUID 27519927019081L;
 /** Last Updated Timestamp 3/23/2009 3:18:22 PM */
 public static long updatedMS = 1237801702292L;
-/** AD_Table_ID=1000000 */
+/** VAF_TableView_ID=1000000 */
 public static int Table_ID=1000000;
 
 /** TableName=testtable */

@@ -44,7 +44,7 @@
         function initEmail() {
             callingFromOutsideofWindow = isWindowForm;
             if (!callingFromOutsideofWindow) {
-                currentTable_ID = _curtab.gridTable.AD_Table_ID;
+                currentTable_ID = _curtab.gridTable.VAF_TableView_ID;
                 // this is data source for multiView Records
                 rowsSource = _curGC.getSelectedRows();
 

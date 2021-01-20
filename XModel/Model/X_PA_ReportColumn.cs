@@ -49,7 +49,7 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
  added by ->Harwinder */
         static X_PA_ReportColumn() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621420744L;/** Last Updated Timestamp 4/1/2016 1:05:03 PM */
-        public static long updatedMS = 1459496103955L;/** AD_Table_ID=446 */
+        public static long updatedMS = 1459496103955L;/** VAF_TableView_ID=446 */
         public static int Table_ID; // =446;
         /** TableName=PA_ReportColumn */
         public static String Table_Name = "PA_ReportColumn";

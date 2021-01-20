@@ -96,7 +96,7 @@ static X_C_BP_EDI()
 //static long serialVersionUID 27562514369977L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053188L;
-/** AD_Table_ID=366 */
+/** VAF_TableView_ID=366 */
 public static int Table_ID;
  // =366;
 

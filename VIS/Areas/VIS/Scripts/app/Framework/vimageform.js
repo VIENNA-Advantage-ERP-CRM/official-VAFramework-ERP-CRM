@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
 
-    function VImageForm(ad_image_id, textLength) {
+    function VImageForm(VAF_Image_id, textLength) {
         var $self = this;
         var $root = $("<div>");
         var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>')
@@ -20,13 +20,13 @@
         var w = null;
         var h = null;
 
-        if (ad_image_id == null || ad_image_id == 'null')
+        if (VAF_Image_id == null || VAF_Image_id == 'null')
         {
-            ad_image_id = 0;
+            VAF_Image_id = 0;
         }
 
         var load = function () {
-            $root.load(VIS.Application.contextUrl + 'VImageForm/Index/?windowno=' + windowNo + '&ad_image_id=' + ad_image_id, function (event) {
+            $root.load(VIS.Application.contextUrl + 'VImageForm/Index/?windowno=' + windowNo + '&VAF_Image_id=' + VAF_Image_id, function (event) {
                 $busyDiv[0].style.visibility = 'visible';
                 init($root);
                 //remove image
@@ -44,8 +44,8 @@
             //    cancelbtn.css("margin-right", "110px");
             //    delbtn.css("margin-right", "55px");
             //}
-            // if ad_image_id > 0, it is for update or delete
-            if (ad_image_id > 0) {
+            // if VAF_Image_id > 0, it is for update or delete
+            if (VAF_Image_id > 0) {
                 delbtn.css("display", "inline-block");
             }
             else {
@@ -102,7 +102,7 @@
                     var fd = new FormData();
                     fd.append("file", fileUpload[0].files[0]);
                     fd.append("isDatabaseSave", chkDataBaseSave.prop("checked"));
-                    fd.append("ad_image_id", ad_image_id);
+                    fd.append("VAF_Image_id", VAF_Image_id);
                     xhr.open("POST", VIS.Application.contextUrl + "VImageForm/SaveImage", true);
                     xhr.send(fd);
                     xhr.addEventListener("load", function (event) {
@@ -119,7 +119,7 @@
                 }
                 else {
                     if ($self.onClose)
-                        $self.onClose(ad_image_id, change);
+                        $self.onClose(VAF_Image_id, change);
                     $root.dialog('close');
                 }
 
@@ -133,7 +133,7 @@
                 change = true;
                 var xhr = new XMLHttpRequest();
                 var fd = new FormData();
-                fd.append("ad_image_id", ad_image_id);
+                fd.append("VAF_Image_id", VAF_Image_id);
                 xhr.open("POST", VIS.Application.contextUrl + "VImageForm/DeleteImage", true);
                 xhr.send(fd);
                 xhr.addEventListener("load", function (event) {

@@ -74,7 +74,7 @@ static X_AD_PInstance()
 //static long serialVersionUID = 27562514362408L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045619L;
-/** AD_Table_ID=282 */
+/** VAF_TableView_ID=282 */
 public static int Table_ID;
  // =282;
 

@@ -113,7 +113,7 @@ namespace VAdvantage.Acct
                 return facts;
             }
 
-            int AD_Org_ID = GetBank_Org_ID();		//	Bank Account Org	
+            int VAF_Org_ID = GetBank_Org_ID();		//	Bank Account Org	
             if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT))
             {
                 // Work done by Bharat for the posting of ED008 Module
@@ -137,7 +137,7 @@ namespace VAdvantage.Acct
                     {
                         MAccount acct = null;
                         MAccount portAcct = null;
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -145,12 +145,12 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                         FactLine fl = fact.CreateLine(null, acct, GetC_Currency_ID(), GetAmount(), null);
 
-                        int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=" + GetC_BPartner_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=" + GetC_BPartner_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (ComID > 0)
                         {
                             portAcct = MAccount.Get(Env.GetCtx(), ComID);
@@ -158,7 +158,7 @@ namespace VAdvantage.Acct
 
                         if (portAcct == null)
                         {
-                            ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             portAcct = MAccount.Get(Env.GetCtx(), ComID);
                         }
                         fl = fact.CreateLine(null, portAcct, GetC_Currency_ID(), null, GetAmount());
@@ -168,7 +168,7 @@ namespace VAdvantage.Acct
                     {
                         MAccount acct = null;
                         MAccount portAcct = null;
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -176,13 +176,13 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                         FactLine fl = fact.CreateLine(null, acct,
                         GetC_Currency_ID(), GetAmount(), null);
 
-                        int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=" + GetC_BPartner_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=" + GetC_BPartner_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (ComID > 0)
                         {
                             portAcct = MAccount.Get(Env.GetCtx(), ComID);
@@ -190,7 +190,7 @@ namespace VAdvantage.Acct
 
                         if (portAcct == null)
                         {
-                            ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             portAcct = MAccount.Get(Env.GetCtx(), ComID);
                         }
                         fl = fact.CreateLine(null, portAcct,
@@ -201,11 +201,11 @@ namespace VAdvantage.Acct
                     {
                         MAccount acct = null;
                         MAccount portAcct = null;
-                        string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
-                        int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                        int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if ("T".Equals(boeType))
                         {
-                            int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             if (validComID > 0)
                             {
                                 acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -213,12 +213,12 @@ namespace VAdvantage.Acct
 
                             if (acct == null)
                             {
-                                validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                                validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                 acct = MAccount.Get(Env.GetCtx(), validComID);
                             }
                             FactLine fl = fact.CreateLine(null, acct, GetC_Currency_ID(), GetAmount(), null);
 
-                            int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             if (ComID > 0)
                             {
                                 portAcct = MAccount.Get(Env.GetCtx(), ComID);
@@ -226,7 +226,7 @@ namespace VAdvantage.Acct
 
                             if (portAcct == null)
                             {
-                                ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                                ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                 portAcct = MAccount.Get(Env.GetCtx(), ComID);
                             }
                             fl = fact.CreateLine(null, portAcct, GetC_Currency_ID(), null, GetAmount());
@@ -236,7 +236,7 @@ namespace VAdvantage.Acct
                         {
                             FactLine fl = fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_BankInTransit, as1), GetC_Currency_ID(), GetAmount(), null);
 
-                            int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             if (ComID > 0)
                             {
                                 portAcct = MAccount.Get(Env.GetCtx(), ComID);
@@ -244,7 +244,7 @@ namespace VAdvantage.Acct
 
                             if (portAcct == null)
                             {
-                                ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                                ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                 portAcct = MAccount.Get(Env.GetCtx(), ComID);
                             }
                             fl = fact.CreateLine(null, portAcct, GetC_Currency_ID(), null, GetAmount());
@@ -255,7 +255,7 @@ namespace VAdvantage.Acct
                     {
                         MAccount acct = null;
                         MAccount portAcct = null;
-                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_BankAccount_Acct WHERE C_BankAccount_ID=" + GetC_BankAccount_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
                             acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -263,13 +263,13 @@ namespace VAdvantage.Acct
 
                         if (acct == null)
                         {
-                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             acct = MAccount.Get(Env.GetCtx(), validComID);
                         }
                         FactLine fl = fact.CreateLine(null, acct,
                         GetC_Currency_ID(), GetAmount(), null);
 
-                        int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=" + GetC_BPartner_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                        int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_BP_Customer_Acct WHERE C_BPartner_ID=" + GetC_BPartner_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (ComID > 0)
                         {
                             portAcct = MAccount.Get(Env.GetCtx(), ComID);
@@ -277,7 +277,7 @@ namespace VAdvantage.Acct
 
                         if (portAcct == null)
                         {
-                            ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_Portfolio_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             portAcct = MAccount.Get(Env.GetCtx(), ComID);
                         }
                         fl = fact.CreateLine(null, portAcct,
@@ -289,9 +289,9 @@ namespace VAdvantage.Acct
                         //	Asset
                         FactLine fl = fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_BankInTransit, as1),
                             GetC_Currency_ID(), GetAmount(), null);
-                        if (fl != null && AD_Org_ID != 0)
+                        if (fl != null && VAF_Org_ID != 0)
                         {
-                            fl.SetAD_Org_ID(AD_Org_ID);
+                            fl.SetVAF_Org_ID(VAF_Org_ID);
                         }
                         //	
                         MAccount acct = null;
@@ -308,10 +308,10 @@ namespace VAdvantage.Acct
                             acct = GetAccount(Doc.ACCTTYPE_UnallocatedCash, as1);
                         }
                         fl = fact.CreateLine(null, acct, GetC_Currency_ID(), null, GetAmount());
-                        if (fl != null && AD_Org_ID != 0
+                        if (fl != null && VAF_Org_ID != 0
                             && GetC_Charge_ID() == 0)		//	don't overwrite charge
                         {
-                            fl.SetAD_Org_ID(AD_Org_ID);
+                            fl.SetVAF_Org_ID(VAF_Org_ID);
                         }
                     }
                 }
@@ -321,9 +321,9 @@ namespace VAdvantage.Acct
                     //	Asset
                     FactLine fl = fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_BankInTransit, as1),
                         GetC_Currency_ID(), GetAmount(), null);
-                    if (fl != null && AD_Org_ID != 0)
+                    if (fl != null && VAF_Org_ID != 0)
                     {
-                        fl.SetAD_Org_ID(AD_Org_ID);
+                        fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
                     //	
                     MAccount acct = null;
@@ -341,10 +341,10 @@ namespace VAdvantage.Acct
                     }
                     fl = fact.CreateLine(null, acct,
                         GetC_Currency_ID(), null, GetAmount());
-                    if (fl != null && AD_Org_ID != 0
+                    if (fl != null && VAF_Org_ID != 0
                         && GetC_Charge_ID() == 0)		//	don't overwrite charge
                     {
-                        fl.SetAD_Org_ID(AD_Org_ID);
+                        fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
                 }
             }
@@ -364,13 +364,13 @@ namespace VAdvantage.Acct
                 {
                     MAccount acct = null;
                     MAccount portAcct = null;
-                    string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
-                    int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                    string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                    int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                     if ("E".Equals(_TenderType))
                     {
                         if ("T".Equals(boeType))
                         {
-                            int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             if (validComID > 0)
                             {
                                 acct = MAccount.Get(Env.GetCtx(), validComID);
@@ -378,12 +378,12 @@ namespace VAdvantage.Acct
 
                             if (acct == null)
                             {
-                                validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                                validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOETransit_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                 acct = MAccount.Get(Env.GetCtx(), validComID);
                             }
                             FactLine f2 = fact.CreateLine(null, acct, GetC_Currency_ID(), GetAmount(), null);
 
-                            int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                            int ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                             if (ComID > 0)
                             {
                                 portAcct = MAccount.Get(Env.GetCtx(), ComID);
@@ -391,7 +391,7 @@ namespace VAdvantage.Acct
 
                             if (portAcct == null)
                             {
-                                ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                                ComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                 portAcct = MAccount.Get(Env.GetCtx(), ComID);
                             }
                             f2 = fact.CreateLine(null, portAcct, GetC_Currency_ID(), null, GetAmount());
@@ -400,9 +400,9 @@ namespace VAdvantage.Acct
                     else
                     {
                         FactLine fl = fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_BankInTransit, as1), GetC_Currency_ID(), null, GetAmount());
-                        if (fl != null && AD_Org_ID != 0
+                        if (fl != null && VAF_Org_ID != 0
                             && GetC_Charge_ID() == 0)		//	don't overwrite charge
-                            fl.SetAD_Org_ID(AD_Org_ID);
+                            fl.SetVAF_Org_ID(VAF_Org_ID);
 
                         DataSet ds = null;
                         DataSet dsSSCode = null;
@@ -414,7 +414,7 @@ namespace VAdvantage.Acct
                         on pay.c_bpartner_id=cb.c_bpartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN c_withholding hold ON hold.C_WithHolding_Id = prd.c_withholding_id
                         LEFT JOIN ed010_withholdingdetails holddet ON holddet.C_WithHolding_Id = hold.C_WithHolding_Id left join C_Withholding_Acct withAcct on hold.C_WithHolding_Id=withAcct.C_WithHolding_Id
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
-                            @"BETWEEN holddet.ED010_FromDate AND holddet.ED010_ToDate and pay.AD_Org_ID = " + GetCtx().GetAD_Org_ID() + " and pay.c_payment_id = " + Get_ID();
+                            @"BETWEEN holddet.ED010_FromDate AND holddet.ED010_ToDate and pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.c_payment_id = " + Get_ID();
 
                         ds = new DataSet();
                         ds = DB.ExecuteDataset(sql, null, null);
@@ -436,7 +436,7 @@ namespace VAdvantage.Acct
                                     }
                                     if (withAcct == null)
                                     {
-                                        validID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT Withholding_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                                        validID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT Withholding_Acct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                         withAcct = MAccount.Get(Env.GetCtx(), validID);
                                     }
                                     fl = fact.CreateLine(null, withAcct, GetC_Currency_ID(), null, Decimal.Round(WithholdingAmt, 2));
@@ -444,9 +444,9 @@ namespace VAdvantage.Acct
                                     {
                                         payAmt += Decimal.Round(WithholdingAmt, 2);
                                     }
-                                    if (fl != null && AD_Org_ID != 0)
+                                    if (fl != null && VAF_Org_ID != 0)
                                     {
-                                        fl.SetAD_Org_ID(AD_Org_ID);
+                                        fl.SetVAF_Org_ID(VAF_Org_ID);
                                     }
                                 }
                             }
@@ -458,7 +458,7 @@ namespace VAdvantage.Acct
                         on pay.c_bpartner_id=cb.c_bpartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN ed010_sscode scode ON scode.ed010_sscode_ID = prd.ed010_sscode_id
                         LEFT JOIN ed010_sscodedetails sdet ON sdet.ed010_sscode_ID = scode.ed010_sscode_ID left join ED010_SSCode_Acct sscAcct on scode.ED010_SSCode_ID=sscAcct.ED010_SSCode_ID
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
-                            @"BETWEEN sdet.ED010_FromDate AND sdet.ED010_ToDate AND pay.AD_Org_ID = " + GetCtx().GetAD_Org_ID() + " and pay.c_payment_id = " + Get_ID();
+                            @"BETWEEN sdet.ED010_FromDate AND sdet.ED010_ToDate AND pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.c_payment_id = " + Get_ID();
 
                         dsSSCode = new DataSet();
                         dsSSCode = DB.ExecuteDataset(sql, null, null);
@@ -492,7 +492,7 @@ namespace VAdvantage.Acct
                                     }
                                     if (sscAcct == null)
                                     {
-                                        vlID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_SecCodeAcct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND AD_Client_ID = " + GetAD_Client_ID()));
+                                        vlID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_SecCodeAcct FROM C_AcctSchema_Default WHERE C_AcctSchema_ID=" + as1.GetC_AcctSchema_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                                         sscAcct = MAccount.Get(Env.GetCtx(), vlID);
                                     }
                                     fl = fact.CreateLine(null, sscAcct, GetC_Currency_ID(), null, Decimal.Round(sscAmt, 2));
@@ -500,9 +500,9 @@ namespace VAdvantage.Acct
                                     {
                                         payAmt += Decimal.Round(sscAmt, 2);
                                     }
-                                    if (fl != null && AD_Org_ID != 0)
+                                    if (fl != null && VAF_Org_ID != 0)
                                     {
-                                        fl.SetAD_Org_ID(AD_Org_ID);
+                                        fl.SetVAF_Org_ID(VAF_Org_ID);
                                     }
                                 }
                             }
@@ -510,8 +510,8 @@ namespace VAdvantage.Acct
                         dsSSCode.Dispose();
 
                         fl = fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_PaymentSelect, as1), GetC_Currency_ID(), payAmt, null);
-                        if (fl != null && AD_Org_ID != 0 && GetC_Charge_ID() == 0)		//	don't overwrite charge
-                            fl.SetAD_Org_ID(AD_Org_ID);
+                        if (fl != null && VAF_Org_ID != 0 && GetC_Charge_ID() == 0)		//	don't overwrite charge
+                            fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
                 }
 
@@ -533,16 +533,16 @@ namespace VAdvantage.Acct
                     }
                     FactLine fl = fact.CreateLine(null, acct,
                         GetC_Currency_ID(), GetAmount(), null);
-                    if (fl != null && AD_Org_ID != 0
+                    if (fl != null && VAF_Org_ID != 0
                         && GetC_Charge_ID() == 0)		//	don't overwrite charge
-                        fl.SetAD_Org_ID(AD_Org_ID);
+                        fl.SetVAF_Org_ID(VAF_Org_ID);
 
                     //	Asset
                     fl = fact.CreateLine(null, GetAccount(Doc.ACCTTYPE_BankInTransit, as1),
                         GetC_Currency_ID(), null, GetAmount());
-                    if (fl != null && AD_Org_ID != 0)
+                    if (fl != null && VAF_Org_ID != 0)
                     {
-                        fl.SetAD_Org_ID(AD_Org_ID);
+                        fl.SetVAF_Org_ID(VAF_Org_ID);
                     }
                 }
             }
@@ -559,9 +559,9 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get AD_Org_ID from Bank Account
+        /// Get VAF_Org_ID from Bank Account
         /// </summary>
-        /// <returns>AD_Org_ID or 0</returns>
+        /// <returns>VAF_Org_ID or 0</returns>
         private int GetBank_Org_ID()
         {
             if (_C_BankAccount_ID == 0)
@@ -570,7 +570,7 @@ namespace VAdvantage.Acct
             }
             //
             MBankAccount ba = MBankAccount.Get(GetCtx(), _C_BankAccount_ID);
-            return ba.GetAD_Org_ID();
+            return ba.GetVAF_Org_ID();
         }
 
     }

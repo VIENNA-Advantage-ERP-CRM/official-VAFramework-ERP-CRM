@@ -101,14 +101,14 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Default C_UOM_ID
         /// </summary>
-        /// <param name="ctx">context for AD_Client</param>
+        /// <param name="ctx">context for VAF_Client</param>
         /// <returns>C_UOM_ID</returns>
         public static int GetDefault_UOM_ID(Ctx ctx)
         {
             String sql = "SELECT C_UOM_ID "
                 + "FROM C_UOM "
-                + "WHERE AD_Client_ID IN (0," + ctx.GetAD_Client_ID() + ") "
-                + "ORDER BY IsDefault DESC, AD_Client_ID DESC, C_UOM_ID";
+                + "WHERE VAF_Client_ID IN (0," + ctx.GetVAF_Client_ID() + ") "
+                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC, C_UOM_ID";
 
             return Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
         }

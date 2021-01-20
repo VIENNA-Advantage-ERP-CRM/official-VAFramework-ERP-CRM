@@ -198,7 +198,7 @@ namespace VAdvantage.Process
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID,
                 FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
+                    " AND t.VAF_Client_ID = " + inventory.GetVAF_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
                 AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) 
                 WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
                 }
@@ -208,7 +208,7 @@ namespace VAdvantage.Process
                 nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, 
                 FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
                 INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                    " AND t.AD_Client_ID = " + inventory.GetAD_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
+                    " AND t.VAF_Client_ID = " + inventory.GetVAF_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
                 AND m.M_Locator_ID = mt.M_Locator_ID WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
                 }
 

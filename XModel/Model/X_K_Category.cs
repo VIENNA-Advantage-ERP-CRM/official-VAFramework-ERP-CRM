@@ -70,7 +70,7 @@ static X_K_Category()
 //static long serialVersionUID 27562514377939L;
 /** Last Updated Timestamp 7/29/2010 1:07:41 PM */
 public static long updatedMS = 1280389061150L;
-/** AD_Table_ID=615 */
+/** VAF_TableView_ID=615 */
 public static int Table_ID;
  // =615;
 

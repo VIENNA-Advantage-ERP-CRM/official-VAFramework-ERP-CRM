@@ -77,8 +77,8 @@
         var selectDivFullWidth = $(window).width() - (minSideWidth);
         var selectDivHeight = $(window).height() - 240;
 
-        var _AD_Client_ID = VIS.Env.getCtx().getAD_Client_ID();
-        var _AD_Org_ID = VIS.Env.getCtx().getAD_Org_ID();
+        var _VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
+        var _VAF_Org_ID = VIS.Env.getCtx().getVAF_Org_ID();
         var _by = VIS.Env.getCtx().getAD_User_ID();
 
         var MATCH_INVOICE = 0;
@@ -515,7 +515,7 @@
 
 
             //var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2163, VIS.DisplayType.TableDir);
-            //$self.cmbMatchFrom = new VIS.Controls.VComboBox("AD_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
+            //$self.cmbMatchFrom = new VIS.Controls.VComboBox("VAF_Org_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
         }
 
@@ -1665,8 +1665,8 @@
             selectDivFullWidth = null;
             selectDivHeight = null;
 
-            _AD_Client_ID = null;
-            _AD_Org_ID = null;
+            _VAF_Client_ID = null;
+            _VAF_Org_ID = null;
             _by = null;
 
             MATCH_INVOICE = null;

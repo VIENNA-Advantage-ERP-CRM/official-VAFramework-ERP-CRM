@@ -80,7 +80,7 @@ static X_M_TransactionAllocation()
 //static long serialVersionUID 27562514381465L;
 /** Last Updated Timestamp 7/29/2010 1:07:44 PM */
 public static long updatedMS = 1280389064676L;
-/** AD_Table_ID=636 */
+/** VAF_TableView_ID=636 */
 public static int Table_ID;
  // =636;
 

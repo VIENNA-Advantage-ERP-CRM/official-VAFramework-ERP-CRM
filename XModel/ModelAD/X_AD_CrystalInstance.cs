@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_CrystalInstance
+/** Generated Model for VAF_CrystalInstance
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_CrystalInstance : PO
+public class X_VAF_CrystalInstance : PO
 {
-public X_AD_CrystalInstance (Context ctx, int AD_CrystalInstance_ID, Trx trxName) : base (ctx, AD_CrystalInstance_ID, trxName)
+public X_VAF_CrystalInstance (Context ctx, int VAF_CrystalInstance_ID, Trx trxName) : base (ctx, VAF_CrystalInstance_ID, trxName)
 {
-/** if (AD_CrystalInstance_ID == 0)
+/** if (VAF_CrystalInstance_ID == 0)
 {
-SetAD_CrystalInstance_ID (0);
+SetVAF_CrystalInstance_ID (0);
 SetIsProcessing (false);
 }
  */
 }
-public X_AD_CrystalInstance (Ctx ctx, int AD_CrystalInstance_ID, Trx trxName) : base (ctx, AD_CrystalInstance_ID, trxName)
+public X_VAF_CrystalInstance (Ctx ctx, int VAF_CrystalInstance_ID, Trx trxName) : base (ctx, VAF_CrystalInstance_ID, trxName)
 {
-/** if (AD_CrystalInstance_ID == 0)
+/** if (VAF_CrystalInstance_ID == 0)
 {
-SetAD_CrystalInstance_ID (0);
+SetVAF_CrystalInstance_ID (0);
 SetIsProcessing (false);
 }
  */
@@ -39,7 +39,7 @@ SetIsProcessing (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CrystalInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_CrystalInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_CrystalInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CrystalInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_CrystalInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_CrystalInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_CrystalInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_CrystalInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_CrystalInstance()
+static X_VAF_CrystalInstance()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -70,12 +70,12 @@ static X_AD_CrystalInstance()
 //static long serialVersionUID = 27582899055799L;
 /** Last Updated Timestamp 3/22/2011 11:32:19 AM */
 public static long updatedMS = 1300773739010L;
-/** AD_Table_ID=1000177 */
+/** VAF_TableView_ID=1000177 */
 public static int Table_ID;
  // =1000177;
 
-/** TableName=AD_CrystalInstance */
-public static String Table_Name="AD_CrystalInstance";
+/** TableName=VAF_CrystalInstance */
+public static String Table_Name="VAF_CrystalInstance";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,37 +109,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_CrystalInstance[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_CrystalInstance[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_CrystalInstance_ID.
-@param AD_CrystalInstance_ID AD_CrystalInstance_ID */
-public void SetAD_CrystalInstance_ID (int AD_CrystalInstance_ID)
+/** Set VAF_CrystalInstance_ID.
+@param VAF_CrystalInstance_ID VAF_CrystalInstance_ID */
+public void SetVAF_CrystalInstance_ID (int VAF_CrystalInstance_ID)
 {
-if (AD_CrystalInstance_ID < 1) throw new ArgumentException ("AD_CrystalInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_CrystalInstance_ID", AD_CrystalInstance_ID);
+if (VAF_CrystalInstance_ID < 1) throw new ArgumentException ("VAF_CrystalInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_CrystalInstance_ID", VAF_CrystalInstance_ID);
 }
-/** Get AD_CrystalInstance_ID.
-@return AD_CrystalInstance_ID */
-public int GetAD_CrystalInstance_ID() 
+/** Get VAF_CrystalInstance_ID.
+@return VAF_CrystalInstance_ID */
+public int GetVAF_CrystalInstance_ID() 
 {
-Object ii = Get_Value("AD_CrystalInstance_ID");
+Object ii = Get_Value("VAF_CrystalInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID <= 0) Set_Value ("AD_Form_ID", null);
+if (VAF_Page_ID <= 0) Set_Value ("VAF_Page_ID", null);
 else
-Set_Value ("AD_Form_ID", AD_Form_ID);
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

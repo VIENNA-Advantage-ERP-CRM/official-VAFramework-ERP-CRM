@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27706189007700L;
         /** Last Updated Timestamp 2/16/2015 10:44:50 AM */
         public static long updatedMS = 1424063690911L;
-        /** AD_Table_ID=1000235 */
+        /** VAF_TableView_ID=1000235 */
         public static int Table_ID;
         // =1000235;
 
@@ -132,34 +132,34 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Tab.
-        @param AD_Tab_ID Tab within a Window */
-        public void SetAD_Tab_ID(int AD_Tab_ID)
+        @param VAF_Tab_ID Tab within a Window */
+        public void SetVAF_Tab_ID(int VAF_Tab_ID)
         {
-            if (AD_Tab_ID <= 0) Set_Value("AD_Tab_ID", null);
+            if (VAF_Tab_ID <= 0) Set_Value("VAF_Tab_ID", null);
             else
-                Set_Value("AD_Tab_ID", AD_Tab_ID);
+                Set_Value("VAF_Tab_ID", VAF_Tab_ID);
         }
         /** Get Tab.
         @return Tab within a Window */
-        public int GetAD_Tab_ID()
+        public int GetVAF_Tab_ID()
         {
-            Object ii = Get_Value("AD_Tab_ID");
+            Object ii = Get_Value("VAF_Tab_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID <= 0) Set_Value("AD_Table_ID", null);
+            if (VAF_TableView_ID <= 0) Set_Value("VAF_TableView_ID", null);
             else
-                Set_Value("AD_Table_ID", AD_Table_ID);
+                Set_Value("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

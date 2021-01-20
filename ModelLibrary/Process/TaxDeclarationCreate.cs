@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		/** **/
 
 		/**	Acct					**/
-		String sql = "SELECT * FROM Fact_Acct WHERE AD_Table_ID=@Param1 AND Record_ID=@Param2";
+		String sql = "SELECT * FROM Fact_Acct WHERE VAF_TableView_ID=@Param1 AND Record_ID=@Param2";
         SqlParameter[] Param=new SqlParameter[2];
         IDataReader idr=null;
         DataTable dt=null;

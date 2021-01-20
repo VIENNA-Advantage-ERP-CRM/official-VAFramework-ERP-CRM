@@ -113,7 +113,7 @@ namespace VAdvantage.Model
             String measureDisplay, DateTime? date, int C_Phase_ID, MRole role)
         {
             String dateColumn = "Created";
-            String orgColumn = "AD_Org_ID";
+            String orgColumn = "VAF_Org_ID";
             String bpColumn = "C_BPartner_ID";
             String pColumn = null;
             //
@@ -160,7 +160,7 @@ namespace VAdvantage.Model
             String measureDataType, DateTime? startDate, MRole role)
         {
             String dateColumn = "Created";
-            String orgColumn = "AD_Org_ID";
+            String orgColumn = "VAF_Org_ID";
             String bpColumn = "C_BPartner_ID";
             String pColumn = null;
             //
@@ -228,7 +228,7 @@ namespace VAdvantage.Model
             String measureScope, String measureDataType, DateTime? reportDate, MRole role)
         {
             String dateColumn = "Created";
-            String orgColumn = "AD_Org_ID";
+            String orgColumn = "VAF_Org_ID";
             String bpColumn = "C_BPartner_ID";
             String pColumn = null;
             //	PlannedAmt -> PlannedQty -> Count

@@ -63,7 +63,7 @@ namespace VAdvantage.Model
         public MProjectIssue(MProject project)
             : this(project.GetCtx(), 0, project.Get_TrxName())
         {
-            SetClientOrg(project.GetAD_Client_ID(), project.GetAD_Org_ID());
+            SetClientOrg(project.GetVAF_Client_ID(), project.GetVAF_Org_ID());
             SetC_Project_ID(project.GetC_Project_ID());	//	Parent
             SetLine(GetNextLine());
             _parent = project;
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
             /** @todo Transaction */
 
             //	**	Create Material Transactions **
-            MTransaction mTrx = new MTransaction(GetCtx(), GetAD_Org_ID(),
+            MTransaction mTrx = new MTransaction(GetCtx(), GetVAF_Org_ID(),
                 MTransaction.MOVEMENTTYPE_WorkOrderPlus,
                 GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(),
                 Decimal.Negate(GetMovementQty()), GetMovementDate(), Get_TrxName());

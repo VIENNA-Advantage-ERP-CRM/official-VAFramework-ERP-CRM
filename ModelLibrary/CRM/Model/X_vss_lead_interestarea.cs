@@ -70,7 +70,7 @@ static X_vss_lead_interestarea()
 //static long serialVersionUID = 27607356283620L;
 /** Last Updated Timestamp 12/30/2011 1:12:47 PM */
 public static long updatedMS = 1325230966831L;
-/** AD_Table_ID=1000224 */
+/** VAF_TableView_ID=1000224 */
 public static int Table_ID;
  // =1000224;
 

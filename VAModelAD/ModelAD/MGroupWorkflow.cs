@@ -8,16 +8,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-   public class MGroupWorkflow:X_AD_Group_Workflow
+   public class MGroupWorkflow:X_VAF_Group_Workflow
     {
             /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_GroupWorkflow_ID">id</param>
+        /// <param name="VAF_GroupWorkflow_ID">id</param>
         /// <param name="trxName">transaction</param>
-       public MGroupWorkflow(Ctx ctx, int AD_GroupWorkflow_ID, Trx trxName)
-           : base(ctx, AD_GroupWorkflow_ID, trxName)
+       public MGroupWorkflow(Ctx ctx, int VAF_GroupWorkflow_ID, Trx trxName)
+           : base(ctx, VAF_GroupWorkflow_ID, trxName)
         {
 
         }
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
                                     SET IsActive      ='Y',IsReadWrite='Y'
                                     WHERE ad_workflow_id=" + GetAD_Workflow_ID() + @"
                                     AND AD_Role_ID   IN
-                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE ad_groupinfo_id=" + GetAD_GroupInfo_ID() + ")");
+                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
             else
             {
@@ -72,14 +72,14 @@ namespace VAdvantage.Model
                                     SET IsActive      ='N',IsReadWrite='N'
                                     WHERE ad_workflow_id=" + GetAD_Workflow_ID() + @"
                                     AND AD_Role_ID   IN
-                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE ad_groupinfo_id=" + GetAD_GroupInfo_ID() + ")");
+                                      ( SELECT AD_Role_ID FROM AD_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() + ")");
             }
             return true;
         }
 
         private void InsertNewRecordInRole()
         {
-            DataSet ds = DB.ExecuteDataset("SELECT AD_Role_ID FROM AD_Role_Group WHERE ad_groupinfo_id=" + GetAD_GroupInfo_ID() );
+            DataSet ds = DB.ExecuteDataset("SELECT AD_Role_ID FROM AD_Role_Group WHERE VAF_Groupinfo_id=" + GetVAF_GroupInfo_ID() );
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)

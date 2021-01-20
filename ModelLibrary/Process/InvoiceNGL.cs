@@ -122,24 +122,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Insert Trx
             String dateStr = DataBase.DB.TO_DATE(_DateReval, true);
-            sql = "INSERT INTO T_InvoiceGL (AD_Client_ID, AD_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
+            sql = "INSERT INTO T_InvoiceGL (VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
              + " AD_PInstance_ID, C_Invoice_ID, GrandTotal, OpenAmt, "
              + " Fact_Acct_ID, AmtSourceBalance, AmtAcctBalance, "
              + " AmtRevalDr, AmtRevalCr, C_DocTypeReval_ID, IsAllCurrencies, "
              + " DateReval, C_ConversionTypeReval_ID, AmtRevalDrDiff, AmtRevalCrDiff, APAR) "
                 //	--
-             + "SELECT i.AD_Client_ID, i.AD_Org_ID, i.IsActive, i.Created,i.CreatedBy, i.Updated,i.UpdatedBy,"
+             + "SELECT i.VAF_Client_ID, i.VAF_Org_ID, i.IsActive, i.Created,i.CreatedBy, i.Updated,i.UpdatedBy,"
              + GetAD_PInstance_ID() + ", i.C_Invoice_ID, i.GrandTotal, invoiceOpen(i.C_Invoice_ID, 0), "
              + " fa.Fact_Acct_ID, fa.AmtSourceDr-fa.AmtSourceCr, fa.AmtAcctDr-fa.AmtAcctCr, "
                 //	AmtRevalDr, AmtRevalCr,
-             + " currencyConvert(fa.AmtSourceDr, i.C_Currency_ID, a.C_Currency_ID, " + dateStr + ", " + _C_ConversionTypeReval_ID + ", i.AD_Client_ID, i.AD_Org_ID),"
-             + " currencyConvert(fa.AmtSourceCr, i.C_Currency_ID, a.C_Currency_ID, " + dateStr + ", " + _C_ConversionTypeReval_ID + ", i.AD_Client_ID, i.AD_Org_ID),"
+             + " currencyConvert(fa.AmtSourceDr, i.C_Currency_ID, a.C_Currency_ID, " + dateStr + ", " + _C_ConversionTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
+             + " currencyConvert(fa.AmtSourceCr, i.C_Currency_ID, a.C_Currency_ID, " + dateStr + ", " + _C_ConversionTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
              + (_C_DocTypeReval_ID == 0 || _C_DocTypeReval_ID==-1 ? "NULL" : Utility.Util.GetValueOfString(_C_DocTypeReval_ID)) + ", "
              + (_IsAllCurrencies ? "'Y'," : "'N',")
              + dateStr + ", " + _C_ConversionTypeReval_ID + ", 0, 0, '" + _APAR + "' "
                 //
              + "FROM C_Invoice_v i"
-             + " INNER JOIN Fact_Acct fa ON (fa.AD_Table_ID=318 AND fa.Record_ID=i.C_Invoice_ID"
+             + " INNER JOIN Fact_Acct fa ON (fa.VAF_TableView_ID=318 AND fa.Record_ID=i.C_Invoice_ID"
                  + " AND (i.GrandTotal=fa.AmtSourceDr OR i.GrandTotal=fa.AmtSourceCr))"
              + " INNER JOIN C_AcctSchema a ON (fa.C_AcctSchema_ID=a.C_AcctSchema_ID) "
              + "WHERE i.IsPaid='N'"
@@ -243,7 +243,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             List<X_T_InvoiceGL> list = new List<X_T_InvoiceGL>();
             String sql = "SELECT * FROM T_InvoiceGL "
                 + "WHERE AD_PInstance_ID=" + GetAD_PInstance_ID()
-                + " ORDER BY AD_Org_ID";
+                + " ORDER BY VAF_Org_ID";
             IDataReader idr = null;
             try
             {
@@ -292,7 +292,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MJournal journal = null;
             Decimal? drTotal = Env.ZERO;
             Decimal? crTotal = Env.ZERO;
-            int AD_Org_ID = 0;
+            int VAF_Org_ID = 0;
             for (int i = 0; i < list.Count; i++)
             {
                 X_T_InvoiceGL gl = list[i];//.get(i);
@@ -312,7 +312,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     journal.SetC_AcctSchema_ID(aas.GetC_AcctSchema_ID());
                     journal.SetC_Currency_ID(aas.GetC_Currency_ID());
                     journal.SetC_ConversionType_ID(_C_ConversionTypeReval_ID);
-                    MOrg org = MOrg.Get(GetCtx(), gl.GetAD_Org_ID());
+                    MOrg org = MOrg.Get(GetCtx(), gl.GetVAF_Org_ID());
                     journal.SetDescription(GetName() + " - " + org.GetName());
                     journal.SetGL_Category_ID(cat.GetGL_Category_ID());
                     if (!journal.Save())
@@ -338,22 +338,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetAmtAcctCr(cr.Value);
                 line.Save();
                 //
-                if (AD_Org_ID == 0)		//	invoice org id
+                if (VAF_Org_ID == 0)		//	invoice org id
                 {
-                    AD_Org_ID = gl.GetAD_Org_ID();
+                    VAF_Org_ID = gl.GetVAF_Org_ID();
                 }
                 //	Change in Org
-                if (AD_Org_ID != gl.GetAD_Org_ID())
+                if (VAF_Org_ID != gl.GetVAF_Org_ID())
                 {
-                    CreateBalancing(asDefaultAccts, journal, drTotal.Value, crTotal.Value, AD_Org_ID, (i + 1) * 10);
+                    CreateBalancing(asDefaultAccts, journal, drTotal.Value, crTotal.Value, VAF_Org_ID, (i + 1) * 10);
                     //
-                    AD_Org_ID = gl.GetAD_Org_ID();
+                    VAF_Org_ID = gl.GetVAF_Org_ID();
                     drTotal = Env.ZERO;
                     crTotal = Env.ZERO;
                     journal = null;
                 }
             }
-            CreateBalancing(asDefaultAccts, journal, drTotal.Value, crTotal.Value, AD_Org_ID, (list.Count + 1) * 10);
+            CreateBalancing(asDefaultAccts, journal, drTotal.Value, crTotal.Value, VAF_Org_ID, (list.Count + 1) * 10);
 
             return " - " + batch.GetDocumentNo() + " #" + list.Count;
         }	//	createGLJournal
@@ -365,10 +365,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="journal">journal</param>
         /// <param name="drTotal">dr</param>
         /// <param name="crTotal">cr</param>
-        /// <param name="AD_Org_ID">org</param>
+        /// <param name="VAF_Org_ID">org</param>
         /// <param name="lineNo">lineno base line no</param>
         private void CreateBalancing(MAcctSchemaDefault asDefaultAccts, MJournal journal,
-            Decimal drTotal, Decimal crTotal, int AD_Org_ID, int lineNo)
+            Decimal drTotal, Decimal crTotal, int VAF_Org_ID, int lineNo)
         {
             if (journal == null)
             {
@@ -380,9 +380,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MJournalLine line = new MJournalLine(journal);
                 line.SetLine(lineNo + 1);
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedGain_Acct());
-                MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetAD_Client_ID(), AD_Org_ID,
+                MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
                     asDefaultAccts.GetC_AcctSchema_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
-                    bas.GetM_Product_ID(), bas.GetC_BPartner_ID(), bas.GetAD_OrgTrx_ID(),
+                    bas.GetM_Product_ID(), bas.GetC_BPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetC_SalesRegion_ID(),
                     bas.GetC_Project_ID(), bas.GetC_Campaign_ID(), bas.GetC_Activity_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());
@@ -398,9 +398,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MJournalLine line = new MJournalLine(journal);
                 line.SetLine(lineNo + 2);
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedLoss_Acct());
-                MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetAD_Client_ID(), AD_Org_ID,
+                MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
                     asDefaultAccts.GetC_AcctSchema_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
-                    bas.GetM_Product_ID(), bas.GetC_BPartner_ID(), bas.GetAD_OrgTrx_ID(),
+                    bas.GetM_Product_ID(), bas.GetC_BPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetC_SalesRegion_ID(),
                     bas.GetC_Project_ID(), bas.GetC_Campaign_ID(), bas.GetC_Activity_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());

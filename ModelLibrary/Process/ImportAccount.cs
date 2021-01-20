@@ -24,7 +24,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ImportAccount : ProcessEngine.SvrProcess
     {
         /**	Client to be imported to		*/
-        private int _AD_Client_ID = 0;
+        private int _VAF_Client_ID = 0;
         /** Default Element					*/
         private int _C_Element_ID = 0;
         /**	Update Default Accounts			*/
@@ -51,8 +51,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Client_ID"))
-                    _AD_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                else if (name.Equals("VAF_Client_ID"))
+                    _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("C_Element_ID"))
                     _C_Element_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("UpdateDefaultAccounts"))
@@ -77,7 +77,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             StringBuilder sql = null;
             int no = 0;
-            String clientCheck = " AND AD_Client_ID=" + _AD_Client_ID;
+            String clientCheck = " AND VAF_Client_ID=" + _VAF_Client_ID;
 
             //	****	Prepare	****
 
@@ -92,8 +92,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Client, Org, IsActive, Created/Updated
             sql = new StringBuilder("UPDATE I_ElementValue "
-                + "SET AD_Client_ID = COALESCE (AD_Client_ID, ").Append(_AD_Client_ID).Append("),"
-                + " AD_Org_ID = COALESCE (AD_Org_ID, 0),"
+                + "SET VAF_Client_ID = COALESCE (VAF_Client_ID, ").Append(_VAF_Client_ID).Append("),"
+                + " VAF_Org_ID = COALESCE (VAF_Org_ID, 0),"
                 + " IsActive = COALESCE (IsActive, 'Y'),"
                 + " Created = COALESCE (Created, SysDate),"
                 + " CreatedBy = COALESCE (CreatedBy, 0),"
@@ -121,7 +121,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_ElementValue i "
                 + "SET C_Element_ID = (SELECT C_Element_ID FROM C_Element e"
-                + " WHERE i.ElementName=e.Name AND i.AD_Client_ID=e.AD_Client_ID)"
+                + " WHERE i.ElementName=e.Name AND i.VAF_Client_ID=e.VAF_Client_ID)"
                 + "WHERE C_Element_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -145,10 +145,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Column
             sql = new StringBuilder("UPDATE I_ElementValue i "
-                + "SET AD_Column_ID = (SELECT AD_Column_ID FROM AD_Column c"
+                + "SET VAF_Column_ID = (SELECT VAF_Column_ID FROM VAF_Column c"
                 + " WHERE UPPER(i.Default_Account)=UPPER(c.ColumnName)"
-                + " AND c.AD_Table_ID IN (315,266) AND AD_Reference_ID=25) "
-                + "WHERE Default_Account IS NOT NULL AND AD_Column_ID IS NULL"
+                + " AND c.VAF_TableView_ID IN (315,266) AND AD_Reference_ID=25) "
+                + "WHERE Default_Account IS NOT NULL AND VAF_Column_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Column=" + no);
@@ -157,7 +157,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 : "I_ErrorMsg";  //java bug, it could not be used directly
             sql = new StringBuilder("UPDATE I_ElementValue "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Column, ' "
-                + "WHERE AD_Column_ID IS NULL AND Default_Account IS NOT NULL"
+                + "WHERE VAF_Column_ID IS NULL AND Default_Account IS NOT NULL"
                 + " AND UPPER(Default_Account)<>'DEFAULT_ACCT'"		//	ignore default account
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -185,7 +185,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Doc Controlled
             sql = new StringBuilder("UPDATE I_ElementValue "
-                + "SET IsDocControlled = CASE WHEN AD_Column_ID IS NOT NULL THEN 'Y' ELSE 'N' END "
+                + "SET IsDocControlled = CASE WHEN VAF_Column_ID IS NOT NULL THEN 'Y' ELSE 'N' END "
                 + "WHERE IsDocControlled IS NULL OR IsDocControlled NOT IN ('Y','N')"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -232,7 +232,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_ElementValue i "
                 + "SET C_ElementValue_ID=(SELECT C_ElementValue_ID FROM C_ElementValue ev"
                 + " INNER JOIN C_Element e ON (ev.C_Element_ID=e.C_Element_ID)"
-                + " WHERE i.C_Element_ID=e.C_Element_ID AND i.AD_Client_ID=e.AD_Client_ID"
+                + " WHERE i.C_Element_ID=e.C_Element_ID AND i.VAF_Client_ID=e.VAF_Client_ID"
                 + " AND i.Value=ev.Value) "
                 + "WHERE C_ElementValue_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
@@ -328,7 +328,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_ElementValue i "
                 + "SET ParentElementValue_ID=(SELECT C_ElementValue_ID"
                 + " FROM C_ElementValue ev WHERE i.C_Element_ID=ev.C_Element_ID"
-                + " AND i.ParentValue=ev.Value AND i.AD_Client_ID=ev.AD_Client_ID) "
+                + " AND i.ParentValue=ev.Value AND i.VAF_Client_ID=ev.VAF_Client_ID) "
                 + "WHERE ParentElementValue_ID IS NULL"
                 + " AND I_IsImported='Y' AND Processed='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -347,7 +347,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " INNER JOIN C_Element e ON (i.C_Element_ID=e.C_Element_ID) "
                 + "WHERE i.C_ElementValue_ID IS NOT NULL AND e.AD_Tree_ID IS NOT NULL"
                 + " AND i.ParentElementValue_ID IS NOT NULL"
-                + " AND i.I_IsImported='Y' AND Processed='N' AND i.AD_Client_ID=").Append(_AD_Client_ID);
+                + " AND i.I_IsImported='Y' AND Processed='N' AND i.VAF_Client_ID=").Append(_VAF_Client_ID);
             int noParentUpdate = 0;
             try
             {
@@ -405,7 +405,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " AND C_ElementValue_ID IS NOT NULL")
                 .Append(clientCheck);
             if (_updateDefaultAccounts)
-                sql.Append(" AND AD_Column_ID IS NULL");
+                sql.Append(" AND VAF_Column_ID IS NULL");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Reset Processing Flag=" + no);
 
@@ -498,8 +498,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             String sql = "SELECT i.C_ElementValue_ID, t.TableName, c.ColumnName, i.I_ElementValue_ID "
                 + "FROM I_ElementValue i"
-                + " INNER JOIN AD_Column c ON (i.AD_Column_ID=c.AD_Column_ID)"
-                + " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+                + " INNER JOIN VAF_Column c ON (i.VAF_Column_ID=c.VAF_Column_ID)"
+                + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE i.I_IsImported='Y' AND Processing='-'"
                 + " AND i.C_ElementValue_ID IS NOT NULL AND C_Element_ID=@param";
             SqlParameter[] param = new SqlParameter[1];

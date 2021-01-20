@@ -129,7 +129,7 @@
 
 
 
-                    var inputWrapGroup = $('<div class="vis-fp-inputgroupseprtr" data-ColumnName="' + crt.getName() + '" data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID() + '"></div>');
+                    var inputWrapGroup = $('<div class="vis-fp-inputgroupseprtr" data-ColumnName="' + crt.getName() + '" data-cid="' + crt.getName() + '_' + this.curTab.getVAF_Tab_ID() + '"></div>');
                     var inputWrap = $('<div class="vis-control-wrap">');
                     var grp = $('<div class="input-group vis-input-wrap">');
 
@@ -258,8 +258,8 @@
         };
 
         this.vetoablechange = function (evt) {
-            //data-cid="' + crt.getName() + '_' + this.curTab.getAD_Tab_ID()
-            var wrapper = bodyDiv.find('[data-cid="' + evt.propertyName + '_' + this.curTab.getAD_Tab_ID() + '"]');
+            //data-cid="' + crt.getName() + '_' + this.curTab.getVAF_Tab_ID()
+            var wrapper = bodyDiv.find('[data-cid="' + evt.propertyName + '_' + this.curTab.getVAF_Tab_ID() + '"]');
             //wrapper.append('<span >' + evt.newValue + '</span>');
             var field = $.grep(this.selectionfields, function (field, index) {
                 if (field.getColumnName() == evt.propertyName)
@@ -287,7 +287,7 @@
             var fields;
             var selIds = [];
             var selItems = [];
-            var wrapper = divStatic.find('[data-cid="' + key + '_' + this.curTab.getAD_Tab_ID() + '"]');
+            var wrapper = divStatic.find('[data-cid="' + key + '_' + this.curTab.getVAF_Tab_ID() + '"]');
             if (wrapper && wrapper.length > 0) {
                 fields = wrapper.find('.vis-fp-lst-searchrcrds');
                 var inputs = fields.find('input');
@@ -876,7 +876,7 @@
                     else {
                         field.setDisplayType(VIS.DisplayType.List);
                         // bind lookup for buttons having Reference List bind with column
-                        field.lookup = new VIS.MLookupFactory.getMLookUp(VIS.context, this.winNo, field.getAD_Column_ID(), VIS.DisplayType.List);
+                        field.lookup = new VIS.MLookupFactory.getMLookUp(VIS.context, this.winNo, field.getVAF_Column_ID(), VIS.DisplayType.List);
                     }
                     //field.loadLookUp();
                 }
@@ -1318,7 +1318,7 @@
                 //        data = data["list"];
                 //        if (data && data.length > 0) {
                 //            var fields;
-                //            var wrapper = divStatic.find('[data-cid="' + key + '_' + that.curTab.getAD_Tab_ID() + '"]');
+                //            var wrapper = divStatic.find('[data-cid="' + key + '_' + that.curTab.getVAF_Tab_ID() + '"]');
                 //            if (wrapper && wrapper.length > 0) {
                 //                fields = wrapper.find('.vis-fp-lst-searchrcrds');
                 //                var inputs = wrapper.find('input');

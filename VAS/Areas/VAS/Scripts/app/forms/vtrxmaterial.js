@@ -84,8 +84,8 @@
             var height = ($(window).height()) * (96 / 100);
 
 
-            var lookupOrg = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.TableDir, "AD_Org_ID", 0, false, null);
-            $cmbOrganization = new VIS.Controls.VComboBox("AD_Org_ID", false, false, true, lookupOrg, 50);
+            var lookupOrg = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.TableDir, "VAF_Org_ID", 0, false, null);
+            $cmbOrganization = new VIS.Controls.VComboBox("VAF_Org_ID", false, false, true, lookupOrg, 50);
 
             // var lookupMoventType = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3666, VIS.DisplayType.List, "MovementType",189, false, null);
             var lookupMoventType = VIS.MLookupFactory.get(VIS.Env.getCtx(), 0, 0, VIS.DisplayType.List, "MovementType", 189, false, null);
@@ -155,7 +155,7 @@
             $divOrganization.append($divOrganizationInputwrap);
             $divOrganizationInputwrap.append($divOrganizationCtrlwrap);
             $divOrganizationCtrlwrap.append($cmbOrganization.getControl());
-            $divOrganizationCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "AD_Org_ID") + " </label>"));
+            $divOrganizationCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAF_Org_ID") + " </label>"));
             $divInfoinn.append($divOrganization);
 
             var $divMovementType = $("<div class='vis-paymentselect-field'>");
@@ -315,7 +315,7 @@
                 $divGridPSelect.append(gridController.getRoot());
                 gridController.activate();
                 query = new VIS.Query();
-                query.addRestriction("AD_Client_ID", VIS.Query.prototype.EQUAL, VIS.context.getAD_Client_ID());
+                query.addRestriction("VAF_Client_ID", VIS.Query.prototype.EQUAL, VIS.context.getVAF_Client_ID());
                 //_mTab.setQuery(query);
                 //gridController.query(0, 0, false);
             });
@@ -341,7 +341,7 @@
                 value = null;
             }
             if (value != null && value.toString().length > 0) {
-                localquery.addRestriction("AD_Org_ID", VIS.Query.prototype.EQUAL, value);
+                localquery.addRestriction("VAF_Org_ID", VIS.Query.prototype.EQUAL, value);
             }
             //  Locator
             value = $locator.getValue();

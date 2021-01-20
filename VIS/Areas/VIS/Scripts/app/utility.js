@@ -623,8 +623,8 @@
                 sb += ctx.getWindowContext(windowNo, "WindowName", false) + "  ";
 
             //sb += ctx.getContext("##AD_User_Name") + "@" +
-            //    ctx.getContext("#AD_Org_Name") + "." +
-            //    ctx.getContext("#AD_Client_Name");
+            //    ctx.getContext("#VAF_Org_Name") + "." +
+            //    ctx.getContext("#VAF_Client_Name");
 
             return sb;
         };
@@ -918,23 +918,23 @@
         function getIsWorkflowProcess() {
             if (s_workflow == null) {
                 s_workflow = false;
-                var AD_Table_ID = 645;	//	AD_WF_Process	
-                if (VIS.MRole.getIsTableAccess(AD_Table_ID, true))	//	RO
+                var VAF_TableView_ID = 645;	//	AD_WF_Process	
+                if (VIS.MRole.getIsTableAccess(VAF_TableView_ID, true))	//	RO
                     s_workflow = true;
                 else {
-                    AD_Table_ID = 644;	//	AD_WF_Activity	
-                    if (VIS.MRole.getIsTableAccess(AD_Table_ID, true))	//	RO
+                    VAF_TableView_ID = 644;	//	AD_WF_Activity	
+                    if (VIS.MRole.getIsTableAccess(VAF_TableView_ID, true))	//	RO
                         s_workflow = true;
                 }
                 //	Get Window
                 if (s_workflow) {
-                    // VIS.DB.executeScalar("SELECT AD_Window_ID FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID, null, function (val) {
+                    // VIS.DB.executeScalar("SELECT AD_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID, null, function (val) {
                     //var dr=null;
                     $.ajax({
                         type: 'Get',
                         async: true,
                         url: VIS.Application.contextUrl + "Form/GetWorkflowWindowID",
-                        data: { AD_Table_ID: AD_Table_ID },
+                        data: { VAF_TableView_ID: VAF_TableView_ID },
                         success: function (data) {
                             var val = JSON.parse(data);
                             if (val && !isNaN(val))
@@ -955,33 +955,33 @@
             return s_workflow;
         };
 
-        function startWorkflowProcess(AD_Table_ID, Record_ID) {
+        function startWorkflowProcess(VAF_TableView_ID, Record_ID) {
             //if (Envs.workflowWindowID == 0)
             //{
             //    return;
             //}
             //
             var query = null;
-            if (AD_Table_ID != 0 && Record_ID != 0) {
+            if (VAF_TableView_ID != 0 && Record_ID != 0) {
                 query = new VIS.Query("AD_WF_Process");
-                query.addRestriction("AD_Table_ID", VIS.Query.prototype.EQUAL, AD_Table_ID);
+                query.addRestriction("VAF_TableView_ID", VIS.Query.prototype.EQUAL, VAF_TableView_ID);
                 query.addRestriction("Record_ID", VIS.Query.prototype.EQUAL, Record_ID);
                 VIS.viewManager.startWindow(s_workflow_Window_ID, query);
             }
         };
 
-        function zoom(AD_Table_ID, Record_ID) {
+        function zoom(VAF_TableView_ID, Record_ID) {
             var tableName = null;
             var AD_Window_ID = 0;
             var PO_Window_ID = 0;
 
-            // var sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM AD_Table WHERE AD_Table_ID=" + AD_Table_ID;
+            // var sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + VAF_TableView_ID;
             var dr = null;
             $.ajax({
                 type: 'Get',
                 async: false,
                 url: VIS.Application.contextUrl + "Form/GetZoomWindowID",
-                data: { AD_Table_ID: AD_Table_ID },
+                data: { VAF_TableView_ID: VAF_TableView_ID },
                 success: function (data) {
                     dr = new VIS.DB.DataReader().toJson(data)
                 },
@@ -1014,7 +1014,7 @@
         };
 
         // vinay bhatt workflow zoom with window id
-        function wfzoom(AD_Table_ID, Record_ID, AD_WF_Activity_ID) {
+        function wfzoom(VAF_TableView_ID, Record_ID, AD_WF_Activity_ID) {
             var tableName = null;
             var AD_Window_ID = 0;
             var PO_Window_ID = 0;
@@ -1023,7 +1023,7 @@
             var sql = "VIS_146";
 
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_Table_ID", AD_Table_ID);
+            param[0] = new VIS.DB.SqlParam("@VAF_TableView_ID", VAF_TableView_ID);
             param[1] = new VIS.DB.SqlParam("@AD_WF_Activity_ID", AD_WF_Activity_ID);
             var dr = null;
             dr = executeReader(sql, param);
@@ -1034,7 +1034,7 @@
                 ActivityWindow = VIS.Utility.Util.getValueOfInt(dr.getInt(3));//"1000157"
             }
             else {
-                zoom(AD_Table_ID, Record_ID);
+                zoom(VAF_TableView_ID, Record_ID);
                 return;
             }
             dr.dispose();

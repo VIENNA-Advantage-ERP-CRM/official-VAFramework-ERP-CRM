@@ -35,7 +35,7 @@ namespace VAdvantage.Report
         private DateTime? _DateAcct_From = null;
         private DateTime? _DateAcct_To = null;
         /**	Org Parameter					*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /**	Account Parameter				*/
         private int _Account_ID = 0;
         /**	BPartner Parameter				*/
@@ -100,9 +100,9 @@ namespace VAdvantage.Report
                 {
                     _PA_Hierarchy_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    _AD_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
                 else if (name.Equals("Account_ID"))
                 {
@@ -151,10 +151,10 @@ namespace VAdvantage.Report
                     _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Account, _Account_ID));
             }
             //	Optional Org
-            if (_AD_Org_ID != 0 && _AD_Org_ID != -1)
+            if (_VAF_Org_ID != 0 && _VAF_Org_ID != -1)
             {
                 _parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _AD_Org_ID));
+                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
             }
             //	Optional BPartner
             if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
@@ -363,8 +363,8 @@ namespace VAdvantage.Report
             //	Set Name,Description
             String sql_select = "SELECT e.Name, fa.Description "
                 + "FROM Fact_Acct fa"
-                + " INNER JOIN AD_Table t ON (fa.AD_Table_ID=t.AD_Table_ID)"
-                + " INNER JOIN AD_Element e ON (t.TableName||'_ID'=e.ColumnName) "
+                + " INNER JOIN VAF_TableView t ON (fa.VAF_TableView_ID=t.VAF_TableView_ID)"
+                + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
                 + "WHERE r.Fact_Acct_ID=fa.Fact_Acct_ID";
             //	Translated Version ...
             sb = new StringBuilder("UPDATE T_ReportStatement r SET (Name,Description)=(")
@@ -450,8 +450,8 @@ namespace VAdvantage.Report
      //       //	Set Name,Description
      //       String sql_select = "SELECT e.Name, fa.Description "
      //           + "FROM Fact_Acct fa"
-     //           + " INNER JOIN AD_Table t ON (fa.AD_Table_ID=t.AD_Table_ID)"
-     //           + " INNER JOIN AD_Element e ON (t.TableName||'_ID'=e.ColumnName) "
+     //           + " INNER JOIN VAF_TableView t ON (fa.VAF_TableView_ID=t.VAF_TableView_ID)"
+     //           + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
      //           + "WHERE r.Fact_Acct_ID=fa.Fact_Acct_ID";
      //       //	Translated Version ...
      //       sb = new StringBuilder("UPDATE T_ReportStatement r SET (Name,Description)=(")

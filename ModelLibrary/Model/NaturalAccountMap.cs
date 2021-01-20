@@ -32,15 +32,15 @@ namespace VAdvantage.Model
         /**	Logger			*/
         private static VLogger log = VLogger.GetVLogger(typeof(NaturalAccountMap<K, V>).FullName);
 
-        public bool SaveAccounts(int AD_Client_ID, int AD_Org_ID, int C_Element_ID)
+        public bool SaveAccounts(int VAF_Client_ID, int VAF_Org_ID, int C_Element_ID)
         {
             log.Config("");
 
             foreach (string key in s_base.Keys)
             {
                 MElementValue na = (MElementValue)s_base[key];
-                na.SetAD_Client_ID(AD_Client_ID);
-                na.SetAD_Org_ID(AD_Org_ID);
+                na.SetVAF_Client_ID(VAF_Client_ID);
+                na.SetVAF_Org_ID(VAF_Org_ID);
                 na.SetC_Element_ID(C_Element_ID);
                 na.SetVIS_DefaultAccount(key);
 
@@ -241,7 +241,7 @@ namespace VAdvantage.Model
 
 
 
-        public String ParseFile(FileStream file, int AD_Client_ID, int AD_Org_ID, int C_Element_ID, MTree tree)
+        public String ParseFile(FileStream file, int VAF_Client_ID, int VAF_Org_ID, int C_Element_ID, MTree tree)
         {
             //log.Config(file.Name);
             String line = null;
@@ -255,7 +255,7 @@ namespace VAdvantage.Model
 
                 //  read lines
                 while ((line = inn.ReadLine()) != null && errMsg.Length == 0)
-                    errMsg = ParseAndSaveLine(line, AD_Client_ID, AD_Org_ID, C_Element_ID,tree);
+                    errMsg = ParseAndSaveLine(line, VAF_Client_ID, VAF_Org_ID, C_Element_ID,tree);
                 line = "";
                 inn.Close();
 
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
         }   //  parse
 
 
-        public String ParseAndSaveLine(String line, int AD_Client_ID, int AD_Org_ID, int C_Element_ID,MTree tree)
+        public String ParseAndSaveLine(String line, int VAF_Client_ID, int VAF_Org_ID, int C_Element_ID,MTree tree)
         {
             log.Config(line);
 
@@ -384,12 +384,12 @@ namespace VAdvantage.Model
                     //  Create Account - save later
                     na = new MElementValue(m_ctx, Value, Name, Description, AccountType, AccountSign, IsDocControlled.ToUpper().StartsWith("Y"), IsSummary.ToUpper().StartsWith("Y"), m_trx);
                     int refElementID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ElementValue_ID FROM C_ElementValue
-                                                                                    WHERE IsActive='Y' AND AD_Client_ID=" + na.GetAD_Client_ID() + " AND Value='" + accountParent + @"'
+                                                                                    WHERE IsActive='Y' AND VAF_Client_ID=" + na.GetVAF_Client_ID() + " AND Value='" + accountParent + @"'
                                                                                     AND C_Element_ID=" + C_Element_ID, null, m_trx));
                     na.SetRef_C_ElementValue_ID(refElementID);
                     m_valueMap[Value] = na;
-                    na.SetAD_Client_ID(AD_Client_ID);
-                    na.SetAD_Org_ID(AD_Org_ID);
+                    na.SetVAF_Client_ID(VAF_Client_ID);
+                    na.SetVAF_Org_ID(VAF_Org_ID);
                     na.SetC_Element_ID(C_Element_ID);
                     na.SetVIS_DefaultAccount(Default_Account);
                     if (!na.Save(m_trx))

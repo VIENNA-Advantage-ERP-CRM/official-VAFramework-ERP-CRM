@@ -232,11 +232,11 @@ namespace VAdvantage.Acct
             }
             else if (journalLineDimension.GetLineType().Equals(MJournalLine.ELEMENTTYPE_OrgTrx) && journalLineDimension.GetOrg_ID() > 0)
             {
-                docLine.SetAD_OrgTrx_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
+                docLine.SetVAF_OrgTrx_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
             }
             else if (journalLineDimension.GetLineType().Equals(MJournalLine.ELEMENTTYPE_Organization) && journalLineDimension.GetOrg_ID() > 0)
             {
-                docLine.SetAD_Org_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
+                docLine.SetVAF_Org_ID(Convert.ToInt32(journalLineDimension.GetOrg_ID()));
             }
             return docLine;
         }

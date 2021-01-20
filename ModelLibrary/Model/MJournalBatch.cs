@@ -46,7 +46,7 @@ namespace VAdvantage.Model
             }
             //
             MJournalBatch to = new MJournalBatch(ctx, 0, trxName);
-            PO.CopyValues(from, to, from.GetAD_Client_ID(), from.GetAD_Org_ID());
+            PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("DocumentNo", null);
             to.Set_ValueNoCheck("C_Period_ID", null);
             to.SetDateAcct(dateDoc);
@@ -142,12 +142,12 @@ namespace VAdvantage.Model
         /// <summary>
         ///	Overwrite Client/Org if required
         /// </summary>
-        /// <param name="AD_Client_ID">client</param>
-        /// <param name="AD_Org_ID">org</param>
-        public new void SetClientOrg(int AD_Client_ID, int AD_Org_ID)
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        public new void SetClientOrg(int VAF_Client_ID, int VAF_Org_ID)
         {
-            //super.setClientOrg(AD_Client_ID, AD_Org_ID);
-            base.SetClientOrg(AD_Client_ID, AD_Org_ID);
+            //super.setClientOrg(VAF_Client_ID, VAF_Org_ID);
+            base.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
         }	//	setClientOrg
 
 
@@ -201,7 +201,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromJournals.Length; i++)
             {
                 MJournal toJournal = new MJournal(GetCtx(), 0, jb.Get_TrxName());
-                PO.CopyValues(fromJournals[i], toJournal, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromJournals[i], toJournal, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toJournal.SetGL_JournalBatch_ID(GetGL_JournalBatch_ID());
                 toJournal.Set_ValueNoCheck("DocumentNo", null);	//	create new
 
@@ -414,7 +414,7 @@ namespace VAdvantage.Model
             MDocType dt = MDocType.Get(GetCtx(), GetC_DocType_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetAD_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -422,7 +422,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetAD_Org_ID()))
+            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 m_processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -617,7 +617,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateDoc());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetAD_Org_ID()))
+                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }

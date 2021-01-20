@@ -10,12 +10,12 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MAlertProcessor : X_AD_AlertProcessor, ViennaProcessor
+    public class MAlertProcessor : X_VAF_AlertHandler, ViennaProcessor
     {
         public static MAlertProcessor[] GetActive(Ctx ctx)
         {
             List<MAlertProcessor> list = new List<MAlertProcessor>();
-            String sql = "SELECT * FROM AD_AlertProcessor WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAF_AlertHandler WHERE IsActive='Y'";
 
             //Changed By Karan.....
             string scheduleIP = null;
@@ -28,7 +28,7 @@ namespace VAdvantage.Model
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
-                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_AlertProcessor WHERE AD_AlertProcessor_ID =" + dr["AD_AlertProcessor_ID"] + " )"));
+                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM VAF_AlertHandler WHERE VAF_AlertHandler_ID =" + dr["VAF_AlertHandler_ID"] + " )"));
 
                     //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
                     if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
@@ -54,8 +54,8 @@ namespace VAdvantage.Model
         /**	Static Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MAlertProcessor).FullName);
 
-        public MAlertProcessor(Ctx ctx, int AD_AlertProcessor_ID, Trx trx)
-            : base(ctx, AD_AlertProcessor_ID, trx)
+        public MAlertProcessor(Ctx ctx, int VAF_AlertHandler_ID, Trx trx)
+            : base(ctx, VAF_AlertHandler_ID, trx)
         {
         }	//	MAlertProcessor
 
@@ -72,13 +72,13 @@ namespace VAdvantage.Model
         {
             List<MAlertProcessorLog> list = new List<MAlertProcessorLog>();
             String sql = "SELECT * "
-                + "FROM AD_AlertProcessorLog "
-                + "WHERE AD_AlertProcessor_ID=@AD_AlertProcessor_ID "
+                + "FROM VAF_AlertHandlerLog "
+                + "WHERE VAF_AlertHandler_ID=@VAF_AlertHandler_ID "
                 + "ORDER BY Created DESC";
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_AlertProcessor_ID", GetAD_AlertProcessor_ID());
+                param[0] = new SqlParameter("@VAF_AlertHandler_ID", GetVAF_AlertHandler_ID());
                 DataSet ds = DB.ExecuteDataset(sql, param);
                 foreach(DataRow dr in ds.Tables[0].Rows)
                     list.Add(new MAlertProcessorLog(GetCtx(), dr, null));
@@ -109,8 +109,8 @@ namespace VAdvantage.Model
         {
             if (GetKeepLogDays() < 1)
                 return 0;
-            String sql = "DELETE FROM AD_AlertProcessorLog "
-                + "WHERE AD_AlertProcessor_ID=" + GetAD_AlertProcessor_ID()
+            String sql = "DELETE FROM VAF_AlertHandlerLog "
+                + "WHERE VAF_AlertHandler_ID=" + GetVAF_AlertHandler_ID()
                 //jz + " AND (Created+" + getKeepLogDays() + ") < SysDate";
                 + " AND addDays(Created," + GetKeepLogDays() + ") < SysDate";
             DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -123,12 +123,12 @@ namespace VAdvantage.Model
             if (m_alerts != null && !reload)
                 return m_alerts;
             String sql = "SELECT * FROM AD_Alert "
-                + "WHERE AD_AlertProcessor_ID=@AD_AlertProcessor_ID AND IsActive='Y'";
+                + "WHERE VAF_AlertHandler_ID=@VAF_AlertHandler_ID AND IsActive='Y'";
             List<MAlert> list = new List<MAlert>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_AlertProcessor_ID", GetAD_AlertProcessor_ID());
+                param[0] = new SqlParameter("@VAF_AlertHandler_ID", GetVAF_AlertHandler_ID());
                 DataSet ds = DB.ExecuteDataset(sql, param);
                 foreach(DataRow dr in ds.Tables[0].Rows)
                     list.Add(new MAlert(GetCtx(), dr, null));

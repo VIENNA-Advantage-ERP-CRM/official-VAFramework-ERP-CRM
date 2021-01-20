@@ -70,7 +70,7 @@ static X_AD_LabelPrinter()
 //static long serialVersionUID = 27562514361937L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045148L;
-/** AD_Table_ID=626 */
+/** VAF_TableView_ID=626 */
 public static int Table_ID;
  // =626;
 

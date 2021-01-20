@@ -15,15 +15,15 @@ namespace VIS.Controllers
     {
         //
         // GET: /VIS/VImageForm/
-        public ActionResult Index(string windowno, int ad_image_id)
+        public ActionResult Index(string windowno, int VAF_Image_id)
         {
             VImageModel obj = new VImageModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                if (ad_image_id > 0)
+                if (VAF_Image_id > 0)
                 {
-                    obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 0, 0, ctx.GetApplicationUrl());
+                    obj.GetImage(ctx, Convert.ToInt32(VAF_Image_id), 0, 0, ctx.GetApplicationUrl());
                 }
             }
 
@@ -33,10 +33,10 @@ namespace VIS.Controllers
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult SaveImage(HttpPostedFileBase file, bool isDatabaseSave, string ad_image_id)
+        public JsonResult SaveImage(HttpPostedFileBase file, bool isDatabaseSave, string VAF_Image_id)
         {
             // check if its not altered
-            if (file == null && ad_image_id == "0")
+            if (file == null && VAF_Image_id == "0")
             {
                 Json(new { result = false }, JsonRequestBehavior.AllowGet);
             }
@@ -50,7 +50,7 @@ namespace VIS.Controllers
                 {
                     Directory.CreateDirectory(Path.Combine(Server.MapPath("~/Images"), "RecordImages"));
                 }
-                value = obj.SaveImage(ctx, Server.MapPath("~/Images/RecordImages"), file, Convert.ToInt32(ad_image_id), isDatabaseSave);
+                value = obj.SaveImage(ctx, Server.MapPath("~/Images/RecordImages"), file, Convert.ToInt32(VAF_Image_id), isDatabaseSave);
             }
             return Json(new { result = value }, JsonRequestBehavior.AllowGet);
         }
@@ -58,28 +58,28 @@ namespace VIS.Controllers
         /// <summary>
         /// To delete image, this controller function will delete image from folder as well as forcely from database too
         /// </summary>
-        /// <param name="ad_image_id">Image id from database</param>
+        /// <param name="VAF_Image_id">Image id from database</param>
         /// <param name="imageUrl">Image path of folder</param>
         /// <returns></returns>
-        public JsonResult DeleteImage(int ad_image_id, string imageUrl)
+        public JsonResult DeleteImage(int VAF_Image_id, string imageUrl)
         {
             VImageModel obj = new VImageModel();
             var value = 0;
             if (Session["Ctx"] != null)
             {
-                value = obj.DeleteImage(Session["ctx"] as Ctx, ad_image_id);
+                value = obj.DeleteImage(Session["ctx"] as Ctx, VAF_Image_id);
             }
             return Json(new { result = "null" }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetImageAsByte(int ad_image_id)
+        public JsonResult GetImageAsByte(int VAF_Image_id)
         {
             VImageModel obj = new VImageModel();
             ImagePathInfo img = null;
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                img = obj.GetImage(ctx, Convert.ToInt32(ad_image_id), 500, 375, ctx.GetApplicationUrl());
+                img = obj.GetImage(ctx, Convert.ToInt32(VAF_Image_id), 500, 375, ctx.GetApplicationUrl());
             }
             return Json(JsonConvert.SerializeObject(img), JsonRequestBehavior.AllowGet);
         }

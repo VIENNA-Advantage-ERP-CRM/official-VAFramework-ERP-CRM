@@ -25,11 +25,11 @@ namespace BaseLibrary.Engine
         bool AfterDelete(PO po, bool success);
         bool IsAutoUpdateTrl(Ctx ctx,string tableName);
         string GetDocumentNo(int id, PO pO);
-        int GetNextID(int AD_Client_ID, string TableName, Trx trx);
+        int GetNextID(int VAF_Client_ID, string TableName, Trx trx);
        string  GetDocumentNo(PO po);
         Lookup GetLookup(Ctx ctx,POInfoColumn colInfo);
-        dynamic GetAttachment(Ctx ctx, int aD_Table_ID, int id);
-        dynamic CreateAttachment(Ctx ctx, int aD_Table_ID, int id, Trx trx);
+        dynamic GetAttachment(Ctx ctx, int vaf_tableview_ID, int id);
+        dynamic CreateAttachment(Ctx ctx, int vaf_tableview_ID, int id, Trx trx);
     }
      
     /// <summary>
@@ -157,14 +157,14 @@ namespace BaseLibrary.Engine
         /// <summary>
         /// Get next record id 
         /// </summary>
-        /// <param name="AD_Client_ID">client id</param>
+        /// <param name="VAF_Client_ID">client id</param>
         /// <param name="TableName">table name</param>
         /// <param name="trx">transaction</param>
         /// <returns>record id</returns>
-        public int GetNextID(int AD_Client_ID, string TableName, Trx trx)
+        public int GetNextID(int VAF_Client_ID, string TableName, Trx trx)
         {
             if (_action != null)
-                return _action.GetNextID(AD_Client_ID,TableName,trx);
+                return _action.GetNextID(VAF_Client_ID,TableName,trx);
             return 0;
         }
 
@@ -197,13 +197,13 @@ namespace BaseLibrary.Engine
         /// Get Attachments if any
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="id">record id</param>
         /// <returns>dynamic MAttachment object</returns>
-        public dynamic GetAttachment(Ctx ctx, int AD_Table_ID, int id)
+        public dynamic GetAttachment(Ctx ctx, int VAF_TableView_ID, int id)
         {
             if (_action != null)
-                return _action.GetAttachment(ctx,AD_Table_ID,id);
+                return _action.GetAttachment(ctx,VAF_TableView_ID,id);
             return null;
         }
 
@@ -211,14 +211,14 @@ namespace BaseLibrary.Engine
         /// Create Attachment 
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="id">record id</param>
         /// <param name="trx">transaction object</param>
         /// <returns>dynamic MAttachment object</returns>
-        public dynamic CreateAttachment(Ctx ctx, int AD_Table_ID, int id, Trx trx)
+        public dynamic CreateAttachment(Ctx ctx, int VAF_TableView_ID, int id, Trx trx)
         {
             if (_action != null)
-                return _action.CreateAttachment(ctx,AD_Table_ID,id,trx);
+                return _action.CreateAttachment(ctx,VAF_TableView_ID,id,trx);
             return null; 
         }
     }

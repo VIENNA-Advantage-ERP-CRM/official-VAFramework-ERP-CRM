@@ -76,7 +76,7 @@ static X_PA_SLA_Measure()
 //static long serialVersionUID 27562514382374L;
 /** Last Updated Timestamp 7/29/2010 1:07:45 PM */
 public static long updatedMS = 1280389065585L;
-/** AD_Table_ID=743 */
+/** VAF_TableView_ID=743 */
 public static int Table_ID;
  // =743;
 
@@ -119,18 +119,18 @@ StringBuilder sb = new StringBuilder ("X_PA_SLA_Measure[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID <= 0) Set_Value ("AD_Table_ID", null);
+if (VAF_TableView_ID <= 0) Set_Value ("VAF_TableView_ID", null);
 else
-Set_Value ("AD_Table_ID", AD_Table_ID);
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

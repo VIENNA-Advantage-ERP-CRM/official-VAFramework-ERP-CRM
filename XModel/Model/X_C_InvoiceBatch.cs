@@ -84,7 +84,7 @@ static X_C_InvoiceBatch()
 //static long serialVersionUID 27562514372375L;
 /** Last Updated Timestamp 7/29/2010 1:07:35 PM */
 public static long updatedMS = 1280389055586L;
-/** AD_Table_ID=767 */
+/** VAF_TableView_ID=767 */
 public static int Table_ID;
  // =767;
 

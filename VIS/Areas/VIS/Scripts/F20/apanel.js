@@ -280,7 +280,7 @@
                         $.ajax({
                             url: VIS.Application.contextUrl + "JsonData/InsertUpdateDefaultSearch",
                             dataType: "json",
-                            data: { AD_Tab_ID: self.curTab.getAD_Tab_ID(), AD_Table_ID: self.curTab.getAD_Table_ID(), AD_User_ID: self.ctx.getAD_User_ID(), AD_UserQuery_ID: uQueryID },
+                            data: { VAF_Tab_ID: self.curTab.getVAF_Tab_ID(), VAF_TableView_ID: self.curTab.getVAF_TableView_ID(), AD_User_ID: self.ctx.getAD_User_ID(), AD_UserQuery_ID: uQueryID },
                             success: function (data) {
 
                             },
@@ -959,13 +959,13 @@
         this.refreshSavedASearchList = function (showData, text) {
             var sqlUserSearch = "VIS_116";
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@AD_Tab_ID", self.curTab.getAD_Tab_ID());
+            param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", self.curTab.getVAF_Tab_ID());
             param[1] = new VIS.DB.SqlParam("@AD_User_ID", self.ctx.getAD_User_ID());
-            param[2] = new VIS.DB.SqlParam("@AD_Tab_ID1", self.curTab.getAD_Tab_ID());
+            param[2] = new VIS.DB.SqlParam("@VAF_Tab_ID1", self.curTab.getVAF_Tab_ID());
             param[3] = new VIS.DB.SqlParam("@AD_User_ID1", self.ctx.getAD_User_ID());
-            param[4] = new VIS.DB.SqlParam("@AD_Client_ID", self.ctx.getAD_Client_ID());
-            param[5] = new VIS.DB.SqlParam("@AD_Tab_ID2", self.curTab.getAD_Tab_ID());
-            param[6] = new VIS.DB.SqlParam("@AD_Table_ID", self.curTab.getAD_Table_ID());
+            param[4] = new VIS.DB.SqlParam("@VAF_Client_ID", self.ctx.getVAF_Client_ID());
+            param[5] = new VIS.DB.SqlParam("@VAF_Tab_ID2", self.curTab.getVAF_Tab_ID());
+            param[6] = new VIS.DB.SqlParam("@VAF_TableView_ID", self.curTab.getVAF_TableView_ID());
 
             var $selfpanel = this;
             executeDataSet(sqlUserSearch, param, function (data) {
@@ -979,8 +979,8 @@
                     var hasDefaultSearch = false;
                     for (var i = 0; i < data.tables[0].rows.length; i++) {
 
-                        if (data.tables[0].rows[i].cells["ad_defaultuserquery_id"] > 0) {
-                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["ad_defaultuserquery_id"], 'userid': data.tables[0].rows[i].cells["ad_defaultuserquery_id"] });
+                        if (data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] > 0) {
+                            userQueries.push({ 'title': data.tables[0].rows[i].cells["title"], 'label': data.tables[0].rows[i].cells["name"], 'value': data.tables[0].rows[i].cells["name"], 'code': data.tables[0].rows[i].cells["code"], 'id': data.tables[0].rows[i].cells["ad_userquery_id"], 'defaultids': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"], 'userid': data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] });
                             hasDefaultSearch = true;
                         }
                         else {
@@ -1390,7 +1390,7 @@
     APanel.prototype.refreshData = function () {
         var ssel = this;
         window.setTimeout(function () {
-            if (ssel.curTab.getAD_Tab_ID() == ssel.firstTabId.split('_')[1]) {
+            if (ssel.curTab.getVAF_Tab_ID() == ssel.firstTabId.split('_')[1]) {
                 ssel.curGC.dataRefreshAll();
             }
             else {
@@ -1473,7 +1473,7 @@
 
         for (var i = 0; i < tabs.length; i++) {
 
-            var id = curWindowNo + "_" + tabs[i].getAD_Tab_ID(); //uniqueID
+            var id = curWindowNo + "_" + tabs[i].getVAF_Tab_ID(); //uniqueID
             var tObj = { action: id, text: tabs[i].getName(), toolTipText: tabs[i].getDescription(), textOnly: true, iconName: '' };
             if (tabs[i].getTabLevel() > 0) {
                 tObj.textOnly = false;
@@ -1499,8 +1499,8 @@
             if (gTab.getIsSortTab())//     .IsSortTab())
             {
                 //var st = new VIS.VSortTab(curWindowNo, id);
-                var st = new VIS.VSortTab(curWindowNo, gTab.getAD_Table_ID(),
-                    gTab.getAD_ColumnSortOrder_ID(), gTab.getAD_ColumnSortYesNo_ID(), gTab.getIsReadOnly(), id);
+                var st = new VIS.VSortTab(curWindowNo, gTab.getVAF_TableView_ID(),
+                    gTab.getVAF_ColumnSortOrder_ID(), gTab.getVAF_ColumnSortYesNo_ID(), gTab.getIsReadOnly(), id);
                 //st.setTabLevel(gTab.getTabLevel());
                 tabElement = st;
                 if (i == 0) {
@@ -1538,7 +1538,7 @@
 
                 //	Is this tab included?
                 if (!multiTabview && !$.isEmptyObject(includedMap)) {
-                    var parent = includedMap[gTab.getAD_Tab_ID()];
+                    var parent = includedMap[gTab.getVAF_Tab_ID()];
                     if (parent != null) {
                         var included = parent.includeTab(gc);
                     }
@@ -1907,7 +1907,7 @@
         else if (tis.aWorkflow != null && action === (tis.aWorkflow.getAction())) {
 
             if (tis.curTab.getRecord_ID() > 0) {
-                VIS.AEnv.startWorkflowProcess(tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID());
+                VIS.AEnv.startWorkflowProcess(tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID());
             }
 
 
@@ -1919,7 +1919,7 @@
         else if (tis.aCreateDocument && tis.aCreateDocument.getAction() === action) {
             if (window.VADMS) {
                 var frame = new VIS.CFrame();
-                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID());
+                var editDoc = new window.VADMS.editDocument(0, "", 0, "", 0, null, "", tis.curTab.getAD_Window_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID());
                 frame.setName(VIS.Msg.getMsg("VADMS_CreateDocument"));
                 frame.setTitle(VIS.Msg.getMsg("VADMS_CreateDocument"));
                 frame.hideHeader(true);
@@ -1936,7 +1936,7 @@
 
             if (window.VADMS) {
                 // New parameter add for upload document dialoag to sent current window name and tab name
-                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getAD_Table_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
+                window.VADMS.uploaddocument(0, tis.curTab.getAD_Window_ID(), tis.curTab.getVAF_TableView_ID(), tis.curTab.getRecord_ID(), tis.$parentWindow.name, tis.curTab.getName());
 
             }
             else {
@@ -1953,7 +1953,7 @@
                 frame.hideHeader(true);
                 doc.setWindowNo(VIS.Env.getWindowNo());
                 doc.setWindowID(tis.curTab.getAD_Window_ID());
-                doc.setTableID(tis.curTab.getAD_Table_ID());
+                doc.setTableID(tis.curTab.getVAF_TableView_ID());
                 doc.setRecordID(tis.curTab.getRecord_ID());
                 doc.setWindowName(tis.gridWindow.getName());
                 frame.setContent(doc);
@@ -1973,7 +1973,7 @@
                     var dataIn = {
                         docID: documentID,
                         winID: tis.curTab.getAD_Window_ID(),
-                        tableID: tis.curTab.getAD_Table_ID(),
+                        tableID: tis.curTab.getVAF_TableView_ID(),
                         recID: tis.curTab.getRecord_ID()
                     };
                     $.ajax({
@@ -2043,27 +2043,27 @@
 
 
         var curTabNo = 0;
-        var AD_Table_ID = 0;
+        var VAF_TableView_ID = 0;
         var Record_ID = 0;
 
         if (curCtrller.curTab) {
             curTabNo = curCtrller.curTab.getTabNo();
             // resolved issue for zoom from notification button
-            AD_Table_ID = ctx.getTabRecordContext(aPanel.curWindowNo, curTabNo, "AD_Table_ID", false);
+            VAF_TableView_ID = ctx.getTabRecordContext(aPanel.curWindowNo, curTabNo, "VAF_TableView_ID", false);
             Record_ID = ctx.getTabRecordContext(aPanel.curWindowNo, curTabNo, "Record_ID", false);
 
-            //AD_Table_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "AD_Table_ID");
+            //VAF_TableView_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "VAF_TableView_ID");
             //Record_ID = ctx.getContextAsInt(aPanel.curWindowNo, curTabNo, "Record_ID");
         }
-        if (AD_Table_ID < 0)
-            AD_Table_ID = ctx.getContextAsInt(aPanel.curWindowNo, "AD_Table_ID");
+        if (VAF_TableView_ID < 0)
+            VAF_TableView_ID = ctx.getContextAsInt(aPanel.curWindowNo, "VAF_TableView_ID");
         if (Record_ID < 0)
             Record_ID = ctx.getContextAsInt(aPanel.curWindowNo, "Record_ID");
 
 
         //  Zoom Button
         if (columnName.equals("Record_ID")) {
-            VIS.AEnv.zoom(AD_Table_ID, Record_ID);
+            VIS.AEnv.zoom(VAF_TableView_ID, Record_ID);
             return;
         }   //  Zoom
 
@@ -2093,7 +2093,7 @@
 
 
     APanel.prototype.actionButtonCallBack = function (vButton, startWOasking, batch, dateScheduledStart, columnName, ctx, self) {
-        var table_ID = self.curTab.getAD_Table_ID();
+        var table_ID = self.curTab.getVAF_TableView_ID();
         //	Record_ID
         var record_ID = self.curTab.getRecord_ID();
 
@@ -2108,12 +2108,12 @@
         //	Record_ID - Change Log ID
         if (record_ID == -1
             && (vButton.getProcess_ID() == 306 || vButton.getProcess_ID() == 307)) {
-            var id = curTab.getValue("AD_ChangeLog_ID");
+            var id = curTab.getValue("VAF_AlterLog_ID");
             record_ID = id;
         }
         //	Record_ID - EntityType
         if (record_ID == -1 && curTab.getKeyColumnName().equals("EntityType")) {
-            record_ID = curTab.getValue("AD_EntityType_ID");
+            record_ID = curTab.getValue("VAF_RecrodType_ID");
         }
         //	Ensure it's saved
         if (record_ID == -1 && curTab.getKeyColumnName().toUpperCase().endsWith("_ID")) {
@@ -2230,7 +2230,7 @@
         //requested by Mohit ,Mukesh Arora
         else if (columnName.equals("BGT01_CreateLinePo")) {
             if (window.BGT01) {
-                BGT01.CreateLineMovement(curTab.getAD_Window_ID(), curTab.getAD_Tab_ID(), curTab.getRecord_ID());
+                BGT01.CreateLineMovement(curTab.getAD_Window_ID(), curTab.getVAF_Tab_ID(), curTab.getRecord_ID());
             }
             return;
         }
@@ -2258,7 +2258,7 @@
             var ps = curTab.getValue("Posted");
             if (ps != null && ps == "Y") {
                 //get Current record orgID by window no
-                var obj = new VIS.AcctViewer(VIS.context.getAD_Client_ID(), curTab.getAD_Table_ID(), curTab.getRecord_ID(), curWindowNo, curTab.getAD_Window_ID());
+                var obj = new VIS.AcctViewer(VIS.context.getVAF_Client_ID(), curTab.getVAF_TableView_ID(), curTab.getRecord_ID(), curWindowNo, curTab.getAD_Window_ID());
                 if (obj != null) {
                     aPanel.setBusy(false);
                     obj.showDialog();
@@ -2281,10 +2281,10 @@
                                 postingByNewLogic = true;
                             }
                             if (window.FRPT && postingByNewLogic) {
-                                var orgID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "AD_Org_ID"));
+                                var orgID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "VAF_Org_ID"));
                                 var winID = curTab.getAD_Window_ID();
                                 var docTypeID = Number(VIS.context.getWindowTabContext(curWindowNo, 0, "C_DocType_ID"));
-                                var postObj = FRPT.PostingLogic(curWindowNo, curTab.getAD_Table_ID(), curTab.getRecord_ID(), force, orgID, winID, docTypeID);
+                                var postObj = FRPT.PostingLogic(curWindowNo, curTab.getVAF_TableView_ID(), curTab.getRecord_ID(), force, orgID, winID, docTypeID);
                                 curGC.dataRefresh();
                                 aPanel.setBusy(false, true);
                                 return;
@@ -2294,8 +2294,8 @@
                                     url: VIS.Application.contextUrl + "Posting/PostImmediate",
                                     dataType: "json",
                                     data: {
-                                        AD_Client_ID: VIS.context.getAD_Client_ID(),
-                                        AD_Table_ID: curTab.getAD_Table_ID(),
+                                        VAF_Client_ID: VIS.context.getVAF_Client_ID(),
+                                        VAF_TableView_ID: curTab.getVAF_TableView_ID(),
                                         Record_ID: curTab.getRecord_ID(),
                                         force: force
                                     },
@@ -2364,10 +2364,10 @@
             self = null;
             return ret;
         }
-        else if (vButton.AD_Form_ID > 0) {
+        else if (vButton.VAF_Page_ID > 0) {
 
-            if (VIS.MRole.getFormAccess(vButton.AD_Form_ID)) {
-                var wForm = new VIS.WForm(VIS.Env.getScreenHeight(), vButton.AD_Form_ID, curTab, curWindowNo);
+            if (VIS.MRole.getFormAccess(vButton.VAF_Page_ID)) {
+                var wForm = new VIS.WForm(VIS.Env.getScreenHeight(), vButton.VAF_Page_ID, curTab, curWindowNo);
             }
             else {
                 VIS.ADialog.warn("AccessTableNoView");
@@ -2383,7 +2383,7 @@
             dataType: "json",
             async: true,
             data: {
-                AD_Client_ID: VIS.context.getAD_Client_ID()
+                VAF_Client_ID: VIS.context.getVAF_Client_ID()
             },
             error: function (e) {
                 VIS.ADialog.info(VIS.Msg.getMsg('ERRORGettingPostingServer'));
@@ -2488,7 +2488,7 @@
             title = columnName;
         var pi = new VIS.ProcessInfo(title, vButton.getProcess_ID(), table_ID, record_ID);
         pi.setAD_User_ID(ctx.getAD_User_ID());
-        pi.setAD_Client_ID(ctx.getAD_Client_ID());
+        pi.setVAF_Client_ID(ctx.getVAF_Client_ID());
         pi.setAD_Window_ID((aPanel.$parentWindow === undefined ? 0 : aPanel.$parentWindow.AD_Window_ID));// vinay bhatt window id
         pi.setIsBatch(batch);
         pi.setIsBackground(isbackground);
@@ -2840,13 +2840,13 @@
         var sqlUserSearch = "VIS_117";
 
         var param = [];
-        param[0] = new VIS.DB.SqlParam("@AD_Tab_ID", this.curTab.getAD_Tab_ID());
+        param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", this.curTab.getVAF_Tab_ID());
         param[1] = new VIS.DB.SqlParam("@AD_User_ID", this.ctx.getAD_User_ID());
-        param[2] = new VIS.DB.SqlParam("@AD_Tab_ID1", this.curTab.getAD_Tab_ID());
+        param[2] = new VIS.DB.SqlParam("@VAF_Tab_ID1", this.curTab.getVAF_Tab_ID());
         param[3] = new VIS.DB.SqlParam("@AD_User_ID1", this.ctx.getAD_User_ID());
-        param[4] = new VIS.DB.SqlParam("@AD_Client_ID", this.ctx.getAD_Client_ID());
-        param[5] = new VIS.DB.SqlParam("@AD_Tab_ID2", this.curTab.getAD_Tab_ID());
-        param[6] = new VIS.DB.SqlParam("@AD_Table_ID", this.curTab.getAD_Table_ID());
+        param[4] = new VIS.DB.SqlParam("@VAF_Client_ID", this.ctx.getVAF_Client_ID());
+        param[5] = new VIS.DB.SqlParam("@VAF_Tab_ID2", this.curTab.getVAF_Tab_ID());
+        param[6] = new VIS.DB.SqlParam("@VAF_TableView_ID", this.curTab.getVAF_TableView_ID());
 
         var data = executeDataSet(sqlUserSearch, param);
 
@@ -2855,7 +2855,7 @@
             if ($selfpanel.curTab.getTabLevel() == 0 && !gc.isZoomAction) {
                 var hasDefaultSearch = false;
                 for (var i = 0; i < data.tables[0].rows.length; i++) {
-                    if (data.tables[0].rows[i].cells["ad_defaultuserquery_id"] > 0) {
+                    if (data.tables[0].rows[i].cells["VAF_DefaultUserQuery_id"] > 0) {
                         hasDefaultSearch = true;
                         $selfpanel.setAdvancedSerachText(false, data.tables[0].rows[i].cells["name"]);
                         var query = new VIS.Query($selfpanel.curTab.getTableName(), false);
@@ -3330,7 +3330,7 @@
         var ids = this.curGC.canDeleteRecords()
 
 
-        // if (!VIS.MRole.getDefault().getIsClientAccess(this.curTab.getAD_Client_ID(), true))
+        // if (!VIS.MRole.getDefault().getIsClientAccess(this.curTab.getVAF_Client_ID(), true))
         if (ids.length > 0) {
             VIS.ADialog.error("CannotDelete", true, " [ " + ids.join(",") + "]");
             return;
@@ -3403,7 +3403,7 @@
         var self = this;
         //var onchatClose = function () { self.curTab.loadChats(); self.aChat.setPressed(self.curTab.hasChat()); };
 
-        var chat = new VIS.Chat(record_ID, this.curTab.getCM_ChatID(), this.curTab.getAD_Table_ID(), infoName + ": " + infoDisplay, this.curWindowNo);
+        var chat = new VIS.Chat(record_ID, this.curTab.getCM_ChatID(), this.curTab.getVAF_TableView_ID(), infoName + ": " + infoDisplay, this.curWindowNo);
 
         chat.onClose = function () {
             self.curTab.loadChats();
@@ -3417,26 +3417,26 @@
         var record_ID = this.curTab.getRecord_ID();
         ///Check table has Email column
 
-        var AD_Table_ID = this.curTab.getAD_Table_ID();
+        var VAF_TableView_ID = this.curTab.getVAF_TableView_ID();
         //log.Info("Record_ID=" + record_ID);
         if (record_ID == -1)	//	No Key
         {
             return;
         }
-        VIS.AppointmentsForm.init(AD_Table_ID, record_ID, 0, 0, false, true);
+        VIS.AppointmentsForm.init(VAF_TableView_ID, record_ID, 0, 0, false, true);
     };
 
     APanel.prototype.cmd_task = function () {
         var record_ID = this.curTab.getRecord_ID();
         ///Check table has Email column
 
-        var AD_Table_ID = this.curTab.getAD_Table_ID();
+        var VAF_TableView_ID = this.curTab.getVAF_TableView_ID();
         //log.Info("Record_ID=" + record_ID);
         if (record_ID == -1)	//	No Key
         {
             return;
         }
-        VIS.AppointmentsForm.init(AD_Table_ID, record_ID, 0, 0, true);
+        VIS.AppointmentsForm.init(VAF_TableView_ID, record_ID, 0, 0, true);
     };
 
     APanel.prototype.cmd_letter = function () {
@@ -3528,7 +3528,7 @@
 
     APanel.prototype.cmd_report = function () {
 
-        if (!VIS.MRole.getDefault().getIsCanReport(this.curTab.getAD_Table_ID())) {
+        if (!VIS.MRole.getDefault().getIsCanReport(this.curTab.getVAF_TableView_ID())) {
             VIS.ADialog.warn("AccessCannotReport");
             return;
         }
@@ -3592,14 +3592,14 @@
 
         if (this.curGC.onDemandTree) {
             if (!this.isSummaryVisible) {
-                var report = new VIS.AReport(this.curTab.getAD_Table_ID(), rquery, this.curTab.getAD_Tab_ID(), this.curWindowNo, this.curTab, this.curGC.treeID, this.curGC.treeNodeID, false);
+                var report = new VIS.AReport(this.curTab.getVAF_TableView_ID(), rquery, this.curTab.getVAF_Tab_ID(), this.curWindowNo, this.curTab, this.curGC.treeID, this.curGC.treeNodeID, false);
             }
             else {
-                var report = new VIS.AReport(this.curTab.getAD_Table_ID(), rquery, this.curTab.getAD_Tab_ID(), this.curWindowNo, this.curTab, this.curGC.treeID, this.curGC.treeNodeID, true);
+                var report = new VIS.AReport(this.curTab.getVAF_TableView_ID(), rquery, this.curTab.getVAF_Tab_ID(), this.curWindowNo, this.curTab, this.curGC.treeID, this.curGC.treeNodeID, true);
             }
         }
         else {
-            var report = new VIS.AReport(this.curTab.getAD_Table_ID(), rquery, this.curTab.getAD_Tab_ID(), this.curWindowNo, this.curTab, 0, 0, false);
+            var report = new VIS.AReport(this.curTab.getVAF_TableView_ID(), rquery, this.curTab.getVAF_Tab_ID(), this.curWindowNo, this.curTab, 0, 0, false);
         }
     };
 
@@ -3644,7 +3644,7 @@
                     recIds += ',' + rowsSource[i][this.curTab.getKeyColumnName().toLower()];
                 }
             }
-            var print = new VIS.APrint(AD_Process_ID, this.curTab.getAD_Table_ID(), 0, this.curWindowNo, recIds, this.curTab, true);
+            var print = new VIS.APrint(AD_Process_ID, this.curTab.getVAF_TableView_ID(), 0, this.curWindowNo, recIds, this.curTab, true);
             print.start(this.aPrint.getListItmIT());
         }
         else {
@@ -3659,14 +3659,14 @@
                 return;
             }
 
-            var print = new VIS.APrint(AD_Process_ID, this.curTab.getAD_Table_ID(), recID, this.curWindowNo, null, this.curTab);
+            var print = new VIS.APrint(AD_Process_ID, this.curTab.getVAF_TableView_ID(), recID, this.curWindowNo, null, this.curTab);
             print.start(this.aPrint.getListItmIT());
         }
-        //var table_ID = this.curTab.getAD_Table_ID();
+        //var table_ID = this.curTab.getVAF_TableView_ID();
         //var record_ID = this.curTab.getRecord_ID();
         //var pi = new VIS.ProcessInfo('Print', AD_Process_ID, table_ID, record_ID);        
         //pi.setAD_User_ID(VIS.context.getAD_User_ID());
-        //pi.setAD_Client_ID(VIS.context.getAD_Client_ID());
+        //pi.setVAF_Client_ID(VIS.context.getVAF_Client_ID());
 
         //pctrl.process(this.curWindowNo);
     };
@@ -3748,7 +3748,7 @@
             self.curTab.loadSubscribe();
             self.aSubscribe.setPressed(self.curTab.HasSubscribed());
         };
-        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getCM_SubScribedID(), this.curTab.getAD_Window_ID(), record_ID, this.curTab.getAD_Table_ID(), reloadSubscribe);
+        VIS.dataContext.subscribeUnsubscribeRecords(this.curTab.getCM_SubScribedID(), this.curTab.getAD_Window_ID(), record_ID, this.curTab.getVAF_TableView_ID(), reloadSubscribe);
     };
 
     APanel.prototype.cmd_ImportMap = function () {
@@ -3781,7 +3781,7 @@
             return;
         }
         var self = this;
-        var att = new VIS.attachmentForm(this.curTab.getWindowNo(), 0, this.curTab.getAD_Table_ID(), this.curTab.getRecord_ID(), '');
+        var att = new VIS.attachmentForm(this.curTab.getWindowNo(), 0, this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), '');
         att.setIsWindowAction(true);
         att.show();
         att.onClose = function () {
@@ -3805,14 +3805,14 @@
         var AD_User_ID = 0;
         if (Object.keys(this.curGC.getColumnNames()).indexOf("C_BPartner_ID") > 0 || (this.curTab.getField("C_BPartner_ID") != null && this.curTab.getField("C_BPartner_ID").getValue() > 0)) {
             c_Bpartner_ID = this.curTab.getField("C_BPartner_ID").getValue();
-            //atHistory = new VIS.AttachmentHistory(this.curTab.getAD_Table_ID(), this.curTab.getRecord_ID(), this.curTab.getField("C_BPartner_ID").getValue());
+            //atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), this.curTab.getField("C_BPartner_ID").getValue());
         }
 
         if (Object.keys(this.curGC.getColumnNames()).indexOf("AD_User_ID") > 0 || (this.curTab.getField("AD_User_ID") != null && this.curTab.getField("AD_User_ID").getValue() > 0)) {
             AD_User_ID = this.curTab.getField("AD_User_ID").getValue();
         }
 
-        atHistory = new VIS.AttachmentHistory(this.curTab.getAD_Table_ID(), this.curTab.getRecord_ID(), c_Bpartner_ID, AD_User_ID, this.curTab.getKeyColumnName());
+        atHistory = new VIS.AttachmentHistory(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID(), c_Bpartner_ID, AD_User_ID, this.curTab.getKeyColumnName());
 
         atHistory.show();
     };
@@ -3935,13 +3935,13 @@
         var record_ID = this.curTab.getRecord_ID();
         //log.Info("ID=" + record_ID);
         if (record_ID > 0) {
-            var AD_Table_ID = this.curTab.getAD_Table_ID();
+            var VAF_TableView_ID = this.curTab.getVAF_TableView_ID();
             //var C_BPartner_ID = 0;
             var BPartner_ID = this.curTab.getValue("C_BPartner_ID");
             //if (BPartner_ID != null)
             //    C_BPartner_ID = parseInt(BPartner_ID);
 
-            var req = new VIS.ARequest(this.aRequest, AD_Table_ID, record_ID, BPartner_ID, null, this.aRequest.getListItmIT());
+            var req = new VIS.ARequest(this.aRequest, VAF_TableView_ID, record_ID, BPartner_ID, null, this.aRequest.getListItmIT());
             req.getRequests();
             req = null;
         }
@@ -3951,12 +3951,12 @@
         var recID = this.curTab.getRecord_ID();
         var rowsource = this.curGC.getSelectedRows();
         var recStr = null;
-        var table_ID = this.curTab.getAD_Table_ID();
+        var table_ID = this.curTab.getVAF_TableView_ID();
         var tableName = this.curTab.getTableName();
         if (recID == -1)	//	No Key
         {
             var data = {
-                AD_Table_ID: table_ID
+                VAF_TableView_ID: table_ID
             };
             var res = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "JsonData/GetKeyColumns", data);
             if (res == null) {
@@ -3968,7 +3968,7 @@
             //    dataType: "json",
             //    type: "POST",                
             //    data: {
-            //        AD_Table_ID: table_ID
+            //        VAF_TableView_ID: table_ID
             //    },
             //    error: function () {
             //        return;
@@ -4062,7 +4062,7 @@
 
     APanel.prototype.cmd_recAccess = function () {
         var recAccessDialog = new VIS.RecordAccessDialog();
-        recAccessDialog.Load(this.curTab.getAD_Table_ID(), this.curTab.getRecord_ID());
+        recAccessDialog.Load(this.curTab.getVAF_TableView_ID(), this.curTab.getRecord_ID());
 
     };
 
@@ -4085,7 +4085,7 @@
             this.aCall.setEnabled(false);
             return;
         }
-        var table_ID = this.curTab.getAD_Table_ID();
+        var table_ID = this.curTab.getVAF_TableView_ID();
 
         if (VA048 && VA048.Apps) {
             var call = new VA048.Apps.CallForm();

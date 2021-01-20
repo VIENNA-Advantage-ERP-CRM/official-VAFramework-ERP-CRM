@@ -447,7 +447,7 @@ namespace VAdvantage.Model
 
             string sql = "SELECT C_BANKACCOUNTLINE_ID FROM C_BANKACCOUNTLINE WHERE C_BANKACCOUNT_ID="
                             + bankAccount.GetC_BankAccount_ID() + " AND STATEMENTDATE="
-                            + DB.TO_DATE(GetStatementLineDate()) + " AND AD_ORG_ID=" + GetAD_Org_ID();
+                            + DB.TO_DATE(GetStatementLineDate()) + " AND VAF_ORG_ID=" + GetVAF_Org_ID();
 
             dtBankAccountLine = DB.ExecuteDataset(sql, null, Get_TrxName()).Tables[0];
 
@@ -461,10 +461,10 @@ namespace VAdvantage.Model
             {
                 bankAccountLine.SetC_BankAccount_ID(bankAccount.GetC_BankAccount_ID());
                 //Arpit To set same orgnization as Bank Statement on Account Line
-                //bankAccountLine.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
-                //bankAccountLine.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                bankAccountLine.SetAD_Org_ID(parent.GetAD_Org_ID());
-                bankAccountLine.SetAD_Client_ID(parent.GetAD_Client_ID());
+                //bankAccountLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
+                //bankAccountLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                bankAccountLine.SetVAF_Org_ID(parent.GetVAF_Org_ID());
+                bankAccountLine.SetVAF_Client_ID(parent.GetVAF_Client_ID());
                 bankAccountLine.SetEndingBalance(
                         Decimal.Add(Decimal.Add(Decimal.Subtract(bankAccountLine.GetEndingBalance(), old_ebAmt), new_ebAmt), bankAccount.GetCurrentBalance()));
 

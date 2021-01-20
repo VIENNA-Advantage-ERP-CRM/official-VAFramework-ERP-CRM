@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         static long serialVersionUID = 27732893351953L;
         /** Last Updated Timestamp 12/22/2015 12:37:15 PM */
         public static long updatedMS = 1450768035164L;
-        /** AD_Table_ID=1000477 */
+        /** VAF_TableView_ID=1000477 */
         public static int Table_ID;
         // =1000477;
 

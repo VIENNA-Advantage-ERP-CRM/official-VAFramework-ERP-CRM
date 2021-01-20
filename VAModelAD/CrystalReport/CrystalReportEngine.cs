@@ -148,7 +148,7 @@ namespace VAdvantage.CrystalReport
 
                     if (_pi.GetRecord_ID() > 0 && _pi.GetTable_ID() > 0)
                     {
-                        string tableName = DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_TABLE_ID =" + _pi.GetTable_ID()).ToString();
+                        string tableName = DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TABLEVIEW_ID =" + _pi.GetTable_ID()).ToString();
                         sb.Append(tableName).Append("_ID = ").Append(_pi.GetRecord_ID());
                     }
 
@@ -567,7 +567,7 @@ namespace VAdvantage.CrystalReport
                         byte[] orgLogo = null;
                         if (imgField.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                             if (orglogo != null && orglogo != DBNull.Value)
                             {
                                 orgLogo = (byte[])orglogo;
@@ -575,7 +575,7 @@ namespace VAdvantage.CrystalReport
                         }
                         else if (imgField.Contains("ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,AD_Org_ID FROM AD_OrgInfo WHERE ISACTIVE='Y'");
+                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,VAF_Org_ID FROM VAF_OrgInfo WHERE ISACTIVE='Y'");
                         }
 
                         for (int i_img = 0; i_img <= ds.Tables[0].Rows.Count - 1; i_img++)
@@ -628,11 +628,11 @@ namespace VAdvantage.CrystalReport
                                     }
                                 }
                                 else if (imgField[j_Img].ToUpper() == "ORGLOGO"
-                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("AD_ORG_ID") > 0)
+                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("VAF_ORG_ID") > 0)
                                 {
-                                    if (dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"]) != null)
+                                    if (dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"]) != null)
                                     {
-                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"])[0]["LOGO"];
+                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"])[0]["LOGO"];
                                     }
                                 }
                                 else
@@ -662,7 +662,7 @@ namespace VAdvantage.CrystalReport
                     if (ds.Tables[0].Rows.Count == 0 && imgField1.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                     {
                         byte[] orgLogo = null;
-                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                         if (orglogo != null && orglogo != DBNull.Value)
                         {
                             orgLogo = (byte[])orglogo;
@@ -1025,7 +1025,7 @@ namespace VAdvantage.CrystalReport
 
                     if (_pi.GetRecord_ID() > 0 && _pi.GetTable_ID() > 0)
                     {
-                        string tableName = DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_TABLE_ID =" + _pi.GetTable_ID()).ToString();
+                        string tableName = DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TABLEVIEW_ID =" + _pi.GetTable_ID()).ToString();
                         sb.Append(tableName).Append("_ID = ").Append(_pi.GetRecord_ID());
                     }
 
@@ -1290,7 +1290,7 @@ namespace VAdvantage.CrystalReport
                         byte[] orgLogo = null;
                         if (imgField.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                            object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                             if (orglogo != null && orglogo != DBNull.Value)
                             {
                                 orgLogo = (byte[])orglogo;
@@ -1298,7 +1298,7 @@ namespace VAdvantage.CrystalReport
                         }
                         else if (imgField.Contains("ORGLOGO", StringComparer.OrdinalIgnoreCase))
                         {
-                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,AD_Org_ID FROM AD_OrgInfo WHERE ISACTIVE='Y'");
+                            dsOrglogo = DB.ExecuteDataset("SELECT LOGO,VAF_Org_ID FROM VAF_OrgInfo WHERE ISACTIVE='Y'");
                         }
 
                         for (int i_img = 0; i_img <= ds.Tables[0].Rows.Count - 1; i_img++)
@@ -1351,11 +1351,11 @@ namespace VAdvantage.CrystalReport
                                     }
                                 }
                                 else if (imgField[j_Img].ToUpper() == "ORGLOGO"
-                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("AD_ORG_ID") > 0)
+                                    && dsOrglogo != null && dsOrglogo.Tables[0].Rows.Count > 0 && ds.Tables[0].Columns.IndexOf("VAF_ORG_ID") > 0)
                                 {
-                                    if (dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"]) != null)
+                                    if (dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"]) != null)
                                     {
-                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("AD_Org_ID=" + ds.Tables[0].Rows[i_img]["AD_Org_ID"])[0]["LOGO"];
+                                        ds.Tables[0].Rows[i_img]["ORGLOGO"] = dsOrglogo.Tables[0].Select("VAF_Org_ID=" + ds.Tables[0].Rows[i_img]["VAF_Org_ID"])[0]["LOGO"];
                                     }
                                 }
                                 else
@@ -1381,7 +1381,7 @@ namespace VAdvantage.CrystalReport
                     if (ds.Tables[0].Rows.Count == 0 && imgField1.Contains("#ORGLOGO", StringComparer.OrdinalIgnoreCase))
                     {
                         byte[] orgLogo = null;
-                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM AD_OrgInfo WHERE ISACTIVE='Y' AND AD_Org_ID=" + _ctx.GetAD_Org_ID());
+                        object orglogo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _ctx.GetVAF_Org_ID());
                         if (orglogo != null && orglogo != DBNull.Value)
                         {
                             orgLogo = (byte[])orglogo;
@@ -1474,7 +1474,7 @@ namespace VAdvantage.CrystalReport
             _ctx = ctx;
             _pi = pi;
 
-            //	Get AD_Table_ID and TableName
+            //	Get VAF_TableView_ID and TableName
             String sql = "SELECT p.AD_Process_ID, p.ReportPath,p.SqlQuery,p.IncludeImage,p.ImageField,p.ImagePathField "
                 + " FROM AD_PInstance pi"
                 + " INNER JOIN AD_Process p ON (pi.AD_Process_ID=p.AD_Process_ID)"
@@ -1529,7 +1529,7 @@ namespace VAdvantage.CrystalReport
                 foreach (MColumn col in cols)
                 {
                     string Name = col.GetColumnName();
-                    if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetAD_Table_ID(), col.GetAD_Column_ID(), false))
+                    if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetVAF_TableView_ID(), col.GetVAF_Column_ID(), false))
                     {
                         string obscureColumn = DBFunctionCollections.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name;
                         sql = sql.Replace(Name, obscureColumn);

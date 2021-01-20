@@ -21,12 +21,12 @@ namespace VIS.Controllers
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult GetSearchColumn(int Ad_InfoWindow_ID)
+        public JsonResult GetSearchColumn(int VAF_QuickSearchWindow_ID)
         {
             Ctx ctx=Session["ctx"] as Ctx;
             InfoWindowModel model = new InfoWindowModel();
-            //model.GetSchema(Ad_InfoWindow_ID);
-            return Json(new { result =model.GetSchema(Ad_InfoWindow_ID,ctx )}, JsonRequestBehavior.AllowGet);
+            //model.GetSchema(VAF_QuickSearchWindow_ID);
+            return Json(new { result =model.GetSchema(VAF_QuickSearchWindow_ID,ctx )}, JsonRequestBehavior.AllowGet);
         }
 
         [AjaxAuthorizeAttribute]
@@ -36,7 +36,7 @@ namespace VIS.Controllers
         public JsonResult GetData(string sql,string tableName,int pageNo)
         {
             InfoWindowModel model = new InfoWindowModel();
-            //model.GetSchema(Ad_InfoWindow_ID);
+            //model.GetSchema(VAF_QuickSearchWindow_ID);
             return Json(JsonConvert.SerializeObject(model.GetData(sql, tableName,pageNo, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 

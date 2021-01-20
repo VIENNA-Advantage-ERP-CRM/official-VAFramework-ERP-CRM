@@ -79,14 +79,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>message</returns>
 	private String VerifyTree (MTree tree)
 	{
-        if (tree.GetAD_Table_ID(true) == 0)
+        if (tree.GetVAF_TableView_ID(true) == 0)
         {
             tree.UpdateTrees();
         }
 		String nodeTableName = tree.GetNodeTableName();
 		String sourceTableName = tree.GetSourceTableName(true);
 		String sourceTableKey = sourceTableName + "_ID";
-		int AD_Client_ID = tree.GetAD_Client_ID();
+		int VAF_Client_ID = tree.GetVAF_Client_ID();
 		int C_Element_ID = 0;
 		if (MTree.TREETYPE_ElementValue.Equals(tree.GetTreeType()))
 		{
@@ -105,7 +105,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			.Append(" WHERE AD_Tree_ID=").Append(tree.GetAD_Tree_ID())
 			.Append(" AND Node_ID NOT IN (SELECT ").Append(sourceTableKey)
 			.Append(" FROM ").Append(sourceTableName)
-			.Append(" WHERE AD_Client_ID IN (0,").Append(AD_Client_ID).Append(")");
+			.Append(" WHERE VAF_Client_ID IN (0,").Append(VAF_Client_ID).Append(")");
         if (C_Element_ID > 0)
         {
             sql1.Append(" AND C_Element_ID=").Append(C_Element_ID);
@@ -125,7 +125,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		StringBuilder sql2 = new StringBuilder();
 		sql2.Append("SELECT ").Append(sourceTableKey)
 			.Append(" FROM ").Append(sourceTableName)
-			.Append(" WHERE AD_Client_ID IN (0,").Append(AD_Client_ID).Append(")");
+			.Append(" WHERE VAF_Client_ID IN (0,").Append(VAF_Client_ID).Append(")");
         if (C_Element_ID > 0)
         {
             sql2.Append(" AND C_Element_ID=").Append(C_Element_ID);

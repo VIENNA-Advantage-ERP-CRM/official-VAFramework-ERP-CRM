@@ -108,9 +108,9 @@ namespace VAdvantage.Process
 
         #region Function
 
-        private bool IsRecordExistInDBSchema(int AD_Table_ID, int Record_ID)
+        private bool IsRecordExistInDBSchema(int VAF_TableView_ID, int Record_ID)
         {
-            int count = Convert.ToInt32(DB.ExecuteScalar("SELECT Count(*) FROM " + MODULE_DB_SCHEMA + " WHERE AD_Table_ID =" + AD_Table_ID
+            int count = Convert.ToInt32(DB.ExecuteScalar("SELECT Count(*) FROM " + MODULE_DB_SCHEMA + " WHERE VAF_TableView_ID =" + VAF_TableView_ID
                                           + " AND Record_ID = " + Record_ID + " AND AD_ModuleInfo_ID = " + AD_ModuleInfo_ID, null, Get_TrxName()));
             if (count > 0)
             {
@@ -119,17 +119,17 @@ namespace VAdvantage.Process
             return false;
         }
 
-        private bool InsertIntoDBSchema(int AD_Table_ID, int Record_ID, string TableName, String RName, string whereClause)
+        private bool InsertIntoDBSchema(int VAF_TableView_ID, int Record_ID, string TableName, String RName, string whereClause)
         {
             //Check Existence
 
-            int count = Convert.ToInt32(DB.ExecuteScalar("SELECT Count(*) FROM " + MODULE_DB_SCHEMA + " WHERE AD_Table_ID =" + AD_Table_ID
+            int count = Convert.ToInt32(DB.ExecuteScalar("SELECT Count(*) FROM " + MODULE_DB_SCHEMA + " WHERE VAF_TableView_ID =" + VAF_TableView_ID
                                           + " AND Record_ID = " + Record_ID + " AND AD_ModuleInfo_ID = " + AD_ModuleInfo_ID, null, Get_TrxName()));
 
             if (count == 0)
             {
                 MModuleDBSchema schema = new MModuleDBSchema(_ctx, 0, Get_TrxName());
-                schema.SetAD_Table_ID(AD_Table_ID);
+                schema.SetVAF_TableView_ID(VAF_TableView_ID);
                 schema.SetRecord_ID(Record_ID);
                 schema.SetName(RName);
                 schema.SetTableName(TableName);
@@ -144,7 +144,7 @@ namespace VAdvantage.Process
                         object Export_ID = DB.ExecuteScalar("SELECT Export_ID FROM " + TableName + " WHERE " + whereClause);
                         if (Export_ID == null || Export_ID.ToString() == "")
                         {
-                            int expID = MSequence.GetNextExportID(GetCtx().GetAD_Client_ID(), TableName, null);
+                            int expID = MSequence.GetNextExportID(GetCtx().GetVAF_Client_ID(), TableName, null);
                             if (expID == -1)
                             {
                                 throw new InvalidConstraintException("ExportID -1 for TableName: " + TableName);
@@ -318,10 +318,10 @@ namespace VAdvantage.Process
             //string name;
             for (int t = 0; t < tableIds.Count; t++)
             {
-                int AD_Table_ID = GetID("AD_ModuleTable", "AD_Table_ID", "AD_ModuleTable_ID = " + tableIds[t]);
-                if (GetTable(AD_Table_ID))
+                int VAF_TableView_ID = GetID("AD_ModuleTable", "VAF_TableView_ID", "AD_ModuleTable_ID = " + tableIds[t]);
+                if (GetTable(VAF_TableView_ID))
                 {
-                    List<int> columnIds = GetIDs("AD_Column", "AD_Column_ID", "AD_Table_ID=" + AD_Table_ID);
+                    List<int> columnIds = GetIDs("VAF_Column", "VAF_Column_ID", "VAF_TableView_ID=" + VAF_TableView_ID);
                     for (int c = 0; c < columnIds.Count; c++)
                     {
                         GetColumn(columnIds[c], true, false);
@@ -345,7 +345,7 @@ namespace VAdvantage.Process
 
             for (int i = 0; i < lstModuleFormIds.Count; i++)
             {
-                int id = GetID("AD_ModuleForm", "AD_Form_ID", "AD_ModuleForm_ID = " + lstModuleFormIds[i]);
+                int id = GetID("AD_ModuleForm", "VAF_Page_ID", "AD_ModuleForm_ID = " + lstModuleFormIds[i]);
                 GetForm(id);
                 InsertIntoDBSchema(X_AD_ModuleForm.Table_ID, lstModuleFormIds[i], X_AD_ModuleForm.Table_Name, "_ModuleFrom" + i, "AD_ModuleForm_ID =" + lstModuleFormIds[i]);
             }
@@ -354,28 +354,28 @@ namespace VAdvantage.Process
         /// <summary>
         /// Mark Module Form
         /// </summary>
-        /// <param name="sAD_Form_ID">id of form</param>
-        void GetForm(int sAD_Form_ID)
+        /// <param name="sVAF_Page_ID">id of form</param>
+        void GetForm(int sVAF_Page_ID)
         {
             string name;
-            if (HasModulePrefix("Name", "AD_Form", "AD_Form_ID =" + sAD_Form_ID, out name))
+            if (HasModulePrefix("Name", "VAF_Page", "VAF_Page_ID =" + sVAF_Page_ID, out name))
             {
-                InsertIntoDBSchema(X_AD_Form.Table_ID, sAD_Form_ID, X_AD_Form.Table_Name, name, "AD_Form_ID =" + sAD_Form_ID);
+                InsertIntoDBSchema(X_VAF_Page.Table_ID, sVAF_Page_ID, X_VAF_Page.Table_Name, name, "VAF_Page_ID =" + sVAF_Page_ID);
 
                 // 1000175
-                DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_CrystalReport_Para WHERE AD_Form_ID = " + sAD_Form_ID);
+                DataSet ds = DB.ExecuteDataset("SELECT * FROM VAF_CrystalReport_Para WHERE VAF_Page_ID = " + sVAF_Page_ID);
 
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     name = "";
-                    X_AD_CrystalReport_Para cPara = new X_AD_CrystalReport_Para(_ctx, ds.Tables[0].Rows[i], null);
+                    X_VAF_CrystalReport_Para cPara = new X_VAF_CrystalReport_Para(_ctx, ds.Tables[0].Rows[i], null);
 
-                    if (cPara.GetAD_Element_ID() > 0)
+                    if (cPara.GetVAF_ColumnDic_ID() > 0)
                     {
-                        if (HasModulePrefix("ColumnName", "AD_Element", "AD_Element_ID =" + cPara.GetAD_Element_ID(), out name))
+                        if (HasModulePrefix("ColumnName", "VAF_ColumnDic", "VAF_ColumnDic_ID =" + cPara.GetVAF_ColumnDic_ID(), out name))
                         {
-                            InsertIntoDBSchema(X_AD_Element.Table_ID, cPara.GetAD_Element_ID(), X_AD_Element.Table_Name, name, "AD_Element_ID = " + cPara.GetAD_Element_ID());
+                            InsertIntoDBSchema(X_VAF_ColumnDic.Table_ID, cPara.GetVAF_ColumnDic_ID(), X_VAF_ColumnDic.Table_Name, name, "VAF_ColumnDic_ID = " + cPara.GetVAF_ColumnDic_ID());
                         }
                     }
 
@@ -384,12 +384,12 @@ namespace VAdvantage.Process
                         GetReference(cPara.GetAD_Reference_Value_ID());//mark reference record [ reference key ]
                     }
 
-                    if (cPara.GetAD_Val_Rule_ID() > 0)
+                    if (cPara.GetVAF_DataVal_Rule_ID() > 0)
                     {
-                        GetValRule(cPara.GetAD_Val_Rule_ID()); //Mark Val_rule recored [ dynamic validation ]
+                        GetValRule(cPara.GetVAF_DataVal_Rule_ID()); //Mark Val_rule recored [ dynamic validation ]
                     }
 
-                    InsertIntoDBSchema(X_AD_CrystalReport_Para.Table_ID, cPara.GetAD_CrystalReport_Para_ID(), X_AD_CrystalReport_Para.Table_Name, cPara.GetColumnName(), "AD_CrystalReport_Para_ID = " + cPara.GetAD_CrystalReport_Para_ID());
+                    InsertIntoDBSchema(X_VAF_CrystalReport_Para.Table_ID, cPara.GetVAF_CrystalReport_Para_ID(), X_VAF_CrystalReport_Para.Table_Name, cPara.GetColumnName(), "VAF_CrystalReport_Para_ID = " + cPara.GetVAF_CrystalReport_Para_ID());
 
                 }
             }
@@ -527,26 +527,26 @@ namespace VAdvantage.Process
 
         #region "Common"
 
-        private void CheckCtxArea(int sAD_CtxArea_ID)
+        private void CheckCtxArea(int sVAF_ContextScope_ID)
         {
-            if (!IsRecordExistInDBSchema(X_AD_CtxArea.Table_ID, sAD_CtxArea_ID))
+            if (!IsRecordExistInDBSchema(X_VAF_ContextScope.Table_ID, sVAF_ContextScope_ID))
             {
                 string name;
-                if (HasModulePrefix("Name", "AD_CtxArea", "AD_CtxArea_ID = " + sAD_CtxArea_ID, out name))
+                if (HasModulePrefix("Name", "VAF_ContextScope", "VAF_ContextScope_ID = " + sVAF_ContextScope_ID, out name))
                 {
-                    InsertIntoDBSchema(X_AD_CtxArea.Table_ID, sAD_CtxArea_ID, X_AD_CtxArea.Table_Name, name, " AD_CtxArea_ID = " + sAD_CtxArea_ID);
+                    InsertIntoDBSchema(X_VAF_ContextScope.Table_ID, sVAF_ContextScope_ID, X_VAF_ContextScope.Table_Name, name, " VAF_ContextScope_ID = " + sVAF_ContextScope_ID);
                 }
             }
         }
 
-        private void CheckImage(int sAD_Image_ID)
+        private void CheckImage(int sVAF_Image_ID)
         {
-            if (!IsRecordExistInDBSchema(X_AD_Image.Table_ID, sAD_Image_ID))
+            if (!IsRecordExistInDBSchema(X_VAF_Image.Table_ID, sVAF_Image_ID))
             {
                 string name;
-                if (HasModulePrefix("Name", "AD_Image", "AD_Image_ID = " + sAD_Image_ID, out name))
+                if (HasModulePrefix("Name", "VAF_Image", "VAF_Image_ID = " + sVAF_Image_ID, out name))
                 {
-                    InsertIntoDBSchema(X_AD_Image.Table_ID, sAD_Image_ID, X_AD_Image.Table_Name, name, " AD_Image_ID = " + sAD_Image_ID);
+                    InsertIntoDBSchema(X_VAF_Image.Table_ID, sVAF_Image_ID, X_VAF_Image.Table_Name, name, " VAF_Image_ID = " + sVAF_Image_ID);
                 }
             }
         }
@@ -609,21 +609,21 @@ namespace VAdvantage.Process
 
         private void GetTabsFields(int sAD_Window_ID, List<int> lstModuleTab)
         {
-            //DataTable dt = GetTable("SELECT * FROM AD_Tab WHERE AD_Window_ID=" + sWindowObj.GetAD_Window_ID() + " ORDER BY SeqNo");
+            //DataTable dt = GetTable("SELECT * FROM VAF_Tab WHERE AD_Window_ID=" + sWindowObj.GetAD_Window_ID() + " ORDER BY SeqNo");
             MTab sTab = null;
-            int sAD_Tab_ID = 0;
+            int sVAF_Tab_ID = 0;
             for (int i = 0; i < lstModuleTab.Count; i++)
             {
-                sAD_Tab_ID = GetID("AD_ModuleTab", "AD_Tab_ID", "AD_ModuleTab_ID = " + lstModuleTab[i]);
+                sVAF_Tab_ID = GetID("AD_ModuleTab", "VAF_Tab_ID", "AD_ModuleTab_ID = " + lstModuleTab[i]);
 
                 bool newTable = false;
-                sTab = new MTab(GetCtx(), sAD_Tab_ID, null);
+                sTab = new MTab(GetCtx(), sVAF_Tab_ID, null);
                 string name;
 
-                if (HasModulePrefix("TableName", "AD_Table", " AD_Table_ID = " + sTab.GetAD_Table_ID(), out name))
+                if (HasModulePrefix("TableName", "VAF_TableView", " VAF_TableView_ID = " + sTab.GetVAF_TableView_ID(), out name))
                 {
 
-                    MTable sTable = new MTable(_ctx, sTab.GetAD_Table_ID(), null);
+                    MTable sTable = new MTable(_ctx, sTab.GetVAF_TableView_ID(), null);
 
                     if (sTable.GetAD_Window_ID() > 0 && sAD_Window_ID != sTable.GetAD_Window_ID())
                     {
@@ -644,51 +644,51 @@ namespace VAdvantage.Process
                         }
                     }
 
-                    if (sTable.GetReferenced_Table_ID() > 0 && sTable.GetAD_Table_ID() != sTable.GetReferenced_Table_ID())
+                    if (sTable.GetReferenced_Table_ID() > 0 && sTable.GetVAF_TableView_ID() != sTable.GetReferenced_Table_ID())
                     {
                         string name4;
-                        if (HasModulePrefix("TableName", "AD_Table", "AD_Table_ID = " + sTable.GetReferenced_Table_ID(), out name4))
+                        if (HasModulePrefix("TableName", "VAF_TableView", "VAF_TableView_ID = " + sTable.GetReferenced_Table_ID(), out name4))
                         {
-                            InsertIntoDBSchema(X_AD_Table.Table_ID, sTable.GetReferenced_Table_ID(), X_AD_Table.Table_Name, name4, "AD_Table_ID =" + sTable.GetReferenced_Table_ID());
+                            InsertIntoDBSchema(X_VAF_TableView.Table_ID, sTable.GetReferenced_Table_ID(), X_VAF_TableView.Table_Name, name4, "VAF_TableView_ID =" + sTable.GetReferenced_Table_ID());
                         }
                     }
 
-                    InsertIntoDBSchema(X_AD_Table.Table_ID, sTab.GetAD_Table_ID(), X_AD_Table.Table_Name, name, "AD_Table_ID = " + sTab.GetAD_Table_ID());
-                    InsertDefaultColumn(sTab.GetAD_Table_ID());
+                    InsertIntoDBSchema(X_VAF_TableView.Table_ID, sTab.GetVAF_TableView_ID(), X_VAF_TableView.Table_Name, name, "VAF_TableView_ID = " + sTab.GetVAF_TableView_ID());
+                    InsertDefaultColumn(sTab.GetVAF_TableView_ID());
                     newTable = true;
                 }
 
 
 
-                if (sTab.GetAD_Column_ID() != 0)
+                if (sTab.GetVAF_Column_ID() != 0)
                 {
-                    //  if (HasModulePrefix("ColumnName", "AD_Column", "AD_Column_ID = " + sTab.GetAD_Column_ID(), out name))
+                    //  if (HasModulePrefix("ColumnName", "VAF_Column", "VAF_Column_ID = " + sTab.GetVAF_Column_ID(), out name))
                     //{
-                    GetColumn(sTab.GetAD_Column_ID(), true, false);
-                    //InsertIntoDBSchema(X_AD_Column.Table_ID, sTab.GetAD_Column_ID(), X_AD_Column.Table_Name, name, " AD_Column_ID = " + sTab.GetAD_Column_ID());
+                    GetColumn(sTab.GetVAF_Column_ID(), true, false);
+                    //InsertIntoDBSchema(X_VAF_Column.Table_ID, sTab.GetVAF_Column_ID(), X_VAF_Column.Table_Name, name, " VAF_Column_ID = " + sTab.GetVAF_Column_ID());
                     //}
                 }
 
-                if (sTab.GetAD_CtxArea_ID() != 0)
+                if (sTab.GetVAF_ContextScope_ID() != 0)
                 {
-                    CheckCtxArea(sTab.GetAD_CtxArea_ID());
+                    CheckCtxArea(sTab.GetVAF_ContextScope_ID());
                 }
 
                 //ImageID
-                if (sTab.GetAD_Image_ID() != 0)
+                if (sTab.GetVAF_Image_ID() != 0)
                 {
-                    CheckImage(sTab.GetAD_Image_ID());
+                    CheckImage(sTab.GetVAF_Image_ID());
                 }
 
                 if (sTab.GetReferenced_Tab_ID() != 0)
                 {
                     MTab rTab = new MTab(GetCtx(), sTab.GetReferenced_Tab_ID(), null);
 
-                    if (HasModulePrefix("TableName", "AD_Table", " AD_Table_ID = " + rTab.GetAD_Table_ID(), out name))
+                    if (HasModulePrefix("TableName", "VAF_TableView", " VAF_TableView_ID = " + rTab.GetVAF_TableView_ID(), out name))
                     {
-                        InsertIntoDBSchema(X_AD_Table.Table_ID, rTab.GetAD_Table_ID(), X_AD_Table.Table_Name, name, "AD_Table_ID = " + rTab.GetAD_Table_ID());
+                        InsertIntoDBSchema(X_VAF_TableView.Table_ID, rTab.GetVAF_TableView_ID(), X_VAF_TableView.Table_Name, name, "VAF_TableView_ID = " + rTab.GetVAF_TableView_ID());
                     }
-                    InsertIntoDBSchema(MTab.Table_ID, rTab.GetAD_Tab_ID(), MTab.Table_Name, rTab.GetName(), " AD_Tab_ID = " + rTab.GetAD_Tab_ID());
+                    InsertIntoDBSchema(MTab.Table_ID, rTab.GetVAF_Tab_ID(), MTab.Table_Name, rTab.GetName(), " VAF_Tab_ID = " + rTab.GetVAF_Tab_ID());
                 }
 
                 if (sTab.GetAD_Process_ID() != 0)
@@ -697,15 +697,15 @@ namespace VAdvantage.Process
                 }
 
                 //New Table HeaderLayout
-                if (sTab.GetAD_HeaderLayout_ID() > 0)
+                if (sTab.GetVAF_HeaderLayout_ID() > 0)
                 {
-                    GetHeaderLayout(sTab.GetAD_HeaderLayout_ID());
+                    GetHeaderLayout(sTab.GetVAF_HeaderLayout_ID());
                 }
 
-                InsertIntoDBSchema(MTab.Table_ID, sAD_Tab_ID, MTab.Table_Name, sTab.GetName(), " AD_Tab_ID = " + sAD_Tab_ID);
+                InsertIntoDBSchema(MTab.Table_ID, sVAF_Tab_ID, MTab.Table_Name, sTab.GetName(), " VAF_Tab_ID = " + sVAF_Tab_ID);
 
 
-                GetTabPanel(sAD_Tab_ID);
+                GetTabPanel(sVAF_Tab_ID);
 
 
                 //Insert AD_ModuleTab Info
@@ -716,17 +716,17 @@ namespace VAdvantage.Process
 
                 List<int> lstModuleField = GetIDs("AD_ModuleField", "AD_ModuleField_ID", "AD_ModuleTab_ID = " + lstModuleTab[i], " ORDER BY SeqNo");
 
-                int sAD_Field_ID = 0;
+                int sVAF_Field_ID = 0;
                 List<int> fields = new List<int>();
                 for (int f = 0; f < lstModuleField.Count; f++)
                 {
 
-                    sAD_Field_ID = GetID("AD_ModuleField", "AD_Field_ID", "AD_ModuleField_ID =" + lstModuleField[f]);
+                    sVAF_Field_ID = GetID("AD_ModuleField", "VAF_Field_ID", "AD_ModuleField_ID =" + lstModuleField[f]);
 
 
-                    name = InsertField(newTable, name, sAD_Field_ID);
+                    name = InsertField(newTable, name, sVAF_Field_ID);
 
-                    fields.Add(sAD_Field_ID);
+                    fields.Add(sVAF_Field_ID);
 
                     InsertIntoDBSchema(X_AD_ModuleField.Table_ID, lstModuleField[f], X_AD_ModuleField.Table_Name, "_ModuleField" + i, "AD_ModuleField_ID =" + lstModuleField[f]);
                 }
@@ -735,10 +735,10 @@ namespace VAdvantage.Process
                 ///
                 if (lstModuleField.Count > 0) // run only if at least one field is binded in modulefield and new tab created
                 {
-                    IDataReader dr = DB.ExecuteReader(@" SELECT Name, AD_Field_ID FROM AD_Field WHERE AD_Column_ID IN
-                                                        ( SELECT AD_Column_ID FROM AD_Column WHERE ColumnName IN ('IsActive','AD_Client_ID', 'AD_Org_ID','" + MTable.Get(_ctx, sTab.GetAD_Table_ID()).GetTableName() + @"_ID',
+                    IDataReader dr = DB.ExecuteReader(@" SELECT Name, VAF_Field_ID FROM VAF_Field WHERE VAF_Column_ID IN
+                                                        ( SELECT VAF_Column_ID FROM VAF_Column WHERE ColumnName IN ('IsActive','VAF_Client_ID', 'VAF_Org_ID','" + MTable.Get(_ctx, sTab.GetVAF_TableView_ID()).GetTableName() + @"_ID',
                                                                                                                  'Export_ID')
-                                                        AND AD_Table_ID = " + sTab.GetAD_Table_ID() + @") AND AD_Tab_ID =" + sTab.GetAD_Tab_ID());
+                                                        AND VAF_TableView_ID = " + sTab.GetVAF_TableView_ID() + @") AND VAF_Tab_ID =" + sTab.GetVAF_Tab_ID());
                     while (dr.Read())
                     {
                         if (!fields.Contains(dr.GetInt32(1)))
@@ -756,58 +756,58 @@ namespace VAdvantage.Process
         /// <summary>
         ///  Mark Tab Panel record if any
         /// </summary>
-        /// <param name="sAD_Tab_ID"> Tab ID</param>
-        private void GetTabPanel(int sAD_Tab_ID)
+        /// <param name="sVAF_Tab_ID"> Tab ID</param>
+        private void GetTabPanel(int sVAF_Tab_ID)
         {
-            DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_TabPanel WHERE AD_Tab_ID=" + sAD_Tab_ID);
+            DataSet ds = DB.ExecuteDataset("SELECT * FROM VAF_TabPanel WHERE VAF_Tab_ID=" + sVAF_Tab_ID);
             if (ds != null)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    InsertIntoDBSchema(X_AD_TabPanel.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_TabPanel_ID"]),
-                        X_AD_TabPanel.Table_Name, ds.Tables[0].Rows[i]["Name"].ToString(), "AD_TabPanel_ID =" + ds.Tables[0].Rows[i]["AD_TabPanel_ID"]);
+                    InsertIntoDBSchema(X_VAF_TabPanel.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TabPanel_ID"]),
+                        X_VAF_TabPanel.Table_Name, ds.Tables[0].Rows[i]["Name"].ToString(), "VAF_TabPanel_ID =" + ds.Tables[0].Rows[i]["VAF_TabPanel_ID"]);
                 }
             }
         }
 
-        private void GetHeaderLayout(int sAD_HeaderLayout_ID)
+        private void GetHeaderLayout(int sVAF_HeaderLayout_ID)
         {
             string name;
-            if (HasModulePrefix("Name", "AD_HeaderLayout", "AD_HeaderLayout_ID=" + sAD_HeaderLayout_ID, out name))
+            if (HasModulePrefix("Name", "VAF_HeaderLayout", "VAF_HeaderLayout_ID=" + sVAF_HeaderLayout_ID, out name))
             {
-                InsertIntoDBSchema(X_AD_HeaderLayout.Table_ID, sAD_HeaderLayout_ID, X_AD_HeaderLayout.Table_Name, name, "AD_HeaderLayout_ID =" + sAD_HeaderLayout_ID);
+                InsertIntoDBSchema(X_VAF_HeaderLayout.Table_ID, sVAF_HeaderLayout_ID, X_VAF_HeaderLayout.Table_Name, name, "VAF_HeaderLayout_ID =" + sVAF_HeaderLayout_ID);
             } //Header
 
-            DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_GridLayout WHERE AD_HeaderLayout_ID=" + sAD_HeaderLayout_ID);
+            DataSet ds = DB.ExecuteDataset("SELECT * FROM VAF_GridLayout WHERE VAF_HeaderLayout_ID=" + sVAF_HeaderLayout_ID);
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++) //Grid header
             {
-                if (HasModulePrefix("Name", "AD_GridLayout", "AD_GridLayout_ID = " + ds.Tables[0].Rows[i]["AD_GridLayout_ID"], out name))
+                if (HasModulePrefix("Name", "VAF_GridLayout", "VAF_GridLayout_ID = " + ds.Tables[0].Rows[i]["VAF_GridLayout_ID"], out name))
                 {
-                    InsertIntoDBSchema(X_AD_GridLayout.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_GridLayout_ID"]),
-                        X_AD_GridLayout.Table_Name, name, "AD_GridLayout_ID=" + ds.Tables[0].Rows[i]["AD_GridLayout_ID"]);
+                    InsertIntoDBSchema(X_VAF_GridLayout.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_GridLayout_ID"]),
+                        X_VAF_GridLayout.Table_Name, name, "VAF_GridLayout_ID=" + ds.Tables[0].Rows[i]["VAF_GridLayout_ID"]);
 
-                    DataSet dsItem = DB.ExecuteDataset("SELECT * FROM AD_GridLayoutItems WHERE AD_GridLayout_ID=" + ds.Tables[0].Rows[i]["AD_GridLayout_ID"]);
+                    DataSet dsItem = DB.ExecuteDataset("SELECT * FROM VAF_GridLayoutItems WHERE VAF_GridLayout_ID=" + ds.Tables[0].Rows[i]["VAF_GridLayout_ID"]);
                     for (int j = 0; j < dsItem.Tables[0].Rows.Count; j++) //GridItems
                     {
-                        //if (HasModulePrefix("Name", "AD_GridLayoutItems", "AD_GridLayoutItems_ID = " + dsItem.Tables[0].Rows[j]["AD_GridLayoutItems_ID"], out name))
+                        //if (HasModulePrefix("Name", "VAF_GridLayoutItems", "VAF_GridLayoutItems_ID = " + dsItem.Tables[0].Rows[j]["VAF_GridLayoutItems_ID"], out name))
                         // {
-                        InsertIntoDBSchema(X_AD_GridLayoutItems.Table_ID, Util.GetValueOfInt(dsItem.Tables[0].Rows[j]["AD_GridLayoutItems_ID"]),
-                            X_AD_GridLayoutItems.Table_Name, "item" + j, "AD_GridLayoutItems_ID=" + dsItem.Tables[0].Rows[j]["AD_GridLayoutItems_ID"]);
+                        InsertIntoDBSchema(X_VAF_GridLayoutItems.Table_ID, Util.GetValueOfInt(dsItem.Tables[0].Rows[j]["VAF_GridLayoutItems_ID"]),
+                            X_VAF_GridLayoutItems.Table_Name, "item" + j, "VAF_GridLayoutItems_ID=" + dsItem.Tables[0].Rows[j]["VAF_GridLayoutItems_ID"]);
                         //}
                     }
                 }
             }
         }
 
-        private string InsertField(bool newTable, string name, int sAD_Field_ID)
+        private string InsertField(bool newTable, string name, int sVAF_Field_ID)
         {
-            MField sField = new MField(_ctx, sAD_Field_ID, null);
+            MField sField = new MField(_ctx, sVAF_Field_ID, null);
 
-            GetColumn(sField.GetAD_Column_ID(), true, !newTable);
+            GetColumn(sField.GetVAF_Column_ID(), true, !newTable);
 
-            if (sField.GetAD_FieldGroup_ID() > 0)
+            if (sField.GetVAF_FieldSection_ID() > 0)
             {
-                InsertIntoDBSchema(X_AD_FieldGroup.Table_ID, sField.GetAD_FieldGroup_ID(), X_AD_FieldGroup.Table_Name, "FieldGroup_" + sField.GetAD_FieldGroup_ID(), "AD_FieldGroup_ID = " + sField.GetAD_FieldGroup_ID());
+                InsertIntoDBSchema(X_VAF_FieldSection.Table_ID, sField.GetVAF_FieldSection_ID(), X_VAF_FieldSection.Table_Name, "FieldGroup_" + sField.GetVAF_FieldSection_ID(), "VAF_FieldSection_ID = " + sField.GetVAF_FieldSection_ID());
             }
 
             if (sField.GetZoomWindow_ID() > 0)
@@ -817,17 +817,17 @@ namespace VAdvantage.Process
                     InsertIntoDBSchema(X_AD_Window.Table_ID, sField.GetZoomWindow_ID(), X_AD_Window.Table_Name, name, " AD_Window_ID = " + sField.GetZoomWindow_ID());
                 }
             }
-            if (sField.GetAD_InfoWindow_ID() > 0)
+            if (sField.GetVAF_QuickSearchWindow_ID() > 0)
             {
-                if (HasModulePrefix("Name", "AD_InfoWindow", "AD_InfoWindow_ID = " + sField.GetAD_InfoWindow_ID(), out name))
+                if (HasModulePrefix("Name", "VAF_QuickSearchWindow", "VAF_QuickSearchWindow_ID = " + sField.GetVAF_QuickSearchWindow_ID(), out name))
                 {
-                    InsertIntoDBSchema(X_AD_InfoWindow.Table_ID, sField.GetAD_InfoWindow_ID(), X_AD_InfoWindow.Table_Name, name, " AD_InfoWindow_ID = " + sField.GetAD_InfoWindow_ID());
+                    InsertIntoDBSchema(X_VAF_QuickSearchWindow.Table_ID, sField.GetVAF_QuickSearchWindow_ID(), X_VAF_QuickSearchWindow.Table_Name, name, " VAF_QuickSearchWindow_ID = " + sField.GetVAF_QuickSearchWindow_ID());
                 }
 
-                DataSet ds = DB.ExecuteDataset("SELECT * FROM AD_InfoColumn WHERE AD_InfoWindow_ID=" + sField.GetAD_InfoWindow_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT * FROM VAF_QuickSearchColumn WHERE VAF_QuickSearchWindow_ID=" + sField.GetVAF_QuickSearchWindow_ID());
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    if (HasModulePrefix("Name", "AD_InfoColumn", "AD_InfoColumn_ID = " + ds.Tables[0].Rows[i]["AD_InfoColumn_ID"], out name))
+                    if (HasModulePrefix("Name", "VAF_QuickSearchColumn", "VAF_QuickSearchColumn_ID = " + ds.Tables[0].Rows[i]["VAF_QuickSearchColumn_ID"], out name))
                     {
 
                         if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]) > 0)
@@ -835,39 +835,39 @@ namespace VAdvantage.Process
                             InsertIntoDBSchema(X_AD_Reference.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]), X_AD_Reference.Table_Name, name,
                            " AD_Reference_ID = " + ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]);
                         }
-                        if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_ELEMENT_ID"]) > 0)
+                        if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_COLUMNDIC_ID"]) > 0)
                         {
-                            InsertIntoDBSchema(X_AD_Element.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_ELEMENT_ID"]), X_AD_Element.Table_Name, name,
-                           " AD_Element_ID = " + ds.Tables[0].Rows[i]["AD_ELEMENT_ID"]);
+                            InsertIntoDBSchema(X_VAF_ColumnDic.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_COLUMNDIC_ID"]), X_VAF_ColumnDic.Table_Name, name,
+                           " VAF_ColumnDic_ID = " + ds.Tables[0].Rows[i]["VAF_COLUMNDIC_ID"]);
                         }
 
-                        InsertIntoDBSchema(X_AD_InfoColumn.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_InfoColumn_ID"]), X_AD_InfoColumn.Table_Name, name,
-                            " AD_InfoColumn_ID = " + ds.Tables[0].Rows[i]["AD_InfoColumn_ID"]);
+                        InsertIntoDBSchema(X_VAF_QuickSearchColumn.Table_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_QuickSearchColumn_ID"]), X_VAF_QuickSearchColumn.Table_Name, name,
+                            " VAF_QuickSearchColumn_ID = " + ds.Tables[0].Rows[i]["VAF_QuickSearchColumn_ID"]);
                     }
                 }
             }
 
-            if (sField.GetAD_Image_ID() > 0)
+            if (sField.GetVAF_Image_ID() > 0)
             {
-                CheckImage(sField.GetAD_Image_ID());
+                CheckImage(sField.GetVAF_Image_ID());
             }
 
-            InsertIntoDBSchema(X_AD_Field.Table_ID, sAD_Field_ID, X_AD_Field.Table_Name, sField.GetName(), " AD_Field_ID = " + sAD_Field_ID);
+            InsertIntoDBSchema(X_VAF_Field.Table_ID, sVAF_Field_ID, X_VAF_Field.Table_Name, sField.GetName(), " VAF_Field_ID = " + sVAF_Field_ID);
             return name;
         }
 
         /// <summary>
         /// If New Table bound to Tab
         /// </summary>
-        /// <param name="sAD_Table_ID"></param>
-        private void InsertDefaultColumn(int sAD_Table_ID)
+        /// <param name="sVAF_TableView_ID"></param>
+        private void InsertDefaultColumn(int sVAF_TableView_ID)
         {
-            string tableName = DB.ExecuteScalar("SELECT TableName FROM AD_Table WHERE AD_Table_ID = " + sAD_Table_ID).ToString();
+            string tableName = DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = " + sVAF_TableView_ID).ToString();
 
-            string stdWhere = " ColumnName IN ('IsActive','AD_Client_ID', 'AD_Org_ID','Created','CreatedBy','Updated','UpdatedBy','"
+            string stdWhere = " ColumnName IN ('IsActive','VAF_Client_ID', 'VAF_Org_ID','Created','CreatedBy','Updated','UpdatedBy','"
                               + tableName + "_ID','Export_ID')";
 
-            IDataReader dr = DB.ExecuteReader("SELECT AD_Column_ID,Name,ColumnName FROM AD_Column WHERE AD_Table_ID = " + sAD_Table_ID + " AND  " + stdWhere);
+            IDataReader dr = DB.ExecuteReader("SELECT VAF_Column_ID,Name,ColumnName FROM VAF_Column WHERE VAF_TableView_ID = " + sVAF_TableView_ID + " AND  " + stdWhere);
             int id = 0;
             // string colName = "";
             while (dr.Read())
@@ -880,17 +880,17 @@ namespace VAdvantage.Process
                 {
                     GetColumn(id, false, false);
                 }
-                InsertIntoDBSchema(X_AD_Column.Table_ID, id, X_AD_Column.Table_Name, Util.GetValueOfString(dr[1]), " AD_Column_ID = " + id);
+                InsertIntoDBSchema(X_VAF_Column.Table_ID, id, X_VAF_Column.Table_Name, Util.GetValueOfString(dr[1]), " VAF_Column_ID = " + id);
             }
             dr.Close();
         }
 
-        private bool GetTable(int sAD_Table_ID)
+        private bool GetTable(int sVAF_TableView_ID)
         {
             string name;
-            if (HasModulePrefix("TableName", "AD_Table", "AD_Table_ID=" + sAD_Table_ID, out name))
+            if (HasModulePrefix("TableName", "VAF_TableView", "VAF_TableView_ID=" + sVAF_TableView_ID, out name))
             {
-                MTable sTable = new MTable(_ctx, sAD_Table_ID, null);
+                MTable sTable = new MTable(_ctx, sVAF_TableView_ID, null);
 
                 if (sTable.GetAD_Window_ID() > 0)
                 {
@@ -914,65 +914,65 @@ namespace VAdvantage.Process
                 if (sTable.GetReferenced_Table_ID() > 0)
                 {
                     string name4;
-                    if (HasModulePrefix("TableName", "AD_Table", "AD_Table_ID = " + sTable.GetReferenced_Table_ID(), out name4))
+                    if (HasModulePrefix("TableName", "VAF_TableView", "VAF_TableView_ID = " + sTable.GetReferenced_Table_ID(), out name4))
                     {
-                        InsertIntoDBSchema(X_AD_Table.Table_ID, sTable.GetReferenced_Table_ID(), X_AD_Table.Table_Name, name4, "AD_Table_ID =" + sTable.GetReferenced_Table_ID());
+                        InsertIntoDBSchema(X_VAF_TableView.Table_ID, sTable.GetReferenced_Table_ID(), X_VAF_TableView.Table_Name, name4, "VAF_TableView_ID =" + sTable.GetReferenced_Table_ID());
                     }
                 }
 
 
-                InsertIntoDBSchema(X_AD_Table.Table_ID, sAD_Table_ID, X_AD_Table.Table_Name, name, "AD_Table_ID =" + sAD_Table_ID);
-                InsertDefaultColumn(sAD_Table_ID);
+                InsertIntoDBSchema(X_VAF_TableView.Table_ID, sVAF_TableView_ID, X_VAF_TableView.Table_Name, name, "VAF_TableView_ID =" + sVAF_TableView_ID);
+                InsertDefaultColumn(sVAF_TableView_ID);
                 return true;
             }
             return false;
         }
 
-        private void GetColumn(int sAD_Column_ID)
+        private void GetColumn(int sVAF_Column_ID)
         {
-            GetColumn(sAD_Column_ID, false, false);
+            GetColumn(sVAF_Column_ID, false, false);
         }
-        private void GetColumn(int sAD_Column_ID, bool checkRP)
+        private void GetColumn(int sVAF_Column_ID, bool checkRP)
         {
-            GetColumn(sAD_Column_ID, checkRP, false);
+            GetColumn(sVAF_Column_ID, checkRP, false);
         }
-        private void GetColumn(int sAd_Column_ID, bool checkRP, bool checkModulePrefix)
+        private void GetColumn(int svaf_column_ID, bool checkRP, bool checkModulePrefix)
         {
             string name;
-            if (HasModulePrefix("ColumnName", "AD_Column", "AD_Column_ID=" + sAd_Column_ID, out name))
+            if (HasModulePrefix("ColumnName", "VAF_Column", "VAF_Column_ID=" + svaf_column_ID, out name))
             {
-                int sAd_Element_ID = GetID("AD_Column", "AD_Element_ID", "AD_Column_ID=" + sAd_Column_ID);
+                int sVAF_ColumnDic_ID = GetID("VAF_Column", "VAF_ColumnDic_ID", "VAF_Column_ID=" + svaf_column_ID);
 
-                GetElement(sAd_Element_ID);
+                GetElement(sVAF_ColumnDic_ID);
 
                 if (checkRP)
                 {
-                    CheckReferenceAndProcess(sAd_Column_ID);
+                    CheckReferenceAndProcess(svaf_column_ID);
                 }
-                InsertIntoDBSchema(X_AD_Column.Table_ID, sAd_Column_ID, X_AD_Column.Table_Name, name, "AD_Column_ID =" + sAd_Column_ID);
+                InsertIntoDBSchema(X_VAF_Column.Table_ID, svaf_column_ID, X_VAF_Column.Table_Name, name, "VAF_Column_ID =" + svaf_column_ID);
             }
             else if (!checkModulePrefix)
             {
                 if (checkRP)
                 {
-                    CheckReferenceAndProcess(sAd_Column_ID);
+                    CheckReferenceAndProcess(svaf_column_ID);
                 }
-                InsertIntoDBSchema(X_AD_Column.Table_ID, sAd_Column_ID, X_AD_Column.Table_Name, name, "AD_Column_ID =" + sAd_Column_ID);
+                InsertIntoDBSchema(X_VAF_Column.Table_ID, svaf_column_ID, X_VAF_Column.Table_Name, name, "VAF_Column_ID =" + svaf_column_ID);
             }
         }
 
-        private void GetElement(int sAd_Element_ID)
+        private void GetElement(int sVAF_ColumnDic_ID)
         {
             string name;
-            if (HasModulePrefix("ColumnName", "AD_Element", "AD_Element_ID=" + sAd_Element_ID, out name))
+            if (HasModulePrefix("ColumnName", "VAF_ColumnDic", "VAF_ColumnDic_ID=" + sVAF_ColumnDic_ID, out name))
             {
-                InsertIntoDBSchema(X_AD_Element.Table_ID, sAd_Element_ID, X_AD_Element.Table_Name, name, "AD_Element_ID =" + sAd_Element_ID);
+                InsertIntoDBSchema(X_VAF_ColumnDic.Table_ID, sVAF_ColumnDic_ID, X_VAF_ColumnDic.Table_Name, name, "VAF_ColumnDic_ID =" + sVAF_ColumnDic_ID);
             }
         }
 
-        private void CheckReferenceAndProcess(int sAd_Column_id)
+        private void CheckReferenceAndProcess(int svaf_column_id)
         {
-            MColumn sColumn = new MColumn(_ctx, sAd_Column_id, null);
+            MColumn sColumn = new MColumn(_ctx, svaf_column_id, null);
             if (DisplayType.IsLookup(sColumn.GetAD_Reference_ID()) || DisplayType.Button == sColumn.GetAD_Reference_ID())
             {
 
@@ -985,9 +985,9 @@ namespace VAdvantage.Process
                     }
                 }
 
-                if (sColumn.GetAD_Val_Rule_ID() != 0)
+                if (sColumn.GetVAF_DataVal_Rule_ID() != 0)
                 {
-                    GetValRule(sColumn.GetAD_Val_Rule_ID());
+                    GetValRule(sColumn.GetVAF_DataVal_Rule_ID());
                 }
 
                 if (sColumn.GetAD_Process_ID() != 0)
@@ -995,20 +995,20 @@ namespace VAdvantage.Process
                     GetProcess(sColumn.GetAD_Process_ID());
                 }
 
-                if (sColumn.GetAD_Form_ID() > 0)
+                if (sColumn.GetVAF_Page_ID() > 0)
                 {
-                    GetForm(sColumn.GetAD_Form_ID());
+                    GetForm(sColumn.GetVAF_Page_ID());
                 }
 
             }
         }
 
-        private void GetValRule(int sAD_Val_Rule_ID)
+        private void GetValRule(int sVAF_DataVal_Rule_ID)
         {
             string name;
-            if (HasModulePrefix("Name", "AD_Val_Rule", "AD_Val_Rule_ID =" + sAD_Val_Rule_ID, out name))
+            if (HasModulePrefix("Name", "VAF_DataVal_Rule", "VAF_DataVal_Rule_ID =" + sVAF_DataVal_Rule_ID, out name))
             {
-                InsertIntoDBSchema(X_AD_Val_Rule.Table_ID, sAD_Val_Rule_ID, X_AD_Val_Rule.Table_Name, name, "AD_Val_Rule_ID =" + sAD_Val_Rule_ID);
+                InsertIntoDBSchema(X_VAF_DataVal_Rule.Table_ID, sVAF_DataVal_Rule_ID, X_VAF_DataVal_Rule.Table_Name, name, "VAF_DataVal_Rule_ID =" + sVAF_DataVal_Rule_ID);
             }
         }
 
@@ -1040,7 +1040,7 @@ namespace VAdvantage.Process
                     {
                         sRefTable = new MRefTable(_ctx, dr, Get_TrxName());
 
-                        GetTable(sRefTable.GetAD_Table_ID());
+                        GetTable(sRefTable.GetVAF_TableView_ID());
                         GetColumn(sRefTable.GetColumn_Key_ID());
                         GetColumn(sRefTable.GetColumn_Display_ID());
                         InsertIntoDBSchema(X_AD_Ref_Table.Table_ID, sAD_Reference_ID, X_AD_Ref_Table.Table_Name, sRefTable.GetDisplayColumnName(), "AD_Reference_ID = " + sReference.GetAD_Reference_ID());
@@ -1059,9 +1059,9 @@ namespace VAdvantage.Process
             {
                 MProcess sProcess = new MProcess(_ctx, sAD_Process_ID, null);
 
-                if (sProcess.GetAD_CtxArea_ID() != 0)
+                if (sProcess.GetVAF_ContextScope_ID() != 0)
                 {
-                    CheckCtxArea(sProcess.GetAD_CtxArea_ID());
+                    CheckCtxArea(sProcess.GetVAF_ContextScope_ID());
                 }
 
                 if (sProcess.GetAD_Workflow_ID() != 0)
@@ -1096,18 +1096,18 @@ namespace VAdvantage.Process
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     MProcessPara sPara = new MProcessPara(_ctx, dr, Get_TrxName());
-                    if (sPara.GetAD_Element_ID() != 0)
+                    if (sPara.GetVAF_ColumnDic_ID() != 0)
                     {
-                        GetElement(sPara.GetAD_Element_ID());
+                        GetElement(sPara.GetVAF_ColumnDic_ID());
                     }
 
                     if (sPara.GetAD_Reference_Value_ID() != 0)
                     {
                         GetReference(sPara.GetAD_Reference_Value_ID());
                     }
-                    if (sPara.GetAD_Val_Rule_ID() != 0)
+                    if (sPara.GetVAF_DataVal_Rule_ID() != 0)
                     {
-                        GetValRule(sPara.GetAD_Val_Rule_ID());
+                        GetValRule(sPara.GetVAF_DataVal_Rule_ID());
                     }
                     InsertIntoDBSchema(X_AD_Process_Para.Table_ID, sPara.GetAD_Process_Para_ID(), X_AD_Process_Para.Table_Name, sPara.GetName(), "AD_Process_Para_ID=" + sPara.GetAD_Process_Para_ID());
                 }
@@ -1134,19 +1134,19 @@ namespace VAdvantage.Process
 
                     X_AD_ReportTable rTable = new X_AD_ReportTable(_ctx, drTable, null);
 
-                    if (rTable.GetAD_Table_ID() > 0)
+                    if (rTable.GetVAF_TableView_ID() > 0)
                     {
-                        GetTable(rTable.GetAD_Table_ID());
+                        GetTable(rTable.GetVAF_TableView_ID());
                     }
 
-                    if (rTable.GetAD_Table_ID_1() > 0)
+                    if (rTable.GetVAF_TableView_ID_1() > 0)
                     {
-                        GetTable(rTable.GetAD_Table_ID_1());
+                        GetTable(rTable.GetVAF_TableView_ID_1());
                     }
 
-                    if (rTable.GetAD_Column_ID() > 0)
+                    if (rTable.GetVAF_Column_ID() > 0)
                     {
-                        GetColumn(rTable.GetAD_Column_ID(), true, false);
+                        GetColumn(rTable.GetVAF_Column_ID(), true, false);
                     }
 
                     InsertIntoDBSchema(X_AD_ReportTable.Table_ID, rTable.GetAD_ReportTable_ID(), X_AD_ReportTable.Table_Name, "ReportTable[" + rTable.GetAD_ReportTable_ID() + "]", "AD_ReportTable_ID = " + rTable.GetAD_ReportTable_ID());
@@ -1157,9 +1157,9 @@ namespace VAdvantage.Process
                     {
                         X_AD_ReportItem rItem = new X_AD_ReportItem(_ctx, drItem, null);
 
-                        if (rItem.GetAD_Column_ID() > 0)
+                        if (rItem.GetVAF_Column_ID() > 0)
                         {
-                            GetColumn(rItem.GetAD_Column_ID(), true, false);
+                            GetColumn(rItem.GetVAF_Column_ID(), true, false);
                         }
                         InsertIntoDBSchema(X_AD_ReportItem.Table_ID, rItem.GetAD_ReportItem_ID(), X_AD_ReportItem.Table_Name, "ReportItem[" + rItem.GetAD_ReportItem_ID() + "]", "AD_ReportItem_ID=" + rItem.GetAD_ReportItem_ID());
                     }
@@ -1176,14 +1176,14 @@ namespace VAdvantage.Process
             {
                 X_AD_ReportView sReportView = new X_AD_ReportView(_ctx, sAD_Reportview_ID, null);
 
-                int rAD_Table_ID = GetID("AD_ReportView", "AD_Table_ID", "AD_ReportView_ID=" + sAD_Reportview_ID);
+                int rVAF_TableView_ID = GetID("AD_ReportView", "VAF_TableView_ID", "AD_ReportView_ID=" + sAD_Reportview_ID);
 
-                GetTable(rAD_Table_ID);
+                GetTable(rVAF_TableView_ID);
 
                 InsertIntoDBSchema(X_AD_ReportView.Table_ID, sAD_Reportview_ID, X_AD_ReportView.Table_Name, name, "AD_ReportView_ID =" + sAD_Reportview_ID);
 
                 //Check for report view column
-                IDataReader dr = DataBase.DB.ExecuteReader("SELECT AD_ReportView_Col_ID,AD_Column_ID,FunctionColumn FROM AD_ReportView_Col WHERE AD_ReportView_ID = " + sReportView.GetAD_ReportView_ID());
+                IDataReader dr = DataBase.DB.ExecuteReader("SELECT AD_ReportView_Col_ID,VAF_Column_ID,FunctionColumn FROM AD_ReportView_Col WHERE AD_ReportView_ID = " + sReportView.GetAD_ReportView_ID());
 
                 while (dr.Read())
                 {
@@ -1235,7 +1235,7 @@ namespace VAdvantage.Process
                     GetPrintTableFormat(sPF.GetAD_PrintTableFormat_ID());
                 }
 
-                GetTable(sPF.GetAD_Table_ID());
+                GetTable(sPF.GetVAF_TableView_ID());
 
                 InsertIntoDBSchema(X_AD_PrintFormat.Table_ID, sAD_PrintFormat_ID, X_AD_PrintFormat.Table_Name, name, "AD_PrintFormat_ID =" + sAD_PrintFormat_ID);
                 //Insert PrintItem
@@ -1248,9 +1248,9 @@ namespace VAdvantage.Process
                 {
                     sItem = new X_AD_PrintFormatItem(_ctx, dr, null);
 
-                    if (sItem.GetAD_Column_ID() != 0)
+                    if (sItem.GetVAF_Column_ID() != 0)
                     {
-                        GetColumn(sItem.GetAD_Column_ID(), true, false); // print format not inserted , process binded to tab;
+                        GetColumn(sItem.GetVAF_Column_ID(), true, false); // print format not inserted , process binded to tab;
                     }
                     if (sItem.GetAD_PrintColor_ID() != 0)
                     {
@@ -1334,9 +1334,9 @@ namespace VAdvantage.Process
                     GetWorkflowProcessor(sWFlow.GetAD_WorkflowProcessor_ID());
                 }
 
-                if (sWFlow.GetAD_Table_ID() != 0)
+                if (sWFlow.GetVAF_TableView_ID() != 0)
                 {
-                    GetTable(sWFlow.GetAD_Table_ID());
+                    GetTable(sWFlow.GetVAF_TableView_ID());
                 }
 
                 if (sWFlow.GetAD_WF_Node_ID() != 0)
@@ -1357,9 +1357,9 @@ namespace VAdvantage.Process
                     {
                         GetWorkflowResponsible(sNode.GetAD_WF_Responsible_ID());
                     }
-                    if (sNode.GetAD_Image_ID() != 0)
+                    if (sNode.GetVAF_Image_ID() != 0)
                     {
-                        CheckImage(sNode.GetAD_Image_ID());
+                        CheckImage(sNode.GetVAF_Image_ID());
                     }
 
                     if (sNode.GetR_MailText_ID() != 0)
@@ -1372,9 +1372,9 @@ namespace VAdvantage.Process
 
                     if (sNode.GetAction() == X_AD_WF_Node.ACTION_UserChoice || sNode.GetAction() == X_AD_WF_Node.ACTION_SetVariable)
                     {
-                        if (sNode.GetAD_Column_ID() != 0)
+                        if (sNode.GetVAF_Column_ID() != 0)
                         {
-                            GetColumn(sNode.GetAD_Column_ID(), false);
+                            GetColumn(sNode.GetVAF_Column_ID(), false);
                         }
                     }
                     //else if (sNode.GetAction() == X_AD_WF_Node.ACTION_EMail)
@@ -1390,9 +1390,9 @@ namespace VAdvantage.Process
 
                     else if (sNode.GetAction() == X_AD_WF_Node.ACTION_UserForm)
                     {
-                        if (sNode.GetAD_Form_ID() != 0)
+                        if (sNode.GetVAF_Page_ID() != 0)
                         {
-                            GetForm(sNode.GetAD_Form_ID());
+                            GetForm(sNode.GetVAF_Page_ID());
                         }
                     }
                     else if (sNode.GetAction() == X_AD_WF_Node.ACTION_AppsTask)
@@ -1496,15 +1496,15 @@ namespace VAdvantage.Process
                     int sAD_WF_NextCondition_ID = Util.GetValueOfInt(dr1[0]);
 
                     X_AD_WF_NextCondition next = new X_AD_WF_NextCondition(_ctx, sAD_WF_NextCondition_ID, null);
-                    if (next.GetAD_Column_ID() > 0)
+                    if (next.GetVAF_Column_ID() > 0)
                     {
-                        if (IsRecordExistInDBSchema(X_AD_Column.Table_ID, next.GetAD_Column_ID()))
+                        if (IsRecordExistInDBSchema(X_VAF_Column.Table_ID, next.GetVAF_Column_ID()))
                         {
                             ;
                         }
                         else
                         {
-                            GetColumn(next.GetAD_Column_ID(), true, false);
+                            GetColumn(next.GetVAF_Column_ID(), true, false);
                         }
                     }
                     InsertIntoDBSchema(X_AD_WF_NextCondition.Table_ID, sAD_WF_NextCondition_ID, X_AD_WF_NextCondition.Table_Name, dr[1].ToString(), "AD_WF_NextCondition_ID = " + sAD_WF_NextCondition_ID);

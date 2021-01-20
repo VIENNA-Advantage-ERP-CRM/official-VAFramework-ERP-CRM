@@ -35,7 +35,7 @@ namespace VIS.Controllers
 
 
         [HttpPost]
-        public JsonResult SendMail(string mails, int AD_User_ID, int AD_Client_ID, int AD_Org_ID, int attachment_ID, string fileNamesFornNewAttach, string fileNamesForopenFormat, string mailFormat, bool notify,string strDocAttach)
+        public JsonResult SendMail(string mails, int AD_User_ID, int VAF_Client_ID, int VAF_Org_ID, int attachment_ID, string fileNamesFornNewAttach, string fileNamesForopenFormat, string mailFormat, bool notify,string strDocAttach)
         {
             List<int> lstDoc = new List<int>();
             Ctx ct = Session["ctx"] as Ctx;
@@ -68,16 +68,16 @@ namespace VIS.Controllers
 
             }
 
-            string result = model.SendMails(lstMails, AD_User_ID, AD_Client_ID, AD_Org_ID, attachment_ID, filesNamesFornNewAttach, filesNamesForopenFormat, Server.HtmlDecode(mailFormat), notify, lstDoc);
+            string result = model.SendMails(lstMails, AD_User_ID, VAF_Client_ID, VAF_Org_ID, attachment_ID, filesNamesFornNewAttach, filesNamesForopenFormat, Server.HtmlDecode(mailFormat), notify, lstDoc);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public JsonResult SaveFormats(int id, int AD_Client_ID, int AD_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int AD_Window_ID, string folderName, int attachmentID)
+        public JsonResult SaveFormats(int id, int VAF_Client_ID, int VAF_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int AD_Window_ID, string folderName, int attachmentID)
         {
             Ctx ct = Session["ctx"] as Ctx;
             EmailModel model = new EmailModel(ct);
-            int result = model.SaveFormats(id, AD_Client_ID, AD_Org_ID, Server.HtmlDecode(name), isDynamic, Server.HtmlDecode(subject), Server.HtmlDecode(text), saveforAll, AD_Window_ID, folderName, attachmentID);
+            int result = model.SaveFormats(id, VAF_Client_ID, VAF_Org_ID, Server.HtmlDecode(name), isDynamic, Server.HtmlDecode(subject), Server.HtmlDecode(text), saveforAll, AD_Window_ID, folderName, attachmentID);
             return Json(JsonConvert.SerializeObject(result), JsonRequestBehavior.AllowGet);
         }
 
@@ -207,13 +207,13 @@ namespace VIS.Controllers
         /// <param name="values"></param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult SaveAttachment(string subject, int AD_Table_ID, string html, string values)
+        public JsonResult SaveAttachment(string subject, int VAF_TableView_ID, string html, string values)
         {
             string res = "";
             Ctx ct = Session["ctx"] as Ctx;
             Dictionary<string, Dictionary<string, string>> value = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(values);
             EmailModel model = new EmailModel(ct);
-            res = model.SaveAttachment(subject, AD_Table_ID, Server.HtmlDecode(html), value);
+            res = model.SaveAttachment(subject, VAF_TableView_ID, Server.HtmlDecode(html), value);
             return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
         }
 

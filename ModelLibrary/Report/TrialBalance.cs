@@ -34,7 +34,7 @@ namespace VAdvantage.Report
         private DateTime? _DateAcct_From = null;
         private DateTime? _DateAcct_To = null;
         /**	Org Parameter					*/
-        private int _AD_Org_ID = 0;
+        private int _VAF_Org_ID = 0;
         /**	Account Parameter				*/
         private int _Account_ID = 0;
         private String _AccountValue_From = null;
@@ -56,7 +56,7 @@ namespace VAdvantage.Report
         /** Hierarchy						*/
         private int _PA_Hierarchy_ID = 0;
 
-        private int _AD_OrgTrx_ID = 0;
+        private int _VAF_OrgTrx_ID = 0;
         private int _C_LocFrom_ID = 0;
         private int _C_LocTo_ID = 0;
         private int _User1_ID = 0;
@@ -73,13 +73,13 @@ namespace VAdvantage.Report
         /**	Insert Statement				*/
         private static String _insert = "INSERT INTO T_TrialBalance "
             + "(AD_PInstance_ID, Fact_Acct_ID,"
-            + " AD_Client_ID, AD_Org_ID, Created,CreatedBy, Updated,UpdatedBy,"
+            + " VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,"
             + " C_AcctSchema_ID, Account_ID, AccountValue, DateTrx, DateAcct, C_Period_ID,"
-            + " AD_Table_ID, Record_ID, Line_ID,"
+            + " VAF_TableView_ID, Record_ID, Line_ID,"
             + " GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,"
             + " C_Currency_ID, AmtSourceDr, AmtSourceCr, AmtSourceBalance,"
             + " AmtAcctDr, AmtAcctCr, AmtAcctBalance, C_UOM_ID, Qty,"
-            + " M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,"
+            + " M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,"
             + " C_SalesRegion_ID, C_Project_ID, C_Campaign_ID, C_Activity_ID,"
             + " User1_ID, User2_ID, A_Asset_ID, Description)";
 
@@ -117,9 +117,9 @@ namespace VAdvantage.Report
                 {
                     _PA_Hierarchy_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
-                    _AD_Org_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
+                    _VAF_Org_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else if (name.Equals("Account_ID"))
                 {
@@ -199,10 +199,10 @@ namespace VAdvantage.Report
                 .Append(DataBase.DB.TO_STRING(_AccountValue_To)).Append("))");
             }
             //	Optional Org
-            if (_AD_Org_ID != 0 && _AD_Org_ID != -1)
+            if (_VAF_Org_ID != 0 && _VAF_Org_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _AD_Org_ID));
+                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
             }
             //	Optional BPartner
             if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
@@ -337,15 +337,15 @@ namespace VAdvantage.Report
             StringBuilder sql = new StringBuilder(_insert);
             //	(AD_PInstance_ID, Fact_Acct_ID,
             sql.Append("SELECT ").Append(GetAD_PInstance_ID()).Append(",0,");
-            //	AD_Client_ID, AD_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
-            sql.Append(GetAD_Client_ID()).Append(",");
-            if (_AD_Org_ID == 0 || _AD_Org_ID==-1)
+            //	VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
+            sql.Append(GetVAF_Client_ID()).Append(",");
+            if (_VAF_Org_ID == 0 || _VAF_Org_ID==-1)
             {
                 sql.Append("0");
             }
             else
             {
-                sql.Append(_AD_Org_ID);
+                sql.Append(_VAF_Org_ID);
             }
             sql.Append(", SysDate,").Append(GetAD_User_ID())
                 .Append(",SysDate,").Append(GetAD_User_ID()).Append(",");
@@ -382,7 +382,7 @@ namespace VAdvantage.Report
                 sql.Append(_C_Period_ID);
             }
             sql.Append(",");
-            //	AD_Table_ID, Record_ID, Line_ID,
+            //	VAF_TableView_ID, Record_ID, Line_ID,
             sql.Append("null,null,null,");
             //	GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,
             sql.Append("null,null,null,null,'").Append(_PostingType).Append("',");
@@ -392,7 +392,7 @@ namespace VAdvantage.Report
             sql.Append(" COALESCE(SUM(AmtAcctDr),0),COALESCE(SUM(AmtAcctCr),0),"
                       + "COALESCE(SUM(AmtAcctDr),0)-COALESCE(SUM(AmtAcctCr),0),"
                 + " null,COALESCE(SUM(Qty),0),");
-            //	M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,
+            //	M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,
             if (_M_Product_ID == 0 ||_M_Product_ID==-1)
             {
                 sql.Append("null");
@@ -411,13 +411,13 @@ namespace VAdvantage.Report
                 sql.Append(_C_BPartner_ID);
             }
             sql.Append(",");
-            if (_AD_OrgTrx_ID == 0 || _AD_OrgTrx_ID==-1)
+            if (_VAF_OrgTrx_ID == 0 || _VAF_OrgTrx_ID==-1)
             {
                 sql.Append("null");
             }
             else
             {
-                sql.Append(_AD_OrgTrx_ID);
+                sql.Append(_VAF_OrgTrx_ID);
             }
             sql.Append(",");
             if (_C_LocFrom_ID == 0 || _C_LocFrom_ID==-1)
@@ -495,7 +495,7 @@ namespace VAdvantage.Report
             }
             sql.Append(", null,null");
             //
-            sql.Append(" FROM Fact_Acct WHERE AD_Client_ID=").Append(GetAD_Client_ID())
+            sql.Append(" FROM Fact_Acct WHERE VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND ").Append(m_parameterWhere)
                 .Append(" AND DateAcct < ").Append(DataBase.DB.TO_DATE(_DateAcct_From, true));
             //	Start Beginning of Year
@@ -532,26 +532,26 @@ namespace VAdvantage.Report
             StringBuilder sql = new StringBuilder(_insert);
             //	(AD_PInstance_ID, Fact_Acct_ID,
             sql.Append("SELECT ").Append(GetAD_PInstance_ID()).Append(",Fact_Acct_ID,");
-            //	AD_Client_ID, AD_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
-            sql.Append(GetAD_Client_ID()).Append(",AD_Org_ID,Created,CreatedBy, Updated,UpdatedBy,");
+            //	VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
+            sql.Append(GetVAF_Client_ID()).Append(",VAF_Org_ID,Created,CreatedBy, Updated,UpdatedBy,");
             //	C_AcctSchema_ID, Account_ID, DateTrx, AccountValue, DateAcct, C_Period_ID,
             sql.Append("C_AcctSchema_ID, Account_ID, null, DateTrx, DateAcct, C_Period_ID,");
-            //	AD_Table_ID, Record_ID, Line_ID,
-            sql.Append("AD_Table_ID, Record_ID, Line_ID,");
+            //	VAF_TableView_ID, Record_ID, Line_ID,
+            sql.Append("VAF_TableView_ID, Record_ID, Line_ID,");
             //	GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,
             sql.Append("GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,");
             //	C_Currency_ID, AmtSourceDr, AmtSourceCr, AmtSourceBalance,
             sql.Append("C_Currency_ID, AmtSourceDr,AmtSourceCr, AmtSourceDr-AmtSourceCr,");
             //	AmtAcctDr, AmtAcctCr, AmtAcctBalance, C_UOM_ID, Qty,
             sql.Append(" AmtAcctDr,AmtAcctCr, AmtAcctDr-AmtAcctCr, C_UOM_ID,Qty,");
-            //	M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,
-            sql.Append("M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,");
+            //	M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,
+            sql.Append("M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,");
             //	C_SalesRegion_ID, C_Project_ID, C_Campaign_ID, C_Activity_ID,
             sql.Append("C_SalesRegion_ID, C_Project_ID, C_Campaign_ID, C_Activity_ID,");
             //	User1_ID, User2_ID, A_Asset_ID, Description)
             sql.Append("User1_ID, User2_ID, A_Asset_ID, Description");
             //
-            sql.Append(" FROM Fact_Acct WHERE AD_Client_ID=").Append(GetAD_Client_ID())
+            sql.Append(" FROM Fact_Acct WHERE VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND ").Append(m_parameterWhere)
                 .Append(" AND DateAcct >= ").Append(DataBase.DB.TO_DATE(_DateAcct_From, true))
                 .Append(" AND TRUNC(DateAcct,'DD') <= ").Append(DataBase.DB.TO_DATE(_DateAcct_To, true));

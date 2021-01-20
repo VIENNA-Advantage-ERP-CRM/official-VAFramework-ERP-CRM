@@ -258,7 +258,7 @@ namespace VAdvantage.Model
             SetC_ProjectTask_ID(oLine.GetC_ProjectTask_ID());
             SetC_Activity_ID(oLine.GetC_Activity_ID());
             SetC_Campaign_ID(oLine.GetC_Campaign_ID());
-            SetAD_OrgTrx_ID(oLine.GetAD_OrgTrx_ID());
+            SetVAF_OrgTrx_ID(oLine.GetVAF_OrgTrx_ID());
             SetUser1_ID(oLine.GetUser1_ID());
             SetUser2_ID(oLine.GetUser2_ID());
         }
@@ -337,7 +337,7 @@ namespace VAdvantage.Model
             SetC_ProjectTask_ID(iLine.GetC_ProjectTask_ID());
             SetC_Activity_ID(iLine.GetC_Activity_ID());
             SetC_Campaign_ID(iLine.GetC_Campaign_ID());
-            SetAD_OrgTrx_ID(iLine.GetAD_OrgTrx_ID());
+            SetVAF_OrgTrx_ID(iLine.GetVAF_OrgTrx_ID());
             SetUser1_ID(iLine.GetUser1_ID());
             SetUser2_ID(iLine.GetUser2_ID());
         }
@@ -900,14 +900,14 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Get AD_OrgTrx_ID
+         * 	Get VAF_OrgTrx_ID
          *	@return trx org
          */
-        public int GetAD_OrgTrx_ID()
+        public int GetVAF_OrgTrx_ID()
         {
-            int ii = base.GetAD_OrgTrx_ID();
+            int ii = base.GetVAF_OrgTrx_ID();
             if (ii == 0)
-                ii = GetParent().GetAD_OrgTrx_ID();
+                ii = GetParent().GetVAF_OrgTrx_ID();
             return ii;
         }
 
@@ -1166,7 +1166,7 @@ namespace VAdvantage.Model
                         qry.Clear();
                         qry.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
                             INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inO.GetMovementDate(), true) +
-                                    " AND t.AD_Client_ID = " + GetAD_Client_ID() + " AND t.M_Locator_ID = " + GetM_Locator_ID() +
+                                    " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + GetM_Locator_ID() +
                                     " AND t.M_Product_ID = " + GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + GetM_AttributeSetInstance_ID() +
                                     " AND NVL(t.M_ProductContainer_ID, 0) = " + GetM_ProductContainer_ID());
                         containerQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry.ToString(), null, Get_Trx()));  // dont use Transaction here - otherwise impact goes wrong on completion
@@ -1269,12 +1269,12 @@ namespace VAdvantage.Model
                     qry1 = @"SELECT  SUM(o.VA024_UnitPrice)  FROM VA024_t_ObsoleteInventory o 
                                   WHERE o.IsActive = 'Y' AND  o.M_Product_ID = " + GetM_Product_ID() + @" and 
                                   ( o.M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + @" OR o.M_AttributeSetInstance_ID IS NULL )" +
-                              " AND o.AD_Org_ID = " + GetAD_Org_ID();
+                              " AND o.VAF_Org_ID = " + GetVAF_Org_ID();
                     VA024_ProvisionPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(qry1, null, Get_Trx()));
                     SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
                     // is used to get cost of binded cost method / costing level of primary accounting schema
-                    Decimal cost = MCost.GetproductCosts(inO.GetAD_Client_ID(), inO.GetAD_Org_ID(), GetM_Product_ID(),
+                    Decimal cost = MCost.GetproductCosts(inO.GetVAF_Client_ID(), inO.GetVAF_Org_ID(), GetM_Product_ID(),
                          GetM_AttributeSetInstance_ID(), Get_Trx(), inO.GetM_Warehouse_ID());
                     SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }

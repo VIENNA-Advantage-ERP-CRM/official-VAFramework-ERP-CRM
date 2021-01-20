@@ -143,7 +143,7 @@ namespace VAdvantage.Model
             : this(imp.GetCtx(), 0, imp.Get_TrxName())
         {
 
-            PO.CopyValues(imp, this, imp.GetAD_Client_ID(), imp.GetAD_Org_ID());
+            PO.CopyValues(imp, this, imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
         }
 
         /** Request Type				*/
@@ -1270,7 +1270,7 @@ namespace VAdvantage.Model
             // if not access user organization access.
             if (!isAllUser && !role.IsUseUserOrgAccess())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND VAF_Org_ID IN (" + GetVAF_Org_ID() + ",0)")) > 0)
                 {
                     isAllUser = true;
                 }
@@ -1287,7 +1287,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  AD_Org_ID IN (" + GetAD_Org_ID() + ",0)")) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Org_ID) FROm AD_User_OrgAccess WHERE AD_User_ID=" + Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]) + " AND  IsActive='Y' AND  VAF_Org_ID IN (" + GetVAF_Org_ID() + ",0)")) > 0)
                     {
                         users.Add(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["AD_User_ID"]));
                     }
@@ -1666,7 +1666,7 @@ namespace VAdvantage.Model
                     };
             String subject = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
             String message = subject + "\n" + GetSummary();
-            MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
             MUser from = MUser.Get(GetCtx(), AD_User_ID);
             MUser to = MUser.Get(GetCtx(), GetSalesRep_ID());
             //
@@ -1698,7 +1698,7 @@ namespace VAdvantage.Model
             log.Finer(message.ToString());
 
             //	Prepare sending Notice/Mail
-            MClient client = MClient.Get(GetCtx(), GetAD_Client_ID());
+            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
             //	ReSet from if external
             if (from.GetEMailUser() == null || from.GetEMailUserPW() == null)
                 from = null;
@@ -1782,7 +1782,7 @@ namespace VAdvantage.Model
 
                     // check the user roles for organization access.
                     MUser user = new MUser(GetCtx(), AD_User_ID, null);
-                    MRole[] role = user.GetRoles(GetAD_Org_ID());
+                    MRole[] role = user.GetRoles(GetVAF_Org_ID());
                     if (role.Length == 0)
                         continue;
 
@@ -1880,9 +1880,9 @@ namespace VAdvantage.Model
                 || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
             {
                 VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
-                _mAttachment.SetAD_Client_ID(GetCtx().GetAD_Client_ID());
-                _mAttachment.SetAD_Org_ID(GetCtx().GetAD_Org_ID());
-                _mAttachment.SetAD_Table_ID(MTable.Get_Table_ID(Table_Name));
+                _mAttachment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
+                _mAttachment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
+                _mAttachment.SetVAF_TableView_ID(MTable.Get_Table_ID(Table_Name));
                 _mAttachment.IsActive();
                 _mAttachment.SetMailAddress("");
                 _mAttachment.SetAttachmentType("M");

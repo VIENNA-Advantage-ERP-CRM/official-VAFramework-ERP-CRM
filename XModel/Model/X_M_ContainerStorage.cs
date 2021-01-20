@@ -25,7 +25,7 @@ public X_M_ContainerStorage (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, d
  added by ->Harwinder */
 static X_M_ContainerStorage(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27818161238381L;/** Last Updated Timestamp 9/4/2018 10:08:41 AM */
-public static long updatedMS = 1536035921592L;/** AD_Table_ID=1000525 */
+public static long updatedMS = 1536035921592L;/** VAF_TableView_ID=1000525 */
 public static int Table_ID; // =1000525;
 /** TableName=M_ContainerStorage */
 public static String Table_Name="M_ContainerStorage";

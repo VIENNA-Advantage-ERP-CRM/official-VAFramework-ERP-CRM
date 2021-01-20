@@ -333,8 +333,8 @@ namespace VAdvantage.DBPort
         {
             String[] exceptionTables = new String[] {
                 "VAF_RIGHTSLOG",
-                "AD_ALERTPROCESSORLOG",
-                "AD_CHANGELOG",
+                "VAF_AlertHandlerLOG",
+                "VAF_ALTERLOG",
                 "AD_ISSUE",
                 "AD_LDAPPROCESSORLOG",
                 "AD_PACKAGE_IMP",
@@ -370,7 +370,7 @@ namespace VAdvantage.DBPort
 				"AD_PROCESS_ACCESS",
                 "AD_WINDOW_ACCESS",
                 "AD_WORKFLOW_ACCESS",
-                "AD_FORM_ACCESS",
+                "VAF_Page_Rights",
 				//
 			};
             String uppStmt = statement.ToUpper().Trim();
@@ -380,8 +380,8 @@ namespace VAdvantage.DBPort
             // don't log update to statistic process
             if (uppStmt.StartsWith("UPDATE AD_PROCESS SET STATISTIC_"))
                 return true;
-            // Don't log DELETE FROM Some_Table WHERE AD_Table_ID=? AND Record_ID=?
-            if (uppStmt.StartsWith("DELETE FROM ") && uppStmt.EndsWith(" WHERE AD_TABLE_ID=? AND RECORD_ID=?"))
+            // Don't log DELETE FROM Some_Table WHERE VAF_TableView_ID=? AND Record_ID=?
+            if (uppStmt.StartsWith("DELETE FROM ") && uppStmt.EndsWith(" WHERE VAF_TABLEVIEW_ID=? AND RECORD_ID=?"))
                 return true;
             for (int i = 0; i < exceptionTables.Length; i++)
             {
@@ -397,7 +397,7 @@ namespace VAdvantage.DBPort
                     return true;
             }
 
-            // don't log selects or insert/update for exception tables (i.e. AD_Issue, AD_ChangeLog)
+            // don't log selects or insert/update for exception tables (i.e. AD_Issue, VAF_AlterLog)
             return false;
         }
     }

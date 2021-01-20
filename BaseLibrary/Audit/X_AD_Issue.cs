@@ -82,7 +82,7 @@ static X_AD_Issue()
 //static long serialVersionUID = 27562514361859L;
 /** Last Updated Timestamp 7/29/2010 1:07:25 PM */
 public static long updatedMS = 1280389045070L;
-/** AD_Table_ID=828 */
+/** VAF_TableView_ID=828 */
 public static int Table_ID;
  // =828;
 
@@ -125,18 +125,18 @@ StringBuilder sb = new StringBuilder ("X_AD_Issue[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 /** Set Special Form.
-@param AD_Form_ID Special Form */
-public void SetAD_Form_ID (int AD_Form_ID)
+@param VAF_Page_ID Special Form */
+public void SetVAF_Page_ID (int VAF_Page_ID)
 {
-if (AD_Form_ID <= 0) Set_Value ("AD_Form_ID", null);
+if (VAF_Page_ID <= 0) Set_Value ("VAF_Page_ID", null);
 else
-Set_Value ("AD_Form_ID", AD_Form_ID);
+Set_Value ("VAF_Page_ID", VAF_Page_ID);
 }
 /** Get Special Form.
 @return Special Form */
-public int GetAD_Form_ID() 
+public int GetVAF_Page_ID() 
 {
-Object ii = Get_Value("AD_Form_ID");
+Object ii = Get_Value("VAF_Page_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

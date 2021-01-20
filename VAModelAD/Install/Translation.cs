@@ -63,11 +63,11 @@ namespace VAdvantage.Install
       	    //Uses TranslationHandler to update translation         
 	/// </summary>
 	/// <param name="directory">file Directory</param>
-	/// <param name="AD_Client_ID">only certain client if id >= 0</param>
+	/// <param name="VAF_Client_ID">only certain client if id >= 0</param>
 	/// <param name="AD_Language">language</param>
 	/// <param name="Trl_Table">table</param>
 	/// <returns>status Message</returns>
-	public String ImportTrl (String directory, int AD_Client_ID, String AD_Language, String Trl_Table)
+	public String ImportTrl (String directory, int VAF_Client_ID, String AD_Language, String Trl_Table)
 	{		
         String fileName = directory + "\\" + Trl_Table + "_" + AD_Language + ".xml";
 		log.Info(fileName);	
@@ -81,7 +81,7 @@ namespace VAdvantage.Install
        
 		try
 		{
-			TranslationHandler handler = new TranslationHandler(AD_Client_ID);
+			TranslationHandler handler = new TranslationHandler(VAF_Client_ID);
 			//SAXParserFactory factory = SAXParserFactory.newInstance();
 		//	factory.setValidating(true);
             XmlReaderSettings factory = new XmlReaderSettings();
@@ -144,11 +144,11 @@ namespace VAdvantage.Install
 	/// Import Translation
 	/// </summary>
 	/// <param name="directory">file directory</param>
-	/// <param name="AD_Client_ID">only certain client if id >= 0</param>
+	/// <param name="VAF_Client_ID">only certain client if id >= 0</param>
 	/// <param name="AD_Language">language</param>
 	/// <param name="Trl_Table">table</param>
 	/// <returns>stauts Message </returns>
-    public String ExportTrl(String directory, int AD_Client_ID, String AD_Language, String Trl_Table)
+    public String ExportTrl(String directory, int VAF_Client_ID, String AD_Language, String Trl_Table)
     {
         String fileName = directory + "\\" + Trl_Table + "_" + AD_Language + ".xml";
         log.Info(fileName);
@@ -204,8 +204,8 @@ namespace VAdvantage.Install
                 sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.IsCentrallyMaintained='N'");
                 haveWhere = true;
             }
-            if (AD_Client_ID >= 0)
-                sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.AD_Client_ID=").Append(AD_Client_ID);
+            if (VAF_Client_ID >= 0)
+                sql.Append(haveWhere ? " AND " : " WHERE ").Append("o.VAF_Client_ID=").Append(VAF_Client_ID);
             sql.Append(" ORDER BY t.").Append(keyColumn);
 
             SqlParameter[] param = null;
@@ -262,8 +262,8 @@ namespace VAdvantage.Install
 	private String[] GetTrlColumns (String Base_Table)
 	{
 		_IsCentrallyMaintained = false;
-		String sql = "SELECT TableName FROM AD_Table t"
-			+ " INNER JOIN AD_Column c ON (c.AD_Table_ID=t.AD_Table_ID AND c.ColumnName='IsCentrallyMaintained') "
+		String sql = "SELECT TableName FROM VAF_TableView t"
+			+ " INNER JOIN VAF_Column c ON (c.VAF_TableView_ID=t.VAF_TableView_ID AND c.ColumnName='IsCentrallyMaintained') "
 			+ "WHERE t.TableName=@param AND c.IsActive='Y'";
         SqlParameter[] param = new SqlParameter[1];
         IDataReader idr = null;
@@ -282,8 +282,8 @@ namespace VAdvantage.Install
 		}
 
 		sql = "SELECT ColumnName "
-			+ "FROM AD_Column c"
-			+ " INNER JOIN AD_Table t ON (c.AD_Table_ID=t.AD_Table_ID) "
+			+ "FROM VAF_Column c"
+			+ " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
 			+ " WHERE t.TableName=@param"
 			+ " AND c.AD_Reference_ID IN (10,14) "
             +" AND c.ColumnName <> 'Export_ID' "
@@ -388,7 +388,7 @@ namespace VAdvantage.Install
 		    return;
 		}
 		String 	sql = "SELECT Name, TableName "
-			+ "FROM AD_Table "
+			+ "FROM VAF_TableView "
 			+ "WHERE TableName LIKE '%_Trl' "
 			+ "ORDER BY 1";
 		List<String> trlTables = new List<String>();

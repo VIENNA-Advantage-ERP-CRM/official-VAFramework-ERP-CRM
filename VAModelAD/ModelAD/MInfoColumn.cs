@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_InfoColumn
+ * Class Used     : X_VAF_QuickSearchColumn
  * Chronological Development
  * Veena Pandey     31-Aug-09
  ******************************************************/
@@ -17,23 +17,23 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MInfoColumn : X_AD_InfoColumn
+    public class MInfoColumn : X_VAF_QuickSearchColumn
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_InfoColumn_ID">id</param>
+        /// <param name="VAF_QuickSearchColumn_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MInfoColumn(Ctx ctx, int AD_InfoColumn_ID, Trx trxName)
-            : base(ctx, AD_InfoColumn_ID, trxName)
+        public MInfoColumn(Ctx ctx, int VAF_QuickSearchColumn_ID, Trx trxName)
+            : base(ctx, VAF_QuickSearchColumn_ID, trxName)
         {
-            if (AD_InfoColumn_ID == 0)
+            if (VAF_QuickSearchColumn_ID == 0)
             {
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 SetIsDisplayed(true);	// Y
                 SetIsQueryCriteria(false);
-                SetSeqNo(0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM AD_InfoColumn WHERE AD_InfoWindow_ID=@AD_InfoWindow_ID@
+                SetSeqNo(0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAF_QuickSearchColumn WHERE VAF_QuickSearchWindow_ID=@VAF_QuickSearchWindow_ID@
             }
         }
 
@@ -56,11 +56,11 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             //	Sync Terminology
-            if ((newRecord || Is_ValueChanged("AD_Element_ID"))
-                && GetAD_Element_ID() != 0
+            if ((newRecord || Is_ValueChanged("VAF_ColumnDic_ID"))
+                && GetVAF_ColumnDic_ID() != 0
                 && IsCentrallyMaintained())
             {
-                M_Element element = new M_Element(GetCtx(), GetAD_Element_ID(), null);
+                M_Element element = new M_Element(GetCtx(), GetVAF_ColumnDic_ID(), null);
                 SetName(element.GetName());
                 SetDescription(element.GetDescription());
                 SetHelp(element.GetHelp());
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             //	Auto Numbering
             if (newRecord && GetSeqNo() == 0)
             {
-                String sql = "SELECT COALESCE(MAX(SeqNo),0)+10 FROM AD_InfoColumn WHERE AD_InfoWindow_ID=" + GetAD_InfoWindow_ID();
+                String sql = "SELECT COALESCE(MAX(SeqNo),0)+10 FROM VAF_QuickSearchColumn WHERE VAF_QuickSearchWindow_ID=" + GetVAF_QuickSearchWindow_ID();
                 int no = CoreLibrary.DataBase.DB.GetSQLValue(null, sql);
                 SetSeqNo(no);
             }

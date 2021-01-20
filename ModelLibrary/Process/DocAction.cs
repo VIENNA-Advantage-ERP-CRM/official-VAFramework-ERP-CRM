@@ -270,14 +270,14 @@ namespace VAdvantage.Process
         /// <summary>
         /// Get Document Client
         /// </summary>
-        /// <returns>AD_Client_ID</returns>
-        int GetAD_Client_ID();
+        /// <returns>VAF_Client_ID</returns>
+        int GetVAF_Client_ID();
 
         /// <summary>
         /// Get Document Organization
         /// </summary>
-        /// <returns>AD_Org_ID</returns>
-        int GetAD_Org_ID();
+        /// <returns>VAF_Org_ID</returns>
+        int GetVAF_Org_ID();
 
         /// <summary>
         /// Get Doc Action
@@ -304,9 +304,9 @@ namespace VAdvantage.Process
         int Get_ID();
 
         /// <summary>
-        /// Get AD_Table_ID
+        /// Get VAF_TableView_ID
         /// </summary>
-        /// <returns>AD_Table_ID</returns>
+        /// <returns>VAF_TableView_ID</returns>
         int Get_Table_ID();
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace VAdvantage.Process
         * Return the SQL to use to retrieve the document line organizations. This
         * is used to check whether the periods are open.
         * 
-        * @return list of AD_Org_ID.  null if the lines do not need to be checked.
+        * @return list of VAF_Org_ID.  null if the lines do not need to be checked.
         */
         VAdvantage.Utility.Env.QueryParams GetLineOrgsQueryInfo();
 

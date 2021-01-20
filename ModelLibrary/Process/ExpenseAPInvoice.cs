@@ -82,7 +82,7 @@ namespace VAdvantage.Process
             StringBuilder sql = new StringBuilder("SELECT * "
                 + "FROM S_TimeExpense e "
                 + "WHERE e.Processed='Y'"
-                + " AND e.AD_Client_ID=@param1");				//	#1
+                + " AND e.VAF_Client_ID=@param1");				//	#1
             if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
             {
                 index++;
@@ -119,8 +119,8 @@ namespace VAdvantage.Process
             {
                 //pstmt = DataBase.prepareStatement (sql.toString (), get_TrxName());
                 int par = 0;
-                //pstmt.setInt(par++, getAD_Client_ID());
-                param[0] = new SqlParameter("@param1", GetAD_Client_ID());
+                //pstmt.setInt(par++, getVAF_Client_ID());
+                param[0] = new SqlParameter("@param1", GetVAF_Client_ID());
                 if (_C_BPartner_ID != 0 && _C_BPartner_ID != -1)
                 {
                     par++;
@@ -233,26 +233,26 @@ namespace VAdvantage.Process
 
                             
                             invoice.SetIsExpenseInvoice(true); //added by arpit asked by Surya Sir on DEC 28,2015
-                            invoice.SetClientOrg(te.GetAD_Client_ID(), te.GetAD_Org_ID());
+                            invoice.SetClientOrg(te.GetVAF_Client_ID(), te.GetVAF_Org_ID());
 
                             //invoice.SetVA009_PaymentMethod_ID(bp.GetVA009_PO_PaymentMethod_ID());
                             // JID_0868
                             // chanegs done by Bharat on 12 September 2018 to set the document type where Expense Invoice checkbox is true.
                             // String qry = "SELECT C_DocType_ID FROM C_DocType "
-                            //+ "WHERE AD_Client_ID=@param1 AND DocBaseType=@param2"
+                            //+ "WHERE VAF_Client_ID=@param1 AND DocBaseType=@param2"
                             //+ " AND IsActive='Y' AND IsExpenseInvoice = 'Y' "
                             //+ "ORDER BY C_DocType_ID DESC ,   IsDefault DESC";
                             String qry = "SELECT C_DocType_ID FROM C_DocType "
-                      + "WHERE AD_Client_ID=" + GetAD_Client_ID() + @" AND DocBaseType='" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'"
-                      + " AND IsActive='Y' AND IsExpenseInvoice = 'Y'  AND AD_Org_ID IN(0," + te.GetAD_Org_ID() + ") "
-                      + " ORDER BY AD_Org_ID Desc, C_DocType_ID DESC ,   IsDefault DESC";
+                      + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + @" AND DocBaseType='" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'"
+                      + " AND IsActive='Y' AND IsExpenseInvoice = 'Y'  AND VAF_Org_ID IN(0," + te.GetVAF_Org_ID() + ") "
+                      + " ORDER BY VAF_Org_ID Desc, C_DocType_ID DESC ,   IsDefault DESC";
 
-                            //int C_DocType_ID = DB.GetSQLValue(null, qry, GetAD_Client_ID(), MDocBaseType.DOCBASETYPE_APINVOICE);
+                            //int C_DocType_ID = DB.GetSQLValue(null, qry, GetVAF_Client_ID(), MDocBaseType.DOCBASETYPE_APINVOICE);
                             int C_DocType_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry));
                             if (C_DocType_ID <= 0)
                             {
                                 log.Log(Level.SEVERE, "Not found for AC_Client_ID="
-                                    + GetAD_Client_ID() + " - " + MDocBaseType.DOCBASETYPE_APINVOICE);
+                                    + GetVAF_Client_ID() + " - " + MDocBaseType.DOCBASETYPE_APINVOICE);
                                 return Msg.GetMsg(GetCtx(), "NoDocTypeExpInvoice");
                             }
                             else
@@ -444,7 +444,7 @@ namespace VAdvantage.Process
         /// <returns></returns>
         public int GetPaymentMethod(MTimeExpense te)
         {
-            sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND AD_Org_ID IN(0," + te.GetAD_Org_ID() + ") ORDER BY AD_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
+            sqlqry = "SELECT VA009_PaymentMethod_ID FROM VA009_PaymentMethod WHERE VA009_PAYMENTBASETYPE='S' AND VAF_Org_ID IN(0," + te.GetVAF_Org_ID() + ") ORDER BY VAF_Org_ID DESC, VA009_PAYMENTMETHOD_ID DESC FETCH NEXT 1 ROWS ONLY";
             pm = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry));
             return pm;
         }
@@ -456,7 +456,7 @@ namespace VAdvantage.Process
         /// <returns></returns>
         public int GetPaymentTerm(MTimeExpense te)
         {
-            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND AD_Org_ID IN(0, " + te.GetAD_Org_ID() + ") ORDER BY AD_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
+            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_Org_ID IN(0, " + te.GetVAF_Org_ID() + ") ORDER BY VAF_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
             pt = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry1));
             return pt;
         }

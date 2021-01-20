@@ -74,7 +74,7 @@ static X_R_InterestArea()
 //static long serialVersionUID 27562514382798L;
 /** Last Updated Timestamp 7/29/2010 1:07:46 PM */
 public static long updatedMS = 1280389066009L;
-/** AD_Table_ID=530 */
+/** VAF_TableView_ID=530 */
 public static int Table_ID;
  // =530;
 

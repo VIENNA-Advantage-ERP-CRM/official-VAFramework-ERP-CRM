@@ -45,8 +45,8 @@
         };
 
 
-        function getCardViewInfo(AD_Window_ID, AD_Tab_ID, callback) {
-            var data = { AD_Window_ID: AD_Window_ID, AD_Tab_ID: AD_Tab_ID };
+        function getCardViewInfo(AD_Window_ID, VAF_Tab_ID, callback) {
+            var data = { AD_Window_ID: AD_Window_ID, VAF_Tab_ID: VAF_Tab_ID };
             $.ajax({
                 url: cardViewUrl,
                 type: "POST",
@@ -143,8 +143,8 @@
             })
         };
 
-        function getWindowRecords(sqlIn, fields, rowCount, SQL_Count, AD_Table_ID, obscureFields, callback) {
-            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, AD_Table_ID: AD_Table_ID, obscureFields: obscureFields };
+        function getWindowRecords(sqlIn, fields, rowCount, SQL_Count, VAF_TableView_ID, obscureFields, callback) {
+            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, VAF_TableView_ID: VAF_TableView_ID, obscureFields: obscureFields };
 
             $.ajax({
                 url: windowRecordsUrl,
@@ -168,8 +168,8 @@
         };
 
 
-        function getWindowRecordsForTreeNode(sqlIn, fields, rowCount, SQL_Count, AD_Table_ID, treeID, treeNode_ID, callback) {
-            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, AD_Table_ID: AD_Table_ID, treeID: treeID, treeNodeID: treeNode_ID };
+        function getWindowRecordsForTreeNode(sqlIn, fields, rowCount, SQL_Count, VAF_TableView_ID, treeID, treeNode_ID, callback) {
+            var data = { fields: fields, sqlIn: sqlIn, rowCount: rowCount, sqlCount: SQL_Count, VAF_TableView_ID: VAF_TableView_ID, treeID: treeID, treeNodeID: treeNode_ID };
 
             $.ajax({
                 url: windowRecordsForTreeNodeUrl,
@@ -205,10 +205,10 @@
             return result;
         }
 
-        function updateInsertLocks(AD_User_ID, AD_Table_ID, Record_ID, locked) {
+        function updateInsertLocks(AD_User_ID, VAF_TableView_ID, Record_ID, locked) {
 
             var result = null;
-            var data = { AD_User_ID: AD_User_ID, AD_Table_ID: AD_Table_ID, Record_ID: Record_ID, locked: locked };
+            var data = { AD_User_ID: AD_User_ID, VAF_TableView_ID: VAF_TableView_ID, Record_ID: Record_ID, locked: locked };
             $.ajax({
                 url: personalLockUrl,
                 type: "POST",
@@ -496,16 +496,16 @@
             return result;
         };
 
-        function subscribeUnsubscribeRecords(CM_SubScribedID, AD_Window_ID, Record_ID, AD_Table_ID, reloadSubscribe) {
+        function subscribeUnsubscribeRecords(CM_SubScribedID, AD_Window_ID, Record_ID, VAF_TableView_ID, reloadSubscribe) {
             var url;
             var data;
             if (CM_SubScribedID == 0) {
                 url = VIS.Application.contextUrl + 'Subscribe/Subscribe';
-                data = { AD_Window_ID: AD_Window_ID, Record_ID: Record_ID, AD_Table_ID: AD_Table_ID };
+                data = { AD_Window_ID: AD_Window_ID, Record_ID: Record_ID, VAF_TableView_ID: VAF_TableView_ID };
             }
             else {
                 url = VIS.Application.contextUrl + 'Subscribe/UnSubscribe';
-                data = { AD_Window_ID: AD_Window_ID, Record_ID: Record_ID, AD_Table_ID: AD_Table_ID };
+                data = { AD_Window_ID: AD_Window_ID, Record_ID: Record_ID, VAF_TableView_ID: VAF_TableView_ID };
             }
             $.ajax({
 

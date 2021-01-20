@@ -24,8 +24,8 @@ namespace VAdvantage.Process
     public class MasterVersions : SvrProcess
     {
         #region Private Variables
-        private int _AD_Table_ID = 0;
-        private int _AD_Column_ID = 0;
+        private int _VAF_TableView_ID = 0;
+        private int _VAF_Column_ID = 0;
         public List<String> listDefVerCols = new List<String> { "VersionValidFrom", "IsVersionApproved", "ProcessedVersion", "RecordVersion", "Processed", "Processing", "VersionLog", "OldVersion" };
         public List<int> listDefVerRef = new List<int> { 15, 20, 20, 11, 20, 20, 14, 11 };
         public List<String> listDefVerValues = new List<String> { "Created", "'Y'", "'Y'", "1", "'Y'", "'N'", "''", "''" };
@@ -47,10 +47,10 @@ namespace VAdvantage.Process
                 if (para[i].GetParameter() == null)
                 {
                 }
-                else if (name.Equals("AD_Table_ID"))
-                    _AD_Table_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
-                else if (name.Equals("AD_Column_ID"))
-                    _AD_Column_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                else if (name.Equals("VAF_TableView_ID"))
+                    _VAF_TableView_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                else if (name.Equals("VAF_Column_ID"))
+                    _VAF_Column_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
@@ -64,17 +64,17 @@ namespace VAdvantage.Process
         {
             _trx = Get_Trx();
             // case when neither Column ID nor Table ID is found to run the process, return in that case
-            if (_AD_Column_ID <= 0 && _AD_Table_ID <= 0)
+            if (_VAF_Column_ID <= 0 && _VAF_TableView_ID <= 0)
             {
                 log.Log(Level.SEVERE, "Table and Column IDs not found");
                 return "";
             }
 
-            if (_AD_Table_ID <= 0)
-                _AD_Table_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Column WHERE AD_Column_ID = " + _AD_Column_ID, null, _trx));
+            if (_VAF_TableView_ID <= 0)
+                _VAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_Column WHERE VAF_Column_ID = " + _VAF_Column_ID, null, _trx));
 
             // Return if Parent table not found
-            if (_AD_Table_ID <= 0)
+            if (_VAF_TableView_ID <= 0)
             {
                 log.Log(Level.SEVERE, "Table not found");
                 return "";
@@ -83,7 +83,7 @@ namespace VAdvantage.Process
             string msg = "";
             //try
             //{
-            msg = CreateVersionInfo(_AD_Column_ID, _AD_Table_ID, _trx);
+            msg = CreateVersionInfo(_VAF_Column_ID, _VAF_TableView_ID, _trx);
             //}
             //catch (Exception e)
             //{
@@ -99,19 +99,19 @@ namespace VAdvantage.Process
         /// where Maintain Version field is marked as true
         /// </summary>
         /// <returns> Message (String) </returns>
-        public string CreateVersionInfo(int AD_Column_ID, int AD_Table_ID, Trx trx)
+        public string CreateVersionInfo(int VAF_Column_ID, int VAF_TableView_ID, Trx trx)
         {
             _trx = trx;
-            _AD_Table_ID = AD_Table_ID;
-            _AD_Column_ID = AD_Column_ID;
-            bool hasMainVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + _AD_Table_ID + " AND IsActive ='Y' AND IsMaintainVersions = 'Y'", null, _trx)) > 0;
+            _VAF_TableView_ID = VAF_TableView_ID;
+            _VAF_Column_ID = VAF_Column_ID;
+            bool hasMainVerCol = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID = " + _VAF_TableView_ID + " AND IsActive ='Y' AND IsMaintainVersions = 'Y'", null, _trx)) > 0;
             if(!hasMainVerCol)
-                hasMainVerCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM AD_Table WHERE AD_Table_ID = " + _AD_Table_ID, null, _trx)) == "Y";
+                hasMainVerCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM VAF_TableView WHERE VAF_TableView_ID = " + _VAF_TableView_ID, null, _trx)) == "Y";
             // check whether there are any columns in the table
             // marked as "Maintain Versions", then proceed else return
             if (hasMainVerCol)
             {
-                MTable tbl = new MTable(GetCtx(), _AD_Table_ID, _trx);
+                MTable tbl = new MTable(GetCtx(), _VAF_TableView_ID, _trx);
 
                 string VerTblName = tbl.GetTableName() + "_Ver";
 
@@ -120,12 +120,12 @@ namespace VAdvantage.Process
                 if (retMsg != "")
                     return retMsg;
 
-                int Ver_AD_Table_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Table_ID FROM AD_Table WHERE TableName = '" + VerTblName + "'", null, _trx));
+                int Ver_VAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = '" + VerTblName + "'", null, _trx));
 
                 // check whether version table is already present in system
                 // if not present then create table 
                 MTable tblVer = null;
-                if (Ver_AD_Table_ID <= 0)
+                if (Ver_VAF_TableView_ID <= 0)
                 {
                     string tableName = tbl.GetTableName();
                     // create new Version table for parent table
@@ -158,31 +158,31 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        Ver_AD_Table_ID = tblVer.GetAD_Table_ID();
+                        Ver_VAF_TableView_ID = tblVer.GetVAF_TableView_ID();
                         // Create Default Version Columns
-                        retMsg = CreateDefaultVerCols(Ver_AD_Table_ID);
+                        retMsg = CreateDefaultVerCols(Ver_VAF_TableView_ID);
                         if (retMsg != "")
                             return retMsg;
                     }
                 }
                 else
                 {
-                    tblVer = new MTable(GetCtx(), Ver_AD_Table_ID, _trx);
+                    tblVer = new MTable(GetCtx(), Ver_VAF_TableView_ID, _trx);
                     // Create Default Version Columns
-                    retMsg = CreateDefaultVerCols(Ver_AD_Table_ID);
+                    retMsg = CreateDefaultVerCols(Ver_VAF_TableView_ID);
                     if (retMsg != "")
                         return retMsg;
                 }
 
                 int VerTableColID = 0;
                 // if Version table successfully created, then check columns, if not found then create new
-                if (Ver_AD_Table_ID > 0)
+                if (Ver_VAF_TableView_ID > 0)
                 {
                     // Get all columns from Version Table
-                    int[] ColIDs = MColumn.GetAllIDs("AD_Column", "AD_Table_ID = " + _AD_Table_ID, _trx);
+                    int[] ColIDs = MColumn.GetAllIDs("VAF_Column", "VAF_TableView_ID = " + _VAF_TableView_ID, _trx);
 
                     bool hasCols = false;
-                    DataSet dsDestCols = DB.ExecuteDataset("SELECT ColumnName, AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + Ver_AD_Table_ID, null, _trx);
+                    DataSet dsDestCols = DB.ExecuteDataset("SELECT ColumnName, VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID = " + Ver_VAF_TableView_ID, null, _trx);
                     if (dsDestCols != null && dsDestCols.Tables[0].Rows.Count > 0)
                         hasCols = true;
 
@@ -212,18 +212,18 @@ namespace VAdvantage.Process
                             }
                             // if column already present and user pressed sync button on same column of Master table
                             // then create object of existing column (in case of change in any column fields)
-                            else if (!createNew && (_AD_Column_ID == columnID))
+                            else if (!createNew && (_VAF_Column_ID == columnID))
                             {
-                                AD_Col_ID = Util.GetValueOfInt(dr[0]["AD_Column_ID"]);
-                                colVer = new MColumn(GetCtx(), Util.GetValueOfInt(dr[0]["AD_Column_ID"]), _trx);
+                                AD_Col_ID = Util.GetValueOfInt(dr[0]["VAF_Column_ID"]);
+                                colVer = new MColumn(GetCtx(), Util.GetValueOfInt(dr[0]["VAF_Column_ID"]), _trx);
                             }
                             if (colVer != null)
                             {
                                 sCol.CopyTo(colVer);
                                 if (AD_Col_ID > 0)
-                                    colVer.SetAD_Column_ID(AD_Col_ID);
+                                    colVer.SetVAF_Column_ID(AD_Col_ID);
                                 colVer.SetExport_ID(null);
-                                colVer.SetAD_Table_ID(Ver_AD_Table_ID);
+                                colVer.SetVAF_TableView_ID(Ver_VAF_TableView_ID);
                                 // set key column to false
                                 colVer.SetIsKey(false);
                                 // check if source column is key column
@@ -257,14 +257,14 @@ namespace VAdvantage.Process
                                     return Msg.GetMsg(GetCtx(), "VersionColNotCreated");
                                 }
                                 else
-                                    VerTableColID = colVer.GetAD_Column_ID();
+                                    VerTableColID = colVer.GetVAF_Column_ID();
                             }
                         }
                     }
 
                     // Get one column to sync table in database from Version Table
                     if (VerTableColID <= 0)
-                        VerTableColID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Column_ID FROM AD_Column WHERE AD_Table_ID = " + Ver_AD_Table_ID, null, _trx));
+                        VerTableColID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID = " + Ver_VAF_TableView_ID, null, _trx));
 
                     // Get newly Created Column
                     if (oldVerCol > 0)
@@ -286,7 +286,7 @@ namespace VAdvantage.Process
                         if (tbl.IsSingleKey())
                         {
                             // get column names from parent table 
-                            string colNameStrings = GetColumnNameString(tbl.GetAD_Table_ID());
+                            string colNameStrings = GetColumnNameString(tbl.GetVAF_TableView_ID());
                             // get default columns string from Version Table columns list
                             string defColString = GetDefaultColString(colNameStrings);
                             // Insert data in version table from Master table
@@ -332,7 +332,7 @@ namespace VAdvantage.Process
                                             .Select(x => string.Format("'{0}'", x)));
 
             // Get System Elements and Column Names for all Version table columns
-            DataSet dsDefVerCols = DB.ExecuteDataset("SELECT AD_Element_ID, ColumnName FROM AD_Element WHERE ColumnName IN (" + DefSysEle + ")", null, _trx);
+            DataSet dsDefVerCols = DB.ExecuteDataset("SELECT VAF_ColumnDic_ID, ColumnName FROM VAF_ColumnDic WHERE ColumnName IN (" + DefSysEle + ")", null, _trx);
 
             if (dsDefVerCols != null && dsDefVerCols.Tables[0].Rows.Count > 0)
             {
@@ -343,8 +343,8 @@ namespace VAdvantage.Process
                     DataRow[] drSysEle = dsDefVerCols.Tables[0].Select("ColumnName='" + listDefVerCols[i] + "'");
                     if (drSysEle.Length > 0)
                     {
-                        if (!_listDefVerElements.Contains(Util.GetValueOfInt(drSysEle[0]["AD_Element_ID"])))
-                            _listDefVerElements.Add(Util.GetValueOfInt(drSysEle[0]["AD_Element_ID"]));
+                        if (!_listDefVerElements.Contains(Util.GetValueOfInt(drSysEle[0]["VAF_ColumnDic_ID"])))
+                            _listDefVerElements.Add(Util.GetValueOfInt(drSysEle[0]["VAF_ColumnDic_ID"]));
                         if (listDefVerCols[i] == VerTblName + "_ID")
                         {
                             listDefVerRef.Add(13);
@@ -353,8 +353,8 @@ namespace VAdvantage.Process
                     else
                     {
                         M_Element ele = new M_Element(GetCtx(), 0, _trx);
-                        ele.SetAD_Client_ID(0);
-                        ele.SetAD_Org_ID(0);
+                        ele.SetVAF_Client_ID(0);
+                        ele.SetVAF_Org_ID(0);
                         ele.SetName(listDefVerCols[i]);
                         ele.SetColumnName(listDefVerCols[i]);
                         ele.SetPrintName(listDefVerCols[i]);
@@ -376,7 +376,7 @@ namespace VAdvantage.Process
                         }
                         else
                         {
-                            _listDefVerElements.Add(ele.GetAD_Element_ID());
+                            _listDefVerElements.Add(ele.GetVAF_ColumnDic_ID());
                             if (ele.GetColumnName() == VerTblName + "_ID")
                             {
                                 listDefVerRef.Add(13);
@@ -421,8 +421,8 @@ namespace VAdvantage.Process
                     // create PO object of destination table (Version table)
                     PO dPO = tblVer.GetPO(GetCtx(), 0, _trx);
                     sPO.CopyTo(dPO);
-                    dPO.SetAD_Client_ID(sPO.GetAD_Client_ID());
-                    dPO.SetAD_Org_ID(sPO.GetAD_Org_ID());
+                    dPO.SetVAF_Client_ID(sPO.GetVAF_Client_ID());
+                    dPO.SetVAF_Org_ID(sPO.GetVAF_Org_ID());
                     dPO.Set_Value("RecordVersion", "1");
                     dPO.Set_ValueNoCheck("VersionValidFrom", sPO.Get_Value("Created"));
                     dPO.Set_ValueNoCheck("IsVersionApproved", true);
@@ -527,13 +527,13 @@ namespace VAdvantage.Process
         /// Sync Version table in database
         /// </summary>
         /// <param name="table"></param>
-        /// <param name="AD_Column_ID"></param>
+        /// <param name="VAF_Column_ID"></param>
         /// <returns>Message (String)</returns>
-        private string SyncVersionTable(MTable table, int AD_Column_ID, out bool Success)
+        private string SyncVersionTable(MTable table, int VAF_Column_ID, out bool Success)
         {
             // create object of Column passed in parameter
             Success = true;
-            MColumn column = new MColumn(GetCtx(), AD_Column_ID, _trx);
+            MColumn column = new MColumn(GetCtx(), VAF_Column_ID, _trx);
             int noColumns = 0;
             // sync table in database
             string sql = Common.Common.SyncColumn(table, column, out noColumns);
@@ -579,7 +579,7 @@ namespace VAdvantage.Process
 
             // Apply constraints on columns for Version table
             ColumnSync colSync = new ColumnSync();
-            colSync.SetAD_Column_ID(AD_Column_ID);
+            colSync.SetVAF_Column_ID(VAF_Column_ID);
             string r = colSync.createFK(noColumns);
 
             return r;
@@ -589,11 +589,11 @@ namespace VAdvantage.Process
         /// Create default columns for Master Data Version Table
         /// e.g. Processed, Processing, IsApproved etc.
         /// </summary>
-        /// <param name="Ver_AD_Table_ID"></param>
+        /// <param name="Ver_VAF_TableView_ID"></param>
         /// <returns></returns>
-        private string CreateDefaultVerCols(int Ver_AD_Table_ID)
+        private string CreateDefaultVerCols(int Ver_VAF_TableView_ID)
         {
-            DataSet dstblCols = DB.ExecuteDataset("SELECT ColumnName FROM AD_Column WHERE AD_Table_ID = " + Ver_AD_Table_ID, null, null);
+            DataSet dstblCols = DB.ExecuteDataset("SELECT ColumnName FROM VAF_Column WHERE VAF_TableView_ID = " + Ver_VAF_TableView_ID, null, null);
 
             for (int i = 0; i < listDefVerCols.Count; i++)
             {
@@ -608,9 +608,9 @@ namespace VAdvantage.Process
                     continue;
                 MColumn colVer = new MColumn(GetCtx(), 0, _trx);
                 colVer.SetExport_ID(null);
-                colVer.SetAD_Table_ID(Ver_AD_Table_ID);
+                colVer.SetVAF_TableView_ID(Ver_VAF_TableView_ID);
                 colVer.SetColumnName(listDefVerCols[i]);
-                colVer.SetAD_Element_ID(_listDefVerElements[i]);
+                colVer.SetVAF_ColumnDic_ID(_listDefVerElements[i]);
                 colVer.SetAD_Reference_ID(listDefVerRef[i]);
                 //if (listDefVerCols[i] == "VersionValidFrom")
                 //    colVer.SetIsParent(true);
@@ -641,7 +641,7 @@ namespace VAdvantage.Process
                     return Msg.GetMsg(GetCtx(), "VersionColNotCreated");
                 }
                 else
-                    oldVerCol = colVer.GetAD_Column_ID();
+                    oldVerCol = colVer.GetVAF_Column_ID();
             }
             return "";
         }
@@ -649,12 +649,12 @@ namespace VAdvantage.Process
         /// <summary>
         /// Get column name string from Version table
         /// </summary>
-        /// <param name="Ver_AD_Table_ID"></param>
+        /// <param name="Ver_VAF_TableView_ID"></param>
         /// <returns>Comma separated string for column names</returns>
-        private string GetColumnNameString(int Ver_AD_Table_ID)
+        private string GetColumnNameString(int Ver_VAF_TableView_ID)
         {
             StringBuilder colNameString = new StringBuilder("");
-            DataSet dsCols = DB.ExecuteDataset("SELECT ColumnName FROM AD_Column WHERE AD_Table_ID = " + Ver_AD_Table_ID + " AND IsActive = 'Y'", null, _trx);
+            DataSet dsCols = DB.ExecuteDataset("SELECT ColumnName FROM VAF_Column WHERE VAF_TableView_ID = " + Ver_VAF_TableView_ID + " AND IsActive = 'Y'", null, _trx);
             if (dsCols != null && dsCols.Tables[0].Rows.Count > 0)
             {
                 string[] colNames = dsCols.Tables[0].AsEnumerable().Select(r => Convert.ToString(r["ColumnName"])).ToArray();

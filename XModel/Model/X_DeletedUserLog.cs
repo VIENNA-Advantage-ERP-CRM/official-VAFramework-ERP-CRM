@@ -68,7 +68,7 @@ static X_DeletedUserLog()
 //static long serialVersionUID 27626181111253L;
 /** Last Updated Timestamp 8/4/2012 10:19:55 AM */
 public static long updatedMS = 1344055794464L;
-/** AD_Table_ID=1000339 */
+/** VAF_TableView_ID=1000339 */
 public static int Table_ID;
  // =1000339;
 

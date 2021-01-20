@@ -72,7 +72,7 @@ static X_M_Product_Category_Trl()
 static long serialVersionUID = 27717284149556L;
 /** Last Updated Timestamp 6/24/2015 8:43:52 PM */
 public static long updatedMS = 1435158832767L;
-/** AD_Table_ID=1000469 */
+/** VAF_TableView_ID=1000469 */
 public static int Table_ID;
  // =1000469;
 

@@ -846,7 +846,7 @@
                             url: VIS.Application.contextUrl + 'Subscribe/UnSubscribe',
                             type: 'GET',
                             dataType: 'Json',
-                            data: { AD_Window_ID: arr[4], Record_ID: arr[1], AD_Table_ID: arr[3] },
+                            data: { AD_Window_ID: arr[4], Record_ID: arr[1], VAF_TableView_ID: arr[3] },
                             success: function (result) {
                                 if (result == false) {
                                     alert(VIS.Msg.getMsg("UnSubscription Failed"));
@@ -956,12 +956,12 @@
                                         var cd = new Date(data.lstFollowups[cnt].Cdate);
                                         dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                     }
-                                    if (data.lstFollowups[cnt].AD_Image_ID == 0) {
+                                    if (data.lstFollowups[cnt].VAF_Image_ID == 0) {
                                         uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>";
                                     }
                                     else {
                                         for (var a in data.lstUserImg) {
-                                            if (data.lstUserImg[a].AD_Image_ID == data.lstFollowups[cnt].AD_Image_ID) {
+                                            if (data.lstUserImg[a].VAF_Image_ID == data.lstFollowups[cnt].VAF_Image_ID) {
                                                 if (data.lstUserImg[a].UserImg != "NoRecordFound" && data.lstUserImg[a].UserImg != "FileDoesn'tExist" && data.lstUserImg[a].UserImg != null) {
                                                     uimg = "<div class='vis-feedimgwrap'  data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' alt='" + VIS.Msg.getMsg("UserImage") + "' title='" + VIS.Msg.getMsg("UserImage") + "' class='userAvatar-Feeds' src='" + VIS.Application.contextUrl + data.lstUserImg[a].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>";
                                                 }
@@ -1050,12 +1050,12 @@
                                     var cd = new Date(data.lstFollowups[r].Cdate);
                                     dbdate = Globalize.format(cd, "F", Globalize.cultureSelector);
                                 }
-                                if (data.lstFollowups[cnt].AD_Image_ID == 0) {
+                                if (data.lstFollowups[cnt].VAF_Image_ID == 0) {
                                     uimg = "<i data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "' class='fa fa-user'></i>"
                                 }
                                 else {
                                     for (var b in data.lstUserImg) {
-                                        if (data.lstUserImg[b].AD_Image_ID == data.lstFollowups[cnt].AD_Image_ID) {
+                                        if (data.lstUserImg[b].VAF_Image_ID == data.lstFollowups[cnt].VAF_Image_ID) {
                                             if (data.lstUserImg[b].UserImg != "NoRecordFound" && data.lstUserImg[b].UserImg != "FileDoesn'tExist" && data.lstUserImg[b].UserImg != null) {
                                                 uimg = "<div class='vis-feedimgwrap' data-fll='UID' data-UID='" + data.lstFollowups[cnt].AD_User_ID + "'><img  alt='" + VIS.Msg.getMsg("UserImage") + "'  title='" + VIS.Msg.getMsg("UserImage") + "'  class='userAvatar-Feeds' src='" + data.lstUserImg[b].UserImg + "?" + new Date($.now()).getSeconds() + "'/></div>"
                                             }

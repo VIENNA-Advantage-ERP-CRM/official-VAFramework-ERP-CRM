@@ -26,7 +26,7 @@ namespace VAdvantage.Print
         {
             SetName(pi.GetTitle());
             SetAD_Process_ID(pi.GetAD_Process_ID());
-            SetAD_Table_ID(pi.GetTable_ID());
+            SetVAF_TableView_ID(pi.GetTable_ID());
             SetRecord_ID(pi.GetRecord_ID());
             SetAD_PInstance_ID(pi.GetAD_PInstance_ID());
         }	//	PrintInfo
@@ -36,13 +36,13 @@ namespace VAdvantage.Print
         /// Document Archive Info
         /// </summary>
         /// <param name="Name">name</param>
-        /// <param name="AD_Table_ID">table id</param>
+        /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <param name="C_BPartner_ID">BPartner ID</param>
-        public PrintInfo(String Name, int AD_Table_ID, int Record_ID, int C_BPartner_ID)
+        public PrintInfo(String Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID)
         {
             SetName(Name);
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             SetRecord_ID(Record_ID);
             SetC_BPartner_ID(C_BPartner_ID);
         }	//	ArchiveInfo
@@ -52,12 +52,12 @@ namespace VAdvantage.Print
         /// Report Archive Info
         /// </summary>
         /// <param name="Name"></param>
-        /// <param name="AD_Table_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
-        public PrintInfo(String Name, int AD_Table_ID, int Record_ID)
+        public PrintInfo(String Name, int VAF_TableView_ID, int Record_ID)
         {
             SetName(Name);
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             SetRecord_ID(Record_ID);
         }	//	ArchiveInfo
 
@@ -70,7 +70,7 @@ namespace VAdvantage.Print
         private String _Description = null;
         private String _Help = null;
         private int _AD_Process_ID = 0;
-        private int _AD_Table_ID = 0;
+        private int _VAF_TableView_ID = 0;
         private int _Record_ID = 0;
         private int _C_BPartner_ID = 0;
         private int _AD_PInstance_ID = 0;
@@ -194,18 +194,18 @@ namespace VAdvantage.Print
         /// Get Table ID
         /// </summary>
         /// <returns>Table ID</returns>
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            return _AD_Table_ID;
+            return _VAF_TableView_ID;
         }
 
         /// <summary>
         /// Set Table ID
         /// </summary>
         /// <param name="table_ID"></param>
-        public void SetAD_Table_ID(int table_ID)
+        public void SetVAF_TableView_ID(int table_ID)
         {
-            _AD_Table_ID = table_ID;
+            _VAF_TableView_ID = table_ID;
         }
 
         /// <summary>
@@ -309,8 +309,8 @@ namespace VAdvantage.Print
             sb.Append(GetName());
             if (GetAD_Process_ID() != 0)
                 sb.Append(",AD_Process_ID=").Append(GetAD_Process_ID());
-            if (GetAD_Table_ID() != 0)
-                sb.Append(",AD_Table_ID=").Append(GetAD_Table_ID());
+            if (GetVAF_TableView_ID() != 0)
+                sb.Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID());
             if (GetRecord_ID() != 0)
                 sb.Append(",Record_ID=").Append(GetRecord_ID());
             if (GetC_BPartner_ID() != 0)

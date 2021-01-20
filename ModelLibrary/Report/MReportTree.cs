@@ -154,18 +154,18 @@ namespace VAdvantage.Report
         protected int GetDefaultAD_Tree_ID()
         {
             int AD_Tree_ID = 0;
-            int AD_Client_ID = _ctx.GetAD_Client_ID();
+            int VAF_Client_ID = _ctx.GetVAF_Client_ID();
 
             String sql = "SELECT AD_Tree_ID, Name FROM AD_Tree "
-                + "WHERE AD_Client_ID=@param1 AND TreeType=@param2 AND IsActive='Y' AND IsAllNodes='Y' "
+                + "WHERE VAF_Client_ID=@param1 AND TreeType=@param2 AND IsActive='Y' AND IsAllNodes='Y' "
                 + "ORDER BY IsDefault DESC, AD_Tree_ID";	//	assumes first is primary tree
             SqlParameter[] param = new SqlParameter[2];
             IDataReader idr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-                param[0] = new SqlParameter("@param1", AD_Client_ID);
-                //pstmt.setInt(1, AD_Client_ID);
+                param[0] = new SqlParameter("@param1", VAF_Client_ID);
+                //pstmt.setInt(1, VAF_Client_ID);
                 // pstmt.setString(2, _TreeType);
                 param[1] = new SqlParameter("@param2", _TreeType);
                 //ResultSet rs = pstmt.executeQuery();

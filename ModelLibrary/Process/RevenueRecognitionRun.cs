@@ -54,7 +54,7 @@ namespace VAdvantage.Process
                 {
                     _RevenueRecognition_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
-                else if (name.Equals("AD_Org_ID"))
+                else if (name.Equals("VAF_Org_ID"))
                 {
                     _orgId = Util.GetValueOfInt(para[i].GetParameter());
                 }
@@ -332,7 +332,7 @@ namespace VAdvantage.Process
                     int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
                     journalLine.Set_ValueNoCheck("Account_ID", account_ID);
                     journalLine.Set_ValueNoCheck("C_BPartner_ID", invoice.GetC_BPartner_ID());
-                    journalLine.SetAD_OrgTrx_ID(invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
+                    journalLine.SetVAF_OrgTrx_ID(invoiceLine.Get_ColumnIndex("VAF_OrgTrx_ID") > 0 ? invoiceLine.GetVAF_OrgTrx_ID() : invoice.GetVAF_OrgTrx_ID());
                     journalLine.Set_ValueNoCheck("C_Project_ID", invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : invoice.Get_Value("C_ProjectRef_ID"));
                     journalLine.Set_ValueNoCheck("C_Campaign_ID", invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID());
                     journalLine.Set_ValueNoCheck("C_Activity_ID", invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID());
@@ -348,7 +348,7 @@ namespace VAdvantage.Process
                         invoiceLine.Get_ColumnIndex("C_Campaign_ID") > 0 ? invoiceLine.GetC_Campaign_ID() : invoice.GetC_Campaign_ID(),
                     account_ID, invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : Util.GetValueOfInt(invoice.Get_Value("C_ProjectRef_ID")),
                     invoiceLine.Get_ColumnIndex("C_Activity_ID") > 0 ? invoiceLine.GetC_Activity_ID() : invoice.GetC_Activity_ID(), invoice.GetC_BPartner_ID(),
-                    invoice.GetAD_Org_ID(), invoiceLine.Get_ColumnIndex("AD_OrgTrx_ID") > 0 ? invoiceLine.GetAD_OrgTrx_ID() : invoice.GetAD_OrgTrx_ID());
+                    invoice.GetVAF_Org_ID(), invoiceLine.Get_ColumnIndex("VAF_OrgTrx_ID") > 0 ? invoiceLine.GetVAF_OrgTrx_ID() : invoice.GetVAF_OrgTrx_ID());
 
 
                     if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
@@ -397,13 +397,13 @@ namespace VAdvantage.Process
         /// <returns>Journal object</returns>
         public MJournal CreateJournalHDR(MRevenueRecognitionPlan revenueRecognitionPlan, MRevenueRecognitionRun revenurecognitionRun, string recFrequency)
         {
-            journal.SetClientOrg(revenueRecognitionPlan.GetAD_Client_ID(), revenueRecognitionPlan.GetAD_Org_ID());
+            journal.SetClientOrg(revenueRecognitionPlan.GetVAF_Client_ID(), revenueRecognitionPlan.GetVAF_Org_ID());
             journal.SetC_AcctSchema_ID(revenueRecognitionPlan.GetC_AcctSchema_ID());
             journal.SetDescription("Revenue Recognition Run");
             journal.SetPostingType(MJournal.POSTINGTYPE_Actual);
 
             int GL_Category_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT GL_Category_ID From GL_Category Where CategoryType='M' 
-            AND  AD_Client_ID= " + revenueRecognitionPlan.GetAD_Client_ID() + " Order by GL_Category_ID desc"));
+            AND  VAF_Client_ID= " + revenueRecognitionPlan.GetVAF_Client_ID() + " Order by GL_Category_ID desc"));
             journal.SetGL_Category_ID(GL_Category_ID);
 
             journal.SetDateDoc(DateTime.Now);
@@ -420,8 +420,8 @@ namespace VAdvantage.Process
             }
 
             string periodSql = "SELECT C_Period_ID From C_Period pr  INNER JOIN c_year yr ON (yr.c_year_id = pr.c_year_id AND yr.c_calendar_id= " +
-                "(CASE WHEN (SELECT NVL(C_Calendar_ID,0) FROM AD_Orginfo WHERE AD_org_ID =" + revenueRecognitionPlan.GetAD_Org_ID() + " ) =0 THEN (SELECT  NVL(C_Calendar_ID,0) FROM AD_ClientInfo WHERE AD_Client_ID =" + revenueRecognitionPlan.GetAD_Client_ID() + ") ELSE " +
-                "(SELECT NVL(C_Calendar_ID,0) FROM AD_Orginfo WHERE AD_org_ID =" + revenueRecognitionPlan.GetAD_Org_ID() + ") END ) ) WHERE " + GlobalVariable.TO_DATE(revenurecognitionRun.GetRecognitionDate(), true) + " BETWEEN StartDate and EndDate";
+                "(CASE WHEN (SELECT NVL(C_Calendar_ID,0) FROM VAF_Orginfo WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + " ) =0 THEN (SELECT  NVL(C_Calendar_ID,0) FROM VAF_ClientDetail WHERE VAF_Client_ID =" + revenueRecognitionPlan.GetVAF_Client_ID() + ") ELSE " +
+                "(SELECT NVL(C_Calendar_ID,0) FROM VAF_Orginfo WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + ") END ) ) WHERE " + GlobalVariable.TO_DATE(revenurecognitionRun.GetRecognitionDate(), true) + " BETWEEN StartDate and EndDate";
 
             C_Period_ID = Util.GetValueOfInt(DB.ExecuteScalar(periodSql));
 
@@ -512,8 +512,8 @@ namespace VAdvantage.Process
                          " AND NVL(C_PROJECT_ID,0)=" + Opprtunity_ID +
                          " AND NVL(C_ACTIVITY_ID,0)=" + Activity_ID +
                           " AND NVL(C_BPARTNER_ID,0)=" + BPartner_ID +
-                           " AND NVL(AD_ORGTRX_ID,0)=" + trxOrg_ID +
-                            " AND NVL(AD_ORG_ID,0)=" + Org_Id;
+                           " AND NVL(VAF_ORGTRX_ID,0)=" + trxOrg_ID +
+                            " AND NVL(VAF_ORG_ID,0)=" + Org_Id;
 
 
             DataTable dt = null;
@@ -573,7 +573,7 @@ namespace VAdvantage.Process
             Line.Set_ValueNoCheck("Account_ID", Account_ID);
             Line.Set_ValueNoCheck("C_BPartner_ID", BPartner_ID);
             Line.Set_ValueNoCheck("M_Product_ID", M_Product_ID);
-            Line.SetAD_OrgTrx_ID(trxOrg_ID);
+            Line.SetVAF_OrgTrx_ID(trxOrg_ID);
             //Line.Set_ValueNoCheck("C_Charge_ID", C_Charge_ID);
             Line.Set_ValueNoCheck("C_Campaign_ID", Campaign_ID);
             Line.Set_ValueNoCheck("C_Project_ID", Opprtunity_ID);
@@ -625,7 +625,7 @@ namespace VAdvantage.Process
                 }
                 ProcessInfo pi = new ProcessInfo("WF", Process_ID);
                 pi.SetAD_User_ID(ctx.GetAD_User_ID());
-                pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+                pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 pi.SetAD_PInstance_ID(pin.GetAD_PInstance_ID());
                 pi.SetRecord_ID(Record_ID);
                 if (Process_ID == 169)

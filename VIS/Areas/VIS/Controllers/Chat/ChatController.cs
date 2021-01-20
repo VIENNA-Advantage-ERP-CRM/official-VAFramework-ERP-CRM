@@ -31,7 +31,7 @@ namespace VIS.Controllers
         public JsonResult LoadChat(ChatProperties prop)
         {
             Ctx ct = Session["ctx"] as Ctx;
-            ChatModel model = new ChatModel(ct, prop.WindowNo, prop.ChatID, prop.AD_Table_ID, prop.Record_ID, prop.Description, null, prop.page, prop.pageSize);
+            ChatModel model = new ChatModel(ct, prop.WindowNo, prop.ChatID, prop.VAF_TableView_ID, prop.Record_ID, prop.Description, null, prop.page, prop.pageSize);
             ChatInfo chatRecords = model.GetChatData();
             return Json(JsonConvert.SerializeObject(chatRecords), JsonRequestBehavior.AllowGet);
         }
@@ -48,7 +48,7 @@ namespace VIS.Controllers
         public JsonResult SaveChat(ChatProperties prop)
         {
             Ctx ct = Session["ctx"] as Ctx;
-            ChatModel model = new ChatModel(ct, prop.ChatID, prop.AD_Table_ID, prop.Record_ID, prop.Description);
+            ChatModel model = new ChatModel(ct, prop.ChatID, prop.VAF_TableView_ID, prop.Record_ID, prop.Description);
             model.Ok(prop.ChatText);
             return Json(true, JsonRequestBehavior.AllowGet);
         }

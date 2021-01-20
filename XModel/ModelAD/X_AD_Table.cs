@@ -11,10 +11,10 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Table
+    /** Generated Model for VAF_TableView
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Table : PO
+    public class X_VAF_TableView : PO
     {
         /** TableTrxType AD_Reference_ID=493 */
         public static int TABLETRXTYPE_AD_Reference_ID = 493;
@@ -26,12 +26,12 @@ namespace VAdvantage.Model
         public static String TABLETRXTYPE_OptionalOrganization = "O";
 
 
-        public X_AD_Table(Context ctx, int AD_Table_ID, Trx trxName)
-            : base(ctx, AD_Table_ID, trxName)
+        public X_VAF_TableView(Context ctx, int VAF_TableView_ID, Trx trxName)
+            : base(ctx, VAF_TableView_ID, trxName)
         {
-            /** if (AD_Table_ID == 0)
+            /** if (VAF_TableView_ID == 0)
             {
-            SetAD_Table_ID (0);
+            SetVAF_TableView_ID (0);
             SetAccessLevel (null);	// 4
             SetEntityType (null);	// U
             SetIsChangeLog (false);
@@ -45,12 +45,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_Table(Ctx ctx, int AD_Table_ID, Trx trxName)
-            : base(ctx, AD_Table_ID, trxName)
+        public X_VAF_TableView(Ctx ctx, int VAF_TableView_ID, Trx trxName)
+            : base(ctx, VAF_TableView_ID, trxName)
         {
-            /** if (AD_Table_ID == 0)
+            /** if (VAF_TableView_ID == 0)
             {
-            SetAD_Table_ID (0);
+            SetVAF_TableView_ID (0);
             SetAccessLevel (null);	// 4
             SetEntityType (null);	// U
             SetIsChangeLog (false);
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Table(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_TableView(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -78,7 +78,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Table(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_TableView(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Table(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_TableView(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -96,7 +96,7 @@ namespace VAdvantage.Model
         /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_AD_Table()
+        static X_VAF_TableView()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -105,12 +105,12 @@ namespace VAdvantage.Model
         //static long serialVersionUID 27562514364335L;
         /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
         public static long updatedMS = 1280389047546L;
-        /** AD_Table_ID=100 */
+        /** VAF_TableView_ID=100 */
         public static int Table_ID;
         // =100;
 
-        /** TableName=AD_Table */
-        public static String Table_Name = "AD_Table";
+        /** TableName=VAF_TableView */
+        public static String Table_Name = "VAF_TableView";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -145,37 +145,37 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Table[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_TableView[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Table.
-        @param AD_Table_ID Database Table information */
-        public void SetAD_Table_ID(int AD_Table_ID)
+        @param VAF_TableView_ID Database Table information */
+        public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {
-            if (AD_Table_ID < 1) throw new ArgumentException("AD_Table_ID is mandatory.");
-            Set_ValueNoCheck("AD_Table_ID", AD_Table_ID);
+            if (VAF_TableView_ID < 1) throw new ArgumentException("VAF_TableView_ID is mandatory.");
+            Set_ValueNoCheck("VAF_TableView_ID", VAF_TableView_ID);
         }
         /** Get Table.
         @return Database Table information */
-        public int GetAD_Table_ID()
+        public int GetVAF_TableView_ID()
         {
-            Object ii = Get_Value("AD_Table_ID");
+            Object ii = Get_Value("VAF_TableView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Dynamic Validation.
-        @param AD_Val_Rule_ID Dynamic Validation Rule */
-        public void SetAD_Val_Rule_ID(int AD_Val_Rule_ID)
+        @param VAF_DataVal_Rule_ID Dynamic Validation Rule */
+        public void SetVAF_DataVal_Rule_ID(int VAF_DataVal_Rule_ID)
         {
-            if (AD_Val_Rule_ID <= 0) Set_Value("AD_Val_Rule_ID", null);
+            if (VAF_DataVal_Rule_ID <= 0) Set_Value("VAF_DataVal_Rule_ID", null);
             else
-                Set_Value("AD_Val_Rule_ID", AD_Val_Rule_ID);
+                Set_Value("VAF_DataVal_Rule_ID", VAF_DataVal_Rule_ID);
         }
         /** Get Dynamic Validation.
         @return Dynamic Validation Rule */
-        public int GetAD_Val_Rule_ID()
+        public int GetVAF_DataVal_Rule_ID()
         {
-            Object ii = Get_Value("AD_Val_Rule_ID");
+            Object ii = Get_Value("VAF_DataVal_Rule_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -559,18 +559,18 @@ namespace VAdvantage.Model
         /** SubTableType AD_Reference_ID=447 */
         public static int SUBTABLETYPE_AD_Reference_ID = 447;
         /** History - Daily = D */
-        public static String SUBTABLETYPE_History_Daily = X_Ref_AD_Table_SubTableType.HISTORY__DAILY;
+        public static String SUBTABLETYPE_History_Daily = X_Ref_VAF_TableView_SubTableType.HISTORY__DAILY;
         /** History - Each = E */
-        public static String SUBTABLETYPE_History_Each = X_Ref_AD_Table_SubTableType.HISTORY__EACH;
+        public static String SUBTABLETYPE_History_Each = X_Ref_VAF_TableView_SubTableType.HISTORY__EACH;
         /** Delta - System = S */
-        public static String SUBTABLETYPE_Delta_System = X_Ref_AD_Table_SubTableType.DELTA__SYSTEM;
+        public static String SUBTABLETYPE_Delta_System = X_Ref_VAF_TableView_SubTableType.DELTA__SYSTEM;
         /** Delta - User = U */
-        public static String SUBTABLETYPE_Delta_User = X_Ref_AD_Table_SubTableType.DELTA__USER;
+        public static String SUBTABLETYPE_Delta_User = X_Ref_VAF_TableView_SubTableType.DELTA__USER;
 
 
         public static bool IsSubTableTypeValid(String test)
         {
-            return X_Ref_AD_Table_SubTableType.IsValid(test);
+            return X_Ref_VAF_TableView_SubTableType.IsValid(test);
 
         }
 
@@ -646,7 +646,7 @@ namespace VAdvantage.Model
         }
     }
 
-    public class X_Ref_AD_Table_SubTableType
+    public class X_Ref_VAF_TableView_SubTableType
     {
         /** History - Daily = D */
         public static string HISTORY__DAILY = "D";
@@ -660,7 +660,7 @@ namespace VAdvantage.Model
 
         public static int AD_Reference_ID = 447;
         private String value;
-        private X_Ref_AD_Table_SubTableType(String value)
+        private X_Ref_VAF_TableView_SubTableType(String value)
         {
             this.value = value;
 
@@ -676,13 +676,13 @@ namespace VAdvantage.Model
         {
             if (test == null) return true;
 
-            if (X_Ref_AD_Table_SubTableType.HISTORY__DAILY == test)
+            if (X_Ref_VAF_TableView_SubTableType.HISTORY__DAILY == test)
                 return true;
-            if (X_Ref_AD_Table_SubTableType.HISTORY__EACH == test)
+            if (X_Ref_VAF_TableView_SubTableType.HISTORY__EACH == test)
                 return true;
-            if (X_Ref_AD_Table_SubTableType.DELTA__SYSTEM == test)
+            if (X_Ref_VAF_TableView_SubTableType.DELTA__SYSTEM == test)
                 return true;
-            if (X_Ref_AD_Table_SubTableType.DELTA__USER == test)
+            if (X_Ref_VAF_TableView_SubTableType.DELTA__USER == test)
                 return true;
 
             return false;

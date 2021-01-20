@@ -78,7 +78,7 @@ namespace VAdvantage.Model
         public static long updatedMS = 1559563775826L;
 
         ///<summary>
-        /// AD_Table_ID=1000845
+        /// VAF_TableView_ID=1000845
         ///</summary>
         public static int Table_ID; // =1000845;
 

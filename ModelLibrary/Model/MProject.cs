@@ -44,7 +44,7 @@ namespace VAdvantage.Model
                 throw new ArgumentException("From Project not found C_Project_ID=" + C_Project_ID);
             //
             MProject to = new MProject(ctx, 0, trxName);
-            PO.CopyValues(from, to, from.GetAD_Client_ID(), from.GetAD_Org_ID());
+            PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("C_Project_ID", I_ZERO);
             //	Set Value with Time
             String Value = to.GetValue() + " ";
@@ -343,7 +343,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromLines.Length; i++)
             {
                 MProjectLine line = new MProjectLine(GetCtx(), 0, project.Get_TrxName());
-                PO.CopyValues(fromLines[i], line, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
                 line.SetC_Project_ID(GetC_Project_ID());
                 line.SetInvoicedAmt(Env.ZERO);
                 line.SetInvoicedQty(Env.ZERO);
@@ -402,7 +402,7 @@ namespace VAdvantage.Model
                 else
                 {
                     MProjectPhase toPhase = new MProjectPhase(GetCtx(), 0, Get_TrxName());
-                    PO.CopyValues(fromPhases[i], toPhase, GetAD_Client_ID(), GetAD_Org_ID());
+                    PO.CopyValues(fromPhases[i], toPhase, GetVAF_Client_ID(), GetVAF_Org_ID());
                     toPhase.SetC_Project_ID(GetC_Project_ID());
                     toPhase.SetC_Order_ID(0);
                     toPhase.SetIsComplete(false);
@@ -497,7 +497,7 @@ namespace VAdvantage.Model
             PO project = null;
             int _client_ID = 0;
             StringBuilder _sql = new StringBuilder();
-            //_sql.Append("Select count(*) from  ad_table where tablename like 'FRPT_Project_Acct'");
+            //_sql.Append("Select count(*) from  vaf_tableview where tablename like 'FRPT_Project_Acct'");
             //_sql.Append("SELECT count(*) FROM all_objects WHERE object_type IN ('TABLE') AND (object_name)  = UPPER('FRPT_Project_Acct')  AND OWNER LIKE '" + DB.GetSchema() + "'");
             _sql.Append(DBFunctionCollection.CheckTableExistence(DB.GetSchema(), "FRPT_Project_Acct"));
             int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
@@ -506,9 +506,9 @@ namespace VAdvantage.Model
                 _sql.Clear();
                 _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Project'");
                 var relatedtoProject = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
-                _client_ID = GetAD_Client_ID();
+                _client_ID = GetVAF_Client_ID();
                 _sql.Clear();
-                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where AD_CLIENT_ID=" + _client_ID);
+                _sql.Append("select C_AcctSchema_ID from C_AcctSchema where VAF_CLIENT_ID=" + _client_ID);
                 DataSet ds3 = new DataSet();
                 ds3 = DB.ExecuteDataset(_sql.ToString(), null);
                 if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["C_AcctSchema_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND AD_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND C_Acctschema_Id=" + _AcctSchema_ID);
                         DataSet ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -527,12 +527,12 @@ namespace VAdvantage.Model
                                 if (_relatedTo != "" && (_relatedTo == relatedtoProject))
                                 {
                                     _sql.Clear();
-                                    _sql.Append("Select COUNT(*) From C_Project Bp Left Join FRPT_Project_Acct ca On Bp.C_Project_ID=ca.C_Project_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.AD_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Project_ID = " + GetC_Project_ID());
+                                    _sql.Append("Select COUNT(*) From C_Project Bp Left Join FRPT_Project_Acct ca On Bp.C_Project_ID=ca.C_Project_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Project_ID = " + GetC_Project_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
                                         project = MTable.GetPO(GetCtx(), "FRPT_Project_Acct", 0, null);
-                                        project.Set_ValueNoCheck("AD_Org_ID", 0);
+                                        project.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         project.Set_ValueNoCheck("C_Project_ID", Util.GetValueOfInt(GetC_Project_ID()));
                                         project.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         project.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));

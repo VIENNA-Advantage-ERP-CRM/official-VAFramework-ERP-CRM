@@ -57,7 +57,7 @@ namespace VAdvantage.Process
 
                     // get all data from storage having OnHandQty != 0, and create recod on container storage with locator, product and qty details
                     sql.Clear();
-                    sql.Append(@"SELECT M_Transaction.AD_client_ID , M_Transaction.AD_Org_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
+                    sql.Append(@"SELECT M_Transaction.vaf_client_ID , M_Transaction.VAF_Org_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
                                   NVL(M_Transaction.M_AttributeSetInstance_ID , 0) AS M_AttributeSetInstance_ID , M_Transaction.M_Transaction_ID ,
                                   M_Transaction.MovementDate , NVL(M_Transaction.MovementQty , 0) AS MovementQty , M_Transaction.CurrentQty , M_Transaction.MovementType ,
                                   CASE WHEN M_Transaction.M_InventoryLine_ID > 0
@@ -67,7 +67,7 @@ namespace VAdvantage.Process
                                     (SELECT MMPolicy FROM M_Product_Category WHERE M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID) AS MMPolicy
                                 FROM M_Transaction 
                                 INNER JOIN M_Product ON M_Product.M_Product_ID = M_Transaction.M_Product_ID  
-                                ORDER BY M_Transaction.AD_Client_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
+                                ORDER BY M_Transaction.VAF_Client_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
                                 M_Transaction.M_AttributeSetInstance_ID , M_Transaction.MovementDate , M_Transaction.M_Transaction_ID ASC");
                     DataSet dsStorage = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
                     if (dsStorage != null && dsStorage.Tables.Count > 0 && dsStorage.Tables[0].Rows.Count > 0)
@@ -184,8 +184,8 @@ namespace VAdvantage.Process
         /// <returns>object of container storage</returns>
         private X_M_ContainerStorage InsertContainerStorage(X_M_ContainerStorage containerStorage, DataRow dr, bool isPhysicalInventory)
         {
-            containerStorage.SetAD_Client_ID(Convert.ToInt32(dr["AD_Client_ID"]));
-            containerStorage.SetAD_Org_ID(Convert.ToInt32(dr["AD_Org_ID"]));
+            containerStorage.SetVAF_Client_ID(Convert.ToInt32(dr["VAF_Client_ID"]));
+            containerStorage.SetVAF_Org_ID(Convert.ToInt32(dr["VAF_Org_ID"]));
             containerStorage.SetM_Locator_ID(Convert.ToInt32(dr["M_Locator_ID"]));
             containerStorage.SetM_Product_ID(Convert.ToInt32(dr["M_Product_ID"]));
             containerStorage.SetM_AttributeSetInstance_ID(Convert.ToInt32(dr["M_AttributeSetInstance_ID"]));
@@ -237,8 +237,8 @@ namespace VAdvantage.Process
         {
             if (containerStorage.Get_ID() <= 0)
             {
-                containerStorage.SetAD_Client_ID(Convert.ToInt32(dr["AD_Client_ID"]));
-                containerStorage.SetAD_Org_ID(MLocator.Get(containerStorage.GetCtx(), Convert.ToInt32(dr["M_Locator_ID"])).GetAD_Org_ID());
+                containerStorage.SetVAF_Client_ID(Convert.ToInt32(dr["VAF_Client_ID"]));
+                containerStorage.SetVAF_Org_ID(MLocator.Get(containerStorage.GetCtx(), Convert.ToInt32(dr["M_Locator_ID"])).GetVAF_Org_ID());
                 containerStorage.SetM_Locator_ID(Convert.ToInt32(dr["M_Locator_ID"]));
                 containerStorage.SetM_Product_ID(Convert.ToInt32(dr["M_Product_ID"]));
                 containerStorage.SetM_AttributeSetInstance_ID(Convert.ToInt32(dr["M_AttributeSetInstance_ID"]));
@@ -351,12 +351,12 @@ namespace VAdvantage.Process
         //  (SELECT il.M_Locator_ID, il.m_product_id, il.M_AttributeSetInstance_ID, i.MovementDate, SUM(il.QtyCount - il.QtyBook) AS qty
         //  FROM m_inventory i INNER JOIN m_inventoryline il ON i.m_inventory_id = il.m_inventory_id WHERE i.isinternaluse = 'N' 
         //  GROUP BY il.M_Locator_ID, il.m_product_id, il.M_AttributeSetInstance_ID, i.MovementDate  )
-        //SELECT AD_Client_ID, AD_Org_ID, M_Storage.M_Locator_ID, M_Storage.M_Product_ID,  NVL(M_Storage.M_AttributeSetInstance_ID , 0) AS M_AttributeSetInstance_ID,
+        //SELECT VAF_Client_ID, VAF_Org_ID, M_Storage.M_Locator_ID, M_Storage.M_Product_ID,  NVL(M_Storage.M_AttributeSetInstance_ID , 0) AS M_AttributeSetInstance_ID,
         //  SUM(QtyOnHand) AS QtyOnHand, DateLastInventory, NVL(qty, 0) AS qty
         //FROM M_Storage LEFT JOIN conSTORAGE ON ( conSTORAGE.m_locator_id = M_Storage.m_locator_id
         //AND conSTORAGE.m_product_id  = M_Storage.m_product_id AND NVL(conSTORAGE.M_AttributeSetInstance_ID , 0) = NVL(M_Storage.M_AttributeSetInstance_ID , 0)
         //AND conSTORAGE.MovementDate = M_Storage.DateLastInventory)
-        //GROUP BY AD_Client_ID, AD_Org_ID, M_Storage.M_Locator_ID, M_Storage.M_Product_ID, M_Storage.M_AttributeSetInstance_ID, DateLastInventory, qty
+        //GROUP BY VAF_Client_ID, VAF_Org_ID, M_Storage.M_Locator_ID, M_Storage.M_Product_ID, M_Storage.M_AttributeSetInstance_ID, DateLastInventory, qty
         //HAVING SUM(QtyOnHand) != 0");
         //                    _log.Info(sql.ToString());
         //                    DataSet dsStorage = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());

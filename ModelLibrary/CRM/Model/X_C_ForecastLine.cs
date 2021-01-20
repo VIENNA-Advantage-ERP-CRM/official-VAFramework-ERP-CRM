@@ -70,7 +70,7 @@ static X_C_ForecastLine()
 //static long serialVersionUID = 27609451562317L;
 /** Last Updated Timestamp 1/23/2012 7:14:05 PM */
 public static long updatedMS = 1327326245528L;
-/** AD_Table_ID=1000245 */
+/** VAF_TableView_ID=1000245 */
 public static int Table_ID;
  // =1000245;
 

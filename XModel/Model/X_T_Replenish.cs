@@ -90,7 +90,7 @@ static X_T_Replenish()
 //static long serialVersionUID 27562514384318L;
 /** Last Updated Timestamp 7/29/2010 1:07:47 PM */
 public static long updatedMS = 1280389067529L;
-/** AD_Table_ID=364 */
+/** VAF_TableView_ID=364 */
 public static int Table_ID;
  // =364;
 

@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         /**
         * 	Detail Constructor
         *	@param ctx context
-        *	@param AD_Org_ID org
+        *	@param VAF_Org_ID org
         * 	@param MovementType movement type
         * 	@param M_Locator_ID locator
         * 	@param M_Product_ID product
@@ -74,13 +74,13 @@ namespace VAdvantage.Model
         * 	@param MovementDate optional date
         *	@param trxName transaction
         */
-        public MTransaction(Ctx ctx, int AD_Org_ID, String MovementType,
+        public MTransaction(Ctx ctx, int VAF_Org_ID, String MovementType,
             int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
             Decimal MovementQty, DateTime? MovementDate, Trx trxName)
             : base(ctx, 0, trxName)
         {
             //isContainerApplicable = MTransaction.ProductContainerApplicable(ctx);
-            SetAD_Org_ID(AD_Org_ID);
+            SetVAF_Org_ID(VAF_Org_ID);
             SetMovementType(MovementType);
             if (M_Locator_ID == 0)
                 throw new ArgumentException("No Locator");
@@ -296,8 +296,8 @@ namespace VAdvantage.Model
         {
             MLocator locator = MLocator.Get(GetCtx(), transaction.GetM_Locator_ID());
             X_M_ContainerStorage containerStorage = new X_M_ContainerStorage(GetCtx(), 0, transaction.Get_Trx());
-            containerStorage.SetAD_Client_ID(transaction.GetAD_Client_ID());
-            containerStorage.SetAD_Org_ID(locator.GetAD_Org_ID());
+            containerStorage.SetVAF_Client_ID(transaction.GetVAF_Client_ID());
+            containerStorage.SetVAF_Org_ID(locator.GetVAF_Org_ID());
             containerStorage.SetM_Locator_ID(transaction.GetM_Locator_ID());
             containerStorage.SetM_Product_ID(transaction.GetM_Product_ID());
             containerStorage.SetM_AttributeSetInstance_ID(transaction.GetM_AttributeSetInstance_ID());
@@ -402,8 +402,8 @@ namespace VAdvantage.Model
             {
                 // if record not found, then create record with ZERO qty
                 X_M_ContainerStorage containerStorage = new X_M_ContainerStorage(GetCtx(), 0, transaction.Get_Trx());
-                containerStorage.SetAD_Client_ID(transaction.GetAD_Client_ID());
-                containerStorage.SetAD_Org_ID(transaction.GetAD_Org_ID());
+                containerStorage.SetVAF_Client_ID(transaction.GetVAF_Client_ID());
+                containerStorage.SetVAF_Org_ID(transaction.GetVAF_Org_ID());
                 containerStorage.SetM_Locator_ID(transaction.GetM_Locator_ID());
                 containerStorage.SetM_Product_ID(transaction.GetM_Product_ID());
                 containerStorage.SetM_AttributeSetInstance_ID(transaction.GetM_AttributeSetInstance_ID());
@@ -464,22 +464,22 @@ namespace VAdvantage.Model
             decimal OpeningStock = 0, movementQty = 0;
             MProductStockSummary Trs = null;
             MLocator loc = new MLocator(GetCtx(), GetM_Locator_ID(), Get_TrxName());
-            int AD_Org_ID = loc.GetAD_Org_ID();
+            int VAF_Org_ID = loc.GetVAF_Org_ID();
 
             Qry.Append("SELECT M_ProductStockSummary_ID FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + GetM_Product_ID() +
-                " AND AD_Org_ID = " + AD_Org_ID + " AND MovementFromDate = " + GlobalVariable.TO_DATE(GetMovementDate(), true));
+                " AND VAF_Org_ID = " + VAF_Org_ID + " AND MovementFromDate = " + GlobalVariable.TO_DATE(GetMovementDate(), true));
             int M_ProductStockSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
 
             Qry.Clear();
             Qry.Append("SELECT Count(*) FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + GetM_Product_ID() +
-                        " AND AD_Org_ID = " + AD_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(GetMovementDate(), true));
+                        " AND VAF_Org_ID = " + VAF_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(GetMovementDate(), true));
             int existOld = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
 
             if (existOld > 0)
             {
                 Qry.Clear();
                 Qry.Append("SELECT QtyCloseStockOrg FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + GetM_Product_ID() +
-                            " AND AD_Org_ID = " + AD_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(GetMovementDate(), true) + " ORDER BY MovementFromDate DESC");
+                            " AND VAF_Org_ID = " + VAF_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(GetMovementDate(), true) + " ORDER BY MovementFromDate DESC");
                 OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
             }
 
@@ -491,12 +491,12 @@ namespace VAdvantage.Model
             }
             else
             {
-                Trs = new MProductStockSummary(GetCtx(), AD_Org_ID, GetM_Product_ID(),
+                Trs = new MProductStockSummary(GetCtx(), VAF_Org_ID, GetM_Product_ID(),
                         0, GetCurrentQty(), GetMovementDate(), Get_TrxName());
                 Trs.SetQtyOpenStockOrg(OpeningStock);
             }
             Qry.Append("SELECT Count(*) FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + GetM_Product_ID() +
-                        " AND AD_Org_ID = " + AD_Org_ID + " AND MovementFromDate > " + GlobalVariable.TO_DATE(GetMovementDate(), true));
+                        " AND VAF_Org_ID = " + VAF_Org_ID + " AND MovementFromDate > " + GlobalVariable.TO_DATE(GetMovementDate(), true));
             int existRec = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
             if (existRec > 0)
             {
@@ -512,7 +512,7 @@ namespace VAdvantage.Model
                 {
                     Qry.Clear();
                     Qry.Append("SELECT M_ProductStockSummary_ID FROM M_ProductStockSummary WHERE IsActive = 'Y' AND M_Product_ID = " + GetM_Product_ID() +
-                                " AND AD_Org_ID = " + AD_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(GetMovementDate(), true) + " ORDER BY MovementFromDate DESC");
+                                " AND VAF_Org_ID = " + VAF_Org_ID + " AND MovementFromDate < " + GlobalVariable.TO_DATE(GetMovementDate(), true) + " ORDER BY MovementFromDate DESC");
                     int oldSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
                     MProductStockSummary oldTrs = new MProductStockSummary(GetCtx(), oldSummary_ID, Get_Trx());
                     oldTrs.SetMovementToDate(Convert.ToDateTime(GetMovementDate()).AddDays(-1));
@@ -547,7 +547,7 @@ namespace VAdvantage.Model
             else
             {
                 Qry.Append("SELECT NVL(GetStockofWarehouse(" + GetM_Product_ID() + "," + GetM_Locator_ID() + ",0," + GetM_AttributeSetInstance_ID() + ","
-                + GlobalVariable.TO_DATE(Convert.ToDateTime(GetMovementDate()).AddDays(-1), true) + "," + GetAD_Client_ID() + "," + GetAD_Org_ID() + "),0) AS Stock FROM DUAL");
+                + GlobalVariable.TO_DATE(Convert.ToDateTime(GetMovementDate()).AddDays(-1), true) + "," + GetVAF_Client_ID() + "," + GetVAF_Org_ID() + "),0) AS Stock FROM DUAL");
             }
 
             OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry.ToString(), null, Get_Trx()));
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
             {
 
                 MLocator loc = new MLocator(GetCtx(), GetM_Locator_ID(), Get_TrxName());
-                Trs = new MTransactionSummary(GetCtx(), loc.GetAD_Org_ID(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(),
+                Trs = new MTransactionSummary(GetCtx(), loc.GetVAF_Org_ID(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(),
                         OpeningStock, GetCurrentQty(), GetMovementDate(), Get_TrxName());
                 movementQty = GetMovementQty();
             }
@@ -730,7 +730,7 @@ namespace VAdvantage.Model
         }
 
         public static Decimal? GetContainerQtyFromTransaction(
-          int AD_Client_ID,
+          int VAF_Client_ID,
           int ProductID,
           int ASIID,
           DateTime? movementDate,
@@ -739,12 +739,12 @@ namespace VAdvantage.Model
           Trx _trx)
         {
             Decimal num = new Decimal(0);
-            return Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS ContainerCurrentQty FROM M_Transaction t WHERE TO_DATE(t.MovementDate,'YYYY-MM-DD') <=" + GlobalVariable.TO_DATE(movementDate, true) + "  AND t.AD_Client_ID = " + AD_Client_ID + " AND t.M_Locator_ID = " + locatorId + " AND t.M_Product_ID = " + ProductID + " AND NVL(t.M_AttributeSetInstance_ID , 0) = COALESCE(" + ASIID + ",0) AND NVL(t.M_ProductContainer_ID, 0) = " + containerId, null, _trx));
+            return Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS ContainerCurrentQty FROM M_Transaction t WHERE TO_DATE(t.MovementDate,'YYYY-MM-DD') <=" + GlobalVariable.TO_DATE(movementDate, true) + "  AND t.VAF_Client_ID = " + VAF_Client_ID + " AND t.M_Locator_ID = " + locatorId + " AND t.M_Product_ID = " + ProductID + " AND NVL(t.M_AttributeSetInstance_ID , 0) = COALESCE(" + ASIID + ",0) AND NVL(t.M_ProductContainer_ID, 0) = " + containerId, null, _trx));
         }
 
         public static string UpdateProductContainerTransaction(
           Ctx ctx,
-          int AD_Org_ID,
+          int VAF_Org_ID,
           int M_Product_ID,
           int ASIID,
           DateTime? movementDate,
@@ -774,8 +774,8 @@ namespace VAdvantage.Model
             if (!flag)
                 nullable1 = MTransaction.GetProductQtyFromStorage(M_Product_ID, ASIID, M_Locator_ID, _trx);
             if (M_ProductContainer_ID >= 0)
-                nullable2 = MTransaction.GetContainerQtyFromTransaction(ctx.GetAD_Client_ID(), M_Product_ID, ASIID, movementDate, M_Locator_ID, M_ProductContainer_ID, _trx);
-            MTransaction mtrx = new MTransaction(ctx, AD_Org_ID, MovementType, M_Locator_ID, M_Product_ID, ASIID, moveQty.Value, movementDate, _trx);
+                nullable2 = MTransaction.GetContainerQtyFromTransaction(ctx.GetVAF_Client_ID(), M_Product_ID, ASIID, movementDate, M_Locator_ID, M_ProductContainer_ID, _trx);
+            MTransaction mtrx = new MTransaction(ctx, VAF_Org_ID, MovementType, M_Locator_ID, M_Product_ID, ASIID, moveQty.Value, movementDate, _trx);
             mtrx.Set_Value(LineColumnName, lineID);
             MTransaction mtransaction1 = mtrx;
             Decimal? nullable3 = nullable1;

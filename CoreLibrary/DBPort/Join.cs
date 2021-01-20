@@ -32,7 +32,7 @@ namespace VAdvantage.DBPort
         /// <summary>
         ///  Evaluate the clause.
         ///  e.g.    tb.AD_User_ID(+)=?
-        ///          f.AD_Column_ID = c.AD_Column_ID(+)
+        ///          f.VAF_Column_ID = c.VAF_Column_ID(+)
         /// </summary>
         /// <param name="joinClause">joinClause</param>
         private void Evaluate(String joinClause)
@@ -41,7 +41,7 @@ namespace VAdvantage.DBPort
             int indexEqual = joinClause.IndexOf('=');
             m_left = indexEqual < joinClause.IndexOf("(+)");    //  converts to LEFT if true
             //  get table alias of it
-            if (m_left)     //  f.AD_Column_ID = c.AD_Column_ID(+)  => f / c
+            if (m_left)     //  f.VAF_Column_ID = c.VAF_Column_ID(+)  => f / c
             {
                 m_mainAlias = joinClause.Substring
                     (0, Util.FindIndexOf(joinClause, '.', '=')).Trim();          //  f
@@ -50,7 +50,7 @@ namespace VAdvantage.DBPort
                     end = joinClause.IndexOf('(', indexEqual);
                 m_joinAlias = joinClause.Substring(indexEqual + 1, end - (indexEqual + 1)).Trim();  //  c
             }
-            else            //  f.AD_Column_ID(+) = c.AD_Column_ID  => c / f
+            else            //  f.VAF_Column_ID(+) = c.VAF_Column_ID  => c / f
             {
                 int end = joinClause.IndexOf('.', indexEqual);
                 if (end == -1)  //  no alias
@@ -64,7 +64,7 @@ namespace VAdvantage.DBPort
 
         /// <summary>
         ///Get origial Join Clause.
-        ///  e.g. f.AD_Column_ID = c.AD_Column_ID(+)
+        ///  e.g. f.VAF_Column_ID = c.VAF_Column_ID(+)
         /// </summary>
         /// <returns>Join cluase</returns>
         public String GetJoinClause()
@@ -101,7 +101,7 @@ namespace VAdvantage.DBPort
 
         /// <summary>
         /// Get Join condition.
-        ///  e.g. f.AD_Column_ID = c.AD_Column_ID
+        ///  e.g. f.VAF_Column_ID = c.VAF_Column_ID
         /// </summary>
         /// <returns>join condition</returns>
         public String GetCondition()

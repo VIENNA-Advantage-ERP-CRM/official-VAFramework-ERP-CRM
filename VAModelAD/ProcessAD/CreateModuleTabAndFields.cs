@@ -35,7 +35,7 @@ namespace VAdvantage.Process
                 return Msg.GetMsg(GetCtx(), "VIS_TabNotFound");
             }
 
-            string sql = "select AD_Tab_ID,AD_ModuleTab_ID FROM AD_ModuleTab WHERE isActive='Y' AND ad_modulewindow_id=" + mWindow.GetAD_ModuleWindow_ID();
+            string sql = "select VAF_Tab_ID,AD_ModuleTab_ID FROM AD_ModuleTab WHERE isActive='Y' AND ad_modulewindow_id=" + mWindow.GetAD_ModuleWindow_ID();
             IDataReader idr = DB.ExecuteReader(sql);
             DataTable dt = new DataTable();
             dt.Load(idr);
@@ -45,26 +45,26 @@ namespace VAdvantage.Process
 
             foreach (DataRow dr in dt.Rows)
             {
-                existingTabs[Convert.ToInt32(dr["AD_Tab_ID"])] = Convert.ToInt32(dr["AD_ModuleTab_ID"]);
+                existingTabs[Convert.ToInt32(dr["VAF_Tab_ID"])] = Convert.ToInt32(dr["AD_ModuleTab_ID"]);
             }
 
             for (int i = 0; i < tabs.Length; i++)
             {
                 MModuleTab mTab = null;
-                if (existingTabs.ContainsKey(tabs[i].GetAD_Tab_ID()))
+                if (existingTabs.ContainsKey(tabs[i].GetVAF_Tab_ID()))
                 {
-                    mTab = new MModuleTab(GetCtx(), existingTabs[tabs[i].GetAD_Tab_ID()], null);
-                    InsertORUpdateFields(tabs[i].GetAD_Tab_ID(), mTab);
+                    mTab = new MModuleTab(GetCtx(), existingTabs[tabs[i].GetVAF_Tab_ID()], null);
+                    InsertORUpdateFields(tabs[i].GetVAF_Tab_ID(), mTab);
                 }
                 else
                 {
                     mTab = new MModuleTab(GetCtx(), 0, null);
 
-                    mTab.SetAD_Tab_ID(tabs[i].GetAD_Tab_ID());
+                    mTab.SetVAF_Tab_ID(tabs[i].GetVAF_Tab_ID());
                     mTab.SetAD_ModuleWindow_ID(GetRecord_ID());
                     if (mTab.Save())
                     {
-                        InsertORUpdateFields(tabs[i].GetAD_Tab_ID(), mTab);
+                        InsertORUpdateFields(tabs[i].GetVAF_Tab_ID(), mTab);
                     }
                 }
             }
@@ -72,15 +72,15 @@ namespace VAdvantage.Process
             return "Done";
         }
 
-        private string InsertORUpdateFields(int AD_Tab_ID, MModuleTab mTab)
+        private string InsertORUpdateFields(int VAF_Tab_ID, MModuleTab mTab)
         {
-            MTab tab = new MTab(GetCtx(), AD_Tab_ID, null);
+            MTab tab = new MTab(GetCtx(), VAF_Tab_ID, null);
             MField[] fields = tab.GetFields(true, null);
             if (fields == null || fields.Length == 0)
             {
                 return Msg.GetMsg(GetCtx(), "VIS_FieldsNotFound" + " " + tab.GetName());
             }
-            string sql = "select AD_Field_ID, AD_MOduleField_ID FROM AD_MOduleField where IsActive='Y' AND ad_moduletab_id=" + mTab.GetAD_ModuleTab_ID();
+            string sql = "select VAF_Field_ID, AD_MOduleField_ID FROM AD_MOduleField where IsActive='Y' AND ad_moduletab_id=" + mTab.GetAD_ModuleTab_ID();
             IDataReader idr = DB.ExecuteReader(sql);
             DataTable dt = new DataTable();
             dt.Load(idr);
@@ -90,7 +90,7 @@ namespace VAdvantage.Process
 
             foreach (DataRow dr in dt.Rows)
             {
-                existingFields[Convert.ToInt32(dr["AD_Field_ID"])] = Convert.ToInt32(dr["AD_MOduleField_ID"]);
+                existingFields[Convert.ToInt32(dr["VAF_Field_ID"])] = Convert.ToInt32(dr["AD_MOduleField_ID"]);
             }
 
             for (int i = 0; i < fields.Length; i++)
@@ -101,14 +101,14 @@ namespace VAdvantage.Process
                 }
 
                 MModuleField mField = null;
-                if (existingFields.ContainsKey(fields[i].GetAD_Field_ID()))
+                if (existingFields.ContainsKey(fields[i].GetVAF_Field_ID()))
                 {
-                    mField = new MModuleField(GetCtx(), existingFields[fields[i].GetAD_Field_ID()], null);
+                    mField = new MModuleField(GetCtx(), existingFields[fields[i].GetVAF_Field_ID()], null);
                 }
                 else
                 {
                     mField = new MModuleField(GetCtx(), 0, null);
-                    mField.SetAD_Field_ID(fields[i].GetAD_Field_ID());
+                    mField.SetVAF_Field_ID(fields[i].GetVAF_Field_ID());
                     mField.SetAD_ModuleTab_ID(mTab.GetAD_ModuleTab_ID());
                 }
 

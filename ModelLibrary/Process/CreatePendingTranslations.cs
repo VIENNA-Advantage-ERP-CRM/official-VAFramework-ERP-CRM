@@ -127,7 +127,7 @@ namespace VAdvantage.Process
                     {
                         param[7] = new System.Data.SqlClient.SqlParameter("@POhelp", tlEle.GetPO_Help());
                     }
-                    sql.Append(@"Update AD_ELEMENT_TRL 
+                    sql.Append(@"Update VAF_COLUMNDIC_TL 
                                                             SET Name=@cname,
                                                             IsTranslated='Y',
                                                             PrintName=@PrintName,
@@ -137,10 +137,10 @@ namespace VAdvantage.Process
                                                             PO_PrintName=@POPrintName,
                                                             PO_Description=@POdesc,
                                                             PO_Help=@POhelp
-                                                         WHERE AD_ELEMENT_ID=" + tlEle.GetAD_Element_ID() + " AND AD_LANGUAGE='" + lang + "'");
+                                                         WHERE VAF_COLUMNDIC_ID=" + tlEle.GetVAF_ColumnDic_ID() + " AND AD_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlEle.GetAD_Element_ID() + " ElementNotTranslated.");
+                        res.Append(tlEle.GetVAF_ColumnDic_ID() + " ElementNotTranslated.");
                         break;
                     }
                     tlEle.SetIsTranslated(true);
@@ -171,14 +171,14 @@ namespace VAdvantage.Process
                         param = new System.Data.SqlClient.SqlParameter[2];
                         param[0] = new System.Data.SqlClient.SqlParameter("@cname", tlField.GetName());
                         param[1] = new System.Data.SqlClient.SqlParameter("@PrintName", tlField.GetName());
-                        sql.Append(@"Update AD_ELEMENT_TRL 
+                        sql.Append(@"Update VAF_COLUMNDIC_TL 
                                             SET Name=@cname,
                                                 PRINTNAME=@PrintName,
                                                 IsTranslated='Y'
-                                            WHERE AD_ELEMENT_ID=" + tlField.GetAD_Element_ID()+" AND AD_LANGUAGE='"+lang+"'");
+                                            WHERE VAF_COLUMNDIC_ID=" + tlField.GetVAF_ColumnDic_ID()+" AND AD_LANGUAGE='"+lang+"'");
                        if(DB.ExecuteQuery(sql.ToString(),param,trx)==-1)
                        {
-                           res.Append(tlField.GetAD_Element_ID() + " SystemElementNotTranslated.");
+                           res.Append(tlField.GetVAF_ColumnDic_ID() + " SystemElementNotTranslated.");
                            break;
                        }
                     }
@@ -206,19 +206,19 @@ namespace VAdvantage.Process
                     {
                         param[2] = new System.Data.SqlClient.SqlParameter("@help", help);
                     }
-                    sql.Append(@"Update AD_Field_TRL 
+                    sql.Append(@"Update VAF_Field_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
                                             help=@help
-                                        WHERE AD_Field_ID=" + tlField.GetAD_Field_ID() + " AND AD_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_Field_ID=" + tlField.GetVAF_Field_ID() + " AND AD_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(),param,trx) == -1)
                     {
-                        res.Append(tlField.GetAD_Field_ID() + " FieldNotTranslated.");
+                        res.Append(tlField.GetVAF_Field_ID() + " FieldNotTranslated.");
                         break;
                     }
                     sql.Clear();
-                    sql.Append("UPDATE AD_Field SET IsCentrallyMaintained='" + isCentrallyMaintained + "' WHERE AD_Field_ID=" + tlField.GetAD_Field_ID());
+                    sql.Append("UPDATE VAF_Field SET IsCentrallyMaintained='" + isCentrallyMaintained + "' WHERE VAF_Field_ID=" + tlField.GetVAF_Field_ID());
                     DB.ExecuteQuery(sql.ToString(),null,trx);
                     tlField.SetIsTranslated(true);
                     tlField.Save(trx);
@@ -359,16 +359,16 @@ namespace VAdvantage.Process
                         param[3] = new System.Data.SqlClient.SqlParameter("@cm", tlTab.GetCommitWarning());
                     }
                     sql.Clear();
-                    sql.Append(@"Update AD_Tab_TRL 
+                    sql.Append(@"Update VAF_Tab_TRL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
                                             Help=@help,
                                             CommitWarning=@cm
-                                        WHERE AD_Tab_ID=" + tlTab.GetAD_Tab_ID() + " AND AD_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_Tab_ID=" + tlTab.GetVAF_Tab_ID() + " AND AD_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlTab.GetAD_Tab_ID() + " TabNotTranslated.");
+                        res.Append(tlTab.GetVAF_Tab_ID() + " TabNotTranslated.");
                         break;
                     }
                     tlTab.SetIsTranslated(true);
@@ -394,13 +394,13 @@ namespace VAdvantage.Process
                     param = new System.Data.SqlClient.SqlParameter[1];
                     param[0] = new System.Data.SqlClient.SqlParameter("@cname", tlfg.GetName());                   
                     sql.Clear();
-                    sql.Append(@"Update AD_FieldGroup_TRL 
+                    sql.Append(@"Update VAF_FieldSection_Tl 
                                         SET Name=@cname,
                                             IsTranslated='Y'                                                                                     
-                                        WHERE AD_FieldGroup_ID=" + tlfg.GetAD_FieldGroup_ID() + " AND AD_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_FieldSection_ID=" + tlfg.GetVAF_FieldSection_ID() + " AND AD_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlfg.GetAD_FieldGroup_ID() + " FieldGroupNotTranslated.");
+                        res.Append(tlfg.GetVAF_FieldSection_ID() + " FieldGroupNotTranslated.");
                         break;
                     }
                     tlfg.SetIsTranslated(true);
@@ -497,15 +497,15 @@ namespace VAdvantage.Process
                         param[2] = new System.Data.SqlClient.SqlParameter("@help", help);
                     }
                     sql.Clear();
-                    sql.Append(@"Update AD_Form_TRL 
+                    sql.Append(@"Update VAF_Page_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
                                             Help=@help                                           
-                                        WHERE AD_Form_ID=" + tlps.GetAD_Form_ID() + " AND AD_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_Page_ID=" + tlps.GetVAF_Page_ID() + " AND AD_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlps.GetAD_Form_ID() + " FormNotTranslated.");
+                        res.Append(tlps.GetVAF_Page_ID() + " FormNotTranslated.");
                         break;
                     }
                     tlps.SetIsTranslated(true);

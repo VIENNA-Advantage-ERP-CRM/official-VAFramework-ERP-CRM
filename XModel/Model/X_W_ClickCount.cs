@@ -72,7 +72,7 @@ static X_W_ClickCount()
 //static long serialVersionUID 27562514384960L;
 /** Last Updated Timestamp 7/29/2010 1:07:48 PM */
 public static long updatedMS = 1280389068171L;
-/** AD_Table_ID=553 */
+/** VAF_TableView_ID=553 */
 public static int Table_ID;
  // =553;
 

@@ -27,7 +27,7 @@ public X_C_DunningRunLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr,
  added by ->Harwinder */
 static X_C_DunningRunLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27837534353617L;/** Last Updated Timestamp 4/16/2019 3:33:56 PM */
-public static long updatedMS = 1555409036828L;/** AD_Table_ID=524 */
+public static long updatedMS = 1555409036828L;/** VAF_TableView_ID=524 */
 public static int Table_ID; // =524;
 /** TableName=C_DunningRunLine */
 public static String Table_Name="C_DunningRunLine";

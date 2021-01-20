@@ -45,7 +45,7 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
  added by ->Harwinder */
         static X_PA_ReportLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621413794L;/** Last Updated Timestamp 4/1/2016 1:04:57 PM */
-        public static long updatedMS = 1459496097005L;/** AD_Table_ID=448 */
+        public static long updatedMS = 1459496097005L;/** VAF_TableView_ID=448 */
         public static int Table_ID; // =448;
         /** TableName=PA_ReportLine */
         public static String Table_Name = "PA_ReportLine";

@@ -54,22 +54,22 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">ctx</param>
         /// <param name="AD_Session_ID">session</param>
-        /// <param name="AD_Client_ID">login client</param>
-        /// <param name="AD_Org_ID">org</param>
-        /// <param name="AD_Table_ID">table</param>
+        /// <param name="VAF_Client_ID">login client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        /// <param name="VAF_TableView_ID">table</param>
         /// <param name="WhereClause">where</param>
         /// <param name="RecordCount">count</param>
         /// <param name="Parameter">parameter</param>
         public MQueryLog(Ctx ctx, int AD_Session_ID,
-        int AD_Client_ID, int AD_Org_ID,
-        int AD_Table_ID, String whereClause, int recordCount, String parameter)
+        int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, String parameter)
             : this(ctx, 0, null)
         {
             //	out of trx
             SetAD_Session_ID(AD_Session_ID);
-            SetClientOrg(AD_Client_ID, AD_Org_ID);
+            SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             //
-            SetAD_Table_ID(AD_Table_ID);
+            SetVAF_TableView_ID(VAF_TableView_ID);
             SetWhereClause(whereClause);
             SetRecordCount(recordCount);
             SetParameter(parameter);

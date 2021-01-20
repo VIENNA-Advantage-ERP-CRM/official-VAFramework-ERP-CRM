@@ -26,7 +26,7 @@ public X_C_TeamMember (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trx
  added by ->Harwinder */
 static X_C_TeamMember(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27757001023343L;/** Last Updated Timestamp 9/26/2016 1:11:46 PM */
-public static long updatedMS = 1474875706554L;/** AD_Table_ID=1000427 */
+public static long updatedMS = 1474875706554L;/** VAF_TableView_ID=1000427 */
 public static int Table_ID; // =1000427;
 /** TableName=C_TeamMember */
 public static String Table_Name="C_TeamMember";

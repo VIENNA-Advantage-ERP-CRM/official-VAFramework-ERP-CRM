@@ -183,7 +183,7 @@ namespace VAdvantage.Model
                 //
                 log.Fine("M_PriceList_ID=" + M_PriceList_ID);
                 bool isSOTrx = false;
-                MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+                MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     GetM_Product_ID(), GetC_BPartner_ID(), GetQty(), isSOTrx);
                 pp.SetM_PriceList_ID(M_PriceList_ID);
 
@@ -256,7 +256,7 @@ namespace VAdvantage.Model
                 int C_BPartner_ID = GetC_BPartner_ID();
                 Decimal Qty = GetQty();
                 bool isSOTrx = false;
-                MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+                MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                     M_Product_ID, C_BPartner_ID, Qty, isSOTrx);
                 //
                 int M_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_ID");
@@ -338,7 +338,7 @@ namespace VAdvantage.Model
                     int M_Product_ID = GetM_Product_ID();
                     int C_BPartner_ID = GetC_BPartner_ID();
                     bool isSOTrx = false;
-                    MProductPricing pp = new MProductPricing(GetAD_Client_ID(), GetAD_Org_ID(),
+                    MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
                         M_Product_ID, C_BPartner_ID, qty, isSOTrx);
                     //
                     int M_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_ID");

@@ -183,8 +183,8 @@ namespace VIS.Controllers
                     model.Login1Model.LoginLanguage = ctx.GetAD_Language();
 
                     model.Login2Model.Role = ctx.GetAD_Role_ID().ToString();
-                    model.Login2Model.Client = ctx.GetAD_Client_ID().ToString();
-                    model.Login2Model.Org = ctx.GetAD_Org_ID().ToString();
+                    model.Login2Model.Client = ctx.GetVAF_Client_ID().ToString();
+                    model.Login2Model.Org = ctx.GetVAF_Org_ID().ToString();
                     model.Login2Model.Warehouse = ctx.GetAD_Warehouse_ID().ToString();
 
 
@@ -248,9 +248,9 @@ namespace VIS.Controllers
 
                     //  LoginHelper.GetClients(id)
 
-                    ClientList = LoginHelper.GetClients(ctx.GetAD_Role_ID());// .Add(new KeyNamePair(ctx.GetAD_Client_ID(), ctx.GetAD_Client_Name()));
-                    OrgList = LoginHelper.GetOrgs(ctx.GetAD_Role_ID(), ctx.GetAD_User_ID(), ctx.GetAD_Client_ID());// .Add(new KeyNamePair(ctx.GetAD_Org_ID(), ctx.GetAD_Org_Name()));
-                    WareHouseList = LoginHelper.GetWarehouse(ctx.GetAD_Org_ID());// .Add(new KeyNamePair(ctx.GetAD_Warehouse_ID(), ctx.GetContext("#M_Warehouse_Name")));
+                    ClientList = LoginHelper.GetClients(ctx.GetAD_Role_ID());// .Add(new KeyNamePair(ctx.GetVAF_Client_ID(), ctx.GetVAF_Client_Name()));
+                    OrgList = LoginHelper.GetOrgs(ctx.GetAD_Role_ID(), ctx.GetAD_User_ID(), ctx.GetVAF_Client_ID());// .Add(new KeyNamePair(ctx.GetVAF_Org_ID(), ctx.GetVAF_Org_Name()));
+                    WareHouseList = LoginHelper.GetWarehouse(ctx.GetVAF_Org_ID());// .Add(new KeyNamePair(ctx.GetAD_Warehouse_ID(), ctx.GetContext("#M_Warehouse_Name")));
 
 
                     ViewBag.RoleList = RoleList;
@@ -829,9 +829,9 @@ namespace VIS.Controllers
             {
                 while (dr.Read())
                 {
-                    int AD_Org_ID = Util.GetValueOfInt(dr[0].ToString());
+                    int VAF_Org_ID = Util.GetValueOfInt(dr[0].ToString());
                     String Name = dr[1].ToString();
-                    KeyNamePair p = new KeyNamePair(AD_Org_ID, Name);
+                    KeyNamePair p = new KeyNamePair(VAF_Org_ID, Name);
                     if (!lst.Contains(p))
                         lst.Add(p);
                 }

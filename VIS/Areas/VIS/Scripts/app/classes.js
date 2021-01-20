@@ -89,7 +89,7 @@
          *	value		:= strings can be with ' or "
          *	logic operators	:= AND or OR with the prevoius result from left to right
          *
-         *	Example	'@AD_Table@=Test | @Language@=GERGER
+         *	Example	'@VAF_TableView@=Test | @Language@=GERGER
          *  </code>
          *  @param source class[function] implementing get_ValueAsString(variable)
          *  @param logic logic string
@@ -1629,8 +1629,8 @@
             // Find windows where the first tab is based on the table
             //var sql = "SELECT DISTINCT w.AD_Window_ID, w.Name, tt.WhereClause, t.TableName, " +
             //        "wp.AD_Window_ID, wp.Name, ws.AD_Window_ID, ws.Name "
-            //    + "FROM AD_Table t "
-            //    + "INNER JOIN AD_Tab tt ON (tt.AD_Table_ID = t.AD_Table_ID) ";
+            //    + "FROM VAF_TableView t "
+            //    + "INNER JOIN VAF_Tab tt ON (tt.VAF_TableView_ID = t.VAF_TableView_ID) ";
             //var baseLanguage = VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "AD_Window");
             //if (baseLanguage) {
             //    sql += "INNER JOIN AD_Window w ON (tt.AD_Window_ID=w.AD_Window_ID)";
@@ -1646,7 +1646,7 @@
             //    + " AND w.AD_Window_ID <> @para5 AND w.isActive='Y'"
             //    + " AND tt.SeqNo=10"
             //    + " AND (wp.AD_Window_ID IS NOT NULL "
-            //            + "OR EXISTS (SELECT 1 FROM AD_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.AD_Table_ID=t.AD_Table_ID AND tt2.SeqNo=10))"
+            //            + "OR EXISTS (SELECT 1 FROM VAF_Tab tt2 WHERE tt2.AD_Window_ID = ws.AD_Window_ID AND tt2.VAF_TableView_ID=t.VAF_TableView_ID AND tt2.SeqNo=10))"
             //    + " ORDER BY 2";
 
             try {

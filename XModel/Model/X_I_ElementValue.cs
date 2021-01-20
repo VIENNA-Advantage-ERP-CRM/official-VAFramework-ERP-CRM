@@ -70,7 +70,7 @@ static X_I_ElementValue()
 //static long serialVersionUID 27562514377014L;
 /** Last Updated Timestamp 7/29/2010 1:07:40 PM */
 public static long updatedMS = 1280389060225L;
-/** AD_Table_ID=534 */
+/** VAF_TableView_ID=534 */
 public static int Table_ID;
  // =534;
 
@@ -113,21 +113,21 @@ StringBuilder sb = new StringBuilder ("X_I_ElementValue[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** AD_Column_ID AD_Reference_ID=272 */
-public static int AD_COLUMN_ID_AD_Reference_ID=272;
+/** VAF_Column_ID AD_Reference_ID=272 */
+public static int VAF_COLUMN_ID_AD_Reference_ID=272;
 /** Set Column.
-@param AD_Column_ID Column in the table */
-public void SetAD_Column_ID (int AD_Column_ID)
+@param VAF_Column_ID Column in the table */
+public void SetVAF_Column_ID (int VAF_Column_ID)
 {
-if (AD_Column_ID <= 0) Set_Value ("AD_Column_ID", null);
+if (VAF_Column_ID <= 0) Set_Value ("VAF_Column_ID", null);
 else
-Set_Value ("AD_Column_ID", AD_Column_ID);
+Set_Value ("VAF_Column_ID", VAF_Column_ID);
 }
 /** Get Column.
 @return Column in the table */
-public int GetAD_Column_ID() 
+public int GetVAF_Column_ID() 
 {
-Object ii = Get_Value("AD_Column_ID");
+Object ii = Get_Value("VAF_Column_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

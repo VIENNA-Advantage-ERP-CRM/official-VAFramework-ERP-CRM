@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MClientInfo
- * Purpose        : Client info using AD_ClientInfo table
- * Class Used     : X_AD_ClientInfo
+ * Purpose        : Client info using VAF_ClientDetail table
+ * Class Used     : X_VAF_ClientDetail
  * Chronological    Development
  * Raghunandan      28-04-2009
   ******************************************************/
@@ -22,44 +22,44 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MClientInfo : X_AD_ClientInfo
+    public class MClientInfo : X_VAF_ClientDetail
     {
         //Account Schema				
         private MAcctSchema _acctSchema = null;
         //New Record
         private bool _createNew = false;
         /**	Cache						*/
-        private static CCache<int, MClientInfo> s_cache = new CCache<int, MClientInfo>("AD_ClientInfo", 2);
+        private static CCache<int, MClientInfo> s_cache = new CCache<int, MClientInfo>("VAF_ClientDetail", 2);
         //private static Dictionary<int, MClientInfo> s_cache = new Dictionary<int, MClientInfo>();
 
         /// <summary>
         /// Get Client Info
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">id</param>
+        /// <param name="VAF_Client_ID">id</param>
         /// <returns>Client Info</returns>
-        public static MClientInfo Get(Ctx ctx, int AD_Client_ID)
+        public static MClientInfo Get(Ctx ctx, int VAF_Client_ID)
         {
-            return Get(ctx, AD_Client_ID, null);
+            return Get(ctx, VAF_Client_ID, null);
         }	//	get
 
         /// <summary>
         /// Get Client Info
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">id</param>
+        /// <param name="VAF_Client_ID">id</param>
         /// <param name="trxName">optional trx</param>
         /// <returns>Client Info</returns>
-        public static MClientInfo Get(Ctx ctx, int AD_Client_ID, Trx trxName)
+        public static MClientInfo Get(Ctx ctx, int VAF_Client_ID, Trx trxName)
         {
-            int key = AD_Client_ID;
+            int key = VAF_Client_ID;
             MClientInfo info = (MClientInfo)s_cache[key];
             if (info != null)
             {
                 return info;
             }
             //
-            String sql = "SELECT * FROM AD_ClientInfo WHERE AD_Client_ID=" + AD_Client_ID;
+            String sql = "SELECT * FROM VAF_ClientDetail WHERE VAF_Client_ID=" + VAF_Client_ID;
             DataSet ds = null;
             try
             {
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
         /// <returns>client</returns>
         public static MClientInfo Get(Ctx ctx)
         {
-            return Get(ctx, ctx.GetAD_Client_ID(), null);
+            return Get(ctx, ctx.GetVAF_Client_ID(), null);
         }	
         
         //	Logger						
@@ -101,11 +101,11 @@ namespace VAdvantage.Model
         ///Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Client_ID">AD_Client_ID ignored</param>
+        /// <param name="VAF_Client_ID">VAF_Client_ID ignored</param>
         /// <param name="trxName">transaction</param>
-        public MClientInfo(Ctx ctx, int AD_Client_ID, Trx trxName):base(ctx,AD_Client_ID,trxName)
+        public MClientInfo(Ctx ctx, int VAF_Client_ID, Trx trxName):base(ctx,VAF_Client_ID,trxName)
         {
-            //super(ctx, AD_Client_ID, trxName);
+            //super(ctx, VAF_Client_ID, trxName);
         }	//	MClientInfo
 
         /// <summary>
@@ -136,8 +136,8 @@ namespace VAdvantage.Model
             int AD_Tree_Campaign_ID, int AD_Tree_Activity_ID, Trx trxName):base(client.GetCtx(),0,trxName)
         {
             //super(client.getCtx(), 0, trxName);
-            SetAD_Client_ID(client.GetAD_Client_ID());	//	to make sure
-            SetAD_Org_ID(0);
+            SetVAF_Client_ID(client.GetVAF_Client_ID());	//	to make sure
+            SetVAF_Org_ID(0);
             SetIsDiscountLineAmt(false);
             //
             SetAD_Tree_Menu_ID(10);		//	HARDCODED
@@ -219,8 +219,8 @@ namespace VAdvantage.Model
         /// <returns>true if saved</returns>
         public override bool Save()
         {
-            if (GetAD_Org_ID() != 0)
-                SetAD_Org_ID(0);
+            if (GetVAF_Org_ID() != 0)
+                SetVAF_Org_ID(0);
             GetMatchRequirementI();
             GetMatchRequirementR();
             if (_createNew)

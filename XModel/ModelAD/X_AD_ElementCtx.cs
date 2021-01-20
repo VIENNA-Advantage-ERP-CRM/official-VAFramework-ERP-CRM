@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ElementCtx
+/** Generated Model for VAF_ColumnDicContext
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ElementCtx : PO
+public class X_VAF_ColumnDicContext : PO
 {
-public X_AD_ElementCtx (Context ctx, int AD_ElementCtx_ID, Trx trxName) : base (ctx, AD_ElementCtx_ID, trxName)
+public X_VAF_ColumnDicContext (Context ctx, int VAF_ColumnDicContext_ID, Trx trxName) : base (ctx, VAF_ColumnDicContext_ID, trxName)
 {
-/** if (AD_ElementCtx_ID == 0)
+/** if (VAF_ColumnDicContext_ID == 0)
 {
-SetAD_CtxArea_ID (0);
-SetAD_ElementCtx_ID (0);
-SetAD_Element_ID (0);
+SetVAF_ContextScope_ID (0);
+SetVAF_ColumnDicContext_ID (0);
+SetVAF_ColumnDic_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetPrintName (null);
 }
  */
 }
-public X_AD_ElementCtx (Ctx ctx, int AD_ElementCtx_ID, Trx trxName) : base (ctx, AD_ElementCtx_ID, trxName)
+public X_VAF_ColumnDicContext (Ctx ctx, int VAF_ColumnDicContext_ID, Trx trxName) : base (ctx, VAF_ColumnDicContext_ID, trxName)
 {
-/** if (AD_ElementCtx_ID == 0)
+/** if (VAF_ColumnDicContext_ID == 0)
 {
-SetAD_CtxArea_ID (0);
-SetAD_ElementCtx_ID (0);
-SetAD_Element_ID (0);
+SetVAF_ContextScope_ID (0);
+SetVAF_ColumnDicContext_ID (0);
+SetVAF_ColumnDic_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 SetPrintName (null);
@@ -47,7 +47,7 @@ SetPrintName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ElementCtx (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ColumnDicContext (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_AD_ElementCtx (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ElementCtx (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ColumnDicContext (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_AD_ElementCtx (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ElementCtx (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ColumnDicContext (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ElementCtx()
+static X_VAF_ColumnDicContext()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,12 +78,12 @@ static X_AD_ElementCtx()
 //static long serialVersionUID = 27562514361169L;
 /** Last Updated Timestamp 7/29/2010 1:07:24 PM */
 public static long updatedMS = 1280389044380L;
-/** AD_Table_ID=927 */
+/** VAF_TableView_ID=927 */
 public static int Table_ID;
  // =927;
 
-/** TableName=AD_ElementCtx */
-public static String Table_Name="AD_ElementCtx";
+/** TableName=VAF_ColumnDicContext */
+public static String Table_Name="VAF_ColumnDicContext";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -117,51 +117,51 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ElementCtx[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ColumnDicContext[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Context Area.
-@param AD_CtxArea_ID Business Domain Area Terminology */
-public void SetAD_CtxArea_ID (int AD_CtxArea_ID)
+@param VAF_ContextScope_ID Business Domain Area Terminology */
+public void SetVAF_ContextScope_ID (int VAF_ContextScope_ID)
 {
-if (AD_CtxArea_ID < 1) throw new ArgumentException ("AD_CtxArea_ID is mandatory.");
-Set_ValueNoCheck ("AD_CtxArea_ID", AD_CtxArea_ID);
+if (VAF_ContextScope_ID < 1) throw new ArgumentException ("VAF_ContextScope_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ContextScope_ID", VAF_ContextScope_ID);
 }
 /** Get Context Area.
 @return Business Domain Area Terminology */
-public int GetAD_CtxArea_ID() 
+public int GetVAF_ContextScope_ID() 
 {
-Object ii = Get_Value("AD_CtxArea_ID");
+Object ii = Get_Value("VAF_ContextScope_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Element Context.
-@param AD_ElementCtx_ID Business Area Context for Element */
-public void SetAD_ElementCtx_ID (int AD_ElementCtx_ID)
+@param VAF_ColumnDicContext_ID Business Area Context for Element */
+public void SetVAF_ColumnDicContext_ID (int VAF_ColumnDicContext_ID)
 {
-if (AD_ElementCtx_ID < 1) throw new ArgumentException ("AD_ElementCtx_ID is mandatory.");
-Set_ValueNoCheck ("AD_ElementCtx_ID", AD_ElementCtx_ID);
+if (VAF_ColumnDicContext_ID < 1) throw new ArgumentException ("VAF_ColumnDicContext_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ColumnDicContext_ID", VAF_ColumnDicContext_ID);
 }
 /** Get Element Context.
 @return Business Area Context for Element */
-public int GetAD_ElementCtx_ID() 
+public int GetVAF_ColumnDicContext_ID() 
 {
-Object ii = Get_Value("AD_ElementCtx_ID");
+Object ii = Get_Value("VAF_ColumnDicContext_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set System Element.
-@param AD_Element_ID System Element enables the central maintenance of column description and help. */
-public void SetAD_Element_ID (int AD_Element_ID)
+@param VAF_ColumnDic_ID System Element enables the central maintenance of column description and help. */
+public void SetVAF_ColumnDic_ID (int VAF_ColumnDic_ID)
 {
-if (AD_Element_ID < 1) throw new ArgumentException ("AD_Element_ID is mandatory.");
-Set_Value ("AD_Element_ID", AD_Element_ID);
+if (VAF_ColumnDic_ID < 1) throw new ArgumentException ("VAF_ColumnDic_ID is mandatory.");
+Set_Value ("VAF_ColumnDic_ID", VAF_ColumnDic_ID);
 }
 /** Get System Element.
 @return System Element enables the central maintenance of column description and help. */
-public int GetAD_Element_ID() 
+public int GetVAF_ColumnDic_ID() 
 {
-Object ii = Get_Value("AD_Element_ID");
+Object ii = Get_Value("VAF_ColumnDic_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

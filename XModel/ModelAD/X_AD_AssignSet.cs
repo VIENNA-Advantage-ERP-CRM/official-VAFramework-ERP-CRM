@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_AssignSet
+/** Generated Model for VAF_AllotSet
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_AssignSet : PO
+public class X_VAF_AllotSet : PO
 {
-public X_AD_AssignSet (Context ctx, int AD_AssignSet_ID, Trx trxName) : base (ctx, AD_AssignSet_ID, trxName)
+public X_VAF_AllotSet (Context ctx, int VAF_AllotSet_ID, Trx trxName) : base (ctx, VAF_AllotSet_ID, trxName)
 {
-/** if (AD_AssignSet_ID == 0)
+/** if (VAF_AllotSet_ID == 0)
 {
-SetAD_AssignSet_ID (0);
-SetAD_Table_ID (0);
+SetVAF_AllotSet_ID (0);
+SetVAF_TableView_ID (0);
 SetAutoAssignRule (null);
 SetName (null);
 }
  */
 }
-public X_AD_AssignSet (Ctx ctx, int AD_AssignSet_ID, Trx trxName) : base (ctx, AD_AssignSet_ID, trxName)
+public X_VAF_AllotSet (Ctx ctx, int VAF_AllotSet_ID, Trx trxName) : base (ctx, VAF_AllotSet_ID, trxName)
 {
-/** if (AD_AssignSet_ID == 0)
+/** if (VAF_AllotSet_ID == 0)
 {
-SetAD_AssignSet_ID (0);
-SetAD_Table_ID (0);
+SetVAF_AllotSet_ID (0);
+SetVAF_TableView_ID (0);
 SetAutoAssignRule (null);
 SetName (null);
 }
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AllotSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_AssignSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_AllotSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_AssignSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_AssignSet (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_AllotSet (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_AssignSet()
+static X_VAF_AllotSet()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,12 +74,12 @@ static X_AD_AssignSet()
 //static long serialVersionUID = 27562514360589L;
 /** Last Updated Timestamp 7/29/2010 1:07:23 PM */
 public static long updatedMS = 1280389043800L;
-/** AD_Table_ID=930 */
+/** VAF_TableView_ID=930 */
 public static int Table_ID;
  // =930;
 
-/** TableName=AD_AssignSet */
-public static String Table_Name="AD_AssignSet";
+/** TableName=VAF_AllotSet */
+public static String Table_Name="VAF_AllotSet";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_AssignSet[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_AllotSet[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Auto Assignment.
-@param AD_AssignSet_ID Automatic Assignment of values */
-public void SetAD_AssignSet_ID (int AD_AssignSet_ID)
+@param VAF_AllotSet_ID Automatic Assignment of values */
+public void SetVAF_AllotSet_ID (int VAF_AllotSet_ID)
 {
-if (AD_AssignSet_ID < 1) throw new ArgumentException ("AD_AssignSet_ID is mandatory.");
-Set_ValueNoCheck ("AD_AssignSet_ID", AD_AssignSet_ID);
+if (VAF_AllotSet_ID < 1) throw new ArgumentException ("VAF_AllotSet_ID is mandatory.");
+Set_ValueNoCheck ("VAF_AllotSet_ID", VAF_AllotSet_ID);
 }
 /** Get Auto Assignment.
 @return Automatic Assignment of values */
-public int GetAD_AssignSet_ID() 
+public int GetVAF_AllotSet_ID() 
 {
-Object ii = Get_Value("AD_AssignSet_ID");
+Object ii = Get_Value("VAF_AllotSet_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Table.
-@param AD_Table_ID Database Table information */
-public void SetAD_Table_ID (int AD_Table_ID)
+@param VAF_TableView_ID Database Table information */
+public void SetVAF_TableView_ID (int VAF_TableView_ID)
 {
-if (AD_Table_ID < 1) throw new ArgumentException ("AD_Table_ID is mandatory.");
-Set_Value ("AD_Table_ID", AD_Table_ID);
+if (VAF_TableView_ID < 1) throw new ArgumentException ("VAF_TableView_ID is mandatory.");
+Set_Value ("VAF_TableView_ID", VAF_TableView_ID);
 }
 /** Get Table.
 @return Database Table information */
-public int GetAD_Table_ID() 
+public int GetVAF_TableView_ID() 
 {
-Object ii = Get_Value("AD_Table_ID");
+Object ii = Get_Value("VAF_TableView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

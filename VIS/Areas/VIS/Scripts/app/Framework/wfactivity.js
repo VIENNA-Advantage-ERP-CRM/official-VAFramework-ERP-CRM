@@ -1028,7 +1028,7 @@
                 detailCtrl.Action = 'W';
             }
             else if (info.NodeAction == 'X') {
-                var ansBtn = $('<button style="margin-bottom:10px;margin-top: 0px;width: 100%;" class="VIS_Pref_pass-btn" data-id="' + index + '" data-form="' + info.AD_Form_ID + '" data-col="' + info.KeyCol + '">').append(info.NodeName);
+                var ansBtn = $('<button style="margin-bottom:10px;margin-top: 0px;width: 100%;" class="VIS_Pref_pass-btn" data-id="' + index + '" data-form="' + info.VAF_Page_ID + '" data-col="' + info.KeyCol + '">').append(info.NodeName);
                 detailCtrl.AnswerCtrl = ansBtn;
                 liAInput.append(ansBtn);
                 ansBtn.on('click', function () {
@@ -1220,14 +1220,14 @@
         var zoom = function (index) {
 
             // vinay bhatt window id
-            VIS.AEnv.wfzoom(fulldata[index].AD_Table_ID, fulldata[index].Record_ID, fulldata[index].AD_WF_Activity_ID);
+            VIS.AEnv.wfzoom(fulldata[index].VAF_TableView_ID, fulldata[index].Record_ID, fulldata[index].AD_WF_Activity_ID);
             //
 
             /*
             //alert(index);
             //data[index].Record_ID;
 
-            var sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM AD_Table WHERE AD_Table_ID=" + fulldata[index].AD_Table_ID;
+            var sql = "SELECT TableName, AD_Window_ID, PO_Window_ID FROM VAF_TableView WHERE VAF_TableView_ID=" + fulldata[index].VAF_TableView_ID;
 
 
             //var sql = "select ad_window_id from ad_window where name='Mail Configuration'";// Upper( name)=Upper('user' )

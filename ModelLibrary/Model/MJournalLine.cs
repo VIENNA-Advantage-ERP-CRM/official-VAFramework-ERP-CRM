@@ -223,11 +223,11 @@ namespace VAdvantage.Model
             //
             int? C_AcctSchema_ID = GetCtx().GetContextAsInt(windowNo, "C_AcctSchema_ID");
             MAcctSchema ass = MAcctSchema.Get(GetCtx(), C_AcctSchema_ID.Value);
-            int? AD_Client_ID = GetAD_Client_ID();
-            int? AD_Org_ID = GetAD_Org_ID();
+            int? VAF_Client_ID = GetVAF_Client_ID();
+            int? VAF_Org_ID = GetVAF_Org_ID();
 
             Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(C_Currency_ID.Value, ass.GetC_Currency_ID(),
-                DateAcct, C_ConversionType_ID.Value, AD_Client_ID.Value, AD_Org_ID.Value);
+                DateAcct, C_ConversionType_ID.Value, VAF_Client_ID.Value, VAF_Org_ID.Value);
             log.Fine("rate = " + CurrencyRate);
             if (CurrencyRate == null)
             {
@@ -507,9 +507,9 @@ namespace VAdvantage.Model
             //	Set Line Org to Acct Org
             if (newRecord
                 || Is_ValueChanged("C_ValidCombination_ID")
-                || Is_ValueChanged("AD_Org_ID"))
+                || Is_ValueChanged("VAF_Org_ID"))
             {
-                SetAD_Org_ID(GetAccount().GetAD_Org_ID());
+                SetVAF_Org_ID(GetAccount().GetVAF_Org_ID());
             }
 
             //18/7/2016
@@ -593,7 +593,7 @@ namespace VAdvantage.Model
         /** Update combination and optionally **/
         private bool GetOrCreateCombination(Boolean newRecord)
         {
-            int Account_ID = 0, C_SubAcct_ID = 0, M_Product_ID = 0, C_BPartner_ID = 0, AD_Org_ID = 0, AD_OrgTrx_ID = 0,
+            int Account_ID = 0, C_SubAcct_ID = 0, M_Product_ID = 0, C_BPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
                 C_LocFrom_ID = 0, C_LocTo_ID = 0, C_SalesRegion_ID = 0, C_Project_ID = 0, C_Campaign_ID = 0,
                 C_Activity_ID = 0, User1_ID = 0, User2_ID = 0;
 
@@ -601,7 +601,7 @@ namespace VAdvantage.Model
                     || (!newRecord && (Is_ValueChanged("Account_ID")
                             || Is_ValueChanged("M_Product_ID")
                             || Is_ValueChanged("C_BPartner_ID")
-                            || Is_ValueChanged("AD_Org_ID")
+                            || Is_ValueChanged("VAF_Org_ID")
                             || Is_ValueChanged("C_Project_ID")
                             || Is_ValueChanged("C_Campaign_ID")
                             || Is_ValueChanged("C_Activity_ID"))))
@@ -626,9 +626,9 @@ namespace VAdvantage.Model
                     if (MAcctSchemaElement.ELEMENTTYPE_Campaign.Equals(et) && Get_ColumnIndex("C_BPartner_ID") > 0)
                         C_BPartner_ID = Util.GetValueOfInt(Get_Value("C_BPartner_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Organization.Equals(et))
-                        AD_Org_ID = GetAD_Org_ID();
-                    if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(et) && Get_ColumnIndex("AD_OrgTrx_ID") > 0)
-                        AD_OrgTrx_ID = Util.GetValueOfInt(Get_Value("AD_OrgTrx_ID"));
+                        VAF_Org_ID = GetVAF_Org_ID();
+                    if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(et) && Get_ColumnIndex("VAF_OrgTrx_ID") > 0)
+                        VAF_OrgTrx_ID = Util.GetValueOfInt(Get_Value("VAF_OrgTrx_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocFrom_ID") > 0)
                         C_LocFrom_ID = Util.GetValueOfInt(Get_Value("C_LocFrom_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocTo_ID") > 0)
@@ -647,8 +647,8 @@ namespace VAdvantage.Model
                         User2_ID = Util.GetValueOfInt(Get_Value("User2_ID"));
                 }
 
-                MAccount acct = MAccount.Get(GetCtx(), GetAD_Client_ID(), AD_Org_ID, gl.GetC_AcctSchema_ID(), Account_ID,
-                        C_SubAcct_ID, M_Product_ID, C_BPartner_ID, AD_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
+                MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetC_AcctSchema_ID(), Account_ID,
+                        C_SubAcct_ID, M_Product_ID, C_BPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
                         C_Project_ID, C_Campaign_ID, C_Activity_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
                 if (acct != null)
@@ -691,10 +691,10 @@ namespace VAdvantage.Model
                     if (combi.GetC_BPartner_ID() > 0)
                         Set_Value("C_BPartner_ID", combi.GetC_BPartner_ID());
                 }
-                if (Get_ColumnIndex("AD_OrgTrx_ID") > 0)
-                    Set_Value("AD_OrgTrx_ID", combi.GetAD_OrgTrx_ID() > 0 ? combi.GetAD_OrgTrx_ID() : 0);
-                if (Get_ColumnIndex("AD_Org_ID") > 0)
-                    Set_Value("AD_Org_ID", combi.GetAD_Org_ID() > 0 ? combi.GetAD_Org_ID() : 0);
+                if (Get_ColumnIndex("VAF_OrgTrx_ID") > 0)
+                    Set_Value("VAF_OrgTrx_ID", combi.GetVAF_OrgTrx_ID() > 0 ? combi.GetVAF_OrgTrx_ID() : 0);
+                if (Get_ColumnIndex("VAF_Org_ID") > 0)
+                    Set_Value("VAF_Org_ID", combi.GetVAF_Org_ID() > 0 ? combi.GetVAF_Org_ID() : 0);
                 if (Get_ColumnIndex("C_LocFrom_ID") > 0)
                     Set_Value("C_LocFrom_ID", combi.GetC_LocFrom_ID() > 0 ? combi.GetC_LocFrom_ID() : 0);
                 if (Get_ColumnIndex("C_LocTo_ID") > 0)
@@ -777,7 +777,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromLines.Length; i++)
             {
                 MLineDimension toLine = new MLineDimension(GetCtx(), 0, fromJournal.Get_TrxName());
-                PO.CopyValues(fromLines[i], toLine, GetAD_Client_ID(), GetAD_Org_ID());
+                PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
 
                 toLine.SetC_BPartner_ID(fromLines[i].GetC_BPartner_ID());
                 toLine.SetC_Campaign_ID(fromLines[i].GetC_Campaign_ID());

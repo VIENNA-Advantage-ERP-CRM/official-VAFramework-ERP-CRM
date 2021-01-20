@@ -59,7 +59,7 @@ namespace VIS.Models
         //    set;
         //}
 
-        public Info GetSchema(int AD_InfoWindow_ID,Ctx ctx)
+        public Info GetSchema(int VAF_QuickSearchWindow_ID,Ctx ctx)
         {
             try
             {
@@ -69,67 +69,67 @@ namespace VIS.Models
                 {
                     sql = @"SELECT 
                                             IW.Name AS WindowName,
-                                            AD_InfoColumn.Name,
-                                            AD_InfoColumn.AD_Reference_ID,
-                                            AD_InfoColumn.AD_Reference_Value_ID,
-                                            AD_InfoColumn.IsQueryCriteria,
-                                            AD_InfoColumn.SelectClause,
-                                            AD_InfoColumn.AD_SetValue,
-                                            AD_InfoColumn.AD_Condition,
+                                            VAF_QuickSearchColumn.Name,
+                                            VAF_QuickSearchColumn.AD_Reference_ID,
+                                            VAF_QuickSearchColumn.AD_Reference_Value_ID,
+                                            VAF_QuickSearchColumn.IsQueryCriteria,
+                                            VAF_QuickSearchColumn.SelectClause,
+                                            VAF_QuickSearchColumn.AD_SetValue,
+                                            VAF_QuickSearchColumn.AD_Condition,
                                             IW.FromClause,
                                             IW.OTHERCLAUSE,
-                                            AD_ELEMENT.ColumnName,
-                                            AD_ELEMENT.Description,
-                                            AD_InfoColumn.IsDisplayed,
-                                            AD_InfoColumn.IsKey,                                           
-                                            AD_InfoColumn.IsRange,
-                                            AD_InfoColumn.ISIDENTIFIER,
+                                            VAF_COLUMNDIC.ColumnName,
+                                            VAF_COLUMNDIC.Description,
+                                            VAF_QuickSearchColumn.IsDisplayed,
+                                            VAF_QuickSearchColumn.IsKey,                                           
+                                            VAF_QuickSearchColumn.IsRange,
+                                            VAF_QuickSearchColumn.ISIDENTIFIER,
                                             infotable.TableName
-                                            FROM AD_InfoColumn
-                                            INNER JOIN AD_ELEMENT
-                                            ON (AD_ELEMENT.AD_ELEMENT_ID =AD_InfoColumn.AD_ELEMENT_ID)
-                                            INNER JOIN AD_InfoWIndow IW
-                                            ON(IW.AD_InfoWindow_ID            =AD_InfoColumn.AD_InfoWindow_ID)
-                                            INNER JOIN AD_Table infotable
-                                            ON(infotable.AD_Table_ID=IW.AD_Table_ID) 
-                                            WHERE AD_InfoColumn.IsActive      ='Y'
-                                            AND AD_InfoColumn.AD_InfoWindow_ID=" + AD_InfoWindow_ID + " ORDER BY AD_InfoColumn.seqno";
+                                            FROM VAF_QuickSearchColumn
+                                            INNER JOIN VAF_COLUMNDIC
+                                            ON (VAF_COLUMNDIC.VAF_COLUMNDIC_ID =VAF_QuickSearchColumn.VAF_COLUMNDIC_ID)
+                                            INNER JOIN VAF_QuickSearchWindow IW
+                                            ON(IW.VAF_QuickSearchWindow_ID            =VAF_QuickSearchColumn.VAF_QuickSearchWindow_ID)
+                                            INNER JOIN VAF_TableView infotable
+                                            ON(infotable.VAF_TableView_ID=IW.VAF_TableView_ID) 
+                                            WHERE VAF_QuickSearchColumn.IsActive      ='Y'
+                                            AND VAF_QuickSearchColumn.VAF_QuickSearchWindow_ID=" + VAF_QuickSearchWindow_ID + " ORDER BY VAF_QuickSearchColumn.seqno";
                 }
                 else  //get column header from translation
                 {
                     sql = @"SELECT IWT.Name AS WindowName,
-                                                              AD_InfoColumn_trl.Name,
-                                                              AD_InfoColumn.AD_Reference_ID,
-                                                              AD_InfoColumn.AD_Reference_Value_ID,
-                                                              AD_InfoColumn.IsQueryCriteria,
-                                                              AD_InfoColumn.SelectClause,
-                                                              AD_InfoColumn.AD_SetValue,
-                                                              AD_InfoColumn.AD_Condition,
+                                                              VAF_QuickSearchColumn_TL.Name,
+                                                              VAF_QuickSearchColumn.AD_Reference_ID,
+                                                              VAF_QuickSearchColumn.AD_Reference_Value_ID,
+                                                              VAF_QuickSearchColumn.IsQueryCriteria,
+                                                              VAF_QuickSearchColumn.SelectClause,
+                                                              VAF_QuickSearchColumn.AD_SetValue,
+                                                              VAF_QuickSearchColumn.AD_Condition,
                                                               IW.FromClause,
                                                               IW.OTHERCLAUSE,
-                                                              AD_ELEMENT.ColumnName,
-                                                              AD_ELEMENT.Description,
-                                                              AD_InfoColumn.IsDisplayed,
-                                                              AD_InfoColumn.IsKey,
-                                                              AD_InfoColumn.AD_Reference_Value_ID,
-                                                              AD_InfoColumn.IsRange,
-                                                              AD_InfoColumn.ISIDENTIFIER,
+                                                              VAF_COLUMNDIC.ColumnName,
+                                                              VAF_COLUMNDIC.Description,
+                                                              VAF_QuickSearchColumn.IsDisplayed,
+                                                              VAF_QuickSearchColumn.IsKey,
+                                                              VAF_QuickSearchColumn.AD_Reference_Value_ID,
+                                                              VAF_QuickSearchColumn.IsRange,
+                                                              VAF_QuickSearchColumn.ISIDENTIFIER,
                                                               infotable.TableName
-                                                            FROM AD_InfoColumn
-                                                            INNER JOIN AD_ELEMENT
-                                                            ON (AD_ELEMENT.AD_ELEMENT_ID =AD_InfoColumn.AD_ELEMENT_ID)
-                                                            INNER JOIN AD_InfoWIndow IW
-                                                            ON(IW.AD_InfoWindow_ID =AD_InfoColumn.AD_InfoWindow_ID)
-                                                            INNER JOIN AD_InfoColumn_trl
-                                                            ON (AD_InfoColumn_trl.AD_InfoColumn_ID=AD_InfoColumn.AD_InfoColumn_ID
-                                                            AND AD_InfoColumn_trl.AD_language     ='" + ctx.GetAD_Language() + @"')
-                                                            INNER JOIN AD_InfoWindow_trl IWT
-                                                            ON (IWT.AD_InfoWindow_ID          =IW.AD_InfoWindow_ID
+                                                            FROM VAF_QuickSearchColumn
+                                                            INNER JOIN VAF_COLUMNDIC
+                                                            ON (VAF_COLUMNDIC.VAF_COLUMNDIC_ID =VAF_QuickSearchColumn.VAF_COLUMNDIC_ID)
+                                                            INNER JOIN VAF_QuickSearchWindow IW
+                                                            ON(IW.VAF_QuickSearchWindow_ID =VAF_QuickSearchColumn.VAF_QuickSearchWindow_ID)
+                                                            INNER JOIN VAF_QuickSearchColumn_TL
+                                                            ON (VAF_QuickSearchColumn_TL.VAF_QuickSearchColumn_ID=VAF_QuickSearchColumn.VAF_QuickSearchColumn_ID
+                                                            AND VAF_QuickSearchColumn_TL.AD_language     ='" + ctx.GetAD_Language() + @"')
+                                                            INNER JOIN VAF_QuickSearchWindow_TL IWT
+                                                            ON (IWT.VAF_QuickSearchWindow_ID          =IW.VAF_QuickSearchWindow_ID
                                                             AND IWT.AD_language               ='" + ctx.GetAD_Language() + @"')
-                                                           INNER JOIN AD_Table infotable
-                                                            ON(infotable.AD_Table_ID=IW.AD_Table_ID)                        
-                                                            WHERE AD_InfoColumn.IsActive      ='Y'
-                                                            AND AD_InfoColumn.AD_InfoWindow_ID=" + AD_InfoWindow_ID + " ORDER BY AD_InfoColumn.seqno";
+                                                           INNER JOIN VAF_TableView infotable
+                                                            ON(infotable.VAF_TableView_ID=IW.VAF_TableView_ID)                        
+                                                            WHERE VAF_QuickSearchColumn.IsActive      ='Y'
+                                                            AND VAF_QuickSearchColumn.VAF_QuickSearchWindow_ID=" + VAF_QuickSearchWindow_ID + " ORDER BY VAF_QuickSearchColumn.seqno";
                 }
                 DataSet ds = DBase.DB.ExecuteDataset(sql);
                 return GetSchema(ds,ctx);
@@ -411,7 +411,7 @@ namespace VIS.Models
         /// <returns></returns> info window id.
         public int GetInfoWindowID(string InfoSearchKey)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_InfoWindow_ID FROM AD_InfoWindow WHERE IsActive='Y' AND Value='" + InfoSearchKey + "'", null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_QuickSearchWindow_ID FROM VAF_QuickSearchWindow WHERE IsActive='Y' AND Value='" + InfoSearchKey + "'", null, null));
         }
 
     }

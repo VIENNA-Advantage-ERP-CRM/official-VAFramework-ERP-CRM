@@ -72,7 +72,7 @@ static X_AD_Sequence_No()
 //static long serialVersionUID 27562514364147L;
 /** Last Updated Timestamp 7/29/2010 1:07:27 PM */
 public static long updatedMS = 1280389047358L;
-/** AD_Table_ID=122 */
+/** VAF_TableView_ID=122 */
 public static int Table_ID;
  // =122;
 

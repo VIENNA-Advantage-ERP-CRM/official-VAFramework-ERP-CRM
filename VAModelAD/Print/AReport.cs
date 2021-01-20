@@ -28,12 +28,12 @@ namespace VAdvantage.Print
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="AD_Table_ID">Table ID</param>
+        /// <param name="VAF_TableView_ID">Table ID</param>
         /// <param name="invoker">object which invoked the event</param>
         /// <param name="query">query</param>
-        public AReport(int AD_Table_ID, ToolStripDropDownButton sender, Query query)
+        public AReport(int VAF_TableView_ID, ToolStripDropDownButton sender, Query query)
         {
-            if (!MRole.GetDefault(Env.GetContext()).IsCanReport(AD_Table_ID))
+            if (!MRole.GetDefault(Env.GetContext()).IsCanReport(VAF_TableView_ID))
             {
                 //ShowMessage.Error("AccessCannotReport", true, query.GetTableName());
                 return;
@@ -42,7 +42,7 @@ namespace VAdvantage.Print
             _query = query;
             //_isParent = isParent;
 
-            GetPrintFormats(AD_Table_ID, sender);
+            GetPrintFormats(VAF_TableView_ID, sender);
         }
 
         /**	The Query						*/
@@ -60,18 +60,18 @@ namespace VAdvantage.Print
         /// Get the Print Formats for the table.
         /// Fill the list and the popup menu
         /// </summary>
-        /// <param name="AD_Table_ID">table</param>
-        private void GetPrintFormats(int AD_Table_ID, ToolStripDropDownButton sender)
+        /// <param name="VAF_TableView_ID">table</param>
+        private void GetPrintFormats(int VAF_TableView_ID, ToolStripDropDownButton sender)
         {
             ToolStripDropDownButton _popup = sender;
 
-            int AD_Client_ID = Env.GetContext().GetAD_Client_ID();
+            int VAF_Client_ID = Env.GetContext().GetVAF_Client_ID();
             //
             String sql = MRole.GetDefault(Env.GetContext()).AddAccessSQL(
-                "SELECT AD_PrintFormat_ID, Name, AD_Client_ID "
+                "SELECT AD_PrintFormat_ID, Name, VAF_Client_ID "
                     + "FROM AD_PrintFormat "
-                    + "WHERE AD_Table_ID='" + AD_Table_ID + "' AND IsTableBased='Y' "
-                    + "ORDER BY AD_Client_ID DESC, IsDefault DESC, Name",		//	Own First
+                    + "WHERE VAF_TableView_ID='" + VAF_TableView_ID + "' AND IsTableBased='Y' "
+                    + "ORDER BY VAF_Client_ID DESC, IsDefault DESC, Name",		//	Own First
                 "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             KeyNamePair pp = null;
@@ -85,7 +85,7 @@ namespace VAdvantage.Print
                 while (dr.Read())
                 {
 
-                    if (Utility.Util.GetValueOfInt(dr[2].ToString()) == AD_Client_ID)
+                    if (Utility.Util.GetValueOfInt(dr[2].ToString()) == VAF_Client_ID)
                     {
                         pp = new KeyNamePair(Utility.Util.GetValueOfInt(dr[0].ToString()), dr[1].ToString());
                         _list.Add(pp);
@@ -113,9 +113,9 @@ namespace VAdvantage.Print
             if (_list.Count == 0)
             {
                 if (pp == null)
-                    CreateNewFormat(AD_Table_ID);		//	calls launch
+                    CreateNewFormat(VAF_TableView_ID);		//	calls launch
                 else
-                    CopyFormat(pp.GetKey(), AD_Client_ID);
+                    CopyFormat(pp.GetKey(), VAF_Client_ID);
             }
             //	One Format exists or no invoker - show it
             else if (_list.Count == 1 || sender == null)
@@ -151,7 +151,7 @@ namespace VAdvantage.Print
             int Record_ID = 0;
             if (_query.GetRestrictionCount() == 1 && (_query.GetCode(0)).GetType() == typeof(int))
                 Record_ID = ((int)_query.GetCode(0));
-            PrintInfo info = new PrintInfo(pf.GetName(), pf.GetAD_Table_ID(), Record_ID);
+            PrintInfo info = new PrintInfo(pf.GetName(), pf.GetVAF_TableView_ID(), Record_ID);
             info.SetDescription(_query.GetInfo());
 
             ReportEngine_N re = new ReportEngine_N(Env.GetContext(), pf, _query, info);
@@ -177,10 +177,10 @@ namespace VAdvantage.Print
         /// <summary>
         /// Creates the new format
         /// </summary>
-        /// <param name="AD_Table_ID">table id</param>
-        private void CreateNewFormat(int AD_Table_ID)
+        /// <param name="VAF_TableView_ID">table id</param>
+        private void CreateNewFormat(int VAF_TableView_ID)
         {
-            MPrintFormat pf = MPrintFormat.CreateFromTable(Env.GetContext(), AD_Table_ID);
+            MPrintFormat pf = MPrintFormat.CreateFromTable(Env.GetContext(), VAF_TableView_ID);
             LaunchReport(pf);
         }	//	createNewFormat
 
@@ -198,14 +198,14 @@ namespace VAdvantage.Print
 
 
         /**************************************************************************
-         * 	Get AD_Table_ID for Table Name
+         * 	Get VAF_TableView_ID for Table Name
          * 	@param TableName table name
-         * 	@return AD_Table_ID or 0
+         * 	@return VAF_TableView_ID or 0
          */
-        static public int GetAD_Table_ID(String TableName)
+        static public int GetVAF_TableView_ID(String TableName)
         {
-            int AD_Table_ID = 0;
-            String sql = "SELECT AD_Table_ID FROM AD_Table WHERE TableName=@tablename";
+            int VAF_TableView_ID = 0;
+            String sql = "SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName=@tablename";
             IDataReader dr =null;
             try
             {
@@ -213,7 +213,7 @@ namespace VAdvantage.Print
                 param[0] = new SqlParameter("@tablename", TableName);
               dr  = DataBase.DB.ExecuteReader(sql, param);
                 while (dr.Read())
-                    AD_Table_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    VAF_TableView_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                 dr.Close();
             }
             catch (SqlException e)
@@ -224,8 +224,8 @@ namespace VAdvantage.Print
                 }
                 log.Log(Level.SEVERE, sql, e);
             }
-            return AD_Table_ID;
-        }	//	getAD_Table_ID
+            return VAF_TableView_ID;
+        }	//	getVAF_TableView_ID
     }
 
 

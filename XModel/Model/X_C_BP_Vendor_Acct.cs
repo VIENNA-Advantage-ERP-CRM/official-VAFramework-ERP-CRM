@@ -74,7 +74,7 @@ static X_C_BP_Vendor_Acct()
 //static long serialVersionUID 27562514370354L;
 /** Last Updated Timestamp 7/29/2010 1:07:33 PM */
 public static long updatedMS = 1280389053565L;
-/** AD_Table_ID=185 */
+/** VAF_TableView_ID=185 */
 public static int Table_ID;
  // =185;
 

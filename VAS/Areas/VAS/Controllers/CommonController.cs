@@ -170,14 +170,14 @@ namespace VIS.Controllers
 
         #region Account Viewer
 
-        public JsonResult GetDataQuery(int AD_Client_ID, string whereClause, string orderClause, bool gr1, bool gr2, bool gr3, bool gr4,
+        public JsonResult GetDataQuery(int VAF_Client_ID, string whereClause, string orderClause, bool gr1, bool gr2, bool gr3, bool gr4,
             String sort1, String sort2, String sort3, String sort4, bool displayDocInfo, bool displaySrcAmt, bool displayqty)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 CommonModel obj = new CommonModel();
-                var value = obj.GetDataQuery(ctx, AD_Client_ID, whereClause, orderClause, gr1, gr2, gr3, gr4, sort1, sort2, sort3, sort4, displayDocInfo, displaySrcAmt, displayqty);
+                var value = obj.GetDataQuery(ctx, VAF_Client_ID, whereClause, orderClause, gr1, gr2, gr3, gr4, sort1, sort2, sort3, sort4, displayDocInfo, displaySrcAmt, displayqty);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
@@ -366,13 +366,13 @@ namespace VIS.Controllers
                 if (Util.GetValueOfBool(paramValue[1]))
                     TableName = TableName + "_Ver";
 
-                int AD_Table_ID = MTable.Get_Table_ID(TableName);
+                int VAF_TableView_ID = MTable.Get_Table_ID(TableName);
 
                 CommonModel objCommonModel = new CommonModel();
 
-                POInfo inf = POInfo.GetPOInfo(ctx, AD_Table_ID);
+                POInfo inf = POInfo.GetPOInfo(ctx, VAF_TableView_ID);
                 // Get SQL Query from PO Info for selected table
-                string sqlCol = objCommonModel.GetSQLQuery(ctx, AD_Table_ID, inf.GetPoInfoColumns());
+                string sqlCol = objCommonModel.GetSQLQuery(ctx, VAF_TableView_ID, inf.GetPoInfoColumns());
 
                 // Append where Clause, passed in the parameter
                 string whClause = Util.GetValueOfString(paramValue[2]);
@@ -1285,13 +1285,13 @@ namespace VIS.Controllers
                     {
                         po.Set_Value("C_Campaign_ID", ol.GetC_Campaign_ID());
                     }
-                    if (ol.GetAD_OrgTrx_ID() <= 0)
+                    if (ol.GetVAF_OrgTrx_ID() <= 0)
                     {
-                        po.Set_Value("AD_OrgTrx_ID", null);
+                        po.Set_Value("VAF_OrgTrx_ID", null);
                     }
                     else
                     {
-                        po.Set_Value("AD_OrgTrx_ID", ol.GetAD_OrgTrx_ID());
+                        po.Set_Value("VAF_OrgTrx_ID", ol.GetVAF_OrgTrx_ID());
                     }
                     if (ol.GetUser1_ID() <= 0)
                     {
@@ -1316,7 +1316,7 @@ namespace VIS.Controllers
                     //iol.SetC_ProjectTask_ID(ol.GetC_ProjectTask_ID());
                     //iol.SetC_Activity_ID(ol.GetC_Activity_ID());
                     //iol.SetC_Campaign_ID(ol.GetC_Campaign_ID());
-                    //iol.SetAD_OrgTrx_ID(ol.GetAD_OrgTrx_ID());
+                    //iol.SetVAF_OrgTrx_ID(ol.GetVAF_OrgTrx_ID());
                     //iol.SetUser1_ID(ol.GetUser1_ID());
                     //iol.SetUser2_ID(ol.GetUser2_ID());
                 }
@@ -1378,13 +1378,13 @@ namespace VIS.Controllers
                     {
                         po.Set_Value("C_Campaign_ID", il.GetC_Campaign_ID());
                     }
-                    if (il.GetAD_OrgTrx_ID() <= 0)
+                    if (il.GetVAF_OrgTrx_ID() <= 0)
                     {
-                        po.Set_Value("AD_OrgTrx_ID", null);
+                        po.Set_Value("VAF_OrgTrx_ID", null);
                     }
                     else
                     {
-                        po.Set_Value("AD_OrgTrx_ID", il.GetAD_OrgTrx_ID());
+                        po.Set_Value("VAF_OrgTrx_ID", il.GetVAF_OrgTrx_ID());
                     }
                     if (il.GetUser1_ID() <= 0)
                     {
@@ -1408,7 +1408,7 @@ namespace VIS.Controllers
                     //iol.SetC_ProjectTask_ID(il.GetC_ProjectTask_ID());
                     //iol.SetC_Activity_ID(il.GetC_Activity_ID());
                     //iol.SetC_Campaign_ID(il.GetC_Campaign_ID());
-                    //iol.SetAD_OrgTrx_ID(il.GetAD_OrgTrx_ID());
+                    //iol.SetVAF_OrgTrx_ID(il.GetVAF_OrgTrx_ID());
                     //iol.SetUser1_ID(il.GetUser1_ID());
                     //iol.SetUser2_ID(il.GetUser2_ID());
                 }
@@ -1454,7 +1454,7 @@ namespace VIS.Controllers
             {
                 inout.SetC_Order_ID(_order.GetC_Order_ID());
                 inout.SetDateOrdered(_order.GetDateOrdered());
-                inout.SetAD_OrgTrx_ID(_order.GetAD_OrgTrx_ID());
+                inout.SetVAF_OrgTrx_ID(_order.GetVAF_OrgTrx_ID());
                 inout.SetC_Project_ID(_order.GetC_Project_ID());
                 inout.SetC_Campaign_ID(_order.GetC_Campaign_ID());
                 inout.SetC_Activity_ID(_order.GetC_Activity_ID());
@@ -1478,7 +1478,7 @@ namespace VIS.Controllers
                 }
                 inout.SetC_Invoice_ID(_invoice.GetC_Invoice_ID());
                 inout.SetDateOrdered(_invoice.GetDateOrdered());
-                inout.SetAD_OrgTrx_ID(_invoice.GetAD_OrgTrx_ID());
+                inout.SetVAF_OrgTrx_ID(_invoice.GetVAF_OrgTrx_ID());
                 inout.SetC_Project_ID(_invoice.GetC_Project_ID());
                 inout.SetC_Campaign_ID(_invoice.GetC_Campaign_ID());
                 inout.SetC_Activity_ID(_invoice.GetC_Activity_ID());
@@ -1745,7 +1745,7 @@ namespace VIS.Controllers
 
                     /* nnayak - Bug 1567690. The organization from the Orderline can be different from the organization 
                     on the header */
-                    invoiceLine.SetClientOrg(orderLine.GetAD_Client_ID(), orderLine.GetAD_Org_ID());
+                    invoiceLine.SetClientOrg(orderLine.GetVAF_Client_ID(), orderLine.GetVAF_Org_ID());
                     if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
                     {
                         //invoiceLine.setQtyInvoiced(QtyEntered
@@ -1841,7 +1841,7 @@ namespace VIS.Controllers
                     on the header */
                     if (inoutLine != null)
                     {
-                        invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
+                        invoiceLine.SetClientOrg(inoutLine.GetVAF_Client_ID(), inoutLine.GetVAF_Org_ID());
                     }
 
                     invoiceLine.SetPrice();
@@ -2109,8 +2109,8 @@ namespace VIS.Controllers
 
             //	Reset Selection
             //String sql = "UPDATE C_Order SET IsSelected = 'N' WHERE IsSelected='Y'"
-            //    + " AND AD_Client_ID=" + ctx.GetAD_Client_ID()
-            //    + " AND AD_Org_ID=" + ctx.GetAD_Org_ID();
+            //    + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID()
+            //    + " AND VAF_Org_ID=" + ctx.GetVAF_Org_ID();
 
             //int no = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, trx));
 
@@ -2144,7 +2144,7 @@ namespace VIS.Controllers
             ProcessInfo pi = new ProcessInfo("", AD_Process_ID);
             pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
 
-            pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 
             //	Add Parameters
             MPInstancePara para = new MPInstancePara(instance, 10);
@@ -2193,7 +2193,7 @@ namespace VIS.Controllers
             //	Reset Selection
             String sql = "UPDATE C_Order SET IsSelected = 'N' "
             + "WHERE IsSelected='Y'"
-            + " AND AD_Client_ID=" + ctx.GetAD_Client_ID();
+            + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             int no = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, trx));
 
             //	Set Selection
@@ -2217,7 +2217,7 @@ namespace VIS.Controllers
             ProcessInfo pi = new ProcessInfo("VInOutGen", AD_Process_ID);
             pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
 
-            pi.SetAD_Client_ID(ctx.GetAD_Client_ID());
+            pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 
             //	Add Parameter - Selection=Y
             MPInstancePara para = new MPInstancePara(instance, 10);
@@ -2424,7 +2424,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            //client = MClient.Get(ctx, Util.GetValueOfInt(inv.GetAD_Client_ID()));
+                            //client = MClient.Get(ctx, Util.GetValueOfInt(inv.GetVAF_Client_ID()));
 
                             //	Create Shipment - Invoice Link
                             if (iLine.GetM_Product_ID() != 0)
@@ -2443,7 +2443,7 @@ namespace VIS.Controllers
                                         MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
 
                                         // Not returning any value as No effect
-                                        MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product,
+                                        MCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product,
                                              match.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                              Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), match.GetQty()),
                                              match.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2482,7 +2482,7 @@ namespace VIS.Controllers
                                     MProduct product = new MProduct(ctx, matchPO.GetM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, matchPO.GetAD_Client_ID(), matchPO.GetAD_Org_ID(), product,
+                                    MCostQueue.CreateProductCostsDetails(ctx, matchPO.GetVAF_Client_ID(), matchPO.GetVAF_Org_ID(), product,
                                           matchPO.GetM_AttributeSetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                           Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), matchPO.GetQty()),
                                           matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2517,14 +2517,14 @@ namespace VIS.Controllers
                                 }
                             }
 
-                            //client = MClient.Get(ctx, Util.GetValueOfInt(sLine.GetAD_Client_ID()));
+                            //client = MClient.Get(ctx, Util.GetValueOfInt(sLine.GetVAF_Client_ID()));
 
                             //	Create PO - Shipment Link
                             if (sLine.GetM_Product_ID() != 0)
                             {
                                 MMatchPO match = new MMatchPO(sLine, ship.GetMovementDate(), qty);
                                 match.Set_ValueNoCheck("C_BPartner_ID", ship.GetC_BPartner_ID());
-                                if (Util.GetValueOfInt(DB.ExecuteScalar("select count(*) from ad_column where columnname like 'IsMatchPOForm'", null, trx)) > 0)
+                                if (Util.GetValueOfInt(DB.ExecuteScalar("select count(*) from vaf_column where columnname like 'IsMatchPOForm'", null, trx)) > 0)
                                     match.SetIsMatchPOForm(true);
                                 if (!match.Save())
                                 {
@@ -2541,7 +2541,7 @@ namespace VIS.Controllers
                                     MProduct product = new MProduct(ctx, match.GetM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, match.GetAD_Client_ID(), match.GetAD_Org_ID(), product, match.GetM_AttributeSetInstance_ID(),
+                                    MCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product, match.GetM_AttributeSetInstance_ID(),
                                         "Match PO", null, sLine, null, null, null, oLine.GetC_OrderLine_ID(), match.GetQty(), trx, out conversionNotFoundMatch, "window");
                                     if (!string.IsNullOrEmpty(conversionNotFoundMatch))
                                     {
@@ -2654,12 +2654,12 @@ namespace VIS.Controllers
         public MAcctSchema ASchema = null;
 
 
-        public AccountViewClass GetDataQuery(Ctx ctx, int AD_Client_ID, string whereClause, string orderClause, bool gr1, bool gr2, bool gr3, bool gr4,
+        public AccountViewClass GetDataQuery(Ctx ctx, int VAF_Client_ID, string whereClause, string orderClause, bool gr1, bool gr2, bool gr3, bool gr4,
             String sort1, String sort2, String sort3, String sort4, bool displayDocInfo, bool displaySrcAmt, bool displayqty)
         {
             group1 = gr1; group2 = gr2; group3 = gr3; group4 = gr4;
             sortBy1 = sort1; sortBy2 = sort2; sortBy3 = sort3; sortBy4 = sort4;
-            ASchemas = MAcctSchema.GetClientAcctSchema(ctx, AD_Client_ID);
+            ASchemas = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
             ASchema = ASchemas[0];
             displayDocumentInfo = displayDocInfo;
             displaySourceAmt = displaySrcAmt;
@@ -2838,7 +2838,7 @@ namespace VIS.Controllers
             }
             if (displayDocumentInfo)
             {
-                rm.AddColumn(new RColumn(ctx, "AD_Table_ID", DisplayType.TableDir));
+                rm.AddColumn(new RColumn(ctx, "VAF_TableView_ID", DisplayType.TableDir));
                 rm.AddColumn(new RColumn(ctx, "Record_ID", DisplayType.ID));
                 rm.AddColumn(new RColumn(ctx, "Description", DisplayType.String));
             }
@@ -2878,7 +2878,7 @@ namespace VIS.Controllers
             MAcctSchemaElement[] elements = ASchema.GetAcctSchemaElements();
             for (int i = 0; i < elements.Length; i++)
             {
-                if (_leadingColumns == 0 && columns.Contains("AD_Org_ID") && columns.Contains("Account_ID"))
+                if (_leadingColumns == 0 && columns.Contains("VAF_Org_ID") && columns.Contains("Account_ID"))
                 {
                     _leadingColumns = columns.Count;
                 }
@@ -2930,7 +2930,7 @@ namespace VIS.Controllers
 
                 }
             }
-            if (_leadingColumns == 0 && columns.Contains("AD_Org_ID") && columns.Contains("Account_ID"))
+            if (_leadingColumns == 0 && columns.Contains("VAF_Org_ID") && columns.Contains("Account_ID"))
             {
                 _leadingColumns = columns.Count;
             }
@@ -2960,7 +2960,7 @@ namespace VIS.Controllers
             MSession sess = MSession.Get(ctx);
 
             //Save Action Log
-            VAdvantage.Common.Common.SaveActionLog(ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetAD_Table_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);
+            VAdvantage.Common.Common.SaveActionLog(ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetVAF_TableView_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);
 
             byte[] report = ar.GetBinaryData();
             //if (report != null && (report.Length > 1048576))
@@ -3016,8 +3016,8 @@ namespace VIS.Controllers
         //public List<Dictionary<string, object>> GetTable(int AD_Role_ID)
         //{
         //    List<Dictionary<string, object>> retDic = null;
-        //    string sql = "SELECT DISTINCT t.AD_Table_ID, t.Name "
-        //        + "FROM AD_Table t INNER JOIN AD_Tab tab ON (tab.AD_Table_ID=t.AD_Table_ID)"
+        //    string sql = "SELECT DISTINCT t.VAF_TableView_ID, t.Name "
+        //        + "FROM VAF_TableView t INNER JOIN VAF_Tab tab ON (tab.VAF_TableView_ID=t.VAF_TableView_ID)"
         //        + " INNER JOIN AD_Window_Access wa ON (tab.AD_Window_ID=wa.AD_Window_ID) "
         //        + "WHERE wa.AD_Role_ID=" + AD_Role_ID
         //        + " AND t.IsActive='Y' AND tab.IsActive='Y' "
@@ -3029,7 +3029,7 @@ namespace VIS.Controllers
         //        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
         //        {
         //            Dictionary<string, object> obj = new Dictionary<string, object>();
-        //            obj["AD_Table_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Table_ID"]);
+        //            obj["VAF_TableView_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TableView_ID"]);
         //            obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
         //            retDic.Add(obj);
         //        }
@@ -3152,7 +3152,7 @@ namespace VIS.Controllers
                                                                      + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
                                                                      + "    WHERE P.PERIODNO  ='1'             "
                                                                      + "    AND P.C_YEAR_ID   = " + YearId
-                                                                     + "    AND Y.AD_CLIENT_ID= " + AdClientID));
+                                                                     + "    AND Y.VAF_CLIENT_ID= " + AdClientID));
 
                     eDate = Util.GetValueOfDateTime(DB.ExecuteScalar(" SELECT P.ENDDATE AS ENDDATE    "
                                                                      + "    FROM C_PERIOD P  "
@@ -3160,7 +3160,7 @@ namespace VIS.Controllers
                                                                      + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
                                                                      + "    WHERE P.PERIODNO  ='12'             "
                                                                      + "    AND P.C_YEAR_ID   = " + YearId
-                                                                     + "    AND Y.AD_CLIENT_ID= " + AdClientID));
+                                                                     + "    AND Y.VAF_CLIENT_ID= " + AdClientID));
 
                     //DataSet ds = DB.ExecuteDataset(sql, null, null);
                     if (stDate != null && eDate != null)
@@ -3203,7 +3203,7 @@ namespace VIS.Controllers
                     CurrencyID = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT C_CURRENCY_ID "
                                                                       + "  FROM C_ACCTSCHEMA "
                                                                       + "  WHERE C_ACCTSCHEMA_ID = " + AccountingSchemaId
-                                                                      + "  AND AD_CLIENT_ID     = " + AdClientID));
+                                                                      + "  AND VAF_CLIENT_ID     = " + AdClientID));
 
 
 
@@ -3234,14 +3234,14 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// Check whether table is deletable on AD_Table window
+        /// Check whether table is deletable on VAF_TableView window
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="TableName"></param>
         /// <returns>returns Y or N </returns>
         public string CheckTableDeletable(Ctx ctx, string TableName)
         {
-            return Util.GetValueOfString(DB.ExecuteScalar("Select IsDeleteable from AD_Table WHERE TableName = '" + TableName + "'"));
+            return Util.GetValueOfString(DB.ExecuteScalar("Select IsDeleteable from VAF_TableView WHERE TableName = '" + TableName + "'"));
         }
 
         /// <summary>
@@ -3286,9 +3286,9 @@ namespace VIS.Controllers
         {
             if (rowData != null)
             {
-                MTable tbl = new MTable(ctx, rowData.AD_Table_ID, null);
+                MTable tbl = new MTable(ctx, rowData.VAF_TableView_ID, null);
 
-                StringBuilder sbSql = new StringBuilder("SELECT COUNT(AD_Table_ID) FROM AD_Table WHERE TableName = '" + rowData.TableName + "_Ver'");
+                StringBuilder sbSql = new StringBuilder("SELECT COUNT(VAF_TableView_ID) FROM VAF_TableView WHERE TableName = '" + rowData.TableName + "_Ver'");
 
                 int Count = Util.GetValueOfInt(DB.ExecuteScalar(sbSql.ToString(), null, null));
 
@@ -3347,13 +3347,13 @@ namespace VIS.Controllers
         }
 
 
-        public string GetSQLQuery(Ctx m_ctx, int _AD_Table_ID, POInfoColumn[] m_columns)
+        public string GetSQLQuery(Ctx m_ctx, int _VAF_TableView_ID, POInfoColumn[] m_columns)
         {
             StringBuilder _querySQL = new StringBuilder("");
             if (m_columns.Length > 0)
             {
                 _querySQL.Append("SELECT ");
-                MTable tbl = new MTable(m_ctx, _AD_Table_ID, null);
+                MTable tbl = new MTable(m_ctx, _VAF_TableView_ID, null);
                 // append all columns from table and get comma separated string
                 _querySQL.Append(tbl.GetSelectColumns());
                 foreach (var column in m_columns)
@@ -3367,7 +3367,7 @@ namespace VIS.Controllers
                         if (DisplayType.IsLookup(column.DisplayType))
                         {
                             VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
-                                column.AD_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+                                column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
                                 column.IsParent, column.ValidationCode);
 
                             if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")

@@ -76,7 +76,7 @@ static X_C_UOM_Conversion()
 //static long serialVersionUID 27562514375808L;
 /** Last Updated Timestamp 7/29/2010 1:07:39 PM */
 public static long updatedMS = 1280389059019L;
-/** AD_Table_ID=175 */
+/** VAF_TableView_ID=175 */
 public static int Table_ID;
  // =175;
 

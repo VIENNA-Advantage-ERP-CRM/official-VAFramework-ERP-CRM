@@ -131,7 +131,7 @@ namespace VAdvantage.Model
                             }	//	for all previous tabs
                         }	//	parents.size > 1
                     }	//	set Link column
-                    mTab.SetLinkColumnName(null);	//	overwrites, if AD_Column_ID exists
+                    mTab.SetLinkColumnName(null);	//	overwrites, if VAF_Column_ID exists
                     //
                     _tabs.Add(mTab);
                 }
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
         private void LogAccess()
         {
             MSession session = MSession.Get(_vo.GetCtx(), true);
-            session.WindowLog(_vo.GetCtx().GetAD_Client_ID(), _vo.GetCtx().GetAD_Org_ID(),
+            session.WindowLog(_vo.GetCtx().GetVAF_Client_ID(), _vo.GetCtx().GetVAF_Org_ID(),
                 GetAD_Window_ID(), 0);
         }	//
 
@@ -165,10 +165,10 @@ namespace VAdvantage.Model
        /// <returns></returns>
         public System.Drawing.Image GetImage()
         {
-            if (_vo.AD_Image_ID == 0)
+            if (_vo.VAF_Image_ID == 0)
                 return null;
             //
-            Model.MImage mImage = MImage.Get((Context)_vo.GetCtx(), _vo.AD_Image_ID);
+            Model.MImage mImage = MImage.Get((Context)_vo.GetCtx(), _vo.VAF_Image_ID);
             return mImage.GetImage();
             
         }   //  getImage
@@ -179,10 +179,10 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public System.Drawing.Icon GetIcon()
         {
-            if (_vo.AD_Image_ID == 0)
+            if (_vo.VAF_Image_ID == 0)
                 return null;
             //
-            //MImage mImage = MImage.get(m_vo.ctx, m_vo.AD_Image_ID);
+            //MImage mImage = MImage.get(m_vo.ctx, m_vo.VAF_Image_ID);
             //return mImage.getIcon();
             return null;
         }   //  
@@ -323,10 +323,10 @@ namespace VAdvantage.Model
             {
                 String sql = "SELECT MAX(w.Updated), MAX(t.Updated), MAX(tt.Updated), MAX(f.Updated), MAX(c.Updated) "
                     + "FROM AD_Window w"
-                    + " INNER JOIN AD_Tab t ON (w.AD_Window_ID=t.AD_Window_ID)"
-                    + " INNER JOIN AD_Table tt ON (t.AD_Table_ID=tt.AD_Table_ID)"
-                    + " INNER JOIN AD_Field f ON (t.AD_Tab_ID=f.AD_Tab_ID)"
-                    + " INNER JOIN AD_Column c ON (f.AD_Column_ID=c.AD_Column_ID) "
+                    + " INNER JOIN VAF_Tab t ON (w.AD_Window_ID=t.AD_Window_ID)"
+                    + " INNER JOIN VAF_TableView tt ON (t.VAF_TableView_ID=tt.VAF_TableView_ID)"
+                    + " INNER JOIN VAF_Field f ON (t.VAF_Tab_ID=f.VAF_Tab_ID)"
+                    + " INNER JOIN VAF_Column c ON (f.VAF_Column_ID=c.VAF_Column_ID) "
                     + "WHERE w.AD_Window_ID=" + GetAD_Window_ID();
                 try
                 {
@@ -373,7 +373,7 @@ namespace VAdvantage.Model
         {
             for (int i = 0; i <= _tabs.Count - 1; i++)
             {
-                if (ID.Equals(_tabs[i].GetAD_Tab_ID()))
+                if (ID.Equals(_tabs[i].GetVAF_Tab_ID()))
                     return _tabs[i];
             }
 

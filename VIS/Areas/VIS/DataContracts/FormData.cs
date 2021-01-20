@@ -7,7 +7,7 @@ namespace VIS.DataContracts
 {
     /// <summary>
     /// conatain Form 's Data
-    ///- stroe form data as class proerties against AD_Form columns
+    ///- stroe form data as class proerties against VAF_Page columns
     ///- 
     /// </summary>
     public class FormDataOut
@@ -16,7 +16,7 @@ namespace VIS.DataContracts
         public String Description { get; set; }
         public String Help { get; set; }
         public String ClassName { get; set; }
-        public int AD_Form_ID { get; set; }
+        public int VAF_Page_ID { get; set; }
 
         public bool IsError
         {

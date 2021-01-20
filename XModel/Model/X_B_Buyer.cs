@@ -72,7 +72,7 @@ static X_B_Buyer()
 //static long serialVersionUID 27562514367329L;
 /** Last Updated Timestamp 7/29/2010 1:07:30 PM */
 public static long updatedMS = 1280389050540L;
-/** AD_Table_ID=684 */
+/** VAF_TableView_ID=684 */
 public static int Table_ID;
  // =684;
 

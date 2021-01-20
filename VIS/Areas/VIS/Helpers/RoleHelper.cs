@@ -16,7 +16,7 @@ namespace VIS.Helpers
             Role r = new Role();
             r.IsAccessAllOrgs = role.IsAccessAllOrgs();
             r.IsAdministrator = role.IsAdministrator();
-            r.AD_Client_ID = role.GetAD_Client_ID();
+            r.VAF_Client_ID = role.GetVAF_Client_ID();
             r.AD_User_ID = role.GetAD_User_ID();
             r.UserLevel = role.GetUserLevel();
             r.IsCanExport = role.IsCanExport();
@@ -77,7 +77,7 @@ namespace VIS.Helpers
         /*Properties*/
         public bool IsAccessAllOrgs;
         public bool IsAdministrator;
-        public int AD_Client_ID;
+        public int VAF_Client_ID;
         public int AD_User_ID;
         public string UserLevel;
         public bool IsCanExport;
@@ -114,9 +114,9 @@ namespace VIS.Helpers
         {
             Dictionary<int, TableData> dataList = new Dictionary<int, TableData>();
 
-            String sql = "SELECT t.AD_Table_ID , (SELECT COUNT(AD_Column_ID) FROM AD_Column "
-                        + " WHERE UPPER(ColumnName) = UPPER(t.TableName)||'_ID' AND AD_Table_ID=t.AD_Table_ID ) as hasKey, "
-                        + " Isview from AD_Table t";
+            String sql = "SELECT t.VAF_TableView_ID , (SELECT COUNT(VAF_Column_ID) FROM VAF_Column "
+                        + " WHERE UPPER(ColumnName) = UPPER(t.TableName)||'_ID' AND VAF_TableView_ID=t.VAF_TableView_ID ) as hasKey, "
+                        + " Isview from VAF_TableView t";
 
 
             IDataReader dr = VAdvantage.DataBase.DB.ExecuteReader(sql);
@@ -149,7 +149,7 @@ namespace VIS.Helpers
     {
         public bool IsExclude;
         public string AccessTypeRule;
-        public int AD_Table_ID;
+        public int VAF_TableView_ID;
         public bool IsCanReport;
         public bool IsCanExport;
         public bool IsReadOnly;
@@ -166,7 +166,7 @@ namespace VIS.Helpers
                 ta.IsCanReport = t.IsCanReport();
                 ta.IsCanExport = t.IsCanExport();
                 ta.IsReadOnly = t.IsReadOnly();
-                ta.AD_Table_ID = t.GetAD_Table_ID();
+                ta.VAF_TableView_ID = t.GetVAF_TableView_ID();
                 tl.Add(ta);
             }
             return tl;
@@ -178,8 +178,8 @@ namespace VIS.Helpers
     public class ColumnAccess
     {
         public bool IsExclude;
-        public int AD_Table_ID;
-        public int AD_Column_ID;
+        public int VAF_TableView_ID;
+        public int VAF_Column_ID;
         public bool IsReadOnly;
         public static List<ColumnAccess> Get(MColumnAccess[] colAccess)
         {
@@ -189,8 +189,8 @@ namespace VIS.Helpers
             {
                 ca = new ColumnAccess();
                 ca.IsExclude = c.IsExclude();
-                ca.AD_Column_ID = c.GetAD_Column_ID();
-                ca.AD_Table_ID = c.GetAD_Table_ID();
+                ca.VAF_Column_ID = c.GetVAF_Column_ID();
+                ca.VAF_TableView_ID = c.GetVAF_TableView_ID();
                 ca.IsReadOnly = c.IsReadOnly();
                 cl.Add(ca);
             }
@@ -203,7 +203,7 @@ namespace VIS.Helpers
 
     public class RecordAccess
     {
-        public int AD_Table_ID;
+        public int VAF_TableView_ID;
         public int Record_ID;
         public bool IsReadOnly;
         public bool IsExclude;
@@ -218,7 +218,7 @@ namespace VIS.Helpers
                 ra = new RecordAccess();
                 ra.IsExclude = r.IsExclude();
                 ra.IsReadOnly = r.IsReadOnly();
-                ra.AD_Table_ID = r.GetAD_Table_ID();
+                ra.VAF_TableView_ID = r.GetVAF_TableView_ID();
                 ra.Record_ID = r.GetRecord_ID();
                 ra.KeyColumnName = r.GetKeyColumnName();
                 rl.Add(ra);

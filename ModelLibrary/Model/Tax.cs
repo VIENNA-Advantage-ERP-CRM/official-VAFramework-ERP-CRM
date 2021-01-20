@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         ///   <pre>
         ///   M_Product_ID/C_Charge_ID	->	C_TaxCategory_ID
         ///   billDate, shipDate			->	billDate, shipDate
-        ///   AD_Org_ID					->	billFromC_Location_ID
+        ///   VAF_Org_ID					->	billFromC_Location_ID
         ///   M_Warehouse_ID				->	shipFromC_Location_ID
         ///   billC_BPartner_Location_ID  ->	billToC_Location_ID
         ///   shipC_BPartner_Location_ID 	->	shipToC_Location_ID
@@ -45,28 +45,28 @@ namespace VAdvantage.Model
         /// <param name="C_Charge_ID">product</param>
         /// <param name="billDate">invoice date</param>
         /// <param name="shipDate">ship date</param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="M_Warehouse_ID">warehouse</param>
         /// <param name="billC_BPartner_Location_ID">invoice location</param>
         /// <param name="shipC_BPartner_Location_ID">ship location</param>
         /// <param name="IsSOTrx">is a sales trx</param>
         /// <returns>C_Tax_ID If error it returns 0 and sets error log (TaxCriteriaNotFound)</returns>
         public static int Get(Ctx ctx, int M_Product_ID, int C_Charge_ID, DateTime? billDate, DateTime? shipDate,
-            int AD_Org_ID, int M_Warehouse_ID, int billC_BPartner_Location_ID, int shipC_BPartner_Location_ID, bool IsSOTrx)
+            int VAF_Org_ID, int M_Warehouse_ID, int billC_BPartner_Location_ID, int shipC_BPartner_Location_ID, bool IsSOTrx)
         {
             if (M_Product_ID != 0)
             {
-                return GetProduct(ctx, M_Product_ID, billDate, shipDate, AD_Org_ID, M_Warehouse_ID,
+                return GetProduct(ctx, M_Product_ID, billDate, shipDate, VAF_Org_ID, M_Warehouse_ID,
                     billC_BPartner_Location_ID, shipC_BPartner_Location_ID, IsSOTrx);
             }
             else if (C_Charge_ID != 0)
             {
-                return GetCharge(ctx, C_Charge_ID, billDate, shipDate, AD_Org_ID, M_Warehouse_ID,
+                return GetCharge(ctx, C_Charge_ID, billDate, shipDate, VAF_Org_ID, M_Warehouse_ID,
                     billC_BPartner_Location_ID, shipC_BPartner_Location_ID, IsSOTrx);
             }
             else
             {
-                return GetExemptTax(ctx, AD_Org_ID);
+                return GetExemptTax(ctx, VAF_Org_ID);
             }
         }
 
@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         ///   <pre>
         ///   M_Product_ID/C_Charge_ID	->	C_TaxCategory_ID
         ///   billDate, shipDate			->	billDate, shipDate
-        ///   AD_Org_ID					->	billFromC_Location_ID
+        ///   VAF_Org_ID					->	billFromC_Location_ID
         ///   M_Warehouse_ID				->	shipFromC_Location_ID
         ///   billC_BPartner_Location_ID  ->	billToC_Location_ID
         ///   shipC_BPartner_Location_ID 	->	shipToC_Location_ID
@@ -87,13 +87,13 @@ namespace VAdvantage.Model
         /// <param name="C_Charge_ID">product</param>
         /// <param name="billDate">invoice date</param>
         /// <param name="shipDate">ship date</param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="M_Warehouse_ID">warehouse</param>
         /// <param name="billC_BPartner_Location_ID">invoice location</param>
         /// <param name="shipC_BPartner_Location_ID">ship location</param>
         /// <param name="IsSOTrx">is a sales trx</param>
         /// <returns>C_Tax_ID If error it returns 0 and sets error log (TaxCriteriaNotFound)</returns>
-        public static int GetCharge(Ctx ctx, int C_Charge_ID, DateTime? billDate, DateTime? shipDate, int AD_Org_ID, int M_Warehouse_ID,
+        public static int GetCharge(Ctx ctx, int C_Charge_ID, DateTime? billDate, DateTime? shipDate, int VAF_Org_ID, int M_Warehouse_ID,
             int billC_BPartner_Location_ID, int shipC_BPartner_Location_ID, bool IsSOTrx)
         {
             if (M_Warehouse_ID == 0)
@@ -114,11 +114,11 @@ namespace VAdvantage.Model
             //	Get all at once
             String sql = "SELECT c.C_TaxCategory_ID, o.C_Location_ID, il.C_Location_ID, b.IsTaxExempt,"
                  + " w.C_Location_ID, sl.C_Location_ID "
-                 + "FROM C_Charge c, AD_OrgInfo o,"
+                 + "FROM C_Charge c, VAF_OrgInfo o,"
                  + " C_BPartner_Location il INNER JOIN C_BPartner b ON (il.C_BPartner_ID=b.C_BPartner_ID),"
                  + " M_Warehouse w, C_BPartner_Location sl "
                  + "WHERE c.C_Charge_ID=" + C_Charge_ID
-                 + " AND o.AD_Org_ID=" + AD_Org_ID
+                 + " AND o.VAF_Org_ID=" + VAF_Org_ID
                  + " AND il.C_BPartner_Location_ID=" + billC_BPartner_Location_ID
                  + " AND w.M_Warehouse_ID=" + M_Warehouse_ID
                  + " AND sl.C_BPartner_Location_ID=" + shipC_BPartner_Location_ID;
@@ -141,13 +141,13 @@ namespace VAdvantage.Model
                 if (!found)
                 {
                     log.Warning("Not found for C_Charge_ID=" + C_Charge_ID 
-                        + ", AD_Org_ID=" + AD_Org_ID + ", M_Warehouse_ID=" + M_Warehouse_ID
+                        + ", VAF_Org_ID=" + VAF_Org_ID + ", M_Warehouse_ID=" + M_Warehouse_ID
                         + ", C_BPartner_Location_ID=" + billC_BPartner_Location_ID 
                        + "/" + shipC_BPartner_Location_ID);
                     return 0;
                 }
                 else if ("Y".Equals(IsTaxExempt))
-                    return GetExemptTax(ctx, AD_Org_ID);
+                    return GetExemptTax(ctx, VAF_Org_ID);
             }
             catch (Exception e)
             {
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
         ///   <pre>
         ///   M_Product_ID/C_Charge_ID	->	C_TaxCategory_ID
         ///   billDate, shipDate			->	billDate, shipDate
-        ///   AD_Org_ID					->	billFromC_Location_ID
+        ///   VAF_Org_ID					->	billFromC_Location_ID
         ///   M_Warehouse_ID				->	shipFromC_Location_ID
         ///   billC_BPartner_Location_ID  ->	billToC_Location_ID
         ///   shipC_BPartner_Location_ID 	->	shipToC_Location_ID
@@ -193,14 +193,14 @@ namespace VAdvantage.Model
         /// <param name="C_Charge_ID">product</param>
         /// <param name="billDate">invoice date</param>
         /// <param name="shipDate">ship date</param>
-        /// <param name="AD_Org_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
         /// <param name="M_Warehouse_ID">warehouse</param>
         /// <param name="billC_BPartner_Location_ID">invoice location</param>
         /// <param name="shipC_BPartner_Location_ID">ship location</param>
         /// <param name="IsSOTrx">is a sales trx</param>
         /// <returns>C_Tax_ID If error it returns 0 and sets error log (TaxCriteriaNotFound)</returns>
         public static int GetProduct(Ctx ctx, int M_Product_ID, DateTime? billDate, DateTime? shipDate,
-            int AD_Org_ID, int M_Warehouse_ID, int billC_BPartner_Location_ID, int shipC_BPartner_Location_ID,
+            int VAF_Org_ID, int M_Warehouse_ID, int billC_BPartner_Location_ID, int shipC_BPartner_Location_ID,
             bool IsSOTrx)
         {
             String variable = "";
@@ -216,11 +216,11 @@ namespace VAdvantage.Model
                 //	Get all at once
                 String sql = "SELECT p.C_TaxCategory_ID, o.C_Location_ID, il.C_Location_ID, b.IsTaxExempt,"
                     + " w.C_Location_ID, sl.C_Location_ID "
-                    + "FROM M_Product p, AD_OrgInfo o,"
+                    + "FROM M_Product p, VAF_OrgInfo o,"
                     + " C_BPartner_Location il INNER JOIN C_BPartner b ON (il.C_BPartner_ID=b.C_BPartner_ID),"
                     + " M_Warehouse w, C_BPartner_Location sl "
                     + "WHERE p.M_Product_ID=" + M_Product_ID
-                    + " AND o.AD_Org_ID=" + AD_Org_ID
+                    + " AND o.VAF_Org_ID=" + VAF_Org_ID
                     + " AND il.C_BPartner_Location_ID=" + billC_BPartner_Location_ID
                     + " AND w.M_Warehouse_ID=" + M_Warehouse_ID
                     + " AND sl.C_BPartner_Location_ID=" + shipC_BPartner_Location_ID;
@@ -242,7 +242,7 @@ namespace VAdvantage.Model
                 if (found && "Y".Equals(IsTaxExempt))
                 {
                     log.Fine("Business Partner is Tax exempt");
-                    return GetExemptTax(ctx, AD_Org_ID);
+                    return GetExemptTax(ctx, VAF_Org_ID);
                 }
                 else if (found)
                 {
@@ -288,10 +288,10 @@ namespace VAdvantage.Model
                     return 0;
                 }
                 log.Fine("C_TaxCategory_ID=" + C_TaxCategory_ID);
-                //	AD_Org_ID					->	billFromC_Location_ID
-                sql = "SELECT C_Location_ID FROM AD_OrgInfo "
-                    + "WHERE AD_Org_ID=" + AD_Org_ID;
-                variable = "AD_Org_ID";
+                //	VAF_Org_ID					->	billFromC_Location_ID
+                sql = "SELECT C_Location_ID FROM VAF_OrgInfo "
+                    + "WHERE VAF_Org_ID=" + VAF_Org_ID;
+                variable = "VAF_Org_ID";
                 pstmt = ExecuteQuery.ExecuteDataset(sql, null);
                 found = false;
                 for (int i = 0; i < pstmt.Tables[0].Rows.Count; i++)
@@ -303,7 +303,7 @@ namespace VAdvantage.Model
                 if (billFromC_Location_ID == 0)
                 {
                     log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetAD_Language(ctx), variable)
-                      + (found ? "" : " (Info/Org=" + AD_Org_ID + " not found)"));
+                      + (found ? "" : " (Info/Org=" + VAF_Org_ID + " not found)"));
                     return 0;
                 }
                 //	billC_BPartner_Location_ID  ->	billToC_Location_ID
@@ -327,7 +327,7 @@ namespace VAdvantage.Model
                     return 0;
                 }
                 if ("Y".Equals(IsTaxExempt))
-                    return GetExemptTax(ctx, AD_Org_ID);
+                    return GetExemptTax(ctx, VAF_Org_ID);
 
                 //  Reverse for PO
                 if (!IsSOTrx)
@@ -403,15 +403,15 @@ namespace VAdvantage.Model
         /// Get Exempt Tax Code
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Org_ID">org to find client</param>
+        /// <param name="VAF_Org_ID">org to find client</param>
         /// <returns>C_Tax_ID</returns>
-        private static int GetExemptTax(Ctx ctx, int AD_Org_ID)
+        private static int GetExemptTax(Ctx ctx, int VAF_Org_ID)
         {
             int C_Tax_ID = 0;
             String sql = "SELECT t.C_Tax_ID "
                 + "FROM C_Tax t"
-                + " INNER JOIN AD_Org o ON (t.AD_Client_ID=o.AD_Client_ID) "
-                + "WHERE t.IsTaxExempt='Y' AND o.AD_Org_ID= " + AD_Org_ID
+                + " INNER JOIN VAF_Org o ON (t.VAF_Client_ID=o.VAF_Client_ID) "
+                + "WHERE t.IsTaxExempt='Y' AND o.VAF_Org_ID= " + VAF_Org_ID
                 + "ORDER BY t.Rate DESC";
             bool found = false;
             try
@@ -432,7 +432,7 @@ namespace VAdvantage.Model
             if (C_Tax_ID == 0)
             {
                 log.SaveError("TaxCriteriaNotFound", Msg.GetMsg(ctx, "TaxNoExemptFound")
-                    + (found ? "" : " (Tax/Org=" + AD_Org_ID + " not found)"));
+                    + (found ? "" : " (Tax/Org=" + VAF_Org_ID + " not found)"));
             }
             return C_Tax_ID;
         }

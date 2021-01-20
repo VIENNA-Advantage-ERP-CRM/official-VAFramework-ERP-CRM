@@ -74,7 +74,7 @@ static X_AD_User_Substitute()
 //static long serialVersionUID 27562514365667L;
 /** Last Updated Timestamp 7/29/2010 1:07:28 PM */
 public static long updatedMS = 1280389048878L;
-/** AD_Table_ID=642 */
+/** VAF_TableView_ID=642 */
 public static int Table_ID;
  // =642;
 
