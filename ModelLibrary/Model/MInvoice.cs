@@ -1270,7 +1270,7 @@ namespace VAdvantage.Model
             /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
             if (GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
             {
-                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@Invalid@ @DueDate@"));
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "DueDateLessThanInvoiceDate"));
                 return false;
             }
 

@@ -90,7 +90,7 @@ namespace VAdvantage.Model
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {                        
                         /** Adhoc Payment - Validation when DueDate is entered ** Dt: 18/01/2021 ** Modified By: Kumar **/
-                        if ((invoice == null) || !((invoice != null && invoice.GetDueDate() >= invoice.GetDateInvoiced()) && list.Count == 1))
+                        if ((invoice == null) || !((invoice != null && invoice.Get_ColumnIndex("DueDate") > 0 && invoice.GetDueDate() >= invoice.GetDateInvoiced()) && list.Count == 1))
                         {                           
                             MPaySchedule ps = new MPaySchedule(GetCtx(), dr, Get_Trx());
                             ps.SetParent(this);
@@ -488,7 +488,7 @@ namespace VAdvantage.Model
                             }
 
                             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-                            if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                            if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                             {
                                 schedule.SetDueDate(invoice.GetDueDate());
                                 schedule.SetVA009_FollowupDate(invoice.GetDueDate());
@@ -512,7 +512,7 @@ namespace VAdvantage.Model
                             }
 
                             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-                            if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                            if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                             {
                                 schedule.SetDiscountDate(invoice.GetDueDate());
                             }
@@ -854,7 +854,7 @@ namespace VAdvantage.Model
             if (schedule.GetDueAmt() == 0)
             {
                 /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-                if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                if (invoice.Get_ColumnIndex("DueDate") > 0 &&  Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                 {
                     schedule.SetDueDate(invoice.GetDueDate());
                     schedule.SetDiscountDate(invoice.GetDueDate());
@@ -886,7 +886,7 @@ namespace VAdvantage.Model
             //DateTime? _followUpDay = GetDueDate(invoice);
 
             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
                 schedule.SetVA009_FollowupDate(invoice.GetDueDate());
                 schedule.SetVA009_PlannedDueDate(invoice.GetDueDate());
@@ -968,7 +968,7 @@ namespace VAdvantage.Model
             StringBuilder _sql = new StringBuilder();
 
             /** Adhoc Payment - Creating an InvoicePaySchedule based on DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(ips.C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule ips WHERE ips.IsActive = 'Y' AND ips.C_Invoice_ID=" + invoice.GetC_Invoice_ID(),null, invoice.Get_Trx())) < 1)
                 {
@@ -1251,7 +1251,7 @@ namespace VAdvantage.Model
                     payDueDate = dueDate;
                 }
                 /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-                if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                 {
                     schedule.SetDueDate(invoice.GetDueDate());
                 }
@@ -1273,7 +1273,7 @@ namespace VAdvantage.Model
                     payDueDate = invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays()));
                 }
                 /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-                if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                 {
                     schedule.SetDiscountDate(invoice.GetDueDate());
                 }
@@ -1294,7 +1294,7 @@ namespace VAdvantage.Model
                     payDueDate = invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2()));
                 }
                 /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-                if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
                 {
                     schedule.SetDiscountDays2(invoice.GetDueDate());
                 }
@@ -1311,7 +1311,7 @@ namespace VAdvantage.Model
             int _graceDay = paytrm.GetGraceDays();
             //DateTime? _followUpDay = GetDueDate(invoice);
             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
                 schedule.SetVA009_FollowupDate(invoice.GetDueDate());
                 schedule.SetVA009_PlannedDueDate(invoice.GetDueDate());
@@ -1419,7 +1419,7 @@ namespace VAdvantage.Model
                 schedule.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
 
             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
                 schedule.SetDueDate(invoice.GetDueDate());
                 schedule.SetDiscountDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
@@ -1497,7 +1497,7 @@ namespace VAdvantage.Model
             schedule.SetC_Payment_ID(Util.GetValueOfInt(_ds["C_Payment_ID"]));
 
             /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
-            if (Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            if (invoice.Get_ColumnIndex("DueDate") > 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
                 schedule.SetDiscountDays2(Util.GetValueOfDateTime(invoice.GetDueDate()));
                 schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
