@@ -161,8 +161,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Currency_To_ID AD_Reference_ID=112 */
-public static int C_CURRENCY_TO_ID_AD_Reference_ID=112;
+/** C_Currency_To_ID VAF_Control_Ref_ID=112 */
+public static int C_CURRENCY_TO_ID_VAF_Control_Ref_ID=112;
 /** Set Currency To.
 @param C_Currency_To_ID Target currency */
 public void SetC_Currency_To_ID (int C_Currency_To_ID)
@@ -301,8 +301,8 @@ public String GetI_ErrorMsg()
 return (String)Get_Value("I_ErrorMsg");
 }
 
-/** I_IsImported AD_Reference_ID=420 */
-public static int I_ISIMPORTED_AD_Reference_ID=420;
+/** I_IsImported VAF_Control_Ref_ID=420 */
+public static int I_ISIMPORTED_VAF_Control_Ref_ID=420;
 /** Error = E */
 public static String I_ISIMPORTED_Error = "E";
 /** No = N */

@@ -504,8 +504,8 @@ public String GetReleaseNo()
 return (String)Get_Value("ReleaseNo");
 }
 
-/** ReplicationType AD_Reference_ID=126 */
-public static int REPLICATIONTYPE_AD_Reference_ID=126;
+/** ReplicationType VAF_Control_Ref_ID=126 */
+public static int REPLICATIONTYPE_VAF_Control_Ref_ID=126;
 /** Local = L */
 public static String REPLICATIONTYPE_Local = "L";
 /** Merge = M */
@@ -603,8 +603,8 @@ public DateTime? GetSupportExpDate()
 return (DateTime?)Get_Value("SupportExpDate");
 }
 
-/** SupportLevel AD_Reference_ID=412 */
-public static int SUPPORTLEVEL_AD_Reference_ID=412;
+/** SupportLevel VAF_Control_Ref_ID=412 */
+public static int SUPPORTLEVEL_VAF_Control_Ref_ID=412;
 /** Enterprise = E */
 public static String SUPPORTLEVEL_Enterprise = "E";
 /** Standard = S */
@@ -654,8 +654,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** SystemStatus AD_Reference_ID=374 */
-public static int SYSTEMSTATUS_AD_Reference_ID=374;
+/** SystemStatus VAF_Control_Ref_ID=374 */
+public static int SYSTEMSTATUS_VAF_Control_Ref_ID=374;
 /** Evaluation = E */
 public static String SYSTEMSTATUS_Evaluation = "E";
 /** Implementation = I */

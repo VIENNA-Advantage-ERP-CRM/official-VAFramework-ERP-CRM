@@ -118,8 +118,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_Tree_Activity_ID AD_Reference_ID=184 */
-        public static int AD_TREE_ACTIVITY_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Activity_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_ACTIVITY_ID_VAF_Control_Ref_ID = 184;
         /** Set Activity Tree.
         @param AD_Tree_Activity_ID Tree to determine activity hierarchy */
         public void SetAD_Tree_Activity_ID(int AD_Tree_Activity_ID)
@@ -137,8 +137,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_BPartner_ID AD_Reference_ID=184 */
-        public static int AD_TREE_BPARTNER_ID_AD_Reference_ID = 184;
+        /** AD_Tree_BPartner_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_BPARTNER_ID_VAF_Control_Ref_ID = 184;
         /** Set BPartner Tree.
         @param AD_Tree_BPartner_ID Tree to determine business partner hierarchy */
         public void SetAD_Tree_BPartner_ID(int AD_Tree_BPartner_ID)
@@ -156,8 +156,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Campaign_ID AD_Reference_ID=184 */
-        public static int AD_TREE_CAMPAIGN_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Campaign_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_CAMPAIGN_ID_VAF_Control_Ref_ID = 184;
         /** Set Campaign Tree.
         @param AD_Tree_Campaign_ID Tree to determine marketing campaign hierarchy */
         public void SetAD_Tree_Campaign_ID(int AD_Tree_Campaign_ID)
@@ -175,8 +175,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Menu_ID AD_Reference_ID=184 */
-        public static int AD_TREE_MENU_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Menu_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_MENU_ID_VAF_Control_Ref_ID = 184;
         /** Set Menu Tree.
         @param AD_Tree_Menu_ID Tree of the menu */
         public void SetAD_Tree_Menu_ID(int AD_Tree_Menu_ID)
@@ -194,8 +194,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Org_ID AD_Reference_ID=184 */
-        public static int AD_TREE_ORG_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Org_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_ORG_ID_VAF_Control_Ref_ID = 184;
         /** Set Organization Tree.
         @param AD_Tree_Org_ID Tree to determine organizational hierarchy */
         public void SetAD_Tree_Org_ID(int AD_Tree_Org_ID)
@@ -213,8 +213,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Product_ID AD_Reference_ID=184 */
-        public static int AD_TREE_PRODUCT_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Product_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_PRODUCT_ID_VAF_Control_Ref_ID = 184;
         /** Set Product Tree.
         @param AD_Tree_Product_ID Tree to determine product hierarchy */
         public void SetAD_Tree_Product_ID(int AD_Tree_Product_ID)
@@ -238,8 +238,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Project_ID AD_Reference_ID=184 */
-        public static int AD_TREE_PROJECT_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Project_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_PROJECT_ID_VAF_Control_Ref_ID = 184;
         /** Set Project Tree.
         @param AD_Tree_Project_ID Tree to determine project hierarchy */
         public void SetAD_Tree_Project_ID(int AD_Tree_Project_ID)
@@ -257,8 +257,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_SalesRegion_ID AD_Reference_ID=184 */
-        public static int AD_TREE_SALESREGION_ID_AD_Reference_ID = 184;
+        /** AD_Tree_SalesRegion_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_SALESREGION_ID_VAF_Control_Ref_ID = 184;
         /** Set Sales Region Tree.
         @param AD_Tree_SalesRegion_ID Tree to determine sales regional hierarchy */
         public void SetAD_Tree_SalesRegion_ID(int AD_Tree_SalesRegion_ID)
@@ -293,8 +293,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("BankVerificationClass");
         }
 
-        /** C_AcctSchema1_ID AD_Reference_ID=136 */
-        public static int C_ACCTSCHEMA1_ID_AD_Reference_ID = 136;
+        /** C_AcctSchema1_ID VAF_Control_Ref_ID=136 */
+        public static int C_ACCTSCHEMA1_ID_VAF_Control_Ref_ID = 136;
         /** Set Primary Accounting Schema.
         @param C_AcctSchema1_ID Primary rules for accounting */
         public void SetC_AcctSchema1_ID(int C_AcctSchema1_ID)
@@ -312,8 +312,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_BPartnerCashTrx_ID AD_Reference_ID=138 */
-        public static int C_BPARTNERCASHTRX_ID_AD_Reference_ID = 138;
+        /** C_BPartnerCashTrx_ID VAF_Control_Ref_ID=138 */
+        public static int C_BPARTNERCASHTRX_ID_VAF_Control_Ref_ID = 138;
         /** Set Template B.Partner.
         @param C_BPartnerCashTrx_ID Business Partner used for creating new Business Partners on the fly */
         public void SetC_BPartnerCashTrx_ID(int C_BPartnerCashTrx_ID)
@@ -347,8 +347,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Length_ID AD_Reference_ID=114 */
-        public static int C_UOM_LENGTH_ID_AD_Reference_ID = 114;
+        /** C_UOM_Length_ID VAF_Control_Ref_ID=114 */
+        public static int C_UOM_LENGTH_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Length.
         @param C_UOM_Length_ID Standard Unit of Measure for Length */
         public void SetC_UOM_Length_ID(int C_UOM_Length_ID)
@@ -366,8 +366,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Time_ID AD_Reference_ID=114 */
-        public static int C_UOM_TIME_ID_AD_Reference_ID = 114;
+        /** C_UOM_Time_ID VAF_Control_Ref_ID=114 */
+        public static int C_UOM_TIME_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Time.
         @param C_UOM_Time_ID Standard Unit of Measure for Time */
         public void SetC_UOM_Time_ID(int C_UOM_Time_ID)
@@ -385,8 +385,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Volume_ID AD_Reference_ID=114 */
-        public static int C_UOM_VOLUME_ID_AD_Reference_ID = 114;
+        /** C_UOM_Volume_ID VAF_Control_Ref_ID=114 */
+        public static int C_UOM_VOLUME_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Volume.
         @param C_UOM_Volume_ID Standard Unit of Measure for Volume */
         public void SetC_UOM_Volume_ID(int C_UOM_Volume_ID)
@@ -404,8 +404,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Weight_ID AD_Reference_ID=114 */
-        public static int C_UOM_WEIGHT_ID_AD_Reference_ID = 114;
+        /** C_UOM_Weight_ID VAF_Control_Ref_ID=114 */
+        public static int C_UOM_WEIGHT_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Weight.
         @param C_UOM_Weight_ID Standard Unit of Measure for Weight */
         public void SetC_UOM_Weight_ID(int C_UOM_Weight_ID)
@@ -455,8 +455,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_ProductFreight_ID AD_Reference_ID=162 */
-        public static int M_PRODUCTFREIGHT_ID_AD_Reference_ID = 162;
+        /** M_ProductFreight_ID VAF_Control_Ref_ID=162 */
+        public static int M_PRODUCTFREIGHT_ID_VAF_Control_Ref_ID = 162;
         /** Set Product for Freight.
         @param M_ProductFreight_ID Product for Freight */
         public void SetM_ProductFreight_ID(int M_ProductFreight_ID)
@@ -474,8 +474,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** MatchRequirementI AD_Reference_ID=360 */
-        public static int MATCHREQUIREMENTI_AD_Reference_ID = 360;
+        /** MatchRequirementI VAF_Control_Ref_ID=360 */
+        public static int MATCHREQUIREMENTI_VAF_Control_Ref_ID = 360;
         /** Purchase Order and Receipt = B */
         public static String MATCHREQUIREMENTI_PurchaseOrderAndReceipt = "B";
         /** None = N */
@@ -511,8 +511,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("MatchRequirementI");
         }
 
-        /** MatchRequirementR AD_Reference_ID=410 */
-        public static int MATCHREQUIREMENTR_AD_Reference_ID = 410;
+        /** MatchRequirementR VAF_Control_Ref_ID=410 */
+        public static int MATCHREQUIREMENTR_VAF_Control_Ref_ID = 410;
         /** Purchase Order and Invoice = B */
         public static String MATCHREQUIREMENTR_PurchaseOrderAndInvoice = "B";
         /** Invoice = I */
@@ -593,8 +593,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("CrystalImagePath");
         }
-        /** SaveAttachmentOn AD_Reference_ID=1000154 */
-        public static int SAVEATTACHMENTON_AD_Reference_ID = 1000154;
+        /** SaveAttachmentOn VAF_Control_Ref_ID=1000154 */
+        public static int SAVEATTACHMENTON_VAF_Control_Ref_ID = 1000154;
         /** Database = DB */
         public static String SAVEATTACHMENTON_Database = "DB";
         /** FTP Location = FT */

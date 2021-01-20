@@ -115,8 +115,8 @@ StringBuilder sb = new StringBuilder ("X_PA_Benchmark[").Append(Get_ID()).Append
 return sb.ToString();
 }
 
-/** AccumulationType AD_Reference_ID=370 */
-public static int ACCUMULATIONTYPE_AD_Reference_ID=370;
+/** AccumulationType VAF_Control_Ref_ID=370 */
+public static int ACCUMULATIONTYPE_VAF_Control_Ref_ID=370;
 /** Average = A */
 public static String ACCUMULATIONTYPE_Average = "A";
 /** Sum = S */

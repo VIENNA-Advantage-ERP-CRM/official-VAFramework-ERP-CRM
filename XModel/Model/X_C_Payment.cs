@@ -84,8 +84,8 @@ SetTrxType (null);// S
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_C_Payment[").Append(Get_ID()).Append("]"); return sb.ToString(); }
-        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;/** Set Trx Organization.
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;/** Set Trx Organization.
 @param VAF_OrgTrx_ID Performing or initiating organization */
         public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
         {
@@ -241,8 +241,8 @@ SetTrxType (null);// S
         public void SetC_Payment_ID(int C_Payment_ID) { if (C_Payment_ID < 1) throw new ArgumentException("C_Payment_ID is mandatory."); Set_ValueNoCheck("C_Payment_ID", C_Payment_ID); }/** Get Payment.
 @return Payment identifier */
         public int GetC_Payment_ID() { Object ii = Get_Value("C_Payment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** C_ProjectRef_ID AD_Reference_ID=1000329 */
-        public static int C_PROJECTREF_ID_AD_Reference_ID = 1000329;/** Set Project.
+        /** C_ProjectRef_ID VAF_Control_Ref_ID=1000329 */
+        public static int C_PROJECTREF_ID_VAF_Control_Ref_ID = 1000329;/** Set Project.
 @param C_ProjectRef_ID Project */
         public void SetC_ProjectRef_ID(int C_ProjectRef_ID)
         {
@@ -313,8 +313,8 @@ SetTrxType (null);// S
         public void SetCreditCardNumber(String CreditCardNumber) { if (CreditCardNumber != null && CreditCardNumber.Length > 20) { log.Warning("Length > 20 - truncated"); CreditCardNumber = CreditCardNumber.Substring(0, 20); } Set_Value("CreditCardNumber", CreditCardNumber); }/** Get Number.
 @return Credit Card Number  */
         public String GetCreditCardNumber() { return (String)Get_Value("CreditCardNumber"); }
-        /** CreditCardType AD_Reference_ID=149 */
-        public static int CREDITCARDTYPE_AD_Reference_ID = 149;/** Amex = A */
+        /** CreditCardType VAF_Control_Ref_ID=149 */
+        public static int CREDITCARDTYPE_VAF_Control_Ref_ID = 149;/** Amex = A */
         public static String CREDITCARDTYPE_Amex = "A";/** ATM = C */
         public static String CREDITCARDTYPE_ATM = "C";/** Diners = D */
         public static String CREDITCARDTYPE_Diners = "D";/** MasterCard = M */
@@ -357,8 +357,8 @@ SetTrxType (null);// S
         public void SetDiscountAmt(Decimal? DiscountAmt) { Set_Value("DiscountAmt", (Decimal?)DiscountAmt); }/** Get Discount Amount.
 @return Calculated amount of discount */
         public Decimal GetDiscountAmt() { Object bd = Get_Value("DiscountAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;/** <None> = -- */
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;/** <None> = -- */
         public static String DOCACTION_None = "--";/** Approve = AP */
         public static String DOCACTION_Approve = "AP";/** Close = CL */
         public static String DOCACTION_Close = "CL";/** Complete = CO */
@@ -384,8 +384,8 @@ SetTrxType (null);// S
         }/** Get Document Action.
 @return The targeted status of the document */
         public String GetDocAction() { return (String)Get_Value("DocAction"); }
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;/** Unknown = ?? */
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;/** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";/** Approved = AP */
         public static String DOCSTATUS_Approved = "AP";/** Closed = CL */
         public static String DOCSTATUS_Closed = "CL";/** Completed = CO */
@@ -507,8 +507,8 @@ SetTrxType (null);// S
         public void SetR_AuthCode_DC(String R_AuthCode_DC) { if (R_AuthCode_DC != null && R_AuthCode_DC.Length > 20) { log.Warning("Length > 20 - truncated"); R_AuthCode_DC = R_AuthCode_DC.Substring(0, 20); } Set_ValueNoCheck("R_AuthCode_DC", R_AuthCode_DC); }/** Get Authorization Code (DC).
 @return Authorization Code Delayed Capture returned */
         public String GetR_AuthCode_DC() { return (String)Get_Value("R_AuthCode_DC"); }
-        /** R_AvsAddr AD_Reference_ID=213 */
-        public static int R_AVSADDR_AD_Reference_ID = 213;/** No Match = N */
+        /** R_AvsAddr VAF_Control_Ref_ID=213 */
+        public static int R_AVSADDR_VAF_Control_Ref_ID = 213;/** No Match = N */
         public static String R_AVSADDR_NoMatch = "N";/** Unavailable = X */
         public static String R_AVSADDR_Unavailable = "X";/** Match = Y */
         public static String R_AVSADDR_Match = "Y";/** Is test a valid value.
@@ -523,8 +523,8 @@ SetTrxType (null);// S
         }/** Get Address verified.
 @return This address has been verified */
         public String GetR_AvsAddr() { return (String)Get_Value("R_AvsAddr"); }
-        /** R_AvsZip AD_Reference_ID=213 */
-        public static int R_AVSZIP_AD_Reference_ID = 213;/** No Match = N */
+        /** R_AvsZip VAF_Control_Ref_ID=213 */
+        public static int R_AVSZIP_VAF_Control_Ref_ID = 213;/** No Match = N */
         public static String R_AVSZIP_NoMatch = "N";/** Unavailable = X */
         public static String R_AVSZIP_Unavailable = "X";/** Match = Y */
         public static String R_AVSZIP_Match = "Y";/** Is test a valid value.
@@ -563,8 +563,8 @@ SetTrxType (null);// S
         public void SetR_Result(String R_Result) { if (R_Result != null && R_Result.Length > 20) { log.Warning("Length > 20 - truncated"); R_Result = R_Result.Substring(0, 20); } Set_ValueNoCheck("R_Result", R_Result); }/** Get Result.
 @return Result of transmission */
         public String GetR_Result() { return (String)Get_Value("R_Result"); }
-        /** Ref_Payment_ID AD_Reference_ID=343 */
-        public static int REF_PAYMENT_ID_AD_Reference_ID = 343;/** Set Referenced Payment.
+        /** Ref_Payment_ID VAF_Control_Ref_ID=343 */
+        public static int REF_PAYMENT_ID_VAF_Control_Ref_ID = 343;/** Set Referenced Payment.
 @param Ref_Payment_ID Referenced Payment */
         public void SetRef_Payment_ID(int Ref_Payment_ID)
         {
@@ -634,8 +634,8 @@ SetTrxType (null);// S
         public void SetTaxAmt(Decimal? TaxAmt) { Set_Value("TaxAmt", (Decimal?)TaxAmt); }/** Get Tax Amount.
 @return Tax Amount for a document */
         public Decimal GetTaxAmt() { Object bd = Get_Value("TaxAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** TenderType AD_Reference_ID=214 */
-        public static int TENDERTYPE_AD_Reference_ID = 214;/** Direct Deposit = A */
+        /** TenderType VAF_Control_Ref_ID=214 */
+        public static int TENDERTYPE_VAF_Control_Ref_ID = 214;/** Direct Deposit = A */
         public static String TENDERTYPE_DirectDeposit = "A";/** Credit Card = C */
         public static String TENDERTYPE_CreditCard = "C";/** Direct Debit = D */
         public static String TENDERTYPE_DirectDebit = "D";/** Check = K */
@@ -657,8 +657,8 @@ SetTrxType (null);// S
         }/** Get Tender type.
 @return Method of Payment */
         public String GetTenderType() { return (String)Get_Value("TenderType"); }
-        /** TrxType AD_Reference_ID=215 */
-        public static int TRXTYPE_AD_Reference_ID = 215;/** Authorization = A */
+        /** TrxType VAF_Control_Ref_ID=215 */
+        public static int TRXTYPE_VAF_Control_Ref_ID = 215;/** Authorization = A */
         public static String TRXTYPE_Authorization = "A";/** Credit (Payment) = C */
         public static String TRXTYPE_CreditPayment = "C";/** Delayed Capture = D */
         public static String TRXTYPE_DelayedCapture = "D";/** Voice Authorization = F */
@@ -676,8 +676,8 @@ SetTrxType (null);// S
         }/** Get Transaction Type.
 @return Type of credit card transaction */
         public String GetTrxType() { return (String)Get_Value("TrxType"); }
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;/** Set User List 1.
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;/** Set User List 1.
 @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
         {
@@ -687,8 +687,8 @@ SetTrxType (null);// S
         }/** Get User List 1.
 @return User defined list element #1 */
         public int GetUser1_ID() { Object ii = Get_Value("User1_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;/** Set User List 2.
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;/** Set User List 2.
 @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
         {
@@ -698,8 +698,8 @@ SetTrxType (null);// S
         }/** Get User List 2.
 @return User defined list element #2 */
         public int GetUser2_ID() { Object ii = Get_Value("User2_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** VA009_ExecutionStatus AD_Reference_ID=1000408 */
-        public static int VA009_EXECUTIONSTATUS_AD_Reference_ID = 1000408;/** Bounced = B */
+        /** VA009_ExecutionStatus VAF_Control_Ref_ID=1000408 */
+        public static int VA009_EXECUTIONSTATUS_VAF_Control_Ref_ID = 1000408;/** Bounced = B */
         public static String VA009_EXECUTIONSTATUS_Bounced = "B";/** Rejected = C */
         public static String VA009_EXECUTIONSTATUS_Rejected = "C";/** In-Progress = I */
         public static String VA009_EXECUTIONSTATUS_In_Progress = "I";/** Received = R */
@@ -753,8 +753,8 @@ SetTrxType (null);// S
         public void SetVARPT_PaymentVoucher(String VARPT_PaymentVoucher) { if (VARPT_PaymentVoucher != null && VARPT_PaymentVoucher.Length > 1) { log.Warning("Length > 1 - truncated"); VARPT_PaymentVoucher = VARPT_PaymentVoucher.Substring(0, 1); } Set_Value("VARPT_PaymentVoucher", VARPT_PaymentVoucher); }/** Get Payment Voucher.
 @return Payment Voucher */
         public String GetVARPT_PaymentVoucher() { return (String)Get_Value("VARPT_PaymentVoucher"); }
-        /** VSS_FEESTYPE AD_Reference_ID=1000018 */
-        public static int VSS_FEESTYPE_AD_Reference_ID = 1000018;/** 4th Semester Fees = A */
+        /** VSS_FEESTYPE VAF_Control_Ref_ID=1000018 */
+        public static int VSS_FEESTYPE_VAF_Control_Ref_ID = 1000018;/** 4th Semester Fees = A */
         public static String VSS_FEESTYPE_4thSemesterFees = "A";/** 6th Semester Fees = B */
         public static String VSS_FEESTYPE_6thSemesterFees = "B";/** 8th Semester Fees = C */
         public static String VSS_FEESTYPE_8thSemesterFees = "C";/** Hostel Dormitory = D */
@@ -850,8 +850,8 @@ SetTrxType (null);// S
         @return Post Dated Check */
         public int GetVA027_PostDatedCheck_ID() { Object ii = Get_Value("VA027_PostDatedCheck_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** PDCType AD_Reference_ID=1000499 */
-        public static int PDCTYPE_AD_Reference_ID = 1000499;/** Direct PDC = D */
+        /** PDCType VAF_Control_Ref_ID=1000499 */
+        public static int PDCTYPE_VAF_Control_Ref_ID = 1000499;/** Direct PDC = D */
         public static String PDCTYPE_DirectPDC = "D";/** Normal PDC = N */
         public static String PDCTYPE_NormalPDC = "N";/** Is test a valid value.
         @param test testvalue
@@ -1036,8 +1036,8 @@ SetTrxType (null);// S
         public void SetBackupWithholdingAmount(Decimal? BackupWithholdingAmount) { Set_Value("BackupWithholdingAmount", (Decimal?)BackupWithholdingAmount); }/** Get Backup Withholding Amount.
 @return Backup Withholding Amount */
         public Decimal GetBackupWithholdingAmount() { Object bd = Get_Value("BackupWithholdingAmount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** BackupWithholding_ID AD_Reference_ID=1000228 */
-        public static int BACKUPWITHHOLDING_ID_AD_Reference_ID = 1000228;/** Set Backup Withholding.
+        /** BackupWithholding_ID VAF_Control_Ref_ID=1000228 */
+        public static int BACKUPWITHHOLDING_ID_VAF_Control_Ref_ID = 1000228;/** Set Backup Withholding.
 @param BackupWithholding_ID Backup Withholding */
         public void SetBackupWithholding_ID(int BackupWithholding_ID)
         {

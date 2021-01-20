@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MNote
  * Purpose        : 
- * Class Used     : X_AD_Note
+ * Class Used     : X_VAF_Notice
  * Chronological    Development
  * Raghunandan       27-04-2009
   ******************************************************/
@@ -21,18 +21,18 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MNote : X_AD_Note
+    public class MNote : X_VAF_Notice
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Note_ID">id</param>
+        /// <param name="VAF_Notice_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MNote(Ctx ctx, int AD_Note_ID, Trx trxName)
-            : base(ctx, AD_Note_ID, trxName)
+        public MNote(Ctx ctx, int VAF_Notice_ID, Trx trxName)
+            : base(ctx, VAF_Notice_ID, trxName)
         {
-            if (AD_Note_ID == 0)
+            if (VAF_Notice_ID == 0)
             {
                 SetProcessed(false);
                 SetProcessing(false);

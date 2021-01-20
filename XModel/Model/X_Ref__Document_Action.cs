@@ -58,7 +58,7 @@ namespace VAdvantage.Model
 
     public class X_RefDocument_Action
     {
-        public static int AD_Reference_ID = 135;
+        public static int VAF_Control_Ref_ID = 135;
         private String value;
 
         private X_RefDocument_Action(String value)

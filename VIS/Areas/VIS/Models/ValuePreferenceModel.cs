@@ -21,7 +21,7 @@ namespace VIS.Controllers
         public int VAF_Org_ID { get; set; }
         public int AD_User_ID { get; set; }
         public int AD_Window_ID { get; set; }
-        public int AD_Reference_ID { get; set; }
+        public int VAF_Control_Ref_ID { get; set; }
 
         //Repository
 
@@ -34,9 +34,9 @@ namespace VIS.Controllers
         public bool DeletePrefrence(Ctx ctx, string preferenceId)
         {
             bool success = false;
-            int AD_Preference_ID = Convert.ToInt32(preferenceId);
+            int VAF_ValuePreference_ID = Convert.ToInt32(preferenceId);
 
-            MPreference pref = new MPreference(ctx, AD_Preference_ID, null);
+            MPreference pref = new MPreference(ctx, VAF_ValuePreference_ID, null);
             // delete the preference
             success = pref.Delete(true);
 
@@ -60,16 +60,16 @@ namespace VIS.Controllers
         {
             bool success = false;
 
-            int AD_Preference_ID = Convert.ToInt32(preferenceId);
+            int VAF_ValuePreference_ID = Convert.ToInt32(preferenceId);
             int _AD_Window_ID = Convert.ToInt32(AD_Window_ID);
             int _AD_User_ID = Convert.ToInt32(userId);
             bool _chkUser, _chkWindow;
             _chkUser = Convert.ToBoolean(chkUser);
             _chkWindow = Convert.ToBoolean(chkWindow);
 
-            MPreference pref = new MPreference(ctx, AD_Preference_ID, null);
+            MPreference pref = new MPreference(ctx, VAF_ValuePreference_ID, null);
             // if preference id=0
-            if (AD_Preference_ID == 0)
+            if (VAF_ValuePreference_ID == 0)
             {
                 // if inserting a new record, then set initial values
                 // set client id

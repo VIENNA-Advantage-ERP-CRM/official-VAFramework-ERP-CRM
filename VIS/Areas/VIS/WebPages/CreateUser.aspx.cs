@@ -75,7 +75,7 @@ namespace VIS.Areas.VIS.WebPages
                 VAF_Client_ID = Convert.ToInt32(dsIUser.Tables[0].Rows[0]["VAF_Client_ID"]);
             }
 
-            sql = "SELECT AD_Role_ID FROM VAF_InviteUser_role WHERE VAF_InviteUser_ID= " + inviteID;
+            sql = "SELECT VAF_Role_ID FROM VAF_InviteUser_role WHERE VAF_InviteUser_ID= " + inviteID;
             DataSet ds = DB.ExecuteDataset(sql);
 
 
@@ -101,7 +101,7 @@ namespace VIS.Areas.VIS.WebPages
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MUserRoles uRoles = new MUserRoles(ctx, user.GetAD_User_ID(), Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]), null);
+                        MUserRoles uRoles = new MUserRoles(ctx, user.GetAD_User_ID(), Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]), null);
                         uRoles.SetVAF_Client_ID(VAF_Client_ID);
                         uRoles.SetVAF_Org_ID(VAF_Org_ID);
                         uRoles.Save();

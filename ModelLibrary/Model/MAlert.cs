@@ -91,19 +91,19 @@ namespace VAdvantage.Model
         }	//	getRecipients
 
 
-        public int GetFirstAD_Role_ID()
+        public int GetFirstVAF_Role_ID()
         {
             GetRecipients(false);
             foreach (MAlertRecipient element in m_recipients)
             {
-                if (element.GetAD_Role_ID() != -1)
-                    return element.GetAD_Role_ID();
+                if (element.GetVAF_Role_ID() != -1)
+                    return element.GetVAF_Role_ID();
             }
             return -1;
-        }	//	getForstAD_Role_ID
+        }	//	getForstVAF_Role_ID
 
 
-        public int GetFirstUserAD_Role_ID()
+        public int GetFirstUserVAF_Role_ID()
         {
             GetRecipients(false);
             int AD_User_ID = GetFirstAD_User_ID();
@@ -113,11 +113,11 @@ namespace VAdvantage.Model
                 foreach (MUserRoles element in urs)
                 {
                     if (element.IsActive())
-                        return element.GetAD_Role_ID();
+                        return element.GetVAF_Role_ID();
                 }
             }
             return -1;
-        }	//	getFirstUserAD_Role_ID
+        }	//	getFirstUserVAF_Role_ID
 
 
         public int GetFirstAD_User_ID()

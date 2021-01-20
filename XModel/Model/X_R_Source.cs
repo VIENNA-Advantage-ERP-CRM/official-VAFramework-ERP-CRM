@@ -190,8 +190,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** SourceCreateType AD_Reference_ID=423 */
-public static int SOURCECREATETYPE_AD_Reference_ID=423;
+/** SourceCreateType VAF_Control_Ref_ID=423 */
+public static int SOURCECREATETYPE_VAF_Control_Ref_ID=423;
 /** Both = B */
 public static String SOURCECREATETYPE_Both = "B";
 /** Lead = L */

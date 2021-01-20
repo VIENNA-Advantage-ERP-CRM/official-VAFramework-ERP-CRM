@@ -175,8 +175,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -267,8 +267,8 @@ public String GetOtherClause()
 return (String)Get_Value("OtherClause");
 }
 
-/** Referenced_Table_ID AD_Reference_ID=415 */
-public static int REFERENCED_TABLE_ID_AD_Reference_ID=415;
+/** Referenced_Table_ID VAF_Control_Ref_ID=415 */
+public static int REFERENCED_TABLE_ID_VAF_Control_Ref_ID=415;
 /** Set Referenced Table.
 @param Referenced_Table_ID Referenced Table */
 public void SetReferenced_Table_ID (int Referenced_Table_ID)

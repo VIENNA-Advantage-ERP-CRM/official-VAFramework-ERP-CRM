@@ -20,7 +20,7 @@ public X_T_TrialBalance (Context ctx, int T_TrialBalance_ID, Trx trxName) : base
 {
 /** if (T_TrialBalance_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetAmtAcctBalance (0.0);
 SetAmtAcctCr (0.0);
 SetAmtAcctDr (0.0);
@@ -35,7 +35,7 @@ public X_T_TrialBalance (Ctx ctx, int T_TrialBalance_ID, Trx trxName) : base (ct
 {
 /** if (T_TrialBalance_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetAmtAcctBalance (0.0);
 SetAmtAcctCr (0.0);
 SetAmtAcctDr (0.0);
@@ -125,8 +125,8 @@ StringBuilder sb = new StringBuilder ("X_T_TrialBalance[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** VAF_OrgTrx_ID AD_Reference_ID=130 */
-public static int VAF_ORGTRX_ID_AD_Reference_ID=130;
+/** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID=130;
 /** Set Trx Organization.
 @param VAF_OrgTrx_ID Performing or initiating organization */
 public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID)
@@ -144,17 +144,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -208,8 +208,8 @@ public String GetAccountValue()
 return (String)Get_Value("AccountValue");
 }
 
-/** Account_ID AD_Reference_ID=132 */
-public static int ACCOUNT_ID_AD_Reference_ID=132;
+/** Account_ID VAF_Control_Ref_ID=132 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=132;
 /** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID)
@@ -393,8 +393,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocFrom_ID AD_Reference_ID=133 */
-public static int C_LOCFROM_ID_AD_Reference_ID=133;
+/** C_LocFrom_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCFROM_ID_VAF_Control_Ref_ID=133;
 /** Set Location From.
 @param C_LocFrom_ID Location that inventory was moved from */
 public void SetC_LocFrom_ID (int C_LocFrom_ID)
@@ -412,8 +412,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocTo_ID AD_Reference_ID=133 */
-public static int C_LOCTO_ID_AD_Reference_ID=133;
+/** C_LocTo_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCTO_ID_VAF_Control_Ref_ID=133;
 /** Set Location To.
 @param C_LocTo_ID Location that inventory was moved to */
 public void SetC_LocTo_ID (int C_LocTo_ID)
@@ -648,8 +648,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PostingType AD_Reference_ID=125 */
-public static int POSTINGTYPE_AD_Reference_ID=125;
+/** PostingType VAF_Control_Ref_ID=125 */
+public static int POSTINGTYPE_VAF_Control_Ref_ID=125;
 /** Actual = A */
 public static String POSTINGTYPE_Actual = "A";
 /** Budget = B */
@@ -718,8 +718,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** User1_ID AD_Reference_ID=134 */
-public static int USER1_ID_AD_Reference_ID=134;
+/** User1_ID VAF_Control_Ref_ID=134 */
+public static int USER1_ID_VAF_Control_Ref_ID=134;
 /** Set User List 1.
 @param User1_ID User defined list element #1 */
 public void SetUser1_ID (int User1_ID)
@@ -737,8 +737,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** User2_ID AD_Reference_ID=137 */
-public static int USER2_ID_AD_Reference_ID=137;
+/** User2_ID VAF_Control_Ref_ID=137 */
+public static int USER2_ID_VAF_Control_Ref_ID=137;
 /** Set User List 2.
 @param User2_ID User defined list element #2 */
 public void SetUser2_ID (int User2_ID)

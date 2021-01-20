@@ -11,29 +11,29 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Role_Group
+    /** Generated Model for VAF_Role_Group
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Role_Group : PO
+    public class X_VAF_Role_Group : PO
     {
-        public X_AD_Role_Group(Context ctx, int AD_Role_Group_ID, Trx trxName)
-            : base(ctx, AD_Role_Group_ID, trxName)
+        public X_VAF_Role_Group(Context ctx, int VAF_Role_Group_ID, Trx trxName)
+            : base(ctx, VAF_Role_Group_ID, trxName)
         {
-            /** if (AD_Role_Group_ID == 0)
+            /** if (VAF_Role_Group_ID == 0)
             {
             SetVAF_GroupInfo_ID (0);
-            SetAD_Role_ID (0);
+            SetVAF_Role_ID (0);
             SetAD_User_ID (0);
             }
              */
         }
-        public X_AD_Role_Group(Ctx ctx, int AD_Role_Group_ID, Trx trxName)
-            : base(ctx, AD_Role_Group_ID, trxName)
+        public X_VAF_Role_Group(Ctx ctx, int VAF_Role_Group_ID, Trx trxName)
+            : base(ctx, VAF_Role_Group_ID, trxName)
         {
-            /** if (AD_Role_Group_ID == 0)
+            /** if (VAF_Role_Group_ID == 0)
             {
             SetVAF_GroupInfo_ID (0);
-            SetAD_Role_ID (0);
+            SetVAF_Role_ID (0);
             SetAD_User_ID (0);
             }
              */
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Role_Group(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_Role_Group(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Role_Group(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_Role_Group(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -61,14 +61,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Role_Group(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_Role_Group(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Role_Group()
+        static X_VAF_Role_Group()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -81,8 +81,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000495;
 
-        /** TableName=AD_Role_Group */
-        public static String Table_Name = "AD_Role_Group";
+        /** TableName=VAF_Role_Group */
+        public static String Table_Name = "VAF_Role_Group";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Role_Group[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Role_Group[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set VAF_GroupInfo_ID.
@@ -135,17 +135,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID < 0) throw new ArgumentException("AD_Role_ID is mandatory.");
-            Set_ValueNoCheck("AD_Role_ID", AD_Role_ID);
+            if (VAF_Role_ID < 0) throw new ArgumentException("VAF_Role_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

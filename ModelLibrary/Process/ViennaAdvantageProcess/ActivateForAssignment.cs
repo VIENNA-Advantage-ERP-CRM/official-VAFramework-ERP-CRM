@@ -61,7 +61,7 @@ namespace ViennaAdvantage.Process
                     return Msg.GetMsg(GetCtx(), "ResourceNotSelected");
                 }
 
-                if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetAD_Role_ID()) == 0)
+                if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAF_Role_ID()) == 0)
                 {
                     return Msg.GetMsg(GetCtx(), "RoleNotSelected");
                 }
@@ -137,9 +137,9 @@ namespace ViennaAdvantage.Process
                                 //return "Error:- User" + "-" + pp.GetValue() + "," + pp.GetName();
                                 return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
-                            int ad_role_id = Resource.GetAD_Role_ID();
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
                             VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
                             userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
                             userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             userrole.SetAD_User_ID(user.GetAD_User_ID());
@@ -190,9 +190,9 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError( user, "PasswordNotSaved"); 
                             }
 
-                            int ad_role_id = Resource.GetAD_Role_ID();
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
                             VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
                             userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
                             userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             userrole.SetAD_User_ID(user.GetAD_User_ID());
@@ -300,9 +300,9 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
 
-                            int ad_role_id = Resource.GetAD_Role_ID();
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
                             VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
                             userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
                             userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             userrole.SetAD_User_ID(user.GetAD_User_ID());
@@ -355,9 +355,9 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError( user,  "PasswordNotSaved"); 
                             }
 
-                            int ad_role_id = Resource.GetAD_Role_ID();
+                            int VAF_Role_id = Resource.GetVAF_Role_ID();
                             VAdvantage.Model.X_AD_User_Roles userrole = new VAdvantage.Model.X_AD_User_Roles(GetCtx(), 0, Get_Trx());
-                            userrole.SetAD_Role_ID(ad_role_id);
+                            userrole.SetVAF_Role_ID(VAF_Role_id);
                             userrole.SetVAF_Client_ID(Resource.GetVAF_Client_ID());
                             userrole.SetVAF_Org_ID(Resource.GetVAF_Org_ID());
                             userrole.SetAD_User_ID(user.GetAD_User_ID());

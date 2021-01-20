@@ -99,7 +99,7 @@ namespace VIS.Classes
 
             queryList.VIS_21 = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = @param1 ";
 
-            queryList.VIS_22 = "SELECT OverwritePriceLimit FROM AD_Role WHERE IsActive = 'Y' AND AD_Role_ID = @param1 ";
+            queryList.VIS_22 = "SELECT OverwritePriceLimit FROM VAF_Role WHERE IsActive = 'Y' AND VAF_Role_ID = @param1 ";
 
             queryList.VIS_23 = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
                                         + " AND M_PriceList_Version_ID = @param2 "
@@ -200,7 +200,7 @@ namespace VIS.Classes
             queryList.VIS_52 = "SELECT M_Product_Category_ID, M_Product_ID, BreakValue, IsBPartnerFlatDiscount, BreakDiscount FROM M_DiscountSchemaBreak WHERE "
                              + " M_DiscountSchema_ID = @Param1 AND M_Product_Category_ID IS NULL AND M_Product_ID IS NULL AND IsActive='Y' AND VAF_Client_ID = @Param2 Order BY BreakValue DESC";
 
-            queryList.VIS_53 = "SELECT VATAX_TaxRule FROM VAF_OrgInfo WHERE VAF_Org_ID = @Param1 AND IsActive ='Y' AND VAF_Client_ID = @Param2";
+            queryList.VIS_53 = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID = @Param1 AND IsActive ='Y' AND VAF_Client_ID = @Param2";
 
             queryList.VIS_54 = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
 
@@ -253,9 +253,9 @@ namespace VIS.Classes
 
             queryList.VIS_75 = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID=@tableID";
 
-            queryList.VIS_76 = "UPDATE AD_PrintFormat SET IsDefault='N' WHERE IsDefault='Y' AND VAF_TableView_ID=@tableID AND VAF_Tab_ID=@tabID";
+            queryList.VIS_76 = "UPDATE VAF_Print_Rpt_Layout SET IsDefault='N' WHERE IsDefault='Y' AND VAF_TableView_ID=@tableID AND VAF_Tab_ID=@tabID";
 
-            queryList.VIS_77 = "UPDATE AD_PrintFormat SET IsDefault='Y' WHERE AD_PrintFormat_ID=@printForamt";
+            queryList.VIS_77 = "UPDATE VAF_Print_Rpt_Layout SET IsDefault='Y' WHERE VAF_Print_Rpt_Layout_ID=@printForamt";
 
             queryList.VIS_78 = "SELECT DISTINCT AD_Window_ID, PO_Window_ID FROM VAF_TableView t WHERE TableName = @targetTableName";
 
@@ -264,34 +264,34 @@ namespace VIS.Classes
 
             queryList.VIS_80 = "SELECT AD_Window_ID, Name FROM AD_Window WHERE Name LIKE 'Work Center%' OR NAME LIKE 'Production Resource'";
 
-            queryList.VIS_81 = "SELECT ISREPORT FROM AD_Process WHERE AD_Process_ID=@AD_Process_ID";
+            queryList.VIS_81 = "SELECT ISREPORT FROM VAF_Job WHERE VAF_Job_ID=@VAF_Job_ID";
 
 
-            queryList.VIS_82 = "SELECT Value, Name FROM AD_Ref_List WHERE AD_Reference_ID=@AD_Reference_ID AND IsActive='Y'";
+            queryList.VIS_82 = "SELECT Value, Name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=@VAF_Control_Ref_ID AND IsActive='Y'";
 
 
             queryList.VIS_83 = "SELECT kc.ColumnName"
-                            + " FROM AD_Ref_Table rt"
+                            + " FROM VAF_CtrlRef_Table rt"
                             + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
-                            + "WHERE rt.AD_Reference_ID=@AD_Reference_ID";
+                            + "WHERE rt.VAF_Control_Ref_ID=@VAF_Control_Ref_ID";
 
             queryList.VIS_84 = "SELECT Columnname, tbl.TableName FROM VAF_Column clm INNER JOIN VAF_TableView tbl ON (tbl.VAF_TableView_ID = clm.VAF_TableView_ID) WHERE VAF_Column_ID = "
-                      + " (SELECT Column_Key_ID FROM AD_Ref_Table WHERE AD_Reference_ID = @refid)";
+                      + " (SELECT Column_Key_ID FROM VAF_CtrlRef_Table WHERE VAF_Control_Ref_ID = @refid)";
 
             queryList.VIS_85 = "SELECT  tbl.tablename, clm.Columnname FROM ( "
                         + " SELECT kc.ColumnName, dc.ColumnName as ColName1, t.TableName,  t.VAF_TableView_ID "
-                        + " FROM AD_Ref_Table rt"
+                        + " FROM VAF_CtrlRef_Table rt"
                         + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
                         + " INNER JOIN VAF_Column dc ON (rt.Column_Display_ID=dc.VAF_Column_ID)"
                         + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID) "
-                        + "WHERE rt.AD_Reference_ID=@refid ) rr "
+                        + "WHERE rt.VAF_Control_Ref_ID=@refid ) rr "
                     + " INNER JOIN VAF_TableView tbl "
                     + " ON (tbl.VAF_TableView_ID = rr.VAF_TableView_ID) "
                     + " INNER JOIN VAF_Column clm "
                     + " ON (clm.VAF_TableView_ID      = tbl.VAF_TableView_ID) "
                     + " WHERE (clm.ColumnName   IN ('DocumentNo', 'Value', 'Name') "
                     + " OR clm.IsIdentifier      ='Y') "
-                    + " AND clm.AD_Reference_ID IN (10,14) "
+                    + " AND clm.VAF_Control_Ref_ID IN (10,14) "
                     + " AND EXISTS "
                       + " (SELECT *  FROM VAF_Column cc WHERE cc.VAF_TableView_ID=tbl.VAF_TableView_ID  AND cc.IsKey ='Y' AND cc.ColumnName = @colname)";
 
@@ -300,16 +300,16 @@ namespace VIS.Classes
                 + "FROM VAF_Column c "
                 + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID AND t.IsView='N') "
                 + "WHERE (c.ColumnName IN ('DocumentNo', 'Value', 'Name') OR c.IsIdentifier='Y')"
-                + " AND c.AD_Reference_ID IN (10,14)"
+                + " AND c.VAF_Control_Ref_ID IN (10,14)"
                 + " AND EXISTS (SELECT * FROM VAF_Column cc WHERE cc.VAF_TableView_ID=t.VAF_TableView_ID"
                     + " AND cc.IsKey='Y' AND cc.ColumnName=@colname)";
 
             queryList.VIS_87 = "SELECT kc.ColumnName, dc.ColumnName, t.TableName "
-                        + "FROM AD_Ref_Table rt"
+                        + "FROM VAF_CtrlRef_Table rt"
                         + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
                         + " INNER JOIN VAF_Column dc ON (rt.Column_Display_ID=dc.VAF_Column_ID)"
                         + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID) "
-                        + "WHERE rt.AD_Reference_ID=@AD_Reference_ID";
+                        + "WHERE rt.VAF_Control_Ref_ID=@VAF_Control_Ref_ID";
             queryList.VIS_88 = "SELECT AD_Window_ID FROM VAF_Tab WHERE VAF_Tab_ID =@VAF_Tab_ID";
 
             queryList.VIS_89 = "SELECT VAF_QuickSearchWindow_ID FROM VAF_QuickSearchWindow WHERE VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName=@tableName) AND IsActive='Y'"
@@ -317,13 +317,13 @@ namespace VIS.Classes
 
 
             queryList.VIS_90 = "SELECT kc.ColumnName"
-                            + " FROM AD_Ref_Table rt"
+                            + " FROM VAF_CtrlRef_Table rt"
                             + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
-                            + "WHERE rt.AD_Reference_ID=@AD_Reference_ID";
+                            + "WHERE rt.VAF_Control_Ref_ID=@VAF_Control_Ref_ID";
             queryList.VIS_91 = "SELECT kc.ColumnName"
-                            + " FROM AD_Ref_Table rt"
+                            + " FROM VAF_CtrlRef_Table rt"
                             + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
-                            + "WHERE rt.AD_Reference_ID=@AD_Reference_ID";
+                            + "WHERE rt.VAF_Control_Ref_ID=@VAF_Control_Ref_ID";
 
             queryList.VIS_92 = "SELECT Value FROM M_Locator WHERE IsActive='Y' and M_Locator_ID=@keyValue";
 
@@ -335,9 +335,9 @@ namespace VIS.Classes
 
             queryList.VIS_96 = "SELECT Description FROM C_GenattributeSetInstance WHERE C_GenattributeSetInstance_ID=@C_GenttributeSetInstance_ID";
 
-            queryList.VIS_97 = "SELECT c.ColumnName, c.AD_Reference_Value_ID, c.IsParent, vr.Code FROM VAF_Column c LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) WHERE c.VAF_Column_ID=@Column_ID";
+            queryList.VIS_97 = "SELECT c.ColumnName, c.VAF_Control_Ref_Value_ID, c.IsParent, vr.Code FROM VAF_Column c LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) WHERE c.VAF_Column_ID=@Column_ID";
 
-            queryList.VIS_98 = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,c.AD_Reference_Value_ID "
+            queryList.VIS_98 = "SELECT c.ColumnName,c.IsTranslated,c.VAF_Control_Ref_ID,c.VAF_Control_Ref_Value_ID "
               + "FROM VAF_TableView t INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
               + "WHERE TableName=@tableName"
               + " AND c.IsIdentifier='Y' "
@@ -347,21 +347,21 @@ namespace VIS.Classes
                     + "FROM C_DimAmt "
                     + "WHERE C_DimAmt_ID=@C_DimAmt_ID";
 
-            queryList.VIS_100 = "SELECT AD_Process_ID,name,CLASSNAME,ENTITYTYPE FROM AD_Process WHERE value=@processName AND ISACTIVE='Y'";
+            queryList.VIS_100 = "SELECT VAF_Job_ID,name,CLASSNAME,ENTITYTYPE FROM VAF_Job WHERE value=@processName AND ISACTIVE='Y'";
 
             queryList.VIS_101 = "SELECT count(*) FROM VAF_TableView t "
         + "INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
         + "WHERE t.TableName=@TableName AND c.ColumnName='C_BPartner_ID' ";
 
-            queryList.VIS_102 = "UPDATE AD_PrintFormat SET IsDefault='N' WHERE IsDefault='Y' AND VAF_TableView_ID=@vaf_tableview_ID AND VAF_Tab_ID=@VAF_Tab_ID";
+            queryList.VIS_102 = "UPDATE VAF_Print_Rpt_Layout SET IsDefault='N' WHERE IsDefault='Y' AND VAF_TableView_ID=@vaf_tableview_ID AND VAF_Tab_ID=@VAF_Tab_ID";
 
-            queryList.VIS_103 = "UPDATE AD_PrintFormat SET IsDefault='Y' WHERE AD_PrintFormat_ID=@id";
+            queryList.VIS_103 = "UPDATE VAF_Print_Rpt_Layout SET IsDefault='Y' WHERE VAF_Print_Rpt_Layout_ID=@id";
 
             queryList.VIS_104 = "SELECT cc.ColumnName "
             + "FROM VAF_Column c"
-            + " INNER JOIN AD_Ref_Table r ON (c.AD_Reference_Value_ID=r.AD_Reference_ID)"
+            + " INNER JOIN VAF_CtrlRef_Table r ON (c.VAF_Control_Ref_Value_ID=r.VAF_Control_Ref_ID)"
             + " INNER JOIN VAF_Column cc ON (r.Column_Key_ID=cc.VAF_Column_ID) "
-            + "WHERE c.AD_Reference_ID IN (18,30)" 	//	Table/Search
+            + "WHERE c.VAF_Control_Ref_ID IN (18,30)" 	//	Table/Search
             + " AND c.ColumnName=@colName";
 
             queryList.VIS_105 = "SELECT t.TableName "
@@ -371,13 +371,13 @@ namespace VIS.Classes
             + " AND EXISTS (SELECT * FROM VAF_Column cc"
             + " WHERE cc.VAF_TableView_ID=t.VAF_TableView_ID AND cc.ColumnName=@tabKeyColumn)";	//	#2 Tab Key Column
 
-            queryList.VIS_106 = "SELECT AD_Reference_ID FROM VAF_Column WHERE ColumnName=@colName";	//	#2 Tab Key Column
+            queryList.VIS_106 = "SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName=@colName";	//	#2 Tab Key Column
 
             queryList.VIS_107 = "SELECT  AD_UserQuery.Code,VAF_DefaultUserQuery.ad_user_id,VAF_DefaultUserQuery.vaf_tab_id FROM AD_UserQuery AD_UserQuery JOIN VAF_DefaultUserQuery VAF_DefaultUserQuery ON AD_UserQuery.AD_UserQuery_ID=VAF_DefaultUserQuery.AD_UserQuery_ID WHERE AD_UserQuery.IsActive                 ='Y'" +
              "AND VAF_DefaultUserQuery.AD_User_ID=@AD_User_ID AND AD_UserQuery.VAF_Client_ID =@VAF_Client_ID AND (AD_UserQuery.VAF_Tab_ID =@VAF_Tab_ID OR AD_UserQuery.VAF_TableView_ID                 = @VAF_TableView_ID)";
 
             queryList.VIS_108 = "SELECT Record_ID "
-            + "FROM AD_Private_Access "
+            + "FROM VAF_Private_Rights "
             + "WHERE AD_User_ID=@AD_User_ID AND VAF_TableView_ID=@VAF_TableView_ID AND IsActive='Y' "
             + "ORDER BY Record_ID";
 
@@ -427,7 +427,7 @@ namespace VIS.Classes
        + " ORDER BY Upper(AD_UserQuery.NAME), AD_UserQuery.AD_UserQuery_ID";
 
 
-            queryList.VIS_118 = "select ad_reportformat_id FROM AD_Process WHERE AD_Process_ID=@AD_Process_ID";
+            queryList.VIS_118 = "select VAF_ReportLayout_id FROM VAF_Job WHERE VAF_Job_ID=@VAF_Job_ID";
 
             queryList.VIS_119 = "select versionno FROM VAF_ModuleInfo where Prefix='VAREPH_'";
 
@@ -509,11 +509,11 @@ namespace VIS.Classes
 
             queryList.VIS_135 = "SELECT PaymentRule FROM C_PaySelectionCheck WHERE C_PaySelection_ID = @pSelectID";
 
-            queryList.VIS_136 = "select ad_process_id from ad_process where ad_printformat_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = @check_ID)) and c_bankaccountdoc.isactive = 'Y' AND rownum =1)";
+            queryList.VIS_136 = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = @check_ID)) and c_bankaccountdoc.isactive = 'Y' AND rownum =1)";
 
             queryList.VIS_137 = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelectionCheck'";
 
-            queryList.VIS_138 = "SELECT AD_Process_ID  FROM VAF_Tab WHERE VAF_Tab_ID = 330";
+            queryList.VIS_138 = "SELECT VAF_Job_ID  FROM VAF_Tab WHERE VAF_Tab_ID = 330";
 
             queryList.VIS_139 = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
 
@@ -527,8 +527,8 @@ namespace VIS.Classes
 
 
             queryList.VIS_144 = "SELECT Log_ID, P_ID, P_Date, P_Number, P_Msg "
-                + "FROM AD_PInstance_Log "
-                + "WHERE AD_PInstance_ID=@AD_PInstance_ID "
+                + "FROM VAF_JInstance_Log "
+                + "WHERE VAF_JInstance_ID=@VAF_JInstance_ID "
                 + " ORDER BY Log_ID";
 
             queryList.VIS_145 = "SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'";
@@ -541,19 +541,19 @@ namespace VIS.Classes
 
             queryList.VIS_147 = "DELETE FROM AD_UserQueryLine WHERE AD_UserQueryLine_ID=@AD_UserQuery_ID";
 
-            queryList.VIS_148 = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                   + "WHERE l.AD_Ref_List_ID=t.AD_Ref_List_ID"
+            queryList.VIS_148 = "SELECT l.Value, t.Name FROM VAF_CtrlRef_List l, VAF_CtrlRef_TL t "
+                   + "WHERE l.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID"
                    + " AND t.VAF_Language='" + Env.GetVAF_Language(ctx) + "'"
-                   + " AND l.AD_Reference_ID=@AD_Reference_ID AND l.IsActive='Y'";
+                   + " AND l.VAF_Control_Ref_ID=@VAF_Control_Ref_ID AND l.IsActive='Y'";
 
-            queryList.VIS_149 = "SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID=@AD_Process_ID";
+            queryList.VIS_149 = "SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID=@VAF_Job_ID";
 
             queryList.VIS_150 = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelection'";
 
 
-            queryList.VIS_151 = "select AD_Process_ID from AD_Process where name='VARPT_RemittancePrint'";
+            queryList.VIS_151 = "select VAF_Job_ID from VAF_Job where name='VARPT_RemittancePrint'";
 
-            queryList.VIS_152 = " SELECT AD_Process_ID from C_BankAccountDoc WHERE C_BankAccount_ID=@BankAcct_ID AND rownum=1";
+            queryList.VIS_152 = " SELECT VAF_Job_ID from C_BankAccountDoc WHERE C_BankAccount_ID=@BankAcct_ID AND rownum=1";
         }
 
         public static string GetQuery(string code, Ctx ctx)

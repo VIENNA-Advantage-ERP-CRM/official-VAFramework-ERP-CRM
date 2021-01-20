@@ -116,8 +116,8 @@ namespace VAdvantage.WF
                 }
                 //	Start Workflow
                 log.Fine(logic);
-                int AD_Process_ID = 305;		//	HARDCODED
-                ProcessInfo pi = new ProcessInfo(wf.GetName(), AD_Process_ID, VAF_TableView_ID, document.Get_ID());
+                int VAF_Job_ID = 305;		//	HARDCODED
+                ProcessInfo pi = new ProcessInfo(wf.GetName(), VAF_Job_ID, VAF_TableView_ID, document.Get_ID());
                 pi.SetAD_User_ID(document.GetCtx().GetAD_User_ID());
                 pi.SetVAF_Client_ID(document.GetVAF_Client_ID());
                 

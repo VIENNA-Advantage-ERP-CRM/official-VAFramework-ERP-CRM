@@ -206,8 +206,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** RoleCenterPanels AD_Reference_ID=1000092 */
-public static int ROLECENTERPANELS_AD_Reference_ID=1000092;
+/** RoleCenterPanels VAF_Control_Ref_ID=1000092 */
+public static int ROLECENTERPANELS_VAF_Control_Ref_ID=1000092;
 /** View = 1 */
 public static String ROLECENTERPANELS_View = "1";
 /** Chart = 2 */

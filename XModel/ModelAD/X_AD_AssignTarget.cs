@@ -147,8 +147,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TargetColumn_ID AD_Reference_ID=414 */
-public static int AD_TARGETCOLUMN_ID_AD_Reference_ID=414;
+/** AD_TargetColumn_ID VAF_Control_Ref_ID=414 */
+public static int AD_TARGETCOLUMN_ID_VAF_Control_Ref_ID=414;
 /** Set Target Column.
 @param AD_TargetColumn_ID Target column to be set */
 public void SetAD_TargetColumn_ID (int AD_TargetColumn_ID)
@@ -171,8 +171,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetAD_TargetColumn_ID().ToString());
 }
 
-/** AssignRule AD_Reference_ID=425 */
-public static int ASSIGNRULE_AD_Reference_ID=425;
+/** AssignRule VAF_Control_Ref_ID=425 */
+public static int ASSIGNRULE_VAF_Control_Ref_ID=425;
 /** Always = A */
 public static String ASSIGNRULE_Always = "A";
 /** Only if NULL = N */

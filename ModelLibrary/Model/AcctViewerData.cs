@@ -155,8 +155,8 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public ListBoxVO GetPostingType()
         {
-            int AD_Reference_ID = 125;
-            List<NamePair> options = new List<NamePair>(MRefList.GetList(AD_Reference_ID, true));
+            int VAF_Control_Ref_ID = 125;
+            List<NamePair> options = new List<NamePair>(MRefList.GetList(VAF_Control_Ref_ID, true));
             return new ListBoxVO(options, null);
         }
 
@@ -510,7 +510,7 @@ namespace VAdvantage.Model
             if (PostingType == null || PostingType.Length == 0)
             {
                 rm.AddColumn(new RColumn(ctx, "PostingType", DisplayType.List,
-                    MFactAcct.POSTINGTYPE_AD_Reference_ID));
+                    MFactAcct.POSTINGTYPE_VAF_Control_Ref_ID));
             }
             return rm;
         }

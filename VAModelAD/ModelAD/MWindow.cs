@@ -195,7 +195,7 @@ namespace VAdvantage.Model
                 MRole[] roles = MRole.GetOf(GetCtx(), "IsManual='N'");
                 for (int i = 0; i < roles.Length; i++)
                 {
-                    MWindowAccess wa = new MWindowAccess(this, roles[i].GetAD_Role_ID());
+                    MWindowAccess wa = new MWindowAccess(this, roles[i].GetVAF_Role_ID());
                     wa.Save();
                 }
             }

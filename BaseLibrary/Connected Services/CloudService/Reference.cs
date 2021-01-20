@@ -767,11 +767,11 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerNotificationM1", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetCustomerNotificationM1(int Ad_Note_ID, string accessKey);
+        string GetCustomerNotificationM1(int VAF_Notice_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AcknowledgeCustomerNotification", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string AcknowledgeCustomerNotification(int Ad_note_ID, string accessKey);
+        string AcknowledgeCustomerNotification(int VAF_Notice_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerCompanyDetail", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -7280,12 +7280,12 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetCustomerNotification(Ad_User_ID, accessKey);
         }
         
-        public string GetCustomerNotificationM1(int Ad_Note_ID, string accessKey) {
-            return base.Channel.GetCustomerNotificationM1(Ad_Note_ID, accessKey);
+        public string GetCustomerNotificationM1(int VAF_Notice_ID, string accessKey) {
+            return base.Channel.GetCustomerNotificationM1(VAF_Notice_ID, accessKey);
         }
         
-        public string AcknowledgeCustomerNotification(int Ad_note_ID, string accessKey) {
-            return base.Channel.AcknowledgeCustomerNotification(Ad_note_ID, accessKey);
+        public string AcknowledgeCustomerNotification(int VAF_Notice_ID, string accessKey) {
+            return base.Channel.AcknowledgeCustomerNotification(VAF_Notice_ID, accessKey);
         }
         
         public string GetCustomerCompanyDetail(int AD_User_ID, string accessKey) {

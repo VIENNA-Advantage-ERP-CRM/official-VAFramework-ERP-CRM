@@ -330,13 +330,13 @@ namespace VAdvantage.Model
 
             List<MRole> list = new List<MRole>();
 
-            //String sql = "SELECT * FROM AD_Role r "
+            //String sql = "SELECT * FROM VAF_Role r "
             //    + "WHERE r.IsActive='Y'"
-            //    + " AND EXISTS (SELECT * FROM AD_Role_OrgAccess ro"
-            //        + " WHERE r.AD_Role_ID=ro.AD_Role_ID AND ro.IsActive='Y' AND ro.VAF_Org_ID=@orgid)"
+            //    + " AND EXISTS (SELECT * FROM VAF_Role_OrgRights ro"
+            //        + " WHERE r.VAF_Role_ID=ro.VAF_Role_ID AND ro.IsActive='Y' AND ro.VAF_Org_ID=@orgid)"
             //    + " AND EXISTS (SELECT * FROM AD_User_Roles ur"
-            //        + " WHERE r.AD_Role_ID=ur.AD_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID=@userid) "
-            //    + "ORDER BY AD_Role_ID";
+            //        + " WHERE r.VAF_Role_ID=ur.VAF_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID=@userid) "
+            //    + "ORDER BY VAF_Role_ID";
 
             // SqlParameter[] param = new SqlParameter[2];
             // param[0] = new SqlParameter("@orgid", VAF_Org_ID);
@@ -345,10 +345,10 @@ namespace VAdvantage.Model
 
             // Commented code above to resolve issue in Fetching Roles of selected user against Organization
             // and rewritten query 
-            String sql = @"SELECT * FROM AD_Role r WHERE r.IsActive='Y' 
-                        AND EXISTS (SELECT * FROM AD_User_Roles ur WHERE r.AD_Role_ID=ur.AD_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID = @userid)
-                        AND ((r.isaccessallorgs = 'Y') OR (r.IsUseUserOrgAccess <> 'Y' AND EXISTS (SELECT * FROM AD_Role_OrgAccess ro WHERE r.AD_Role_ID=ro.AD_Role_ID AND ro.IsActive='Y' AND ro.VAF_Org_ID=@orgid)) 
-                        OR (r.IsUseUserOrgAccess = 'Y' AND EXISTS (SELECT * FROM AD_User_OrgAccess uo WHERE uo.AD_User_ID=@userid1 AND uo.IsActive='Y' AND uo.VAF_Org_ID=@orgid1))) ORDER BY AD_Role_ID";
+            String sql = @"SELECT * FROM VAF_Role r WHERE r.IsActive='Y' 
+                        AND EXISTS (SELECT * FROM AD_User_Roles ur WHERE r.VAF_Role_ID=ur.VAF_Role_ID AND ur.IsActive='Y' AND ur.AD_User_ID = @userid)
+                        AND ((r.isaccessallorgs = 'Y') OR (r.IsUseUserOrgAccess <> 'Y' AND EXISTS (SELECT * FROM VAF_Role_OrgRights ro WHERE r.VAF_Role_ID=ro.VAF_Role_ID AND ro.IsActive='Y' AND ro.VAF_Org_ID=@orgid)) 
+                        OR (r.IsUseUserOrgAccess = 'Y' AND EXISTS (SELECT * FROM AD_User_OrgAccess uo WHERE uo.AD_User_ID=@userid1 AND uo.IsActive='Y' AND uo.VAF_Org_ID=@orgid1))) ORDER BY VAF_Role_ID";
 
             SqlParameter[] param = new SqlParameter[4];
             param[0] = new SqlParameter("@userid", GetAD_User_ID());
@@ -389,7 +389,7 @@ namespace VAdvantage.Model
             String sql = "SELECT * FROM AD_User u "
                 + "WHERE u.IsActive='Y'"
                 + " AND EXISTS (SELECT * FROM AD_User_Roles ur "
-                    + "WHERE ur.AD_User_ID=u.AD_User_ID AND ur.AD_Role_ID=" + role.GetAD_Role_ID() + " AND ur.IsActive='Y')";
+                    + "WHERE ur.AD_User_ID=u.AD_User_ID AND ur.VAF_Role_ID=" + role.GetVAF_Role_ID() + " AND ur.IsActive='Y')";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -445,7 +445,7 @@ namespace VAdvantage.Model
                 MRole[] roles = GetRoles(0);
                 for (int i = 0; i < roles.Length; i++)
                 {
-                    if (roles[i].GetAD_Role_ID() == 0)
+                    if (roles[i].GetVAF_Role_ID() == 0)
                     {
                         _isSystemAdministrator = true;
                         break;

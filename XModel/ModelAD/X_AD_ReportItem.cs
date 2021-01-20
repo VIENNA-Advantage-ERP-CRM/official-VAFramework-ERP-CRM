@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ReportItem
+/** Generated Model for VAF_ReportItem
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ReportItem : PO
+public class X_VAF_ReportItem : PO
 {
-public X_AD_ReportItem (Context ctx, int AD_ReportItem_ID, Trx trxName) : base (ctx, AD_ReportItem_ID, trxName)
+public X_VAF_ReportItem (Context ctx, int VAF_ReportItem_ID, Trx trxName) : base (ctx, VAF_ReportItem_ID, trxName)
 {
-/** if (AD_ReportItem_ID == 0)
+/** if (VAF_ReportItem_ID == 0)
 {
-SetAD_ReportItem_ID (0);
-SetAD_ReportTable_ID (0);
+SetVAF_ReportItem_ID (0);
+SetVAF_ReportTable_ID (0);
 }
  */
 }
-public X_AD_ReportItem (Ctx ctx, int AD_ReportItem_ID, Trx trxName) : base (ctx, AD_ReportItem_ID, trxName)
+public X_VAF_ReportItem (Ctx ctx, int VAF_ReportItem_ID, Trx trxName) : base (ctx, VAF_ReportItem_ID, trxName)
 {
-/** if (AD_ReportItem_ID == 0)
+/** if (VAF_ReportItem_ID == 0)
 {
-SetAD_ReportItem_ID (0);
-SetAD_ReportTable_ID (0);
+SetVAF_ReportItem_ID (0);
+SetVAF_ReportTable_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_ReportTable_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportItem (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportItem (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_ReportItem (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportItem (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportItem (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_ReportItem (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportItem (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ReportItem (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ReportItem()
+static X_VAF_ReportItem()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1375278729738L;
 public static int Table_ID;
  // =1000728;
 
-/** TableName=AD_ReportItem */
-public static String Table_Name="AD_ReportItem";
+/** TableName=VAF_ReportItem */
+public static String Table_Name="VAF_ReportItem";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ReportItem[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ReportItem[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
@@ -165,65 +165,65 @@ if (oo != null)
 return false;
 }
 
-/** AD_PrintFormatType AD_Reference_ID=1000148 */
-public static int AD_PRINTFORMATTYPE_AD_Reference_ID=1000148;
+/** VAF_Print_Rpt_LayoutType VAF_Control_Ref_ID=1000148 */
+public static int VAF_PRINT_RPT_LAYOUTTYPE_VAF_Control_Ref_ID=1000148;
 /** Only Label = L */
-public static String AD_PRINTFORMATTYPE_OnlyLabel = "L";
+public static String VAF_PRINT_RPT_LAYOUTTYPE_OnlyLabel = "L";
 /** Only Value = V */
-public static String AD_PRINTFORMATTYPE_OnlyValue = "V";
+public static String VAF_PRINT_RPT_LAYOUTTYPE_OnlyValue = "V";
 /** Is test a valid value.
 @param test testvalue
 @returns true if valid **/
-public bool IsAD_PrintFormatTypeValid (String test)
+public bool IsVAF_Print_Rpt_LayoutTypeValid (String test)
 {
 return test == null || test.Equals("L") || test.Equals("V");
 }
 /** Set Print Format Type.
-@param AD_PrintFormatType Print Format Type */
-public void SetAD_PrintFormatType (String AD_PrintFormatType)
+@param VAF_Print_Rpt_LayoutType Print Format Type */
+public void SetVAF_Print_Rpt_LayoutType (String VAF_Print_Rpt_LayoutType)
 {
-if (!IsAD_PrintFormatTypeValid(AD_PrintFormatType))
-throw new ArgumentException ("AD_PrintFormatType Invalid value - " + AD_PrintFormatType + " - Reference_ID=1000148 - L - V");
-if (AD_PrintFormatType != null && AD_PrintFormatType.Length > 1)
+if (!IsVAF_Print_Rpt_LayoutTypeValid(VAF_Print_Rpt_LayoutType))
+throw new ArgumentException ("VAF_Print_Rpt_LayoutType Invalid value - " + VAF_Print_Rpt_LayoutType + " - Reference_ID=1000148 - L - V");
+if (VAF_Print_Rpt_LayoutType != null && VAF_Print_Rpt_LayoutType.Length > 1)
 {
 log.Warning("Length > 1 - truncated");
-AD_PrintFormatType = AD_PrintFormatType.Substring(0,1);
+VAF_Print_Rpt_LayoutType = VAF_Print_Rpt_LayoutType.Substring(0,1);
 }
-Set_Value ("AD_PrintFormatType", AD_PrintFormatType);
+Set_Value ("VAF_Print_Rpt_LayoutType", VAF_Print_Rpt_LayoutType);
 }
 /** Get Print Format Type.
 @return Print Format Type */
-public String GetAD_PrintFormatType() 
+public String GetVAF_Print_Rpt_LayoutType() 
 {
-return (String)Get_Value("AD_PrintFormatType");
+return (String)Get_Value("VAF_Print_Rpt_LayoutType");
 }
-/** Set AD_ReportItem_ID.
-@param AD_ReportItem_ID AD_ReportItem_ID */
-public void SetAD_ReportItem_ID (int AD_ReportItem_ID)
+/** Set VAF_ReportItem_ID.
+@param VAF_ReportItem_ID VAF_ReportItem_ID */
+public void SetVAF_ReportItem_ID (int VAF_ReportItem_ID)
 {
-if (AD_ReportItem_ID < 1) throw new ArgumentException ("AD_ReportItem_ID is mandatory.");
-Set_ValueNoCheck ("AD_ReportItem_ID", AD_ReportItem_ID);
+if (VAF_ReportItem_ID < 1) throw new ArgumentException ("VAF_ReportItem_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ReportItem_ID", VAF_ReportItem_ID);
 }
-/** Get AD_ReportItem_ID.
-@return AD_ReportItem_ID */
-public int GetAD_ReportItem_ID() 
+/** Get VAF_ReportItem_ID.
+@return VAF_ReportItem_ID */
+public int GetVAF_ReportItem_ID() 
 {
-Object ii = Get_Value("AD_ReportItem_ID");
+Object ii = Get_Value("VAF_ReportItem_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set AD_ReportTable_ID.
-@param AD_ReportTable_ID AD_ReportTable_ID */
-public void SetAD_ReportTable_ID (int AD_ReportTable_ID)
+/** Set VAF_ReportTable_ID.
+@param VAF_ReportTable_ID VAF_ReportTable_ID */
+public void SetVAF_ReportTable_ID (int VAF_ReportTable_ID)
 {
-if (AD_ReportTable_ID < 1) throw new ArgumentException ("AD_ReportTable_ID is mandatory.");
-Set_ValueNoCheck ("AD_ReportTable_ID", AD_ReportTable_ID);
+if (VAF_ReportTable_ID < 1) throw new ArgumentException ("VAF_ReportTable_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ReportTable_ID", VAF_ReportTable_ID);
 }
-/** Get AD_ReportTable_ID.
-@return AD_ReportTable_ID */
-public int GetAD_ReportTable_ID() 
+/** Get VAF_ReportTable_ID.
+@return VAF_ReportTable_ID */
+public int GetVAF_ReportTable_ID() 
 {
-Object ii = Get_Value("AD_ReportTable_ID");
+Object ii = Get_Value("VAF_ReportTable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

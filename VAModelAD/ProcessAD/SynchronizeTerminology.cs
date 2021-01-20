@@ -123,7 +123,7 @@ namespace VAdvantage.Process
             try
             {
                 sql = "SELECT DISTINCT ColumnName, Name, Description, Help, EntityType " +
-                        "FROM	AD_Process_Para p " +
+                        "FROM	VAF_Job_Para p " +
                         "WHERE NOT EXISTS " +
                         "	(SELECT * FROM VAF_ColumnDic e " +
                         "	WHERE UPPER(p.ColumnName)=UPPER(e.ColumnName))";
@@ -236,7 +236,7 @@ namespace VAdvantage.Process
             AND NOT EXISTS
                 (SELECT * FROM VAF_QuickSearchColumn c WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)
             AND NOT EXISTS
-                (SELECT * FROM AD_Process_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName)));
+                (SELECT * FROM VAF_Job_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName)));
 
         DELETE	VAF_ColumnDic e
         WHERE NOT EXISTS
@@ -244,7 +244,7 @@ namespace VAdvantage.Process
         AND NOT EXISTS
             (SELECT * FROM VAF_QuickSearchColumn c WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)
         AND NOT EXISTS
-            (SELECT * FROM AD_Process_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName));
+            (SELECT * FROM VAF_Job_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName));
         DBMS_OUTPUT.PUT_LINE('  rows deleted: ' || SQL%ROWCOUNT);
 
              */
@@ -256,7 +256,7 @@ namespace VAdvantage.Process
                     + " AND NOT EXISTS"
                     + " (SELECT * FROM VAF_QuickSearchColumn c WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)"
                     + " AND NOT EXISTS"
-                    + " (SELECT * FROM AD_Process_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName)))";
+                    + " (SELECT * FROM VAF_Job_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName)))";
             //not do delete for now
             //executesql("Deleting unused Elements-TRL", sql,  "  rows deleted: ");
 
@@ -266,7 +266,7 @@ namespace VAdvantage.Process
                 + " AND NOT EXISTS"
                 + " (SELECT * FROM VAF_QuickSearchColumn c WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)"
                 + " AND NOT EXISTS"
-                + " (SELECT * FROM AD_Process_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName)))";
+                + " (SELECT * FROM VAF_Job_Para p WHERE UPPER(e.ColumnName)=UPPER(p.ColumnName)))";
             //executesql("Deleting unused Elements", sql,  "  rows deleted: ");
 
             /*
@@ -319,7 +319,7 @@ namespace VAdvantage.Process
         WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
           AND EXISTS (SELECT * FROM VAF_ColumnDic e, VAF_Column c
                     WHERE f.VAF_Column_ID=c.VAF_Column_ID
-                      AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL
+                      AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL
                       AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' ')));
         DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
 
@@ -332,7 +332,7 @@ namespace VAdvantage.Process
                 + " 	WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                 + " 	  AND EXISTS (SELECT * FROM VAF_ColumnDic e, VAF_Column c"
                 + " 				WHERE f.VAF_Column_ID=c.VAF_Column_ID"
-                + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL"
+                + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL"
                 + " 				  AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' ')))"
                 + "AND NOT EXISTS ("
                 + "      SELECT *"
@@ -362,7 +362,7 @@ namespace VAdvantage.Process
     WHERE EXISTS (SELECT * FROM VAF_Field f, vaf_columndic_tl e, VAF_Column c
                 WHERE trl.VAF_Field_ID=f.VAF_Field_ID
                   AND f.VAF_Column_ID=c.VAF_Column_ID
-                  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL
+                  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL
                   AND trl.VAF_Language=e.VAF_Language
                   AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
                   AND (trl.Name <> e.Name OR NVL(trl.Description,' ') <> NVL(e.Description,' ') OR NVL(trl.Help,' ') <> NVL(e.Help,' ')));
@@ -386,7 +386,7 @@ namespace VAdvantage.Process
                 + " 	WHERE EXISTS (SELECT * FROM VAF_Field f, vaf_columndic_tl e, VAF_Column c"
                 + " 				WHERE trl.VAF_Field_ID=f.VAF_Field_ID"
                 + " 				  AND f.VAF_Column_ID=c.VAF_Column_ID"
-                + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL"
+                + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL"
                 + " 				  AND trl.VAF_Language=e.VAF_Language"
                 + " 				  AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                 + " 				  AND (trl.Name <> e.Name OR NVL(trl.Description,' ') <> NVL(e.Description,' ') OR NVL(trl.Help,' ') <> NVL(e.Help,' ')))"
@@ -413,7 +413,7 @@ namespace VAdvantage.Process
     WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
       AND EXISTS (SELECT * FROM VAF_ColumnDic e, VAF_Column c
                 WHERE f.VAF_Column_ID=c.VAF_Column_ID
-                  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL
+                  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL
                   AND (f.Name <> e.PO_Name OR NVL(f.Description,' ') <> NVL(e.PO_Description,' ') OR NVL(f.Help,' ') <> NVL(e.PO_Help,' '))
                   AND e.PO_Name IS NOT NULL)
       AND EXISTS (SELECT * FROM VAF_Tab t, AD_Window w
@@ -434,7 +434,7 @@ namespace VAdvantage.Process
                                 + " WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                                 + "   AND EXISTS (SELECT * FROM VAF_ColumnDic e, VAF_Column c"
                                 + " 			WHERE f.VAF_Column_ID=c.VAF_Column_ID"
-                                + " 			  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL"
+                                + " 			  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL"
                                 + " 			  AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' '))"
                                 + " 			  AND e.Name IS NOT NULL)"
                                 + "   AND EXISTS (SELECT * FROM VAF_Tab t, AD_Window w"
@@ -465,7 +465,7 @@ namespace VAdvantage.Process
     WHERE EXISTS (SELECT * FROM VAF_Field f, vaf_columndic_tl e, VAF_Column c
                 WHERE trl.VAF_Field_ID=f.VAF_Field_ID
                   AND f.VAF_Column_ID=c.VAF_Column_ID
-                  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL
+                  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL
                   AND trl.VAF_Language=e.VAF_Language
                   AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
                   AND (trl.Name <> e.PO_Name OR NVL(trl.Description,' ') <> NVL(e.PO_Description,' ') OR NVL(trl.Help,' ') <> NVL(e.PO_Help,' '))
@@ -495,7 +495,7 @@ namespace VAdvantage.Process
                     + " 	WHERE EXISTS (SELECT * FROM VAF_Field f, vaf_columndic_tl e, VAF_Column c"
                     + " 				WHERE trl.VAF_Field_ID=f.VAF_Field_ID"
                     + " 				  AND f.VAF_Column_ID=c.VAF_Column_ID"
-                    + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL"
+                    + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL"
                     + " 				  AND trl.VAF_Language=e.VAF_Language"
                     + " 				  AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                     + " 				  AND (trl.Name <> e.Name OR NVL(trl.Description,' ') <> NVL(e.Description,' ') OR NVL(trl.Help,' ') <> NVL(e.Help,' '))"
@@ -533,7 +533,7 @@ namespace VAdvantage.Process
                 + " WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                 + "   AND EXISTS (SELECT * FROM VAF_ColumnDicContext e, VAF_Column c, VAF_Tab t, AD_Window w"
                 + " 			WHERE f.VAF_Column_ID=c.VAF_Column_ID"
-                + " 			  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.AD_Process_ID IS NULL"
+                + " 			  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND c.VAF_Job_ID IS NULL"
                 + " 			  AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' '))"
                 + " 			  AND e.Name IS NOT NULL"
                 + "               AND t.VAF_Tab_ID=f.VAF_Tab_ID AND w.AD_Window_ID=t.AD_Window_ID"
@@ -582,7 +582,7 @@ namespace VAdvantage.Process
                 + " 	WHERE EXISTS (SELECT * FROM VAF_Field f, VAF_ColumnDicContext_TL et, VAF_ColumnDicContext e,  VAF_Column c, VAF_Tab t, AD_Window w"
                 + " 				WHERE trl.VAF_Field_ID=f.VAF_Field_ID"
                 + " 				  AND f.VAF_Column_ID=c.VAF_Column_ID"
-                + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND et.VAF_ColumnDicContext_ID=e.VAF_ColumnDicContext_ID AND c.AD_Process_ID IS NULL"
+                + " 				  AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND et.VAF_ColumnDicContext_ID=e.VAF_ColumnDicContext_ID AND c.VAF_Job_ID IS NULL"
                 + " 				  AND trl.VAF_Language=et.VAF_Language"
                 + " 				  AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                 + " 				  AND (trl.Name <> et.Name OR NVL(trl.Description,' ') <> NVL(et.Description,' ') OR NVL(trl.Help,' ') <> NVL(et.Help,' '))"
@@ -595,16 +595,16 @@ namespace VAdvantage.Process
                 --	Fields from Process
                 DBMS_OUTPUT.PUT_LINE('Synchronize Field from Process');
                 UPDATE VAF_Field f
-                    SET Name = (SELECT p.Name FROM AD_Process p, VAF_Column c WHERE p.AD_Process_ID=c.AD_Process_ID
+                    SET Name = (SELECT p.Name FROM VAF_Job p, VAF_Column c WHERE p.VAF_Job_ID=c.VAF_Job_ID
                                 AND c.VAF_Column_ID=f.VAF_Column_ID),
-                        Description = (SELECT p.Description FROM AD_Process p, VAF_Column c WHERE p.AD_Process_ID=c.AD_Process_ID
+                        Description = (SELECT p.Description FROM VAF_Job p, VAF_Column c WHERE p.VAF_Job_ID=c.VAF_Job_ID
                                 AND c.VAF_Column_ID=f.VAF_Column_ID),
-                        Help = (SELECT p.Help FROM AD_Process p, VAF_Column c WHERE p.AD_Process_ID=c.AD_Process_ID
+                        Help = (SELECT p.Help FROM VAF_Job p, VAF_Column c WHERE p.VAF_Job_ID=c.VAF_Job_ID
                                 AND c.VAF_Column_ID=f.VAF_Column_ID),
                         Updated = SysDate
                 WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y' 
-                  AND EXISTS (SELECT * FROM AD_Process p, VAF_Column c
-                            WHERE c.AD_Process_ID=p.AD_Process_ID AND f.VAF_Column_ID=c.VAF_Column_ID
+                  AND EXISTS (SELECT * FROM VAF_Job p, VAF_Column c
+                            WHERE c.VAF_Job_ID=p.VAF_Job_ID AND f.VAF_Column_ID=c.VAF_Column_ID
                             AND (f.Name<>p.Name OR NVL(f.Description,' ')<>NVL(p.Description,' ') OR NVL(f.Help,' ')<>NVL(p.Help,' ')));
                 DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
                 */
@@ -613,21 +613,21 @@ namespace VAdvantage.Process
             //// Note 1 : Proeccess name was setting as field name in windows button so removed name and set only description and help ////
 
             // Removed This
-            /* SET Name = (SELECT p.Name FROM AD_Process p, VAF_Column c WHERE p.AD_Process_ID=c.AD_Process_ID
+            /* SET Name = (SELECT p.Name FROM VAF_Job p, VAF_Column c WHERE p.VAF_Job_ID=c.VAF_Job_ID
                                 AND c.VAF_Column_ID=f.VAF_Column_ID),
              */
 
 
             // Commented 
             //sql = "	UPDATE VAF_Field f"
-            //        + " SET Description = (SELECT p.Description FROM AD_Process p, VAF_Column c WHERE p.AD_Process_ID=c.AD_Process_ID"
+            //        + " SET Description = (SELECT p.Description FROM VAF_Job p, VAF_Column c WHERE p.VAF_Job_ID=c.VAF_Job_ID"
             //        + " 			AND c.VAF_Column_ID=f.VAF_Column_ID),"
-            //        + " 	Help = (SELECT p.Help FROM AD_Process p, VAF_Column c WHERE p.AD_Process_ID=c.AD_Process_ID"
+            //        + " 	Help = (SELECT p.Help FROM VAF_Job p, VAF_Column c WHERE p.VAF_Job_ID=c.VAF_Job_ID"
             //        + " 			AND c.VAF_Column_ID=f.VAF_Column_ID),"
             //        + " 	Updated = CURRENT_TIMESTAMP"
             //        + " WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y' "
-            //        + "   AND EXISTS (SELECT * FROM AD_Process p, VAF_Column c"
-            //        + " 			WHERE c.AD_Process_ID=p.AD_Process_ID AND f.VAF_Column_ID=c.VAF_Column_ID"
+            //        + "   AND EXISTS (SELECT * FROM VAF_Job p, VAF_Column c"
+            //        + " 			WHERE c.VAF_Job_ID=p.VAF_Job_ID AND f.VAF_Column_ID=c.VAF_Column_ID"
             //        + " 			AND (f.Name<>p.Name OR NVL(f.Description,' ')<>NVL(p.Description,' ') OR NVL(f.Help,' ')<>NVL(p.Help,' ')))";
             //Execute("Synchronize Field from Process", sql, "  rows updated: ");
 
@@ -635,21 +635,21 @@ namespace VAdvantage.Process
             --	Field Translations from Process
             DBMS_OUTPUT.PUT_LINE('Synchronize Field Trl from Process Trl');
             UPDATE VAF_Field_TL trl
-                SET Name = (SELECT p.Name FROM AD_Process_trl p, VAF_Column c, VAF_Field f 
-                            WHERE p.AD_Process_ID=c.AD_Process_ID AND c.VAF_Column_ID=f.VAF_Column_ID
+                SET Name = (SELECT p.Name FROM VAF_Job_TL p, VAF_Column c, VAF_Field f 
+                            WHERE p.VAF_Job_ID=c.VAF_Job_ID AND c.VAF_Column_ID=f.VAF_Column_ID
                             AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language),
-                    Description = (SELECT p.Description FROM AD_Process_trl p, VAF_Column c, VAF_Field f 
-                            WHERE p.AD_Process_ID=c.AD_Process_ID AND c.VAF_Column_ID=f.VAF_Column_ID
+                    Description = (SELECT p.Description FROM VAF_Job_TL p, VAF_Column c, VAF_Field f 
+                            WHERE p.VAF_Job_ID=c.VAF_Job_ID AND c.VAF_Column_ID=f.VAF_Column_ID
                             AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language),
-                    Help = (SELECT p.Help FROM AD_Process_trl p, VAF_Column c, VAF_Field f 
-                            WHERE p.AD_Process_ID=c.AD_Process_ID AND c.VAF_Column_ID=f.VAF_Column_ID
+                    Help = (SELECT p.Help FROM VAF_Job_TL p, VAF_Column c, VAF_Field f 
+                            WHERE p.VAF_Job_ID=c.VAF_Job_ID AND c.VAF_Column_ID=f.VAF_Column_ID
                             AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language),
-                    IsTranslated = (SELECT p.IsTranslated FROM AD_Process_trl p, VAF_Column c, VAF_Field f 
-                            WHERE p.AD_Process_ID=c.AD_Process_ID AND c.VAF_Column_ID=f.VAF_Column_ID
+                    IsTranslated = (SELECT p.IsTranslated FROM VAF_Job_TL p, VAF_Column c, VAF_Field f 
+                            WHERE p.VAF_Job_ID=c.VAF_Job_ID AND c.VAF_Column_ID=f.VAF_Column_ID
                             AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language),
                     Updated = SysDate
-            WHERE EXISTS (SELECT * FROM AD_Process_Trl p, VAF_Column c, VAF_Field f
-                        WHERE c.AD_Process_ID=p.AD_Process_ID AND f.VAF_Column_ID=c.VAF_Column_ID
+            WHERE EXISTS (SELECT * FROM VAF_Job_TL p, VAF_Column c, VAF_Field f
+                        WHERE c.VAF_Job_ID=p.VAF_Job_ID AND f.VAF_Column_ID=c.VAF_Column_ID
                         AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language
                         AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
                         AND (trl.Name<>p.Name OR NVL(trl.Description,' ')<>NVL(p.Description,' ') OR NVL(trl.Help,' ')<>NVL(p.Help,' ')));
@@ -660,18 +660,18 @@ namespace VAdvantage.Process
 
 
             sql = "UPDATE VAF_Field_TL trl"
-                    + " SET Description = (SELECT p.Description FROM AD_Process_trl p, VAF_Column c, VAF_Field f "
-                    + " 			WHERE p.AD_Process_ID=c.AD_Process_ID AND c.VAF_Column_ID=f.VAF_Column_ID"
+                    + " SET Description = (SELECT p.Description FROM VAF_Job_TL p, VAF_Column c, VAF_Field f "
+                    + " 			WHERE p.VAF_Job_ID=c.VAF_Job_ID AND c.VAF_Column_ID=f.VAF_Column_ID"
                     + " 			AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language),"
-                    + " 	Help = (SELECT p.Help FROM AD_Process_trl p, VAF_Column c, VAF_Field f "
-                    + " 			WHERE p.AD_Process_ID=c.AD_Process_ID AND c.VAF_Column_ID=f.VAF_Column_ID"
+                    + " 	Help = (SELECT p.Help FROM VAF_Job_TL p, VAF_Column c, VAF_Field f "
+                    + " 			WHERE p.VAF_Job_ID=c.VAF_Job_ID AND c.VAF_Column_ID=f.VAF_Column_ID"
                     + " 			AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language),"
-                    + " 	IsTranslated = (SELECT p.IsTranslated FROM AD_Process_trl p, VAF_Column c, VAF_Field f "
-                    + " 			WHERE p.AD_Process_ID=c.AD_Process_ID AND c.VAF_Column_ID=f.VAF_Column_ID"
+                    + " 	IsTranslated = (SELECT p.IsTranslated FROM VAF_Job_TL p, VAF_Column c, VAF_Field f "
+                    + " 			WHERE p.VAF_Job_ID=c.VAF_Job_ID AND c.VAF_Column_ID=f.VAF_Column_ID"
                     + " 			AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language),"
                     + " 	Updated = CURRENT_TIMESTAMP"
-                    + " WHERE EXISTS (SELECT * FROM AD_Process_Trl p, VAF_Column c, VAF_Field f"
-                    + " 		WHERE c.AD_Process_ID=p.AD_Process_ID AND f.VAF_Column_ID=c.VAF_Column_ID"
+                    + " WHERE EXISTS (SELECT * FROM VAF_Job_TL p, VAF_Column c, VAF_Field f"
+                    + " 		WHERE c.VAF_Job_ID=p.VAF_Job_ID AND f.VAF_Column_ID=c.VAF_Column_ID"
                     + " 		AND f.VAF_Field_ID=trl.VAF_Field_ID AND p.VAF_Language=trl.VAF_Language"
                     + " 		AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'"
                     + " 		AND (trl.Name<>p.Name OR NVL(trl.Description,' ')<>NVL(p.Description,' ') OR NVL(trl.Help,' ')<>NVL(p.Help,' ')))";
@@ -679,7 +679,7 @@ namespace VAdvantage.Process
 
             /*
             --	Sync Parameter ColumnName
-            UPDATE	AD_Process_Para f
+            UPDATE	VAF_Job_Para f
                 SET	ColumnName = (SELECT e.ColumnName FROM VAF_ColumnDic e
                             WHERE UPPER(e.ColumnName)=UPPER(f.ColumnName))
             WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
@@ -687,7 +687,7 @@ namespace VAdvantage.Process
                 WHERE UPPER(e.ColumnName)=UPPER(f.ColumnName)
                 AND e.ColumnName<>f.ColumnName);
             */
-            sql = "	UPDATE AD_Process_Para f " +
+            sql = "	UPDATE VAF_Job_Para f " +
                     " SET ColumnName = (SELECT e.ColumnName FROM VAF_ColumnDic e " +
                     " WHERE UPPER(e.ColumnName)=UPPER(f.ColumnName)) " +
                     " WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y' " +
@@ -700,12 +700,12 @@ namespace VAdvantage.Process
 
 
             --	Paramenter Fields
-            UPDATE	AD_Process_Para p
+            UPDATE	VAF_Job_Para p
               SET	IsCentrallyMaintained = 'N'
             WHERE	IsCentrallyMaintained <> 'N'
               AND NOT EXISTS (SELECT * FROM VAF_ColumnDic e WHERE p.ColumnName=e.ColumnName); 
             */
-            sql = "UPDATE AD_Process_Para p " +
+            sql = "UPDATE VAF_Job_Para p " +
                     " SET IsCentrallyMaintained = 'N' " +
                     " WHERE IsCentrallyMaintained <> 'N' " +
                     " AND NOT EXISTS (SELECT * FROM VAF_ColumnDic e WHERE p.ColumnName=e.ColumnName) ";
@@ -714,7 +714,7 @@ namespace VAdvantage.Process
             /*
             --	Parameter Fields
             DBMS_OUTPUT.PUT_LINE('Synchronize Process Parameter');
-            UPDATE AD_Process_Para f
+            UPDATE VAF_Job_Para f
                 SET Name = (SELECT e.Name FROM VAF_ColumnDic e
                             WHERE e.ColumnName=f.ColumnName),
                     Description = (SELECT e.Description FROM VAF_ColumnDic e
@@ -729,7 +729,7 @@ namespace VAdvantage.Process
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
             //TODO process, element, ctx relationships???
-            sql = "	UPDATE AD_Process_Para f " +
+            sql = "	UPDATE VAF_Job_Para f " +
                     " SET Name = (SELECT e.Name FROM VAF_ColumnDic e " +
                     " WHERE e.ColumnName=f.ColumnName)," +
                     " Description = (SELECT e.Description FROM VAF_ColumnDic e " +
@@ -742,35 +742,35 @@ namespace VAdvantage.Process
                     " 	  WHERE e.ColumnName=f.ColumnName " +
                     "     AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' '))) " +
                     " AND NOT EXISTS (" +
-                    "   SELECT * FROM AD_Process p, VAF_ColumnDic e, VAF_ColumnDicContext ec " +
-                    "   WHERE p.AD_Process_ID=f.AD_Process_ID " +
+                    "   SELECT * FROM VAF_Job p, VAF_ColumnDic e, VAF_ColumnDicContext ec " +
+                    "   WHERE p.VAF_Job_ID=f.VAF_Job_ID " +
                     "   AND e.ColumnName=f.ColumnName " +
                     "   AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
                     "   AND ec.VAF_ContextScope_ID=p.VAF_ContextScope_ID) ";
             Execute("Synchronize Process Parameter with Element", sql, "  rows updated: ");
 
-            sql = "	UPDATE AD_Process_Para f " +
+            sql = "	UPDATE VAF_Job_Para f " +
                     " SET Name = (SELECT e.Name FROM VAF_ColumnDicContext e " +
                     "				JOIN VAF_ColumnDic el ON (e.VAF_ColumnDic_ID=el.VAF_ColumnDic_ID) " +
-                    "				JOIN AD_Process p ON (p.VAF_ContextScope_ID=e.VAF_ContextScope_ID) " +
+                    "				JOIN VAF_Job p ON (p.VAF_ContextScope_ID=e.VAF_ContextScope_ID) " +
                     "   			WHERE el.ColumnName=f.ColumnName AND " +
-                    "   	 			p.AD_Process_ID=f.AD_Process_ID)," +
+                    "   	 			p.VAF_Job_ID=f.VAF_Job_ID)," +
                     " Description = (SELECT e.Description FROM VAF_ColumnDicContext e " +
                     "				JOIN VAF_ColumnDic el ON (e.VAF_ColumnDic_ID=el.VAF_ColumnDic_ID) " +
-                    "				JOIN AD_Process p ON (p.VAF_ContextScope_ID=e.VAF_ContextScope_ID) " +
+                    "				JOIN VAF_Job p ON (p.VAF_ContextScope_ID=e.VAF_ContextScope_ID) " +
                     "   			WHERE el.ColumnName=f.ColumnName AND " +
-                    "   	 			p.AD_Process_ID=f.AD_Process_ID)," +
+                    "   	 			p.VAF_Job_ID=f.VAF_Job_ID)," +
                     " Help = (SELECT e.Help FROM VAF_ColumnDicContext e " +
                     "				JOIN VAF_ColumnDic el ON (e.VAF_ColumnDic_ID=el.VAF_ColumnDic_ID) " +
-                    "				JOIN AD_Process p ON (p.VAF_ContextScope_ID=e.VAF_ContextScope_ID) " +
+                    "				JOIN VAF_Job p ON (p.VAF_ContextScope_ID=e.VAF_ContextScope_ID) " +
                     "   			WHERE el.ColumnName=f.ColumnName AND " +
-                    "   	 			p.AD_Process_ID=f.AD_Process_ID)," +
+                    "   	 			p.VAF_Job_ID=f.VAF_Job_ID)," +
                     " Updated = CURRENT_TIMESTAMP" +
                     " WHERE f.IsCentrallyMaintained='Y' AND f.IsActive='Y'" +
-                    "   AND EXISTS (SELECT * FROM AD_Process p, VAF_ColumnDic e, VAF_ColumnDicContext ec " +
+                    "   AND EXISTS (SELECT * FROM VAF_Job p, VAF_ColumnDic e, VAF_ColumnDicContext ec " +
                     " 	  WHERE e.ColumnName=f.ColumnName " +
                     "     AND (f.Name <> e.Name OR NVL(f.Description,' ') <> NVL(e.Description,' ') OR NVL(f.Help,' ') <> NVL(e.Help,' ')) " +
-                    "     AND p.AD_Process_ID=f.AD_Process_ID " +
+                    "     AND p.VAF_Job_ID=f.VAF_Job_ID " +
                     "     AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
                     "     AND ec.VAF_ContextScope_ID=p.VAF_ContextScope_ID) ";
 
@@ -780,80 +780,80 @@ namespace VAdvantage.Process
 
             --	Parameter Translations
             DBMS_OUTPUT.PUT_LINE('Synchronize Process Parameter Trl');
-            UPDATE AD_Process_Para_Trl trl
-                SET Name = (SELECT et.Name FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, AD_Process_Para f
+            UPDATE VAF_Job_Para_TL trl
+                SET Name = (SELECT et.Name FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, VAF_Job_Para f
                             WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID
-                              AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID),
-                    Description = (SELECT et.Description FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, AD_Process_Para f
+                              AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID),
+                    Description = (SELECT et.Description FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, VAF_Job_Para f
                             WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID
-                              AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID),
-                    Help = (SELECT et.Help FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, AD_Process_Para f
+                              AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID),
+                    Help = (SELECT et.Help FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, VAF_Job_Para f
                             WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID
-                              AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID),
-                    IsTranslated = (SELECT et.IsTranslated FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, AD_Process_Para f
+                              AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID),
+                    IsTranslated = (SELECT et.IsTranslated FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, VAF_Job_Para f
                             WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID
-                              AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID),
+                              AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID),
                     Updated = SysDate
-            WHERE EXISTS (SELECT * FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, AD_Process_Para f
+            WHERE EXISTS (SELECT * FROM VAF_ColumnDic_TL et, VAF_ColumnDic e, VAF_Job_Para f
                             WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID
-                              AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID
+                              AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID
                               AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y'
                               AND (trl.Name <> et.Name OR NVL(trl.Description,' ') <> NVL(et.Description,' ') OR NVL(trl.Help,' ') <> NVL(et.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_Process_Para_Trl trl " +
-                    " SET Name = (SELECT et.Name FROM VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN AD_Process_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
+            sql = "	UPDATE VAF_Job_Para_TL trl " +
+                    " SET Name = (SELECT et.Name FROM VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN VAF_Job_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
                     " 	  WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
-                    "     AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID), " +
-                    "   Description = (SELECT et.Description FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN AD_Process_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
+                    "     AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID), " +
+                    "   Description = (SELECT et.Description FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN VAF_Job_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
                     " 	  WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
-                    "     AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID), " +
-                    " 	Help = (SELECT et.Help FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN AD_Process_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
+                    "     AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID), " +
+                    " 	Help = (SELECT et.Help FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN VAF_Job_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
                     " 	  WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
-                    " 	  AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID), " +
-                    " 	IsTranslated = (SELECT et.IsTranslated FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN AD_Process_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
+                    " 	  AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID), " +
+                    " 	IsTranslated = (SELECT et.IsTranslated FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN VAF_Job_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
                     " 	  WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
-                    "     AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID), " +
+                    "     AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID), " +
                     " 	Updated = CURRENT_TIMESTAMP " +
-                    " 	WHERE EXISTS (SELECT * FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN AD_Process_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
+                    " 	WHERE EXISTS (SELECT * FROM  VAF_ColumnDic_TL et INNER JOIN  VAF_ColumnDic e ON (et.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) INNER JOIN VAF_Job_Para f ON (f.VAF_ColumnDic_ID = e.VAF_ColumnDic_ID) " +
                     " 	      WHERE et.VAF_Language=trl.VAF_Language AND et.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
-                    " 		  AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID " +
+                    " 		  AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID " +
                     " 		  AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y' " +
                     " 		  AND (trl.Name <> et.Name OR NVL(trl.Description,' ') <> NVL(et.Description,' ') OR NVL(trl.Help,' ') <> NVL(et.Help,' '))) " +
                     "  	AND NOT EXISTS (" +
                     "     SELECT * " +
-                    "     FROM AD_Process_Para f, AD_Process p, VAF_ColumnDic e, VAF_ColumnDicContext ec " +
-                    "     WHERE f.AD_Process_Para_ID=trl.AD_Process_Para_ID " +
-                    "     AND p.AD_Process_ID=f.AD_Process_ID " +
+                    "     FROM VAF_Job_Para f, VAF_Job p, VAF_ColumnDic e, VAF_ColumnDicContext ec " +
+                    "     WHERE f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID " +
+                    "     AND p.VAF_Job_ID=f.VAF_Job_ID " +
                     "     AND e.ColumnName=f.ColumnName " +
                     "     AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
                     "     AND ec.VAF_ContextScope_ID=p.VAF_ContextScope_ID) ";
             Execute("Synchronize Process Parameter Trl with Element Trl", sql, "  rows updated: ");
 
 
-            sql = "	UPDATE AD_Process_Para_Trl trl " +
-                    " SET Name = (SELECT et.Name FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, AD_Process_Para f, AD_Process p " +
+            sql = "	UPDATE VAF_Job_Para_TL trl " +
+                    " SET Name = (SELECT et.Name FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, VAF_Job_Para f, VAF_Job p " +
                             " WHERE et.VAF_Language=trl.VAF_Language AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND et.VAF_ColumnDicContext_ID=ec.VAF_ColumnDicContext_ID " +
-                            " AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID " +
-                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.AD_Process_ID=f.AD_Process_ID), " +
-                    "   Description = (SELECT et.Description FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, AD_Process_Para f, AD_Process p " +
+                            " AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID " +
+                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.VAF_Job_ID=f.VAF_Job_ID), " +
+                    "   Description = (SELECT et.Description FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, VAF_Job_Para f, VAF_Job p " +
                             " WHERE et.VAF_Language=trl.VAF_Language AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND et.VAF_ColumnDicContext_ID=ec.VAF_ColumnDicContext_ID " +
-                            " AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID " +
-                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.AD_Process_ID=f.AD_Process_ID), " +
-                    " 	Help = (SELECT et.Help FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, AD_Process_Para f, AD_Process p " +
+                            " AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID " +
+                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.VAF_Job_ID=f.VAF_Job_ID), " +
+                    " 	Help = (SELECT et.Help FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, VAF_Job_Para f, VAF_Job p " +
                             " WHERE et.VAF_Language=trl.VAF_Language AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND et.VAF_ColumnDicContext_ID=ec.VAF_ColumnDicContext_ID " +
-                            " AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID " +
-                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.AD_Process_ID=f.AD_Process_ID), " +
-                    " 	IsTranslated = (SELECT et.IsTranslated FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, AD_Process_Para f, AD_Process p " +
+                            " AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID " +
+                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.VAF_Job_ID=f.VAF_Job_ID), " +
+                    " 	IsTranslated = (SELECT et.IsTranslated FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, VAF_Job_Para f, VAF_Job p " +
                             " WHERE et.VAF_Language=trl.VAF_Language AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID AND et.VAF_ColumnDicContext_ID=ec.VAF_ColumnDicContext_ID " +
-                            " AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID " +
-                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.AD_Process_ID=f.AD_Process_ID), " +
+                            " AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID " +
+                            "AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID AND p.VAF_Job_ID=f.VAF_Job_ID), " +
                     " 	Updated = CURRENT_TIMESTAMP " +
-                    " 	WHERE EXISTS (SELECT * FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, AD_Process_Para f, AD_Process p " +
+                    " 	WHERE EXISTS (SELECT * FROM VAF_ColumnDicContext_TL et, VAF_ColumnDicContext ec, VAF_ColumnDic e, VAF_Job_Para f, VAF_Job p " +
                     " 	      WHERE et.VAF_Language=trl.VAF_Language AND ec.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID " +
                     "         AND et.VAF_ColumnDicContext_ID=ec.VAF_ColumnDicContext_ID " +
-                    " 		  AND e.ColumnName=f.ColumnName AND f.AD_Process_Para_ID=trl.AD_Process_Para_ID " +
-                    " 		  AND p.AD_Process_ID=f.AD_Process_ID AND trl.AD_Process_Para_ID=f.AD_Process_Para_ID " +
+                    " 		  AND e.ColumnName=f.ColumnName AND f.VAF_Job_Para_ID=trl.VAF_Job_Para_ID " +
+                    " 		  AND p.VAF_Job_ID=f.VAF_Job_ID AND trl.VAF_Job_Para_ID=f.VAF_Job_Para_ID " +
                     " 		  AND p.VAF_ContextScope_ID IS NOT NULL AND p.VAF_ContextScope_ID=ec.VAF_ContextScope_ID " +
                     " 		  AND f.IsCentrallyMaintained='Y' AND f.IsActive='Y' " +
                     " 		  AND (trl.Name <> et.Name OR NVL(trl.Description,' ') <> NVL(et.Description,' ') OR NVL(trl.Help,' ') <> NVL(et.Help,' '))) ";
@@ -995,27 +995,27 @@ namespace VAdvantage.Process
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node from Process');
             UPDATE AD_WF_Node n
                 SET (Name, Description, Help) = (SELECT f.Name, f.Description, f.Help 
-                        FROM AD_Process f
-                        WHERE f.AD_Process_ID=n.AD_Process_ID)
+                        FROM VAF_Job f
+                        WHERE f.VAF_Job_ID=n.VAF_Job_ID)
             WHERE n.IsCentrallyMaintained = 'Y'
-              AND EXISTS  (SELECT * FROM AD_Process f
-                        WHERE f.AD_Process_ID=n.AD_Process_ID
+              AND EXISTS  (SELECT * FROM VAF_Job f
+                        WHERE f.VAF_Job_ID=n.VAF_Job_ID
                           AND (f.Name <> n.Name OR NVL(f.Description,' ') <> NVL(n.Description,' ') OR NVL(f.Help,' ') <> NVL(n.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
             sql = "	UPDATE AD_WF_Node n " +
                     " SET Name = (SELECT f.Name " +
-                    " 	FROM AD_Process f " +
-                    " 	WHERE f.AD_Process_ID=n.AD_Process_ID) " +
+                    " 	FROM VAF_Job f " +
+                    " 	WHERE f.VAF_Job_ID=n.VAF_Job_ID) " +
                     " ,  Description = (SELECT f.Description " +
-                    " 	FROM AD_Process f " +
-                    " 	WHERE f.AD_Process_ID=n.AD_Process_ID) " +
+                    " 	FROM VAF_Job f " +
+                    " 	WHERE f.VAF_Job_ID=n.VAF_Job_ID) " +
                     " ,  Help = (SELECT  f.Help " +
-                    " 	FROM AD_Process f " +
-                    " 	WHERE f.AD_Process_ID=n.AD_Process_ID) " +
+                    " 	FROM VAF_Job f " +
+                    " 	WHERE f.VAF_Job_ID=n.VAF_Job_ID) " +
                     " WHERE n.IsCentrallyMaintained = 'Y' " +
-                    "   AND EXISTS  (SELECT * FROM AD_Process f " +
-                    " 		WHERE f.AD_Process_ID=n.AD_Process_ID " +
+                    "   AND EXISTS  (SELECT * FROM VAF_Job f " +
+                    " 		WHERE f.VAF_Job_ID=n.VAF_Job_ID " +
                     " 		  AND (f.Name <> n.Name OR NVL(f.Description,' ') <> NVL(n.Description,' ') OR NVL(f.Help,' ') <> NVL(n.Help,' '))) ";
             Execute("Synchronize Workflow Node from Process", sql, "  rows updated: ");
 
@@ -1025,30 +1025,30 @@ namespace VAdvantage.Process
             DBMS_OUTPUT.PUT_LINE('Synchronize Workflow Node Trl from Process Trl');
             UPDATE AD_WF_Node_Trl trl
                 SET (Name, Description, Help) = (SELECT t.Name, t.Description, t.Help
-                    FROM AD_Process_trl t, AD_WF_Node n
-                    WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Process_ID=t.AD_Process_ID
+                    FROM VAF_Job_TL t, AD_WF_Node n
+                    WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID
                       AND trl.VAF_Language=t.VAF_Language)
-            WHERE EXISTS (SELECT * FROM AD_Process_Trl t, AD_WF_Node n
-                        WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Process_ID=t.AD_Process_ID
+            WHERE EXISTS (SELECT * FROM VAF_Job_TL t, AD_WF_Node n
+                        WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID
                           AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y'
                           AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' ')));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
             sql = "	UPDATE AD_WF_Node_Trl trl " +
                     " SET Name = (SELECT t.Name " +
-                    " 		FROM AD_Process_trl t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Process_ID=t.AD_Process_ID " +
+                    " 		FROM VAF_Job_TL t, AD_WF_Node n " +
+                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language) " +
                     " ,  Description = (SELECT  t.Description " +
-                    " 		FROM AD_Process_trl t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Process_ID=t.AD_Process_ID " +
+                    " 		FROM VAF_Job_TL t, AD_WF_Node n " +
+                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language) " +
                     " ,  Help= (SELECT  t.Help " +
-                    " 		FROM AD_Process_trl t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Process_ID=t.AD_Process_ID " +
+                    " 		FROM VAF_Job_TL t, AD_WF_Node n " +
+                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language) " +
-                    " WHERE EXISTS (SELECT * FROM AD_Process_Trl t, AD_WF_Node n " +
-                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.AD_Process_ID=t.AD_Process_ID " +
+                    " WHERE EXISTS (SELECT * FROM VAF_Job_TL t, AD_WF_Node n " +
+                    " 		WHERE trl.AD_WF_Node_ID=n.AD_WF_Node_ID AND n.VAF_Job_ID=t.VAF_Job_ID " +
                     " 		  AND trl.VAF_Language=t.VAF_Language AND n.IsCentrallyMaintained='Y' AND n.IsActive='Y' " +
                     " 		  AND (trl.Name <> t.Name OR NVL(trl.Description,' ') <> NVL(t.Description,' ') OR NVL(trl.Help,' ') <> NVL(t.Help,' '))) ";
             Execute("Synchronize Workflow Node Trl from Process Trl", sql, "  rows updated: ");
@@ -1057,7 +1057,7 @@ namespace VAdvantage.Process
 
             --  Need centrally maintained flag here!
             DBMS_OUTPUT.PUT_LINE('Synchronize PrintFormatItem Name from Element');
-            UPDATE AD_PrintFormatItem pfi
+            UPDATE VAF_Print_Rpt_LItem pfi
               SET Name = (SELECT e.Name 
                 FROM VAF_ColumnDic e, VAF_Column c
                 WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID
@@ -1072,7 +1072,7 @@ namespace VAdvantage.Process
                 WHERE VAF_Client_ID=pfi.VAF_Client_ID AND IsMultiLingualDocument='Y');
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_PrintFormatItem pfi " +
+            sql = "	UPDATE VAF_Print_Rpt_LItem pfi " +
                     "	  SET Name = (SELECT e.Name " +
                     "		FROM VAF_ColumnDic e, VAF_Column c " +
                     "		WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID " +
@@ -1090,37 +1090,37 @@ namespace VAdvantage.Process
             /*
 
             DBMS_OUTPUT.PUT_LINE('Synchronize PrintFormatItem PrintName from Element');
-            UPDATE AD_PrintFormatItem pfi
+            UPDATE VAF_Print_Rpt_LItem pfi
               SET PrintName = (SELECT e.PrintName 
                 FROM VAF_ColumnDic e, VAF_Column c
                 WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID
                   AND c.VAF_Column_ID=pfi.VAF_Column_ID)
             WHERE pfi.IsCentrallyMaintained='Y'
               AND EXISTS (SELECT * 
-                FROM VAF_ColumnDic e, VAF_Column c, AD_PrintFormat pf
+                FROM VAF_ColumnDic e, VAF_Column c, VAF_Print_Rpt_Layout pf
                 WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID
                   AND c.VAF_Column_ID=pfi.VAF_Column_ID
                   AND LENGTH(pfi.PrintName) > 0
                   AND e.PrintName<>pfi.PrintName
-                  AND pf.AD_PrintFormat_ID=pfi.AD_PrintFormat_ID
+                  AND pf.VAF_Print_Rpt_Layout_ID=pfi.VAF_Print_Rpt_Layout_ID
                   AND pf.IsForm='N' AND IsTableBased='Y')
               AND EXISTS (SELECT * FROM VAF_Client 
                 WHERE VAF_Client_ID=pfi.VAF_Client_ID AND IsMultiLingualDocument='Y');
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_PrintFormatItem pfi " +
+            sql = "	UPDATE VAF_Print_Rpt_LItem pfi " +
                     "	  SET PrintName = (SELECT e.PrintName " +
                     "		FROM VAF_ColumnDic e, VAF_Column c " +
                     "		WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID " +
                     "		  AND c.VAF_Column_ID=pfi.VAF_Column_ID) " +
                     "	WHERE pfi.IsCentrallyMaintained='Y' " +
                     "      AND EXISTS (SELECT * " +
-                    "		FROM VAF_ColumnDic e, VAF_Column c, AD_PrintFormat pf " +
+                    "		FROM VAF_ColumnDic e, VAF_Column c, VAF_Print_Rpt_Layout pf " +
                     "		WHERE e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID " +
                     "		  AND c.VAF_Column_ID=pfi.VAF_Column_ID " +
                     "		  AND LENGTH(pfi.PrintName) > 0 " +
                     "		  AND e.PrintName<>pfi.PrintName " +
-                    "		  AND pf.AD_PrintFormat_ID=pfi.AD_PrintFormat_ID " +
+                    "		  AND pf.VAF_Print_Rpt_Layout_ID=pfi.VAF_Print_Rpt_Layout_ID " +
                     "		  AND pf.IsForm='N' AND IsTableBased='Y') " +
                     "	  AND EXISTS (SELECT * FROM VAF_Client " +
                     "		WHERE VAF_Client_ID=pfi.VAF_Client_ID AND IsMultiLingualDocument='Y') ";
@@ -1129,45 +1129,45 @@ namespace VAdvantage.Process
             /*
 
             DBMS_OUTPUT.PUT_LINE('Synchronize PrintFormatItem Trl from Element Trl (Multi-Lingual)');
-            UPDATE AD_PrintFormatItem_Trl trl
+            UPDATE VAF_Print_Rpt_LItem_TL trl
               SET PrintName = (SELECT e.PrintName 
-                FROM VAF_ColumnDic_TL e, VAF_Column c, AD_PrintFormatItem pfi
+                FROM VAF_ColumnDic_TL e, VAF_Column c, VAF_Print_Rpt_LItem pfi
                 WHERE e.VAF_Language=trl.VAF_Language
                   AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID
                   AND c.VAF_Column_ID=pfi.VAF_Column_ID
-                  AND pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID)
+                  AND pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID)
             WHERE EXISTS (SELECT * 
-                FROM VAF_ColumnDic_TL e, VAF_Column c, AD_PrintFormatItem pfi, AD_PrintFormat pf
+                FROM VAF_ColumnDic_TL e, VAF_Column c, VAF_Print_Rpt_LItem pfi, VAF_Print_Rpt_Layout pf
                 WHERE e.VAF_Language=trl.VAF_Language
                   AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID
                   AND c.VAF_Column_ID=pfi.VAF_Column_ID
-                  AND pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID
+                  AND pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID
                   AND pfi.IsCentrallyMaintained='Y'
                   AND LENGTH(pfi.PrintName) > 0
                   AND (e.PrintName<>trl.PrintName OR trl.PrintName IS NULL)
-                  AND pf.AD_PrintFormat_ID=pfi.AD_PrintFormat_ID 
+                  AND pf.VAF_Print_Rpt_Layout_ID=pfi.VAF_Print_Rpt_Layout_ID 
                   AND pf.IsForm='N' AND IsTableBased='Y')
               AND EXISTS (SELECT * FROM VAF_Client 
                 WHERE VAF_Client_ID=trl.VAF_Client_ID AND IsMultiLingualDocument='Y');
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_PrintFormatItem_Trl trl " +
+            sql = "	UPDATE VAF_Print_Rpt_LItem_TL trl " +
                     "	  SET PrintName = (SELECT e.PrintName " +
-                    "		FROM VAF_ColumnDic_TL e, VAF_Column c, AD_PrintFormatItem pfi " +
+                    "		FROM VAF_ColumnDic_TL e, VAF_Column c, VAF_Print_Rpt_LItem pfi " +
                     "		WHERE e.VAF_Language=trl.VAF_Language " +
                     "		  AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID " +
                     "		  AND c.VAF_Column_ID=pfi.VAF_Column_ID " +
-                    "		  AND pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID) " +
+                    "		  AND pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID) " +
                     "	WHERE EXISTS (SELECT * " +
-                    "		FROM VAF_ColumnDic_TL e, VAF_Column c, AD_PrintFormatItem pfi, AD_PrintFormat pf " +
+                    "		FROM VAF_ColumnDic_TL e, VAF_Column c, VAF_Print_Rpt_LItem pfi, VAF_Print_Rpt_Layout pf " +
                     "		WHERE e.VAF_Language=trl.VAF_Language " +
                     "		  AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID " +
                     "		  AND c.VAF_Column_ID=pfi.VAF_Column_ID " +
-                    "		  AND pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID " +
+                    "		  AND pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID " +
                     "          AND pfi.IsCentrallyMaintained='Y' " +
                     "		  AND LENGTH(pfi.PrintName) > 0 " +
                     "		  AND (e.PrintName<>trl.PrintName OR trl.PrintName IS NULL) " +
-                    "		  AND pf.AD_PrintFormat_ID=pfi.AD_PrintFormat_ID " +
+                    "		  AND pf.VAF_Print_Rpt_Layout_ID=pfi.VAF_Print_Rpt_Layout_ID " +
                     "		  AND pf.IsForm='N' AND IsTableBased='Y') " +
                     "	  AND EXISTS (SELECT * FROM VAF_Client " +
                     "		WHERE VAF_Client_ID=trl.VAF_Client_ID AND IsMultiLingualDocument='Y')";
@@ -1176,33 +1176,33 @@ namespace VAdvantage.Process
             /*
 
             DBMS_OUTPUT.PUT_LINE('Synchronize PrintFormatItem Trl (Not Multi-Lingual)');
-            UPDATE AD_PrintFormatItem_Trl trl
+            UPDATE VAF_Print_Rpt_LItem_TL trl
               SET PrintName = (SELECT pfi.PrintName 
-                FROM AD_PrintFormatItem pfi
-                WHERE pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID)
+                FROM VAF_Print_Rpt_LItem pfi
+                WHERE pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID)
             WHERE EXISTS (SELECT * 
-                FROM AD_PrintFormatItem pfi, AD_PrintFormat pf
-                WHERE pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID
+                FROM VAF_Print_Rpt_LItem pfi, VAF_Print_Rpt_Layout pf
+                WHERE pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID
                   AND pfi.IsCentrallyMaintained='Y'
                   AND LENGTH(pfi.PrintName) > 0
                   AND pfi.PrintName<>trl.PrintName
-                  AND pf.AD_PrintFormat_ID=pfi.AD_PrintFormat_ID 
+                  AND pf.VAF_Print_Rpt_Layout_ID=pfi.VAF_Print_Rpt_Layout_ID 
                   AND pf.IsForm='N' AND pf.IsTableBased='Y')
               AND EXISTS (SELECT * FROM VAF_Client 
                 WHERE VAF_Client_ID=trl.VAF_Client_ID AND IsMultiLingualDocument='N');
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_PrintFormatItem_Trl trl " +
+            sql = "	UPDATE VAF_Print_Rpt_LItem_TL trl " +
                     "	  SET PrintName = (SELECT pfi.PrintName " +
-                    "		FROM AD_PrintFormatItem pfi " +
-                    "		WHERE pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID) " +
+                    "		FROM VAF_Print_Rpt_LItem pfi " +
+                    "		WHERE pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID) " +
                     "	WHERE EXISTS (SELECT * " +
-                    "		FROM AD_PrintFormatItem pfi, AD_PrintFormat pf " +
-                    "		WHERE pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID " +
+                    "		FROM VAF_Print_Rpt_LItem pfi, VAF_Print_Rpt_Layout pf " +
+                    "		WHERE pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID " +
                     "          AND pfi.IsCentrallyMaintained='Y' " +
                     "		  AND LENGTH(pfi.PrintName) > 0 " +
                     "		  AND pfi.PrintName<>trl.PrintName " +
-                    "		  AND pf.AD_PrintFormat_ID=pfi.AD_PrintFormat_ID " +
+                    "		  AND pf.VAF_Print_Rpt_Layout_ID=pfi.VAF_Print_Rpt_Layout_ID " +
                     "		  AND pf.IsForm='N' AND pf.IsTableBased='Y') " +
                     "	  AND EXISTS (SELECT * FROM VAF_Client " +
                     "		WHERE VAF_Client_ID=trl.VAF_Client_ID AND IsMultiLingualDocument='N')";
@@ -1211,22 +1211,22 @@ namespace VAdvantage.Process
             /*
 
             DBMS_OUTPUT.PUT_LINE('Reset PrintFormatItem Trl where not used in base table');
-            UPDATE AD_PrintFormatItem_Trl trl
+            UPDATE VAF_Print_Rpt_LItem_TL trl
               SET PrintName = NULL
             WHERE PrintName IS NOT NULL
               AND EXISTS (SELECT *
-                FROM AD_PrintFormatItem pfi
-                WHERE pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID 
+                FROM VAF_Print_Rpt_LItem pfi
+                WHERE pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID 
                   AND pfi.IsCentrallyMaintained='Y'
                   AND (LENGTH (pfi.PrintName) = 0 OR pfi.PrintName IS NULL));
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "	UPDATE AD_PrintFormatItem_Trl trl " +
+            sql = "	UPDATE VAF_Print_Rpt_LItem_TL trl " +
                     "	  SET PrintName = NULL " +
                     "	WHERE PrintName IS NOT NULL " +
                     "	  AND EXISTS (SELECT * " +
-                    "		FROM AD_PrintFormatItem pfi " +
-                    "		WHERE pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID " +
+                    "		FROM VAF_Print_Rpt_LItem pfi " +
+                    "		WHERE pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID " +
                     "          AND pfi.IsCentrallyMaintained='Y' " +
                     "		  AND (LENGTH (pfi.PrintName) = 0 OR pfi.PrintName IS NULL))";
             Execute("Synchronize PrintFormatItem Trl where not used in base table", sql, "  rows updated: ");
@@ -1237,9 +1237,9 @@ namespace VAdvantage.Process
         SELECT 	e.PrintName "Element", pfi.PrintName "FormatItem", trl.VAF_Language, trl.PrintName "Trl"
         FROM 	VAF_ColumnDic e
           INNER JOIN VAF_Column c ON (e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID)
-          INNER JOIN AD_PrintFormatItem pfi ON (c.VAF_Column_ID=pfi.VAF_Column_ID)
-          INNER JOIN AD_PrintFormatItem_Trl trl ON (pfi.AD_PrintFormatItem_ID=trl.AD_PrintFormatItem_ID)
-        WHERE pfi.AD_PrintFormatItem_ID=?
+          INNER JOIN VAF_Print_Rpt_LItem pfi ON (c.VAF_Column_ID=pfi.VAF_Column_ID)
+          INNER JOIN VAF_Print_Rpt_LItem_TL trl ON (pfi.VAF_Print_Rpt_LItem_ID=trl.VAF_Print_Rpt_LItem_ID)
+        WHERE pfi.VAF_Print_Rpt_LItem_ID=?
         **
 
             --	Sync Names - Window
@@ -1299,9 +1299,9 @@ namespace VAdvantage.Process
             --	Sync Names - Process
             DBMS_OUTPUT.PUT_LINE('Synchronizing Menu with Processes');
             UPDATE	VAF_MenuConfig m
-            SET		Name = (SELECT p.Name FROM AD_Process p WHERE m.AD_Process_ID=p.AD_Process_ID),
-                    Description = (SELECT p.Description FROM AD_Process p WHERE m.AD_Process_ID=p.AD_Process_ID)
-            WHERE	m.AD_Process_ID IS NOT NULL
+            SET		Name = (SELECT p.Name FROM VAF_Job p WHERE m.VAF_Job_ID=p.VAF_Job_ID),
+                    Description = (SELECT p.Description FROM VAF_Job p WHERE m.VAF_Job_ID=p.VAF_Job_ID)
+            WHERE	m.VAF_Job_ID IS NOT NULL
               AND	m.Action IN ('R', 'P');
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
@@ -1310,9 +1310,9 @@ namespace VAdvantage.Process
 
             // Commented 
             //sql = "	UPDATE	VAF_MenuConfig m " +
-            //        "	SET		Name = (SELECT p.value FROM AD_Process p WHERE m.AD_Process_ID=p.AD_Process_ID), " +
-            //        "			Description = (SELECT p.Description FROM AD_Process p WHERE m.AD_Process_ID=p.AD_Process_ID) " +
-            //        "	WHERE	m.AD_Process_ID IS NOT NULL " +
+            //        "	SET		Name = (SELECT p.value FROM VAF_Job p WHERE m.VAF_Job_ID=p.VAF_Job_ID), " +
+            //        "			Description = (SELECT p.Description FROM VAF_Job p WHERE m.VAF_Job_ID=p.VAF_Job_ID) " +
+            //        "	WHERE	m.VAF_Job_ID IS NOT NULL " +
             //        "	  AND	m.Action IN ('R', 'P')";
             //Execute("Synchronize Menu with Processes", sql, "  rows updated: ");
 
@@ -1321,38 +1321,38 @@ namespace VAdvantage.Process
             /*
 
             UPDATE	VAF_MenuConfig_TL mt
-            SET		Name = (SELECT pt.Name FROM AD_Process_Trl pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID
+            SET		Name = (SELECT pt.Name FROM VAF_Job_TL pt, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID
                             AND mt.VAF_Language=pt.VAF_Language),
-                    Description = (SELECT pt.Description FROM AD_Process_Trl pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID
+                    Description = (SELECT pt.Description FROM VAF_Job_TL pt, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID
                             AND mt.VAF_Language=pt.VAF_Language),
-                    IsTranslated = (SELECT pt.IsTranslated FROM AD_Process_Trl pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID
+                    IsTranslated = (SELECT pt.IsTranslated FROM VAF_Job_TL pt, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID
                             AND mt.VAF_Language=pt.VAF_Language)
-            WHERE EXISTS (SELECT * FROM AD_Process_Trl pt, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID
+            WHERE EXISTS (SELECT * FROM VAF_Job_TL pt, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID
                             AND mt.VAF_Language=pt.VAF_Language
-                            AND m.AD_Process_ID IS NOT NULL
+                            AND m.VAF_Job_ID IS NOT NULL
                             AND	Action IN ('R', 'P'));
             DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);
             */
 
 
             //sql = "	UPDATE	VAF_MenuConfig_TL mt " +
-            //        "	SET		Name = (SELECT pt.Name FROM AD_Process_Trl pt, VAF_MenuConfig m " +
-            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID " +
+            //        "	SET		Name = (SELECT pt.Name FROM VAF_Job_TL pt, VAF_MenuConfig m " +
+            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID " +
             //        "					AND mt.VAF_Language=pt.VAF_Language), " +
-            //        "			Description = (SELECT pt.Description FROM AD_Process_Trl pt, VAF_MenuConfig m " +
-            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID " +
+            //        "			Description = (SELECT pt.Description FROM VAF_Job_TL pt, VAF_MenuConfig m " +
+            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID " +
             //        "					AND mt.VAF_Language=pt.VAF_Language), " +
-            //        "			IsTranslated = (SELECT pt.IsTranslated FROM AD_Process_Trl pt, VAF_MenuConfig m " +
-            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID" +
+            //        "			IsTranslated = (SELECT pt.IsTranslated FROM VAF_Job_TL pt, VAF_MenuConfig m " +
+            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID" +
             //        "					AND mt.VAF_Language=pt.VAF_Language)" +
-            //        "	WHERE EXISTS (SELECT * FROM AD_Process_Trl pt, VAF_MenuConfig m" +
-            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Process_ID=pt.AD_Process_ID" +
+            //        "	WHERE EXISTS (SELECT * FROM VAF_Job_TL pt, VAF_MenuConfig m" +
+            //        "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Job_ID=pt.VAF_Job_ID" +
             //        "					AND mt.VAF_Language=pt.VAF_Language" +
-            //        "					AND m.AD_Process_ID IS NOT NULL" +
+            //        "					AND m.VAF_Job_ID IS NOT NULL" +
             //        "					AND	Action IN ('R', 'P'))";
             //Execute("Synchronize Menu with Processes Translations", sql, "  rows updated: ");
 

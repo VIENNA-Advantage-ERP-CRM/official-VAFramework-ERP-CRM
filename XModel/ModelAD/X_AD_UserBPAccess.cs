@@ -145,8 +145,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** BPAccessType AD_Reference_ID=358 */
-public static int BPACCESSTYPE_AD_Reference_ID=358;
+/** BPAccessType VAF_Control_Ref_ID=358 */
+public static int BPACCESSTYPE_VAF_Control_Ref_ID=358;
 /** Assets, Download = A */
 public static String BPACCESSTYPE_AssetsDownload = "A";
 /** Business Documents = B */
@@ -181,8 +181,8 @@ public String GetBPAccessType()
 return (String)Get_Value("BPAccessType");
 }
 
-/** DocBaseType AD_Reference_ID=432 */
-public static int DOCBASETYPE_AD_Reference_ID=432;
+/** DocBaseType VAF_Control_Ref_ID=432 */
+public static int DOCBASETYPE_VAF_Control_Ref_ID=432;
 /** Set Document BaseType.
 @param DocBaseType Logical type of document */
 public void SetDocBaseType (String DocBaseType)

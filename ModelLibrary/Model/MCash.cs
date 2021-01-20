@@ -706,11 +706,11 @@ namespace VAdvantage.Model
                 String fileName = Get_TableName() + Get_ID() + "_" + CommonFunctions.GenerateRandomNo() + ".pdf";
                 string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", fileName);
 
-                int processID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Process_Id FROM AD_Process WHERE VALUE='CashJournalReport'", null, null));
+                int processID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Job_Id FROM VAF_Job WHERE VALUE='CashJournalReport'", null, null));
                 MPInstance instance = new MPInstance(GetCtx(), processID, GetC_Cash_ID());
                 instance.Save();
                 ProcessInfo pi = new ProcessInfo("", processID, Get_Table_ID(), GetC_Cash_ID());
-                pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
 
                 ProcessCtl ctl = new ProcessCtl();
                 //ctl.IsArabicReportFromOutside = false;

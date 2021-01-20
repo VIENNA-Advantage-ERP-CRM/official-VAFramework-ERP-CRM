@@ -22,7 +22,7 @@ namespace VAdvantage.Model
 {
 SetVAF_Column_ID (0);
 SetVAF_ColumnDic_ID (0);
-SetAD_Reference_ID (0);
+SetVAF_Control_Ref_ID (0);
 SetVAF_TableView_ID (0);
 SetColumnName (null);
 SetEntityType (null);	// U
@@ -47,7 +47,7 @@ SetVersion (0.0);
 {
 SetVAF_Column_ID (0);
 SetVAF_ColumnDic_ID (0);
-SetAD_Reference_ID (0);
+SetVAF_Control_Ref_ID (0);
 SetVAF_TableView_ID (0);
 SetColumnName (null);
 SetEntityType (null);	// U
@@ -175,55 +175,55 @@ SetVersion (0.0);
             return Convert.ToInt32(ii);
         }
         /** Set Process.
-@param AD_Process_ID Process or Report */
-        public void SetAD_Process_ID(int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+        public void SetVAF_Job_ID(int VAF_Job_ID)
         {
-            if (AD_Process_ID <= 0) Set_Value("AD_Process_ID", null);
+            if (VAF_Job_ID <= 0) Set_Value("VAF_Job_ID", null);
             else
-                Set_Value("AD_Process_ID", AD_Process_ID);
+                Set_Value("VAF_Job_ID", VAF_Job_ID);
         }
         /** Get Process.
 @return Process or Report */
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            Object ii = Get_Value("AD_Process_ID");
+            Object ii = Get_Value("VAF_Job_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Reference_ID AD_Reference_ID=1 */
-        public static int AD_REFERENCE_ID_AD_Reference_ID = 1;
+        /** VAF_Control_Ref_ID VAF_Control_Ref_ID=1 */
+        public static int VAF_CONTROL_REF_ID_VAF_Control_Ref_ID = 1;
         /** Set Reference.
-@param AD_Reference_ID System Reference and Validation */
-        public void SetAD_Reference_ID(int AD_Reference_ID)
+@param VAF_Control_Ref_ID System Reference and Validation */
+        public void SetVAF_Control_Ref_ID(int VAF_Control_Ref_ID)
         {
-            if (AD_Reference_ID < 1) throw new ArgumentException("AD_Reference_ID is mandatory.");
-            Set_Value("AD_Reference_ID", AD_Reference_ID);
+            if (VAF_Control_Ref_ID < 1) throw new ArgumentException("VAF_Control_Ref_ID is mandatory.");
+            Set_Value("VAF_Control_Ref_ID", VAF_Control_Ref_ID);
         }
         /** Get Reference.
 @return System Reference and Validation */
-        public int GetAD_Reference_ID()
+        public int GetVAF_Control_Ref_ID()
         {
-            Object ii = Get_Value("AD_Reference_ID");
+            Object ii = Get_Value("VAF_Control_Ref_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Reference_Value_ID AD_Reference_ID=4 */
-        public static int AD_REFERENCE_VALUE_ID_AD_Reference_ID = 4;
+        /** VAF_Control_Ref_Value_ID VAF_Control_Ref_ID=4 */
+        public static int VAF_CONTROL_REF_VALUE_ID_VAF_Control_Ref_ID = 4;
         /** Set Reference Key.
-@param AD_Reference_Value_ID Required to specify, if data type is Table or List */
-        public void SetAD_Reference_Value_ID(int AD_Reference_Value_ID)
+@param VAF_Control_Ref_Value_ID Required to specify, if data type is Table or List */
+        public void SetVAF_Control_Ref_Value_ID(int VAF_Control_Ref_Value_ID)
         {
-            if (AD_Reference_Value_ID <= 0) Set_Value("AD_Reference_Value_ID", null);
+            if (VAF_Control_Ref_Value_ID <= 0) Set_Value("VAF_Control_Ref_Value_ID", null);
             else
-                Set_Value("AD_Reference_Value_ID", AD_Reference_Value_ID);
+                Set_Value("VAF_Control_Ref_Value_ID", VAF_Control_Ref_Value_ID);
         }
         /** Get Reference Key.
 @return Required to specify, if data type is Table or List */
-        public int GetAD_Reference_Value_ID()
+        public int GetVAF_Control_Ref_Value_ID()
         {
-            Object ii = Get_Value("AD_Reference_Value_ID");
+            Object ii = Get_Value("VAF_Control_Ref_Value_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -348,8 +348,8 @@ SetVersion (0.0);
             return (String)Get_Value("ConstraintName");
         }
 
-        /** ConstraintType AD_Reference_ID=411 */
-        public static int CONSTRAINTTYPE_AD_Reference_ID = 411;
+        /** ConstraintType VAF_Control_Ref_ID=411 */
+        public static int CONSTRAINTTYPE_VAF_Control_Ref_ID = 411;
         /** Cascade = C */
         public static String CONSTRAINTTYPE_Cascade = "C";
         /** Null = N */
@@ -427,8 +427,8 @@ SetVersion (0.0);
             return (String)Get_Value("Description");
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */
@@ -516,8 +516,8 @@ SetVersion (0.0);
             return false;
         }
 
-        /** IsEncrypted AD_Reference_ID=354 */
-        public static int ISENCRYPTED_AD_Reference_ID = 354;
+        /** IsEncrypted VAF_Control_Ref_ID=354 */
+        public static int ISENCRYPTED_VAF_Control_Ref_ID = 354;
         /** Not Encrypted = N */
         public static String ISENCRYPTED_NotEncrypted = "N";
         /** Encrypted = Y */
@@ -1049,8 +1049,8 @@ SetVersion (0.0);
             return false;
         }
 
-        /** ObscureType AD_Reference_ID=291 */
-        public static int OBSCURETYPE_AD_Reference_ID = 291;/** Obscure Digits but last 4 = 904 */
+        /** ObscureType VAF_Control_Ref_ID=291 */
+        public static int OBSCURETYPE_VAF_Control_Ref_ID = 291;/** Obscure Digits but last 4 = 904 */
         public static String OBSCURETYPE_ObscureDigitsButLast4 = "904";/** Obscure Digits but first/last 4 = 944 */
         public static String OBSCURETYPE_ObscureDigitsButFirstLast4 = "944";/** Obscure AlphaNumeric but last 4 = A04 */
         public static String OBSCURETYPE_ObscureAlphaNumericButLast4 = "A04";/** Obscure AlphaNumeric but first/last 4 = A44 */

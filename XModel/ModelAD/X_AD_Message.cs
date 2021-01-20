@@ -134,8 +134,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -191,8 +191,8 @@ public String GetMsgTip()
 return (String)Get_Value("MsgTip");
 }
 
-/** MsgType AD_Reference_ID=103 */
-public static int MSGTYPE_AD_Reference_ID=103;
+/** MsgType VAF_Control_Ref_ID=103 */
+public static int MSGTYPE_VAF_Control_Ref_ID=103;
 /** Error = E */
 public static String MSGTYPE_Error = "E";
 /** Information = I */

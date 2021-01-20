@@ -123,8 +123,8 @@ StringBuilder sb = new StringBuilder ("X_CM_CStage[").Append(Get_ID()).Append("]
 return sb.ToString();
 }
 
-/** CM_CStageLink_ID AD_Reference_ID=387 */
-public static int CM_CSTAGELINK_ID_AD_Reference_ID=387;
+/** CM_CStageLink_ID VAF_Control_Ref_ID=387 */
+public static int CM_CSTAGELINK_ID_VAF_Control_Ref_ID=387;
 /** Set Container Link.
 @param CM_CStageLink_ID Stage Link to another Container in the Web Project */
 public void SetCM_CStageLink_ID (int CM_CStageLink_ID)
@@ -205,8 +205,8 @@ public String GetContainerLinkURL()
 return (String)Get_Value("ContainerLinkURL");
 }
 
-/** ContainerType AD_Reference_ID=385 */
-public static int CONTAINERTYPE_AD_Reference_ID=385;
+/** ContainerType VAF_Control_Ref_ID=385 */
+public static int CONTAINERTYPE_VAF_Control_Ref_ID=385;
 /** Document = D */
 public static String CONTAINERTYPE_Document = "D";
 /** Internal Link = L */

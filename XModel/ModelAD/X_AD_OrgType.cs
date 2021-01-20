@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAF_OrgType
+/** Generated Model for VAF_OrgCategory
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAF_OrgType : PO
+public class X_VAF_OrgCategory : PO
 {
-public X_VAF_OrgType (Context ctx, int VAF_OrgType_ID, Trx trxName) : base (ctx, VAF_OrgType_ID, trxName)
+public X_VAF_OrgCategory (Context ctx, int VAF_OrgCategory_ID, Trx trxName) : base (ctx, VAF_OrgCategory_ID, trxName)
 {
-/** if (VAF_OrgType_ID == 0)
+/** if (VAF_OrgCategory_ID == 0)
 {
-SetVAF_OrgType_ID (0);
+SetVAF_OrgCategory_ID (0);
 SetIsBalancing (false);	// N
 SetIsLegalEntity (false);	// N
 SetName (null);
 }
  */
 }
-public X_VAF_OrgType (Ctx ctx, int VAF_OrgType_ID, Trx trxName) : base (ctx, VAF_OrgType_ID, trxName)
+public X_VAF_OrgCategory (Ctx ctx, int VAF_OrgCategory_ID, Trx trxName) : base (ctx, VAF_OrgCategory_ID, trxName)
 {
-/** if (VAF_OrgType_ID == 0)
+/** if (VAF_OrgCategory_ID == 0)
 {
-SetVAF_OrgType_ID (0);
+SetVAF_OrgCategory_ID (0);
 SetIsBalancing (false);	// N
 SetIsLegalEntity (false);	// N
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_OrgType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_OrgCategory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_VAF_OrgType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_OrgType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_OrgCategory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_VAF_OrgType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_OrgType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_OrgCategory (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAF_OrgType()
+static X_VAF_OrgCategory()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389045587L;
 public static int Table_ID;
  // =689;
 
-/** TableName=VAF_OrgType */
-public static String Table_Name="VAF_OrgType";
+/** TableName=VAF_OrgCategory */
+public static String Table_Name="VAF_OrgCategory";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,37 +113,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAF_OrgType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_OrgCategory[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Organization Type.
-@param VAF_OrgType_ID Organization Type allows you to categorize your organizations */
-public void SetVAF_OrgType_ID (int VAF_OrgType_ID)
+@param VAF_OrgCategory_ID Organization Type allows you to categorize your organizations */
+public void SetVAF_OrgCategory_ID (int VAF_OrgCategory_ID)
 {
-if (VAF_OrgType_ID < 1) throw new ArgumentException ("VAF_OrgType_ID is mandatory.");
-Set_ValueNoCheck ("VAF_OrgType_ID", VAF_OrgType_ID);
+if (VAF_OrgCategory_ID < 1) throw new ArgumentException ("VAF_OrgCategory_ID is mandatory.");
+Set_ValueNoCheck ("VAF_OrgCategory_ID", VAF_OrgCategory_ID);
 }
 /** Get Organization Type.
 @return Organization Type allows you to categorize your organizations */
-public int GetVAF_OrgType_ID() 
+public int GetVAF_OrgCategory_ID() 
 {
-Object ii = Get_Value("VAF_OrgType_ID");
+Object ii = Get_Value("VAF_OrgCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Color.
-@param AD_PrintColor_ID Color used for printing and display */
-public void SetAD_PrintColor_ID (int AD_PrintColor_ID)
+@param VAF_Print_Rpt_Colour_ID Color used for printing and display */
+public void SetVAF_Print_Rpt_Colour_ID (int VAF_Print_Rpt_Colour_ID)
 {
-if (AD_PrintColor_ID <= 0) Set_Value ("AD_PrintColor_ID", null);
+if (VAF_Print_Rpt_Colour_ID <= 0) Set_Value ("VAF_Print_Rpt_Colour_ID", null);
 else
-Set_Value ("AD_PrintColor_ID", AD_PrintColor_ID);
+Set_Value ("VAF_Print_Rpt_Colour_ID", VAF_Print_Rpt_Colour_ID);
 }
 /** Get Print Color.
 @return Color used for printing and display */
-public int GetAD_PrintColor_ID() 
+public int GetVAF_Print_Rpt_Colour_ID() 
 {
-Object ii = Get_Value("AD_PrintColor_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Colour_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

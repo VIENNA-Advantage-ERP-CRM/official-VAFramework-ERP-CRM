@@ -512,7 +512,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public bool IsPrinted()
         {
-            return _vo.AD_Process_ID != 0;
+            return _vo.VAF_Job_ID != 0;
         }	//	isPrinted
 
 
@@ -1356,9 +1356,9 @@ namespace VAdvantage.Model
             //	Find Refernce Column e.g. BillTo_ID -> C_BPartner_Location_ID
             string sql = "SELECT cc.ColumnName "
                 + "FROM VAF_Column c"
-                + " INNER JOIN AD_Ref_Table r ON (c.AD_Reference_Value_ID=r.AD_Reference_ID)"
+                + " INNER JOIN VAF_CtrlRef_Table r ON (c.VAF_Control_Ref_Value_ID=r.VAF_Control_Ref_ID)"
                 + " INNER JOIN VAF_Column cc ON (r.Column_Key_ID=cc.VAF_Column_ID) "
-                + "WHERE c.AD_Reference_ID IN (18,30)" 	//	Table/Search
+                + "WHERE c.VAF_Control_Ref_ID IN (18,30)" 	//	Table/Search
                 + " AND c.ColumnName='" + colName + "'";
             IDataReader dr = null;
             try
@@ -1420,13 +1420,13 @@ namespace VAdvantage.Model
             }
 
             //	Special Reference Handling
-            if (tabKeyColumn.Equals("AD_Reference_ID"))
+            if (tabKeyColumn.Equals("VAF_Control_Ref_ID"))
             {
-                //	Column=AccessLevel, Key=AD_Reference_ID, Query=AccessLevel='6'
-                sql = "SELECT AD_Reference_ID FROM VAF_Column WHERE ColumnName='" + colName + "'";
-                //int AD_Reference_ID = DataBase.getSQLValue(null, sql, colName);
-                string AD_Reference_ID = DataBase.DB.ExecuteScalar(sql).ToString();
-                return "AD_Reference_ID=" + AD_Reference_ID;
+                //	Column=AccessLevel, Key=VAF_Control_Ref_ID, Query=AccessLevel='6'
+                sql = "SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName='" + colName + "'";
+                //int VAF_Control_Ref_ID = DataBase.getSQLValue(null, sql, colName);
+                string VAF_Control_Ref_ID = DataBase.DB.ExecuteScalar(sql).ToString();
+                return "VAF_Control_Ref_ID=" + VAF_Control_Ref_ID;
             }
 
             ////	Causes could be functions in query
@@ -1875,9 +1875,9 @@ namespace VAdvantage.Model
         /// Get ProcessID
         /// </summary>
         /// <returns>ProcessID</returns>
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            return _vo.AD_Process_ID;
+            return _vo.VAF_Job_ID;
         }
 
         /// <summary>
@@ -2024,7 +2024,7 @@ namespace VAdvantage.Model
             }
             if (_wVo.IsPrivateRecordLock)
             {
-                sql = " SELECT Record_ID FROM AD_Private_Access WHERE AD_User_ID=" + AD_User_ID + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID";
+                sql = " SELECT Record_ID FROM VAF_Private_Rights WHERE AD_User_ID=" + AD_User_ID + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -2696,7 +2696,7 @@ namespace VAdvantage.Model
                 return;
 
             String sql = "SELECT Record_ID "
-                + "FROM AD_Private_Access "
+                + "FROM VAF_Private_Rights "
                 + "WHERE AD_User_ID=" + AD_User_ID.ToString() + " AND VAF_TableView_ID=" + _vo.VAF_TableView_ID.ToString() + " AND IsActive='Y' "
                 + "ORDER BY Record_ID";
             IDataReader dr = null;

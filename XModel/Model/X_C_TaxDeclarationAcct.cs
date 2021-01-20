@@ -117,8 +117,8 @@ StringBuilder sb = new StringBuilder ("X_C_TaxDeclarationAcct[").Append(Get_ID()
 return sb.ToString();
 }
 
-/** Account_ID AD_Reference_ID=331 */
-public static int ACCOUNT_ID_AD_Reference_ID=331;
+/** Account_ID VAF_Control_Ref_ID=331 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=331;
 /** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID)

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRecordAccess
  * Purpose        : Record Access Model
- * Class Used     : X_AD_Record_Access
+ * Class Used     : X_VAF_Record_Rights
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRecordAccess : X_AD_Record_Access
+    public class MRecordAccess : X_VAF_Record_Rights
     {
         #region Private Variables
        // private static long serialVersionUID = -5115765616266528435L;
@@ -77,14 +77,14 @@ namespace VAdvantage.Model
         /// Full New Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
         /// <param name="trxName"></param>
-        public MRecordAccess(Ctx ctx, int AD_Role_ID, int VAF_TableView_ID, int Record_ID, Trx trxName)
+        public MRecordAccess(Ctx ctx, int VAF_Role_ID, int VAF_TableView_ID, int Record_ID, Trx trxName)
             : base(ctx, 0, trxName)
         {
-            SetAD_Role_ID(AD_Role_ID);
+            SetVAF_Role_ID(VAF_Role_ID);
             SetVAF_TableView_ID(VAF_TableView_ID);
             SetRecord_ID(Record_ID);
             SetIsExclude(true);
@@ -217,8 +217,8 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MRecordAccess[AD_Role_ID=")
-                .Append(GetAD_Role_ID())
+            StringBuilder sb = new StringBuilder("MRecordAccess[VAF_Role_ID=")
+                .Append(GetVAF_Role_ID())
                 .Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID())
                 .Append(",Record_ID=").Append(GetRecord_ID())
                 .Append(",Active=").Append(IsActive())

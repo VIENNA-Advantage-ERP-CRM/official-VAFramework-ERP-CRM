@@ -156,7 +156,7 @@ OR
                               (SELECT *
                               FROM AD_WF_Responsible r
                               INNER JOIN AD_User_Roles ur
-                              ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                              ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
                               WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
                               AND ur.IsActive = 'Y'
                               AND (ur.AD_User_ID          =" + AD_User_ID + @" 
@@ -309,7 +309,7 @@ OR
                               (SELECT *
                               FROM AD_WF_Responsible r
                               INNER JOIN AD_User_Roles ur
-                              ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                              ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
                               WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
                               AND (ur.AD_User_ID          =" + ctx.GetAD_User_ID() + @"
                               OR a.AD_User_ID            IN
@@ -596,8 +596,8 @@ OR
                 {
                     MColumn col = node.GetColumn();
                     info.ColID = col.GetVAF_Column_ID();
-                    info.ColReference = col.GetAD_Reference_ID();
-                    info.ColReferenceValue = col.GetAD_Reference_Value_ID();
+                    info.ColReference = col.GetVAF_Control_Ref_ID();
+                    info.ColReferenceValue = col.GetVAF_Control_Ref_Value_ID();
                     info.ColName = col.GetColumnName();
                 }
                 else if (MWFNode.ACTION_UserWindow.Equals(node.GetAction()))
@@ -730,7 +730,7 @@ OR
                         if (column == null)
                             column = node.GetColumn();
                         //	Do we have an answer?
-                        int dt = column.GetAD_Reference_ID();
+                        int dt = column.GetVAF_Control_Ref_ID();
                         String value = null;
                         value = answer != null ? answer.ToString() : null;
                         //if (dt == DisplayType.YesNo || dt == DisplayType.List || dt == DisplayType.TableDir)
@@ -786,7 +786,7 @@ OR
                                 int parentOrg_ID = -1;
                                 if (resp.IsOrganization())
                                 {
-                                    parentOrg_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Parent_Org_Id FROM vaf_orgInfo WHERE VAF_Org_ID = " + activity.GetResponsibleOrg_ID()));
+                                    parentOrg_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Parent_Org_Id FROM VAF_OrgDetail WHERE VAF_Org_ID = " + activity.GetResponsibleOrg_ID()));
                                     superVisiorID = (new MOrgInfo(ctx, parentOrg_ID, null).GetSupervisor_ID());
                                     if (superVisiorID > 0)
                                         setRespOrg = true;
@@ -1014,7 +1014,7 @@ OR
                                   (SELECT *
                                   FROM AD_WF_Responsible r
                                   INNER JOIN AD_User_Roles ur
-                                  ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                                  ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
                                   WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
                                   AND (ur.AD_User_ID          =" + ctx.GetAD_User_ID() + @"
                                   OR AD_WF_Activity.AD_User_ID            IN
@@ -1085,7 +1085,7 @@ OR
                                   (SELECT *
                                   FROM AD_WF_Responsible r
                                   INNER JOIN AD_User_Roles ur
-                                  ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                                  ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
                                   WHERE AD_WF_Activity.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
                                   AND (ur.AD_User_ID          =" + ctx.GetAD_User_ID() + @"
                                   OR AD_WF_Activity.AD_User_ID            IN

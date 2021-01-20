@@ -16,7 +16,7 @@ namespace VIS.Models
             List<CardViewPropeties> lstCardView = null;
             //string sqlQuery = "SELECT * FROM VAF_CardView WHERE AD_Window_id=" + ad_Window_ID + " and VAF_Tab_id=" + vaf_tab_ID + " AND (createdby=" + ctx.GetAD_User_ID() + " OR AD_USER_ID Is NULL OR AD_User_ID = " + ctx.GetAD_User_ID() + ") AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             //string sqlQuery = " SELECT * FROM VAF_CardView c WHERE c.AD_Window_id=" + ad_Window_ID + " and c.VAF_Tab_id=" + vaf_tab_ID + " AND (c.createdby=" + ctx.GetAD_User_ID() +
-            //                  " OR ((c.AD_USER_ID    IS NULL) AND exists (select * from VAF_CardView_role r where r.VAF_CardView_id = c.VAF_CardView_id and r.ad_role_id = " + ctx.GetAD_Role_ID() + ")) OR c.AD_User_ID     = " + ctx.GetAD_User_ID() +
+            //                  " OR ((c.AD_USER_ID    IS NULL) AND exists (select * from VAF_CardView_role r where r.VAF_CardView_id = c.VAF_CardView_id and r.VAF_Role_id = " + ctx.GetVAF_Role_ID() + ")) OR c.AD_User_ID     = " + ctx.GetAD_User_ID() +
             //                  " ) AND c.VAF_Client_ID  =" + ctx.GetVAF_Client_ID();
 
             //   string sqlQuery = " SELECT * FROM VAF_CardView c WHERE c.AD_Window_id=" + ad_Window_ID + " and c.VAF_Tab_id=" + vaf_tab_ID + " AND c.VAF_Client_ID  =" + ctx.GetVAF_Client_ID();
@@ -62,7 +62,7 @@ namespace VIS.Models
         {
             List<RolePropeties> lstCardViewRole = null;
             RolePropeties objCardView = null;
-            string sqlQuery = "SELECT AD_ROLE_ID,VAF_CardView_ID from VAF_CardView_ROLE WHERE VAF_CardView_id=" + VAF_CardView_ID + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();
+            string sqlQuery = "SELECT VAF_ROLE_ID,VAF_CardView_ID from VAF_CardView_ROLE WHERE VAF_CardView_id=" + VAF_CardView_ID + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             //  string sqlQuery = "SELECT * FROM VAF_CardView WHERE AD_Window_id=" + ad_Window_ID + " and VAF_Tab_id=" + vaf_tab_ID + " AND (AD_USER_ID=" + ctx.GetAD_User_ID() + " OR AD_USER_ID Is NULL )" ;
             // sqlQuery = MRole.GetDefault(ctx).AddAccessSQL(sqlQuery, "VAF_CardView", false, false);
             DataSet ds = DB.ExecuteDataset(sqlQuery);
@@ -73,7 +73,7 @@ namespace VIS.Models
                 {
                     objCardView = new RolePropeties()
                     {
-                        AD_Role_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Role_ID"]),
+                        VAF_Role_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Role_ID"]),
                         VAF_CardView_ID = VAdvantage.Utility.Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_CardView_ID"])
                     };
                     lstCardViewRole.Add(objCardView);
@@ -132,8 +132,8 @@ namespace VIS.Models
         {
             List<RolePropeties> lstRole = null;
 
-            string sqlQuery = "SELECT  r.AD_Role_ID,  r.Name  FROM AD_User u INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive ='Y') " +
-                        " INNER JOIN AD_Role r ON (ur.AD_Role_ID =r.AD_Role_ID AND r.IsActive ='Y') WHERE u.AD_User_ID = " + ctx.GetAD_User_ID() + " AND u.IsActive ='Y' AND EXISTS " +
+            string sqlQuery = "SELECT  r.VAF_Role_ID,  r.Name  FROM AD_User u INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive ='Y') " +
+                        " INNER JOIN VAF_Role r ON (ur.VAF_Role_ID =r.VAF_Role_ID AND r.IsActive ='Y') WHERE u.AD_User_ID = " + ctx.GetAD_User_ID() + " AND u.IsActive ='Y' AND EXISTS " +
                         " (SELECT * FROM VAF_Client c WHERE u.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive      ='Y' ) " +
                         " AND EXISTS (SELECT * FROM VAF_Client c WHERE r.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive      ='Y' )";
 
@@ -146,7 +146,7 @@ namespace VIS.Models
                     RolePropeties objCardView = new RolePropeties()
                     {
                         RoleName = Convert.ToString(ds.Tables[0].Rows[i]["NAME"]),
-                        AD_Role_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"])
+                        VAF_Role_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"])
                     };
                     lstRole.Add(objCardView);
                 }
@@ -233,7 +233,7 @@ namespace VIS.Models
                 {
                     MCardViewRole objMCVR = new MCardViewRole(ctx, 0, null);
                     objMCVR.SetVAF_CardView_ID(objCardView.Get_ID());
-                    objMCVR.SetAD_Role_ID(lstRoleId[i].AD_Role_ID);
+                    objMCVR.SetVAF_Role_ID(lstRoleId[i].VAF_Role_ID);
                     if (!objMCVR.Save())
                     {
                     }
@@ -433,7 +433,7 @@ namespace VIS.Models
     public class RolePropeties
     {
         public string RoleName { get; set; }
-        public int AD_Role_ID { get; set; }
+        public int VAF_Role_ID { get; set; }
         public int VAF_CardView_ID { get; set; }
 
     }

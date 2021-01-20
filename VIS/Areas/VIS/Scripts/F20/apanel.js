@@ -1706,7 +1706,7 @@
     APanel.prototype.unlockUI = function (pi) {
         //	log.fine("" + pi);
         var notPrint = pi != null
-            && pi.getAD_Process_ID() != this.curTab.getAD_Process_ID();
+            && pi.getVAF_Job_ID() != this.curTab.getVAF_Job_ID();
         //  Process Result
         if (notPrint)		//	refresh if not print
         {
@@ -2334,8 +2334,8 @@
 
         //	Send Email -----
         else if (columnName.equals("SendNewEMail")) {
-            // AD_Process_ID = vButton.getProcess_ID();
-            //if (AD_Process_ID != 0)
+            // VAF_Job_ID = vButton.getProcess_ID();
+            //if (VAF_Job_ID != 0)
             //{
             //}
             ////	Mail Defaults
@@ -2358,7 +2358,7 @@
             return;
         }
 
-        if (vButton.AD_Process_ID > 0) {
+        if (vButton.VAF_Job_ID > 0) {
 
             var ret = this.checkAndCallProcess(vButton, table_ID, record_ID, ctx, self);
             self = null;
@@ -2820,7 +2820,7 @@
 
         curEle = tabEle = null;
 
-        if (this.curTab.getAD_Process_ID() == 0) {
+        if (this.curTab.getVAF_Job_ID() == 0) {
             this.aPrint.setEnabled(false);
         }
         else this.aPrint.setEnabled(true);
@@ -3610,16 +3610,16 @@
             return;
         }
 
-        var AD_Process_ID = this.curTab.getAD_Process_ID();
-        if (AD_Process_ID == 0) {
+        var VAF_Job_ID = this.curTab.getVAF_Job_ID();
+        if (VAF_Job_ID == 0) {
             return;
         }
 
 
         var sql = "VIS_118";
         var param = [];
-        param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
-        var AD_ReportFormat_ID = executeScalar(sql, param);
+        param[0] = new VIS.DB.SqlParam("@VAF_Job_ID", VAF_Job_ID);
+        var VAF_ReportLayout_ID = executeScalar(sql, param);
 
 
         sql = "VIS_119";
@@ -3627,7 +3627,7 @@
 
 
 
-        if (rowsSource.length > 1 && AD_ReportFormat_ID > 0 && InstalledVersion && (InstalledVersion.toString() > ('1.0.0.3'))) {
+        if (rowsSource.length > 1 && VAF_ReportLayout_ID > 0 && InstalledVersion && (InstalledVersion.toString() > ('1.0.0.3'))) {
 
             if (this.curTab.needSave(true, false)) {
                 this.cmd_save(true);
@@ -3644,7 +3644,7 @@
                     recIds += ',' + rowsSource[i][this.curTab.getKeyColumnName().toLower()];
                 }
             }
-            var print = new VIS.APrint(AD_Process_ID, this.curTab.getVAF_TableView_ID(), 0, this.curWindowNo, recIds, this.curTab, true);
+            var print = new VIS.APrint(VAF_Job_ID, this.curTab.getVAF_TableView_ID(), 0, this.curWindowNo, recIds, this.curTab, true);
             print.start(this.aPrint.getListItmIT());
         }
         else {
@@ -3659,12 +3659,12 @@
                 return;
             }
 
-            var print = new VIS.APrint(AD_Process_ID, this.curTab.getVAF_TableView_ID(), recID, this.curWindowNo, null, this.curTab);
+            var print = new VIS.APrint(VAF_Job_ID, this.curTab.getVAF_TableView_ID(), recID, this.curWindowNo, null, this.curTab);
             print.start(this.aPrint.getListItmIT());
         }
         //var table_ID = this.curTab.getVAF_TableView_ID();
         //var record_ID = this.curTab.getRecord_ID();
-        //var pi = new VIS.ProcessInfo('Print', AD_Process_ID, table_ID, record_ID);        
+        //var pi = new VIS.ProcessInfo('Print', VAF_Job_ID, table_ID, record_ID);        
         //pi.setAD_User_ID(VIS.context.getAD_User_ID());
         //pi.setVAF_Client_ID(VIS.context.getVAF_Client_ID());
 

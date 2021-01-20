@@ -198,8 +198,8 @@ public String GetManualNote()
 return (String)Get_Value("ManualNote");
 }
 
-/** MeasureDataType AD_Reference_ID=369 */
-public static int MEASUREDATATYPE_AD_Reference_ID=369;
+/** MeasureDataType VAF_Control_Ref_ID=369 */
+public static int MEASUREDATATYPE_VAF_Control_Ref_ID=369;
 /** Status Qty/Amount = S */
 public static String MEASUREDATATYPE_StatusQtyAmount = "S";
 /** Qty/Amount in Time = T */
@@ -232,8 +232,8 @@ public String GetMeasureDataType()
 return (String)Get_Value("MeasureDataType");
 }
 
-/** MeasureType AD_Reference_ID=231 */
-public static int MEASURETYPE_AD_Reference_ID=231;
+/** MeasureType VAF_Control_Ref_ID=231 */
+public static int MEASURETYPE_VAF_Control_Ref_ID=231;
 /** Achievements = A */
 public static String MEASURETYPE_Achievements = "A";
 /** Calculated = C */

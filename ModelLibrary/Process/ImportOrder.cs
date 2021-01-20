@@ -220,10 +220,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Order O " +
                     "SET PaymentRule= " +
                     "(SELECT R.value " +
-                    "  FROM AD_Ref_List R " +
-                    "  left outer join AD_Ref_List_Trl RT " +
-                    "  on RT.AD_Ref_List_ID = R.AD_Ref_List_ID and RT.VAF_Language = @param " +
-                    "  WHERE R.AD_Reference_ID = 195 and coalesce( RT.Name, R.Name ) = O.PaymentRuleName ) " +
+                    "  FROM VAF_CtrlRef_List R " +
+                    "  left outer join VAF_CtrlRef_TL RT " +
+                    "  on RT.VAF_CtrlRef_List_ID = R.VAF_CtrlRef_List_ID and RT.VAF_Language = @param " +
+                    "  WHERE R.VAF_Control_Ref_ID = 195 and coalesce( RT.Name, R.Name ) = O.PaymentRuleName ) " +
                     "WHERE PaymentRule is null AND PaymentRuleName IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param", VAF_Language);

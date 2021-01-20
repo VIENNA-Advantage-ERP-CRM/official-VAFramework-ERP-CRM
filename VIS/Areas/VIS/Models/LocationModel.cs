@@ -373,17 +373,17 @@ namespace VIS.Models
             try
             {
                 // load the country from login orgnization's organization info loaction.
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Location_ID FROM VAF_OrgInfo WHERE IsActive='Y' AND VAF_Org_ID=" + ctx.GetVAF_Org_ID() + " ", null, null)) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Location_ID FROM VAF_OrgDetail WHERE IsActive='Y' AND VAF_Org_ID=" + ctx.GetVAF_Org_ID() + " ", null, null)) > 0)
                 {
                     if (Env.IsBaseLanguage(ctx, ""))
                     {
                         _ds = DB.ExecuteDataset("SELECT cnt.C_Country_ID,  cnt.Name FROM C_Country cnt INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) "
-                                         + " INNER JOIN VAF_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE oi.VAF_Org_ID =  " + ctx.GetVAF_Org_ID());
+                                         + " INNER JOIN VAF_OrgDetail oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE oi.VAF_Org_ID =  " + ctx.GetVAF_Org_ID());
                     }
                     else
                     {
                         _ds = DB.ExecuteDataset(@"SELECT cnt.C_Country_ID,  cntrl.Name FROM C_Country cnt INNER JOIN C_Country_Trl cntrl ON(cnt.c_country_ID = cntrl.c_country_id)
-                                                INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) INNER JOIN VAF_OrgInfo oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE 
+                                                INNER JOIN C_Location loc ON(loc.C_Country_ID = cnt.C_Country_ID) INNER JOIN VAF_OrgDetail oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE 
                                                 oi.VAF_Org_ID = " + ctx.GetVAF_Org_ID() + "  AND CNTRL.VAF_Language = '" + VAF_Language + "'");
                     }
                 }

@@ -123,8 +123,8 @@ StringBuilder sb = new StringBuilder ("X_M_TransactionAllocation[").Append(Get_I
 return sb.ToString();
 }
 
-/** AllocationStrategyType AD_Reference_ID=294 */
-public static int ALLOCATIONSTRATEGYTYPE_AD_Reference_ID=294;
+/** AllocationStrategyType VAF_Control_Ref_ID=294 */
+public static int ALLOCATIONSTRATEGYTYPE_VAF_Control_Ref_ID=294;
 /** FiFo = F */
 public static String ALLOCATIONSTRATEGYTYPE_FiFo = "F";
 /** LiFo = L */
@@ -292,8 +292,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetM_Transaction_ID().ToString());
 }
 
-/** Out_M_InOutLine_ID AD_Reference_ID=295 */
-public static int OUT_M_INOUTLINE_ID_AD_Reference_ID=295;
+/** Out_M_InOutLine_ID VAF_Control_Ref_ID=295 */
+public static int OUT_M_INOUTLINE_ID_VAF_Control_Ref_ID=295;
 /** Set Out Shipment Line.
 @param Out_M_InOutLine_ID Outgoing Shipment/Receipt */
 public void SetOut_M_InOutLine_ID (int Out_M_InOutLine_ID)
@@ -311,8 +311,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Out_M_InventoryLine_ID AD_Reference_ID=296 */
-public static int OUT_M_INVENTORYLINE_ID_AD_Reference_ID=296;
+/** Out_M_InventoryLine_ID VAF_Control_Ref_ID=296 */
+public static int OUT_M_INVENTORYLINE_ID_VAF_Control_Ref_ID=296;
 /** Set Out Inventory Line.
 @param Out_M_InventoryLine_ID Outgoing Inventory Line */
 public void SetOut_M_InventoryLine_ID (int Out_M_InventoryLine_ID)
@@ -330,8 +330,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Out_M_ProductionLine_ID AD_Reference_ID=297 */
-public static int OUT_M_PRODUCTIONLINE_ID_AD_Reference_ID=297;
+/** Out_M_ProductionLine_ID VAF_Control_Ref_ID=297 */
+public static int OUT_M_PRODUCTIONLINE_ID_VAF_Control_Ref_ID=297;
 /** Set Out Production Line.
 @param Out_M_ProductionLine_ID Outgoing Production Line */
 public void SetOut_M_ProductionLine_ID (int Out_M_ProductionLine_ID)
@@ -349,8 +349,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Out_M_Transaction_ID AD_Reference_ID=298 */
-public static int OUT_M_TRANSACTION_ID_AD_Reference_ID=298;
+/** Out_M_Transaction_ID VAF_Control_Ref_ID=298 */
+public static int OUT_M_TRANSACTION_ID_VAF_Control_Ref_ID=298;
 /** Set Out Transaction.
 @param Out_M_Transaction_ID Outgoing Transaction */
 public void SetOut_M_Transaction_ID (int Out_M_Transaction_ID)

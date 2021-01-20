@@ -72,7 +72,7 @@ namespace VAdvantage.Report
         private long m_start =CommonFunctions.CurrentTimeMillis();//  System.currentTimeMillis();
         /**	Insert Statement				*/
         private static String _insert = "INSERT INTO T_TrialBalance "
-            + "(AD_PInstance_ID, Fact_Acct_ID,"
+            + "(VAF_JInstance_ID, Fact_Acct_ID,"
             + " VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,"
             + " C_AcctSchema_ID, Account_ID, AccountValue, DateTrx, DateAcct, C_Period_ID,"
             + " VAF_TableView_ID, Record_ID, Line_ID,"
@@ -89,8 +89,8 @@ namespace VAdvantage.Report
         /// </summary>
         protected override void Prepare()
         {
-            StringBuilder sb = new StringBuilder("AD_PInstance_ID=")
-                .Append(GetAD_PInstance_ID());
+            StringBuilder sb = new StringBuilder("VAF_JInstance_ID=")
+                .Append(GetVAF_JInstance_ID());
             //	Parameter
             ProcessInfoParameter[] para = GetParameter();
             for (int i = 0; i < para.Length; i++)
@@ -322,8 +322,8 @@ namespace VAdvantage.Report
             CreateBalanceLine();
             CreateDetailLines();
 
-            //	int AD_PrintFormat_ID = 134;
-            //	getProcessInfo().setTransientObject (MPrintFormat.get (getCtx(), AD_PrintFormat_ID, false));
+            //	int VAF_Print_Rpt_Layout_ID = 134;
+            //	getProcessInfo().setTransientObject (MPrintFormat.get (getCtx(), VAF_Print_Rpt_Layout_ID, false));
 
             log.Fine((CommonFunctions.CurrentTimeMillis() - m_start) + " ms");
             return "";
@@ -335,8 +335,8 @@ namespace VAdvantage.Report
         private void CreateBalanceLine()
         {
             StringBuilder sql = new StringBuilder(_insert);
-            //	(AD_PInstance_ID, Fact_Acct_ID,
-            sql.Append("SELECT ").Append(GetAD_PInstance_ID()).Append(",0,");
+            //	(VAF_JInstance_ID, Fact_Acct_ID,
+            sql.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",0,");
             //	VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
             sql.Append(GetVAF_Client_ID()).Append(",");
             if (_VAF_Org_ID == 0 || _VAF_Org_ID==-1)
@@ -530,8 +530,8 @@ namespace VAdvantage.Report
         private void CreateDetailLines()
         {
             StringBuilder sql = new StringBuilder(_insert);
-            //	(AD_PInstance_ID, Fact_Acct_ID,
-            sql.Append("SELECT ").Append(GetAD_PInstance_ID()).Append(",Fact_Acct_ID,");
+            //	(VAF_JInstance_ID, Fact_Acct_ID,
+            sql.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",Fact_Acct_ID,");
             //	VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
             sql.Append(GetVAF_Client_ID()).Append(",VAF_Org_ID,Created,CreatedBy, Updated,UpdatedBy,");
             //	C_AcctSchema_ID, Account_ID, DateTrx, AccountValue, DateAcct, C_Period_ID,

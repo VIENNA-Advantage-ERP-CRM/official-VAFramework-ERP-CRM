@@ -20,8 +20,8 @@ public X_PA_ColorSchema (Context ctx, int PA_ColorSchema_ID, Trx trxName) : base
 {
 /** if (PA_ColorSchema_ID == 0)
 {
-SetAD_PrintColor1_ID (0);
-SetAD_PrintColor2_ID (0);
+SetVAF_Print_Rpt_Colour1_ID (0);
+SetVAF_Print_Rpt_Colour2_ID (0);
 SetEntityType (null);	// U
 SetMark1Percent (0);
 SetMark2Percent (0);
@@ -34,8 +34,8 @@ public X_PA_ColorSchema (Ctx ctx, int PA_ColorSchema_ID, Trx trxName) : base (ct
 {
 /** if (PA_ColorSchema_ID == 0)
 {
-SetAD_PrintColor1_ID (0);
-SetAD_PrintColor2_ID (0);
+SetVAF_Print_Rpt_Colour1_ID (0);
+SetVAF_Print_Rpt_Colour2_ID (0);
 SetEntityType (null);	// U
 SetMark1Percent (0);
 SetMark2Percent (0);
@@ -123,76 +123,76 @@ StringBuilder sb = new StringBuilder ("X_PA_ColorSchema[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** AD_PrintColor1_ID AD_Reference_ID=266 */
-public static int AD_PRINTCOLOR1_ID_AD_Reference_ID=266;
+/** VAF_Print_Rpt_Colour1_ID VAF_Control_Ref_ID=266 */
+public static int VAF_PRINT_RPT_COLOUR1_ID_VAF_Control_Ref_ID=266;
 /** Set Color 1.
-@param AD_PrintColor1_ID First color used */
-public void SetAD_PrintColor1_ID (int AD_PrintColor1_ID)
+@param VAF_Print_Rpt_Colour1_ID First color used */
+public void SetVAF_Print_Rpt_Colour1_ID (int VAF_Print_Rpt_Colour1_ID)
 {
-if (AD_PrintColor1_ID < 1) throw new ArgumentException ("AD_PrintColor1_ID is mandatory.");
-Set_Value ("AD_PrintColor1_ID", AD_PrintColor1_ID);
+if (VAF_Print_Rpt_Colour1_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Colour1_ID is mandatory.");
+Set_Value ("VAF_Print_Rpt_Colour1_ID", VAF_Print_Rpt_Colour1_ID);
 }
 /** Get Color 1.
 @return First color used */
-public int GetAD_PrintColor1_ID() 
+public int GetVAF_Print_Rpt_Colour1_ID() 
 {
-Object ii = Get_Value("AD_PrintColor1_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Colour1_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_PrintColor2_ID AD_Reference_ID=266 */
-public static int AD_PRINTCOLOR2_ID_AD_Reference_ID=266;
+/** VAF_Print_Rpt_Colour2_ID VAF_Control_Ref_ID=266 */
+public static int VAF_PRINT_RPT_COLOUR2_ID_VAF_Control_Ref_ID=266;
 /** Set Color 2.
-@param AD_PrintColor2_ID Second color used */
-public void SetAD_PrintColor2_ID (int AD_PrintColor2_ID)
+@param VAF_Print_Rpt_Colour2_ID Second color used */
+public void SetVAF_Print_Rpt_Colour2_ID (int VAF_Print_Rpt_Colour2_ID)
 {
-if (AD_PrintColor2_ID < 1) throw new ArgumentException ("AD_PrintColor2_ID is mandatory.");
-Set_Value ("AD_PrintColor2_ID", AD_PrintColor2_ID);
+if (VAF_Print_Rpt_Colour2_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Colour2_ID is mandatory.");
+Set_Value ("VAF_Print_Rpt_Colour2_ID", VAF_Print_Rpt_Colour2_ID);
 }
 /** Get Color 2.
 @return Second color used */
-public int GetAD_PrintColor2_ID() 
+public int GetVAF_Print_Rpt_Colour2_ID() 
 {
-Object ii = Get_Value("AD_PrintColor2_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Colour2_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_PrintColor3_ID AD_Reference_ID=266 */
-public static int AD_PRINTCOLOR3_ID_AD_Reference_ID=266;
+/** VAF_Print_Rpt_Colour3_ID VAF_Control_Ref_ID=266 */
+public static int VAF_PRINT_RPT_COLOUR3_ID_VAF_Control_Ref_ID=266;
 /** Set Color 3.
-@param AD_PrintColor3_ID Third color used */
-public void SetAD_PrintColor3_ID (int AD_PrintColor3_ID)
+@param VAF_Print_Rpt_Colour3_ID Third color used */
+public void SetVAF_Print_Rpt_Colour3_ID (int VAF_Print_Rpt_Colour3_ID)
 {
-if (AD_PrintColor3_ID <= 0) Set_Value ("AD_PrintColor3_ID", null);
+if (VAF_Print_Rpt_Colour3_ID <= 0) Set_Value ("VAF_Print_Rpt_Colour3_ID", null);
 else
-Set_Value ("AD_PrintColor3_ID", AD_PrintColor3_ID);
+Set_Value ("VAF_Print_Rpt_Colour3_ID", VAF_Print_Rpt_Colour3_ID);
 }
 /** Get Color 3.
 @return Third color used */
-public int GetAD_PrintColor3_ID() 
+public int GetVAF_Print_Rpt_Colour3_ID() 
 {
-Object ii = Get_Value("AD_PrintColor3_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Colour3_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_PrintColor4_ID AD_Reference_ID=266 */
-public static int AD_PRINTCOLOR4_ID_AD_Reference_ID=266;
+/** VAF_Print_Rpt_Colour4_ID VAF_Control_Ref_ID=266 */
+public static int VAF_PRINT_RPT_COLOUR4_ID_VAF_Control_Ref_ID=266;
 /** Set Color 4.
-@param AD_PrintColor4_ID Forth color used */
-public void SetAD_PrintColor4_ID (int AD_PrintColor4_ID)
+@param VAF_Print_Rpt_Colour4_ID Forth color used */
+public void SetVAF_Print_Rpt_Colour4_ID (int VAF_Print_Rpt_Colour4_ID)
 {
-if (AD_PrintColor4_ID <= 0) Set_Value ("AD_PrintColor4_ID", null);
+if (VAF_Print_Rpt_Colour4_ID <= 0) Set_Value ("VAF_Print_Rpt_Colour4_ID", null);
 else
-Set_Value ("AD_PrintColor4_ID", AD_PrintColor4_ID);
+Set_Value ("VAF_Print_Rpt_Colour4_ID", VAF_Print_Rpt_Colour4_ID);
 }
 /** Get Color 4.
 @return Forth color used */
-public int GetAD_PrintColor4_ID() 
+public int GetVAF_Print_Rpt_Colour4_ID() 
 {
-Object ii = Get_Value("AD_PrintColor4_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Colour4_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -214,8 +214,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

@@ -170,8 +170,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetM_Product_ID().ToString());
 }
 
-/** M_WarehouseSource_ID AD_Reference_ID=197 */
-public static int M_WAREHOUSESOURCE_ID_AD_Reference_ID=197;
+/** M_WarehouseSource_ID VAF_Control_Ref_ID=197 */
+public static int M_WAREHOUSESOURCE_ID_VAF_Control_Ref_ID=197;
 /** Set Source Warehouse.
 @param M_WarehouseSource_ID Optional Warehouse to replenish from */
 public void SetM_WarehouseSource_ID (int M_WarehouseSource_ID)
@@ -204,8 +204,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ReplenishType AD_Reference_ID=164 */
-public static int REPLENISHTYPE_AD_Reference_ID=164;
+/** ReplenishType VAF_Control_Ref_ID=164 */
+public static int REPLENISHTYPE_VAF_Control_Ref_ID=164;
 /** Manual = 0 */
 public static String REPLENISHTYPE_Manual = "0";
 /** Reorder below Minimum Level = 1 */

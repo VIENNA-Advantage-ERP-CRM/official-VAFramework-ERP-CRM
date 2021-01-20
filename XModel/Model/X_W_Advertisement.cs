@@ -152,8 +152,8 @@ public String GetAdText()
 return (String)Get_Value("AdText");
 }
 
-/** C_BPartner_ID AD_Reference_ID=232 */
-public static int C_BPARTNER_ID_AD_Reference_ID=232;
+/** C_BPartner_ID VAF_Control_Ref_ID=232 */
+public static int C_BPARTNER_ID_VAF_Control_Ref_ID=232;
 /** Set Business Partner.
 @param C_BPartner_ID Identifies a Business Partner */
 public void SetC_BPartner_ID (int C_BPartner_ID)
@@ -281,8 +281,8 @@ if (oo != null)
 return false;
 }
 
-/** PublishStatus AD_Reference_ID=310 */
-public static int PUBLISHSTATUS_AD_Reference_ID=310;
+/** PublishStatus VAF_Control_Ref_ID=310 */
+public static int PUBLISHSTATUS_VAF_Control_Ref_ID=310;
 /** Released = R */
 public static String PUBLISHSTATUS_Released = "R";
 /** Test = T */

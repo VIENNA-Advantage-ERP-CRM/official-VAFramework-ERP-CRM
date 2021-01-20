@@ -106,8 +106,8 @@ namespace VAdvantage.Process
 		for (int i = 0; i < columns.Length; i++)
 		{
 			MColumn column = columns[i];
-			if (column.GetAD_Reference_ID() == DisplayType.String
-				|| column.GetAD_Reference_ID() == DisplayType.Text)
+			if (column.GetVAF_Control_Ref_ID() == DisplayType.String
+				|| column.GetVAF_Control_Ref_ID() == DisplayType.Text)
 			{
 				String columnName = column.GetColumnName();
                 if (sql.Length != 0)

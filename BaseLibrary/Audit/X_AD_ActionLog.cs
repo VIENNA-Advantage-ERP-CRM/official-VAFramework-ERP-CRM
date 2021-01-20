@@ -61,15 +61,15 @@ namespace VAdvantage.Model
         public void SetAD_ActionLog_ID(int AD_ActionLog_ID) { if (AD_ActionLog_ID < 1) throw new ArgumentException("AD_ActionLog_ID is mandatory."); Set_ValueNoCheck("AD_ActionLog_ID", AD_ActionLog_ID); }/** Get AD_ActionLog_ID.
 @return AD_ActionLog_ID */
         public int GetAD_ActionLog_ID() { Object ii = Get_Value("AD_ActionLog_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Role.
-@param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }/** Get Role.
 @return Responsibility Role */
-        public int GetAD_Role_ID() { Object ii = Get_Value("AD_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Session.
+        public int GetVAF_Role_ID() { Object ii = Get_Value("VAF_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Session.
 @param AD_Session_ID User Session Online or Web */
         public void SetAD_Session_ID(int AD_Session_ID)
         {
@@ -88,8 +88,8 @@ namespace VAdvantage.Model
         }/** Get Table/View.
 @return Database Table information */
         public int GetVAF_TableView_ID() { Object ii = Get_Value("VAF_TableView_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Action AD_Reference_ID=104 */
-        public static int ACTION_AD_Reference_ID = 104;/** Workbench = B */
+        /** Action VAF_Control_Ref_ID=104 */
+        public static int ACTION_VAF_Control_Ref_ID = 104;/** Workbench = B */
         public static String ACTION_Workbench = "B";/** WorkFlow = F */
         public static String ACTION_WorkFlow = "F";/** Process = P */
         public static String ACTION_Process = "P";/** Report = R */
@@ -113,8 +113,8 @@ namespace VAdvantage.Model
         public void SetActionOrigin(String ActionOrigin) { if (ActionOrigin != null && ActionOrigin.Length > 100) { log.Warning("Length > 100 - truncated"); ActionOrigin = ActionOrigin.Substring(0, 100); } Set_Value("ActionOrigin", ActionOrigin); }/** Get Action origin.
 @return Action origin */
         public String GetActionOrigin() { return (String)Get_Value("ActionOrigin"); }
-        /** ActionType AD_Reference_ID=1000491 */
-        public static int ACTIONTYPE_AD_Reference_ID = 1000491;/** Download = D */
+        /** ActionType VAF_Control_Ref_ID=1000491 */
+        public static int ACTIONTYPE_VAF_Control_Ref_ID = 1000491;/** Download = D */
         public static String ACTIONTYPE_Download = "D";/** View = V */
         public static String ACTIONTYPE_View = "V";/** Is test a valid value.
 @param test testvalue

@@ -52,7 +52,7 @@ namespace VAWorkflow.Classes
                 while (true)
                 {
                     // Get records from mail queue table to send them one by one as email
-                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, AD_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, AD_WF_Activity_ID, AD_WF_EventAudit_ID, VAF_MailQueue_ID, AD_WF_Process_ID FROM VAF_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY VAF_MailQueue_ID");
+                    DataSet mailds = DB.ExecuteDataset("SELECT VAF_Org_ID, VAF_Client_ID, CreatedBy, VAF_Role_ID, ToEMail, ToName, MailSubject, MailMessage, IsHtmlEmail, VAF_TableView_ID, Record_ID, AD_WF_Activity_ID, AD_WF_EventAudit_ID, VAF_MailQueue_ID, AD_WF_Process_ID FROM VAF_MailQueue WHERE MailStatus = 'Q' AND ROWNUM <= 5 ORDER BY VAF_MailQueue_ID");
 
                     if (mailds != null && mailds.Tables.Count > 0 && mailds.Tables[0].Rows.Count > 0)
                     {
@@ -61,7 +61,7 @@ namespace VAWorkflow.Classes
                             int VAF_Org_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Org_ID"]);
                             int VAF_Client_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Client_ID"]);
                             int AD_User_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["CreatedBy"]);
-                            int AD_Role_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["AD_Role_ID"]);
+                            int VAF_Role_ID = Util.GetValueOfInt(mailds.Tables[0].Rows[m]["VAF_Role_ID"]);
 
                             String toEMail = Util.GetValueOfString(mailds.Tables[0].Rows[m]["ToEMail"]);
                             String toName = Util.GetValueOfString(mailds.Tables[0].Rows[m]["ToName"]);
@@ -84,7 +84,7 @@ namespace VAWorkflow.Classes
                             _ctx.SetVAF_Org_ID(VAF_Org_ID);
                             _ctx.SetVAF_Client_ID(VAF_Client_ID);
                             _ctx.SetAD_User_ID(AD_User_ID);
-                            _ctx.SetAD_Role_ID(AD_Role_ID);
+                            _ctx.SetVAF_Role_ID(VAF_Role_ID);
 
 
                             string sql = "SELECT AD_WF_NODE_ID FROM AD_WF_Activity WHERE AD_WF_Activity_ID=" + AD_WF_Activity_ID;

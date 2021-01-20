@@ -154,8 +154,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Check_PrintFormat_ID AD_Reference_ID=268 */
-        public static int CHECK_PRINTFORMAT_ID_AD_Reference_ID = 268;
+        /** Check_PrintFormat_ID VAF_Control_Ref_ID=268 */
+        public static int CHECK_PRINTFORMAT_ID_VAF_Control_Ref_ID = 268;
         /** Set Check Print Format.
         @param Check_PrintFormat_ID Print Format for printing Checks */
         public void SetCheck_PrintFormat_ID(int Check_PrintFormat_ID)
@@ -228,8 +228,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
 
-        /** PaymentRule AD_Reference_ID=195 */
-        public static int PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        public static int PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         public static String PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */

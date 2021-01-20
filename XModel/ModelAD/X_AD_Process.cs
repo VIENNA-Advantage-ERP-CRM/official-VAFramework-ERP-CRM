@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Process
+    /** Generated Model for VAF_Job
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Process : PO
+    public class X_VAF_Job : PO
     {
-        public X_AD_Process(Context ctx, int AD_Process_ID, Trx trxName)
-            : base(ctx, AD_Process_ID, trxName)
+        public X_VAF_Job(Context ctx, int VAF_Job_ID, Trx trxName)
+            : base(ctx, VAF_Job_ID, trxName)
         {
-            /** if (AD_Process_ID == 0)
+            /** if (VAF_Job_ID == 0)
             {
-            SetAD_Process_ID (0);
+            SetVAF_Job_ID (0);
             SetAccessLevel (null);
             SetEntityType (null);	// U
             SetIsBetaFunctionality (false);
@@ -32,12 +32,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_Process(Ctx ctx, int AD_Process_ID, Trx trxName)
-            : base(ctx, AD_Process_ID, trxName)
+        public X_VAF_Job(Ctx ctx, int VAF_Job_ID, Trx trxName)
+            : base(ctx, VAF_Job_ID, trxName)
         {
-            /** if (AD_Process_ID == 0)
+            /** if (VAF_Job_ID == 0)
             {
-            SetAD_Process_ID (0);
+            SetVAF_Job_ID (0);
             SetAccessLevel (null);
             SetEntityType (null);	// U
             SetIsBetaFunctionality (false);
@@ -53,7 +53,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Process(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_Job(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Process(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_Job(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -71,14 +71,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Process(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_Job(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Process()
+        static X_VAF_Job()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -91,8 +91,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =284;
 
-        /** TableName=AD_Process */
-        public static String Table_Name = "AD_Process";
+        /** TableName=VAF_Job */
+        public static String Table_Name = "VAF_Job";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Process[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Job[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Context Area.
@@ -146,49 +146,49 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Print Format.
-        @param AD_PrintFormat_ID Data Print Format */
-        public void SetAD_PrintFormat_ID(int AD_PrintFormat_ID)
+        @param VAF_Print_Rpt_Layout_ID Data Print Format */
+        public void SetVAF_Print_Rpt_Layout_ID(int VAF_Print_Rpt_Layout_ID)
         {
-            if (AD_PrintFormat_ID <= 0) Set_Value("AD_PrintFormat_ID", null);
+            if (VAF_Print_Rpt_Layout_ID <= 0) Set_Value("VAF_Print_Rpt_Layout_ID", null);
             else
-                Set_Value("AD_PrintFormat_ID", AD_PrintFormat_ID);
+                Set_Value("VAF_Print_Rpt_Layout_ID", VAF_Print_Rpt_Layout_ID);
         }
         /** Get Print Format.
         @return Data Print Format */
-        public int GetAD_PrintFormat_ID()
+        public int GetVAF_Print_Rpt_Layout_ID()
         {
-            Object ii = Get_Value("AD_PrintFormat_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Layout_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Process.
-        @param AD_Process_ID Process or Report */
-        public void SetAD_Process_ID(int AD_Process_ID)
+        @param VAF_Job_ID Process or Report */
+        public void SetVAF_Job_ID(int VAF_Job_ID)
         {
-            if (AD_Process_ID < 1) throw new ArgumentException("AD_Process_ID is mandatory.");
-            Set_ValueNoCheck("AD_Process_ID", AD_Process_ID);
+            if (VAF_Job_ID < 1) throw new ArgumentException("VAF_Job_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Job_ID", VAF_Job_ID);
         }
         /** Get Process.
         @return Process or Report */
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            Object ii = Get_Value("AD_Process_ID");
+            Object ii = Get_Value("VAF_Job_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Report View.
-        @param AD_ReportView_ID View used to generate this report */
-        public void SetAD_ReportView_ID(int AD_ReportView_ID)
+        @param VAF_ReportView_ID View used to generate this report */
+        public void SetVAF_ReportView_ID(int VAF_ReportView_ID)
         {
-            if (AD_ReportView_ID <= 0) Set_Value("AD_ReportView_ID", null);
+            if (VAF_ReportView_ID <= 0) Set_Value("VAF_ReportView_ID", null);
             else
-                Set_Value("AD_ReportView_ID", AD_ReportView_ID);
+                Set_Value("VAF_ReportView_ID", VAF_ReportView_ID);
         }
         /** Get Report View.
         @return View used to generate this report */
-        public int GetAD_ReportView_ID()
+        public int GetVAF_ReportView_ID()
         {
-            Object ii = Get_Value("AD_ReportView_ID");
+            Object ii = Get_Value("VAF_ReportView_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -209,8 +209,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AccessLevel AD_Reference_ID=5 */
-        public static int ACCESSLEVEL_AD_Reference_ID = 5;
+        /** AccessLevel VAF_Control_Ref_ID=5 */
+        public static int ACCESSLEVEL_VAF_Control_Ref_ID = 5;
         /** Organization = 1 */
         public static String ACCESSLEVEL_Organization = "1";
         /** Client only = 2 */
@@ -285,8 +285,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
         @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */
@@ -399,8 +399,8 @@ namespace VAdvantage.Model
 
 
 
-        /** IsCrystalReport AD_Reference_ID=1000193 */
-        public static int ISCRYSTALREPORT_AD_Reference_ID = 1000193;/** BI Report = B */
+        /** IsCrystalReport VAF_Control_Ref_ID=1000193 */
+        public static int ISCRYSTALREPORT_VAF_Control_Ref_ID = 1000193;/** BI Report = B */
         public static String ISCRYSTALREPORT_BIReport = "B";/** None = N */
         public static String ISCRYSTALREPORT_None = "N";/** Telerik Report = T */
         public static String ISCRYSTALREPORT_TelerikReport = "T";/** Crystal Report = Y */
@@ -542,19 +542,19 @@ namespace VAdvantage.Model
             return (String)Get_Value("WorkflowValue");
         }
 
-        /** Set AD_ReportFormat_ID.
-        @param AD_ReportFormat AD_ReportFormat_ID */
-        public void SetAD_ReportFormat_ID(int AD_ReportFormat_ID)
+        /** Set VAF_ReportLayout_ID.
+        @param VAF_ReportLayout VAF_ReportLayout_ID */
+        public void SetVAF_ReportLayout_ID(int VAF_ReportLayout_ID)
         {
-            if (AD_ReportFormat_ID <= 0) Set_Value("AD_ReportFormat_ID", null);
+            if (VAF_ReportLayout_ID <= 0) Set_Value("VAF_ReportLayout_ID", null);
             else
-                Set_Value("AD_ReportFormat_ID", AD_ReportFormat_ID);
+                Set_Value("VAF_ReportLayout_ID", VAF_ReportLayout_ID);
         }
         /** Get VARCOM_Report_ID.
         @return VARCOM_Report_ID */
-        public int GetAD_ReportFormat_ID()
+        public int GetVAF_ReportLayout_ID()
         {
-            Object ii = Get_Value("AD_ReportFormat_ID");
+            Object ii = Get_Value("VAF_ReportLayout_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -571,19 +571,19 @@ namespace VAdvantage.Model
 
 
 
-        /** Set AD_ReportFormat_ID.
-       @param AD_ReportFormat AD_ReportFormat_ID */
-        public void SetAD_ReportMaster_ID(int AD_ReportMaster_ID)
+        /** Set VAF_ReportLayout_ID.
+       @param VAF_ReportLayout VAF_ReportLayout_ID */
+        public void SetVAF_ReportMaster_ID(int VAF_ReportMaster_ID)
         {
-            if (AD_ReportMaster_ID <= 0) Set_Value("AD_ReportMaster_ID", null);
+            if (VAF_ReportMaster_ID <= 0) Set_Value("VAF_ReportMaster_ID", null);
             else
-                Set_Value("AD_ReportMaster_ID", AD_ReportMaster_ID);
+                Set_Value("VAF_ReportMaster_ID", VAF_ReportMaster_ID);
         }
         /** Get VARCOM_Report_ID.
         @return VARCOM_Report_ID */
-        public int GetAD_ReportMaster_ID()
+        public int GetVAF_ReportMaster_ID()
         {
-            Object ii = Get_Value("AD_ReportMaster_ID");
+            Object ii = Get_Value("VAF_ReportMaster_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

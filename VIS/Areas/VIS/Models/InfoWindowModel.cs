@@ -70,8 +70,8 @@ namespace VIS.Models
                     sql = @"SELECT 
                                             IW.Name AS WindowName,
                                             VAF_QuickSearchColumn.Name,
-                                            VAF_QuickSearchColumn.AD_Reference_ID,
-                                            VAF_QuickSearchColumn.AD_Reference_Value_ID,
+                                            VAF_QuickSearchColumn.VAF_Control_Ref_ID,
+                                            VAF_QuickSearchColumn.VAF_Control_Ref_Value_ID,
                                             VAF_QuickSearchColumn.IsQueryCriteria,
                                             VAF_QuickSearchColumn.SelectClause,
                                             VAF_QuickSearchColumn.AD_SetValue,
@@ -99,8 +99,8 @@ namespace VIS.Models
                 {
                     sql = @"SELECT IWT.Name AS WindowName,
                                                               VAF_QuickSearchColumn_TL.Name,
-                                                              VAF_QuickSearchColumn.AD_Reference_ID,
-                                                              VAF_QuickSearchColumn.AD_Reference_Value_ID,
+                                                              VAF_QuickSearchColumn.VAF_Control_Ref_ID,
+                                                              VAF_QuickSearchColumn.VAF_Control_Ref_Value_ID,
                                                               VAF_QuickSearchColumn.IsQueryCriteria,
                                                               VAF_QuickSearchColumn.SelectClause,
                                                               VAF_QuickSearchColumn.AD_SetValue,
@@ -111,7 +111,7 @@ namespace VIS.Models
                                                               VAF_COLUMNDIC.Description,
                                                               VAF_QuickSearchColumn.IsDisplayed,
                                                               VAF_QuickSearchColumn.IsKey,
-                                                              VAF_QuickSearchColumn.AD_Reference_Value_ID,
+                                                              VAF_QuickSearchColumn.VAF_Control_Ref_Value_ID,
                                                               VAF_QuickSearchColumn.IsRange,
                                                               VAF_QuickSearchColumn.ISIDENTIFIER,
                                                               infotable.TableName
@@ -184,24 +184,24 @@ namespace VIS.Models
                     info.TableName = ds.Tables[0].Rows[i]["TableName"].ToString();
                     schema.Name = ds.Tables[0].Rows[i]["Name"].ToString();
                     
-                    if (ds.Tables[0].Rows[i]["AD_Reference_ID"] != null &&
-                        ds.Tables[0].Rows[i]["AD_Reference_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Control_Ref_ID"] != null &&
+                        ds.Tables[0].Rows[i]["VAF_Control_Ref_ID"] != DBNull.Value)
                     {
-                        schema.AD_Reference_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_ID"]);
-                        if (schema.AD_Reference_ID == 17)//if reference is List
+                        schema.VAF_Control_Ref_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Control_Ref_ID"]);
+                        if (schema.VAF_Control_Ref_ID == 17)//if reference is List
                         {
-                            schema.RefList = GetRefList(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_Value_ID"]),ctx);
+                            schema.RefList = GetRefList(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Control_Ref_Value_ID"]),ctx);
                         }
                     }
-                    if (ds.Tables[0].Rows[i]["AD_Reference_Value_ID"] != null &&
-                        ds.Tables[0].Rows[i]["AD_Reference_Value_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Control_Ref_Value_ID"] != null &&
+                        ds.Tables[0].Rows[i]["VAF_Control_Ref_Value_ID"] != DBNull.Value)
                     {
-                        schema.AD_Reference_Value_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Reference_Value_ID"]);
+                        schema.VAF_Control_Ref_Value_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Control_Ref_Value_ID"]);
 
                     }
                     else
                     {
-                        schema.AD_Reference_Value_ID = 0;
+                        schema.VAF_Control_Ref_Value_ID = 0;
                     }
                     if (ds.Tables[0].Rows[i]["SelectClause"] != null &&
                        ds.Tables[0].Rows[i]["SelectClause"] != DBNull.Value)
@@ -272,11 +272,11 @@ namespace VIS.Models
                     {
                         schema.IsDisplayed = true;
                     }
-                    //if (schema.AD_Reference_ID == DisplayType.Search
-                    //    || schema.AD_Reference_ID == DisplayType.Table
-                    //    || schema.AD_Reference_ID == DisplayType.TableDir)
+                    //if (schema.VAF_Control_Ref_ID == DisplayType.Search
+                    //    || schema.VAF_Control_Ref_ID == DisplayType.Table
+                    //    || schema.VAF_Control_Ref_ID == DisplayType.TableDir)
                     //{
-                    //    schema.lookup = VLookUpFactory.Get(ctx, 0, 0, schema.AD_Reference_ID, schema.ColumnName, schema.AD_Reference_Value_ID, false, null);
+                    //    schema.lookup = VLookUpFactory.Get(ctx, 0, 0, schema.VAF_Control_Ref_ID, schema.ColumnName, schema.VAF_Control_Ref_Value_ID, false, null);
                     //}
 
                     lstSchema.Add(schema);
@@ -291,17 +291,17 @@ namespace VIS.Models
             }
         }
 
-        private List<InfoRefList> GetRefList(int AD_Reference_ID,Ctx ctx)
+        private List<InfoRefList> GetRefList(int VAF_Control_Ref_ID,Ctx ctx)
         {
           
-                //String sql = "SELECT Value, Name FROM AD_Ref_List "
-                //    + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND IsActive='Y' ORDER BY 1";
+                //String sql = "SELECT Value, Name FROM VAF_CtrlRef_List "
+                //    + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND IsActive='Y' ORDER BY 1";
                 //DataSet ds = null;
                
                 List<InfoRefList> list = new List<InfoRefList>();
                 try
                 {
-                    ValueNamePair[] refList = MRefList.GetList(AD_Reference_ID, true, ctx);
+                    ValueNamePair[] refList = MRefList.GetList(VAF_Control_Ref_ID, true, ctx);
                     //ds = DB.ExecuteDataset(sql, null, null);
                     InfoRefList itm = null;// new InfoRefList();
                    // itm.Key = "";
@@ -425,12 +425,12 @@ namespace VIS.Models
             get;
             set;
         }
-        public int AD_Reference_ID
+        public int VAF_Control_Ref_ID
         {
             get;
             set;
         }
-        public int AD_Reference_Value_ID
+        public int VAF_Control_Ref_Value_ID
         {
             get;
             set;

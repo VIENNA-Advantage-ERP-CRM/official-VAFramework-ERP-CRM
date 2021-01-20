@@ -273,7 +273,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			ProcessAllocation();
 			_m_alloc = new MAllocationHdr (GetCtx(), true, 
 				_DateAcct, C_Currency_ID,
-				GetProcessInfo().GetTitle() + " #" + GetAD_PInstance_ID(), Get_TrxName());
+				GetProcessInfo().GetTitle() + " #" + GetVAF_JInstance_ID(), Get_TrxName());
 			_m_alloc.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
 			if (!_m_alloc.Save())
 			{
@@ -294,7 +294,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			_m_payment.SetTenderType(MPayment.TENDERTYPE_Check);
 			_m_payment.SetDateTrx(_DateAcct);
 			_m_payment.SetDateAcct(_DateAcct);
-			_m_payment.SetDescription(GetProcessInfo().GetTitle() + " #" + GetAD_PInstance_ID());
+			_m_payment.SetDescription(GetProcessInfo().GetTitle() + " #" + GetVAF_JInstance_ID());
 			_m_payment.SetC_BPartner_ID(invoice.GetC_BPartner_ID());
 			_m_payment.SetIsReceipt(true);	//	payments are negative
 			_m_payment.SetC_Currency_ID(C_Currency_ID);

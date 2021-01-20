@@ -20,18 +20,18 @@ namespace VIS.Areas.VIS.Controllers
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public JsonResult SaveAccess(int AD_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities,bool isUpdate)
+        public JsonResult SaveAccess(int VAF_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities,bool isUpdate)
         {
             Ctx ctx=Session["ctx"] as Ctx;            
             RecordAccessModel model = new RecordAccessModel();            
-            return Json(new { result = model.SaveAccess(ctx,AD_Role_ID,VAF_TableView_ID,Record_ID,isActive,isExclude,isReadOnly,isDependentEntities,isUpdate) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = model.SaveAccess(ctx,VAF_Role_ID,VAF_TableView_ID,Record_ID,isActive,isExclude,isReadOnly,isDependentEntities,isUpdate) }, JsonRequestBehavior.AllowGet);
         }
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]        
-        public JsonResult DeleteRecord(int AD_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities)
+        public JsonResult DeleteRecord(int VAF_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities)
         {
             RecordAccessModel model = new RecordAccessModel();
-            return Json(new { result = model.DeleteRecordAccess( AD_Role_ID, VAF_TableView_ID, Record_ID, isActive, isExclude, isReadOnly, isDependentEntities) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = model.DeleteRecordAccess( VAF_Role_ID, VAF_TableView_ID, Record_ID, isActive, isExclude, isReadOnly, isDependentEntities) }, JsonRequestBehavior.AllowGet);
         }
 
         // Added by Bharat on 06 June 2017

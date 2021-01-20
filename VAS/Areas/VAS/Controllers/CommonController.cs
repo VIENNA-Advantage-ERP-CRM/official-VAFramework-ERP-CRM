@@ -2133,16 +2133,16 @@ namespace VIS.Controllers
             //statusBar += no.ToString();
 
             //	Prepare Process
-            int AD_Process_ID = 134;  // HARDCODED    C_InvoiceCreate
-            MPInstance instance = new MPInstance(ctx, AD_Process_ID, 0);
+            int VAF_Job_ID = 134;  // HARDCODED    C_InvoiceCreate
+            MPInstance instance = new MPInstance(ctx, VAF_Job_ID, 0);
             if (!instance.Save())
             {
                 lblStatusInfo = Msg.GetMsg(ctx, "ProcessNoInstance");
                 return Msg.GetMsg(ctx, "ProcessNoInstance");
             }
 
-            ProcessInfo pi = new ProcessInfo("", AD_Process_ID);
-            pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+            ProcessInfo pi = new ProcessInfo("", VAF_Job_ID);
+            pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
 
             pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 
@@ -2208,14 +2208,14 @@ namespace VIS.Controllers
             statusBar += no.ToString();
 
             //	Prepare Process
-            int AD_Process_ID = 199;	  // M_InOutCreate - Vframwork.Process.InOutGenerate
-            MPInstance instance = new MPInstance(ctx, AD_Process_ID, 0);
+            int VAF_Job_ID = 199;	  // M_InOutCreate - Vframwork.Process.InOutGenerate
+            MPInstance instance = new MPInstance(ctx, VAF_Job_ID, 0);
             if (!instance.Save())
             {
                 lblStatusInfo = Msg.GetMsg(ctx, "ProcessNoInstance");
             }
-            ProcessInfo pi = new ProcessInfo("VInOutGen", AD_Process_ID);
-            pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+            ProcessInfo pi = new ProcessInfo("VInOutGen", VAF_Job_ID);
+            pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
 
             pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 
@@ -2845,7 +2845,7 @@ namespace VIS.Controllers
             if (PostingType == null || PostingType.Length == 0)
             {
                 rm.AddColumn(new RColumn(ctx, "PostingType", DisplayType.List,
-                    MFactAcct.POSTINGTYPE_AD_Reference_ID));
+                    MFactAcct.POSTINGTYPE_VAF_Control_Ref_ID));
             }
             return rm;
         }
@@ -2989,12 +2989,12 @@ namespace VIS.Controllers
         }
 
         // Added by Bharat on 07 June 2017
-        //public List<Dictionary<string, object>> GetProcess(int AD_Role_ID)
+        //public List<Dictionary<string, object>> GetProcess(int VAF_Role_ID)
         //{
         //    List<Dictionary<string, object>> retDic = null;
-        //    string sql = "SELECT DISTINCT p.AD_Process_ID, p.Name "
-        //            + "FROM AD_Process p INNER JOIN AD_Process_Access pa ON (p.AD_Process_ID=pa.AD_Process_ID) "
-        //            + "WHERE pa.AD_Role_ID=" + AD_Role_ID
+        //    string sql = "SELECT DISTINCT p.VAF_Job_ID, p.Name "
+        //            + "FROM VAF_Job p INNER JOIN VAF_Job_Rights pa ON (p.VAF_Job_ID=pa.VAF_Job_ID) "
+        //            + "WHERE pa.VAF_Role_ID=" + VAF_Role_ID
         //            + " AND p.IsReport='Y' AND p.IsActive='Y' AND pa.IsActive='Y' "
         //            + "ORDER BY 2";
         //    DataSet ds = DB.ExecuteDataset(sql);
@@ -3004,7 +3004,7 @@ namespace VIS.Controllers
         //        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
         //        {
         //            Dictionary<string, object> obj = new Dictionary<string, object>();
-        //            obj["AD_Process_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Process_ID"]);
+        //            obj["VAF_Job_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Job_ID"]);
         //            obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
         //            retDic.Add(obj);
         //        }
@@ -3013,13 +3013,13 @@ namespace VIS.Controllers
         //}
 
         // Added by Bharat on 07 June 2017
-        //public List<Dictionary<string, object>> GetTable(int AD_Role_ID)
+        //public List<Dictionary<string, object>> GetTable(int VAF_Role_ID)
         //{
         //    List<Dictionary<string, object>> retDic = null;
         //    string sql = "SELECT DISTINCT t.VAF_TableView_ID, t.Name "
         //        + "FROM VAF_TableView t INNER JOIN VAF_Tab tab ON (tab.VAF_TableView_ID=t.VAF_TableView_ID)"
         //        + " INNER JOIN AD_Window_Access wa ON (tab.AD_Window_ID=wa.AD_Window_ID) "
-        //        + "WHERE wa.AD_Role_ID=" + AD_Role_ID
+        //        + "WHERE wa.VAF_Role_ID=" + VAF_Role_ID
         //        + " AND t.IsActive='Y' AND tab.IsActive='Y' "
         //        + "ORDER BY 2";
         //    DataSet ds = DB.ExecuteDataset(sql);
@@ -3367,7 +3367,7 @@ namespace VIS.Controllers
                         if (DisplayType.IsLookup(column.DisplayType))
                         {
                             VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
-                                column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+                                column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.VAF_Control_Ref_Value_ID,
                                 column.IsParent, column.ValidationCode);
 
                             if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")

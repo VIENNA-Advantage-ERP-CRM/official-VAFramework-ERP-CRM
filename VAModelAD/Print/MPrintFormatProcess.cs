@@ -10,7 +10,7 @@ namespace VAdvantage.Print
     public class MPrintFormatProcess : ProcessEngine.SvrProcess
     {
         /** PrintFormat             */
-        private Decimal? _AD_PrintFormat_ID;
+        private Decimal? _VAF_Print_Rpt_Layout_ID;
         /** Table	                */
         private Decimal? _VAF_TableView_ID;
 
@@ -22,8 +22,8 @@ namespace VAdvantage.Print
                 String name = para[i].GetParameterName();
                 if (para[i].GetParameter() == null)
                 { ; }
-                else if (name.Equals("AD_PrintFormat_ID"))
-                    _AD_PrintFormat_ID = ((Decimal?)para[i].GetParameter());
+                else if (name.Equals("VAF_Print_Rpt_Layout_ID"))
+                    _VAF_Print_Rpt_Layout_ID = ((Decimal?)para[i].GetParameter());
                 else if (name.Equals("VAF_TableView_ID"))
                     _VAF_TableView_ID = ((Decimal?)para[i].GetParameter());
                 else
@@ -44,10 +44,10 @@ namespace VAdvantage.Print
                 AddLog(Utility.Util.GetValueOfInt(_VAF_TableView_ID.ToString()), null, pf.GetItemCount(), pf.GetName());
                 return pf.GetName() + " #" + pf.GetItemCount();
             }
-            else if (_AD_PrintFormat_ID != null && _AD_PrintFormat_ID > 0)
+            else if (_VAF_Print_Rpt_Layout_ID != null && _VAF_Print_Rpt_Layout_ID > 0)
             {
-                MPrintFormat pf = MPrintFormat.Copy(GetCtx(), Utility.Util.GetValueOfInt(_AD_PrintFormat_ID.ToString()), GetRecord_ID());
-                AddLog(Utility.Util.GetValueOfInt(_AD_PrintFormat_ID.ToString()), null, pf.GetItemCount(), pf.GetName());
+                MPrintFormat pf = MPrintFormat.Copy(GetCtx(), Utility.Util.GetValueOfInt(_VAF_Print_Rpt_Layout_ID.ToString()), GetRecord_ID());
+                AddLog(Utility.Util.GetValueOfInt(_VAF_Print_Rpt_Layout_ID.ToString()), null, pf.GetItemCount(), pf.GetName());
                 return pf.GetName() + " #" + pf.GetItemCount();
             }
             else

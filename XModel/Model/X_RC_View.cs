@@ -116,18 +116,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -196,8 +196,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** BG_Color_ID AD_Reference_ID=266 */
-        public static int BG_COLOR_ID_AD_Reference_ID = 266;
+        /** BG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int BG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set BG Color.
         @param BG_Color_ID BG Color */
         public void SetBG_Color_ID(int BG_Color_ID)
@@ -249,8 +249,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Export_ID");
         }
 
-        /** Font_Color_ID AD_Reference_ID=266 */
-        public static int FONT_COLOR_ID_AD_Reference_ID = 266;
+        /** Font_Color_ID VAF_Control_Ref_ID=266 */
+        public static int FONT_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Font Color.
         @param Font_Color_ID Font Color */
         public void SetFont_Color_ID(int Font_Color_ID)
@@ -268,8 +268,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** HeaderBG_Color_ID AD_Reference_ID=266 */
-        public static int HEADERBG_COLOR_ID_AD_Reference_ID = 266;
+        /** HeaderBG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int HEADERBG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Header BG Color.
         @param HeaderBG_Color_ID Header BG Color */
         public void SetHeaderBG_Color_ID(int HeaderBG_Color_ID)
@@ -287,8 +287,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** HeaderFont_Color_ID AD_Reference_ID=266 */
-        public static int HEADERFONT_COLOR_ID_AD_Reference_ID = 266;
+        /** HeaderFont_Color_ID VAF_Control_Ref_ID=266 */
+        public static int HEADERFONT_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Header Font Color.
         @param HeaderFont_Color_ID Header Font Color */
         public void SetHeaderFont_Color_ID(int HeaderFont_Color_ID)

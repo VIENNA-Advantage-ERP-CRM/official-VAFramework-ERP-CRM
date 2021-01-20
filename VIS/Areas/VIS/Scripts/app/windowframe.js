@@ -499,21 +499,21 @@
 
     /**
 	 *	Dynamic Initialization process
-	 *  @param AD_Process_ID process
+	 *  @param VAF_Job_ID process
      *  @param callback to add menu item for form
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initProcess = function (AD_Process_ID, callback, action, splitUI, extrnalForm) {
+    AWindow.prototype.initProcess = function (VAF_Job_ID, callback, action, splitUI, extrnalForm) {
 
-        //this.cPanel = new VIS.AProcess(AD_Process_ID, VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT, splitUI, extrnalForm); //initlize AForm
-        this.cPanel = new VIS.AProcess(AD_Process_ID, VIS.Env.getScreenHeight() - 0, splitUI, extrnalForm); //initlize AForm
+        //this.cPanel = new VIS.AProcess(VAF_Job_ID, VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT, splitUI, extrnalForm); //initlize AForm
+        this.cPanel = new VIS.AProcess(VAF_Job_ID, VIS.Env.getScreenHeight() - 0, splitUI, extrnalForm); //initlize AForm
         //set variable
         var windowNo = VIS.Env.getWindowNo();
-        this.id = windowNo + "_" + AD_Process_ID;
-        this.hid = action + "=" + AD_Process_ID;
+        this.id = windowNo + "_" + VAF_Job_ID;
+        this.hid = action + "=" + VAF_Job_ID;
         this.hideHeader(true);
         var self = this;
-        VIS.dataContext.getProcessDataString({ AD_Process_ID: AD_Process_ID }, function (json) {
+        VIS.dataContext.getProcessDataString({ VAF_Job_ID: VAF_Job_ID }, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error
                 self.dispose();
@@ -535,7 +535,7 @@
             self.setTitle("");
             self.setName(jsonData.Name);
 
-            jsonData.AD_Process_ID = AD_Process_ID;
+            jsonData.VAF_Job_ID = VAF_Job_ID;
             //console.log(jsonData);
 
             if (!self.cPanel.init(jsonData, self, windowNo)) {
@@ -561,13 +561,13 @@
     };
 
 
-    AWindow.prototype.refreshProcess = function (AD_Process_ID, callback, action, splitUI, externalForm) {
+    AWindow.prototype.refreshProcess = function (VAF_Job_ID, callback, action, splitUI, externalForm) {
         if (this.cPanel) {
             this.cPanel.disposeComponent();
             this.cPanel = null;
         }
         splitUI = true;
-        this.initProcess(AD_Process_ID, callback, action, splitUI, externalForm);
+        this.initProcess(VAF_Job_ID, callback, action, splitUI, externalForm);
         if (externalForm.disposeComponent) {
             externalForm.getParameterContainer().empty().append(this.cPanel.getParametersContainer());
             this.cPanel.getContentTable().css('height', externalForm.getContentContainer().height());
@@ -2715,7 +2715,7 @@
     APanel.prototype.unlockUI = function (pi) {
         //	log.fine("" + pi);
         var notPrint = pi != null
-            && pi.getAD_Process_ID() != this.curTab.getAD_Process_ID();
+            && pi.getVAF_Job_ID() != this.curTab.getVAF_Job_ID();
         //  Process Result
         if (notPrint)		//	refresh if not print
         {
@@ -3333,8 +3333,8 @@
 
         //	Send Email -----
         else if (columnName.equals("SendNewEMail")) {
-            // AD_Process_ID = vButton.getProcess_ID();
-            //if (AD_Process_ID != 0)
+            // VAF_Job_ID = vButton.getProcess_ID();
+            //if (VAF_Job_ID != 0)
             //{
             //}
             ////	Mail Defaults
@@ -3357,7 +3357,7 @@
             return;
         }
 
-        if (vButton.AD_Process_ID > 0) {
+        if (vButton.VAF_Job_ID > 0) {
 
             var ret = checkAndCallProcess(vButton, table_ID, record_ID, ctx, self);
             self = null;
@@ -3800,7 +3800,7 @@
 
         curEle = tabEle = null;
 
-        if (this.curTab.getAD_Process_ID() == 0) {
+        if (this.curTab.getVAF_Job_ID() == 0) {
             this.aPrint.setEnabled(false);
         }
         else this.aPrint.setEnabled(true);
@@ -4627,16 +4627,16 @@
             return;
         }
 
-        var AD_Process_ID = this.curTab.getAD_Process_ID();
-        if (AD_Process_ID == 0) {
+        var VAF_Job_ID = this.curTab.getVAF_Job_ID();
+        if (VAF_Job_ID == 0) {
             return;
         }
 
 
         var sql = "VIS_118";
         var param = [];
-        param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
-        var AD_ReportFormat_ID = executeScalar(sql, param);
+        param[0] = new VIS.DB.SqlParam("@VAF_Job_ID", VAF_Job_ID);
+        var VAF_ReportLayout_ID = executeScalar(sql, param);
 
 
         sql = "VIS_119";
@@ -4644,7 +4644,7 @@
 
 
 
-        if (rowsSource.length > 1 && AD_ReportFormat_ID > 0 && InstalledVersion && (InstalledVersion.toString() > ('1.0.0.3'))) {
+        if (rowsSource.length > 1 && VAF_ReportLayout_ID > 0 && InstalledVersion && (InstalledVersion.toString() > ('1.0.0.3'))) {
 
             if (this.curTab.needSave(true, false)) {
                 this.cmd_save(true);
@@ -4661,7 +4661,7 @@
                     recIds += ',' + rowsSource[i][this.curTab.getKeyColumnName().toLower()];
                 }
             }
-            var print = new VIS.APrint(AD_Process_ID, this.curTab.getVAF_TableView_ID(), 0, this.curWindowNo, recIds, this.curTab, true);
+            var print = new VIS.APrint(VAF_Job_ID, this.curTab.getVAF_TableView_ID(), 0, this.curWindowNo, recIds, this.curTab, true);
             print.start(this.aPrint.getListItmIT());
         }
         else {
@@ -4676,12 +4676,12 @@
                 return;
             }
 
-            var print = new VIS.APrint(AD_Process_ID, this.curTab.getVAF_TableView_ID(), recID, this.curWindowNo, null, this.curTab);
+            var print = new VIS.APrint(VAF_Job_ID, this.curTab.getVAF_TableView_ID(), recID, this.curWindowNo, null, this.curTab);
             print.start(this.aPrint.getListItmIT());
         }
         //var table_ID = this.curTab.getVAF_TableView_ID();
         //var record_ID = this.curTab.getRecord_ID();
-        //var pi = new VIS.ProcessInfo('Print', AD_Process_ID, table_ID, record_ID);        
+        //var pi = new VIS.ProcessInfo('Print', VAF_Job_ID, table_ID, record_ID);        
         //pi.setAD_User_ID(VIS.context.getAD_User_ID());
         //pi.setVAF_Client_ID(VIS.context.getVAF_Client_ID());
 

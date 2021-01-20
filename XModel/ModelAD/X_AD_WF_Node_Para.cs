@@ -115,18 +115,18 @@ StringBuilder sb = new StringBuilder ("X_AD_WF_Node_Para[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set Process Parameter.
-@param AD_Process_Para_ID Process Parameter */
-public void SetAD_Process_Para_ID (int AD_Process_Para_ID)
+@param VAF_Job_Para_ID Process Parameter */
+public void SetVAF_Job_Para_ID (int VAF_Job_Para_ID)
 {
-if (AD_Process_Para_ID <= 0) Set_Value ("AD_Process_Para_ID", null);
+if (VAF_Job_Para_ID <= 0) Set_Value ("VAF_Job_Para_ID", null);
 else
-Set_Value ("AD_Process_Para_ID", AD_Process_Para_ID);
+Set_Value ("VAF_Job_Para_ID", VAF_Job_Para_ID);
 }
 /** Get Process Parameter.
 @return Process Parameter */
-public int GetAD_Process_Para_ID() 
+public int GetVAF_Job_Para_ID() 
 {
-Object ii = Get_Value("AD_Process_Para_ID");
+Object ii = Get_Value("VAF_Job_Para_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -218,8 +218,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

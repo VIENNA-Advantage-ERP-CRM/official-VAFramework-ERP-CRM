@@ -22,19 +22,19 @@ using System.Drawing.Printing;
 
 namespace VAdvantage.Print
 {
-    public class MPrintTableFormat : X_AD_PrintTableFormat
+    public class MPrintTableFormat : X_VAF_Print_Rpt_TblLayout
     {
         /// <summary>
         /// Standard Constructor    
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PrintTableFormat_ID">AD_PrintTableFormat_ID</param>
+        /// <param name="VAF_Print_Rpt_TblLayout_ID">VAF_Print_Rpt_TblLayout_ID</param>
         /// <param name="trxName">transaction</param>
-        public MPrintTableFormat(Ctx ctx, int AD_PrintTableFormat_ID, Trx trxName)
-            : base(ctx, AD_PrintTableFormat_ID, trxName)
+        public MPrintTableFormat(Ctx ctx, int VAF_Print_Rpt_TblLayout_ID, Trx trxName)
+            : base(ctx, VAF_Print_Rpt_TblLayout_ID, trxName)
         {
 
-            if (AD_PrintTableFormat_ID == 0)
+            if (VAF_Print_Rpt_TblLayout_ID == 0)
             {
                 //	setName (null);
                 SetIsDefault(false);
@@ -481,19 +481,19 @@ namespace VAdvantage.Print
             return lineV_StrokePdf;
         }	//	getHLine_Stroke
 
-        private static CCache<int, MPrintTableFormat> _cache = new CCache<int, MPrintTableFormat>("AD_PrintTableFormat", 3);
+        private static CCache<int, MPrintTableFormat> _cache = new CCache<int, MPrintTableFormat>("VAF_Print_Rpt_TblLayout", 3);
 
-        static public MPrintTableFormat Get(Ctx ctx, int AD_PrintTableFormat_ID, Font standard_font)
+        static public MPrintTableFormat Get(Ctx ctx, int VAF_Print_Rpt_TblLayout_ID, Font standard_font)
         {
-            int ii = AD_PrintTableFormat_ID;
+            int ii = VAF_Print_Rpt_TblLayout_ID;
             //MPrintTableFormat tf = (MPrintTableFormat)_cache[ii];
             MPrintTableFormat tf = null;
             if (tf == null)
             {
-                if (AD_PrintTableFormat_ID == 0)
+                if (VAF_Print_Rpt_TblLayout_ID == 0)
                     tf = GetDefault(ctx);
                 else
-                    tf = new MPrintTableFormat(ctx, AD_PrintTableFormat_ID, null);
+                    tf = new MPrintTableFormat(ctx, VAF_Print_Rpt_TblLayout_ID, null);
                 _cache.Add(ii, tf);
             }
             tf.SetStandard_Font(standard_font);
@@ -501,9 +501,9 @@ namespace VAdvantage.Print
         }	//	get
 
 
-        static public MPrintTableFormat Get(Ctx ctx, int AD_PrintTableFormat_ID, int AD_PrintFont_ID)
+        static public MPrintTableFormat Get(Ctx ctx, int VAF_Print_Rpt_TblLayout_ID, int VAF_Print_Rpt_Font_ID)
         {
-            return Get(ctx, AD_PrintTableFormat_ID, MPrintFont.Get(AD_PrintFont_ID).GetFont());
+            return Get(ctx, VAF_Print_Rpt_TblLayout_ID, MPrintFont.Get(VAF_Print_Rpt_Font_ID).GetFont());
         }	//	get
 
         /// <summary>
@@ -516,7 +516,7 @@ namespace VAdvantage.Print
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
             MPrintTableFormat tf = null;
-            String sql = "SELECT * FROM AD_PrintTableFormat "
+            String sql = "SELECT * FROM VAF_Print_Rpt_TblLayout "
                 + "WHERE VAF_Client_ID IN (0," + VAF_Client_ID + ") AND IsActive='Y' "
                 + "ORDER BY IsDefault DESC, VAF_Client_ID DESC";
             try

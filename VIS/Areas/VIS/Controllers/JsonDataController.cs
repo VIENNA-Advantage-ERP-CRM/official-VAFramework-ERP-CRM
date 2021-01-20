@@ -345,16 +345,16 @@ namespace VIS.Controllers
         /// Get Process Info
         /// - call from process menu Item 
         /// </summary>
-        /// <param name="AD_Process_ID">id of process</param>
+        /// <param name="VAF_Job_ID">id of process</param>
         /// <returns>json result</returns>
-        public JsonResult GetProcessInfo(int AD_Process_ID)
+        public JsonResult GetProcessInfo(int VAF_Job_ID)
         {
             string retJSON = "";
             string retError = null;
 
             if (Session["ctx"] != null)
             {
-                retJSON = JsonConvert.SerializeObject(ProcessHelper.GetProcessInfo(AD_Process_ID, Session["ctx"] as Ctx));
+                retJSON = JsonConvert.SerializeObject(ProcessHelper.GetProcessInfo(VAF_Job_ID, Session["ctx"] as Ctx));
             }
             else
             {
@@ -368,7 +368,7 @@ namespace VIS.Controllers
         /// execute process 
         /// - return process parameter fields if has any, halt processing
         /// </summary>
-        /// <param name="AD_Process_ID">id of process</param>
+        /// <param name="VAF_Job_ID">id of process</param>
         /// <param name="Name">name of process</param>
         /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record  id of table</param>
@@ -404,9 +404,9 @@ namespace VIS.Controllers
         /// - call after parameter dialog window
         /// - first save parameter for Process then execute
         /// </summary>
-        /// <param name="AD_Process_ID">id of process</param>
+        /// <param name="VAF_Job_ID">id of process</param>
         /// <param name="Name">name of process</param>
-        /// <param name="AD_PInstance_ID">process instance id</param>
+        /// <param name="VAF_JInstance_ID">process instance id</param>
         /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <param name="ParameterList">process parameter list</param>
@@ -443,7 +443,7 @@ namespace VIS.Controllers
                 //}
 
                 retJSON = JsonConvert.SerializeObject(rep);
-                //retJSON = JsonConvert.SerializeObject(ProcessHelper.ExecuteProcess(Session["ctx"] as Ctx, AD_Process_ID, Name, AD_PInstance_ID, VAF_TableView_ID, Record_ID, ParameterList));
+                //retJSON = JsonConvert.SerializeObject(ProcessHelper.ExecuteProcess(Session["ctx"] as Ctx, VAF_Job_ID, Name, VAF_JInstance_ID, VAF_TableView_ID, Record_ID, ParameterList));
             }
             else
             {
@@ -495,9 +495,9 @@ namespace VIS.Controllers
                                 JOIN AD_Sequence_No AD_Sequence_No
                                 On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
                                 AND Ad_Sequence_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
-                                JOIN AD_Process ON AD_Process.AD_Process_ID=AD_Sequence_No.Report_ID
+                                JOIN VAF_Job ON VAF_Job.VAF_Job_ID=AD_Sequence_No.Report_ID
                                 Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
-                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND AD_Process.IsActive='Y'";
+                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND VAF_Job.IsActive='Y'";
 
                     object processID = DB.ExecuteScalar(sql1);
                     if (processID == DBNull.Value || processID == null || Convert.ToInt32(processID) == 0)
@@ -691,13 +691,13 @@ namespace VIS.Controllers
         #endregion
 
         #region "Others"
-        public JsonResult GetLookup(Dictionary<string, object> ctx, int windowNo, int column_ID, int AD_Reference_ID, string columnName,
-            int AD_Reference_Value_ID, bool isParent, string validationCode)
+        public JsonResult GetLookup(Dictionary<string, object> ctx, int windowNo, int column_ID, int VAF_Control_Ref_ID, string columnName,
+            int VAF_Control_Ref_Value_ID, bool isParent, string validationCode)
         {
             Ctx _ctx = new Ctx(ctx);
             //Ctx _ctx = null;//(ctx) as Ctx;
-            Lookup res = LookupHelper.GetLookup(_ctx, windowNo, column_ID, AD_Reference_ID, columnName,
-                AD_Reference_Value_ID, isParent, validationCode);
+            Lookup res = LookupHelper.GetLookup(_ctx, windowNo, column_ID, VAF_Control_Ref_ID, columnName,
+                VAF_Control_Ref_Value_ID, isParent, validationCode);
             return Json(JsonConvert.SerializeObject(res), JsonRequestBehavior.AllowGet);
         }
 
@@ -713,7 +713,7 @@ namespace VIS.Controllers
                 //}
                 List<string> qryInfo = JsonConvert.DeserializeObject<List<string>>(queryInfo);
                 ProcessHelper pHe = new ProcessHelper();
-                GridReportInfo rep = (pHe.GenerateReport(Session["ctx"] as Ctx, Util.GetValueOfInt(processInfo["AD_PrintFormat_ID"]), qryInfo, code, isCreateNew, processInfo, Util.GetValueOfInt(processInfo["PageNo"]), Util.GetValueOfInt(processInfo["AD_PInstance_ID"]), Util.GetValueOfString(processInfo["FileType"]), node_ID, treeID, IsSummary));
+                GridReportInfo rep = (pHe.GenerateReport(Session["ctx"] as Ctx, Util.GetValueOfInt(processInfo["VAF_Print_Rpt_Layout_ID"]), qryInfo, code, isCreateNew, processInfo, Util.GetValueOfInt(processInfo["PageNo"]), Util.GetValueOfInt(processInfo["VAF_JInstance_ID"]), Util.GetValueOfString(processInfo["FileType"]), node_ID, treeID, IsSummary));
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
             else
@@ -722,7 +722,7 @@ namespace VIS.Controllers
             }
         }
 
-        public JsonResult GeneratePrint(int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
+        public JsonResult GeneratePrint(int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
@@ -731,9 +731,9 @@ namespace VIS.Controllers
                 if (pID > 0)
                 {
                     ctx.SetContext("FetchingDocReport", "Y");
-                    AD_Process_ID = pID;
+                    VAF_Job_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, AD_Process_ID, Name, VAF_TableView_ID, Record_ID, WindowNo, "", filetype, actionOrigin, originName));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(Session["ctx"] as Ctx, VAF_Job_ID, Name, VAF_TableView_ID, Record_ID, WindowNo, "", filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
@@ -747,14 +747,14 @@ namespace VIS.Controllers
         /// <summary>
         /// This function executes when user select multiple records from window and click print button
         /// </summary>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <param name="Name"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="RecIDs"></param>
         /// <param name="WindowNo"></param>
         /// <param name="filetype"></param>
         /// <returns></returns>
-        public JsonResult GenerateMultiPrint(int AD_Process_ID, string Name, int VAF_TableView_ID, string RecIDs, int WindowNo, string filetype, string actionOrigin, string originName)
+        public JsonResult GenerateMultiPrint(int VAF_Job_ID, string Name, int VAF_TableView_ID, string RecIDs, int WindowNo, string filetype, string actionOrigin, string originName)
         {
             if (Session["ctx"] != null)
             {
@@ -764,9 +764,9 @@ namespace VIS.Controllers
                 int pID = GetDoctypeBasedReport(ctx, VAF_TableView_ID, Record_ID);
                 if (pID > 0)
                 {
-                    AD_Process_ID = pID;
+                    VAF_Job_ID = pID;
                 }
-                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, AD_Process_ID, Name, VAF_TableView_ID, 0, WindowNo, RecIDs, filetype, actionOrigin, originName));
+                ProcessReportInfo rep = (ProcessHelper.GeneratePrint(ctx, VAF_Job_ID, Name, VAF_TableView_ID, 0, WindowNo, RecIDs, filetype, actionOrigin, originName));
                 ctx.SetContext("FetchingDocReport", "N");
                 return Json(JsonConvert.SerializeObject(rep), JsonRequestBehavior.AllowGet);
             }
@@ -780,11 +780,11 @@ namespace VIS.Controllers
 
 
 
-        public JsonResult ArchiveDoc(int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
+        public JsonResult ArchiveDoc(int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
         {
             if (Session["ctx"] != null)
             {
-                return Json(JsonConvert.SerializeObject(ProcessHelper.ArchiveDoc(Session["ctx"] as Ctx, AD_Process_ID, Name, VAF_TableView_ID, Record_ID, C_BPartner_ID, isReport, binaryData, reportPath)), JsonRequestBehavior.AllowGet);
+                return Json(JsonConvert.SerializeObject(ProcessHelper.ArchiveDoc(Session["ctx"] as Ctx, VAF_Job_ID, Name, VAF_TableView_ID, Record_ID, C_BPartner_ID, isReport, binaryData, reportPath)), JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -938,10 +938,10 @@ namespace VIS.Controllers
 
         }
 
-        public JsonResult GetReportFileTypes(int AD_Process_ID)
+        public JsonResult GetReportFileTypes(int VAF_Job_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
-            return Json(JsonConvert.SerializeObject(ProcessHelper.GetReportFileTypes(ctx, AD_Process_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(ProcessHelper.GetReportFileTypes(ctx, VAF_Job_ID)), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -960,7 +960,7 @@ namespace VIS.Controllers
         }
 
         public ActionResult GetRecordForFilter(string keyCol, string displayCol, string validationCode, string tableName,
-            string AD_Referencevalue_ID, string pTableName, string pColumnName, string whereClause)
+            string VAF_Control_Refvalue_ID, string pTableName, string pColumnName, string whereClause)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             string sql = null;
@@ -980,10 +980,10 @@ namespace VIS.Controllers
             }
             else
             {
-                if (tableName.Equals("AD_Ref_List"))
+                if (tableName.Equals("VAF_CtrlRef_List"))
                 {
                     //sql = "SELECT " + keyCol + ", " + displayCol + " || '('|| count(" + keyCol + ") || ')' FROM " + tableName + " WHERE IsActive='Y'";
-                    sql = "SELECT " + pColumnName + ", (Select Name from AD_REf_List where Value= " + pColumnName + " AND AD_Reference_ID=" + AD_Referencevalue_ID + ")  as name ,count(" + pColumnName + ")"
+                    sql = "SELECT " + pColumnName + ", (Select Name from VAF_CtrlRef_List where Value= " + pColumnName + " AND VAF_Control_Ref_ID=" + VAF_Control_Refvalue_ID + ")  as name ,count(" + pColumnName + ")"
                         + " FROM " + pTableName;// + " WHERE " + pTableName + ".IsActive='Y'";
                     sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))

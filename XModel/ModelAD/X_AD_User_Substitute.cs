@@ -188,8 +188,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** Substitute_ID AD_Reference_ID=110 */
-public static int SUBSTITUTE_ID_AD_Reference_ID=110;
+/** Substitute_ID VAF_Control_Ref_ID=110 */
+public static int SUBSTITUTE_ID_VAF_Control_Ref_ID=110;
 /** Set Substitute.
 @param Substitute_ID Entity which can be used in place of this entity */
 public void SetSubstitute_ID (int Substitute_ID)

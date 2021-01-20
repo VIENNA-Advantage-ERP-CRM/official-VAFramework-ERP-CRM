@@ -119,8 +119,8 @@ StringBuilder sb = new StringBuilder ("X_VAM_ProductFeature[").Append(Get_ID()).
 return sb.ToString();
 }
 
-/** AttributeValueType AD_Reference_ID=326 */
-public static int ATTRIBUTEVALUETYPE_AD_Reference_ID=326;
+/** AttributeValueType VAF_Control_Ref_ID=326 */
+public static int ATTRIBUTEVALUETYPE_VAF_Control_Ref_ID=326;
 /** List = L */
 public static String ATTRIBUTEVALUETYPE_List = "L";
 /** Number = N */

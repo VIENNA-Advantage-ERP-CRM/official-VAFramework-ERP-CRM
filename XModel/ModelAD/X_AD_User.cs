@@ -140,8 +140,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
         @param VAF_OrgTrx_ID Performing or initiating organization */
         public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
@@ -159,24 +159,24 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_MenuFavorite_ID AD_Reference_ID=184 */
-        public static int AD_TREE_MENUFAVORITE_ID_AD_Reference_ID = 184;
+        /** AD_Tree_MenuFavorite_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_MENUFAVORITE_ID_VAF_Control_Ref_ID = 184;
         /** Set Favorite Menu Tree.
         @param AD_Tree_MenuFavorite_ID Tree of the personal Favorite menu */
         public void SetAD_Tree_MenuFavorite_ID(int AD_Tree_MenuFavorite_ID)
@@ -194,8 +194,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_MenuNew_ID AD_Reference_ID=184 */
-        public static int AD_TREE_MENUNEW_ID_AD_Reference_ID = 184;
+        /** AD_Tree_MenuNew_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_MENUNEW_ID_VAF_Control_Ref_ID = 184;
         /** Set New Menu Tree.
         @param AD_Tree_MenuNew_ID Tree of the personal Favorite menu for new items */
         public void SetAD_Tree_MenuNew_ID(int AD_Tree_MenuNew_ID)
@@ -388,8 +388,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Comments");
         }
 
-        /** ConnectionProfile AD_Reference_ID=364 */
-        public static int CONNECTIONPROFILE_AD_Reference_ID = 364;
+        /** ConnectionProfile VAF_Control_Ref_ID=364 */
+        public static int CONNECTIONPROFILE_VAF_Control_Ref_ID = 364;
         /** LAN = L */
         public static String CONNECTIONPROFILE_LAN = "L";
         /** Terminal Server = T */
@@ -683,8 +683,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Graduation");
         }
 
-        /** HEALTH AD_Reference_ID=1000011 */
-        public static int HEALTH_AD_Reference_ID = 1000011;
+        /** HEALTH VAF_Control_Ref_ID=1000011 */
+        public static int HEALTH_VAF_Control_Ref_ID = 1000011;
         /** Normal = NO */
         public static String HEALTH_Normal = "NO";
         /** Special1 = S1 */
@@ -906,8 +906,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
 
-        /** NotificationType AD_Reference_ID=344 */
-        public static int NOTIFICATIONTYPE_AD_Reference_ID = 344;
+        /** NotificationType VAF_Control_Ref_ID=344 */
+        public static int NOTIFICATIONTYPE_VAF_Control_Ref_ID = 344;
         /** FaxEMail = A */
         public static String NOTIFICATIONTYPE_FaxEMail = "A";
         /** EMail+Notice = B */
@@ -1175,8 +1175,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("RelivingReason");
         }
 
-        /** Supervisor_ID AD_Reference_ID=110 */
-        public static int SUPERVISOR_ID_AD_Reference_ID = 110;
+        /** Supervisor_ID VAF_Control_Ref_ID=110 */
+        public static int SUPERVISOR_ID_VAF_Control_Ref_ID = 110;
         /** Set Supervisor.
         @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
         public void SetSupervisor_ID(int Supervisor_ID)
@@ -1544,8 +1544,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("SAP001_PartnerCounter");
         }
 
-        /** SAP001_PartnerFunction AD_Reference_ID=1000194 */
-        public static int SAP001_PARTNERFUNCTION_AD_Reference_ID = 1000194;
+        /** SAP001_PartnerFunction VAF_Control_Ref_ID=1000194 */
+        public static int SAP001_PARTNERFUNCTION_VAF_Control_Ref_ID = 1000194;
         /** Sold-to party = AG */
         public static String SAP001_PARTNERFUNCTION_Sold_ToParty = "AG";
         /** Bill-to party = RE */

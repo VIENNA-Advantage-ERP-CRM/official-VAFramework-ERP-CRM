@@ -510,9 +510,9 @@ namespace VAdvantage.Model
         /// Get Reference Value
         /// </summary>
         /// <returns>Reference Value</returns>
-        public int GetAD_Reference_Value_ID()
+        public int GetVAF_Control_Ref_Value_ID()
         {
-            return _vInfo.AD_Reference_Value_ID;
+            return _vInfo.VAF_Control_Ref_Value_ID;
         }
 
         /// <summary>

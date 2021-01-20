@@ -147,7 +147,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_ElementValue i "
                 + "SET VAF_Column_ID = (SELECT VAF_Column_ID FROM VAF_Column c"
                 + " WHERE UPPER(i.Default_Account)=UPPER(c.ColumnName)"
-                + " AND c.VAF_TableView_ID IN (315,266) AND AD_Reference_ID=25) "
+                + " AND c.VAF_TableView_ID IN (315,266) AND VAF_Control_Ref_ID=25) "
                 + "WHERE Default_Account IS NOT NULL AND VAF_Column_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());

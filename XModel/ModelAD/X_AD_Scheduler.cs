@@ -20,7 +20,7 @@ public X_AD_Scheduler (Context ctx, int AD_Scheduler_ID, Trx trxName) : base (ct
 {
 /** if (AD_Scheduler_ID == 0)
 {
-SetAD_Process_ID (0);
+SetVAF_Job_ID (0);
 SetAD_Scheduler_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
@@ -32,7 +32,7 @@ public X_AD_Scheduler (Ctx ctx, int AD_Scheduler_ID, Trx trxName) : base (ctx, A
 {
 /** if (AD_Scheduler_ID == 0)
 {
-SetAD_Process_ID (0);
+SetVAF_Job_ID (0);
 SetAD_Scheduler_ID (0);
 SetKeepLogDays (0);	// 7
 SetName (null);
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_AD_Scheduler[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID < 1) throw new ArgumentException ("AD_Process_ID is mandatory.");
-Set_ValueNoCheck ("AD_Process_ID", AD_Process_ID);
+if (VAF_Job_ID < 1) throw new ArgumentException ("VAF_Job_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -220,8 +220,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */
@@ -311,8 +311,8 @@ if (oo != null)
 return false;
 }
 
-/** Supervisor_ID AD_Reference_ID=316 */
-public static int SUPERVISOR_ID_AD_Reference_ID=316;
+/** Supervisor_ID VAF_Control_Ref_ID=316 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=316;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)

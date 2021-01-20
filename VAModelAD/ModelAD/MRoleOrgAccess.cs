@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MRoleOrgAccess : X_AD_Role_OrgAccess
+    public class MRoleOrgAccess : X_VAF_Role_OrgRights
     {
         private String _clientName;
         private String _orgName;
@@ -23,11 +23,11 @@ namespace VAdvantage.Model
         /// Get Organizational Access of Role
         /// </summary>
         /// <param name="ctx"> context</param>
-        /// <param name="AD_Role_ID">role</param>
+        /// <param name="VAF_Role_ID">role</param>
         /// <returns>array of Role Org Access</returns>
-        public static MRoleOrgAccess[] GetOfRole(Ctx ctx, int AD_Role_ID)
+        public static MRoleOrgAccess[] GetOfRole(Ctx ctx, int VAF_Role_ID)
         {
-            return Get(ctx, "SELECT * FROM AD_Role_OrgAccess WHERE AD_Role_ID=@param1", AD_Role_ID);
+            return Get(ctx, "SELECT * FROM VAF_Role_OrgRights WHERE VAF_Role_ID=@param1", VAF_Role_ID);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         /// <returns>array of Role Org Access</returns>
         public static MRoleOrgAccess[] GetOfClient(Ctx ctx, int VAF_Client_ID)
         {
-            return Get(ctx, "SELECT * FROM AD_Role_OrgAccess WHERE VAF_Client_ID=" + VAF_Client_ID, VAF_Client_ID);
+            return Get(ctx, "SELECT * FROM VAF_Role_OrgRights WHERE VAF_Client_ID=" + VAF_Client_ID, VAF_Client_ID);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         /// <returns>array of Role Org Access</returns>
         public static MRoleOrgAccess[] GetOfOrg(Ctx ctx, int VAF_Org_ID)
         {
-            return Get(ctx, "SELECT * FROM AD_Role_OrgAccess WHERE VAF_Org_ID=@param1", VAF_Org_ID);
+            return Get(ctx, "SELECT * FROM VAF_Role_OrgRights WHERE VAF_Org_ID=@param1", VAF_Org_ID);
         }
 
         /// <summary>
@@ -130,12 +130,12 @@ namespace VAdvantage.Model
         /// Organization Constructor
         /// </summary>
         /// <param name="org">org</param>
-        /// <param name="AD_Role_ID">role id</param>
-        public MRoleOrgAccess(PO org, int AD_Role_ID)
+        /// <param name="VAF_Role_ID">role id</param>
+        public MRoleOrgAccess(PO org, int VAF_Role_ID)
             : this(org.GetCtx(), 0, org.Get_TrxName())
         {
             SetClientOrg(org);
-            SetAD_Role_ID(AD_Role_ID);
+            SetVAF_Role_ID(VAF_Role_ID);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace VAdvantage.Model
             : this(role.GetCtx(), 0, role.Get_TrxName())
         {
             SetClientOrg(role.GetVAF_Client_ID(), VAF_Org_ID);
-            SetAD_Role_ID(role.GetAD_Role_ID());
+            SetVAF_Role_ID(role.GetVAF_Role_ID());
         }
 
 
@@ -164,7 +164,7 @@ namespace VAdvantage.Model
             {
                 if (!roles[i].IsManual())
                 {
-                    MRoleOrgAccess orgAccess = new MRoleOrgAccess(org, roles[i].GetAD_Role_ID());
+                    MRoleOrgAccess orgAccess = new MRoleOrgAccess(org, roles[i].GetVAF_Role_ID());
                     if (orgAccess.Save())
                         counter++;
                 }
@@ -180,7 +180,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MRoleOrgAccess[");
-            sb.Append("AD_Role_ID=").Append(GetAD_Role_ID())
+            sb.Append("VAF_Role_ID=").Append(GetVAF_Role_ID())
                 .Append(",VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(",VAF_Org_ID=").Append(GetVAF_Org_ID())
                 .Append(",RO=").Append(IsReadOnly());
@@ -282,10 +282,10 @@ namespace VAdvantage.Model
 
         private void UpdateLoginSettings()
         {
-            MRole role = new MRole(GetCtx(), GetAD_Role_ID(), null);
+            MRole role = new MRole(GetCtx(), GetVAF_Role_ID(), null);
             if (!role.IsUseUserOrgAccess())
             {
-                DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID());
+                DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND VAF_Role_ID=" + GetVAF_Role_ID());
             }
             else
             {
@@ -301,7 +301,7 @@ namespace VAdvantage.Model
 
                 }
 
-                string sql = "SELECT AD_User_ID FROM VAF_Loginsetting   WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID();
+                string sql = "SELECT AD_User_ID FROM VAF_Loginsetting   WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND VAF_Role_ID=" + GetVAF_Role_ID();
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -315,7 +315,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_Role_ID=" + GetAD_Role_ID());
+                    DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND VAF_Role_ID=" + GetVAF_Role_ID());
                 }
             }
         }

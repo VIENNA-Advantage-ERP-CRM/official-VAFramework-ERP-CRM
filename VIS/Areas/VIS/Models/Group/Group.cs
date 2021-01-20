@@ -186,24 +186,24 @@ namespace VIS.Models
 
 
 
-            sql = @"Select AD_Role.AD_Role_ID, AD_Role.Name from AD_Role WHERE AD_Role.VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND AD_Role.AD_Role_ID > 0 AND  IsActive='Y'";
+            sql = @"Select VAF_Role.VAF_Role_ID, VAF_Role.Name from VAF_Role WHERE VAF_Role.VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND VAF_Role.VAF_Role_ID > 0 AND  IsActive='Y'";
 
 
-            //            string sql = @"SELECT AD_Role.AD_Role_ID,
-            //                          AD_Role.Name
-            //                        FROM AD_Role
+            //            string sql = @"SELECT VAF_Role.VAF_Role_ID,
+            //                          VAF_Role.Name
+            //                        FROM VAF_Role
             //                        JOIN ad_user_roles
             //
-            //                        on AD_Role.AD_role_ID=ad_user_roles.AD_Role_ID
-            //                    WHERE AD_User_Roles.IsActive='Y' AND AD_Role.IsActive='Y' AND  AD_User_Roles.AD_User_ID=" + ctx.GetAD_User_ID();
+            //                        on VAF_Role.VAF_Role_ID=ad_user_roles.VAF_Role_ID
+            //                    WHERE AD_User_Roles.IsActive='Y' AND VAF_Role.IsActive='Y' AND  AD_User_Roles.AD_User_ID=" + ctx.GetAD_User_ID();
 
             if (name != null && name.Length > 0)
             {
-                sql += " AND upper(AD_Role.Name) like ('%" + name.ToUpper() + "%')";
+                sql += " AND upper(VAF_Role.Name) like ('%" + name.ToUpper() + "%')";
             }
 
-            sql += " ORDER BY upper(AD_Role.Name)";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_Role", true, false);
+            sql += " ORDER BY upper(VAF_Role.Name)";
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_Role", true, false);
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -211,7 +211,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     RolesInfo roleInfo = new RolesInfo();
-                    roleInfo.AD_Role_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                    roleInfo.VAF_Role_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                     roleInfo.Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
                     roleInfo.IsAssignedToUser = false;
                     roleInfo.roleWindowID = RoleWindowID;
@@ -220,13 +220,13 @@ namespace VIS.Models
                 }
 
 
-                sql = "Select AD_Role_ID, IsActive from ad_user_roles where AD_User_ID=" + AD_User_ID;
+                sql = "Select VAF_Role_ID, IsActive from ad_user_roles where AD_User_ID=" + AD_User_ID;
                 DataSet dsURoles = DB.ExecuteDataset(sql);
                 if (dsURoles != null && dsURoles.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < dsURoles.Tables[0].Rows.Count; i++)
                     {
-                        RolesInfo rrinfo = rInfo.Where(a => a.AD_Role_ID == Convert.ToInt32(dsURoles.Tables[0].Rows[i]["AD_Role_ID"])).FirstOrDefault();
+                        RolesInfo rrinfo = rInfo.Where(a => a.VAF_Role_ID == Convert.ToInt32(dsURoles.Tables[0].Rows[i]["VAF_Role_ID"])).FirstOrDefault();
                         if (rrinfo != null)
                         {
                             if (dsURoles.Tables[0].Rows[i]["IsActive"].ToString().Equals("Y"))
@@ -254,7 +254,7 @@ namespace VIS.Models
         /// <param name="roles"></param>
         public void UpdateUserRoles(int AD_User_ID, List<RolesInfo> roles)
         {
-            string sql = "SELECT isActive, AD_Role_ID FROM AD_User_Roles WHERE AD_User_ID= " + AD_User_ID;
+            string sql = "SELECT isActive, VAF_Role_ID FROM AD_User_Roles WHERE AD_User_ID= " + AD_User_ID;
             DataSet ds = DB.ExecuteDataset(sql);
 
             StringBuilder setActive = new StringBuilder();
@@ -266,35 +266,35 @@ namespace VIS.Models
                 {
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
-                        DataRow[] dr = ds.Tables[0].Select("AD_Role_ID=" + roles[i].AD_Role_ID);
+                        DataRow[] dr = ds.Tables[0].Select("VAF_Role_ID=" + roles[i].VAF_Role_ID);
                         if (dr != null && dr.Length > 0)
                         {
                             if (setActive.Length > 0)
                             {
                                 setActive.Append(" OR ");
                             }
-                            setActive.Append("(AD_Role_ID=" + roles[i].AD_Role_ID + " AND AD_User_ID=" + AD_User_ID + ")");
+                            setActive.Append("(VAF_Role_ID=" + roles[i].VAF_Role_ID + " AND AD_User_ID=" + AD_User_ID + ")");
                         }
                         else
                         {
-                            CreateNewUserRole(roles[i].AD_Role_ID, AD_User_ID);
+                            CreateNewUserRole(roles[i].VAF_Role_ID, AD_User_ID);
                         }
                     }
                     else
                     {
-                        CreateNewUserRole(roles[i].AD_Role_ID, AD_User_ID);
+                        CreateNewUserRole(roles[i].VAF_Role_ID, AD_User_ID);
                     }
                 }
                 else
                 {
-                    DataRow[] dr = ds.Tables[0].Select("AD_Role_ID=" + roles[i].AD_Role_ID);
+                    DataRow[] dr = ds.Tables[0].Select("VAF_Role_ID=" + roles[i].VAF_Role_ID);
                     if (dr != null && dr.Length > 0)
                     {
                         if (setInActive.Length > 0)
                         {
                             setInActive.Append(" OR ");
                         }
-                        setInActive.Append("(AD_Role_ID=" + roles[i].AD_Role_ID + " AND AD_User_ID=" + AD_User_ID + ")");
+                        setInActive.Append("(VAF_Role_ID=" + roles[i].VAF_Role_ID + " AND AD_User_ID=" + AD_User_ID + ")");
                     }
                 }
 
@@ -315,25 +315,25 @@ namespace VIS.Models
         /// <summary>
         /// Assign New Role to Current User.
         /// </summary>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="AD_User_ID"></param>
-        private void CreateNewUserRole(int AD_Role_ID, int AD_User_ID)
+        private void CreateNewUserRole(int VAF_Role_ID, int AD_User_ID)
         {
             MUserRoles role = new MUserRoles(ctx, 0, null);
             role.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
             role.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             role.SetAD_User_ID(AD_User_ID);
-            role.SetAD_Role_ID(AD_Role_ID);
+            role.SetVAF_Role_ID(VAF_Role_ID);
             role.Save();
         }
 
         /// <summary>
         /// Get All the groups of current client. If a group is assigned to current role then it will be checked otherwise unchecked.
         /// </summary>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public List<GroupInfo> GetGroupInfo(int AD_Role_ID, string name)
+        public List<GroupInfo> GetGroupInfo(int VAF_Role_ID, string name)
         {
             List<GroupInfo> gInfo = new List<GroupInfo>();
             int groupWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT AD_Window_ID from AD_Window WHERE Name='Group Rights'", null, null));
@@ -367,7 +367,7 @@ namespace VIS.Models
                 }
             }
 
-            sql = "select ad_role_group.VAF_GroupInfo_ID,ad_role_group.IsActive from ad_role_group join VAF_GroupInfo on ad_role_group.VAF_GroupInfo_ID=VAF_GroupInfo.VAF_GroupInfo_ID WHERE  ad_role_group.AD_Role_ID=" + AD_Role_ID;
+            sql = "select VAF_Role_group.VAF_GroupInfo_ID,VAF_Role_group.IsActive from VAF_Role_group join VAF_GroupInfo on VAF_Role_group.VAF_GroupInfo_ID=VAF_GroupInfo.VAF_GroupInfo_ID WHERE  VAF_Role_group.VAF_Role_ID=" + VAF_Role_ID;
             if (!string.IsNullOrEmpty(name))
             {
                 sql += " AND upper(VAF_GroupInfo.Name) like ('%" + name.ToUpper() + "%')";
@@ -404,11 +404,11 @@ namespace VIS.Models
         /// <summary>
         /// Assign/UnAssign group to roles.
         /// </summary>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="groups"></param>
-        public void UpdateUserGroup(int AD_Role_ID, List<GroupInfo> groups)
+        public void UpdateUserGroup(int VAF_Role_ID, List<GroupInfo> groups)
         {
-            string sql = " select isActive,VAF_Groupinfo_id from ad_role_group where AD_Role_ID =" + AD_Role_ID;
+            string sql = " select isActive,VAF_Groupinfo_id from VAF_Role_group where VAF_Role_ID =" + VAF_Role_ID;
             DataSet ds = DB.ExecuteDataset(sql);
 
             StringBuilder setActive = new StringBuilder();
@@ -422,58 +422,58 @@ namespace VIS.Models
                     if (ds != null && ds.Tables[0].Rows.Count > 0)      // if current group is assigned to role 
                     {
                         DataRow[] dr = ds.Tables[0].Select("VAF_GroupInfo_ID=" + groups[i].VAF_Group_ID);
-                        if (dr != null && dr.Length > 0)            // check if assigned group was inActive AD_Role_Group then Active it.
+                        if (dr != null && dr.Length > 0)            // check if assigned group was inActive VAF_Role_Group then Active it.
                         {
                             if (setActive.Length > 0)
                             {
                                 setActive.Append(" OR ");
                             }
-                            setActive.Append("(VAF_GroupInfo_ID=" + groups[i].VAF_Group_ID + " AND AD_Role_ID=" + AD_Role_ID + ")");
+                            setActive.Append("(VAF_GroupInfo_ID=" + groups[i].VAF_Group_ID + " AND VAF_Role_ID=" + VAF_Role_ID + ")");
                         }
                         else
                         {
-                            CreateNewUserGroup(AD_Role_ID, groups[i].VAF_Group_ID);  // else create new role group
+                            CreateNewUserGroup(VAF_Role_ID, groups[i].VAF_Group_ID);  // else create new role group
                             newGroupCreated = true;
                         }
                     }
                     else
                     {
-                        CreateNewUserGroup(AD_Role_ID, groups[i].VAF_Group_ID);  // else create new role group
+                        CreateNewUserGroup(VAF_Role_ID, groups[i].VAF_Group_ID);  // else create new role group
                         newGroupCreated = true;
                     }
                 }
                 else// if current is group is unchecked..
                 {
                     DataRow[] dr = ds.Tables[0].Select("VAF_GroupInfo_ID=" + groups[i].VAF_Group_ID);
-                    if (dr != null && dr.Length > 0)        // if group is already assigned and now marked unchecked, then delete it from AD_Role_Group
+                    if (dr != null && dr.Length > 0)        // if group is already assigned and now marked unchecked, then delete it from VAF_Role_Group
                     {
                         if (setInActive.Length > 0)
                         {
                             setInActive.Append(" OR ");
                         }
-                        setInActive.Append("(VAF_GroupInfo_ID=" + groups[i].VAF_Group_ID + " AND AD_Role_ID=" + AD_Role_ID + ")");
+                        setInActive.Append("(VAF_GroupInfo_ID=" + groups[i].VAF_Group_ID + " AND VAF_Role_ID=" + VAF_Role_ID + ")");
                     }
                 }
                
                 DataRow[] drr = ds.Tables[0].Select("VAF_GroupInfo_ID=" + groups[i].VAF_Group_ID);
                 if ((drr != null && drr.Length > 0) || newGroupCreated)     // update group's window/ form/process/workflow    OR      window Create new entry in window/ form/process/workflow
                 {
-                    ProvideWindowAccessToRole(groups[i].VAF_Group_ID, AD_Role_ID, groups[i].IsAssignedToUser);
-                    ProvideFormAccessToRole(groups[i].VAF_Group_ID, AD_Role_ID, groups[i].IsAssignedToUser);
-                    ProvideProcessAccessToRole(groups[i].VAF_Group_ID, AD_Role_ID, groups[i].IsAssignedToUser);
-                    ProvideWorkflowAccessToRole(groups[i].VAF_Group_ID, AD_Role_ID, groups[i].IsAssignedToUser);
+                    ProvideWindowAccessToRole(groups[i].VAF_Group_ID, VAF_Role_ID, groups[i].IsAssignedToUser);
+                    ProvideFormAccessToRole(groups[i].VAF_Group_ID, VAF_Role_ID, groups[i].IsAssignedToUser);
+                    ProvideProcessAccessToRole(groups[i].VAF_Group_ID, VAF_Role_ID, groups[i].IsAssignedToUser);
+                    ProvideWorkflowAccessToRole(groups[i].VAF_Group_ID, VAF_Role_ID, groups[i].IsAssignedToUser);
                 }
 
             }
 
             if (setActive.Length > 0)
             {
-                DB.ExecuteQuery("Update AD_Role_Group Set IsActive='Y' WHERE " + setActive.ToString(), null, null);
+                DB.ExecuteQuery("Update VAF_Role_Group Set IsActive='Y' WHERE " + setActive.ToString(), null, null);
             }
             if (setInActive.Length > 0)
             {
-                //DB.ExecuteQuery("Update AD_Role_Group Set IsActive='N' WHERE " + setInActive.ToString(), null, null);
-                DB.ExecuteQuery("DELETE FROM AD_Role_Group WHERE " + setInActive.ToString(), null, null);
+                //DB.ExecuteQuery("Update VAF_Role_Group Set IsActive='N' WHERE " + setInActive.ToString(), null, null);
+                DB.ExecuteQuery("DELETE FROM VAF_Role_Group WHERE " + setInActive.ToString(), null, null);
             }
             //}
 
@@ -483,14 +483,14 @@ namespace VIS.Models
         /// <summary>
         /// Assign Role to group
         /// </summary>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="VAF_Group_ID"></param>
-        private void CreateNewUserGroup(int AD_Role_ID, int VAF_Group_ID)
+        private void CreateNewUserGroup(int VAF_Role_ID, int VAF_Group_ID)
         {
-            X_AD_Role_Group role = new X_AD_Role_Group(ctx, 0, null);
+            X_VAF_Role_Group role = new X_VAF_Role_Group(ctx, 0, null);
             role.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
             role.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-            role.SetAD_Role_ID(AD_Role_ID);
+            role.SetVAF_Role_ID(VAF_Role_ID);
             role.SetVAF_GroupInfo_ID(VAF_Group_ID);
             role.Save();
         }
@@ -499,9 +499,9 @@ namespace VIS.Models
         /// Assign/UnAssign windows from group to role
         /// </summary>
         /// <param name="VAF_Group_ID"></param>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="grantAccess"></param>
-        private void ProvideWindowAccessToRole(int VAF_Group_ID, int AD_Role_ID, bool grantAccess)
+        private void ProvideWindowAccessToRole(int VAF_Group_ID, int VAF_Role_ID, bool grantAccess)
         {
             string sql = "SELECT AD_Window_ID from VAF_Group_Window WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
             DataSet ds = DB.ExecuteDataset(sql);
@@ -526,7 +526,7 @@ namespace VIS.Models
                 groupWindowIDs.Sort();
 
                 // get windowsID from WIndow Access for current role and windows in group 
-                sql = "SELECT AD_Window_ID,IsReadWrite FROM AD_Window_Access WHERE AD_Role_ID=" + AD_Role_ID + " AND AD_Window_ID IN(" + winIDs.ToString() + ")";
+                sql = "SELECT AD_Window_ID,IsReadWrite FROM AD_Window_Access WHERE VAF_Role_ID=" + VAF_Role_ID + " AND AD_Window_ID IN(" + winIDs.ToString() + ")";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -547,11 +547,11 @@ namespace VIS.Models
                             //bool savenew = wAccess.Save();
                             if (grantAccess)
                             {
-                                sql = "UPDATE AD_Window_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE AD_Window_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             else
                             {
-                                sql = "UPDATE AD_Window_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE AD_Window_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Window_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             DB.ExecuteQuery(sql, null, null);
 
@@ -561,10 +561,10 @@ namespace VIS.Models
                     else                // Else create new entry....
                     {
                         MWindow wind = new MWindow(ctx, groupWindowIDs[i], null);
-                        MWindowAccess wAccess = new MWindowAccess(wind, AD_Role_ID);
+                        MWindowAccess wAccess = new MWindowAccess(wind, VAF_Role_ID);
                         wAccess.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wAccess.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
-                        wAccess.SetAD_Role_ID(AD_Role_ID);
+                        wAccess.SetVAF_Role_ID(VAF_Role_ID);
                         wAccess.SetAD_Window_ID(groupWindowIDs[i]);
                         wAccess.SetIsReadWrite(grantAccess);
                         bool savenew = wAccess.Save();
@@ -577,9 +577,9 @@ namespace VIS.Models
         /// Assign/UnAssign Forms from group to role
         /// </summary>
         /// <param name="VAF_Group_ID"></param>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="grantAccess"></param>
-        private void ProvideFormAccessToRole(int VAF_Group_ID, int AD_Role_ID, bool grantAccess)
+        private void ProvideFormAccessToRole(int VAF_Group_ID, int VAF_Role_ID, bool grantAccess)
         {
             string sql = "SELECT VAF_Page_ID from VAF_Group_Form WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
             DataSet ds = DB.ExecuteDataset(sql);
@@ -603,7 +603,7 @@ namespace VIS.Models
 
                 groupWindowIDs.Sort();
 
-                sql = "SELECT VAF_Page_ID,IsReadWrite FROM VAF_Page_Rights WHERE AD_Role_ID=" + AD_Role_ID + " AND VAF_Page_ID IN(" + winIDs.ToString() + ")";
+                sql = "SELECT VAF_Page_ID,IsReadWrite FROM VAF_Page_Rights WHERE VAF_Role_ID=" + VAF_Role_ID + " AND VAF_Page_ID IN(" + winIDs.ToString() + ")";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -616,7 +616,7 @@ namespace VIS.Models
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
                     MForm wind = new MForm(ctx, groupWindowIDs[i], null);
-                    MFormAccess wAccess = new MFormAccess(wind, AD_Role_ID);
+                    MFormAccess wAccess = new MFormAccess(wind, VAF_Role_ID);
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))
                     {
                         if (roleWindowIDsDictinary[groupWindowIDs[i]] != grantAccess)
@@ -625,11 +625,11 @@ namespace VIS.Models
                             //wAccess.Save();
                             if (grantAccess)
                             {
-                                sql = "UPDATE VAF_Page_Rights Set IsReadWrite='Y',IsActive='Y' WHERE VAF_Page_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE VAF_Page_Rights Set IsReadWrite='Y',IsActive='Y' WHERE VAF_Page_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             else
                             {
-                                sql = "UPDATE VAF_Page_Rights Set IsReadWrite='N',IsActive='N' WHERE VAF_Page_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE VAF_Page_Rights Set IsReadWrite='N',IsActive='N' WHERE VAF_Page_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             DB.ExecuteQuery(sql, null, null);
                         }
@@ -639,7 +639,7 @@ namespace VIS.Models
 
                         wAccess.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wAccess.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
-                        wAccess.SetAD_Role_ID(AD_Role_ID);
+                        wAccess.SetVAF_Role_ID(VAF_Role_ID);
                         wAccess.SetVAF_Page_ID(groupWindowIDs[i]);
                         wAccess.SetIsReadWrite(grantAccess);
                         wAccess.Save();
@@ -652,11 +652,11 @@ namespace VIS.Models
         /// Assign/UnAssign process from group to role
         /// </summary>
         /// <param name="VAF_Group_ID"></param>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="grantAccess"></param>
-        private void ProvideProcessAccessToRole(int VAF_Group_ID, int AD_Role_ID, bool grantAccess)
+        private void ProvideProcessAccessToRole(int VAF_Group_ID, int VAF_Role_ID, bool grantAccess)
         {
-            string sql = "SELECT AD_Process_ID from VAF_Group_Process WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
+            string sql = "SELECT VAF_Job_ID from VAF_Group_Process WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             List<int> groupWindowIDs = new List<int>();
             Dictionary<int, bool> roleWindowIDsDictinary = new Dictionary<int, bool>();
@@ -665,33 +665,33 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    if (ds.Tables[0].Rows[i]["AD_Process_ID"] != null && ds.Tables[0].Rows[i]["AD_Process_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Job_ID"] != null && ds.Tables[0].Rows[i]["VAF_Job_ID"] != DBNull.Value)
                     {
                         if (winIDs.Length > 0)
                         {
                             winIDs.Append(",");
                         }
-                        winIDs.Append(ds.Tables[0].Rows[i]["AD_Process_ID"].ToString());
-                        groupWindowIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Process_ID"]));
+                        winIDs.Append(ds.Tables[0].Rows[i]["VAF_Job_ID"].ToString());
+                        groupWindowIDs.Add(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Job_ID"]));
                     }
                 }
 
                 groupWindowIDs.Sort();
 
-                sql = "SELECT AD_Process_ID,IsReadWrite FROM AD_Process_Access WHERE AD_Role_ID=" + AD_Role_ID + " AND AD_Process_ID IN(" + winIDs.ToString() + ")";
+                sql = "SELECT VAF_Job_ID,IsReadWrite FROM VAF_Job_Rights WHERE VAF_Role_ID=" + VAF_Role_ID + " AND VAF_Job_ID IN(" + winIDs.ToString() + ")";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        roleWindowIDsDictinary[Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Process_ID"])] = ds.Tables[0].Rows[i]["IsReadWrite"].ToString() == "Y" ? true : false;
+                        roleWindowIDsDictinary[Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Job_ID"])] = ds.Tables[0].Rows[i]["IsReadWrite"].ToString() == "Y" ? true : false;
                     }
                 }
 
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
                     MProcess wind = new MProcess(ctx, groupWindowIDs[i], null);
-                    MProcessAccess wAccess = new MProcessAccess(wind, AD_Role_ID);
+                    MProcessAccess wAccess = new MProcessAccess(wind, VAF_Role_ID);
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))
                     {
                         if (roleWindowIDsDictinary[groupWindowIDs[i]] != grantAccess)
@@ -700,11 +700,11 @@ namespace VIS.Models
                             //wAccess.Save();
                             if (grantAccess)
                             {
-                                sql = "UPDATE AD_Process_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Process_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE VAF_Job_Rights Set IsReadWrite='Y',IsActive='Y' WHERE VAF_Job_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             else
                             {
-                                sql = "UPDATE AD_Process_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Process_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE VAF_Job_Rights Set IsReadWrite='N',IsActive='N' WHERE VAF_Job_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             DB.ExecuteQuery(sql, null, null);
                         }
@@ -714,8 +714,8 @@ namespace VIS.Models
 
                         wAccess.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wAccess.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
-                        wAccess.SetAD_Role_ID(AD_Role_ID);
-                        wAccess.SetAD_Process_ID(groupWindowIDs[i]);
+                        wAccess.SetVAF_Role_ID(VAF_Role_ID);
+                        wAccess.SetVAF_Job_ID(groupWindowIDs[i]);
                         wAccess.SetIsReadWrite(grantAccess);
                         wAccess.Save();
                     }
@@ -727,9 +727,9 @@ namespace VIS.Models
         /// Assign/UnAssign workflow from group to role
         /// </summary>
         /// <param name="VAF_Group_ID"></param>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <param name="grantAccess"></param>
-        private void ProvideWorkflowAccessToRole(int VAF_Group_ID, int AD_Role_ID, bool grantAccess)
+        private void ProvideWorkflowAccessToRole(int VAF_Group_ID, int VAF_Role_ID, bool grantAccess)
         {
             string sql = "SELECT AD_Workflow_ID from VAF_Group_Workflow WHERE IsActive='Y' AND VAF_GroupInfo_ID=" + VAF_Group_ID;
             DataSet ds = DB.ExecuteDataset(sql);
@@ -753,7 +753,7 @@ namespace VIS.Models
 
                 groupWindowIDs.Sort();
 
-                sql = "SELECT AD_Workflow_ID,IsReadWrite FROM AD_workflow_Access WHERE AD_Role_ID=" + AD_Role_ID + " AND AD_Workflow_ID IN(" + winIDs.ToString() + ")";
+                sql = "SELECT AD_Workflow_ID,IsReadWrite FROM AD_workflow_Access WHERE VAF_Role_ID=" + VAF_Role_ID + " AND AD_Workflow_ID IN(" + winIDs.ToString() + ")";
                 ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -766,7 +766,7 @@ namespace VIS.Models
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
                     MWorkflow wind = new MWorkflow(ctx, groupWindowIDs[i], null);
-                    MWorkflowAccess wAccess = new MWorkflowAccess(wind, AD_Role_ID);
+                    MWorkflowAccess wAccess = new MWorkflowAccess(wind, VAF_Role_ID);
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))
                     {
                         if (roleWindowIDsDictinary[groupWindowIDs[i]] != grantAccess)
@@ -775,11 +775,11 @@ namespace VIS.Models
                             //wAccess.Save();
                             if (grantAccess)
                             {
-                                sql = "UPDATE AD_Workflow_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Workflow_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE AD_Workflow_Access Set IsReadWrite='Y',IsActive='Y' WHERE AD_Workflow_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             else
                             {
-                                sql = "UPDATE AD_Workflow_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Workflow_ID=" + groupWindowIDs[i] + " AND AD_Role_ID=" + AD_Role_ID;
+                                sql = "UPDATE AD_Workflow_Access Set IsReadWrite='N',IsActive='N' WHERE AD_Workflow_ID=" + groupWindowIDs[i] + " AND VAF_Role_ID=" + VAF_Role_ID;
                             }
                             DB.ExecuteQuery(sql, null, null);
                         }
@@ -789,7 +789,7 @@ namespace VIS.Models
 
                         wAccess.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wAccess.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
-                        wAccess.SetAD_Role_ID(AD_Role_ID);
+                        wAccess.SetVAF_Role_ID(VAF_Role_ID);
                         wAccess.SetAD_Workflow_ID(groupWindowIDs[i]);
                         wAccess.SetIsReadWrite(grantAccess);
                         wAccess.Save();
@@ -900,9 +900,9 @@ namespace VIS.Models
 
             gInfo.FormName = forms.ToString();
 
-            sql = @"SELECT AD_Process.Name FROM VAF_Group_Process  JOIN AD_Process
-                     ON VAF_Group_Process.AD_Process_ID=AD_Process.AD_Process_ID
-                     WHERE VAF_Group_Process.IsActive='Y' AND VAF_Group_Process.VAF_GroupInfo_ID=" + groupID + " ORDER BY AD_Process.Name";
+            sql = @"SELECT VAF_Job.Name FROM VAF_Group_Process  JOIN VAF_Job
+                     ON VAF_Group_Process.VAF_Job_ID=VAF_Job.VAF_Job_ID
+                     WHERE VAF_Group_Process.IsActive='Y' AND VAF_Group_Process.VAF_GroupInfo_ID=" + groupID + " ORDER BY VAF_Job.Name";
 
             ds = DB.ExecuteDataset(sql);
 
@@ -960,14 +960,14 @@ namespace VIS.Models
             
             string info ="";
             string msg;
-            int AD_Role_Table_ID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='AD_Role'", null, null));
+            int VAF_Role_Table_ID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAF_Role'", null, null));
 
             try
             {
                 string sql = @"SELECT VAF_Column_ID,ColumnName,
                                   defaultvalue
                                 FROM VAF_Column
-                                WHERE VAF_TableView_ID =" + AD_Role_Table_ID + @"
+                                WHERE VAF_TableView_ID =" + VAF_Role_Table_ID + @"
                                 AND isActive      ='Y'
                                 AND defaultvalue IS NOT NULL";
 
@@ -1001,7 +1001,7 @@ namespace VIS.Models
                         for (int i = 0; i < OrgID.Count; i++)           // Assigning org access to role
                         {
                             MOrg org = new MOrg(ctx, OrgID[i], null);
-                            MRoleOrgAccess roles = new MRoleOrgAccess(org, role.GetAD_Role_ID());
+                            MRoleOrgAccess roles = new MRoleOrgAccess(org, role.GetVAF_Role_ID());
                             roles.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                             roles.SetVAF_Org_ID(OrgID[i]);
                             roles.SetIsReadOnly(false);
@@ -1048,13 +1048,13 @@ namespace VIS.Models
         {
             List<KeyVal> keyval = new List<KeyVal>();
 
-            string sql = @"SELECT AD_Ref_List.value,
-                                      AD_Ref_List.Name
-                                    FROM AD_Ref_List
-                                    JOIN ad_reference
-                                    ON ad_reference.ad_reference_id = ad_ref_list.ad_reference_id
-                                    WHERE ad_reference.Name         ='AD_Role User Level'
-                                    ORDER BY AD_Ref_List_ID";
+            string sql = @"SELECT VAF_CtrlRef_List.value,
+                                      VAF_CtrlRef_List.Name
+                                    FROM VAF_CtrlRef_List
+                                    JOIN VAF_Control_Ref
+                                    ON VAF_Control_Ref.VAF_Control_Ref_id = VAF_CtrlRef_List.VAF_Control_Ref_id
+                                    WHERE VAF_Control_Ref.Name         ='VAF_Role User Level'
+                                    ORDER BY VAF_CtrlRef_List_ID";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1102,7 +1102,7 @@ namespace VIS.Models
 
     public class RolesInfo
     {
-        public int AD_Role_ID { get; set; }
+        public int VAF_Role_ID { get; set; }
         public string Name { get; set; }
         public bool IsAssignedToUser { get; set; }
         public int roleWindowID { get; set; }

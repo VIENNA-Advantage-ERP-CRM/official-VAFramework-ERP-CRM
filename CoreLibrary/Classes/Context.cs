@@ -215,29 +215,29 @@ namespace VAdvantage.Classes
         /// <summary>
         /// Add Role ID in list
         /// </summary>
-        /// <param name="AD_Role_ID"></param>
+        /// <param name="VAF_Role_ID"></param>
         /// <returns></returns>
-        public void SetAD_Role_ID(int AD_Role_ID)
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            SetContext("#AD_Role_ID", AD_Role_ID.ToString());
+            SetContext("#VAF_Role_ID", VAF_Role_ID.ToString());
         }
 
         /// <summary>
         /// Get Role Id from Context
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            return GetContextAsInt("#AD_Role_ID");
+            return GetContextAsInt("#VAF_Role_ID");
         }
 
         /// <summary>
-        ///	Get Login AD_Role_Name
+        ///	Get Login VAF_Role_Name
         /// </summary>
         /// <returns></returns>
-        public string GetAD_Role_Name()
+        public string GetVAF_Role_Name()
         {
-            return GetContext("#AD_Role_Name");
+            return GetContext("#VAF_Role_Name");
         }
 
         /// <summary>

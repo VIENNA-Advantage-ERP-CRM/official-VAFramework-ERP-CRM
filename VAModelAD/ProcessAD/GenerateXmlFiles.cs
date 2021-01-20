@@ -174,9 +174,9 @@ namespace VAdvantage.Process
 
         private string GetKeyColumnName(string tableName)
         {
-            /* SpecialCase For AD_Ref_Table*/
-            if (tableName == "AD_Ref_Table")
-                return "AD_Reference_ID";
+            /* SpecialCase For VAF_CtrlRef_Table*/
+            if (tableName == "VAF_CtrlRef_Table")
+                return "VAF_Control_Ref_ID";
             else
                 return tableName + "_ID";
         }

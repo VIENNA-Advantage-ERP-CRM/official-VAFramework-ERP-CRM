@@ -83,7 +83,7 @@ namespace VAdvantage.Controller
                     columnName = dr.GetName(i).ToUpper();// rsmd.getColumnName(i);
                     if (columnName.Equals("NAME"))
                         vo.Header = dr[i].ToString();
-                    else if (columnName.Equals("AD_REFERENCE_ID"))
+                    else if (columnName.Equals("VAF_CONTROL_REF_ID"))
                         vo.displayType = Utility.Util.GetValueOfInt(dr[i]);//  Utility.Util.GetValueOfInt(dr[i])
                     else if (columnName.Equals("VAF_COLUMN_ID"))
                         vo.VAF_Column_ID = Utility.Util.GetValueOfInt(dr[i]);
@@ -203,8 +203,8 @@ namespace VAdvantage.Controller
                             vo.Callout = callouts.ToString();
                         }
                     }
-                    else if (columnName.Equals("AD_PROCESS_ID"))
-                        vo.AD_Process_ID = Utility.Util.GetValueOfInt(dr[i]);
+                    else if (columnName.Equals("VAF_JOB_ID"))
+                        vo.VAF_Job_ID = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("AD_FORM_ID"))
                         vo.VAF_Page_ID = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("READONLYLOGIC"))
@@ -218,8 +218,8 @@ namespace VAdvantage.Controller
                     else if (columnName.Equals("ISDEFAULTFOCUS"))
                         vo.IsDefaultFocus = "Y".Equals(dr[i].ToString());
                     //
-                    else if (columnName.Equals("AD_REFERENCE_VALUE_ID"))
-                        vo.AD_Reference_Value_ID = Utility.Util.GetValueOfInt(dr[i]);
+                    else if (columnName.Equals("VAF_CONTROL_REF_VALUE_ID"))
+                        vo.VAF_Control_Ref_Value_ID = Utility.Util.GetValueOfInt(dr[i]);
                     else if (columnName.Equals("VALIDATIONCODE"))
                         vo.ValidationCode = dr[i].ToString();
                     else if (columnName.Equals("COLUMNSQL"))
@@ -386,13 +386,13 @@ namespace VAdvantage.Controller
             try
             {
                 vo.VAF_TableView_ID = 0;
-                vo.VAF_Column_ID = Utility.Util.GetValueOfInt(dr["AD_Process_Para_ID"]);	//	**
+                vo.VAF_Column_ID = Utility.Util.GetValueOfInt(dr["VAF_Job_Para_ID"]);	//	**
                 vo.ColumnName = dr["ColumnName"].ToString();
                 vo.Header = dr["Name"].ToString();
                 vo.Description = Utility.Util.GetValueOfString(dr["Description"]);
                 vo.Help = Utility.Util.GetValueOfString(dr["Help"]);
-                vo.displayType = Utility.Util.GetValueOfInt(dr["AD_Reference_ID"]);
-                vo.AD_Reference_ID = Utility.Util.GetValueOfInt(dr["AD_Reference_ID"]);
+                vo.displayType = Utility.Util.GetValueOfInt(dr["VAF_Control_Ref_ID"]);
+                vo.VAF_Control_Ref_ID = Utility.Util.GetValueOfInt(dr["VAF_Control_Ref_ID"]);
                 vo.IsMandatoryUI = Utility.Util.GetValueOfString(dr["IsMandatoryUI"]).Equals("Y");
                 vo.FieldLength = Utility.Util.GetValueOfInt(dr["FieldLength"]);
                 vo.DisplayLength = vo.FieldLength;
@@ -403,7 +403,7 @@ namespace VAdvantage.Controller
                 vo.ValueMax = Utility.Util.GetValueOfString(dr["ValueMax"]);
                 vo.isRange = Utility.Util.GetValueOfString(dr["IsRange"]).Equals("Y");
                 //
-                vo.AD_Reference_Value_ID = Utility.Util.GetValueOfInt(dr["AD_Reference_Value_ID"]);
+                vo.VAF_Control_Ref_Value_ID = Utility.Util.GetValueOfInt(dr["VAF_Control_Ref_Value_ID"]);
                 vo.ValidationCode = Utility.Util.GetValueOfString(dr["ValidationCode"]);
                 vo.VAF_QuickSearchWindow_ID = Util.GetValueOfInt(dr["VAF_QuickSearchWindow_ID"]);
             }
@@ -433,7 +433,7 @@ namespace VAdvantage.Controller
             voT.IsUpdateable = true;
             //
             voT.VAF_TableView_ID = voF.VAF_TableView_ID;
-            voT.VAF_Column_ID = voF.VAF_Column_ID;    //  AD_Process_Para_ID
+            voT.VAF_Column_ID = voF.VAF_Column_ID;    //  VAF_Job_Para_ID
             voT.ColumnName = voF.ColumnName;
             voT.Header = voF.Header;
             voT.Description = voF.Description;
@@ -466,7 +466,7 @@ namespace VAdvantage.Controller
             voT.IsUpdateable = true;
             //
             voT.VAF_TableView_ID = voF.VAF_TableView_ID;
-            voT.VAF_Column_ID = voF.VAF_Column_ID;    //  AD_Process_Para_ID
+            voT.VAF_Column_ID = voF.VAF_Column_ID;    //  VAF_Job_Para_ID
             voT.ColumnName = voF.ColumnName;
             voT.Header = voF.Header;
             voT.Description = voF.Description;
@@ -508,7 +508,7 @@ namespace VAdvantage.Controller
                 vo.ColumnName += "By";
             vo.displayType = isTimestamp ? DisplayType.DateTime : DisplayType.Table;
             if (!isTimestamp)
-                vo.AD_Reference_Value_ID = 110;		//	AD_User Table Reference
+                vo.VAF_Control_Ref_Value_ID = 110;		//	AD_User Table Reference
             vo.IsDisplayedf = false;
             vo.IsMandatoryUI = false;
             vo.IsReadOnly = false;
@@ -535,14 +535,14 @@ namespace VAdvantage.Controller
             try
             {
                 vo.VAF_TableView_ID = 0;
-                vo.VAF_Column_ID = int.Parse(dr["AD_Process_Para_ID"].ToString());
+                vo.VAF_Column_ID = int.Parse(dr["VAF_Job_Para_ID"].ToString());
                 vo.ColumnName = dr["COLUMNNAME"].ToString();
                 vo.Header = dr["Name"].ToString();
                 vo.name = dr["Name"].ToString();
                 vo.Description = dr["Description"].ToString();
                 vo.Help = dr["Help"].ToString();
-                vo.displayType = int.Parse(dr["AD_Reference_ID"].ToString());
-                vo.AD_Reference_ID = int.Parse(dr["AD_Reference_ID"].ToString());
+                vo.displayType = int.Parse(dr["VAF_Control_Ref_ID"].ToString());
+                vo.VAF_Control_Ref_ID = int.Parse(dr["VAF_Control_Ref_ID"].ToString());
                 vo.IsMandatoryUI = dr["IsMandatoryUI"].ToString() == "Y" ? true : false;
                 vo.FieldLength = int.Parse(dr["FIELDLENGTH"].ToString());
                 vo.DisplayLength = vo.FieldLength;
@@ -551,7 +551,7 @@ namespace VAdvantage.Controller
                 vo.ValueMin = dr["VALUEMIN"].ToString();
                 vo.ValueMax = dr["VALUEMAX"].ToString();
                 vo.isRange = dr["ISRANGE"].ToString() == "Y";
-                vo.AD_Reference_Value_ID = int.Parse((dr["AD_REFERENCE_VALUE_ID"].ToString() == "") ? "0" : dr["AD_REFERENCE_VALUE_ID"].ToString());
+                vo.VAF_Control_Ref_Value_ID = int.Parse((dr["VAF_CONTROL_REF_VALUE_ID"].ToString() == "") ? "0" : dr["VAF_CONTROL_REF_VALUE_ID"].ToString());
                 vo.ValidationCode = dr["VALIDATIONCODE"].ToString();
                 vo.VAF_QuickSearchWindow_ID = Util.GetValueOfInt(dr["VAF_QuickSearchWindow_ID"]);
                 vo.LoadRecursiveData = dr["LoadRecursiveData"].ToString() == "Y" ? true : false;
@@ -595,8 +595,8 @@ namespace VAdvantage.Controller
                 vo.Header = dr["Name"].ToString();
                 vo.name = dr["Name"].ToString();
                 vo.Description = dr["Description"].ToString();
-                vo.displayType = int.Parse(dr["AD_Reference_ID"].ToString());
-                vo.AD_Reference_ID = int.Parse(dr["AD_Reference_ID"].ToString());
+                vo.displayType = int.Parse(dr["VAF_Control_Ref_ID"].ToString());
+                vo.VAF_Control_Ref_ID = int.Parse(dr["VAF_Control_Ref_ID"].ToString());
                 vo.IsMandatoryUI = dr["IsMandatoryUI"].ToString() == "Y" ? true : false;
                 vo.FieldLength = int.Parse(dr["FIELDLENGTH"].ToString());
                 vo.DisplayLength = vo.FieldLength;
@@ -605,7 +605,7 @@ namespace VAdvantage.Controller
                 //vo.ValueMin = dr["VALUEMIN"].ToString();
                 //vo.ValueMax = dr["VALUEMAX"].ToString();
                 vo.isRange = dr["ISRANGE"].ToString() == "Y";
-                vo.AD_Reference_Value_ID = int.Parse((dr["AD_REFERENCE_VALUE_ID"].ToString() == "") ? "0" : dr["AD_REFERENCE_VALUE_ID"].ToString());
+                vo.VAF_Control_Ref_Value_ID = int.Parse((dr["VAF_CONTROL_REF_VALUE_ID"].ToString() == "") ? "0" : dr["VAF_CONTROL_REF_VALUE_ID"].ToString());
                 vo.ValidationCode = dr["VALIDATIONCODE"].ToString();
                 vo.VAF_QuickSearchWindow_ID = Util.GetValueOfInt(dr["VAF_QuickSearchWindow_ID"]);
                 dr.Delete();
@@ -673,7 +673,7 @@ namespace VAdvantage.Controller
             vo.ValueMax = f.ValueMax;
             vo.isRange = f.isRange;
             //
-            vo.AD_Reference_Value_ID = f.AD_Reference_Value_ID;
+            vo.VAF_Control_Ref_Value_ID = f.VAF_Control_Ref_Value_ID;
             vo.ValidationCode = f.ValidationCode;
             //
             vo.InitFinish();
@@ -729,7 +729,7 @@ namespace VAdvantage.Controller
                     try
                     {
                         lookupInfo = VLookUpFactory.GetLookUpInfo(ctx, windowNo, displayType,
-                            VAF_Column_ID, Env.GetLanguage(ctx), ColumnName, AD_Reference_Value_ID,
+                            VAF_Column_ID, Env.GetLanguage(ctx), ColumnName, VAF_Control_Ref_Value_ID,
                             IsParent, ValidationCode);
                     }
                     catch (Exception e)     //  Cannot create Lookup
@@ -797,7 +797,7 @@ namespace VAdvantage.Controller
             clone.IsKey = IsKey;
             clone.IsParent = IsParent;
             clone.Callout = Callout;
-            clone.AD_Process_ID = AD_Process_ID;
+            clone.VAF_Job_ID = VAF_Job_ID;
             clone.Description = Description;
             clone.Help = Help;
             clone.ReadOnlyLogic = ReadOnlyLogic;
@@ -805,7 +805,7 @@ namespace VAdvantage.Controller
             clone.IsDefaultFocus = IsDefaultFocus;
             //	Lookup
             clone.ValidationCode = ValidationCode;
-            clone.AD_Reference_Value_ID = AD_Reference_Value_ID;
+            clone.VAF_Control_Ref_Value_ID = VAF_Control_Ref_Value_ID;
             clone.lookupInfo = lookupInfo;
 
             //  Process Parameter

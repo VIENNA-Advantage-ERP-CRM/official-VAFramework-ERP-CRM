@@ -115,8 +115,8 @@ StringBuilder sb = new StringBuilder ("X_AD_UserDef_Win[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** VAF_Language AD_Reference_ID=106 */
-public static int VAF_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language VAF_Control_Ref_ID=106 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=106;
 /** Set Language.
 @param VAF_Language Language for this entity */
 public void SetVAF_Language (String VAF_Language)
@@ -135,18 +135,18 @@ public String GetVAF_Language()
 return (String)Get_Value("VAF_Language");
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -255,8 +255,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** IsDefault AD_Reference_ID=319 */
-public static int ISDEFAULT_AD_Reference_ID=319;
+/** IsDefault VAF_Control_Ref_ID=319 */
+public static int ISDEFAULT_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISDEFAULT_No = "N";
 /** Yes = Y */
@@ -288,8 +288,8 @@ public String GetIsDefault()
 return (String)Get_Value("IsDefault");
 }
 
-/** IsReadOnly AD_Reference_ID=319 */
-public static int ISREADONLY_AD_Reference_ID=319;
+/** IsReadOnly VAF_Control_Ref_ID=319 */
+public static int ISREADONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREADONLY_No = "N";
 /** Yes = Y */

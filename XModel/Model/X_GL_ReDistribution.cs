@@ -46,15 +46,15 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_GL_ReDistribution[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** Account_ID AD_Reference_ID=132 */
-public static int ACCOUNT_ID_AD_Reference_ID=132;/** Set Account.
+/** Account_ID VAF_Control_Ref_ID=132 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=132;/** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID){if (Account_ID <= 0) Set_Value ("Account_ID", null);else
 Set_Value ("Account_ID", Account_ID);}/** Get Account.
 @return Account used */
 public int GetAccount_ID() {Object ii = Get_Value("Account_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** C_AcctSchema1_ID AD_Reference_ID=136 */
-public static int C_ACCTSCHEMA1_ID_AD_Reference_ID=136;/** Set Primary Accounting Schema.
+/** C_AcctSchema1_ID VAF_Control_Ref_ID=136 */
+public static int C_ACCTSCHEMA1_ID_VAF_Control_Ref_ID=136;/** Set Primary Accounting Schema.
 @param C_AcctSchema1_ID Primary rules for accounting */
 public void SetC_AcctSchema1_ID (int C_AcctSchema1_ID){if (C_AcctSchema1_ID <= 0) Set_Value ("C_AcctSchema1_ID", null);else
 Set_Value ("C_AcctSchema1_ID", C_AcctSchema1_ID);}/** Get Primary Accounting Schema.
@@ -110,8 +110,8 @@ public int GetGL_ReDistribution_ID() {Object ii = Get_Value("GL_ReDistribution_I
 public void SetIsCopyBalance (Boolean IsCopyBalance){Set_Value ("IsCopyBalance", IsCopyBalance);}/** Get Copy Balance.
 @return Copy Balance */
 public Boolean IsCopyBalance() {Object oo = Get_Value("IsCopyBalance");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}
-/** PostingType AD_Reference_ID=125 */
-public static int POSTINGTYPE_AD_Reference_ID=125;/** Actual = A */
+/** PostingType VAF_Control_Ref_ID=125 */
+public static int POSTINGTYPE_VAF_Control_Ref_ID=125;/** Actual = A */
 public static String POSTINGTYPE_Actual = "A";/** Budget = B */
 public static String POSTINGTYPE_Budget = "B";/** Commitment = E */
 public static String POSTINGTYPE_Commitment = "E";/** Reservation = R */

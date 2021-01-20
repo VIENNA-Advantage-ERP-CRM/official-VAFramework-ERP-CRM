@@ -166,8 +166,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** OrgAssignmentType AD_Reference_ID=401 */
-public static int ORGASSIGNMENTTYPE_AD_Reference_ID=401;
+/** OrgAssignmentType VAF_Control_Ref_ID=401 */
+public static int ORGASSIGNMENTTYPE_VAF_Control_Ref_ID=401;
 /** Matrix = M */
 public static String ORGASSIGNMENTTYPE_Matrix = "M";
 /** Other = O */

@@ -116,8 +116,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** BG_Color_ID AD_Reference_ID=266 */
-        public static int BG_COLOR_ID_AD_Reference_ID = 266;
+        /** BG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int BG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set BG Color.
         @param BG_Color_ID BG Color */
         public void SetBG_Color_ID(int BG_Color_ID)
@@ -169,8 +169,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Export_ID");
         }
 
-        /** Height AD_Reference_ID=1000210 */
-        public static int HEIGHT_AD_Reference_ID = 1000210;
+        /** Height VAF_Control_Ref_ID=1000210 */
+        public static int HEIGHT_VAF_Control_Ref_ID = 1000210;
         /** 100% = 100 */
         public static String HEIGHT_100 = "100";
         /** 50% = 50 */
@@ -268,8 +268,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Width AD_Reference_ID=1000201 */
-        public static int WIDTH_AD_Reference_ID = 1000201;
+        /** Width VAF_Control_Ref_ID=1000201 */
+        public static int WIDTH_VAF_Control_Ref_ID = 1000201;
         /** 100% = 100 */
         public static String WIDTH_100 = "100";
         /** 25% = 25 */

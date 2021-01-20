@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Process
  * Purpose        : 
- * Class Used     : X_AD_Process_Access
+ * Class Used     : X_VAF_Job_Rights
  * Chronological Development
  * Jagmohan Bhatt    07-May-2009
  ******************************************************/
@@ -19,9 +19,9 @@ using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.Model
 {
-    public class MProcess : X_AD_Process
+    public class MProcess : X_VAF_Job
     {
-        private static CCache<int, MProcess> _cache = new CCache<int, MProcess>("AD_Process", 20);
+        private static CCache<int, MProcess> _cache = new CCache<int, MProcess>("VAF_Job", 20);
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MProcess).FullName);
 
@@ -29,11 +29,11 @@ namespace VAdvantage.Model
         /// Get MProcess from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Process_ID">AD_Process_ID</param>
+        /// <param name="VAF_Job_ID">VAF_Job_ID</param>
         /// <returns>MProcess</returns>
-        public static MProcess Get(Ctx ctx, int AD_Process_ID)
+        public static MProcess Get(Ctx ctx, int VAF_Job_ID)
         {
-            int key = AD_Process_ID;
+            int key = VAF_Job_ID;
             MProcess retValue = null;
             if(_cache.ContainsKey(key))
                 retValue = (MProcess)_cache[key];
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
                 retValue.p_ctx = ctx;
                 return retValue;
             }
-            retValue = new MProcess(ctx, AD_Process_ID, null);
+            retValue = new MProcess(ctx, VAF_Job_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         public static MProcess GetByValue(Ctx ctx, string value)
         {
             MProcess retValue = null;
-            String sql = "SELECT * FROM AD_Process p "
+            String sql = "SELECT * FROM VAF_Job p "
                 + "WHERE p.Value LIKE @like";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@like", value);
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
                     {
                         retValue = new MProcess(ctx, dr, null);
                         //	Save in cache
-                        int key = retValue.GetAD_Process_ID();
+                        int key = retValue.GetVAF_Job_ID();
                         _cache.Add(key, retValue);
                     }
                 }
@@ -98,9 +98,9 @@ namespace VAdvantage.Model
         public static MProcess GetFromMenu(Ctx ctx, int VAF_MenuConfig_ID)
         {
             MProcess retValue = null;
-            String sql = "SELECT * FROM AD_Process p "
+            String sql = "SELECT * FROM VAF_Job p "
                 + "WHERE EXISTS (SELECT * FROM VAF_MenuConfig m "
-                    + "WHERE m.AD_Process_ID=p.AD_Process_ID AND m.VAF_MenuConfig_ID=@menuid)";
+                    + "WHERE m.VAF_Job_ID=p.VAF_Job_ID AND m.VAF_MenuConfig_ID=@menuid)";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@menuid", VAF_MenuConfig_ID.ToString());
             DataTable dt=null;
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
                     DataRow dr = dt.Rows[i];
                     retValue = new MProcess(ctx, dr, null);
                     //	Save in cache
-                    int key = retValue.GetAD_Process_ID();
+                    int key = retValue.GetVAF_Job_ID();
                     _cache.Add(key, retValue);
                 }
             }
@@ -159,12 +159,12 @@ namespace VAdvantage.Model
         ///// Constructor
         ///// </summary>
         ///// <param name="ctx">context</param>
-        ///// <param name="AD_Process_ID">ad process id</param>
+        ///// <param name="VAF_Job_ID">ad process id</param>
         ///// <param name="ignored">no transaction</param>
-        //public MProcess(Ctx ctx, int AD_Process_ID, String ignored)
-        //    : base(ctx, AD_Process_ID, null)
+        //public MProcess(Ctx ctx, int VAF_Job_ID, String ignored)
+        //    : base(ctx, VAF_Job_ID, null)
         //{
-        //    if (AD_Process_ID == 0)
+        //    if (VAF_Job_ID == 0)
         //    {
         //        //	setValue (null);
         //        //	setName (null);
@@ -180,12 +180,12 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Process_ID">ad process id</param>
+        /// <param name="VAF_Job_ID">ad process id</param>
         /// <param name="ignored">no transaction</param>
-        public MProcess(Ctx ctx, int AD_Process_ID, Trx ignored)
-            : base(ctx, AD_Process_ID, null)
+        public MProcess(Ctx ctx, int VAF_Job_ID, Trx ignored)
+            : base(ctx, VAF_Job_ID, null)
         {
-            if (AD_Process_ID == 0)
+            if (VAF_Job_ID == 0)
             {
                 //	setValue (null);
                 //	setName (null);
@@ -215,9 +215,9 @@ namespace VAdvantage.Model
                 return _parameters;
             List<MProcessPara> list = new List<MProcessPara>();
             //
-            String sql = "SELECT * FROM AD_Process_Para WHERE AD_Process_ID=@processid ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAF_Job_Para WHERE VAF_Job_ID=@processid ORDER BY SeqNo";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@processid", GetAD_Process_ID());
+            param[0] = new SqlParameter("@processid", GetVAF_Job_ID());
             DataTable dt=null;
             IDataReader idr = null;
             try
@@ -315,7 +315,7 @@ namespace VAdvantage.Model
          */
         public bool ProcessIt(ProcessInfo pi, Trx trx)
         {
-            if (pi.GetAD_PInstance_ID() == 0)
+            if (pi.GetVAF_JInstance_ID() == 0)
             {
                 MPInstance pInstance = new MPInstance(this, pi.GetRecord_ID());
                 //	Lock
@@ -363,13 +363,13 @@ namespace VAdvantage.Model
 
         private bool StartProcess(String ProcedureName, MPInstance pInstance)
         {
-            int AD_PInstance_ID = pInstance.GetAD_PInstance_ID();
+            int VAF_JInstance_ID = pInstance.GetVAF_JInstance_ID();
             //  execute on this thread/connection
             String sql = "{call " + ProcedureName + "(@instanceid)}";
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@instanceid", AD_PInstance_ID);
+                param[0] = new SqlParameter("@instanceid", VAF_JInstance_ID);
                 int i = DataBase.DB.ExecuteQuery(sql, param);
             }
             catch (Exception e)
@@ -468,7 +468,7 @@ namespace VAdvantage.Model
                 MProcessAccess pa;
                 for (int i = 0; i < roles.Length; i++)
                 {
-                    pa = new MProcessAccess(this, roles[i].GetAD_Role_ID());
+                    pa = new MProcessAccess(this, roles[i].GetVAF_Role_ID());
                     pa.Save();
                     pa = null;
                 }
@@ -477,7 +477,7 @@ namespace VAdvantage.Model
             else if (Is_ValueChanged("IsActive") || Is_ValueChanged("Name")
                 || Is_ValueChanged("Description") || Is_ValueChanged("Help"))
             {
-                MMenu[] menues = MMenu.Get(GetCtx(), "AD_Process_ID=" + GetAD_Process_ID());
+                MMenu[] menues = MMenu.Get(GetCtx(), "VAF_Job_ID=" + GetVAF_Job_ID());
                 for (int i = 0; i < menues.Length; i++)
                 {
                     menues[i].SetIsActive(IsActive());
@@ -485,7 +485,7 @@ namespace VAdvantage.Model
                     menues[i].SetDescription(GetDescription());
                     menues[i].Save();
                 }
-                X_AD_WF_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "AD_Process_ID=" + GetAD_Process_ID());
+                X_AD_WF_Node[] nodes = MWindow.GetWFNodes(GetCtx(), "VAF_Job_ID=" + GetVAF_Job_ID());
                 for (int i = 0; i < nodes.Length; i++)
                 {
                     bool changed = false;
@@ -509,7 +509,7 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get AD_Process_ID by Value
+        /// Get VAF_Job_ID by Value
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="value"></param>
@@ -518,7 +518,7 @@ namespace VAdvantage.Model
         public static int GetIDByValue(Ctx ctx, String value)
         {
             int retValue = -1;
-            String sql = "SELECT AD_Process_ID FROM AD_Process p "
+            String sql = "SELECT VAF_Job_ID FROM VAF_Job p "
                 + "WHERE p.Value LIKE @param1";
 
             IDataReader idr = null;

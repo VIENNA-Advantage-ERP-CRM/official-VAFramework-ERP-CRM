@@ -52,8 +52,8 @@ namespace VAdvantage.Process
             if (ds.Tables.Contains(tableName))
             {
                 String s = tableName;
-                if (s.Equals("AD_Ref_Table"))
-                    s = "AD_Reference";
+                if (s.Equals("VAF_CtrlRef_Table"))
+                    s = "VAF_Control_Ref";
 
                 DataRow[] copyRows = tmpDs.Tables[0].Select();
                 int Pid = 0;

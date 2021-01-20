@@ -120,8 +120,8 @@
             return sb.ToString();
         }
 
-        /** AD_User_ID AD_Reference_ID=286 */
-        public static int AD_USER_ID_AD_Reference_ID = 286;
+        /** AD_User_ID VAF_Control_Ref_ID=286 */
+        public static int AD_USER_ID_VAF_Control_Ref_ID = 286;
         /** Set User/Contact.
         @param AD_User_ID User within the system - Internal or Business Partner Contact */
         public void SetAD_User_ID(int AD_User_ID)
@@ -139,8 +139,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocType_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPE_ID_AD_Reference_ID = 170;
+        /** C_DocType_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPE_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type.
         @param C_DocType_ID Document type or rules */
         public void SetC_DocType_ID(int C_DocType_ID)
@@ -186,8 +186,8 @@
             return (String)Get_Value("Description");
         }
 
-        /** DocBaseType AD_Reference_ID=432 */
-        public static int DOCBASETYPE_AD_Reference_ID = 432;
+        /** DocBaseType VAF_Control_Ref_ID=432 */
+        public static int DOCBASETYPE_VAF_Control_Ref_ID = 432;
         /** Set Document BaseType.
         @param DocBaseType Logical type of document */
         public void SetDocBaseType(String DocBaseType)
@@ -201,8 +201,8 @@
             return (String)Get_Value("DocBaseType");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -301,8 +301,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** PickMethod AD_Reference_ID=474 */
-        public static int PICKMETHOD_AD_Reference_ID = 474;
+        /** PickMethod VAF_Control_Ref_ID=474 */
+        public static int PICKMETHOD_VAF_Control_Ref_ID = 474;
         /** Cluster Picking = C */
         public static String PICKMETHOD_ClusterPicking = "C";
         /** Order Picking = O */

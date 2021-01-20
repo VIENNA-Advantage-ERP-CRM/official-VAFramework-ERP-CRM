@@ -75,8 +75,8 @@ public int GetGraceDays() {Object ii = Get_Value("GraceDays");if (ii == null) re
 public void SetIsValid (Boolean IsValid){Set_Value ("IsValid", IsValid);}/** Get Valid.
 @return Element is valid */
 public Boolean IsValid() {Object oo = Get_Value("IsValid");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}
-/** NetDay AD_Reference_ID=167 */
-public static int NETDAY_AD_Reference_ID=167;/** Monday = 1 */
+/** NetDay VAF_Control_Ref_ID=167 */
+public static int NETDAY_VAF_Control_Ref_ID=167;/** Monday = 1 */
 public static String NETDAY_Monday = "1";/** Tuesday = 2 */
 public static String NETDAY_Tuesday = "2";/** Wednesday = 3 */
 public static String NETDAY_Wednesday = "3";/** Thursday = 4 */

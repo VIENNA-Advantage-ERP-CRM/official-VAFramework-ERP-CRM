@@ -121,18 +121,18 @@ StringBuilder sb = new StringBuilder ("X_IP_Requirement[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);
+if (VAF_Job_ID <= 0) Set_Value ("VAF_Job_ID", null);
 else
-Set_Value ("AD_Process_ID", AD_Process_ID);
+Set_Value ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -169,8 +169,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_ProjectPhaseReq_ID AD_Reference_ID=405 */
-public static int C_PROJECTPHASEREQ_ID_AD_Reference_ID=405;
+/** C_ProjectPhaseReq_ID VAF_Control_Ref_ID=405 */
+public static int C_PROJECTPHASEREQ_ID_VAF_Control_Ref_ID=405;
 /** Set Requirement Phase.
 @param C_ProjectPhaseReq_ID Project Requirements Phase */
 public void SetC_ProjectPhaseReq_ID (int C_ProjectPhaseReq_ID)
@@ -329,8 +329,8 @@ public String GetPrerequisites()
 return (String)Get_Value("Prerequisites");
 }
 
-/** RequirementType AD_Reference_ID=407 */
-public static int REQUIREMENTTYPE_AD_Reference_ID=407;
+/** RequirementType VAF_Control_Ref_ID=407 */
+public static int REQUIREMENTTYPE_VAF_Control_Ref_ID=407;
 /** Other = O */
 public static String REQUIREMENTTYPE_Other = "O";
 /** Determine Scope = S */
@@ -380,8 +380,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** TaskType AD_Reference_ID=408 */
-public static int TASKTYPE_AD_Reference_ID=408;
+/** TaskType VAF_Control_Ref_ID=408 */
+public static int TASKTYPE_VAF_Control_Ref_ID=408;
 /** Personal Activity = A */
 public static String TASKTYPE_PersonalActivity = "A";
 /** Delegation = D */

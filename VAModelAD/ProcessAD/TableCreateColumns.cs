@@ -213,28 +213,28 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (columnName.Equals(tableName + "_ID", StringComparison.OrdinalIgnoreCase))
                     {
                         column.SetIsKey(true);
-                        column.SetAD_Reference_ID(DisplayType.ID);
+                        column.SetVAF_Control_Ref_ID(DisplayType.ID);
                         column.SetIsUpdateable(false);
                     }
                     // Account
                     else if ((columnName.ToUpper().IndexOf("ACCT") != -1)
                         && (size == 10))
-                        column.SetAD_Reference_ID(DisplayType.Account);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Account);
                     // Location
                     else if (columnName.Equals("C_Location_ID", StringComparison.OrdinalIgnoreCase))
-                        column.SetAD_Reference_ID(DisplayType.Location);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Location);
                     // Product Attribute
                     else if (columnName.Equals("M_AttributeSetInstance_ID"))
-                        column.SetAD_Reference_ID(DisplayType.PAttribute);
+                        column.SetVAF_Control_Ref_ID(DisplayType.PAttribute);
                     // SalesRep_ID (=User)
                     else if (columnName.Equals("SalesRep_ID", StringComparison.OrdinalIgnoreCase))
                     {
-                        column.SetAD_Reference_ID(DisplayType.Table);
-                        column.SetAD_Reference_Value_ID(190);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Table);
+                        column.SetVAF_Control_Ref_Value_ID(190);
                     }
                     // ID
                     else if (columnName.EndsWith("_ID"))
-                        column.SetAD_Reference_ID(DisplayType.TableDir);
+                        column.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                     // Date
                     else if ((typeName == Types.DATE) || (typeName == Types.TIME)
                         || (typeName == Types.TIMESTAMP)
@@ -242,15 +242,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || columnName.Equals("Created", StringComparison.OrdinalIgnoreCase)
                         || columnName.Equals("Updated", StringComparison.OrdinalIgnoreCase))
                     {
-                        column.SetAD_Reference_ID(DisplayType.DateTime);
+                        column.SetVAF_Control_Ref_ID(DisplayType.DateTime);
                         column.SetIsUpdateable(false);
                     }
                     // CreatedBy/UpdatedBy (=User)
                     else if (columnName.Equals("CreatedBy", StringComparison.OrdinalIgnoreCase)
                         || columnName.Equals("UpdatedBy", StringComparison.OrdinalIgnoreCase))
                     {
-                        column.SetAD_Reference_ID(DisplayType.Table);
-                        column.SetAD_Reference_Value_ID(110);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Table);
+                        column.SetVAF_Control_Ref_Value_ID(110);
                         column.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                         column.SetIsUpdateable(false);
                     }
@@ -263,36 +263,36 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Entity Type
                     else if (columnName.Equals("EntityType", StringComparison.OrdinalIgnoreCase))
                     {
-                        column.SetAD_Reference_ID(DisplayType.Table);
-                        column.SetAD_Reference_Value_ID(389);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Table);
+                        column.SetVAF_Control_Ref_Value_ID(389);
                         column.SetDefaultValue("U");
                         column.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_Restrict);
                         column.SetReadOnlyLogic("@EntityType@=D");
                     }
                     // CLOB
                     else if (typeName == Types.CLOB)
-                        column.SetAD_Reference_ID(DisplayType.TextLong);
+                        column.SetVAF_Control_Ref_ID(DisplayType.TextLong);
                     // BLOB
                     else if (typeName == Types.BLOB)
-                        column.SetAD_Reference_ID(DisplayType.Binary);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Binary);
                     // Amount
                     else if (columnName.ToUpper().IndexOf("AMT") != -1)
-                        column.SetAD_Reference_ID(DisplayType.Amount);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Amount);
                     // Qty
                     else if (columnName.ToUpper().IndexOf("QTY") != -1)
-                        column.SetAD_Reference_ID(DisplayType.Quantity);
+                        column.SetVAF_Control_Ref_ID(DisplayType.Quantity);
                     // Boolean
                     else if ((size == 1)
                         && (columnName.ToUpper().StartsWith("IS") || (typeName == Types.CHAR)))
-                        column.SetAD_Reference_ID(DisplayType.YesNo);
+                        column.SetVAF_Control_Ref_ID(DisplayType.YesNo);
                     // List
                     else if ((size < 4) && (typeName == Types.CHAR))
-                        column.SetAD_Reference_ID(DisplayType.List);
+                        column.SetVAF_Control_Ref_ID(DisplayType.List);
                     // Name, DocumentNo
                     else if (columnName.Equals("Name", StringComparison.OrdinalIgnoreCase)
                         || columnName.Equals("DocumentNo", StringComparison.OrdinalIgnoreCase))
                     {
-                        column.SetAD_Reference_ID(DisplayType.String);
+                        column.SetVAF_Control_Ref_ID(DisplayType.String);
                         column.SetIsIdentifier(true);
                         column.SetSeqNo(1);
                     }
@@ -304,9 +304,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (typeName.StartsWith("N"))	//	MultiByte
                             size /= 2;
                         if (size > 255)
-                            column.SetAD_Reference_ID(DisplayType.Text);
+                            column.SetVAF_Control_Ref_ID(DisplayType.Text);
                         else
-                            column.SetAD_Reference_ID(DisplayType.String);
+                            column.SetVAF_Control_Ref_ID(DisplayType.String);
                     }
 
                     // Number
@@ -314,13 +314,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || (typeName == Types.DECIMAL) || (typeName == Types.NUMERIC))
                     {
                         if (size == 10)
-                            column.SetAD_Reference_ID(DisplayType.Integer);
+                            column.SetVAF_Control_Ref_ID(DisplayType.Integer);
                         else
-                            column.SetAD_Reference_ID(DisplayType.Number);
+                            column.SetVAF_Control_Ref_ID(DisplayType.Number);
                     }
                     //	??
                     else
-                        column.SetAD_Reference_ID(DisplayType.String);
+                        column.SetVAF_Control_Ref_ID(DisplayType.String);
 
                     //	General Defaults
                     if (columnName.EndsWith("_ID"))
@@ -339,14 +339,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     else if (columnName.Equals("Processed"))
                     {
-                        column.SetAD_Reference_ID(DisplayType.YesNo);
+                        column.SetVAF_Control_Ref_ID(DisplayType.YesNo);
                         column.SetDefaultValue("N");
                         column.SetIsUpdateable(false);
                     }
                     else if (columnName.Equals("Posted"))
                     {
-                        column.SetAD_Reference_ID(DisplayType.Button);
-                        column.SetAD_Reference_Value_ID(234);	//	_PostedStatus
+                        column.SetVAF_Control_Ref_ID(DisplayType.Button);
+                        column.SetVAF_Control_Ref_Value_ID(234);	//	_PostedStatus
                         column.SetDefaultValue("N");
                         column.SetIsUpdateable(false);
                     }

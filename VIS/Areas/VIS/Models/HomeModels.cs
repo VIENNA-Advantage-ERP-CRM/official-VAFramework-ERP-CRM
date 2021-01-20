@@ -122,7 +122,7 @@ namespace VIS.Models
     #region Notice
     public class HomeNotice
     {
-        public int AD_Note_ID { get; set; }
+        public int VAF_Notice_ID { get; set; }
         public int VAF_TableView_ID { get; set; }
         public int AD_Window_ID { get; set; }
         public int Record_ID { get; set; }

@@ -49,7 +49,7 @@
         this.aAttribute = mField.getColumnName();
         this.aDisplayAttribute = mField.getHeader();
         this.aDisplayType = mField.getDisplayType();
-        this.AD_Reference_ID = 0;
+        this.VAF_Control_Ref_ID = 0;
         this.windowNum = mField.getWindowNo();
 
         if ("Value".equals(this.aAttribute) || "DocumentNo".equals(this.aAttribute)) {
@@ -291,7 +291,7 @@
 
     ValuePreference.prototype.getADPreferenceID = function () {
         // make sql query to get preference id
-        var sql = "SELECT AD_Preference_ID FROM AD_Preference WHERE ";
+        var sql = "SELECT VAF_ValuePreference_ID FROM VAF_ValuePreference WHERE ";
         var valuetem = this.tenantchk ? this.VAF_Client_ID : 0;
         //	Client
         sql += "VAF_Client_ID=" + valuetem;
@@ -322,7 +322,7 @@
 
         if (ds != null && ds.tables[0].rows.length > 0) {
             // get id
-            preferenceId = ds.tables[0].rows[0].getCell("ad_preference_id");
+            preferenceId = ds.tables[0].rows[0].getCell("vaf_valuepreference_id");
         }
         if (preferenceId < 0) {
             preferenceId = 0;
@@ -333,14 +333,14 @@
     ValuePreference.prototype.delete = function () {
         var returnValue = false;
         // get preference id
-        var AD_Preference_ID = this.getADPreferenceID();
+        var VAF_ValuePreference_ID = this.getADPreferenceID();
         var localObj = this;
-        if (AD_Preference_ID > 0) {
+        if (VAF_ValuePreference_ID > 0) {
             $.ajax({
                 url: VIS.Application.contextUrl + "ValuePreference/Delete",
                 dataType: "json",
                 data: {
-                    preferenceId: AD_Preference_ID
+                    preferenceId: VAF_ValuePreference_ID
                 },
                 success: function (data) {
                     returnValue = data.result;
@@ -386,14 +386,14 @@
 
         var localObj = this;
 
-        var AD_Preference_ID = this.getADPreferenceID();
+        var VAF_ValuePreference_ID = this.getADPreferenceID();
 
        
         $.ajax({
             url: VIS.Application.contextUrl + "ValuePreference/Save",
             dataType: "json",
             data: {
-                preferenceId: AD_Preference_ID,
+                preferenceId: VAF_ValuePreference_ID,
                 clientId: this.tenantchk ? this.VAF_Client_ID : 0,
                 orgId: this.orgchk ? this.VAF_Org_ID : 0,
                 chkWindow: this.windowchk,

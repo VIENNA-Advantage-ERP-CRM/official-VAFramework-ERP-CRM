@@ -133,8 +133,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** VAF_Column_ID AD_Reference_ID=244 */
-public static int VAF_COLUMN_ID_AD_Reference_ID=244;
+/** VAF_Column_ID VAF_Control_Ref_ID=244 */
+public static int VAF_COLUMN_ID_VAF_Control_Ref_ID=244;
 /** Set Column.
 @param VAF_Column_ID Column in the table */
 public void SetVAF_Column_ID (int VAF_Column_ID)
@@ -199,8 +199,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

@@ -1891,7 +1891,7 @@
             //		tableName = tableName.substring(0, tableName.length()-3);
             if (m_tableNames.indexOf(tableName) < 0)
                 return 0;
-            if (tableName.equals("AD_Role")) {
+            if (tableName.equals("VAF_Role")) {
                 //  MRole.reset(Record_ID);
             }
             //

@@ -258,8 +258,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** RemunerationType AD_Reference_ID=346 */
-public static int REMUNERATIONTYPE_AD_Reference_ID=346;
+/** RemunerationType VAF_Control_Ref_ID=346 */
+public static int REMUNERATIONTYPE_VAF_Control_Ref_ID=346;
 /** Bi-Weekly = B */
 public static String REMUNERATIONTYPE_Bi_Weekly = "B";
 /** Daily = D */

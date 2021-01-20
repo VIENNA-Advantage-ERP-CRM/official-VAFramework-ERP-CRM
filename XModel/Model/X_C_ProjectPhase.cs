@@ -381,8 +381,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** ProjInvoiceRule AD_Reference_ID=383 */
-public static int PROJINVOICERULE_AD_Reference_ID=383;
+/** ProjInvoiceRule VAF_Control_Ref_ID=383 */
+public static int PROJINVOICERULE_VAF_Control_Ref_ID=383;
 /** None = - */
 public static String PROJINVOICERULE_None = "-";
 /** Committed Amount = C */

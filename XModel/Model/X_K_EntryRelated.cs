@@ -113,8 +113,8 @@ StringBuilder sb = new StringBuilder ("X_K_EntryRelated[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** K_EntryRelated_ID AD_Reference_ID=285 */
-public static int K_ENTRYRELATED_ID_AD_Reference_ID=285;
+/** K_EntryRelated_ID VAF_Control_Ref_ID=285 */
+public static int K_ENTRYRELATED_ID_VAF_Control_Ref_ID=285;
 /** Set Related Entry.
 @param K_EntryRelated_ID Related Entry for this Enntry */
 public void SetK_EntryRelated_ID (int K_EntryRelated_ID)

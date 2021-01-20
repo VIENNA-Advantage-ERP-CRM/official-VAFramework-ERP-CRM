@@ -149,8 +149,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Counter_C_DocType_ID AD_Reference_ID=170 */
-public static int COUNTER_C_DOCTYPE_ID_AD_Reference_ID=170;
+/** Counter_C_DocType_ID VAF_Control_Ref_ID=170 */
+public static int COUNTER_C_DOCTYPE_ID_VAF_Control_Ref_ID=170;
 /** Set Counter Document Type.
 @param Counter_C_DocType_ID Generated Counter Document Type (To) */
 public void SetCounter_C_DocType_ID (int Counter_C_DocType_ID)
@@ -185,8 +185,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DocAction AD_Reference_ID=135 */
-public static int DOCACTION_AD_Reference_ID=135;
+/** DocAction VAF_Control_Ref_ID=135 */
+public static int DOCACTION_VAF_Control_Ref_ID=135;
 /** <None> = -- */
 public static String DOCACTION_None = "--";
 /** Approve = AP */

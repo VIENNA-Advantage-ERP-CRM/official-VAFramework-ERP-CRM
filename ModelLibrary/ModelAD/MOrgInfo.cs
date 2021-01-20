@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_VAF_OrgInfo
+ * Class Used     : X_VAF_OrgDetail
  * Chronological Development
  * Veena Pandey     
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MOrgInfo : X_VAF_OrgInfo
+    public class MOrgInfo : X_VAF_OrgDetail
     {
         // Static Logger					
          private static VLogger _log = VLogger.GetVLogger(typeof(MOrgInfo).FullName);
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
         public static MOrgInfo Get(Ctx ctx, int VAF_Org_ID, Trx trxName)
         {
             MOrgInfo retValue = null;
-            String sql = "SELECT * FROM VAF_OrgInfo WHERE VAF_Org_ID=" + VAF_Org_ID;
+            String sql = "SELECT * FROM VAF_OrgDetail WHERE VAF_Org_ID=" + VAF_Org_ID;
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);

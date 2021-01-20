@@ -166,8 +166,8 @@ public String GetDeliveryConfirmation()
 return (String)Get_Value("DeliveryConfirmation");
 }
 
-/** IsDelivered AD_Reference_ID=319 */
-public static int ISDELIVERED_AD_Reference_ID=319;
+/** IsDelivered VAF_Control_Ref_ID=319 */
+public static int ISDELIVERED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISDELIVERED_No = "N";
 /** Yes = Y */

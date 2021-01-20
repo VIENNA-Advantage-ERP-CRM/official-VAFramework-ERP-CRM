@@ -108,17 +108,17 @@ namespace VAdvantage.Process
         }
         private void CallProcess(int lead_id)
         {
-            string sql = "select ad_process_id from ad_process where name = 'C_Lead BPartner'";
-            int AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName())); // 1000025;
+            string sql = "select VAF_Job_id from VAF_Job where name = 'C_Lead BPartner'";
+            int VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName())); // 1000025;
 
-            MPInstance instance = new MPInstance(GetCtx(), AD_Process_ID, GetRecord_ID());
+            MPInstance instance = new MPInstance(GetCtx(), VAF_Job_ID, GetRecord_ID());
             if (!instance.Save())
             {
                 return;
             }
 
-            ProcessInfo pi = new ProcessInfo("VInOutGen", AD_Process_ID);
-            pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+            ProcessInfo pi = new ProcessInfo("VInOutGen", VAF_Job_ID);
+            pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
 
             // Add Parameter - Selection=Y
             MPInstancePara para = new MPInstancePara(instance, 10);

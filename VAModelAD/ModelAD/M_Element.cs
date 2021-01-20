@@ -241,7 +241,7 @@ namespace VAdvantage.Model
 			log.Fine("Fields updated #" + no);
 			
 			//	Parameter 
-			sql = new StringBuilder("UPDATE AD_Process_Para SET ColumnName=")
+			sql = new StringBuilder("UPDATE VAF_Job_Para SET ColumnName=")
 				.Append(DataBase.DB.TO_STRING(GetColumnName()));
             if (!DB.UseMigratedConnection)
             {
@@ -256,7 +256,7 @@ namespace VAdvantage.Model
 				.Append(" AND IsCentrallyMaintained='Y' AND VAF_ColumnDic_ID IS NULL");
 
             no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
-			sql = new StringBuilder("UPDATE AD_Process_Para SET ColumnName=")
+			sql = new StringBuilder("UPDATE VAF_Job_Para SET ColumnName=")
 				.Append(DataBase.DB.TO_STRING(GetColumnName()));
                  if (!DB.UseMigratedConnection)
             {
@@ -268,12 +268,12 @@ namespace VAdvantage.Model
 				.Append(", Help=").Append(DataBase.DB.TO_STRING(GetHelp()))
 				.Append(" WHERE VAF_ColumnDic_ID=").Append(Get_ID())
 				.Append(" AND IsCentrallyMaintained='Y'")
-				.Append(" AND AD_Process_ID IN (SELECT AD_Process_ID FROM AD_Process WHERE VAF_ContextScope_ID IS NULL)");
+				.Append(" AND VAF_Job_ID IN (SELECT VAF_Job_ID FROM VAF_Job WHERE VAF_ContextScope_ID IS NULL)");
 
             no += Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName()));
 			log.Fine("Parameters updated #" + no);
 			//	Print Info
-            sql = new StringBuilder("UPDATE AD_PrintFormatItem pi SET PrintName=")
+            sql = new StringBuilder("UPDATE VAF_Print_Rpt_LItem pi SET PrintName=")
                 .Append(DataBase.DB.TO_STRING(GetPrintName()));
                  if (!DB.UseMigratedConnection)
             {

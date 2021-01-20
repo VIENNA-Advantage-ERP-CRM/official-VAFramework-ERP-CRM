@@ -189,8 +189,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** DTD001_ChargeType AD_Reference_ID=1000312 */
-        public static int DTD001_CHARGETYPE_AD_Reference_ID = 1000312;
+        /** DTD001_ChargeType VAF_Control_Ref_ID=1000312 */
+        public static int DTD001_CHARGETYPE_VAF_Control_Ref_ID = 1000312;
         /** AVL = AVL */
         public static String DTD001_CHARGETYPE_AVL = "AVL";
         /** Indemnity = IDM */

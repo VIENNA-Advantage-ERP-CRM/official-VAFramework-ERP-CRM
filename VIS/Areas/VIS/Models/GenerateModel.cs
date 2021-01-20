@@ -77,7 +77,7 @@ namespace VAdvantage.Tool
 
             StringBuilder sb = new StringBuilder();
             String sql = "SELECT c.ColumnName, c.IsUpdateable, c.IsMandatory,"		//	1..3
-                + " c.AD_Reference_ID, c.AD_Reference_Value_ID, DefaultValue, SeqNo, "	//	4..7
+                + " c.VAF_Control_Ref_ID, c.VAF_Control_Ref_Value_ID, DefaultValue, SeqNo, "	//	4..7
                 + " c.FieldLength, c.valueMin, c.valueMax, c.vFormat, c.callOut, "	//	8..12
                 + " c.name, c.description, c.columnSQL, c.isEncrypted, c.IsKey "
                 + "FROM VAF_Column c "
@@ -103,8 +103,8 @@ namespace VAdvantage.Tool
                     String columnName = dr["ColumnName"].ToString();
                     bool isUpdateable = "Y".Equals(dr["IsUpdateable"].ToString());
                     bool isMandatory = "Y".Equals(dr["IsMandatory"].ToString());
-                    int displayType = string.IsNullOrEmpty(dr["AD_Reference_ID"].ToString()) ? int.Parse("0") : int.Parse(dr["AD_Reference_ID"].ToString());
-                    int AD_Reference_Value_ID = string.IsNullOrEmpty(dr["AD_Reference_Value_ID"].ToString()) ? int.Parse("0") : int.Parse(dr["AD_Reference_Value_ID"].ToString());
+                    int displayType = string.IsNullOrEmpty(dr["VAF_Control_Ref_ID"].ToString()) ? int.Parse("0") : int.Parse(dr["VAF_Control_Ref_ID"].ToString());
+                    int VAF_Control_Ref_Value_ID = string.IsNullOrEmpty(dr["VAF_Control_Ref_Value_ID"].ToString()) ? int.Parse("0") : int.Parse(dr["VAF_Control_Ref_Value_ID"].ToString());
                     String defaultValue = dr["DefaultValue"].ToString();
                     int seqNo = string.IsNullOrEmpty(dr["SeqNo"].ToString()) ? int.Parse("0") : int.Parse(dr["SeqNo"].ToString());
                     int fieldLength = int.Parse(dr["FieldLength"].ToString());
@@ -121,7 +121,7 @@ namespace VAdvantage.Tool
                     //
                     sb.Append(CreateColumnMethods(mandatory,
                         columnName, isUpdateable, isMandatory,
-                        displayType, AD_Reference_Value_ID, fieldLength,
+                        displayType, VAF_Control_Ref_Value_ID, fieldLength,
                         defaultValue, valueMin, valueMax, vFormat,
                         callOut, name, description, virtualColumn, isEncrypted));
                     //	
@@ -367,7 +367,7 @@ namespace VAdvantage.Tool
         /// <param name="isUpdateable">isUpdateable - true or false</param>
         /// <param name="isMandatory">isMandatory - true of false</param>
         /// <param name="displayType">displayType (int)</param>
-        /// <param name="AD_Reference_ID">AD_Reference_ID</param>
+        /// <param name="VAF_Control_Ref_ID">VAF_Control_Ref_ID</param>
         /// <param name="fieldLength">fieldLength</param>
         /// <param name="defaultValue">defaultValue</param>
         /// <param name="ValueMin">Min value</param>
@@ -381,7 +381,7 @@ namespace VAdvantage.Tool
         /// <returns>String</returns>
         private String CreateColumnMethods(StringBuilder mandatory,
              String columnName, bool isUpdateable, bool isMandatory,
-             int displayType, int AD_Reference_ID, int fieldLength,
+             int displayType, int VAF_Control_Ref_ID, int fieldLength,
              String defaultValue, String valueMin, String valueMax, String vFormat,
              String callOut, String name, String description,
              bool virtualColumn, bool isEncrypted)
@@ -399,13 +399,13 @@ namespace VAdvantage.Tool
                 || columnName.Equals("Processing", StringComparison.InvariantCultureIgnoreCase))
             {
                 clazz = typeof(bool);
-                AD_Reference_ID = 0;
+                VAF_Control_Ref_ID = 0;
             }
             //	Record_ID
             else if (columnName.Equals("Record_ID", StringComparison.InvariantCultureIgnoreCase))
             {
                 clazz = typeof(int);
-                AD_Reference_ID = 0;
+                VAF_Control_Ref_ID = 0;
             }
             //	String Key
             else if (columnName.Equals("VAF_Language", StringComparison.InvariantCultureIgnoreCase)
@@ -456,9 +456,9 @@ namespace VAdvantage.Tool
                     + "{");
             }
             //	List Validation
-            if (AD_Reference_ID != 0)
+            if (VAF_Control_Ref_ID != 0)
             {
-                String staticVar = addListValidation(sb, AD_Reference_ID, columnName, !isMandatory);
+                String staticVar = addListValidation(sb, VAF_Control_Ref_ID, columnName, !isMandatory);
                 sb.Insert(0, staticVar);	//	first check
             }
             //	setValue ("ColumnName", xx);
@@ -476,7 +476,7 @@ namespace VAdvantage.Tool
                         int firstOK = 1;	//	Valid ID 0
                         if (columnName.Equals("VAF_Client_ID") || columnName.Equals("VAF_Org_ID")
                             || columnName.Equals("Record_ID") || columnName.Equals("C_DocType_ID")
-                            || columnName.Equals("Node_ID") || columnName.Equals("AD_Role_ID")
+                            || columnName.Equals("Node_ID") || columnName.Equals("VAF_Role_ID")
                             || columnName.Equals("M_AttributeSet_ID") || columnName.Equals("M_AttributeSetInstance_ID"))
                             firstOK = 0;
                         sb.Append("if (").Append(columnName)
@@ -501,7 +501,7 @@ namespace VAdvantage.Tool
             }
             else
             {
-                if (isMandatory && AD_Reference_ID == 0)	//	does not apply to int/bool
+                if (isMandatory && VAF_Control_Ref_ID == 0)	//	does not apply to int/bool
                 {
                     sb.Append("if (")
                         .Append(columnName).Append(" == null)"
@@ -653,23 +653,23 @@ namespace VAdvantage.Tool
         /// AddListValidation
         /// </summary>
         /// <param name="sbText">Generated text</param>
-        /// <param name="AD_Reference_ID">AD_Reference_ID</param>
+        /// <param name="VAF_Control_Ref_ID">VAF_Control_Ref_ID</param>
         /// <param name="columnName">columnName</param>
         /// <param name="nullable">nullable - true or false</param>
         /// <returns></returns>
-        private String addListValidation(StringBuilder sb, int AD_Reference_ID, String columnName, bool nullable)
+        private String addListValidation(StringBuilder sb, int VAF_Control_Ref_ID, String columnName, bool nullable)
         {
             StringBuilder isValid = new StringBuilder("/** Is test a valid value.\n@param test testvalue\n@returns true if valid **/\npublic bool Is")
                 .Append(columnName).Append("Valid (String test){return ");
 
             StringBuilder retValue = new StringBuilder();
-            retValue.Append("\n/** ").Append(columnName).Append(" AD_Reference_ID=").Append(AD_Reference_ID).Append(" */\n")
+            retValue.Append("\n/** ").Append(columnName).Append(" VAF_Control_Ref_ID=").Append(VAF_Control_Ref_ID).Append(" */\n")
                 .Append("public static int ").Append(columnName.ToUpper())
-                .Append("_AD_Reference_ID=").Append(AD_Reference_ID).Append(";");
+                .Append("_VAF_Control_Ref_ID=").Append(VAF_Control_Ref_ID).Append(";");
             //
             bool found = false;
             StringBuilder values = new StringBuilder("Reference_ID=")
-                .Append(AD_Reference_ID);
+                .Append(VAF_Control_Ref_ID);
             StringBuilder statement = new StringBuilder("");
             if (nullable)
             {
@@ -678,9 +678,9 @@ namespace VAdvantage.Tool
             }
             //
             bool isRealList = false;
-            String sql = "SELECT Value, name FROM AD_Ref_List WHERE AD_Reference_ID=@refid";
+            String sql = "SELECT Value, name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=@refid";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@refid", AD_Reference_ID);
+            param[0] = new SqlParameter("@refid", VAF_Control_Ref_ID);
             IDataReader dr = null;
             try
             {

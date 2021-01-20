@@ -20,7 +20,7 @@ public X_AD_RecentItem (Context ctx, int AD_RecentItem_ID, Trx trxName) : base (
 {
 /* if (AD_RecentItem_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetVAF_Tab_ID (0);
 SetAD_Window_ID (0);
 SetName (null);
@@ -32,7 +32,7 @@ public X_AD_RecentItem (Ctx ctx, int AD_RecentItem_ID, Trx trxName) : base (ctx,
 {
 /** if (AD_RecentItem_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetVAF_Tab_ID (0);
 SetAD_Window_ID (0);
 SetName (null);
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_AD_RecentItem[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_Value ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

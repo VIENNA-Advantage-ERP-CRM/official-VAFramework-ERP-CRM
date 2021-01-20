@@ -88,8 +88,8 @@ if (ii == null) return 0;
 return (int)ii;
 }
 
-/** VAF_Language AD_Reference_ID=106 */
-public static int VAF_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language VAF_Control_Ref_ID=106 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=106;
 /** Set Language.
 @param VAF_Language Language for this entity */
 public void SetVAF_Language (String VAF_Language)

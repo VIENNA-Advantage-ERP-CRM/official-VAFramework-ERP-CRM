@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Process
  * Purpose        : 
- * Class Used     : X_AD_Process_Access
+ * Class Used     : X_VAF_Job_Rights
  * Chronological Development
  * Veena Pandey     07-May-2009
  ******************************************************/
@@ -17,7 +17,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
-   public class MProcessAccess : X_AD_Process_Access
+   public class MProcessAccess : X_VAF_Job_Rights
     {
         /// <summary>
         /// Standard Constructor
@@ -32,8 +32,8 @@ namespace VAdvantage.Model
                 throw new ArgumentException("Multi-Key");
             else
             {
-                //	setAD_Process_ID (0);
-                //	setAD_Role_ID (0);
+                //	setVAF_Job_ID (0);
+                //	setVAF_Role_ID (0);
                 SetIsReadWrite(true);
             }
         }
@@ -53,13 +53,13 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        /// <param name="AD_Role_ID">role id</param>
-        public MProcessAccess(X_AD_Process parent, int AD_Role_ID)
+        /// <param name="VAF_Role_ID">role id</param>
+        public MProcessAccess(X_VAF_Job parent, int VAF_Role_ID)
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_Process_ID(parent.GetAD_Process_ID());
-            SetAD_Role_ID(AD_Role_ID);
+            SetVAF_Job_ID(parent.GetVAF_Job_ID());
+            SetVAF_Role_ID(VAF_Role_ID);
         }
 
     }

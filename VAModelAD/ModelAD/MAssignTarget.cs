@@ -128,7 +128,7 @@ namespace VAdvantage.Model
             String methodName = "set" + columnName;
             Type parameterType = null;
             Object parameter = null;
-            int displayType = column.GetAD_Reference_ID();
+            int displayType = column.GetVAF_Control_Ref_ID();
             String valueString = GetValueString();
             if (DisplayType.IsText(displayType) || displayType == DisplayType.List)
             {

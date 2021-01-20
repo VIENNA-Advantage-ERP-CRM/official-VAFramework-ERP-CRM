@@ -156,18 +156,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID)
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID)
 {
-if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);
+if (VAF_Job_ID <= 0) Set_Value ("VAF_Job_ID", null);
 else
-Set_Value ("AD_Process_ID", AD_Process_ID);
+Set_Value ("VAF_Job_ID", VAF_Job_ID);
 }
 /** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() 
+public int GetVAF_Job_ID() 
 {
-Object ii = Get_Value("AD_Process_ID");
+Object ii = Get_Value("VAF_Job_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -272,8 +272,8 @@ public String GetErrorTrace()
 return (String)Get_Value("ErrorTrace");
 }
 
-/** IsReproducible AD_Reference_ID=319 */
-public static int ISREPRODUCIBLE_AD_Reference_ID=319;
+/** IsReproducible VAF_Control_Ref_ID=319 */
+public static int ISREPRODUCIBLE_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREPRODUCIBLE_No = "N";
 /** Yes = Y */
@@ -305,8 +305,8 @@ public String GetIsReproducible()
 return (String)Get_Value("IsReproducible");
 }
 
-/** IsVanillaSystem AD_Reference_ID=319 */
-public static int ISVANILLASYSTEM_AD_Reference_ID=319;
+/** IsVanillaSystem VAF_Control_Ref_ID=319 */
+public static int ISVANILLASYSTEM_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISVANILLASYSTEM_No = "N";
 /** Yes = Y */
@@ -338,8 +338,8 @@ public String GetIsVanillaSystem()
 return (String)Get_Value("IsVanillaSystem");
 }
 
-/** IssueSource AD_Reference_ID=104 */
-public static int ISSUESOURCE_AD_Reference_ID=104;
+/** IssueSource VAF_Control_Ref_ID=104 */
+public static int ISSUESOURCE_VAF_Control_Ref_ID=104;
 /** Workbench = B */
 public static String ISSUESOURCE_Workbench = "B";
 /** WorkFlow = F */
@@ -842,8 +842,8 @@ public String GetSupportEMail()
 return (String)Get_Value("SupportEMail");
 }
 
-/** SystemStatus AD_Reference_ID=374 */
-public static int SYSTEMSTATUS_AD_Reference_ID=374;
+/** SystemStatus VAF_Control_Ref_ID=374 */
+public static int SYSTEMSTATUS_VAF_Control_Ref_ID=374;
 /** Evaluation = E */
 public static String SYSTEMSTATUS_Evaluation = "E";
 /** Implementation = I */

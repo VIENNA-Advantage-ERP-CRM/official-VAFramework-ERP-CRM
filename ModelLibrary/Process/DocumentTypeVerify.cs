@@ -31,8 +31,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             _log.Info("VAF_Client_ID=" + VAF_Client_ID);
             String sql = "SELECT rl.Value, rl.Name "
-                + "FROM AD_Ref_List rl "
-                + "WHERE rl.AD_Reference_ID=183"
+                + "FROM VAF_CtrlRef_List rl "
+                + "WHERE rl.VAF_Control_Ref_ID=183"
                 + " AND rl.IsActive='Y' AND NOT EXISTS "
                 + " (SELECT * FROM C_DocType dt WHERE dt.VAF_Client_ID='" + VAF_Client_ID + "' AND rl.Value=dt.DocBaseType)";
             IDataReader idr=null;

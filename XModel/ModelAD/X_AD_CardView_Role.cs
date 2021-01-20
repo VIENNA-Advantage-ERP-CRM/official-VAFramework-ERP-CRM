@@ -73,15 +73,15 @@ namespace ViennaAdvantage.Model
         public void SetVAF_CardView_Role_ID(int VAF_CardView_Role_ID) { if (VAF_CardView_Role_ID < 1) throw new ArgumentException("VAF_CardView_Role_ID is mandatory."); Set_ValueNoCheck("VAF_CardView_Role_ID", VAF_CardView_Role_ID); }/** Get VAF_CardView_Role_ID.
 @return VAF_CardView_Role_ID */
         public int GetVAF_CardView_Role_ID() { Object ii = Get_Value("VAF_CardView_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Role.
-@param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }/** Get Role.
 @return Responsibility Role */
-        public int GetAD_Role_ID() { Object ii = Get_Value("AD_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
+        public int GetVAF_Role_ID() { Object ii = Get_Value("VAF_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */

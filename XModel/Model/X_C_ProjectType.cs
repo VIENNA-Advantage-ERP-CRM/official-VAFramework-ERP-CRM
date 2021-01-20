@@ -188,8 +188,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** ProjectCategory AD_Reference_ID=288 */
-public static int PROJECTCATEGORY_AD_Reference_ID=288;
+/** ProjectCategory VAF_Control_Ref_ID=288 */
+public static int PROJECTCATEGORY_VAF_Control_Ref_ID=288;
 /** Asset Project = A */
 public static String PROJECTCATEGORY_AssetProject = "A";
 /** General = N */

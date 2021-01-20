@@ -16,7 +16,7 @@ namespace VIS.DataContracts
         public String Name { get; set; }
         public String Description { get; set; }
         public String Help { get; set; }
-        public int AD_Process_ID { get; set; }
+        public int VAF_Job_ID { get; set; }
         public int VAF_ContextScope_ID { get; set; }
         public String IsSOTrx { get; set; }
         public String MessageText { get; set; }
@@ -58,20 +58,20 @@ namespace VIS.DataContracts
         int _record_ID;
         string recIDs = "";
         private bool isReport = false;
-        int _AD_Process_ID;             //2
-        public int AD_PrintFormat_ID
+        int _VAF_Job_ID;             //2
+        public int VAF_Print_Rpt_Layout_ID
         {
             get;
             set;
         }
 
-        public int AD_ReportView_ID
+        public int VAF_ReportView_ID
         {
             get;
             set;
         }
 
-        public int AD_PInstance_ID { get; set; }
+        public int VAF_JInstance_ID { get; set; }
 
         public Dictionary<string, object> ReportProcessInfo
         {
@@ -168,7 +168,7 @@ namespace VIS.DataContracts
         /// get process id
         /// </summary>
         /// <returns></returns>
-        public int AD_Process_ID
+        public int VAF_Job_ID
         {
             get;
             set;

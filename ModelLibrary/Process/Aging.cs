@@ -150,7 +150,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MAging aging = null;
             int counter = 0;
             int rows = 0;
-            int AD_PInstance_ID = GetAD_PInstance_ID();
+            int VAF_JInstance_ID = GetVAF_JInstance_ID();
             //
             try
             {
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     rows++;
                     //	New Aging Row
                     if (aging == null 		//	Key
-                        || AD_PInstance_ID != aging.GetAD_PInstance_ID()
+                        || VAF_JInstance_ID != aging.GetVAF_JInstance_ID()
                         || C_BPartner_ID != aging.GetC_BPartner_ID()
                         || C_Currency_ID != aging.GetC_Currency_ID()
                         || C_Invoice_ID != aging.GetC_Invoice_ID()
@@ -204,7 +204,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 break;
                             }
                         }
-                        aging = new MAging(GetCtx(), AD_PInstance_ID, _StatementDate,
+                        aging = new MAging(GetCtx(), VAF_JInstance_ID, _StatementDate,
                             C_BPartner_ID, C_Currency_ID,
                             C_Invoice_ID, C_InvoicePaySchedule_ID,
                             C_BP_Group_ID, DueDate, IsSOTrx, Get_Trx());

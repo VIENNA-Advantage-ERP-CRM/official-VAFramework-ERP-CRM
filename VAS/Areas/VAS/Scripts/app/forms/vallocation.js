@@ -2597,7 +2597,7 @@
                 getDate = VIS.DB.to_date(new Date());
 
             var chk = $vchkMultiCurrency.is(':checked');
-            var AD_Role_ID = ctx.getAD_Role_ID();
+            var VAF_Role_ID = ctx.getVAF_Role_ID();
             var AD_User_ID = ctx.getAD_User_ID();
             var role = VIS.MRole.getDefault();
             //  Need to have both values

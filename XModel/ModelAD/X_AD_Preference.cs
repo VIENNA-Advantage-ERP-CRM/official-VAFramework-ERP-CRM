@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Preference
+/** Generated Model for VAF_ValuePreference
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Preference : PO
+public class X_VAF_ValuePreference : PO
 {
-public X_AD_Preference (Context ctx, int AD_Preference_ID, Trx trxName) : base (ctx, AD_Preference_ID, trxName)
+public X_VAF_ValuePreference (Context ctx, int VAF_ValuePreference_ID, Trx trxName) : base (ctx, VAF_ValuePreference_ID, trxName)
 {
-/** if (AD_Preference_ID == 0)
+/** if (VAF_ValuePreference_ID == 0)
 {
-SetAD_Preference_ID (0);
+SetVAF_ValuePreference_ID (0);
 SetAttribute (null);
 SetValue (null);
 }
  */
 }
-public X_AD_Preference (Ctx ctx, int AD_Preference_ID, Trx trxName) : base (ctx, AD_Preference_ID, trxName)
+public X_VAF_ValuePreference (Ctx ctx, int VAF_ValuePreference_ID, Trx trxName) : base (ctx, VAF_ValuePreference_ID, trxName)
 {
-/** if (AD_Preference_ID == 0)
+/** if (VAF_ValuePreference_ID == 0)
 {
-SetAD_Preference_ID (0);
+SetVAF_ValuePreference_ID (0);
 SetAttribute (null);
 SetValue (null);
 }
@@ -41,7 +41,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Preference (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ValuePreference (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Preference (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Preference (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ValuePreference (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Preference (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Preference (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ValuePreference (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Preference()
+static X_VAF_ValuePreference()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389045713L;
 public static int Table_ID;
  // =195;
 
-/** TableName=AD_Preference */
-public static String Table_Name="AD_Preference";
+/** TableName=VAF_ValuePreference */
+public static String Table_Name="VAF_ValuePreference";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Preference[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ValuePreference[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Preference.
-@param AD_Preference_ID Personal Value Preference */
-public void SetAD_Preference_ID (int AD_Preference_ID)
+@param VAF_ValuePreference_ID Personal Value Preference */
+public void SetVAF_ValuePreference_ID (int VAF_ValuePreference_ID)
 {
-if (AD_Preference_ID < 1) throw new ArgumentException ("AD_Preference_ID is mandatory.");
-Set_ValueNoCheck ("AD_Preference_ID", AD_Preference_ID);
+if (VAF_ValuePreference_ID < 1) throw new ArgumentException ("VAF_ValuePreference_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ValuePreference_ID", VAF_ValuePreference_ID);
 }
 /** Get Preference.
 @return Personal Value Preference */
-public int GetAD_Preference_ID() 
+public int GetVAF_ValuePreference_ID() 
 {
-Object ii = Get_Value("AD_Preference_ID");
+Object ii = Get_Value("VAF_ValuePreference_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

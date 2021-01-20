@@ -217,8 +217,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** IsDisplayed AD_Reference_ID=319 */
-public static int ISDISPLAYED_AD_Reference_ID=319;
+/** IsDisplayed VAF_Control_Ref_ID=319 */
+public static int ISDISPLAYED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISDISPLAYED_No = "N";
 /** Yes = Y */
@@ -250,8 +250,8 @@ public String GetIsDisplayed()
 return (String)Get_Value("IsDisplayed");
 }
 
-/** IsInsertRecord AD_Reference_ID=319 */
-public static int ISINSERTRECORD_AD_Reference_ID=319;
+/** IsInsertRecord VAF_Control_Ref_ID=319 */
+public static int ISINSERTRECORD_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISINSERTRECORD_No = "N";
 /** Yes = Y */
@@ -283,8 +283,8 @@ public String GetIsInsertRecord()
 return (String)Get_Value("IsInsertRecord");
 }
 
-/** IsMultiRowOnly AD_Reference_ID=319 */
-public static int ISMULTIROWONLY_AD_Reference_ID=319;
+/** IsMultiRowOnly VAF_Control_Ref_ID=319 */
+public static int ISMULTIROWONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISMULTIROWONLY_No = "N";
 /** Yes = Y */
@@ -316,8 +316,8 @@ public String GetIsMultiRowOnly()
 return (String)Get_Value("IsMultiRowOnly");
 }
 
-/** IsReadOnly AD_Reference_ID=319 */
-public static int ISREADONLY_AD_Reference_ID=319;
+/** IsReadOnly VAF_Control_Ref_ID=319 */
+public static int ISREADONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREADONLY_No = "N";
 /** Yes = Y */
@@ -349,8 +349,8 @@ public String GetIsReadOnly()
 return (String)Get_Value("IsReadOnly");
 }
 
-/** IsSingleRow AD_Reference_ID=319 */
-public static int ISSINGLEROW_AD_Reference_ID=319;
+/** IsSingleRow VAF_Control_Ref_ID=319 */
+public static int ISSINGLEROW_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSINGLEROW_No = "N";
 /** Yes = Y */

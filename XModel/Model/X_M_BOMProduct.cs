@@ -128,8 +128,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** BOMProductType AD_Reference_ID=349 */
-        public static int BOMPRODUCTTYPE_AD_Reference_ID = 349;
+        /** BOMProductType VAF_Control_Ref_ID=349 */
+        public static int BOMPRODUCTTYPE_VAF_Control_Ref_ID = 349;
         /** Alternative = A */
         public static String BOMPRODUCTTYPE_Alternative = "A";
         /** Alternative (Default) = D */
@@ -347,8 +347,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_ProductBOM_ID AD_Reference_ID=162 */
-        public static int M_PRODUCTBOM_ID_AD_Reference_ID = 162;
+        /** M_ProductBOM_ID VAF_Control_Ref_ID=162 */
+        public static int M_PRODUCTBOM_ID_VAF_Control_Ref_ID = 162;
         /** Set BOM Product.
         @param M_ProductBOM_ID Bill of Material Component Product */
         public void SetM_ProductBOM_ID(int M_ProductBOM_ID)
@@ -462,8 +462,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** BasisType AD_Reference_ID=1000032 */
-        public static int BASISTYPE_AD_Reference_ID = 1000032;/** Per Batch = B */
+        /** BasisType VAF_Control_Ref_ID=1000032 */
+        public static int BASISTYPE_VAF_Control_Ref_ID = 1000032;/** Per Batch = B */
         public static String BASISTYPE_PerBatch = "B";/** Per Item = I */
         public static String BASISTYPE_PerItem = "I";/** Is test a valid value.
 @param test testvalue

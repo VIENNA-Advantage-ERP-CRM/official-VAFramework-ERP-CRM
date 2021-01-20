@@ -11,25 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAF_Org_Trl
+/** Generated Model for VAF_Org_TL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAF_Org_Trl : PO
+public class X_VAF_Org_TL : PO
 {
-public X_VAF_Org_Trl (Context ctx, int VAF_Org_Trl_ID, Trx trxName) : base (ctx, VAF_Org_Trl_ID, trxName)
+public X_VAF_Org_TL (Context ctx, int VAF_Org_TL_ID, Trx trxName) : base (ctx, VAF_Org_TL_ID, trxName)
 {
-/** if (VAF_Org_Trl_ID == 0)
-{
-SetVAF_Language (null);
-SetIsTranslated (true);	// Y
-SetName (null);
-SetPrintName (null);
-}
- */
-}
-public X_VAF_Org_Trl (Ctx ctx, int VAF_Org_Trl_ID, Trx trxName) : base (ctx, VAF_Org_Trl_ID, trxName)
-{
-/** if (VAF_Org_Trl_ID == 0)
+/** if (VAF_Org_TL_ID == 0)
 {
 SetVAF_Language (null);
 SetIsTranslated (true);	// Y
@@ -38,12 +27,23 @@ SetPrintName (null);
 }
  */
 }
+public X_VAF_Org_TL (Ctx ctx, int VAF_Org_TL_ID, Trx trxName) : base (ctx, VAF_Org_TL_ID, trxName)
+{
+/** if (VAF_Org_TL_ID == 0)
+{
+SetVAF_Language (null);
+SetIsTranslated (true);	// Y
+SetName (null);
+SetPrintName (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_Org_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Org_TL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_VAF_Org_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_Org_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Org_TL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_VAF_Org_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_Org_Trl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Org_TL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAF_Org_Trl()
+static X_VAF_Org_TL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1434612239200L;
 public static int Table_ID;
  // =1000467;
 
-/** TableName=VAF_Org_Trl */
-public static String Table_Name="VAF_Org_Trl";
+/** TableName=VAF_Org_TL */
+public static String Table_Name="VAF_Org_TL";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -113,12 +113,12 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAF_Org_Trl[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Org_TL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** VAF_Language AD_Reference_ID=106 */
-public static int VAF_LANGUAGE_AD_Reference_ID=106;
+/** VAF_Language VAF_Control_Ref_ID=106 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=106;
 /** Set Language.
 @param VAF_Language Language for this entity */
 public void SetVAF_Language (String VAF_Language)

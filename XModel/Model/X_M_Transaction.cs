@@ -302,8 +302,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** MovementType AD_Reference_ID=189 */
-        public static int MOVEMENTTYPE_AD_Reference_ID = 189;
+        /** MovementType VAF_Control_Ref_ID=189 */
+        public static int MOVEMENTTYPE_VAF_Control_Ref_ID = 189;
         /** Customer Returns = C+ */
         public static String MOVEMENTTYPE_CustomerReturns = "C+";
         /** Customer Shipment = C- */

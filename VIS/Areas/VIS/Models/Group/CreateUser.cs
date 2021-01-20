@@ -126,14 +126,14 @@ namespace VIS.Models
             }
 
             String sql = "SELECT o.VAF_Org_ID,o.Name,o.Description   "	//	1..3
-                + "FROM AD_Role r, VAF_Client c"
+                + "FROM VAF_Role r, VAF_Client c"
                 + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID OR o.VAF_Org_ID=0) "
-                + "WHERE r.AD_Role_ID='" + ctx.GetAD_Role_ID() + "'" 	//	#1
+                + "WHERE r.VAF_Role_ID='" + ctx.GetVAF_Role_ID() + "'" 	//	#1
                 + " AND c.VAF_Client_ID='" + ctx.GetVAF_Client_ID() + "'"	//	#2
                 + " AND o.IsActive='Y' AND o.IsSummary='N'"
                 + " AND (r.IsAccessAllOrgs='Y' "
-                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_Role_OrgAccess ra "
-                        + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
+                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
+                        + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
                     + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
                         + "WHERE ua.AD_User_ID='" + ctx.GetAD_User_ID() + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
@@ -186,7 +186,7 @@ namespace VIS.Models
                 {
                     X_VAF_InviteUser_Role userRole = new X_VAF_InviteUser_Role(ctx, 0, null);
                     userRole.SetVAF_InviteUser_ID(iuser.GetVAF_InviteUser_ID());
-                    userRole.SetAD_Role_ID(infos[i].AD_Role_ID);
+                    userRole.SetVAF_Role_ID(infos[i].VAF_Role_ID);
                     userRole.Save();
                 }
             }

@@ -133,8 +133,8 @@ StringBuilder sb = new StringBuilder ("X_CM_WebProject[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 
-/** AD_TreeCMC_ID AD_Reference_ID=184 */
-public static int AD_TREECMC_ID_AD_Reference_ID=184;
+/** AD_TreeCMC_ID VAF_Control_Ref_ID=184 */
+public static int AD_TREECMC_ID_VAF_Control_Ref_ID=184;
 /** Set Container Tree.
 @param AD_TreeCMC_ID Container Tree */
 public void SetAD_TreeCMC_ID (int AD_TreeCMC_ID)
@@ -151,8 +151,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TreeCMM_ID AD_Reference_ID=184 */
-public static int AD_TREECMM_ID_AD_Reference_ID=184;
+/** AD_TreeCMM_ID VAF_Control_Ref_ID=184 */
+public static int AD_TREECMM_ID_VAF_Control_Ref_ID=184;
 /** Set Media Tree.
 @param AD_TreeCMM_ID Media Tree */
 public void SetAD_TreeCMM_ID (int AD_TreeCMM_ID)
@@ -169,8 +169,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TreeCMS_ID AD_Reference_ID=184 */
-public static int AD_TREECMS_ID_AD_Reference_ID=184;
+/** AD_TreeCMS_ID VAF_Control_Ref_ID=184 */
+public static int AD_TREECMS_ID_VAF_Control_Ref_ID=184;
 /** Set Stage Tree.
 @param AD_TreeCMS_ID Stage Tree */
 public void SetAD_TreeCMS_ID (int AD_TreeCMS_ID)
@@ -187,8 +187,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TreeCMT_ID AD_Reference_ID=184 */
-public static int AD_TREECMT_ID_AD_Reference_ID=184;
+/** AD_TreeCMT_ID VAF_Control_Ref_ID=184 */
+public static int AD_TREECMT_ID_VAF_Control_Ref_ID=184;
 /** Set Template Tree.
 @param AD_TreeCMT_ID Template Tree */
 public void SetAD_TreeCMT_ID (int AD_TreeCMT_ID)

@@ -241,8 +241,8 @@ namespace VAdvantage.Model
                 MGoal goal = goals[i];
                 //	Find Role
                 MRole role = null;
-                if (goal.GetAD_Role_ID() != 0)
-                    role = MRole.Get(GetCtx(), goal.GetAD_Role_ID());
+                if (goal.GetVAF_Role_ID() != 0)
+                    role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
                 else if (goal.GetAD_User_ID() != 0)
                 {
                     MUser user = MUser.Get(GetCtx(), goal.GetAD_User_ID());
@@ -318,8 +318,8 @@ namespace VAdvantage.Model
                 MGoal goal = goals[i];
                 //	Find Role
                 MRole role = null;
-                if (goal.GetAD_Role_ID() != 0)
-                    role = MRole.Get(GetCtx(), goal.GetAD_Role_ID());
+                if (goal.GetVAF_Role_ID() != 0)
+                    role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
                 else if (goal.GetAD_User_ID() != 0)
                 {
                     MUser user = MUser.Get(GetCtx(), goal.GetAD_User_ID());
@@ -381,8 +381,8 @@ namespace VAdvantage.Model
                 MGoal goal = goals[i];
                 //	Find Role
                 MRole role = null;
-                if (goal.GetAD_Role_ID() != 0)
-                    role = MRole.Get(GetCtx(), goal.GetAD_Role_ID());
+                if (goal.GetVAF_Role_ID() != 0)
+                    role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
                 else if (goal.GetAD_User_ID() != 0)
                 {
                     MUser user = MUser.Get(GetCtx(), goal.GetAD_User_ID());

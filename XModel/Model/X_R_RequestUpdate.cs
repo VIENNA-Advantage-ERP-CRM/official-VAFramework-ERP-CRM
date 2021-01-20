@@ -115,8 +115,8 @@ StringBuilder sb = new StringBuilder ("X_R_RequestUpdate[").Append(Get_ID()).App
 return sb.ToString();
 }
 
-/** ConfidentialTypeEntry AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPEENTRY_AD_Reference_ID=340;
+/** ConfidentialTypeEntry VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPEENTRY_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -165,8 +165,8 @@ public DateTime? GetEndTime()
 return (DateTime?)Get_Value("EndTime");
 }
 
-/** M_ProductSpent_ID AD_Reference_ID=162 */
-public static int M_PRODUCTSPENT_ID_AD_Reference_ID=162;
+/** M_ProductSpent_ID VAF_Control_Ref_ID=162 */
+public static int M_PRODUCTSPENT_ID_VAF_Control_Ref_ID=162;
 /** Set Product Used.
 @param M_ProductSpent_ID Product/Resource/Service used in Request */
 public void SetM_ProductSpent_ID (int M_ProductSpent_ID)

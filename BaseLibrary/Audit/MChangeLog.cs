@@ -102,10 +102,10 @@ namespace VAdvantage.Model
 
             if (VAF_TableView_ID == X_VAF_AlterLog.Table_ID
                    || VAF_TableView_ID == X_AD_WindowLog.Table_ID
-                   || VAF_TableView_ID == X_AD_QueryLog.Table_ID
+                   || VAF_TableView_ID == X_VAF_DBQueryLog.Table_ID
                    || VAF_TableView_ID == X_VAF_Issue.Table_ID
-                   || VAF_Column_ID == 6652 // AD_Process.Statistics_Count
-                   || VAF_Column_ID == 6653) // AD_Process.Statistics_Seconds
+                   || VAF_Column_ID == 6652 // VAF_Job.Statistics_Count
+                   || VAF_Column_ID == 6653) // VAF_Job.Statistics_Seconds
                 return true;
 
             // Don't log Log entries
@@ -125,7 +125,7 @@ namespace VAdvantage.Model
             //    || VAF_TableView_ID == MQueryLog.Table_ID
             //    //|| VAF_TableView_ID == MIssue.Table_ID
             //    || VAF_Column_ID == 6652
-            //    || VAF_Column_ID == 6653)		//	AD_Process.Statistics_
+            //    || VAF_Column_ID == 6653)		//	VAF_Job.Statistics_
             //    return true;
             ////	Don't log Log entries
             //if (CHANGELOGTYPE_Insert.Equals(type)
@@ -219,8 +219,8 @@ namespace VAdvantage.Model
 
             if (VAF_AlterLog_ID == 0)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                SetVAF_Role_ID(VAF_Role_ID);
                 SetRecord_ID(0);
             }
         }	//	MChangeLog
@@ -273,7 +273,7 @@ namespace VAdvantage.Model
             //
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             //
-           // SetAD_Role_ID(ctx.GetAD_Role_ID());
+           // SetVAF_Role_ID(ctx.GetVAF_Role_ID());
             SetOldValue(oldValue);
             SetNewValue(newValue);
 

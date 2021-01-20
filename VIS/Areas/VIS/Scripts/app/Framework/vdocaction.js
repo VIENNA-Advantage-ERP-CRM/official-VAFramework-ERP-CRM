@@ -48,15 +48,15 @@
 
         function readReference() {
             var sql;
-            if (VIS.Env.isBaseLanguage(ctx, "AD_Ref_List"))//    GlobalVariable.IsBaseLanguage())//   Env.isBaseLanguage(ctx, "AD_Ref_List"))
-                sql = "SELECT Value, Name, Description FROM AD_Ref_List "
-                    + "WHERE AD_Reference_ID=135 ORDER BY Name";
+            if (VIS.Env.isBaseLanguage(ctx, "VAF_CtrlRef_List"))//    GlobalVariable.IsBaseLanguage())//   Env.isBaseLanguage(ctx, "VAF_CtrlRef_List"))
+                sql = "SELECT Value, Name, Description FROM VAF_CtrlRef_List "
+                    + "WHERE VAF_Control_Ref_ID=135 ORDER BY Name";
             else
                 sql = "SELECT l.Value, t.Name, t.Description "
-                    + "FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                    + "WHERE l.AD_Ref_List_ID=t.AD_Ref_List_ID"
+                    + "FROM VAF_CtrlRef_List l, VAF_CtrlRef_TL t "
+                    + "WHERE l.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID"
                     + " AND t.VAF_Language='" + VIS.Env.getVAF_Language(ctx) + "'"
-                    + " AND l.AD_Reference_ID=135 ORDER BY t.Name";
+                    + " AND l.VAF_Control_Ref_ID=135 ORDER BY t.Name";
 
             var valueLst = [];
             var nameLst = [];

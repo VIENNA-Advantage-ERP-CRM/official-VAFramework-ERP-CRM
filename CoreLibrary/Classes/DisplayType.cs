@@ -241,7 +241,7 @@ namespace VAdvantage.Classes
 
         ///<summary>
         ///Get SQL DataType
-        ///<param name="displayType">AD_Reference_ID</param>
+        ///<param name="displayType">VAF_Control_Ref_ID</param>
         ///<param name="columnName">name</param>
         ///<param name="fieldLength">length</param>
         /// </summary>

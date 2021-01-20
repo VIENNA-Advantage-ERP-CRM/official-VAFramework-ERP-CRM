@@ -153,8 +153,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** DocBaseType AD_Reference_ID=432 */
-public static int DOCBASETYPE_AD_Reference_ID=432;
+/** DocBaseType VAF_Control_Ref_ID=432 */
+public static int DOCBASETYPE_VAF_Control_Ref_ID=432;
 /** Set Document BaseType.
 @param DocBaseType Logical type of document */
 public void SetDocBaseType (String DocBaseType)
@@ -173,8 +173,8 @@ public String GetDocBaseType()
 return (String)Get_Value("DocBaseType");
 }
 
-/** PeriodAction AD_Reference_ID=176 */
-public static int PERIODACTION_AD_Reference_ID=176;
+/** PeriodAction VAF_Control_Ref_ID=176 */
+public static int PERIODACTION_VAF_Control_Ref_ID=176;
 /** Close Period = C */
 public static String PERIODACTION_ClosePeriod = "C";
 /** <No Action> = N */
@@ -211,8 +211,8 @@ public String GetPeriodAction()
 return (String)Get_Value("PeriodAction");
 }
 
-/** PeriodStatus AD_Reference_ID=177 */
-public static int PERIODSTATUS_AD_Reference_ID=177;
+/** PeriodStatus VAF_Control_Ref_ID=177 */
+public static int PERIODSTATUS_VAF_Control_Ref_ID=177;
 /** Closed = C */
 public static String PERIODSTATUS_Closed = "C";
 /** Never opened = N */

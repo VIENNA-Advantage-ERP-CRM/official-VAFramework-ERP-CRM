@@ -30,7 +30,7 @@ namespace VAdvantage.Classes
         /*Table IsTranslated Cache */
         // private static CCache<string, bool> _sIsTranslated = new CCache<string, bool>("VAF_TableView_isTranslated", 10);
         /** Table Reference Cache				*/
-        // private static CCache<string, VLookUpInfo> _sCacheRefTable = new CCache<string, VLookUpInfo>("AD_Ref_Table", 30, 60);	//	1h
+        // private static CCache<string, VLookUpInfo> _sCacheRefTable = new CCache<string, VLookUpInfo>("VAF_CtrlRef_Table", 30, 60);	//	1h
         /**	Logging								*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(VLookUpInfo).FullName);
 
@@ -40,16 +40,16 @@ namespace VAdvantage.Classes
         /// <param name="ctx">context</param>
         /// <param name="windowNo">window no</param>
         /// <param name="Column_ID">column id</param>
-        /// <param name="AD_Reference_ID">reference id</param>
+        /// <param name="VAF_Control_Ref_ID">reference id</param>
         /// <returns>MLookup</returns>
-        public static MLookup Get(Ctx ctx, int windowNo, int Column_ID, int AD_Reference_ID)
+        public static MLookup Get(Ctx ctx, int windowNo, int Column_ID, int VAF_Control_Ref_ID)
         {
             String columnName = "";
-            int AD_Reference_Value_ID = 0;
+            int VAF_Control_Ref_Value_ID = 0;
             bool isParent = false;
             String validationCode = "";
             //
-            String sql = "SELECT c.ColumnName, c.AD_Reference_Value_ID, c.IsParent, vr.Code "
+            String sql = "SELECT c.ColumnName, c.VAF_Control_Ref_Value_ID, c.IsParent, vr.Code "
                 + "FROM VAF_Column c"
                 + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) "
                 + "WHERE c.VAF_Column_ID=" + Column_ID;
@@ -60,7 +60,7 @@ namespace VAdvantage.Classes
                 if (dr.Read())
                 {
                     columnName = dr[0].ToString();
-                    AD_Reference_Value_ID = Utility.Util.GetValueOfInt(dr[1]);
+                    VAF_Control_Ref_Value_ID = Utility.Util.GetValueOfInt(dr[1]);
                     isParent = "Y".Equals(dr[2].ToString());
                     validationCode = dr[3].ToString();
                 }
@@ -82,11 +82,11 @@ namespace VAdvantage.Classes
                 s_log.Log(Level.SEVERE, sql, ex);
             }
             //
-            MLookup lookup = new MLookup(ctx, windowNo, AD_Reference_ID);
+            MLookup lookup = new MLookup(ctx, windowNo, VAF_Control_Ref_ID);
             VLookUpInfo info = GetLookUpInfo(lookup, Column_ID,
-                Env.GetLanguage(ctx), columnName, AD_Reference_Value_ID, isParent, validationCode);
+                Env.GetLanguage(ctx), columnName, VAF_Control_Ref_Value_ID, isParent, validationCode);
             //VLookUpInfo info = GetLookUpInfo(lookup.GetCtx(), lookup.GetWindowNo(), lookup.GetDisplayType(),
-            //  Column_ID,Env.GetLanguage(ctx), columnName, AD_Reference_Value_ID, isParent, validationCode);
+            //  Column_ID,Env.GetLanguage(ctx), columnName, VAF_Control_Ref_Value_ID, isParent, validationCode);
             if (info == null)
                 throw new ArgumentException("MLookup.create - no LookupInfo");
             return lookup.Initialize(info);
@@ -98,19 +98,19 @@ namespace VAdvantage.Classes
         /// <param name="ctx">context</param>
         /// <param name="WindowNo">window number</param>
         /// <param name="Column_ID">key id of column</param>
-        /// <param name="AD_Reference_ID">displaytype id </param>
+        /// <param name="VAF_Control_Ref_ID">displaytype id </param>
         /// <param name="ColumnName">name of column</param>
-        /// <param name="AD_Reference_Value_ID"> </param>
+        /// <param name="VAF_Control_Ref_Value_ID"> </param>
         /// <param name="IsParent">is parent column</param>
         /// <param name="ValidationCode">validate text</param>
         /// <returns>MLookup object</returns>
-        public static MLookup Get(Ctx ctx, int windowNo, int Column_ID, int AD_Reference_ID,
-                 String columnName, int AD_Reference_Value_ID,
+        public static MLookup Get(Ctx ctx, int windowNo, int Column_ID, int VAF_Control_Ref_ID,
+                 String columnName, int VAF_Control_Ref_Value_ID,
                 bool IsParent, String ValidationCode)
         {
-            MLookup lookup = new MLookup(ctx, windowNo, AD_Reference_ID);
+            MLookup lookup = new MLookup(ctx, windowNo, VAF_Control_Ref_ID);
             VLookUpInfo info = GetLookUpInfo(lookup, Column_ID,
-                Env.GetLanguage(ctx), columnName, AD_Reference_Value_ID, IsParent, ValidationCode);
+                Env.GetLanguage(ctx), columnName, VAF_Control_Ref_Value_ID, IsParent, ValidationCode);
             if (info == null)
                 throw new ArgumentException("MLookup.create - no LookupInfo");
             return lookup.Initialize(info);
@@ -125,19 +125,19 @@ namespace VAdvantage.Classes
         /// </pre>
         /// </summary>
         /// <param name="lookup">ctx context for access</param>
-        /// <param name="Column_ID">VAF_Column_ID or AD_Process_Para_ID</param>
+        /// <param name="Column_ID">VAF_Column_ID or VAF_Job_Para_ID</param>
         /// <param name="language">report lang</param>
         /// <param name="ColumnName">key column name</param>
-        /// <param name="AD_Reference_Value_ID"></param>
+        /// <param name="VAF_Control_Ref_Value_ID"></param>
         /// <param name="IsParent">parent (prevents query to directly access value)</param>
         /// <param name="ValidationCode">ValidationCode optional SQL validation</param>
         /// <returns>lookup info structure</returns>
         public static VLookUpInfo GetLookUpInfo(Lookup lookup,
-            int Column_ID, Language language, String columnName, int AD_Reference_Value_ID,
+            int Column_ID, Language language, String columnName, int VAF_Control_Ref_Value_ID,
             bool IsParent, String ValidationCode)
         {
             return GetLookUpInfo(lookup.GetCtx(), lookup.GetWindowNo(), lookup.GetDisplayType(),
-                Column_ID, language, columnName, AD_Reference_Value_ID,
+                Column_ID, language, columnName, VAF_Control_Ref_Value_ID,
                 IsParent, ValidationCode);
         }
 
@@ -145,36 +145,36 @@ namespace VAdvantage.Classes
         /// Get Information for Lookups based on Column_ID for Table Columns or Process Parameters.
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Reference_ID">ref id</param>
+        /// <param name="VAF_Control_Ref_ID">ref id</param>
         /// <param name="Column_ID">col id</param>
         /// <param name="ColumnName">name of col</param>
-        /// <param name="AD_Reference_Value_ID">ref_val id</param>
+        /// <param name="VAF_Control_Ref_Value_ID">ref_val id</param>
         /// <param name="IsParent">is parent col</param>
         /// <param name="ValidationCode">validate text</param>
         /// <returns></returns>
-        public static VLookUpInfo GetLookUpInfo(Ctx ctx, int windowNum, int AD_Reference_ID,
-            int Column_ID, Language language, string columnName, int AD_Reference_Value_ID, bool IsParent, string ValidationCode)
+        public static VLookUpInfo GetLookUpInfo(Ctx ctx, int windowNum, int VAF_Control_Ref_ID,
+            int Column_ID, Language language, string columnName, int VAF_Control_Ref_Value_ID, bool IsParent, string ValidationCode)
         {
             VLookUpInfo info = null;
             bool needToAddSecurity = true;
             //	List
-            if (AD_Reference_ID == DisplayType.List)	//	17
+            if (VAF_Control_Ref_ID == DisplayType.List)	//	17
             {
-                info = GetLookUp_List(language, AD_Reference_Value_ID);
+                info = GetLookUp_List(language, VAF_Control_Ref_Value_ID);
                 needToAddSecurity = false;
             }
             // TAble OR Search with Reference value
-            else if ((AD_Reference_ID == DisplayType.Table || AD_Reference_ID == DisplayType.Search || DisplayType.MultiKey == AD_Reference_ID)
-            && AD_Reference_Value_ID != 0)
+            else if ((VAF_Control_Ref_ID == DisplayType.Table || VAF_Control_Ref_ID == DisplayType.Search || DisplayType.MultiKey == VAF_Control_Ref_ID)
+            && VAF_Control_Ref_Value_ID != 0)
             {
-                info = GetLookup_Table(ctx, language, windowNum, AD_Reference_Value_ID);
+                info = GetLookup_Table(ctx, language, windowNum, VAF_Control_Ref_Value_ID);
             }
             //	Acct
-            else if (AD_Reference_ID == DisplayType.Account)
+            else if (VAF_Control_Ref_ID == DisplayType.Account)
             {
                 info = GetLookup_Acct(ctx, Column_ID);
             }
-            else if (AD_Reference_ID == DisplayType.ProductContainer)
+            else if (VAF_Control_Ref_ID == DisplayType.ProductContainer)
             {
                 info = GetLookup_PContainer(ctx, Column_ID);
             }
@@ -191,7 +191,7 @@ namespace VAdvantage.Classes
             }
             //	remaining values
             info.column_ID = Column_ID;
-            info.AD_Reference_Value_ID = AD_Reference_Value_ID;
+            info.VAF_Control_Ref_Value_ID = VAF_Control_Ref_Value_ID;
             info.isParent = IsParent;
             info.validationCode = ValidationCode;
 
@@ -295,29 +295,29 @@ namespace VAdvantage.Classes
         /// <summary>
         ///Get Lookup SQL for Lists
         /// </summary>
-        /// <param name="AD_Reference_Value_ID">ref_val id</param>
+        /// <param name="VAF_Control_Ref_Value_ID">ref_val id</param>
         /// <returns></returns>
-        public static VLookUpInfo GetLookUp_List(Language language, int AD_Reference_Value_ID)
+        public static VLookUpInfo GetLookUp_List(Language language, int VAF_Control_Ref_Value_ID)
         {
-            StringBuilder realSQL = new StringBuilder("SELECT NULL, AD_Ref_List.Value,");
-            String displayCol = "AD_Ref_List.Name";
-            if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
+            StringBuilder realSQL = new StringBuilder("SELECT NULL, VAF_CtrlRef_List.Value,");
+            String displayCol = "VAF_CtrlRef_List.Name";
+            if (Utility.Env.IsBaseLanguage(language, "VAF_CtrlRef_List"))
             {
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive FROM AD_Ref_List");
+                realSQL.Append(displayCol + ", VAF_CtrlRef_List.IsActive FROM VAF_CtrlRef_List");
             }
             else
             {
                 displayCol = "trl.Name";
-                realSQL.Append(displayCol + ", AD_Ref_List.IsActive "
-                    + "FROM AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
-                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.VAF_Language='")
+                realSQL.Append(displayCol + ", VAF_CtrlRef_List.IsActive "
+                    + "FROM VAF_CtrlRef_List INNER JOIN VAF_CtrlRef_TL trl "
+                    + " ON (VAF_CtrlRef_List.VAF_CtrlRef_List_ID=trl.VAF_CtrlRef_List_ID AND trl.VAF_Language='")
                         .Append(language.GetVAF_Language()).Append("')");
             }
-            realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID);
+            realSQL.Append(" WHERE VAF_CtrlRef_List.VAF_Control_Ref_ID=").Append(VAF_Control_Ref_Value_ID);
             realSQL.Append(" ORDER BY 2");
             //
-            VLookUpInfo lookupInfo = new VLookUpInfo(realSQL.ToString(), "AD_Ref_List", "AD_Ref_List.Value",
-                101, 101, Query.GetEqualQuery("AD_Reference_ID", AD_Reference_Value_ID));	//	Zoom Window+Query
+            VLookUpInfo lookupInfo = new VLookUpInfo(realSQL.ToString(), "VAF_CtrlRef_List", "VAF_CtrlRef_List.Value",
+                101, 101, Query.GetEqualQuery("VAF_Control_Ref_ID", VAF_Control_Ref_Value_ID));	//	Zoom Window+Query
             // add extra property for display Column value
             lookupInfo.displayColSubQ = displayCol;
             return lookupInfo;
@@ -327,22 +327,22 @@ namespace VAdvantage.Classes
         ///Get Lookup SQL for List
         /// </summary>
         /// <param name="language"></param>
-        /// <param name="AD_Reference_Value_ID"></param>
+        /// <param name="VAF_Control_Ref_Value_ID"></param>
         /// <param name="linkColumnName"></param>
-        /// <returns>SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID=x AND Value=linkColumn</returns>
+        /// <returns>SELECT Name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=x AND Value=linkColumn</returns>
         public static String GetLookup_ListEmbed(Language language,
-            int AD_Reference_Value_ID, String linkColumnName)
+            int VAF_Control_Ref_Value_ID, String linkColumnName)
         {
             StringBuilder realSQL = new StringBuilder("SELECT ");
-            if (Utility.Env.IsBaseLanguage(language, "AD_Ref_List"))
-                realSQL.Append("AD_Ref_List.Name FROM AD_Ref_List");
+            if (Utility.Env.IsBaseLanguage(language, "VAF_CtrlRef_List"))
+                realSQL.Append("VAF_CtrlRef_List.Name FROM VAF_CtrlRef_List");
             else
                 realSQL.Append("trl.Name "
-                    + "FROM AD_Ref_List INNER JOIN AD_Ref_List_Trl trl "
-                    + " ON (AD_Ref_List.AD_Ref_List_ID=trl.AD_Ref_List_ID AND trl.VAF_Language='")
+                    + "FROM VAF_CtrlRef_List INNER JOIN VAF_CtrlRef_TL trl "
+                    + " ON (VAF_CtrlRef_List.VAF_CtrlRef_List_ID=trl.VAF_CtrlRef_List_ID AND trl.VAF_Language='")
                         .Append(language.GetVAF_Language()).Append("')");
-            realSQL.Append(" WHERE AD_Ref_List.AD_Reference_ID=").Append(AD_Reference_Value_ID)
-                .Append(" AND AD_Ref_List.Value=").Append(linkColumnName);
+            realSQL.Append(" WHERE VAF_CtrlRef_List.VAF_Control_Ref_ID=").Append(VAF_Control_Ref_Value_ID)
+                .Append(" AND VAF_CtrlRef_List.Value=").Append(linkColumnName);
             //
             return realSQL.ToString();
         }
@@ -478,7 +478,7 @@ namespace VAdvantage.Classes
             String tableName = columnName.Substring(0, columnName.Length - 3);
 
             //	get display column name (first identifier column)
-            String sql = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,c.AD_Reference_Value_ID "
+            String sql = "SELECT c.ColumnName,c.IsTranslated,c.VAF_Control_Ref_ID,c.VAF_Control_Ref_Value_ID "
                 + "FROM VAF_TableView t INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE TableName='" + tableName + "'"
                 + " AND c.IsIdentifier='Y' "
@@ -517,7 +517,7 @@ namespace VAdvantage.Classes
             {
                 // Change By Lokesh Chauhan In Case Primary Key Column differs from table name in case
 
-                String sql1 = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,c.AD_Reference_Value_ID "
+                String sql1 = "SELECT c.ColumnName,c.IsTranslated,c.VAF_Control_Ref_ID,c.VAF_Control_Ref_Value_ID "
                + "FROM VAF_TableView t INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                + "WHERE UPPER(TableName)=UPPER('" + tableName + "')"
                + " AND c.IsIdentifier='Y' "
@@ -652,8 +652,8 @@ namespace VAdvantage.Classes
         public static StringBuilder GetLookup_DisplayColumn(Language language, string tableName)
         {
             //	get display column names
-            String sql0 = "SELECT c.ColumnName,c.IsTranslated,c.AD_Reference_ID,"
-                + "c.AD_Reference_Value_ID,t.AD_Window_ID,t.PO_Window_ID "
+            String sql0 = "SELECT c.ColumnName,c.IsTranslated,c.VAF_Control_Ref_ID,"
+                + "c.VAF_Control_Ref_Value_ID,t.AD_Window_ID,t.PO_Window_ID "
                 + "FROM VAF_TableView t"
                 + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE tableName=@tableName"
@@ -775,11 +775,11 @@ namespace VAdvantage.Classes
         /// <summary>
         /// Get Lookup SQL for Table Lookup
         /// </summary>
-        /// <param name="AD_Reference_Value_ID"></param>
+        /// <param name="VAF_Control_Ref_Value_ID"></param>
         /// <returns></returns>
-        private static VLookUpInfo GetLookup_Table(Ctx ctx, Language language, int windowNum, int AD_Reference_Value_ID)
+        private static VLookUpInfo GetLookup_Table(Ctx ctx, Language language, int windowNum, int VAF_Control_Ref_Value_ID)
         {
-            string key = AD_Reference_Value_ID.ToString();
+            string key = VAF_Control_Ref_Value_ID.ToString();
             VLookUpInfo retValue = null;
             //_sCacheRefTable.TryGetValue(key, out retValue);
             //if (retValue != null)
@@ -792,11 +792,11 @@ namespace VAdvantage.Classes
             + "cd.ColumnName AS DisplayColumn,rt.IsValueDisplayed,cd.IsTranslated,"	//	3..5
             + "rt.WhereClause,rt.OrderByClause,t.AD_Window_ID,t.PO_Window_ID, "		//	6..9
             + "t.VAF_TableView_ID , rt.IsDisplayIdentifiers "								//	10..11
-            + "FROM AD_Ref_Table rt"
+            + "FROM VAF_CtrlRef_Table rt"
             + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID)"
             + " INNER JOIN VAF_Column ck ON (rt.Column_Key_ID=ck.VAF_Column_ID)"
             + " INNER JOIN VAF_Column cd ON (rt.Column_Display_ID=cd.VAF_Column_ID) "
-            + "WHERE rt.AD_Reference_ID = '" + key + "' "
+            + "WHERE rt.VAF_Control_Ref_ID = '" + key + "' "
             + " AND rt.IsActive='Y' AND t.IsActive='Y'";
             //
             string keyColumn = "", tableName = "", whereClause = "", orderByClause = "";
@@ -842,7 +842,7 @@ namespace VAdvantage.Classes
 
             if (!loaded)
             {
-                s_log.Log(Level.SEVERE, "No Table Reference Table ID=" + AD_Reference_Value_ID);
+                s_log.Log(Level.SEVERE, "No Table Reference Table ID=" + VAF_Control_Ref_Value_ID);
                 return null;
             }
 
@@ -958,7 +958,7 @@ namespace VAdvantage.Classes
             else
                 sb.Append(" ORDER BY 3");
 
-            s_log.Finest("AD_Reference_Value_ID=" + AD_Reference_Value_ID + " - " + sb.ToString());
+            s_log.Finest("VAF_Control_Ref_Value_ID=" + VAF_Control_Ref_Value_ID + " - " + sb.ToString());
             retValue = new VLookUpInfo(sb.ToString(), tableName,
                 tableName + "." + keyColumn, zoomWindow, zoomWindowPO, zoomQuery);
             //if(!_sCacheRefTable.ContainsKey(key))
@@ -977,17 +977,17 @@ namespace VAdvantage.Classes
         /// </summary>
         /// <param name="BaseColumn"></param>
         /// <param name="BaseTable"></param>
-        /// <param name="AD_Reference_Value_ID"></param>
+        /// <param name="VAF_Control_Ref_Value_ID"></param>
         /// <returns></returns>
-        static public string GetLookup_TableEmbed(Language language, string BaseColumn, string BaseTable, int AD_Reference_Value_ID)
+        static public string GetLookup_TableEmbed(Language language, string BaseColumn, string BaseTable, int VAF_Control_Ref_Value_ID)
         {
             string sql = "SELECT t.tableName,ck.ColumnName AS keyColumn,"
                 + "cd.ColumnName AS DisplayColumn,rt.IsValueDisplayed,cd.IsTranslated "
-                + "FROM AD_Ref_Table rt"
+                + "FROM VAF_CtrlRef_Table rt"
                 + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID)"
                 + " INNER JOIN VAF_Column ck ON (rt.Column_Key_ID=ck.VAF_Column_ID)"
                 + " INNER JOIN VAF_Column cd ON (rt.Column_Display_ID=cd.VAF_Column_ID) "
-                + "WHERE rt.AD_Reference_ID=" + AD_Reference_Value_ID.ToString() + ""
+                + "WHERE rt.VAF_Control_Ref_ID=" + VAF_Control_Ref_Value_ID.ToString() + ""
                 + " AND rt.IsActive='Y' AND t.IsActive='Y'";
             //
             string keyColumn = "", DisplayColumn = "", tableName = "";
@@ -1010,7 +1010,7 @@ namespace VAdvantage.Classes
                 dr = null;
                 if (!success)
                 {
-                    s_log.Log(Level.SEVERE, "Cannot find Reference Table, ID=" + AD_Reference_Value_ID
+                    s_log.Log(Level.SEVERE, "Cannot find Reference Table, ID=" + VAF_Control_Ref_Value_ID
                     + ", Base=" + BaseTable + "." + BaseColumn);
                     return null;
                 }

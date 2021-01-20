@@ -188,8 +188,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** ShareType AD_Reference_ID=365 */
-public static int SHARETYPE_AD_Reference_ID=365;
+/** ShareType VAF_Control_Ref_ID=365 */
+public static int SHARETYPE_VAF_Control_Ref_ID=365;
 /** Client (all shared) = C */
 public static String SHARETYPE_ClientAllShared = "C";
 /** Org (not shared) = O */

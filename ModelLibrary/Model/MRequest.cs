@@ -593,7 +593,7 @@ namespace VAdvantage.Model
          */
         public String GetDueTypeText()
         {
-            return MRefList.GetListName(GetCtx(), DUETYPE_AD_Reference_ID, GetDueType());
+            return MRefList.GetListName(GetCtx(), DUETYPE_VAF_Control_Ref_ID, GetDueType());
         }
 
         /**
@@ -602,7 +602,7 @@ namespace VAdvantage.Model
          */
         public String GetPriorityText()
         {
-            return MRefList.GetListName(GetCtx(), PRIORITY_AD_Reference_ID, GetPriority());
+            return MRefList.GetListName(GetCtx(), PRIORITY_VAF_Control_Ref_ID, GetPriority());
         }
 
         /**
@@ -611,7 +611,7 @@ namespace VAdvantage.Model
          */
         public String GetPriorityUserText()
         {
-            return MRefList.GetListName(GetCtx(), PRIORITYUSER_AD_Reference_ID, GetPriorityUser());
+            return MRefList.GetListName(GetCtx(), PRIORITYUSER_VAF_Control_Ref_ID, GetPriorityUser());
         }
 
         /**
@@ -620,7 +620,7 @@ namespace VAdvantage.Model
          */
         public String GetConfidentialText()
         {
-            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPE_AD_Reference_ID, GetConfidentialType());
+            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPE_VAF_Control_Ref_ID, GetConfidentialType());
         }
 
         /**
@@ -629,7 +629,7 @@ namespace VAdvantage.Model
          */
         public String GetConfidentialEntryText()
         {
-            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_AD_Reference_ID, GetConfidentialTypeEntry());
+            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID, GetConfidentialTypeEntry());
         }
 
         /**
@@ -1019,7 +1019,7 @@ namespace VAdvantage.Model
                     sendInfo.Add("SalesRep_ID");
                 }
             }
-            CheckChange(ra, "AD_Role_ID");
+            CheckChange(ra, "VAF_Role_ID");
             //
             if (CheckChange(ra, "Priority"))
                 sendInfo.Add("Priority");
@@ -1220,14 +1220,14 @@ namespace VAdvantage.Model
         {
             List<int> _users = new List<int>();
             string sql = @"SELECT AD_User.ad_user_ID,
-                         AD_User_Roles.AD_Role_ID
+                         AD_User_Roles.VAF_Role_ID
                         FROM AD_User_Roles
                         INNER JOIN ad_user
                         ON (AD_User_Roles.AD_User_ID    =AD_User.AD_User_ID)
-                        WHERE AD_User_Roles.AD_Role_ID IN
-                          (SELECT AD_Role_ID
+                        WHERE AD_User_Roles.VAF_Role_ID IN
+                          (SELECT VAF_Role_ID
                           FROM R_RequestTypeUpdates
-                          WHERE AD_Role_ID   IS NOT NULL
+                          WHERE VAF_Role_ID   IS NOT NULL
                           AND R_RequestType_ID=" + GetR_RequestType_ID() + @"
                           AND IsActive        ='Y'
                           )
@@ -1260,7 +1260,7 @@ namespace VAdvantage.Model
         private List<int> validateUsers(DataSet _ds)
         {
             List<int> users = new List<int>();
-            MRole role = new MRole(GetCtx(), Util.GetValueOfInt(_ds.Tables[0].Rows[0]["AD_Role_ID"]), null);
+            MRole role = new MRole(GetCtx(), Util.GetValueOfInt(_ds.Tables[0].Rows[0]["VAF_Role_ID"]), null);
             bool isAllUser = false;
             // if access all organization
             if (role.IsAccessAllOrgs())
@@ -1270,7 +1270,7 @@ namespace VAdvantage.Model
             // if not access user organization access.
             if (!isAllUser && !role.IsUseUserOrgAccess())
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Org_ID) FROm AD_Role_OrgAccess WHERE IsActive='Y' AND  AD_Role_ID=" + role.GetAD_Role_ID() + " AND VAF_Org_ID IN (" + GetVAF_Org_ID() + ",0)")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Org_ID) FROm VAF_Role_OrgRights WHERE IsActive='Y' AND  VAF_Role_ID=" + role.GetVAF_Role_ID() + " AND VAF_Org_ID IN (" + GetVAF_Org_ID() + ",0)")) > 0)
                 {
                     isAllUser = true;
                 }
@@ -1351,7 +1351,7 @@ namespace VAdvantage.Model
                         sendInfo.Add("SalesRep_ID");
                     }
                 }
-                CheckChange(ra, "AD_Role_ID");
+                CheckChange(ra, "VAF_Role_ID");
                 //
                 if (CheckChange(ra, "Priority"))
                     sendInfo.Add("Priority");
@@ -1708,7 +1708,7 @@ namespace VAdvantage.Model
 
             /** List of users - aviod duplicates	*/
             List<int> userList = new List<int>();
-            String sql = "SELECT u.AD_User_ID, u.NotificationType, u.EMail, u.Name, MAX(r.AD_Role_ID) "
+            String sql = "SELECT u.AD_User_ID, u.NotificationType, u.EMail, u.Name, MAX(r.VAF_Role_ID) "
                 + "FROM RV_RequestUpdates_Only ru"
                 + " INNER JOIN AD_User u ON (ru.AD_User_ID=u.AD_User_ID)"
                 + " LEFT OUTER JOIN AD_User_Roles r ON (u.AD_User_ID=r.AD_User_ID) "
@@ -1734,10 +1734,10 @@ namespace VAdvantage.Model
 
                     String Name = Util.GetValueOfString(idr[3]);//idr.GetString(3);
                     //	Role
-                    int AD_Role_ID = Utility.Util.GetValueOfInt(idr[4]);
+                    int VAF_Role_ID = Utility.Util.GetValueOfInt(idr[4]);
                     if (idr == null)
                     {
-                        AD_Role_ID = -1;
+                        VAF_Role_ID = -1;
                     }
 
                     //	Don't send mail to oneself
@@ -1745,7 +1745,7 @@ namespace VAdvantage.Model
                     //			continue;
 
                     //	No confidential to externals
-                    if (AD_Role_ID == -1
+                    if (VAF_Role_ID == -1
                         && (GetConfidentialTypeEntry().Equals(CONFIDENTIALTYPE_Internal)
                             || GetConfidentialTypeEntry().Equals(CONFIDENTIALTYPE_PrivateInformation)))
                         continue;
@@ -1759,7 +1759,7 @@ namespace VAdvantage.Model
                         || X_AD_User.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
                         && (email == null || email.Length == 0))
                     {
-                        if (AD_Role_ID >= 0)
+                        if (VAF_Role_ID >= 0)
                             NotificationType = X_AD_User.NOTIFICATIONTYPE_Notice;
                         else
                         {
@@ -1768,7 +1768,7 @@ namespace VAdvantage.Model
                         }
                     }
                     if (X_AD_User.NOTIFICATIONTYPE_Notice.Equals(NotificationType)
-                        && AD_Role_ID >= 0)
+                        && VAF_Role_ID >= 0)
                     {
                         log.Config("No internal User: " + Name);
                         continue;

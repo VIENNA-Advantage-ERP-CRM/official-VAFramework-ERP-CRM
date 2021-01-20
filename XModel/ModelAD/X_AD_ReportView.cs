@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ReportView
+/** Generated Model for VAF_ReportView
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ReportView : PO
+public class X_VAF_ReportView : PO
 {
-public X_AD_ReportView (Context ctx, int AD_ReportView_ID, Trx trxName) : base (ctx, AD_ReportView_ID, trxName)
+public X_VAF_ReportView (Context ctx, int VAF_ReportView_ID, Trx trxName) : base (ctx, VAF_ReportView_ID, trxName)
 {
-/** if (AD_ReportView_ID == 0)
+/** if (VAF_ReportView_ID == 0)
 {
-SetAD_ReportView_ID (0);
+SetVAF_ReportView_ID (0);
 SetVAF_TableView_ID (0);
 SetEntityType (null);	// U
 SetName (null);
 }
  */
 }
-public X_AD_ReportView (Ctx ctx, int AD_ReportView_ID, Trx trxName) : base (ctx, AD_ReportView_ID, trxName)
+public X_VAF_ReportView (Ctx ctx, int VAF_ReportView_ID, Trx trxName) : base (ctx, VAF_ReportView_ID, trxName)
 {
-/** if (AD_ReportView_ID == 0)
+/** if (VAF_ReportView_ID == 0)
 {
-SetAD_ReportView_ID (0);
+SetVAF_ReportView_ID (0);
 SetVAF_TableView_ID (0);
 SetEntityType (null);	// U
 SetName (null);
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportView (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportView (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_ReportView (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportView (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportView (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_ReportView (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportView (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ReportView (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ReportView()
+static X_VAF_ReportView()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389046998L;
 public static int Table_ID;
  // =361;
 
-/** TableName=AD_ReportView */
-public static String Table_Name="AD_ReportView";
+/** TableName=VAF_ReportView */
+public static String Table_Name="VAF_ReportView";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ReportView[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ReportView[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Report View.
-@param AD_ReportView_ID View used to generate this report */
-public void SetAD_ReportView_ID (int AD_ReportView_ID)
+@param VAF_ReportView_ID View used to generate this report */
+public void SetVAF_ReportView_ID (int VAF_ReportView_ID)
 {
-if (AD_ReportView_ID < 1) throw new ArgumentException ("AD_ReportView_ID is mandatory.");
-Set_ValueNoCheck ("AD_ReportView_ID", AD_ReportView_ID);
+if (VAF_ReportView_ID < 1) throw new ArgumentException ("VAF_ReportView_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ReportView_ID", VAF_ReportView_ID);
 }
 /** Get Report View.
 @return View used to generate this report */
-public int GetAD_ReportView_ID() 
+public int GetVAF_ReportView_ID() 
 {
-Object ii = Get_Value("AD_ReportView_ID");
+Object ii = Get_Value("VAF_ReportView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -164,8 +164,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

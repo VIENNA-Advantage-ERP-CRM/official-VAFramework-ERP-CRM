@@ -201,8 +201,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PeriodType AD_Reference_ID=115 */
-public static int PERIODTYPE_AD_Reference_ID=115;
+/** PeriodType VAF_Control_Ref_ID=115 */
+public static int PERIODTYPE_VAF_Control_Ref_ID=115;
 /** Adjustment Period = A */
 public static String PERIODTYPE_AdjustmentPeriod = "A";
 /** Standard Calendar Period = S */

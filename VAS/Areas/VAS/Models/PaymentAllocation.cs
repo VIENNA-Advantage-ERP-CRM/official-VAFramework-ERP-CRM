@@ -3373,7 +3373,7 @@ namespace VIS.Models
                                   WHEN (GetConversionType(cn.VAF_Client_ID) != 0 ) THEN (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID = GetConversionType(cn.VAF_Client_ID))
                                   ELSE (SELECT name FROM C_CONVERSIONTYPE WHERE C_CONVERSIONTYPE_ID =(GetConversionType(0)) ) END AS CONVERSIONNAME ,
                                 CASE
-                                  WHEN NVL(cl.VSS_PaymentType,0)!='0' THEN (SELECT Name FROM AD_Ref_List WHERE AD_Reference_ID=(SELECT AD_Reference_Value_ID FROM VAF_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_CashLine')) AND IsActive='Y' AND value=cl.VSS_PaymentType) END AS Payment,
+                                  WHEN NVL(cl.VSS_PaymentType,0)!='0' THEN (SELECT Name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=(SELECT VAF_Control_Ref_Value_ID FROM VAF_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_CashLine')) AND IsActive='Y' AND value=cl.VSS_PaymentType) END AS Payment,
                                   ROUND(cn.amount, " + objCurrency.GetStdPrecision() + ") AS AMOUNT, "
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT ,cn.C_ConversionType_ID  ,cn.VAF_Client_ID ,cn.VAF_Org_ID ) , " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1cn.amount as OPENAMT,"
                              + " ROUND(currencyConvert(ALLOCCASHAVAILABLE(cn.C_CashLine_ID),cn.C_Currency_ID ," + _C_Currency_ID + ",cn.DATEACCT,cn.C_ConversionType_ID ,cn.VAF_Client_ID ,cn.VAF_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
@@ -3802,7 +3802,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
             string _sql = "SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APR','API','ARC','APC','ARI') AND C_DocType.ISACTIVE='Y'";
-            //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT AD_Reference_ID FROM VAF_Column WHERE ColumnName ='DocBaseType' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
+            //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName ='DocBaseType' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -3824,7 +3824,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         {
             List<VIS_DocType> DocType = new List<VIS_DocType>();
             string _sql = "SELECT C_DocType.NAME, C_DocType.C_DOCTYPE_ID FROM C_DOCTYPE C_DOCTYPE INNER JOIN C_DOCBASETYPE DB ON C_DocType.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APP','ARR') AND C_DocType.ISACTIVE='Y'";
-            //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT AD_Reference_ID FROM VAF_Column WHERE ColumnName ='DocBaseType' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
+            //string _sql = "SELECT C_DocType.Name,C_DocType_ID FROM C_DocType INNER JOIN c_docbasetype ON c_doctype.docbasetype = c_docbasetype.docbasetype WHERE  C_DocBaseType_ID IN (SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName ='DocBaseType' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_DocType')) AND c_doctype.isactive='Y'";
             _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "C_DocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -3845,8 +3845,8 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         public List<VIS_PayType> GetPaymentType()
         {
             List<VIS_PayType> payType = new List<VIS_PayType>();
-            string _sql = "SELECT Value,Name FROM AD_Ref_List WHERE AD_Reference_ID=(SELECT AD_Reference_Value_ID FROM VAF_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_CashLine')) AND IsActive='Y'";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "AD_Ref_List", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            string _sql = "SELECT Value,Name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=(SELECT VAF_Control_Ref_Value_ID FROM VAF_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='C_CashLine')) AND IsActive='Y'";
+            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAF_CtrlRef_List", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -5760,7 +5760,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
         private string[] CompleteOrReverse(Ctx ctx, int Record_ID, int Process_ID, string DocAction, Trx trx)
         {
             string[] result = new string[2];
-            MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
+            MRole role = MRole.Get(ctx, ctx.GetVAF_Role_ID());
             if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
             {
                 if (Process_ID == 150)
@@ -5813,7 +5813,7 @@ currencyConvert(invoiceOpen * MultiplierAP, C_Currency_ID, " + _C_Currency_ID + 
                 VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo("WF", Process_ID);
                 pi.SetAD_User_ID(ctx.GetAD_User_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-                pi.SetAD_PInstance_ID(pin.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(pin.GetVAF_JInstance_ID());
                 pi.SetRecord_ID(Record_ID);
                 pi.SetTable_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE Export_ID ='VIS_735'")));
                 ProcessCtl worker = new ProcessCtl(ctx, null, pi, null);

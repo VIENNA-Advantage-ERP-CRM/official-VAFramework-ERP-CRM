@@ -11,27 +11,27 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_PInstance_Para
+    /** Generated Model for VAF_JInstance_Para
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_PInstance_Para : PO
+    public class X_VAF_JInstance_Para : PO
     {
-        public X_AD_PInstance_Para(Context ctx, int AD_PInstance_Para_ID, Trx trxName)
-            : base(ctx, AD_PInstance_Para_ID, trxName)
+        public X_VAF_JInstance_Para(Context ctx, int VAF_JInstance_Para_ID, Trx trxName)
+            : base(ctx, VAF_JInstance_Para_ID, trxName)
         {
-            /** if (AD_PInstance_Para_ID == 0)
+            /** if (VAF_JInstance_Para_ID == 0)
             {
-            SetAD_PInstance_ID (0);
+            SetVAF_JInstance_ID (0);
             SetSeqNo (0);
             }
              */
         }
-        public X_AD_PInstance_Para(Ctx ctx, int AD_PInstance_Para_ID, Trx trxName)
-            : base(ctx, AD_PInstance_Para_ID, trxName)
+        public X_VAF_JInstance_Para(Ctx ctx, int VAF_JInstance_Para_ID, Trx trxName)
+            : base(ctx, VAF_JInstance_Para_ID, trxName)
         {
-            /** if (AD_PInstance_Para_ID == 0)
+            /** if (VAF_JInstance_Para_ID == 0)
             {
-            SetAD_PInstance_ID (0);
+            SetVAF_JInstance_ID (0);
             SetSeqNo (0);
             }
              */
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_PInstance_Para(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_JInstance_Para(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_PInstance_Para(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_JInstance_Para(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_PInstance_Para(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_JInstance_Para(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_PInstance_Para()
+        static X_VAF_JInstance_Para()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =283;
 
-        /** TableName=AD_PInstance_Para */
-        public static String Table_Name = "AD_PInstance_Para";
+        /** TableName=VAF_JInstance_Para */
+        public static String Table_Name = "VAF_JInstance_Para";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -114,21 +114,21 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_PInstance_Para[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_JInstance_Para[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Process Instance.
-        @param AD_PInstance_ID Instance of the process */
-        public void SetAD_PInstance_ID(int AD_PInstance_ID)
+        @param VAF_JInstance_ID Instance of the process */
+        public void SetVAF_JInstance_ID(int VAF_JInstance_ID)
         {
-            if (AD_PInstance_ID < 1) throw new ArgumentException("AD_PInstance_ID is mandatory.");
-            Set_ValueNoCheck("AD_PInstance_ID", AD_PInstance_ID);
+            if (VAF_JInstance_ID < 1) throw new ArgumentException("VAF_JInstance_ID is mandatory.");
+            Set_ValueNoCheck("VAF_JInstance_ID", VAF_JInstance_ID);
         }
         /** Get Process Instance.
         @return Instance of the process */
-        public int GetAD_PInstance_ID()
+        public int GetVAF_JInstance_ID()
         {
-            Object ii = Get_Value("AD_PInstance_ID");
+            Object ii = Get_Value("VAF_JInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetAD_PInstance_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAF_JInstance_ID().ToString());
         }
         /** Set Info.
         @param Info Information */
@@ -316,11 +316,11 @@ public DateTime? GetP_Time_To() {return (DateTime?)Get_Value("P_Time_To");}
 
 
         /** Set Process Parameter.
-@param AD_Process_Para_ID Process Parameter */
-public void SetAD_Process_Para_ID (int AD_Process_Para_ID){if (AD_Process_Para_ID <= 0) Set_Value ("AD_Process_Para_ID", null);else
-Set_Value ("AD_Process_Para_ID", AD_Process_Para_ID);}/** Get Process Parameter.
+@param VAF_Job_Para_ID Process Parameter */
+public void SetVAF_Job_Para_ID (int VAF_Job_Para_ID){if (VAF_Job_Para_ID <= 0) Set_Value ("VAF_Job_Para_ID", null);else
+Set_Value ("VAF_Job_Para_ID", VAF_Job_Para_ID);}/** Get Process Parameter.
 @return Process Parameter */
-public int GetAD_Process_Para_ID() {Object ii = Get_Value("AD_Process_Para_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+public int GetVAF_Job_Para_ID() {Object ii = Get_Value("VAF_Job_Para_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
 
 
 

@@ -66,16 +66,16 @@ namespace VIS.Controllers
             return Json(JsonConvert.SerializeObject(""), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetGroupInfo(int AD_Role_ID, string name)
+        public JsonResult GetGroupInfo(int VAF_Role_ID, string name)
         {
             Ctx ct = Session["ctx"] as Ctx;
             Group model = new Group(ct);
-            List<GroupInfo> roles = model.GetGroupInfo(AD_Role_ID, name);
+            List<GroupInfo> roles = model.GetGroupInfo(VAF_Role_ID, name);
             return Json(JsonConvert.SerializeObject(roles), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public JsonResult UpdateUserGroups(int AD_Role_ID, string groups)
+        public JsonResult UpdateUserGroups(int VAF_Role_ID, string groups)
         {
             Ctx ct = Session["ctx"] as Ctx;
             List<GroupInfo> gInfo = null;
@@ -84,14 +84,14 @@ namespace VIS.Controllers
             {
                 gInfo = JsonConvert.DeserializeObject<List<GroupInfo>>(groups);
             }
-            //if (AD_Role_ID != null && AD_Role_ID.Length > 0)
+            //if (VAF_Role_ID != null && VAF_Role_ID.Length > 0)
             //{
-            //    rInfo = JsonConvert.DeserializeObject<List<RolesInfo>>(AD_Role_ID);
+            //    rInfo = JsonConvert.DeserializeObject<List<RolesInfo>>(VAF_Role_ID);
             //}
 
 
             Group model = new Group(ct);
-            model.UpdateUserGroup(AD_Role_ID, gInfo);
+            model.UpdateUserGroup(VAF_Role_ID, gInfo);
             return Json(JsonConvert.SerializeObject(""), JsonRequestBehavior.AllowGet);
         }
 

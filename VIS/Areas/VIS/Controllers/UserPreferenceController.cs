@@ -35,7 +35,7 @@ namespace VIS.Controllers
                 var ctx = Session["ctx"] as Ctx;
                 obj = obj.GetUserSettings(ctx, Convert.ToInt32(adUserId));
                 ViewBag.lang = ctx.GetVAF_Language();
-                ViewBag.IsAdmin = ctx.GetAD_Role_ID() == 0 && (ctx.GetAD_User_ID() == 100 || ctx.GetAD_User_ID() == 0)
+                ViewBag.IsAdmin = ctx.GetVAF_Role_ID() == 0 && (ctx.GetAD_User_ID() == 100 || ctx.GetAD_User_ID() == 0)
                     && Util.GetValueOfInt(ctx.GetContext("#FRAMEWORK_VERSION")) > 1;
             }
             
@@ -64,13 +64,13 @@ namespace VIS.Controllers
         /// <param name="pref"></param>
         /// <returns></returns>
         public JsonResult SaveUserSettings(int AD_User_ID, string currentPws, string newPws, bool chkEmail, bool chkNotice,
-            bool chkSMS, bool chkFax, string emailUserName, string emailPws,int AD_Role_ID,int VAF_Client_ID,int VAF_Org_ID, int M_Warehouse_ID)
+            bool chkSMS, bool chkFax, string emailUserName, string emailPws,int VAF_Role_ID,int VAF_Client_ID,int VAF_Org_ID, int M_Warehouse_ID)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 UserPreferenceModel obj = new UserPreferenceModel();
-                var val = obj.SaveUserSettings(ctx, AD_User_ID, currentPws, newPws, chkEmail, chkNotice, chkSMS, chkFax, emailUserName, emailPws,AD_Role_ID,VAF_Client_ID,VAF_Org_ID, M_Warehouse_ID);
+                var val = obj.SaveUserSettings(ctx, AD_User_ID, currentPws, newPws, chkEmail, chkNotice, chkSMS, chkFax, emailUserName, emailPws,VAF_Role_ID,VAF_Client_ID,VAF_Org_ID, M_Warehouse_ID);
                 return Json(new { result = val }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
@@ -102,16 +102,16 @@ namespace VIS.Controllers
                 String msg = "";
                 var ctx = Session["ctx"] as Ctx;
                 
-                var AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_PROCESS_ID  FROM AD_PROCESS WHERE NAME = 'Reset Your Password'", null, null)); // Get Reset Your Password process id 
+                var VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_JOB_ID  FROM VAF_JOB WHERE NAME = 'Reset Your Password'", null, null)); // Get Reset Your Password process id 
                 // Prepare Process
-                MPInstance instance = new MPInstance(ctx, AD_Process_ID, 0); // create object of MPInstance
+                MPInstance instance = new MPInstance(ctx, VAF_Job_ID, 0); // create object of MPInstance
                 if (!instance.Save())
                 {
                     msg = Msg.GetMsg(ctx, "ProcessNoInstance");
                     return Json(new { result = msg }, JsonRequestBehavior.AllowGet);
                 }
-                VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo("ChangePassword", AD_Process_ID);
-                pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+                VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo("ChangePassword", VAF_Job_ID);
+                pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
                 pi.SetAD_User_ID(AD_User_ID);
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 // Add Parameter - CurrentPassword

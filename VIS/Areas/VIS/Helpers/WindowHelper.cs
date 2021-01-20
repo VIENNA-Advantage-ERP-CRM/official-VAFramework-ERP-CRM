@@ -2644,11 +2644,11 @@ namespace VIS.Helpers
             //
             try
             {
-                if (DisplayType.IsText(column.GetAD_Reference_ID()))
+                if (DisplayType.IsText(column.GetVAF_Control_Ref_ID()))
                 {
                     ;
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.YesNo)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.YesNo)
                 {
                     if (OldValue != null)
                     {
@@ -2661,7 +2661,7 @@ namespace VIS.Helpers
                         showNewValue = Msg.GetMsg(ctx, yes ? "Y" : "N");
                     }
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.Amount)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.Amount)
                 {
                     if (OldValue != null)
                         showOldValue = String.Format(_amtFormat.GetFormat(), OldValue);//.fo
@@ -2670,46 +2670,46 @@ namespace VIS.Helpers
                         showNewValue = String.Format(_amtFormat.GetFormat(), NewValue);//.ToString(_amtFormat.GetFormat());//  m_amtFormat
                     //.format (new BigDecimal (NewValue));
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.Integer)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.Integer)
                 {
                     if (OldValue != null)
                         showOldValue = String.Format(_intFormat.GetFormat(), OldValue);//.ToString(_intFormat.GetFormat());// m_intFormat.format (new Integer (OldValue));
                     if (NewValue != null)
                         showNewValue = String.Format(_intFormat.GetFormat(), NewValue);//.ToString(_intFormat.GetFormat());//m_intFormat.format (new Integer (NewValue));
                 }
-                else if (DisplayType.IsNumeric(column.GetAD_Reference_ID()))
+                else if (DisplayType.IsNumeric(column.GetVAF_Control_Ref_ID()))
                 {
                     if (OldValue != null)
                         showOldValue = String.Format(_numberFormat.GetFormat(), OldValue);//.ToString(_numberFormat.GetFormat());//m_numberFormat.format (new BigDecimal (OldValue));
                     if (NewValue != null)
                         showNewValue = String.Format(_numberFormat.GetFormat(), NewValue);//.ToString(_numberFormat.GetFormat()); //m_numberFormat.format (new BigDecimal (NewValue));
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.Date)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.Date)
                 {
                     if (OldValue != null)
                         showOldValue = _dateFormat.Format(OldValue);// m_dateFormat.format (Timestamp.valueOf (OldValue));
                     if (NewValue != null)
                         showNewValue = _dateFormat.Format(NewValue);// m_dateFormat.format (Timestamp.valueOf (NewValue));
                 }
-                else if (column.GetAD_Reference_ID() == DisplayType.DateTime)
+                else if (column.GetVAF_Control_Ref_ID() == DisplayType.DateTime)
                 {
                     if (OldValue != null)
                         showOldValue = _dateTimeFormat.Format(OldValue);// (Timestamp.valueOf (OldValue));
                     if (NewValue != null)
                         showNewValue = _dateTimeFormat.Format(NewValue);// (Timestamp.valueOf (NewValue));
                 }
-                else if (DisplayType.IsLookup(column.GetAD_Reference_ID()))
+                else if (DisplayType.IsLookup(column.GetVAF_Control_Ref_ID()))
                 {
                     MLookup lookup = VAdvantage.Classes.VLookUpFactory.Get(ctx, 0,
-                        VAF_Column_ID, column.GetAD_Reference_ID(),
+                        VAF_Column_ID, column.GetVAF_Control_Ref_ID(),
                          column.GetColumnName(),
-                        column.GetAD_Reference_Value_ID(),
+                        column.GetVAF_Control_Ref_Value_ID(),
                         column.IsParent(), null);
 
                     if (OldValue != null)
                     {
                         Object key = OldValue;
-                        if (column.GetAD_Reference_ID() != DisplayType.List
+                        if (column.GetVAF_Control_Ref_ID() != DisplayType.List
                             && column.GetColumnName().EndsWith("_ID"))
                         {
                             try
@@ -2727,7 +2727,7 @@ namespace VIS.Helpers
                     if (NewValue != null)
                     {
                         Object key = NewValue;
-                        if (column.GetAD_Reference_ID() != DisplayType.List
+                        if (column.GetVAF_Control_Ref_ID() != DisplayType.List
                             && column.GetColumnName().EndsWith("_ID"))
                         {
                             try
@@ -2743,7 +2743,7 @@ namespace VIS.Helpers
                             showNewValue = pp.GetName();
                     }
                 }
-                else if (DisplayType.IsLOB(column.GetAD_Reference_ID()))
+                else if (DisplayType.IsLOB(column.GetVAF_Control_Ref_ID()))
                 {
                 }
 
@@ -2793,7 +2793,7 @@ namespace VIS.Helpers
                 {
                     dr.Close();
                     sql = "SELECT c.VAF_CardView_ID, c.VAF_Field_ID  FROM VAF_CardView c INNER JOIN VAF_CardView_Role r ON r.VAF_CardView_ID = r.VAF_CardView_ID WHERE c.AD_Window_ID=" + AD_Window_ID + " AND "
-                                 + " c.VAF_Tab_ID=" + VAF_Tab_ID + " AND r.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND c.AD_User_ID IS NULL";
+                                 + " c.VAF_Tab_ID=" + VAF_Tab_ID + " AND r.VAF_Role_ID = " + ctx.GetVAF_Role_ID() + " AND c.AD_User_ID IS NULL";
                     dr = DB.ExecuteReader(sql);
                     if (dr.Read())
                     {

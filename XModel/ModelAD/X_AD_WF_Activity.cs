@@ -161,8 +161,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_User_ID AD_Reference_ID=286 */
-        public static int AD_USER_ID_AD_Reference_ID = 286;
+        /** AD_User_ID VAF_Control_Ref_ID=286 */
+        public static int AD_USER_ID_VAF_Control_Ref_ID = 286;
         /** Set User/Contact.
         @param AD_User_ID User within the system - Internal or Business Partner Contact */
         public void SetAD_User_ID(int AD_User_ID)
@@ -382,8 +382,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("TextMsg");
         }
 
-        /** WFState AD_Reference_ID=305 */
-        public static int WFSTATE_AD_Reference_ID = 305;
+        /** WFState VAF_Control_Ref_ID=305 */
+        public static int WFSTATE_VAF_Control_Ref_ID = 305;
         /** Aborted = CA */
         public static String WFSTATE_Aborted = "CA";
         /** Completed = CC */
@@ -477,8 +477,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Summary");
         }
 
-         /** ResponsibleOrg_ID AD_Reference_ID=276 */
-        public static int RESPONSIBLEORG_ID_AD_Reference_ID = 276;
+         /** ResponsibleOrg_ID VAF_Control_Ref_ID=276 */
+        public static int RESPONSIBLEORG_ID_VAF_Control_Ref_ID = 276;
         /** Set Responsible Organization.
         @param ResponsibleOrg_ID Responsible Organization */
         public void SetResponsibleOrg_ID(int ResponsibleOrg_ID)

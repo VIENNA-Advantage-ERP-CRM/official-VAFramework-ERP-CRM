@@ -28,7 +28,7 @@ namespace VAModelAD.Model
             //cascade
             PORecord.AddCascade(X_VAF_Attachment.Table_ID, X_VAF_Attachment.Table_Name);
             PORecord.AddCascade(X_VAF_Archive.Table_ID, X_VAF_Archive.Table_Name);
-            PORecord.AddCascade(X_AD_Note.Table_ID, X_AD_Note.Table_Name);
+            PORecord.AddCascade(X_VAF_Notice.Table_ID, X_VAF_Notice.Table_Name);
             PORecord.AddCascade(X_MailAttachment1.Table_ID, X_MailAttachment1.Table_Name);
             PORecord.AddCascade(X_AppointmentsInfo.Table_ID, X_AppointmentsInfo.Table_Name);
             PORecord.AddCascade(X_K_Index.Table_ID, X_K_Index.Table_Name);

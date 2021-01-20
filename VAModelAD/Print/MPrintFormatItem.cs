@@ -20,21 +20,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Print
 {
-    public class MPrintFormatItem : X_AD_PrintFormatItem
+    public class MPrintFormatItem : X_VAF_Print_Rpt_LItem
     {
         private static VLogger s_log = VLogger.GetVLogger(typeof(MPrintFormatItem).FullName);
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PrintFormatItem_ID">AD_PrintFormatItem_ID</param>
+        /// <param name="VAF_Print_Rpt_LItem_ID">VAF_Print_Rpt_LItem_ID</param>
         /// <param name="trxName">transaction</param>
-        public MPrintFormatItem(Ctx ctx, int AD_PrintFormatItem_ID, Trx trxName)
-            : base(ctx, AD_PrintFormatItem_ID, trxName)
+        public MPrintFormatItem(Ctx ctx, int VAF_Print_Rpt_LItem_ID, Trx trxName)
+            : base(ctx, VAF_Print_Rpt_LItem_ID, trxName)
         {
 
             //	Default Setting
-            if (AD_PrintFormatItem_ID == 0)
+            if (VAF_Print_Rpt_LItem_ID == 0)
             {
                 SetFieldAlignmentType(FIELDALIGNMENTTYPE_Default);
                 SetLineAlignmentType(LINEALIGNMENTTYPE_None);
@@ -103,7 +103,7 @@ namespace VAdvantage.Print
         /// <returns>print name</returns>
         public String GetPrintName(Language language)
         {
-            if (language == null || Env.IsBaseLanguage(language, "AD_PrintFormatItem"))
+            if (language == null || Env.IsBaseLanguage(language, "VAF_Print_Rpt_LItem"))
                 return GetPrintName();
             LoadTranslations();
 
@@ -122,7 +122,7 @@ namespace VAdvantage.Print
         /// <returns>print name suffix</returns>
         public String GetPrintNameSuffix(Language language)
         {
-            if (language == null || Env.IsBaseLanguage(language, "AD_PrintFormatItem"))// GlobalVariable.IsBaseLanguage())
+            if (language == null || Env.IsBaseLanguage(language, "VAF_Print_Rpt_LItem"))// GlobalVariable.IsBaseLanguage())
                 return GetPrintNameSuffix();
             LoadTranslations();
             // String retValue = (String)_translationSuffix[language.GetVAF_Language()];
@@ -142,7 +142,7 @@ namespace VAdvantage.Print
             {
                 _translationLabel = new Dictionary<String, String>();
                 _translationSuffix = new Dictionary<String, String>();
-                String sql = "SELECT VAF_Language, PrintName, PrintNameSuffix FROM AD_PrintFormatItem_Trl WHERE AD_PrintFormatItem_ID=@formatitem";
+                String sql = "SELECT VAF_Language, PrintName, PrintNameSuffix FROM VAF_Print_Rpt_LItem_TL WHERE VAF_Print_Rpt_LItem_ID=@formatitem";
                 IDataReader dr = null;
                 try
                 {
@@ -327,7 +327,7 @@ namespace VAdvantage.Print
         }
 
         /**	Lookup Map of VAF_Column_ID for ColumnName	*/
-        private static CCache<int, String> _columns = new CCache<int, String>("AD_PrintFormatItem", 200);
+        private static CCache<int, String> _columns = new CCache<int, String>("VAF_Print_Rpt_LItem", 200);
 
         /// <summary>
         /// Get ColumnName from VAF_Column_ID
@@ -392,7 +392,7 @@ namespace VAdvantage.Print
         public static MPrintFormatItem CreateFromColumn(MPrintFormat format, int VAF_Column_ID, int seqNo)
         {
             MPrintFormatItem pfi = new MPrintFormatItem(format.GetCtx(), 0, null);
-            pfi.SetAD_PrintFormat_ID(format.GetAD_PrintFormat_ID());
+            pfi.SetVAF_Print_Rpt_Layout_ID(format.GetVAF_Print_Rpt_Layout_ID());
             pfi.SetClientOrg(format);
             pfi.SetVAF_Column_ID(VAF_Column_ID);
             pfi.SetPrintFormatType(PRINTFORMATTYPE_Field);
@@ -400,7 +400,7 @@ namespace VAdvantage.Print
 
             //	translation is dome by trigger
             String sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
-                + "c.AD_Reference_ID,c.IsKey,c.SeqNo "					//	4..6
+                + "c.VAF_Control_Ref_ID,c.IsKey,c.SeqNo "					//	4..6
                 + "FROM VAF_Column c, VAF_ColumnDic e "
                 + "WHERE c.VAF_Column_ID='" + VAF_Column_ID + "'"
                 + " AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID";
@@ -410,7 +410,7 @@ namespace VAdvantage.Print
             Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseVAF_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
-                    + "c.AD_Reference_ID,c.IsKey,c.SeqNo "				//	4..6
+                    + "c.VAF_Control_Ref_ID,c.IsKey,c.SeqNo "				//	4..6
                     + "FROM VAF_Column c, VAF_ColumnDic_TL e "
                     + "WHERE c.VAF_Column_ID='" + VAF_Column_ID + "'"
                     + " AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID"
@@ -484,7 +484,7 @@ namespace VAdvantage.Print
         public static MPrintFormatItem CreateFromColumn(MPrintFormat format, int VAF_Column_ID, int VAF_Field_ID, int seqNo, bool isMESeqDefined)
         {
             MPrintFormatItem pfi = new MPrintFormatItem(format.GetCtx(), 0, null);
-            pfi.SetAD_PrintFormat_ID(format.GetAD_PrintFormat_ID());
+            pfi.SetVAF_Print_Rpt_Layout_ID(format.GetVAF_Print_Rpt_Layout_ID());
             pfi.SetClientOrg(format);
             pfi.SetVAF_Column_ID(VAF_Column_ID);
             pfi.SetPrintFormatType(PRINTFORMATTYPE_Field);
@@ -492,7 +492,7 @@ namespace VAdvantage.Print
 
             //	translation is dome by trigger
             String sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
-                + "c.AD_Reference_ID,c.IsKey,c.SeqNo,  f.MRSeqNo,  f.MRIsDisplayed,f.IsDisplayed "					//	4..6
+                + "c.VAF_Control_Ref_ID,c.IsKey,c.SeqNo,  f.MRSeqNo,  f.MRIsDisplayed,f.IsDisplayed "					//	4..6
                 + "FROM VAF_Column c, VAF_ColumnDic e ,VAF_Field f "
                 + "WHERE c.VAF_Column_ID=" + VAF_Column_ID + " AND f.VAF_Field_ID="+VAF_Field_ID+""
                 + " AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID";
@@ -502,7 +502,7 @@ namespace VAdvantage.Print
             Boolean trl = !Common.Common.IsMultiLingualDocument(format.GetCtx()) && !Language.IsBaseLanguage(Login.Language.GetBaseVAF_Language());
             if (trl)
                 sql = "SELECT c.ColumnName,e.Name,e.PrintName, "		//	1..3
-                    + "c.AD_Reference_ID,c.IsKey,c.SeqNo , f.MRSeqNo,  f.MRIsDisplayed,f.IsDisplayed "				//	4..6
+                    + "c.VAF_Control_Ref_ID,c.IsKey,c.SeqNo , f.MRSeqNo,  f.MRIsDisplayed,f.IsDisplayed "				//	4..6
                     + "FROM VAF_Column c, VAF_ColumnDic_TL e ,VAF_Field f"
                     + "WHERE c.VAF_Column_ID=" + VAF_Column_ID + "  AND f.VAF_Field_ID=" + VAF_Field_ID + ""
                     + " AND c.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID"
@@ -583,14 +583,14 @@ namespace VAdvantage.Print
         /// Copy existing Definition To Client
         /// </summary>
         /// <param name="To_Client_ID">to client</param>
-        /// <param name="AD_PrintFormat_ID">parent print format</param>
+        /// <param name="VAF_Print_Rpt_Layout_ID">parent print format</param>
         /// <returns>format item</returns>
-        public MPrintFormatItem CopyToClient(int To_Client_ID, int AD_PrintFormat_ID)
+        public MPrintFormatItem CopyToClient(int To_Client_ID, int VAF_Print_Rpt_Layout_ID)
         {
             MPrintFormatItem to = new MPrintFormatItem(Env.GetContext(), 0, null);
             MPrintFormatItem.CopyValues(this, to);
             to.SetClientOrg(To_Client_ID, 0);
-            to.SetAD_PrintFormat_ID(AD_PrintFormat_ID);
+            to.SetVAF_Print_Rpt_Layout_ID(VAF_Print_Rpt_Layout_ID);
             to.Save();
             return to;
         }	//	copyToClient
@@ -643,21 +643,21 @@ namespace VAdvantage.Print
                 //	&& MClient.get(getCtx()).isMultiLingualDocument()
                 && GetPrintName() != null && GetPrintName().Length > 0)
             {
-                String sql = "UPDATE AD_PrintFormatItem_Trl "
+                String sql = "UPDATE VAF_Print_Rpt_LItem_TL "
                     + "SET PrintName = (SELECT e.PrintName "
                         + "FROM VAF_ColumnDic_TL e, VAF_Column c "
-                        + "WHERE e.VAF_Language=AD_PrintFormatItem_Trl.VAF_Language"
+                        + "WHERE e.VAF_Language=VAF_Print_Rpt_LItem_TL.VAF_Language"
                         + " AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID"
                         + " AND c.VAF_Column_ID=" + GetVAF_Column_ID() + ") "
-                    + "WHERE AD_PrintFormatItem_ID = " + Get_ID()
+                    + "WHERE VAF_Print_Rpt_LItem_ID = " + Get_ID()
                     + " AND EXISTS (SELECT * "
                         + "FROM VAF_ColumnDic_TL e, VAF_Column c "
-                        + "WHERE e.VAF_Language=AD_PrintFormatItem_Trl.VAF_Language"
+                        + "WHERE e.VAF_Language=VAF_Print_Rpt_LItem_TL.VAF_Language"
                         + " AND e.VAF_ColumnDic_ID=c.VAF_ColumnDic_ID"
                         + " AND c.VAF_Column_ID=" + GetVAF_Column_ID()
-                        + " AND AD_PrintFormatItem_Trl.AD_PrintFormatItem_ID = " + Get_ID() + ")"
+                        + " AND VAF_Print_Rpt_LItem_TL.VAF_Print_Rpt_LItem_ID = " + Get_ID() + ")"
                     + " AND EXISTS (SELECT * FROM VAF_Client "
-                        + "WHERE VAF_Client_ID=AD_PrintFormatItem_Trl.VAF_Client_ID AND IsMultiLingualDocument='Y')";
+                        + "WHERE VAF_Client_ID=VAF_Print_Rpt_LItem_TL.VAF_Client_ID AND IsMultiLingualDocument='Y')";
                 int no = DataBase.DB.ExecuteQuery(sql, null, Get_Trx());
             }
 

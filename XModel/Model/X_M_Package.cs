@@ -272,8 +272,8 @@ public Boolean IsDTD001_IsPackgConfirm()
     }
     return false;
 }
-/** C_DocType_ID AD_Reference_ID=170 */
-public static int C_DOCTYPE_ID_AD_Reference_ID = 170;
+/** C_DocType_ID VAF_Control_Ref_ID=170 */
+public static int C_DOCTYPE_ID_VAF_Control_Ref_ID = 170;
 /** Set Document Type.
 @param C_DocType_ID Document type or rules */
 public void SetC_DocType_ID(int C_DocType_ID)

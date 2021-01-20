@@ -22,7 +22,7 @@ public X_VAF_QuickSearchColumn (Context ctx, int VAF_QuickSearchColumn_ID, Trx t
 {
 SetVAF_QuickSearchColumn_ID (0);
 SetVAF_QuickSearchWindow_ID (0);
-SetAD_Reference_ID (0);
+SetVAF_Control_Ref_ID (0);
 SetEntityType (null);	// U
 SetIsDisplayed (true);	// Y
 SetIsIdentifier (false);
@@ -41,7 +41,7 @@ public X_VAF_QuickSearchColumn (Ctx ctx, int VAF_QuickSearchColumn_ID, Trx trxNa
 {
 SetVAF_QuickSearchColumn_ID (0);
 SetVAF_QuickSearchWindow_ID (0);
-SetAD_Reference_ID (0);
+SetVAF_Control_Ref_ID (0);
 SetEntityType (null);	// U
 SetIsDisplayed (true);	// Y
 SetIsIdentifier (false);
@@ -179,20 +179,20 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_Reference_ID AD_Reference_ID=1 */
-public static int AD_REFERENCE_ID_AD_Reference_ID=1;
+/** VAF_Control_Ref_ID VAF_Control_Ref_ID=1 */
+public static int VAF_CONTROL_REF_ID_VAF_Control_Ref_ID=1;
 /** Set Reference.
-@param AD_Reference_ID System Reference and Validation */
-public void SetAD_Reference_ID (int AD_Reference_ID)
+@param VAF_Control_Ref_ID System Reference and Validation */
+public void SetVAF_Control_Ref_ID (int VAF_Control_Ref_ID)
 {
-if (AD_Reference_ID < 1) throw new ArgumentException ("AD_Reference_ID is mandatory.");
-Set_Value ("AD_Reference_ID", AD_Reference_ID);
+if (VAF_Control_Ref_ID < 1) throw new ArgumentException ("VAF_Control_Ref_ID is mandatory.");
+Set_Value ("VAF_Control_Ref_ID", VAF_Control_Ref_ID);
 }
 /** Get Reference.
 @return System Reference and Validation */
-public int GetAD_Reference_ID() 
+public int GetVAF_Control_Ref_ID() 
 {
-Object ii = Get_Value("AD_Reference_ID");
+Object ii = Get_Value("VAF_Control_Ref_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -214,8 +214,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

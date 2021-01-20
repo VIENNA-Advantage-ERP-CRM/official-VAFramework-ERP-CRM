@@ -336,7 +336,7 @@ namespace VAdvantage.Acct
                     int custCnt = 0;
 
                     //Check For Country Of Organization And Customer
-                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM VAF_OrgInfo org INNER JOIN C_Location loc ON (org.C_Location_ID=loc.C_Location_ID) WHERE org.VAF_Org_ID=" + GetVAF_Org_ID()));
+                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM VAF_OrgDetail org INNER JOIN C_Location loc ON (org.C_Location_ID=loc.C_Location_ID) WHERE org.VAF_Org_ID=" + GetVAF_Org_ID()));
                     custCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.C_Country_ID FROM C_Invoice inv INNER JOIN C_Bpartner_Location bl ON (inv.C_Bpartner_Location_ID=bl.C_Bpartner_Location_ID) INNER JOIN C_Location loc ON (bl.C_Location_ID=loc.C_Location_ID) WHERE inv.C_Invoice_ID=" + Get_ID()));
 
                     if (orgCnt == custCnt)

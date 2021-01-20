@@ -21,7 +21,7 @@ public X_VAF_Page_Rights (Context ctx, int VAF_Page_Rights_ID, Trx trxName) : ba
 /** if (VAF_Page_Rights_ID == 0)
 {
 SetVAF_Page_ID (0);
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadWrite (false);
 }
  */
@@ -31,7 +31,7 @@ public X_VAF_Page_Rights (Ctx ctx, int VAF_Page_Rights_ID, Trx trxName) : base (
 /** if (VAF_Page_Rights_ID == 0)
 {
 SetVAF_Page_ID (0);
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetIsReadWrite (false);
 }
  */
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -148,7 +148,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Role_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set Read Write.
 @param IsReadWrite Field is read / write */

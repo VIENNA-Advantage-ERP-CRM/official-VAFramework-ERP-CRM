@@ -146,8 +146,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** BasisType AD_Reference_ID=1000032 */
-public static int BASISTYPE_AD_Reference_ID=1000032;
+/** BasisType VAF_Control_Ref_ID=1000032 */
+public static int BASISTYPE_VAF_Control_Ref_ID=1000032;
 /** Per Batch = B */
 public static String BASISTYPE_PerBatch = "B";
 /** Per Item = I */
@@ -209,8 +209,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** CostingMethod AD_Reference_ID=122 */
-public static int COSTINGMETHOD_AD_Reference_ID=122;
+/** CostingMethod VAF_Control_Ref_ID=122 */
+public static int COSTINGMETHOD_VAF_Control_Ref_ID=122;
 /** Average PO = A */
 public static String COSTINGMETHOD_AveragePO = "A";
 /** Fifo = F */
@@ -375,8 +375,8 @@ if (oo != null)
 return false;
 }
 
-/** IsThisLevel AD_Reference_ID=319 */
-public static int ISTHISLEVEL_AD_Reference_ID=319;
+/** IsThisLevel VAF_Control_Ref_ID=319 */
+public static int ISTHISLEVEL_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISTHISLEVEL_No = "N";
 /** Yes = Y */
@@ -409,8 +409,8 @@ public String GetIsThisLevel()
 return (String)Get_Value("IsThisLevel");
 }
 
-/** IsUserDefined AD_Reference_ID=319 */
-public static int ISUSERDEFINED_AD_Reference_ID=319;
+/** IsUserDefined VAF_Control_Ref_ID=319 */
+public static int ISUSERDEFINED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISUSERDEFINED_No = "N";
 /** Yes = Y */

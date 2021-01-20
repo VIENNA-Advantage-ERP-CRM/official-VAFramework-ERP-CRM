@@ -114,7 +114,7 @@ namespace VAdvantage.Model
             //	Get all at once
             String sql = "SELECT c.C_TaxCategory_ID, o.C_Location_ID, il.C_Location_ID, b.IsTaxExempt,"
                  + " w.C_Location_ID, sl.C_Location_ID "
-                 + "FROM C_Charge c, VAF_OrgInfo o,"
+                 + "FROM C_Charge c, VAF_OrgDetail o,"
                  + " C_BPartner_Location il INNER JOIN C_BPartner b ON (il.C_BPartner_ID=b.C_BPartner_ID),"
                  + " M_Warehouse w, C_BPartner_Location sl "
                  + "WHERE c.C_Charge_ID=" + C_Charge_ID
@@ -216,7 +216,7 @@ namespace VAdvantage.Model
                 //	Get all at once
                 String sql = "SELECT p.C_TaxCategory_ID, o.C_Location_ID, il.C_Location_ID, b.IsTaxExempt,"
                     + " w.C_Location_ID, sl.C_Location_ID "
-                    + "FROM M_Product p, VAF_OrgInfo o,"
+                    + "FROM M_Product p, VAF_OrgDetail o,"
                     + " C_BPartner_Location il INNER JOIN C_BPartner b ON (il.C_BPartner_ID=b.C_BPartner_ID),"
                     + " M_Warehouse w, C_BPartner_Location sl "
                     + "WHERE p.M_Product_ID=" + M_Product_ID
@@ -289,7 +289,7 @@ namespace VAdvantage.Model
                 }
                 log.Fine("C_TaxCategory_ID=" + C_TaxCategory_ID);
                 //	VAF_Org_ID					->	billFromC_Location_ID
-                sql = "SELECT C_Location_ID FROM VAF_OrgInfo "
+                sql = "SELECT C_Location_ID FROM VAF_OrgDetail "
                     + "WHERE VAF_Org_ID=" + VAF_Org_ID;
                 variable = "VAF_Org_ID";
                 pstmt = ExecuteQuery.ExecuteDataset(sql, null);

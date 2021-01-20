@@ -245,8 +245,8 @@ if (oo != null)
 return false;
 }
 
-/** Supervisor_ID AD_Reference_ID=110 */
-public static int SUPERVISOR_ID_AD_Reference_ID=110;
+/** Supervisor_ID VAF_Control_Ref_ID=110 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=110;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)

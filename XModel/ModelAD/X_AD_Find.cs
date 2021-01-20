@@ -121,8 +121,8 @@ StringBuilder sb = new StringBuilder ("X_VAF_Search[").Append(Get_ID()).Append("
 return sb.ToString();
 }
 
-/** VAF_Column_ID AD_Reference_ID=251 */
-public static int VAF_COLUMN_ID_AD_Reference_ID=251;
+/** VAF_Column_ID VAF_Control_Ref_ID=251 */
+public static int VAF_COLUMN_ID_VAF_Control_Ref_ID=251;
 /** Set Column.
 @param VAF_Column_ID Column in the table */
 public void SetVAF_Column_ID (int VAF_Column_ID)
@@ -160,8 +160,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_Search_ID().ToString());
 }
 
-/** AndOr AD_Reference_ID=204 */
-public static int ANDOR_AD_Reference_ID=204;
+/** AndOr VAF_Control_Ref_ID=204 */
+public static int ANDOR_VAF_Control_Ref_ID=204;
 /** And = A */
 public static String ANDOR_And = "A";
 /** Or = O */
@@ -209,8 +209,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** Operation AD_Reference_ID=205 */
-public static int OPERATION_AD_Reference_ID=205;
+/** Operation VAF_Control_Ref_ID=205 */
+public static int OPERATION_VAF_Control_Ref_ID=205;
 /** != = != */
 public static String OPERATION_NotEq = "!=";
 /** < = << */

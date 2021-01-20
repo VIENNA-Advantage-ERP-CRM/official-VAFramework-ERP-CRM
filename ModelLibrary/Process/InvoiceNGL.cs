@@ -113,7 +113,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 _DateReval = DateTime.Now; //new Timestamp(System.currentTimeMillis());
             }
             //	Delete - just to be sure
-            String sql = "DELETE FROM T_InvoiceGL WHERE AD_PInstance_ID=" + GetAD_PInstance_ID();  //jz FROM
+            String sql = "DELETE FROM T_InvoiceGL WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();  //jz FROM
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no > 0)
             {
@@ -123,13 +123,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Insert Trx
             String dateStr = DataBase.DB.TO_DATE(_DateReval, true);
             sql = "INSERT INTO T_InvoiceGL (VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
-             + " AD_PInstance_ID, C_Invoice_ID, GrandTotal, OpenAmt, "
+             + " VAF_JInstance_ID, C_Invoice_ID, GrandTotal, OpenAmt, "
              + " Fact_Acct_ID, AmtSourceBalance, AmtAcctBalance, "
              + " AmtRevalDr, AmtRevalCr, C_DocTypeReval_ID, IsAllCurrencies, "
              + " DateReval, C_ConversionTypeReval_ID, AmtRevalDrDiff, AmtRevalCrDiff, APAR) "
                 //	--
              + "SELECT i.VAF_Client_ID, i.VAF_Org_ID, i.IsActive, i.Created,i.CreatedBy, i.Updated,i.UpdatedBy,"
-             + GetAD_PInstance_ID() + ", i.C_Invoice_ID, i.GrandTotal, invoiceOpen(i.C_Invoice_ID, 0), "
+             + GetVAF_JInstance_ID() + ", i.C_Invoice_ID, i.GrandTotal, invoiceOpen(i.C_Invoice_ID, 0), "
              + " fa.Fact_Acct_ID, fa.AmtSourceDr-fa.AmtSourceCr, fa.AmtAcctDr-fa.AmtAcctCr, "
                 //	AmtRevalDr, AmtRevalCr,
              + " currencyConvert(fa.AmtSourceDr, i.C_Currency_ID, a.C_Currency_ID, " + dateStr + ", " + _C_ConversionTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
@@ -183,7 +183,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "(SELECT gl.AmtRevalDr-fa.AmtAcctDr, gl.AmtRevalCr-fa.AmtAcctCr "
                     + "FROM Fact_Acct fa "
                     + "WHERE gl.Fact_Acct_ID=fa.Fact_Acct_ID) "
-                + "WHERE AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             int noT = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (noT > 0)
             {
@@ -192,7 +192,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Percentage
             sql = "UPDATE T_InvoiceGL SET PercentGL = 100 "
-                + "WHERE GrandTotal=OpenAmt AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + "WHERE GrandTotal=OpenAmt AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no > 0)
             {
@@ -200,7 +200,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             sql = "UPDATE T_InvoiceGL SET PercentGL = ROUND(OpenAmt*100/GrandTotal,6) "
-                + "WHERE GrandTotal<>OpenAmt AND GrandTotal <> 0 AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + "WHERE GrandTotal<>OpenAmt AND GrandTotal <> 0 AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no > 0)
             {
@@ -211,7 +211,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " AmtRevalCr = AmtRevalCr * PercentGL/100,"
                 + " AmtRevalDrDiff = AmtRevalDrDiff * PercentGL/100,"
                 + " AmtRevalCrDiff = AmtRevalCrDiff * PercentGL/100 "
-                + "WHERE PercentGL <> 100 AND AD_PInstance_ID=" + GetAD_PInstance_ID();
+                + "WHERE PercentGL <> 100 AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no > 0)
             {
@@ -242,7 +242,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             List<X_T_InvoiceGL> list = new List<X_T_InvoiceGL>();
             String sql = "SELECT * FROM T_InvoiceGL "
-                + "WHERE AD_PInstance_ID=" + GetAD_PInstance_ID()
+                + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID()
                 + " ORDER BY VAF_Org_ID";
             IDataReader idr = null;
             try

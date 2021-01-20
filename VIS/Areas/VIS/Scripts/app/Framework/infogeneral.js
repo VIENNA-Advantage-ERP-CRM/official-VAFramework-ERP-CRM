@@ -277,9 +277,9 @@
                 var srchCtrl = {
                 };
 
-                ctrl = new VIS.Controls.VTextBox(schema[item].ColumnName, false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+                ctrl = new VIS.Controls.VTextBox(schema[item].ColumnName, false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = schema[item].ColumnName;
                 // Change done by mohit asked by mukesh sir to show the data on info window from translated tab if logged in with langauge other than base language- 22/03/2018
                 srchCtrl.IsTranslated = schema[item].IsTranslated;
@@ -351,7 +351,7 @@
             for (var item in displayCols) {
 
 
-                displayType = displayCols[item].AD_Reference_ID;
+                displayType = displayCols[item].VAF_Control_Ref_ID;
                 if (displayType == VIS.DisplayType.YesNo) {
                     sql += " ( CASE " + tableName + "." + displayCols[item].ColumnName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (displayCols[item].ColumnName);
                 }
@@ -527,7 +527,7 @@
 
                     resizable: true
                 }
-                displayType = displayCols[item].AD_Reference_ID;
+                displayType = displayCols[item].VAF_Control_Ref_ID;
 
                 oColumn.caption = displayCols[item].Name;
                 oColumn.field = displayCols[item].ColumnName.toUpperCase();

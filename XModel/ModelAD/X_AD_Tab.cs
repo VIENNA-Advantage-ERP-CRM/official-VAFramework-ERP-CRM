@@ -56,15 +56,15 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAF_Tab[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** VAF_ColumnSortOrder_ID AD_Reference_ID=257 */
-public static int VAF_COLUMNSORTORDER_ID_AD_Reference_ID=257;/** Set Order Column.
+/** VAF_ColumnSortOrder_ID VAF_Control_Ref_ID=257 */
+public static int VAF_COLUMNSORTORDER_ID_VAF_Control_Ref_ID=257;/** Set Order Column.
 @param VAF_ColumnSortOrder_ID Column determining the order */
 public void SetVAF_ColumnSortOrder_ID (int VAF_ColumnSortOrder_ID){if (VAF_ColumnSortOrder_ID <= 0) Set_Value ("VAF_ColumnSortOrder_ID", null);else
 Set_Value ("VAF_ColumnSortOrder_ID", VAF_ColumnSortOrder_ID);}/** Get Order Column.
 @return Column determining the order */
 public int GetVAF_ColumnSortOrder_ID() {Object ii = Get_Value("VAF_ColumnSortOrder_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** VAF_ColumnSortYesNo_ID AD_Reference_ID=258 */
-public static int VAF_COLUMNSORTYESNO_ID_AD_Reference_ID=258;/** Set Included Column.
+/** VAF_ColumnSortYesNo_ID VAF_Control_Ref_ID=258 */
+public static int VAF_COLUMNSORTYESNO_ID_VAF_Control_Ref_ID=258;/** Set Included Column.
 @param VAF_ColumnSortYesNo_ID Column determining if a Table Column is included in Ordering */
 public void SetVAF_ColumnSortYesNo_ID (int VAF_ColumnSortYesNo_ID){if (VAF_ColumnSortYesNo_ID <= 0) Set_Value ("VAF_ColumnSortYesNo_ID", null);else
 Set_Value ("VAF_ColumnSortYesNo_ID", VAF_ColumnSortYesNo_ID);}/** Get Included Column.
@@ -90,11 +90,11 @@ public void SetVAF_Image_ID (int VAF_Image_ID){if (VAF_Image_ID <= 0) Set_Value 
 Set_Value ("VAF_Image_ID", VAF_Image_ID);}/** Get Image.
 @return Image or Icon */
 public int GetVAF_Image_ID() {Object ii = Get_Value("VAF_Image_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Process.
-@param AD_Process_ID Process or Report */
-public void SetAD_Process_ID (int AD_Process_ID){if (AD_Process_ID <= 0) Set_Value ("AD_Process_ID", null);else
-Set_Value ("AD_Process_ID", AD_Process_ID);}/** Get Process.
+@param VAF_Job_ID Process or Report */
+public void SetVAF_Job_ID (int VAF_Job_ID){if (VAF_Job_ID <= 0) Set_Value ("VAF_Job_ID", null);else
+Set_Value ("VAF_Job_ID", VAF_Job_ID);}/** Get Process.
 @return Process or Report */
-public int GetAD_Process_ID() {Object ii = Get_Value("AD_Process_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Tab.
+public int GetVAF_Job_ID() {Object ii = Get_Value("VAF_Job_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Tab.
 @param VAF_Tab_ID Tab within a Window */
 public void SetVAF_Tab_ID (int VAF_Tab_ID){if (VAF_Tab_ID < 1) throw new ArgumentException ("VAF_Tab_ID is mandatory.");Set_ValueNoCheck ("VAF_Tab_ID", VAF_Tab_ID);}/** Get Tab.
 @return Tab within a Window */
@@ -125,8 +125,8 @@ public String GetDescription() {return (String)Get_Value("Description");}/** Set
 public void SetDisplayLogic (String DisplayLogic){if (DisplayLogic != null && DisplayLogic.Length > 2000){log.Warning("Length > 2000 - truncated");DisplayLogic = DisplayLogic.Substring(0,2000);}Set_Value ("DisplayLogic", DisplayLogic);}/** Get Display Logic.
 @return If the Field is displayed, the result determines if the field is actually displayed */
 public String GetDisplayLogic() {return (String)Get_Value("DisplayLogic");}
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;/** Set Entity Type.
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;/** Set Entity Type.
 @param EntityType Dictionary Entity Type; Determines ownership and synchronization */
 public void SetEntityType (String EntityType){if (EntityType.Length > 4){log.Warning("Length > 4 - truncated");EntityType = EntityType.Substring(0,4);}Set_Value ("EntityType", EntityType);}/** Get Entity Type.
 @return Dictionary Entity Type; Determines ownership and synchronization */
@@ -147,8 +147,8 @@ public String GetHelp() {return (String)Get_Value("Help");}/** Set Import Fields
 public void SetImportFields (String ImportFields){if (ImportFields != null && ImportFields.Length > 1){log.Warning("Length > 1 - truncated");ImportFields = ImportFields.Substring(0,1);}Set_Value ("ImportFields", ImportFields);}/** Get Import Fields.
 @return Create Fields from Table Columns */
 public String GetImportFields() {return (String)Get_Value("ImportFields");}
-/** Included_Tab_ID AD_Reference_ID=278 */
-public static int INCLUDED_TAB_ID_AD_Reference_ID=278;/** Set Included Tab.
+/** Included_Tab_ID VAF_Control_Ref_ID=278 */
+public static int INCLUDED_TAB_ID_VAF_Control_Ref_ID=278;/** Set Included Tab.
 @param Included_Tab_ID Included Tab in this Tab (Master Detail) */
 public void SetIncluded_Tab_ID (int Included_Tab_ID){if (Included_Tab_ID <= 0) Set_Value ("Included_Tab_ID", null);else
 Set_Value ("Included_Tab_ID", Included_Tab_ID);}/** Get Included Tab.
@@ -206,8 +206,8 @@ public Boolean IsProcessing() {Object oo = Get_Value("Processing");if (oo != nul
 public void SetReadOnlyLogic (String ReadOnlyLogic){if (ReadOnlyLogic != null && ReadOnlyLogic.Length > 2000){log.Warning("Length > 2000 - truncated");ReadOnlyLogic = ReadOnlyLogic.Substring(0,2000);}Set_Value ("ReadOnlyLogic", ReadOnlyLogic);}/** Get Read Only Logic.
 @return Logic to determine if field is read only (applies only when field is read-write) */
 public String GetReadOnlyLogic() {return (String)Get_Value("ReadOnlyLogic");}
-/** Referenced_Tab_ID AD_Reference_ID=278 */
-public static int REFERENCED_TAB_ID_AD_Reference_ID=278;/** Set Referenced Tab.
+/** Referenced_Tab_ID VAF_Control_Ref_ID=278 */
+public static int REFERENCED_TAB_ID_VAF_Control_Ref_ID=278;/** Set Referenced Tab.
 @param Referenced_Tab_ID Referenced Tab */
 public void SetReferenced_Tab_ID (int Referenced_Tab_ID){if (Referenced_Tab_ID <= 0) Set_Value ("Referenced_Tab_ID", null);else
 Set_Value ("Referenced_Tab_ID", Referenced_Tab_ID);}/** Get Referenced Tab.
@@ -225,8 +225,8 @@ public Boolean IsShowSummaryLevelNodes() {Object oo = Get_Value("ShowSummaryLeve
 public void SetTabLevel (int TabLevel){Set_Value ("TabLevel", TabLevel);}/** Get Tab Level.
 @return Hierarchical Tab Level (0 = top) */
 public int GetTabLevel() {Object ii = Get_Value("TabLevel");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** TabPanelAlignment AD_Reference_ID=1000223 */
-public static int TABPANELALIGNMENT_AD_Reference_ID=1000223;/** Horizontal = H */
+/** TabPanelAlignment VAF_Control_Ref_ID=1000223 */
+public static int TABPANELALIGNMENT_VAF_Control_Ref_ID=1000223;/** Horizontal = H */
 public static String TABPANELALIGNMENT_Horizontal = "H";/** Vertical = V */
 public static String TABPANELALIGNMENT_Vertical = "V";/** Is test a valid value.
 @param test testvalue

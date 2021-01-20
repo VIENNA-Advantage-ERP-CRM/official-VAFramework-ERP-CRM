@@ -219,9 +219,9 @@
             var srchCtrl = {
             };
 
-            ctrl = new VIS.Controls.VTextBox("Value", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            ctrl = new VIS.Controls.VTextBox("Value", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = ctrl;
-            srchCtrl.AD_Reference_ID = 10;
+            srchCtrl.VAF_Control_Ref_ID = 10;
             srchCtrl.ColumnName = "Value";
             var tdctrl = $("<td>");
             //tr.append(tdctrl);
@@ -244,9 +244,9 @@
             var srchCtrl = {
             };
 
-            ctrl = new VIS.Controls.VTextBox("Name", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            ctrl = new VIS.Controls.VTextBox("Name", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = ctrl;
-            srchCtrl.AD_Reference_ID = 10;
+            srchCtrl.VAF_Control_Ref_ID = 10;
             srchCtrl.ColumnName = "Name";
             ctrl.setValue(value);
             var tdctrl = $("<td>");
@@ -270,9 +270,9 @@
             var srchCtrl = {
             };
 
-            ctrl = new VIS.Controls.VTextBox("UPC", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            ctrl = new VIS.Controls.VTextBox("UPC", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = ctrl;
-            srchCtrl.AD_Reference_ID = 10;
+            srchCtrl.VAF_Control_Ref_ID = 10;
             srchCtrl.ColumnName = "UPC";
             //var tdctrl = $("<td>");
             //tr.append(tdctrl);
@@ -295,9 +295,9 @@
             var srchCtrl = {
             };
 
-            ctrl = new VIS.Controls.VTextBox("SKU", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            ctrl = new VIS.Controls.VTextBox("SKU", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = ctrl;
-            srchCtrl.AD_Reference_ID = 10;
+            srchCtrl.VAF_Control_Ref_ID = 10;
             srchCtrl.ColumnName = "SKU";
             var tdctrl = $("<td>");
             //tr.append(tdctrl);
@@ -320,9 +320,9 @@
             var srchCtrl = {
             };
 
-            cmbWarehoue = new VIS.Controls.VComboBox("M_Warehouse_ID", false, false, true, null, 50);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            cmbWarehoue = new VIS.Controls.VComboBox("M_Warehouse_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = cmbWarehoue;
-            srchCtrl.AD_Reference_ID = VIS.DisplayType.tableDir;
+            srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.tableDir;
             srchCtrl.ColumnName = "M_Warehouse_ID";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
@@ -345,9 +345,9 @@
             var srchCtrl = {
             };
 
-            cmbPriceList = new VIS.Controls.VComboBox("M_PriceList_Version_ID", false, false, true, null, 50);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            cmbPriceList = new VIS.Controls.VComboBox("M_PriceList_Version_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = cmbPriceList;
-            srchCtrl.AD_Reference_ID = VIS.DisplayType.tableDir;
+            srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.tableDir;
             srchCtrl.ColumnName = "M_PriceList_Version_ID";
             var tdctrl = $("<td>");
             //tr.append(tdctrl);
@@ -372,9 +372,9 @@
             var srchCtrl = {
             };
 
-            ctrl = new VIS.Controls.VTextBox("AttributeCode", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            ctrl = new VIS.Controls.VTextBox("AttributeCode", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = ctrl;
-            srchCtrl.AD_Reference_ID = 10;
+            srchCtrl.VAF_Control_Ref_ID = 10;
             srchCtrl.ColumnName = "AttributeCode";
             var tdctrl = $("<td>");
             //tr.append(tdctrl);
@@ -397,9 +397,9 @@
             //tableSArea.append(tr);
             var srchCtrl = {
             };
-            cmbAttributeSet = new VIS.Controls.VComboBox("M_AttributeSet_ID", false, false, true, null, 50);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+            cmbAttributeSet = new VIS.Controls.VComboBox("M_AttributeSet_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = cmbAttributeSet;
-            srchCtrl.AD_Reference_ID = VIS.DisplayType.tableDir;
+            srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.tableDir;
             srchCtrl.ColumnName = "M_AttributeSet_ID";
             var tdctrl = $("<td>");
             //tr.append(tdctrl);
@@ -518,7 +518,7 @@
             //$AttrSetInstControl.getBtn(1).css("height", "26px");
             //$AttrSetInstControl.getBtn(1).css("margin-top", "-1px");
             srchCtrl.Ctrl = $AttrSetInstControl;
-            srchCtrl.AD_Reference_ID = VIS.DisplayType.Search;
+            srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.Search;
             srchCtrl.ColumnName = "M_AttributeSetInstance_ID";
             var td = $("<td>");
             var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
@@ -1975,7 +1975,7 @@
             var count = $.makeArray(displayCols).length;
             //get Qry from InfoColumns
             for (var item in displayCols) {
-                displayType = displayCols[item].AD_Reference_ID;
+                displayType = displayCols[item].VAF_Control_Ref_ID;
                 if (displayType == VIS.DisplayType.YesNo) {
                     sql += " ( CASE " + displayCols[item].ColumnSQL + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) " + displayCols[item].ColumnName;
                 }
@@ -2163,7 +2163,7 @@
 
                     resizable: true
                 }
-                displayType = displayCols[item].AD_Reference_ID;
+                displayType = displayCols[item].VAF_Control_Ref_ID;
 
                 oColumn.caption = displayCols[item].Name;
                 oColumn.field = displayCols[item].ColumnName.toUpperCase();

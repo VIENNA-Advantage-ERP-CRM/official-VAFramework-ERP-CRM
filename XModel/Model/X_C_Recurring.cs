@@ -122,8 +122,8 @@ SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
         public void SetFrequency(int Frequency) { Set_Value("Frequency", Frequency); }/** Get Frequency.
 @return Frequency of events */
         public int GetFrequency() { Object ii = Get_Value("Frequency"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** FrequencyType AD_Reference_ID=283 */
-        public static int FREQUENCYTYPE_AD_Reference_ID = 283;/** Daily = D */
+        /** FrequencyType VAF_Control_Ref_ID=283 */
+        public static int FREQUENCYTYPE_VAF_Control_Ref_ID = 283;/** Daily = D */
         public static String FREQUENCYTYPE_Daily = "D";/** Monthly = M */
         public static String FREQUENCYTYPE_Monthly = "M";/** Quarterly = Q */
         public static String FREQUENCYTYPE_Quarterly = "Q";/** Weekly = W */
@@ -171,8 +171,8 @@ SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
         public void SetProcessing(Boolean Processing) { Set_Value("Processing", Processing); }/** Get Process Now.
 @return Process Now */
         public Boolean IsProcessing() { Object oo = Get_Value("Processing"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** RecurringType AD_Reference_ID=282 */
-        public static int RECURRINGTYPE_AD_Reference_ID = 282;/** GL Journal = B */
+        /** RecurringType VAF_Control_Ref_ID=282 */
+        public static int RECURRINGTYPE_VAF_Control_Ref_ID = 282;/** GL Journal = B */
         public static String RECURRINGTYPE_GLJournal = "B";/** GL Journal Batch = G */
         public static String RECURRINGTYPE_GLJournalBatch = "G";/** Invoice = I */
         public static String RECURRINGTYPE_Invoice = "I";/** Project = J */

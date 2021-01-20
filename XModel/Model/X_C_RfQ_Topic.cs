@@ -61,15 +61,15 @@ namespace VAdvantage.Model
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_C_RfQ_Topic[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Print Format.
-@param AD_PrintFormat_ID Data Print Format */
-        public void SetAD_PrintFormat_ID(int AD_PrintFormat_ID)
+@param VAF_Print_Rpt_Layout_ID Data Print Format */
+        public void SetVAF_Print_Rpt_Layout_ID(int VAF_Print_Rpt_Layout_ID)
         {
-            if (AD_PrintFormat_ID <= 0) Set_Value("AD_PrintFormat_ID", null);
+            if (VAF_Print_Rpt_Layout_ID <= 0) Set_Value("VAF_Print_Rpt_Layout_ID", null);
             else
-                Set_Value("AD_PrintFormat_ID", AD_PrintFormat_ID);
+                Set_Value("VAF_Print_Rpt_Layout_ID", VAF_Print_Rpt_Layout_ID);
         }/** Get Print Format.
 @return Data Print Format */
-        public int GetAD_PrintFormat_ID() { Object ii = Get_Value("AD_PrintFormat_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set RfQ Topic.
+        public int GetVAF_Print_Rpt_Layout_ID() { Object ii = Get_Value("VAF_Print_Rpt_Layout_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set RfQ Topic.
 @param C_RfQ_Topic_ID Topic for Request for Quotations */
         public void SetC_RfQ_Topic_ID(int C_RfQ_Topic_ID) { if (C_RfQ_Topic_ID < 1) throw new ArgumentException("C_RfQ_Topic_ID is mandatory."); Set_ValueNoCheck("C_RfQ_Topic_ID", C_RfQ_Topic_ID); }/** Get RfQ Topic.
 @return Topic for Request for Quotations */

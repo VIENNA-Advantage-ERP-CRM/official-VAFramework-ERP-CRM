@@ -22,7 +22,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// 
     /// </summary>
-    public class MPrintColor : X_AD_PrintColor
+    public class MPrintColor : X_VAF_Print_Rpt_Colour
     {
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MPrintColor).FullName);
@@ -63,46 +63,46 @@ namespace VAdvantage.Model
         /** Dark Brown			*/
         public static Color darkBrown = Color.FromArgb(102, 51, 0);
 
-        static private CCache<int, MPrintColor> _colors = new CCache<int, MPrintColor>("AD_PrintColor", 20);
+        static private CCache<int, MPrintColor> _colors = new CCache<int, MPrintColor>("VAF_Print_Rpt_Colour", 20);
 
 
-        static public MPrintColor Get(Ctx ctx, int AD_PrintColor_ID)
+        static public MPrintColor Get(Ctx ctx, int VAF_Print_Rpt_Colour_ID)
         {
-            //	if (AD_PrintColor_ID == 0)
+            //	if (VAF_Print_Rpt_Colour_ID == 0)
             //		return new MPrintColor (ctx, 0);
             //Info
-            int key = AD_PrintColor_ID;
+            int key = VAF_Print_Rpt_Colour_ID;
             MPrintColor pc = (MPrintColor)_colors[key];
             if (pc == null)
             {
-                pc = new MPrintColor(ctx, AD_PrintColor_ID, null);
+                pc = new MPrintColor(ctx, VAF_Print_Rpt_Colour_ID, null);
                 _colors.Add(key, pc);
             }
             return pc;
         }	//	get
 
-        static public MPrintColor Get(Ctx ctx, String AD_PrintColor_ID)
+        static public MPrintColor Get(Ctx ctx, String VAF_Print_Rpt_Colour_ID)
         {
-            if (AD_PrintColor_ID == null || AD_PrintColor_ID.Length == 0)
+            if (VAF_Print_Rpt_Colour_ID == null || VAF_Print_Rpt_Colour_ID.Length == 0)
                 return null;
             try
             {
-                int id = int.Parse(AD_PrintColor_ID);
+                int id = int.Parse(VAF_Print_Rpt_Colour_ID);
                 return Get(ctx, id);
             }
             catch (Exception e)
             {
-                _log.Log(Level.SEVERE, "AD_PrintColor_ID=" + AD_PrintColor_ID
+                _log.Log(Level.SEVERE, "VAF_Print_Rpt_Colour_ID=" + VAF_Print_Rpt_Colour_ID
                 + " - " + e.ToString());
             }
             return null;
         }
 
 
-        public MPrintColor(Ctx ctx, int AD_PrintColor_ID, Trx trxName)
-            : base(ctx, AD_PrintColor_ID, trxName)
+        public MPrintColor(Ctx ctx, int VAF_Print_Rpt_Colour_ID, Trx trxName)
+            : base(ctx, VAF_Print_Rpt_Colour_ID, trxName)
         {
-            if (AD_PrintColor_ID == 0)
+            if (VAF_Print_Rpt_Colour_ID == 0)
                 SetIsDefault(false);
         }	//	MPrintColor
 

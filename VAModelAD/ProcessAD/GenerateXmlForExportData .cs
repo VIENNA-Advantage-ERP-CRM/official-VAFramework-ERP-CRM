@@ -47,7 +47,7 @@ namespace VAdvantage.Process
 
         private DataSet ds; //Stores all the fetched records
 
-        String[] _ExceptionTables = new String[] { "AD_Role", "AD_User" };   //Stores tables which are not be included
+        String[] _ExceptionTables = new String[] { "VAF_Role", "AD_User" };   //Stores tables which are not be included
 
         // lock for simultaneous process
         private object _lock = new object();
@@ -319,7 +319,7 @@ namespace VAdvantage.Process
             //if (res.Count() <= 0)
             {
                 _ExecutedRecordList.Add(refRecord);
-                String chkRef = "SELECT * FROM AD_Reference WHERE IsActive = 'Y' AND AD_Reference_ID =" + refVID;
+                String chkRef = "SELECT * FROM VAF_Control_Ref WHERE IsActive = 'Y' AND VAF_Control_Ref_ID =" + refVID;
                 String ValidationType = "";
                 DataSet tmpDS = DB.ExecuteDataset(chkRef);
                 if (tmpDS.Tables[0].Rows[0]["ValidationType"] != DBNull.Value)
@@ -333,11 +333,11 @@ namespace VAdvantage.Process
 
                 DataSet tempRefDS = tmpDS.Copy();
 
-                if (!String.IsNullOrEmpty(ValidationType)) //if reference entry is found, chck furhter for ad_ref_list records
+                if (!String.IsNullOrEmpty(ValidationType)) //if reference entry is found, chck furhter for VAF_CtrlRef_List records
                 {
-                    String refTableName = ValidationType.Equals("L") ? "AD_Ref_List" : "AD_Ref_Table";
+                    String refTableName = ValidationType.Equals("L") ? "VAF_CtrlRef_List" : "VAF_CtrlRef_Table";
 
-                    tmpDS = DB.ExecuteDataset(GetSql(refTableName, refVID, "AD_Reference_ID"));
+                    tmpDS = DB.ExecuteDataset(GetSql(refTableName, refVID, "VAF_Control_Ref_ID"));
                     tmpDS.Tables[0].TableName = refTableName;
 
                     for (int a = 0; a < tmpDS.Tables[0].Rows.Count; a++)
@@ -348,14 +348,14 @@ namespace VAdvantage.Process
                             int PrimaryID = 0;
                             if (ValidationType.Equals("T"))
                             {
-                                tempStore = "AD_Reference_ID";
+                                tempStore = "VAF_Control_Ref_ID";
                                 PrimaryID = int.Parse(tmpDS.Tables[0].Rows[a][tempStore].ToString());
 
                                 refTable = new MRefTable(GetCtx(), tmpDS.Tables[0].Rows[a], null);
 
                                 if (tmpDS.Tables[0].Rows[a]["Export_ID"].Equals(DBNull.Value))
                                 {
-                                    tmpDS.Tables[0].Rows[a]["Export_ID"] = ManageExportID(refVID, tableName, "AD_Ref_Table");
+                                    tmpDS.Tables[0].Rows[a]["Export_ID"] = ManageExportID(refVID, tableName, "VAF_CtrlRef_Table");
                                 }
                             }
                             else
@@ -449,8 +449,8 @@ namespace VAdvantage.Process
                                 for (int cols = 0; cols <= columns.Length - 1; cols++)
                                 {
                                     string colName = columns[cols].GetColumnName();
-                                    int refVID = columns[cols].GetAD_Reference_Value_ID();
-                                    int refID = columns[cols].GetAD_Reference_ID();
+                                    int refVID = columns[cols].GetVAF_Control_Ref_Value_ID();
+                                    int refID = columns[cols].GetVAF_Control_Ref_ID();
 
                                     // Special case applied for workflow table to bypass the start node on workflow- asked by mukesh sir- done by mohit- 1 February 2019.
                                     if (tableName == "AD_Workflow" && colName == "AD_WF_Node_ID")
@@ -478,7 +478,7 @@ namespace VAdvantage.Process
                                         else if (refID == DisplayType.List || refID == DisplayType.Table)
                                         {
                                             Object colValue = tmpDS.Tables[0].Rows[0][colName];
-                                            MRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("AD_Reference") }, "AD_Reference");
+                                            MRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
 
                                             if (refTable != null && colValue != null && colValue.ToString() != "")
                                             {
@@ -552,8 +552,8 @@ namespace VAdvantage.Process
                                 for (int cols = 0; cols <= columns.Length - 1; cols++)
                                 {
                                     string colName = columns[cols].GetColumnName();
-                                    int refVID = columns[cols].GetAD_Reference_Value_ID();
-                                    int refID = columns[cols].GetAD_Reference_ID();
+                                    int refVID = columns[cols].GetVAF_Control_Ref_Value_ID();
+                                    int refID = columns[cols].GetVAF_Control_Ref_ID();
 
                                     if (!columns[cols].IsStandardColumn() && !columns[cols].IsKey())
                                     {
@@ -575,7 +575,7 @@ namespace VAdvantage.Process
                                         }
                                         else if (refID == DisplayType.List || refID == DisplayType.Table)
                                         {
-                                            CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("AD_Reference") }, "AD_Reference");
+                                            CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
                                         }
                                         else
                                         {

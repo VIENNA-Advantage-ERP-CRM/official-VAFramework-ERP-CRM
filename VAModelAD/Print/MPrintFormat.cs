@@ -23,10 +23,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Print
 {
-    public class MPrintFormat : X_AD_PrintFormat
+    public class MPrintFormat : X_VAF_Print_Rpt_Layout
     {
         /** Cached Formats						*/
-        static private CCache<int, MPrintFormat> s_formats = new CCache<int, MPrintFormat>("AD_PrintFormat", 30);
+        static private CCache<int, MPrintFormat> s_formats = new CCache<int, MPrintFormat>("VAF_Print_Rpt_Layout", 30);
         private static VLogger s_log = VLogger.GetVLogger(typeof(MPrintFormat).FullName);
         public Ctx _ctx = null;
 
@@ -48,15 +48,15 @@ namespace VAdvantage.Print
         /// Use static get methods
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PrintFormat_ID">AD_PrintFormat_ID</param>
+        /// <param name="VAF_Print_Rpt_Layout_ID">VAF_Print_Rpt_Layout_ID</param>
         /// <param name="trxName">transaction</param>
-        public MPrintFormat(Ctx ctx, int AD_PrintFormat_ID, Trx trxName)
-            : base(ctx, AD_PrintFormat_ID, trxName)
+        public MPrintFormat(Ctx ctx, int VAF_Print_Rpt_Layout_ID, Trx trxName)
+            : base(ctx, VAF_Print_Rpt_Layout_ID, trxName)
         {
             _ctx = ctx;
             //	Language=[Deutsch,Locale=de_DE,VAF_Language=en_US,DatePattern=DD.MM.YYYY,DecimalPoint=false]
             _language = Env.GetLanguage(ctx);
-            if (AD_PrintFormat_ID == 0)
+            if (VAF_Print_Rpt_Layout_ID == 0)
             {
                 SetStandardHeaderFooter(true);
                 SetIsTableBased(true);
@@ -94,18 +94,18 @@ namespace VAdvantage.Print
             }
         }	//	setSatndardHeaderFooter
 
-        public static MPrintFormat Copy(Ctx ctx, int from_AD_PrintFormat_ID,
-            int to_AD_PrintFormat_ID, int to_Client_ID)
+        public static MPrintFormat Copy(Ctx ctx, int from_VAF_Print_Rpt_Layout_ID,
+            int to_VAF_Print_Rpt_Layout_ID, int to_Client_ID)
         {
             //_ctx = ctx;
-            if (from_AD_PrintFormat_ID == 0)
-                throw new ArgumentException("From_AD_PrintFormat_ID is 0");
+            if (from_VAF_Print_Rpt_Layout_ID == 0)
+                throw new ArgumentException("From_VAF_Print_Rpt_Layout_ID is 0");
             //
-            MPrintFormat from = new MPrintFormat(ctx, from_AD_PrintFormat_ID, null);
-            MPrintFormat to = new MPrintFormat(ctx, to_AD_PrintFormat_ID, null);		//	could be 0
+            MPrintFormat from = new MPrintFormat(ctx, from_VAF_Print_Rpt_Layout_ID, null);
+            MPrintFormat to = new MPrintFormat(ctx, to_VAF_Print_Rpt_Layout_ID, null);		//	could be 0
             MPrintFormat.CopyValues(from, to);
             //	New
-            if (to_AD_PrintFormat_ID == 0)
+            if (to_VAF_Print_Rpt_Layout_ID == 0)
             {
                 if (to_Client_ID < 0)
                     to_Client_ID = ctx.GetVAF_Client_ID();
@@ -129,12 +129,12 @@ namespace VAdvantage.Print
         /// Copy existing Definition To Client
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="from_AD_PrintFormat_ID"></param>
-        /// <param name="to_AD_PrintFormat_ID"></param>
+        /// <param name="from_VAF_Print_Rpt_Layout_ID"></param>
+        /// <param name="to_VAF_Print_Rpt_Layout_ID"></param>
         /// <returns>return print format</returns>
-        public static MPrintFormat Copy(Ctx ctx, int from_AD_PrintFormat_ID, int to_AD_PrintFormat_ID)
+        public static MPrintFormat Copy(Ctx ctx, int from_VAF_Print_Rpt_Layout_ID, int to_VAF_Print_Rpt_Layout_ID)
         {
-            return Copy(ctx, from_AD_PrintFormat_ID, to_AD_PrintFormat_ID, -1);
+            return Copy(ctx, from_VAF_Print_Rpt_Layout_ID, to_VAF_Print_Rpt_Layout_ID, -1);
         }
 
 
@@ -142,13 +142,13 @@ namespace VAdvantage.Print
         /// Get Format
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PrintFormat_ID">id</param>
+        /// <param name="VAF_Print_Rpt_Layout_ID">id</param>
         /// <param name="readFromDisk">refresh from disk</param>
         /// <param name="isParent">wether tab is parent or a child</param>
         /// <returns>Format</returns>
-        static public MPrintFormat Get(Ctx ctx, int AD_PrintFormat_ID, bool readFromDisk)
+        static public MPrintFormat Get(Ctx ctx, int VAF_Print_Rpt_Layout_ID, bool readFromDisk)
         {
-            int key = AD_PrintFormat_ID;
+            int key = VAF_Print_Rpt_Layout_ID;
             MPrintFormat pf = null;
             if (!readFromDisk)
                 pf = (MPrintFormat)s_formats[key];
@@ -161,7 +161,7 @@ namespace VAdvantage.Print
 
             if (pf == null)
             {
-                pf = new MPrintFormat(ctx, AD_PrintFormat_ID, null);
+                pf = new MPrintFormat(ctx, VAF_Print_Rpt_Layout_ID, null);
                 pf.GetCtx().SetContext("#TimezoneOffset", ctx.GetContext("#TimezoneOffset"));
                 s_formats.Add(key, pf);
             }
@@ -174,16 +174,16 @@ namespace VAdvantage.Print
         /// Get (default) Printformat for Report View or Table
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_ReportView_ID">id or 0</param>
+        /// <param name="VAF_ReportView_ID">id or 0</param>
         /// <param name="VAF_TableView_ID">id or 0</param>
         /// <returns>first print format found or null</returns>
-        static public MPrintFormat Get(Ctx ctx, int AD_ReportView_ID, int VAF_TableView_ID)
+        static public MPrintFormat Get(Ctx ctx, int VAF_ReportView_ID, int VAF_TableView_ID)
         {
             MPrintFormat retValue = null;
 
-            String sql = "SELECT * FROM AD_PrintFormat WHERE ";
-            if (AD_ReportView_ID > 0)
-                sql += "AD_ReportView_ID=@val1";
+            String sql = "SELECT * FROM VAF_Print_Rpt_Layout WHERE ";
+            if (VAF_ReportView_ID > 0)
+                sql += "VAF_ReportView_ID=@val1";
             else
                 sql += "VAF_TableView_ID=@val1";
             sql += " ORDER BY IsDefault DESC";
@@ -191,7 +191,7 @@ namespace VAdvantage.Print
             SqlParameter[] param = new SqlParameter[1];
             try
             {
-                param[0] = new SqlParameter("@val1", AD_ReportView_ID > 0 ? AD_ReportView_ID : VAF_TableView_ID);
+                param[0] = new SqlParameter("@val1", VAF_ReportView_ID > 0 ? VAF_ReportView_ID : VAF_TableView_ID);
                 DataSet ds = SqlExec.ExecuteQuery.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -210,10 +210,10 @@ namespace VAdvantage.Print
         /// <summary>
         /// Delete Format from Cache
         /// </summary>
-        /// <param name="AD_PrintFormat_ID">id</param>
-        static public void DeleteFromCache(int AD_PrintFormat_ID)
+        /// <param name="VAF_Print_Rpt_Layout_ID">id</param>
+        static public void DeleteFromCache(int VAF_Print_Rpt_Layout_ID)
         {
-            int key = AD_PrintFormat_ID;
+            int key = VAF_Print_Rpt_Layout_ID;
             s_formats.Add(key, null);
         }	//	deleteFromCache
 
@@ -282,8 +282,8 @@ namespace VAdvantage.Print
         private MPrintFormatItem[] GetItems()
         {
             List<MPrintFormatItem> list = new List<MPrintFormatItem>();
-            String sql = "SELECT * FROM AD_PrintFormatItem pfi "
-                + "WHERE pfi.AD_PrintFormat_ID=@AD_PrintFormat_ID AND pfi.IsActive='Y'"
+            String sql = "SELECT * FROM VAF_Print_Rpt_LItem pfi "
+                + "WHERE pfi.VAF_Print_Rpt_Layout_ID=@VAF_Print_Rpt_Layout_ID AND pfi.IsActive='Y'"
                 //	Display restrictions - Passwords, etc.
                 + " AND NOT EXISTS (SELECT * FROM VAF_Field f "
                     + "WHERE pfi.VAF_Column_ID=f.VAF_Column_ID"
@@ -293,7 +293,7 @@ namespace VAdvantage.Print
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@AD_PrintFormat_ID", Get_ID());
+                param[0] = new SqlParameter("@VAF_Print_Rpt_Layout_ID", Get_ID());
                 DataSet ds = SqlExec.ExecuteQuery.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -326,16 +326,16 @@ namespace VAdvantage.Print
             int counter = 0;
             for (int i = 0; i < fromItems.Length; i++)
             {
-                int fromID = fromItems[i].GetAD_PrintFormatItem_ID();
-                int toID = toItems[i].GetAD_PrintFormatItem_ID();
+                int fromID = fromItems[i].GetVAF_Print_Rpt_LItem_ID();
+                int toID = toItems[i].GetVAF_Print_Rpt_LItem_ID();
 
-                StringBuilder sql = new StringBuilder("UPDATE AD_PrintFormatItem_Trl ne ")
+                StringBuilder sql = new StringBuilder("UPDATE VAF_Print_Rpt_LItem_TL ne ")
                 .Append("SET ")
-.Append("PrintName=(SELECT PrintName FROM AD_PrintFormatItem_Trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID =").Append(fromID).Append("),")
-.Append("PrintNameSuffix=(SELECT PrintNameSuffix FROM AD_PrintFormatItem_Trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID =").Append(toID).Append("),")
-.Append("IsTranslated=(SELECT IsTranslated FROM AD_PrintFormatItem_Trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID=").Append(fromID)
-.Append(") WHERE AD_PrintFormatItem_ID=").Append(toID).Append(" AND EXISTS").Append("(")
-                .Append("SELECT AD_PrintFormatItem_ID").Append(" FROM AD_PrintFormatItem_trl ol WHERE ol.VAF_Language=ne.VAF_Language AND AD_PrintFormatItem_ID=").Append(fromID).Append(")");// = 5087); 
+.Append("PrintName=(SELECT PrintName FROM VAF_Print_Rpt_LItem_TL ol WHERE ol.VAF_Language=ne.VAF_Language AND VAF_Print_Rpt_LItem_ID =").Append(fromID).Append("),")
+.Append("PrintNameSuffix=(SELECT PrintNameSuffix FROM VAF_Print_Rpt_LItem_TL ol WHERE ol.VAF_Language=ne.VAF_Language AND VAF_Print_Rpt_LItem_ID =").Append(toID).Append("),")
+.Append("IsTranslated=(SELECT IsTranslated FROM VAF_Print_Rpt_LItem_TL ol WHERE ol.VAF_Language=ne.VAF_Language AND VAF_Print_Rpt_LItem_ID=").Append(fromID)
+.Append(") WHERE VAF_Print_Rpt_LItem_ID=").Append(toID).Append(" AND EXISTS").Append("(")
+                .Append("SELECT VAF_Print_Rpt_LItem_ID").Append(" FROM VAF_Print_Rpt_LItem_TL ol WHERE ol.VAF_Language=ne.VAF_Language AND VAF_Print_Rpt_LItem_ID=").Append(fromID).Append(")");// = 5087); 
 
 
 
@@ -343,16 +343,16 @@ namespace VAdvantage.Print
                 //.Append("SET (PrintName, PrintNameSuffix, IsTranslated) = ")
                 //.Append("(")
                 //.Append("SELECT PrintName, PrintNameSuffix, IsTranslated ")
-                //.Append("FROM AD_PrintFormatItem_Trl old ")
+                //.Append("FROM VAF_Print_Rpt_LItem_TL old ")
                 //.Append("WHERE old.VAF_Language=new.VAF_Language")
-                //.Append(" AND AD_PrintFormatItem_ID =").Append(fromID)
+                //.Append(" AND VAF_Print_Rpt_LItem_ID =").Append(fromID)
                 //.Append(") ")
                 ////	WHERE
-                //.Append("WHERE  AD_PrintFormatItem_ID=").Append(toID)
-                //.Append(" AND EXISTS (SELECT AD_PrintFormatItem_ID ")
-                //    .Append(" FROM AD_PrintFormatItem_trl old")
+                //.Append("WHERE  VAF_Print_Rpt_LItem_ID=").Append(toID)
+                //.Append(" AND EXISTS (SELECT VAF_Print_Rpt_LItem_ID ")
+                //    .Append(" FROM VAF_Print_Rpt_LItem_TL old")
                 //    .Append(" WHERE old.VAF_Language=new.VAF_Language")
-                //    .Append(" AND AD_PrintFormatItem_ID =").Append(fromID)
+                //    .Append(" AND VAF_Print_Rpt_LItem_ID =").Append(fromID)
                 //    .Append(") ");
                 int no = DataBase.DB.ExecuteQuery(sql.ToString(), null);
                 if (no == 0)	//	if first has no translation, the rest does neither
@@ -365,12 +365,12 @@ namespace VAdvantage.Print
         /// Copy existing Definition To Client
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PrintFormat_ID">format</param>
+        /// <param name="VAF_Print_Rpt_Layout_ID">format</param>
         /// <param name="to_Client_ID">client</param>
         /// <returns>format</returns>
-        public static MPrintFormat CopyToClient(Ctx ctx, int AD_PrintFormat_ID, int to_Client_ID)
+        public static MPrintFormat CopyToClient(Ctx ctx, int VAF_Print_Rpt_Layout_ID, int to_Client_ID)
         {
-            return Copy(ctx, AD_PrintFormat_ID, 0, to_Client_ID);
+            return Copy(ctx, VAF_Print_Rpt_Layout_ID, 0, to_Client_ID);
         }	//	copy
 
 
@@ -584,7 +584,7 @@ namespace VAdvantage.Print
         public MPrintTableFormat GetTableFormat()
         {
             if (_tFormat == null)
-                _tFormat = MPrintTableFormat.Get(GetCtx(), GetAD_PrintTableFormat_ID(), GetAD_PrintFont_ID());
+                _tFormat = MPrintTableFormat.Get(GetCtx(), GetVAF_Print_Rpt_TblLayout_ID(), GetVAF_Print_Rpt_Font_ID());
             return _tFormat;
         }	//	getTableFormat
 
@@ -613,26 +613,26 @@ namespace VAdvantage.Print
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAF_TableView_ID">VAF_TableView_ID</param>
-        /// <param name="AD_PrintFormat_ID">AD_PrintFormat_ID</param>
+        /// <param name="VAF_Print_Rpt_Layout_ID">VAF_Print_Rpt_Layout_ID</param>
         /// <returns>print format</returns>
-        static public MPrintFormat CreateFromTable(Ctx ctx, int VAF_TableView_ID, int AD_PrintFormat_ID)
+        static public MPrintFormat CreateFromTable(Ctx ctx, int VAF_TableView_ID, int VAF_Print_Rpt_Layout_ID)
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
-            MPrintFormat pf = new MPrintFormat(ctx, AD_PrintFormat_ID, null);
+            MPrintFormat pf = new MPrintFormat(ctx, VAF_Print_Rpt_Layout_ID, null);
             pf.SetVAF_TableView_ID(VAF_TableView_ID);
 
             //	Get Info
             String sql = "SELECT TableName,"		//	1
-                + " (SELECT COUNT(*) FROM AD_PrintFormat x WHERE x.VAF_TableView_ID=t.VAF_TableView_ID AND x.VAF_Client_ID=c.VAF_Client_ID) AS Count,"
-                + " COALESCE (cpc.AD_PrintColor_ID, pc.AD_PrintColor_ID) AS AD_PrintColor_ID,"	//	3
-                + " COALESCE (cpf.AD_PrintFont_ID, pf.AD_PrintFont_ID) AS AD_PrintFont_ID,"
-                + " COALESCE (cpp.AD_PrintPaper_ID, pp.AD_PrintPaper_ID) AS AD_PrintPaper_ID "
+                + " (SELECT COUNT(*) FROM VAF_Print_Rpt_Layout x WHERE x.VAF_TableView_ID=t.VAF_TableView_ID AND x.VAF_Client_ID=c.VAF_Client_ID) AS Count,"
+                + " COALESCE (cpc.VAF_Print_Rpt_Colour_ID, pc.VAF_Print_Rpt_Colour_ID) AS VAF_Print_Rpt_Colour_ID,"	//	3
+                + " COALESCE (cpf.VAF_Print_Rpt_Font_ID, pf.VAF_Print_Rpt_Font_ID) AS VAF_Print_Rpt_Font_ID,"
+                + " COALESCE (cpp.VAF_Print_Rpt_Paper_ID, pp.VAF_Print_Rpt_Paper_ID) AS VAF_Print_Rpt_Paper_ID "
                 + "FROM VAF_TableView t, VAF_Client c"
-                + " LEFT OUTER JOIN AD_PrintColor cpc ON (cpc.VAF_Client_ID=c.VAF_Client_ID AND cpc.IsDefault='Y')"
-                + " LEFT OUTER JOIN AD_PrintFont cpf ON (cpf.VAF_Client_ID=c.VAF_Client_ID AND cpf.IsDefault='Y')"
-                + " LEFT OUTER JOIN AD_PrintPaper cpp ON (cpp.VAF_Client_ID=c.VAF_Client_ID AND cpp.IsDefault='Y'),"
-                + " AD_PrintColor pc, AD_PrintFont pf, AD_PrintPaper pp "
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Colour cpc ON (cpc.VAF_Client_ID=c.VAF_Client_ID AND cpc.IsDefault='Y')"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Font cpf ON (cpf.VAF_Client_ID=c.VAF_Client_ID AND cpf.IsDefault='Y')"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Paper cpp ON (cpp.VAF_Client_ID=c.VAF_Client_ID AND cpp.IsDefault='Y'),"
+                + " VAF_Print_Rpt_Colour pc, VAF_Print_Rpt_Font pf, VAF_Print_Rpt_Paper pp "
                 + "WHERE t.VAF_TableView_ID='" + VAF_TableView_ID + "' AND c.VAF_Client_ID='" + VAF_Client_ID + "'"		//	#1/2
                 + " AND pc.IsDefault='Y' AND pf.IsDefault='Y' AND pp.IsDefault='Y'";
 
@@ -669,9 +669,9 @@ namespace VAdvantage.Print
                     s += "_" + (count + 1);
                     pf.SetName(s);
                     //
-                    pf.SetAD_PrintColor_ID(Utility.Util.GetValueOfInt(dr[2].ToString()));
-                    pf.SetAD_PrintFont_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
-                    pf.SetAD_PrintPaper_ID(Utility.Util.GetValueOfInt(dr[4].ToString()));
+                    pf.SetVAF_Print_Rpt_Colour_ID(Utility.Util.GetValueOfInt(dr[2].ToString()));
+                    pf.SetVAF_Print_Rpt_Font_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
+                    pf.SetVAF_Print_Rpt_Paper_ID(Utility.Util.GetValueOfInt(dr[4].ToString()));
                     //
                     error = false;
                     break;
@@ -704,13 +704,13 @@ namespace VAdvantage.Print
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAF_TableView_ID">VAF_TableView_ID</param>
-        /// <param name="AD_PrintFormat_ID">AD_PrintFormat_ID</param>
+        /// <param name="VAF_Print_Rpt_Layout_ID">VAF_Print_Rpt_Layout_ID</param>
         /// <returns>print format</returns>
-        static public MPrintFormat CreateFromTable(Ctx ctx, int VAF_TableView_ID, int AD_PrintFormat_ID, int VAF_Tab_ID,bool IsMRSeq=false)
+        static public MPrintFormat CreateFromTable(Ctx ctx, int VAF_TableView_ID, int VAF_Print_Rpt_Layout_ID, int VAF_Tab_ID,bool IsMRSeq=false)
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
-            MPrintFormat pf = new MPrintFormat(ctx, AD_PrintFormat_ID, null);
+            MPrintFormat pf = new MPrintFormat(ctx, VAF_Print_Rpt_Layout_ID, null);
             pf.SetVAF_TableView_ID(VAF_TableView_ID);
             if (VAF_Tab_ID > 0)
             {
@@ -719,15 +719,15 @@ namespace VAdvantage.Print
 
             //	Get Info
             String sql = "SELECT TableName,"		//	1
-                + " (SELECT COUNT(*) FROM AD_PrintFormat x WHERE x.VAF_TableView_ID=t.VAF_TableView_ID AND x.VAF_Client_ID=c.VAF_Client_ID) AS Count,"
-                + " COALESCE (cpc.AD_PrintColor_ID, pc.AD_PrintColor_ID) AS AD_PrintColor_ID,"	//	3
-                + " COALESCE (cpf.AD_PrintFont_ID, pf.AD_PrintFont_ID) AS AD_PrintFont_ID,"
-                + " COALESCE (cpp.AD_PrintPaper_ID, pp.AD_PrintPaper_ID) AS AD_PrintPaper_ID "
+                + " (SELECT COUNT(*) FROM VAF_Print_Rpt_Layout x WHERE x.VAF_TableView_ID=t.VAF_TableView_ID AND x.VAF_Client_ID=c.VAF_Client_ID) AS Count,"
+                + " COALESCE (cpc.VAF_Print_Rpt_Colour_ID, pc.VAF_Print_Rpt_Colour_ID) AS VAF_Print_Rpt_Colour_ID,"	//	3
+                + " COALESCE (cpf.VAF_Print_Rpt_Font_ID, pf.VAF_Print_Rpt_Font_ID) AS VAF_Print_Rpt_Font_ID,"
+                + " COALESCE (cpp.VAF_Print_Rpt_Paper_ID, pp.VAF_Print_Rpt_Paper_ID) AS VAF_Print_Rpt_Paper_ID "
                 + "FROM VAF_TableView t, VAF_Client c"
-                + " LEFT OUTER JOIN AD_PrintColor cpc ON (cpc.VAF_Client_ID=c.VAF_Client_ID AND cpc.IsDefault='Y')"
-                + " LEFT OUTER JOIN AD_PrintFont cpf ON (cpf.VAF_Client_ID=c.VAF_Client_ID AND cpf.IsDefault='Y')"
-                + " LEFT OUTER JOIN AD_PrintPaper cpp ON (cpp.VAF_Client_ID=c.VAF_Client_ID AND cpp.IsDefault='Y'),"
-                + " AD_PrintColor pc, AD_PrintFont pf, AD_PrintPaper pp "
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Colour cpc ON (cpc.VAF_Client_ID=c.VAF_Client_ID AND cpc.IsDefault='Y')"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Font cpf ON (cpf.VAF_Client_ID=c.VAF_Client_ID AND cpf.IsDefault='Y')"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Paper cpp ON (cpp.VAF_Client_ID=c.VAF_Client_ID AND cpp.IsDefault='Y'),"
+                + " VAF_Print_Rpt_Colour pc, VAF_Print_Rpt_Font pf, VAF_Print_Rpt_Paper pp "
                 + "WHERE t.VAF_TableView_ID='" + VAF_TableView_ID + "' AND c.VAF_Client_ID='" + VAF_Client_ID + "'"		//	#1/2
                 + " AND pc.IsDefault='Y' AND pf.IsDefault='Y' AND pp.IsDefault='Y'";
 
@@ -737,13 +737,13 @@ namespace VAdvantage.Print
 
             if (VAF_Language == null || VAF_Language.Length == 0 || Env.IsBaseLanguage(VAF_Language, "VAF_ColumnDic"))
             {
-                sql1 = sql1 + " t.Name,  (SELECT COUNT(*)  FROM AD_PrintFormat x  WHERE x.VAF_Tab_ID =t.VAF_Tab_ID  "
+                sql1 = sql1 + " t.Name,  (SELECT COUNT(*)  FROM VAF_Print_Rpt_Layout x  WHERE x.VAF_Tab_ID =t.VAF_Tab_ID  "
                 + "AND x.VAF_Client_ID=c.VAF_Client_ID  ) AS COUNT FROM VAF_Tab t ,VAF_Client c "
                 + "WHERE t.VAF_Tab_ID ='" + VAF_Tab_ID + "' AND c.VAF_Client_ID='" + VAF_Client_ID + "'";
             }
             else
             {
-                sql1 = sql1 + " Distinct tt.Name, (SELECT COUNT(*) FROM AD_PrintFormat x WHERE x.VAF_Tab_ID =t.VAF_Tab_ID  AND x.VAF_Client_ID=c.VAF_Client_ID ) AS COUNT"
+                sql1 = sql1 + " Distinct tt.Name, (SELECT COUNT(*) FROM VAF_Print_Rpt_Layout x WHERE x.VAF_Tab_ID =t.VAF_Tab_ID  AND x.VAF_Client_ID=c.VAF_Client_ID ) AS COUNT"
                             + " FROM VAF_Client c, VAF_Tab t JOIN VAF_Tab_Trl tt ON (tt.VAF_Tab_ID=t.vaf_tab_id)"
                             + " WHERE t.VAF_Tab_ID ='" + VAF_Tab_ID + "'  AND tt.VAF_Language='" + VAF_Language + "'"
                             + " AND c.VAF_Client_ID='" + VAF_Client_ID + "'";
@@ -792,9 +792,9 @@ namespace VAdvantage.Print
                         s += "_" + (count + 1);
                     pf.SetName(s);
                     //
-                    pf.SetAD_PrintColor_ID(Utility.Util.GetValueOfInt(dr[2].ToString()));
-                    pf.SetAD_PrintFont_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
-                    pf.SetAD_PrintPaper_ID(Utility.Util.GetValueOfInt(dr[4].ToString()));
+                    pf.SetVAF_Print_Rpt_Colour_ID(Utility.Util.GetValueOfInt(dr[2].ToString()));
+                    pf.SetVAF_Print_Rpt_Font_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
+                    pf.SetVAF_Print_Rpt_Paper_ID(Utility.Util.GetValueOfInt(dr[4].ToString()));
                     //
                     error = false;
                     break;
@@ -831,31 +831,31 @@ namespace VAdvantage.Print
         /// Create MPrintFormat for ReportView
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_ReportView_ID">AD_ReportView_ID</param>
+        /// <param name="VAF_ReportView_ID">VAF_ReportView_ID</param>
         /// <param name="ReportName">optional Report Name</param>
         /// <returns>print format</returns>
-        static public MPrintFormat CreateFromReportView(Ctx ctx, int AD_ReportView_ID, String ReportName)
+        static public MPrintFormat CreateFromReportView(Ctx ctx, int VAF_ReportView_ID, String ReportName)
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
             MPrintFormat pf = new MPrintFormat(ctx, 0, null);
-            pf.SetAD_ReportView_ID(AD_ReportView_ID);
+            pf.SetVAF_ReportView_ID(VAF_ReportView_ID);
 
             //	Get Info
             String sql = "SELECT t.TableName,"
-                + " (SELECT COUNT(*) FROM AD_PrintFormat x WHERE x.AD_ReportView_ID=rv.AD_ReportView_ID AND x.VAF_Client_ID=c.VAF_Client_ID) AS Count,"
-                + " COALESCE (cpc.AD_PrintColor_ID, pc.AD_PrintColor_ID) AS AD_PrintColor_ID,"
-                + " COALESCE (cpf.AD_PrintFont_ID, pf.AD_PrintFont_ID) AS AD_PrintFont_ID,"
-                + " COALESCE (cpp.AD_PrintPaper_ID, pp.AD_PrintPaper_ID) AS AD_PrintPaper_ID,"
+                + " (SELECT COUNT(*) FROM VAF_Print_Rpt_Layout x WHERE x.VAF_ReportView_ID=rv.VAF_ReportView_ID AND x.VAF_Client_ID=c.VAF_Client_ID) AS Count,"
+                + " COALESCE (cpc.VAF_Print_Rpt_Colour_ID, pc.VAF_Print_Rpt_Colour_ID) AS VAF_Print_Rpt_Colour_ID,"
+                + " COALESCE (cpf.VAF_Print_Rpt_Font_ID, pf.VAF_Print_Rpt_Font_ID) AS VAF_Print_Rpt_Font_ID,"
+                + " COALESCE (cpp.VAF_Print_Rpt_Paper_ID, pp.VAF_Print_Rpt_Paper_ID) AS VAF_Print_Rpt_Paper_ID,"
                 + " t.VAF_TableView_ID "
-                + "FROM AD_ReportView rv"
+                + "FROM VAF_ReportView rv"
                 + " INNER JOIN VAF_TableView t ON (rv.VAF_TableView_ID=t.VAF_TableView_ID),"
                 + " VAF_Client c"
-                + " LEFT OUTER JOIN AD_PrintColor cpc ON (cpc.VAF_Client_ID=c.VAF_Client_ID AND cpc.IsDefault='Y')"
-                + " LEFT OUTER JOIN AD_PrintFont cpf ON (cpf.VAF_Client_ID=c.VAF_Client_ID AND cpf.IsDefault='Y')"
-                + " LEFT OUTER JOIN AD_PrintPaper cpp ON (cpp.VAF_Client_ID=c.VAF_Client_ID AND cpp.IsDefault='Y'),"
-                + " AD_PrintColor pc, AD_PrintFont pf, AD_PrintPaper pp "
-                + "WHERE rv.AD_ReportView_ID='" + AD_ReportView_ID + "' AND c.VAF_Client_ID='" + VAF_Client_ID + "'"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Colour cpc ON (cpc.VAF_Client_ID=c.VAF_Client_ID AND cpc.IsDefault='Y')"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Font cpf ON (cpf.VAF_Client_ID=c.VAF_Client_ID AND cpf.IsDefault='Y')"
+                + " LEFT OUTER JOIN VAF_Print_Rpt_Paper cpp ON (cpp.VAF_Client_ID=c.VAF_Client_ID AND cpp.IsDefault='Y'),"
+                + " VAF_Print_Rpt_Colour pc, VAF_Print_Rpt_Font pf, VAF_Print_Rpt_Paper pp "
+                + "WHERE rv.VAF_ReportView_ID='" + VAF_ReportView_ID + "' AND c.VAF_Client_ID='" + VAF_Client_ID + "'"
                 + " AND pc.IsDefault='Y' AND pf.IsDefault='Y' AND pp.IsDefault='Y'";
             bool error = true;
             IDataReader dr = null;
@@ -873,9 +873,9 @@ namespace VAdvantage.Print
                         name += "_" + count;
                     pf.SetName(name);
                     //
-                    pf.SetAD_PrintColor_ID(Utility.Util.GetValueOfInt(dr[2].ToString()));
-                    pf.SetAD_PrintFont_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
-                    pf.SetAD_PrintPaper_ID(Utility.Util.GetValueOfInt(dr[4].ToString()));
+                    pf.SetVAF_Print_Rpt_Colour_ID(Utility.Util.GetValueOfInt(dr[2].ToString()));
+                    pf.SetVAF_Print_Rpt_Font_ID(Utility.Util.GetValueOfInt(dr[3].ToString()));
+                    pf.SetVAF_Print_Rpt_Paper_ID(Utility.Util.GetValueOfInt(dr[4].ToString()));
                     //
                     pf.SetVAF_TableView_ID(Utility.Util.GetValueOfInt(dr[5].ToString()));
                     error = false;
@@ -1058,12 +1058,12 @@ namespace VAdvantage.Print
         /// <summary>
         /// Get Optional TableFormat
         /// </summary>
-        /// <param name="AD_PrintTableFormat_ID">table format</param>
-        new public void SetAD_PrintTableFormat_ID(int AD_PrintTableFormat_ID)
+        /// <param name="VAF_Print_Rpt_TblLayout_ID">table format</param>
+        new public void SetVAF_Print_Rpt_TblLayout_ID(int VAF_Print_Rpt_TblLayout_ID)
         {
-            base.SetAD_PrintTableFormat_ID(AD_PrintTableFormat_ID);
-            _tFormat = MPrintTableFormat.Get(GetCtx(), AD_PrintTableFormat_ID, GetAD_PrintFont_ID());
-        }	//	getAD_PrintTableFormat_ID
+            base.SetVAF_Print_Rpt_TblLayout_ID(VAF_Print_Rpt_TblLayout_ID);
+            _tFormat = MPrintTableFormat.Get(GetCtx(), VAF_Print_Rpt_TblLayout_ID, GetVAF_Print_Rpt_Font_ID());
+        }	//	getVAF_Print_Rpt_TblLayout_ID
 
         /// <summary>
         /// Load Special data (images, ..).
@@ -1084,11 +1084,11 @@ namespace VAdvantage.Print
         /// </summary>
         public void SetTranslation()
         {
-            StringBuilder sb = new StringBuilder("UPDATE AD_PrintFormatItem_Trl t"
+            StringBuilder sb = new StringBuilder("UPDATE VAF_Print_Rpt_LItem_TL t"
                 + " SET (PrintName, PrintNameSuffix)="
-                + " (SELECT PrintName, PrintNameSuffix FROM AD_PrintFormatItem i WHERE i.AD_PrintFormatItem_ID=t.AD_PrintFormatItem_ID) "
-                + "WHERE AD_PrintFormatItem_ID IN"
-                + " (SELECT AD_PrintFormatItem_ID FROM AD_PrintFormatItem WHERE AD_PrintFormat_ID=").Append(Get_ID()).Append(")");
+                + " (SELECT PrintName, PrintNameSuffix FROM VAF_Print_Rpt_LItem i WHERE i.VAF_Print_Rpt_LItem_ID=t.VAF_Print_Rpt_LItem_ID) "
+                + "WHERE VAF_Print_Rpt_LItem_ID IN"
+                + " (SELECT VAF_Print_Rpt_LItem_ID FROM VAF_Print_Rpt_LItem WHERE VAF_Print_Rpt_Layout_ID=").Append(Get_ID()).Append(")");
             int no = DataBase.DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
             log.Fine("setTranslation #" + no);
         }

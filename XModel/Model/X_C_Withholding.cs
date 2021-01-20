@@ -58,8 +58,8 @@ namespace VAdvantage.Model
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_C_Withholding[").Append(Get_ID()).Append("]"); return sb.ToString(); }
-        /** Beneficiary_ID AD_Reference_ID=138 */
-        public static int BENEFICIARY_ID_AD_Reference_ID = 138;/** Set Beneficiary.
+        /** Beneficiary_ID VAF_Control_Ref_ID=138 */
+        public static int BENEFICIARY_ID_VAF_Control_Ref_ID = 138;/** Set Beneficiary.
 @param Beneficiary_ID Business Partner to whom payment is made */
         public void SetBeneficiary_ID(int Beneficiary_ID)
         {
@@ -89,8 +89,8 @@ namespace VAdvantage.Model
         public void SetFixAmt(Decimal? FixAmt) { Set_Value("FixAmt", (Decimal?)FixAmt); }/** Get Fix amount.
 @return Fixed amount to be levied or paid */
         public Decimal GetFixAmt() { Object bd = Get_Value("FixAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
-        /** InvCalculation AD_Reference_ID=1000226 */
-        public static int INVCALCULATION_AD_Reference_ID = 1000226;/** Grand Total = G */
+        /** InvCalculation VAF_Control_Ref_ID=1000226 */
+        public static int INVCALCULATION_VAF_Control_Ref_ID = 1000226;/** Grand Total = G */
         public static String INVCALCULATION_GrandTotal = "G";/** Sub Total = N */
         public static String INVCALCULATION_SubTotal = "N";/** Payment Amount = P */
         public static String INVCALCULATION_PaymentAmount = "P";/** Tax Amount = T */
@@ -153,8 +153,8 @@ namespace VAdvantage.Model
         public String GetName() { return (String)Get_Value("Name"); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetName()); }
-        /** PayCalculation AD_Reference_ID=1000226 */
-        public static int PAYCALCULATION_AD_Reference_ID = 1000226;/** Grand Total = G */
+        /** PayCalculation VAF_Control_Ref_ID=1000226 */
+        public static int PAYCALCULATION_VAF_Control_Ref_ID = 1000226;/** Grand Total = G */
         public static String PAYCALCULATION_GrandTotal = "G";/** Sub Total = N */
         public static String PAYCALCULATION_SubTotal = "N";/** Payment Amount = P */
         public static String PAYCALCULATION_PaymentAmount = "P";/** Tax Amount = T */
@@ -188,8 +188,8 @@ namespace VAdvantage.Model
 @return Minimum gross amount for withholding calculation */
         public Decimal GetThresholdmin() { Object bd = Get_Value("Thresholdmin"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
-        /** TransactionType AD_Reference_ID=1000227 */
-        public static int TRANSACTIONTYPE_AD_Reference_ID = 1000227;/** Purchase = P */
+        /** TransactionType VAF_Control_Ref_ID=1000227 */
+        public static int TRANSACTIONTYPE_VAF_Control_Ref_ID = 1000227;/** Purchase = P */
         public static String TRANSACTIONTYPE_Purchase = "P";/** Sale = S */
         public static String TRANSACTIONTYPE_Sale = "S";/** Is test a valid value.
 @param test testvalue

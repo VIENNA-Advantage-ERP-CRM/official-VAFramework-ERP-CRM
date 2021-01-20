@@ -323,8 +323,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Ref_BPartner_ID AD_Reference_ID=138 */
-public static int REF_BPARTNER_ID_AD_Reference_ID=138;
+/** Ref_BPartner_ID VAF_Control_Ref_ID=138 */
+public static int REF_BPARTNER_ID_VAF_Control_Ref_ID=138;
 /** Set Ref_BPartner_ID.
 @param Ref_BPartner_ID Ref_BPartner_ID */
 public void SetRef_BPartner_ID (int Ref_BPartner_ID)

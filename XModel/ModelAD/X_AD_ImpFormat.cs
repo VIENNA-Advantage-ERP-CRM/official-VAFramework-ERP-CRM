@@ -166,8 +166,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** FormatType AD_Reference_ID=209 */
-public static int FORMATTYPE_AD_Reference_ID=209;
+/** FormatType VAF_Control_Ref_ID=209 */
+public static int FORMATTYPE_VAF_Control_Ref_ID=209;
 /** Comma Separated = C */
 public static String FORMATTYPE_CommaSeparated = "C";
 /** Fixed Position = F */

@@ -52,8 +52,8 @@ public int GetVAF_GridLayoutItems_ID() {Object ii = Get_Value("VAF_GridLayoutIte
 public void SetVAF_GridLayout_ID (int VAF_GridLayout_ID){if (VAF_GridLayout_ID < 1) throw new ArgumentException ("VAF_GridLayout_ID is mandatory.");Set_ValueNoCheck ("VAF_GridLayout_ID", VAF_GridLayout_ID);}/** Get Grid Layout.
 @return Grid Layout */
 public int GetVAF_GridLayout_ID() {Object ii = Get_Value("VAF_GridLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** AlignItems AD_Reference_ID=1000224 */
-public static int ALIGNITEMS_AD_Reference_ID=1000224;/** Bottom = B */
+/** AlignItems VAF_Control_Ref_ID=1000224 */
+public static int ALIGNITEMS_VAF_Control_Ref_ID=1000224;/** Bottom = B */
 public static String ALIGNITEMS_Bottom = "B";/** Center = C */
 public static String ALIGNITEMS_Center = "C";/** Top = T */
 public static String ALIGNITEMS_Top = "T";/** Is test a valid value.
@@ -85,8 +85,8 @@ public String GetFontColor() {return (String)Get_Value("FontColor");}/** Set Fon
 public void SetFontSize (String FontSize){if (FontSize != null && FontSize.Length > 50){log.Warning("Length > 50 - truncated");FontSize = FontSize.Substring(0,50);}Set_Value ("FontSize", FontSize);}/** Get Font Size.
 @return Font Size */
 public String GetFontSize() {return (String)Get_Value("FontSize");}
-/** JustifyItems AD_Reference_ID=1000225 */
-public static int JUSTIFYITEMS_AD_Reference_ID=1000225;/** Center = C */
+/** JustifyItems VAF_Control_Ref_ID=1000225 */
+public static int JUSTIFYITEMS_VAF_Control_Ref_ID=1000225;/** Center = C */
 public static String JUSTIFYITEMS_Center = "C";/** Left = L */
 public static String JUSTIFYITEMS_Left = "L";/** Right = R */
 public static String JUSTIFYITEMS_Right = "R";/** Is test a valid value.

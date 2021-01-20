@@ -165,8 +165,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ConfidentialType AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPE_AD_Reference_ID=340;
+/** ConfidentialType VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPE_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPE_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -227,8 +227,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetDescription());
 }
 
-/** ModerationType AD_Reference_ID=395 */
-public static int MODERATIONTYPE_AD_Reference_ID=395;
+/** ModerationType VAF_Control_Ref_ID=395 */
+public static int MODERATIONTYPE_VAF_Control_Ref_ID=395;
 /** After Publishing = A */
 public static String MODERATIONTYPE_AfterPublishing = "A";
 /** Before Publishing = B */

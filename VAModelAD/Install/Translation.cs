@@ -285,7 +285,7 @@ namespace VAdvantage.Install
 			+ "FROM VAF_Column c"
 			+ " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
 			+ " WHERE t.TableName=@param"
-			+ " AND c.AD_Reference_ID IN (10,14) "
+			+ " AND c.VAF_Control_Ref_ID IN (10,14) "
             +" AND c.ColumnName <> 'Export_ID' "
 			+ "ORDER BY IsMandatory DESC, ColumnName";
 		List<String> list = new List<String>();

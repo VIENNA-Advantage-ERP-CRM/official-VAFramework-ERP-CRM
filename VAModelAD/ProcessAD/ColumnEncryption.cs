@@ -68,7 +68,7 @@ namespace VAdvantage.Process
                 throw new Exception("@NotFound@ @VAF_Column_ID@ - " + p_VAF_Column_ID);
             //
             String columnName = column.GetColumnName();
-            int dt = column.GetAD_Reference_ID();
+            int dt = column.GetVAF_Control_Ref_ID();
 
             //	Can it be enabled?
             if (column.IsKey()

@@ -242,8 +242,8 @@ namespace VAdvantage.Model
 
         private void UpdateLoginSettings()
         {
-            DataSet ds = DB.ExecuteDataset(@"SELECT AD_Role_ID,ISUSEUSERORGACCESS From AD_Role WHERE AD_Role_ID IN 
-                        (SELECT AD_Role_ID FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID() + ")");
+            DataSet ds = DB.ExecuteDataset(@"SELECT VAF_Role_ID,ISUSEUSERORGACCESS From VAF_Role WHERE VAF_Role_ID IN 
+                        (SELECT VAF_Role_ID FROM VAF_Loginsetting WHERE VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID() + ")");
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -251,24 +251,24 @@ namespace VAdvantage.Model
                 {
                     if (ds.Tables[0].Rows[i]["ISUSEUSERORGACCESS"].ToString() == "Y" ? true : false)
                     {
-                        deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                        deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                     }
                     else
                     {
-                        int roleOrgID = Convert.ToInt32(DB.ExecuteScalar(@"SELECT count(*) From AD_Role_OrgAccess WHERE VAF_Org_ID=" + GetVAF_Org_ID() +
-                            " AND AD_Role_ID=" + Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"])));
+                        int roleOrgID = Convert.ToInt32(DB.ExecuteScalar(@"SELECT count(*) From VAF_Role_OrgRights WHERE VAF_Org_ID=" + GetVAF_Org_ID() +
+                            " AND VAF_Role_ID=" + Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"])));
                         if (roleOrgID == 0)
                         {
-                            deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                            deleteLoginDetails(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                         }
                     }
                 }
             }
         }
 
-        private void deleteLoginDetails(int AD_Role_ID)
+        private void deleteLoginDetails(int VAF_Role_ID)
         {
-            DB.ExecuteQuery(@"DELETE FROM VAF_Loginsetting WHERE AD_Role_ID=" + AD_Role_ID +
+            DB.ExecuteQuery(@"DELETE FROM VAF_Loginsetting WHERE VAF_Role_ID=" + VAF_Role_ID +
                                                              " AND VAF_Org_ID=" + GetVAF_Org_ID() + " AND AD_User_ID=" + GetAD_User_ID());
         }
 

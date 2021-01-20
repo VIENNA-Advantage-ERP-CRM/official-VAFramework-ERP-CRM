@@ -504,7 +504,7 @@ namespace VAdvantage.Model
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Project'");
+                _sql.Append("Select L.Value From VAF_CtrlRef_List L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Project'");
                 var relatedtoProject = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
                 _client_ID = GetVAF_Client_ID();
                 _sql.Clear();

@@ -20,7 +20,7 @@ public X_AD_PrintGraph (Context ctx, int AD_PrintGraph_ID, Trx trxName) : base (
 {
 /** if (AD_PrintGraph_ID == 0)
 {
-SetAD_PrintFormat_ID (0);
+SetVAF_Print_Rpt_Layout_ID (0);
 SetAD_PrintGraph_ID (0);
 SetData_PrintFormatItem_ID (0);
 SetDescription_PrintFormatItem_ID (0);
@@ -33,7 +33,7 @@ public X_AD_PrintGraph (Ctx ctx, int AD_PrintGraph_ID, Trx trxName) : base (ctx,
 {
 /** if (AD_PrintGraph_ID == 0)
 {
-SetAD_PrintFormat_ID (0);
+SetVAF_Print_Rpt_Layout_ID (0);
 SetAD_PrintGraph_ID (0);
 SetData_PrintFormatItem_ID (0);
 SetDescription_PrintFormatItem_ID (0);
@@ -121,17 +121,17 @@ StringBuilder sb = new StringBuilder ("X_AD_PrintGraph[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set Print Format.
-@param AD_PrintFormat_ID Data Print Format */
-public void SetAD_PrintFormat_ID (int AD_PrintFormat_ID)
+@param VAF_Print_Rpt_Layout_ID Data Print Format */
+public void SetVAF_Print_Rpt_Layout_ID (int VAF_Print_Rpt_Layout_ID)
 {
-if (AD_PrintFormat_ID < 1) throw new ArgumentException ("AD_PrintFormat_ID is mandatory.");
-Set_Value ("AD_PrintFormat_ID", AD_PrintFormat_ID);
+if (VAF_Print_Rpt_Layout_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Layout_ID is mandatory.");
+Set_Value ("VAF_Print_Rpt_Layout_ID", VAF_Print_Rpt_Layout_ID);
 }
 /** Get Print Format.
 @return Data Print Format */
-public int GetAD_PrintFormat_ID() 
+public int GetVAF_Print_Rpt_Layout_ID() 
 {
-Object ii = Get_Value("AD_PrintFormat_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Layout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -151,8 +151,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Data1_PrintFormatItem_ID AD_Reference_ID=264 */
-public static int DATA1_PRINTFORMATITEM_ID_AD_Reference_ID=264;
+/** Data1_PrintFormatItem_ID VAF_Control_Ref_ID=264 */
+public static int DATA1_PRINTFORMATITEM_ID_VAF_Control_Ref_ID=264;
 /** Set Data Column 2.
 @param Data1_PrintFormatItem_ID Data Column for Line Charts */
 public void SetData1_PrintFormatItem_ID (int Data1_PrintFormatItem_ID)
@@ -170,8 +170,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Data2_PrintFormatItem_ID AD_Reference_ID=264 */
-public static int DATA2_PRINTFORMATITEM_ID_AD_Reference_ID=264;
+/** Data2_PrintFormatItem_ID VAF_Control_Ref_ID=264 */
+public static int DATA2_PRINTFORMATITEM_ID_VAF_Control_Ref_ID=264;
 /** Set Data Column 3.
 @param Data2_PrintFormatItem_ID Data Column for Line Charts */
 public void SetData2_PrintFormatItem_ID (int Data2_PrintFormatItem_ID)
@@ -189,8 +189,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Data3_PrintFormatItem_ID AD_Reference_ID=264 */
-public static int DATA3_PRINTFORMATITEM_ID_AD_Reference_ID=264;
+/** Data3_PrintFormatItem_ID VAF_Control_Ref_ID=264 */
+public static int DATA3_PRINTFORMATITEM_ID_VAF_Control_Ref_ID=264;
 /** Set Data Column 4.
 @param Data3_PrintFormatItem_ID Data Column for Line Charts */
 public void SetData3_PrintFormatItem_ID (int Data3_PrintFormatItem_ID)
@@ -208,8 +208,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Data4_PrintFormatItem_ID AD_Reference_ID=264 */
-public static int DATA4_PRINTFORMATITEM_ID_AD_Reference_ID=264;
+/** Data4_PrintFormatItem_ID VAF_Control_Ref_ID=264 */
+public static int DATA4_PRINTFORMATITEM_ID_VAF_Control_Ref_ID=264;
 /** Set Data Column 5.
 @param Data4_PrintFormatItem_ID Data Column for Line Charts */
 public void SetData4_PrintFormatItem_ID (int Data4_PrintFormatItem_ID)
@@ -227,8 +227,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Data_PrintFormatItem_ID AD_Reference_ID=264 */
-public static int DATA_PRINTFORMATITEM_ID_AD_Reference_ID=264;
+/** Data_PrintFormatItem_ID VAF_Control_Ref_ID=264 */
+public static int DATA_PRINTFORMATITEM_ID_VAF_Control_Ref_ID=264;
 /** Set Data Column.
 @param Data_PrintFormatItem_ID Data Column for Pie and Line Charts */
 public void SetData_PrintFormatItem_ID (int Data_PrintFormatItem_ID)
@@ -262,8 +262,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** Description_PrintFormatItem_ID AD_Reference_ID=264 */
-public static int DESCRIPTION_PRINTFORMATITEM_ID_AD_Reference_ID=264;
+/** Description_PrintFormatItem_ID VAF_Control_Ref_ID=264 */
+public static int DESCRIPTION_PRINTFORMATITEM_ID_VAF_Control_Ref_ID=264;
 /** Set Description Column.
 @param Description_PrintFormatItem_ID Description Column for Pie/Line/Bar Charts */
 public void SetDescription_PrintFormatItem_ID (int Description_PrintFormatItem_ID)
@@ -280,8 +280,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** GraphType AD_Reference_ID=265 */
-public static int GRAPHTYPE_AD_Reference_ID=265;
+/** GraphType VAF_Control_Ref_ID=265 */
+public static int GRAPHTYPE_VAF_Control_Ref_ID=265;
 /** Bar Chart = B */
 public static String GRAPHTYPE_BarChart = "B";
 /** Line Chart = L */

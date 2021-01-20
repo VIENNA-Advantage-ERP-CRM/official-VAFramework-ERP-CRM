@@ -246,8 +246,8 @@ if (oo != null)
 return false;
 }
 
-/** TreeType AD_Reference_ID=120 */
-public static int TREETYPE_AD_Reference_ID=120;
+/** TreeType VAF_Control_Ref_ID=120 */
+public static int TREETYPE_VAF_Control_Ref_ID=120;
 /** Activity = AY */
 public static String TREETYPE_Activity = "AY";
 /** BoM = BB */

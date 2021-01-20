@@ -297,8 +297,8 @@ namespace VAdvantage.Model
 
         //Added By Mohit VAWMS 20-8-2015
 
-        /* Picking_UOM_ID AD_Reference_ID=114 /
-         public static int PICKING_UOM_ID_AD_Reference_ID = 114;
+        /* Picking_UOM_ID VAF_Control_Ref_ID=114 /
+         public static int PICKING_UOM_ID_VAF_Control_Ref_ID = 114;
         /** Set Picking UOM.
         @param Picking_UOM_ID Picking UOM of locator */
         public void SetPicking_UOM_ID(int Picking_UOM_ID)

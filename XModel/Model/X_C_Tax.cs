@@ -138,8 +138,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** C_Country_ID AD_Reference_ID=156 */
-        public static int C_COUNTRY_ID_AD_Reference_ID = 156;
+        /** C_Country_ID VAF_Control_Ref_ID=156 */
+        public static int C_COUNTRY_ID_VAF_Control_Ref_ID = 156;
         /** Set Country.
         @param C_Country_ID Country */
         public void SetC_Country_ID(int C_Country_ID)
@@ -157,8 +157,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_Region_ID AD_Reference_ID=157 */
-        public static int C_REGION_ID_AD_Reference_ID = 157;
+        /** C_Region_ID VAF_Control_Ref_ID=157 */
+        public static int C_REGION_ID_VAF_Control_Ref_ID = 157;
         /** Set Region.
         @param C_Region_ID Identifies a geographical Region */
         public void SetC_Region_ID(int C_Region_ID)
@@ -360,8 +360,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
 
-        /** Parent_Tax_ID AD_Reference_ID=158 */
-        public static int PARENT_TAX_ID_AD_Reference_ID = 158;
+        /** Parent_Tax_ID VAF_Control_Ref_ID=158 */
+        public static int PARENT_TAX_ID_VAF_Control_Ref_ID = 158;
         /** Set Parent Tax.
         @param Parent_Tax_ID Parent Tax indicates a tax that is made up of multiple taxes */
         public void SetParent_Tax_ID(int Parent_Tax_ID)
@@ -412,8 +412,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** SOPOType AD_Reference_ID=287 */
-        public static int SOPOTYPE_AD_Reference_ID = 287;
+        /** SOPOType VAF_Control_Ref_ID=287 */
+        public static int SOPOTYPE_VAF_Control_Ref_ID = 287;
         /** Both = B */
         public static String SOPOTYPE_Both = "B";
         /** Purchase Tax = P */
@@ -447,8 +447,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("SOPOType");
         }
-        /** SurchargeType AD_Reference_ID=1000222 */
-        public static int SURCHARGETYPE_AD_Reference_ID = 1000222;
+        /** SurchargeType VAF_Control_Ref_ID=1000222 */
+        public static int SURCHARGETYPE_VAF_Control_Ref_ID = 1000222;
         /** Line Amount = LA */
         public static String SURCHARGETYPE_LineAmount = "LA";
         /** Line Amount + Tax = LT */
@@ -487,8 +487,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("SurchargeType");
         }
-        /** Surcharge_Tax_ID AD_Reference_ID=158 */
-        public static int SURCHARGE_TAX_ID_AD_Reference_ID = 158;
+        /** Surcharge_Tax_ID VAF_Control_Ref_ID=158 */
+        public static int SURCHARGE_TAX_ID_VAF_Control_Ref_ID = 158;
         /// <summary>
         /// Set Surcharge Tax.
         /// </summary>
@@ -529,8 +529,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("TaxIndicator");
         }
 
-        /** To_Country_ID AD_Reference_ID=156 */
-        public static int TO_COUNTRY_ID_AD_Reference_ID = 156;
+        /** To_Country_ID VAF_Control_Ref_ID=156 */
+        public static int TO_COUNTRY_ID_VAF_Control_Ref_ID = 156;
         /** Set To.
         @param To_Country_ID Receiving Country */
         public void SetTo_Country_ID(int To_Country_ID)
@@ -548,8 +548,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** To_Region_ID AD_Reference_ID=157 */
-        public static int TO_REGION_ID_AD_Reference_ID = 157;
+        /** To_Region_ID VAF_Control_Ref_ID=157 */
+        public static int TO_REGION_ID_VAF_Control_Ref_ID = 157;
         /** Set To.
         @param To_Region_ID Receiving Region */
         public void SetTo_Region_ID(int To_Region_ID)

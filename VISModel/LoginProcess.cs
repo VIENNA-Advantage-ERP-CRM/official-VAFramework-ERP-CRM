@@ -73,10 +73,10 @@ namespace VAdvantage.Login
             KeyNamePair[] retValue = null;
             List<KeyNamePair> list = new List<KeyNamePair>();
             //
-            String sql = "SELECT u.AD_User_ID, r.AD_Role_ID, u.Name "
+            String sql = "SELECT u.AD_User_ID, r.VAF_Role_ID, u.Name "
                 + "FROM AD_User u"
                 + " INNER JOIN W_Store ws ON (u.VAF_Client_ID=ws.VAF_Client_ID) "
-                + " INNER JOIN AD_Role r ON (ws.AD_Role_ID=r.AD_Role_ID) "
+                + " INNER JOIN VAF_Role r ON (ws.VAF_Role_ID=r.VAF_Role_ID) "
                 + "WHERE u.EMail='" + eMail + "'"
                 + " AND (u.Password='" + password + "' OR u.Password='" + password + "')"
                 + " AND ws.W_Store_ID='" + W_Store_ID + "'"
@@ -104,13 +104,13 @@ namespace VAdvantage.Login
                 m_user = new KeyNamePair(AD_User_ID, eMail);
                 m_users.Add(AD_User_ID);	//	for role
                 //
-                int AD_Role_ID = Utility.Util.GetValueOfInt(dr[1].ToString());
-                m_ctx.SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = Utility.Util.GetValueOfInt(dr[1].ToString());
+                m_ctx.SetVAF_Role_ID(VAF_Role_ID);
                 String Name = dr[2].ToString();
                 m_ctx.SetContext("##AD_User_Name", Name);
-                if (AD_Role_ID == 0)	//	User is a Sys Admin
+                if (VAF_Role_ID == 0)	//	User is a Sys Admin
                     m_ctx.SetContext("#SysAdmin", "Y");
-                KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
+                KeyNamePair p = new KeyNamePair(VAF_Role_ID, Name);
                 m_roles.Add(p);
                 list.Add(p);
 
@@ -144,12 +144,12 @@ namespace VAdvantage.Login
         }	//	getAD_User_ID
 
 
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
             if (m_role != null)
                 return m_role.GetKey();
             return -1;
-        }	//	getAD_Role_ID
+        }	//	getVAF_Role_ID
 
 
 
@@ -160,9 +160,9 @@ namespace VAdvantage.Login
         /// - VAF_Client/Info,
         /// - C_AcctSchema,
         /// - C_AcctSchema_Elements
-        /// - AD_Preference
+        /// - VAF_ValuePreference
         /// </para>
-        /// Assumes that the context is set for #VAF_Client_ID, ##AD_User_ID, #AD_Role_ID
+        /// Assumes that the context is set for #VAF_Client_ID, ##AD_User_ID, #VAF_Role_ID
         /// </summary>
         /// <param name="org">org information</param>
         /// <param name="warehouse">optional warehouse information</param>
@@ -180,8 +180,8 @@ namespace VAdvantage.Login
                 throw new Exception("Missing Context #VAF_Client_ID");
             if (m_ctx.GetContext("##AD_User_ID").Length == 0)
                 throw new Exception("Missing Context ##AD_User_ID");
-            if (m_ctx.GetContext("#AD_Role_ID").Length == 0)
-                throw new Exception("Missing Context #AD_Role_ID");
+            if (m_ctx.GetContext("#VAF_Role_ID").Length == 0)
+                throw new Exception("Missing Context #VAF_Role_ID");
 
 
             //  Org Info - assumes that it is valid
@@ -230,7 +230,7 @@ namespace VAdvantage.Login
             int VAF_Client_ID = m_ctx.GetVAF_Client_ID();
             //	int VAF_Org_ID =  org.getKey();
             //	int AD_User_ID =  Env.getAD_User_ID (m_ctx);
-            int AD_Role_ID = m_ctx.GetAD_Role_ID();
+            int VAF_Role_ID = m_ctx.GetVAF_Role_ID();
 
             //	Other Settings
             m_ctx.SetContext("#YYYY", "Y");
@@ -251,7 +251,7 @@ namespace VAdvantage.Login
                 if (!dr.Read())
                 {
                     //  No Warning for System
-                    if (AD_Role_ID != 0)
+                    if (VAF_Role_ID != 0)
                         retValue = "NoValidAcctInfo";
                 }
                 else
@@ -282,7 +282,7 @@ namespace VAdvantage.Login
                 //	This reads all relevant window neutral defaults
                 //	overwriting superseeded ones.  Window specific is read in Maintain
                 sql = "SELECT Attribute, Value, AD_Window_ID "
-                    + "FROM AD_Preference "
+                    + "FROM VAF_ValuePreference "
                     + "WHERE VAF_Client_ID IN (0, @#VAF_Client_ID@)"
                     + " AND VAF_Org_ID IN (0, @#VAF_Org_ID@)"
                     + " AND (AD_User_ID IS NULL OR AD_User_ID=0 OR AD_User_ID=@##AD_User_ID@)"
@@ -343,7 +343,7 @@ namespace VAdvantage.Login
         private void LoadDefault(String TableName, String ColumnName)
         {
             if (TableName.StartsWith("AD_Window")
-                || TableName.StartsWith("AD_PrintFormat")
+                || TableName.StartsWith("VAF_Print_Rpt_Layout")
                 || TableName.StartsWith("AD_Workflow"))
                 return;
             String value = null;
@@ -393,7 +393,7 @@ namespace VAdvantage.Login
             String info = m_user + ",R:" + m_role.ToString() + ",O=" + m_org.ToString();
             int VAF_Client_ID = m_ctx.GetVAF_Client_ID();
             int VAF_Org_ID = org.GetKey();
-            int AD_Role_ID = m_ctx.GetAD_Role_ID();
+            int VAF_Role_ID = m_ctx.GetVAF_Role_ID();
             int AD_User_ID = m_ctx.GetAD_User_ID();
             //
             MSession session = MSession.Get(m_ctx, true);
@@ -401,10 +401,10 @@ namespace VAdvantage.Login
                 session.SetVAF_Client_ID(VAF_Client_ID);
             if (VAF_Org_ID != session.GetVAF_Org_ID())
                 session.SetVAF_Org_ID(VAF_Org_ID);
-            if (AD_Role_ID != session.GetAD_Role_ID())
-                session.SetAD_Role_ID(AD_Role_ID);
+            if (VAF_Role_ID != session.GetVAF_Role_ID())
+                session.SetVAF_Role_ID(VAF_Role_ID);
             //
-            String error = ModelValidationEngine.Get().LoginComplete(VAF_Client_ID, VAF_Org_ID, AD_Role_ID, AD_User_ID);
+            String error = ModelValidationEngine.Get().LoginComplete(VAF_Client_ID, VAF_Org_ID, VAF_Role_ID, AD_User_ID);
             if (error != null && error.Length > 0)
             {
                 session.SetDescription(error);
@@ -448,11 +448,11 @@ namespace VAdvantage.Login
             KeyNamePair[] retValue = null;
             List<KeyNamePair> list = new List<KeyNamePair>();
             //
-            StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.AD_Role_ID,r.Name,")
+            StringBuilder sql = new StringBuilder("SELECT u.AD_User_ID, r.VAF_Role_ID,r.Name,")
                 .Append(" u.ConnectionProfile, u.Password ")	//	4,5
                 .Append("FROM AD_User u")
                 .Append(" INNER JOIN AD_User_Roles ur ON (u.AD_User_ID=ur.AD_User_ID AND ur.IsActive='Y')")
-                .Append(" INNER JOIN AD_Role r ON (ur.AD_Role_ID=r.AD_Role_ID AND r.IsActive='Y') ")
+                .Append(" INNER JOIN VAF_Role r ON (ur.VAF_Role_ID=r.VAF_Role_ID AND r.IsActive='Y') ")
                 .Append("WHERE COALESCE(u.LDAPUser,u.Name)=@username")		//	#1
                 .Append(" AND u.IsActive='Y'")
                 .Append(" AND EXISTS (SELECT * FROM VAF_Client c WHERE u.VAF_Client_ID=c.VAF_Client_ID AND c.IsActive='Y')")
@@ -511,11 +511,11 @@ namespace VAdvantage.Login
                     AD_User_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                     m_users.Add(AD_User_ID);	//	for role
                     //
-                    int AD_Role_ID = Utility.Util.GetValueOfInt(dr[1].ToString());
-                    if (AD_Role_ID == 0)	//	User is a Sys Admin
+                    int VAF_Role_ID = Utility.Util.GetValueOfInt(dr[1].ToString());
+                    if (VAF_Role_ID == 0)	//	User is a Sys Admin
                         m_ctx.SetContext("#SysAdmin", "Y");
                     String Name = dr[2].ToString();
-                    KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
+                    KeyNamePair p = new KeyNamePair(VAF_Role_ID, Name);
                     m_roles.Add(p);
                     list.Add(p);
                 }
@@ -558,10 +558,10 @@ namespace VAdvantage.Login
             //    return new KeyNamePair[] { new KeyNamePair(m_store.GetVAF_Client_ID(), m_store.GetName() + " Tenant") };
 
             //	Set User for Role
-            int AD_Role_ID = role.GetKey();
+            int VAF_Role_ID = role.GetKey();
             for (int i = 0; i < m_roles.Count; i++)
             {
-                if (AD_Role_ID == m_roles[i].GetKey())
+                if (VAF_Role_ID == m_roles[i].GetKey())
                 {
                     int AD_User_ID = m_users[i];
                     m_ctx.SetAD_User_ID(AD_User_ID);
@@ -576,9 +576,9 @@ namespace VAdvantage.Login
             KeyNamePair[] retValue = null;
             String sql = "SELECT DISTINCT r.UserLevel, r.ConnectionProfile, "	//	1..2
                 + " c.VAF_Client_ID,c.Name "								//	3..4 
-                + "FROM AD_Role r"
+                + "FROM VAF_Role r"
                 + " INNER JOIN VAF_Client c ON (r.VAF_Client_ID=c.VAF_Client_ID) "
-                + "WHERE r.AD_Role_ID=@roleid"		//	#1
+                + "WHERE r.VAF_Role_ID=@roleid"		//	#1
                 + " AND r.IsActive='Y' AND c.IsActive='Y'";
 
             //	get Role details
@@ -596,8 +596,8 @@ namespace VAdvantage.Login
                 }
 
                 //  Role Info
-                m_ctx.SetAD_Role_ID(role.GetKey());
-                m_ctx.SetContext("#AD_Role_Name", role.GetName());
+                m_ctx.SetVAF_Role_ID(role.GetKey());
+                m_ctx.SetContext("#VAF_Role_Name", role.GetName());
                 Ini.SetProperty(Ini.P_ROLE, role.GetName());
                 //	User Level
                 m_ctx.SetContext("#User_Level", dr[0].ToString());  	//	Format 'SCO'
@@ -640,26 +640,26 @@ namespace VAdvantage.Login
             if (m_store != null)
                 return new KeyNamePair[] { new KeyNamePair(m_store.GetVAF_Org_ID(), m_store.GetName() + " Org") };
 
-            if (m_ctx.GetContext("#AD_Role_ID").Length == 0)	//	could be number 0
-                throw new Exception("Missing Context #AD_Role_ID");
+            if (m_ctx.GetContext("#VAF_Role_ID").Length == 0)	//	could be number 0
+                throw new Exception("Missing Context #VAF_Role_ID");
 
-            int AD_Role_ID = m_ctx.GetAD_Role_ID();
+            int VAF_Role_ID = m_ctx.GetVAF_Role_ID();
             int AD_User_ID = m_ctx.GetAD_User_ID();
-            //	s_log.fine("Client: " + client.toStringX() + ", AD_Role_ID=" + AD_Role_ID);
+            //	s_log.fine("Client: " + client.toStringX() + ", VAF_Role_ID=" + VAF_Role_ID);
 
             //	get Client details for role
             List<KeyNamePair> list = new List<KeyNamePair>();
             KeyNamePair[] retValue = null;
             //
             String sql = "SELECT o.VAF_Org_ID,o.Name,o.IsSummary "	//	1..3
-                + "FROM AD_Role r, VAF_Client c"
+                + "FROM VAF_Role r, VAF_Client c"
                 + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID OR o.VAF_Org_ID=0) "
-                + "WHERE r.AD_Role_ID='" + AD_Role_ID + "'" 	//	#1
+                + "WHERE r.VAF_Role_ID='" + VAF_Role_ID + "'" 	//	#1
                 + " AND c.VAF_Client_ID='" + client.GetKey() + "'"	//	#2
                 + " AND o.IsActive='Y' AND o.IsSummary='N'"
                 + " AND (r.IsAccessAllOrgs='Y' "
-                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_Role_OrgAccess ra "
-                        + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
+                    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
+                        + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
                     + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
                         + "WHERE ua.AD_User_ID='" + AD_User_ID + "' AND ua.IsActive='Y'))"		//	#3
                     + ") "
@@ -680,7 +680,7 @@ namespace VAdvantage.Login
                     if (summary)
                     {
                         if (role == null)
-                            role = MRole.Get(m_ctx, AD_Role_ID, AD_User_ID, false);
+                            role = MRole.Get(m_ctx, VAF_Role_ID, AD_User_ID, false);
                         GetOrgsAddSummary(list, VAF_Org_ID, Name, role);
                     }
                     else
@@ -855,9 +855,9 @@ namespace VAdvantage.Login
         /// - VAF_Client/Info,
         /// - C_AcctSchema,
         /// - C_AcctSchema_Elements
-        /// - AD_Preference
+        /// - VAF_ValuePreference
         /// </para>
-        /// Assumes that the context is set for #VAF_Client_ID, ##AD_User_ID, #AD_Role_ID
+        /// Assumes that the context is set for #VAF_Client_ID, ##AD_User_ID, #VAF_Role_ID
         /// </summary>
         /// <param name="org">org information</param>
         /// <param name="warehouse">optional warehouse information</param>
@@ -870,8 +870,8 @@ namespace VAdvantage.Login
                 throw new Exception("Missing Context #VAF_Client_ID");
             if (m_ctx.GetContext("##AD_User_ID").Length == 0)
                 throw new Exception("Missing Context ##AD_User_ID");
-            if (m_ctx.GetContext("#AD_Role_ID").Length == 0)
-                throw new Exception("Missing Context #AD_Role_ID");
+            if (m_ctx.GetContext("#VAF_Role_ID").Length == 0)
+                throw new Exception("Missing Context #VAF_Role_ID");
 
             string dateS = m_ctx.GetContext("#Date");
 
@@ -913,7 +913,7 @@ namespace VAdvantage.Login
             int VAF_Client_ID = m_ctx.GetVAF_Client_ID();
             //	int VAF_Org_ID =  org.getKey();
             //	int AD_User_ID =  Env.getAD_User_ID (m_ctx);
-            int AD_Role_ID = m_ctx.GetAD_Role_ID();
+            int VAF_Role_ID = m_ctx.GetVAF_Role_ID();
 
             //	Other Settings
             m_ctx.SetContext("#YYYY", "Y");
@@ -958,7 +958,7 @@ namespace VAdvantage.Login
                 if (!dr.Read())
                 {
                     //  No Warning for System
-                    if (AD_Role_ID != 0)
+                    if (VAF_Role_ID != 0)
                         retValue = "NoValidAcctInfo";
                 }
                 else
@@ -995,7 +995,7 @@ namespace VAdvantage.Login
                 //	This reads all relevant window neutral defaults
                 //	overwriting superseeded ones.  Window specific is read in Maintain
                 sql = "SELECT Attribute, Value, AD_Window_ID "
-                    + "FROM AD_Preference "
+                    + "FROM VAF_ValuePreference "
                     + "WHERE VAF_Client_ID IN (0, @#VAF_Client_ID@)"
                     + " AND VAF_Org_ID IN (0, @#VAF_Org_ID@)"
                     + " AND (AD_User_ID IS NULL OR AD_User_ID=0 OR AD_User_ID=@##AD_User_ID@)"

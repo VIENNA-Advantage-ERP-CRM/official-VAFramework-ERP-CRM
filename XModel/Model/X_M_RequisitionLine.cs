@@ -299,8 +299,8 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** OrderLocator_ID AD_Reference_ID=191 */
-        public static int ORDERLOCATOR_ID_AD_Reference_ID = 191;/** Set Order Locator.
+        /** OrderLocator_ID VAF_Control_Ref_ID=191 */
+        public static int ORDERLOCATOR_ID_VAF_Control_Ref_ID = 191;/** Set Order Locator.
 @param OrderLocator_ID Warehouse Locator */
         public void SetOrderLocator_ID(int OrderLocator_ID)
         {
@@ -346,8 +346,8 @@ namespace VAdvantage.Model
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
-        /** ReserveLocator_ID AD_Reference_ID=191 */
-        public static int RESERVELOCATOR_ID_AD_Reference_ID = 191;
+        /** ReserveLocator_ID VAF_Control_Ref_ID=191 */
+        public static int RESERVELOCATOR_ID_VAF_Control_Ref_ID = 191;
         /** Set Reserve Locator.
         @param ReserveLocator_ID Warehouse Locator */
         public void SetReserveLocator_ID(int ReserveLocator_ID)

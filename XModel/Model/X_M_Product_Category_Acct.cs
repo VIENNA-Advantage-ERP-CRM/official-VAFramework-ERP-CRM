@@ -154,8 +154,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetC_AcctSchema_ID().ToString());
 }
 
-/** CostingLevel AD_Reference_ID=355 */
-public static int COSTINGLEVEL_AD_Reference_ID=355;
+/** CostingLevel VAF_Control_Ref_ID=355 */
+public static int COSTINGLEVEL_VAF_Control_Ref_ID=355;
 /** Batch/Lot = B */
 public static String COSTINGLEVEL_BatchLot = "B";
 /** Client = C */
@@ -189,8 +189,8 @@ public String GetCostingLevel()
 return (String)Get_Value("CostingLevel");
 }
 
-/** CostingMethod AD_Reference_ID=122 */
-public static int COSTINGMETHOD_AD_Reference_ID=122;
+/** CostingMethod VAF_Control_Ref_ID=122 */
+public static int COSTINGMETHOD_VAF_Control_Ref_ID=122;
 /** Average PO = A */
 public static String COSTINGMETHOD_AveragePO = "A";
 /** Fifo = F */

@@ -188,12 +188,12 @@ VIS.context.getAD_User_Name = function () {
     return this.getContext("#AD_User_Name");
 };
 
-VIS.context.getAD_Role_ID = function () {
-    return this.getContextAsInt("#AD_Role_ID");
+VIS.context.getVAF_Role_ID = function () {
+    return this.getContextAsInt("#VAF_Role_ID");
 }
 
-VIS.context.getAD_Role_Name = function () {
-    return this.getContext("#AD_Role_Name");
+VIS.context.getVAF_Role_Name = function () {
+    return this.getContext("#VAF_Role_Name");
 };
 
 VIS.context.getVAF_Client_ID = function () {

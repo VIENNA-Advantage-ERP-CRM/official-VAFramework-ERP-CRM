@@ -1,8 +1,8 @@
 ﻿
 /********************************************************
  * Module/Class Name    : Model Classes (MQueryLog.cs)
- * Purpose              : Handle the table AD_QueryLog
- * Class Used           : X_AD_QueryLog
+ * Purpose              : Handle the table VAF_DBQueryLog
+ * Class Used           : X_VAF_DBQueryLog
  * Created By           : Mukesh Arora
  * Date                 : 05-May-09
 **********************************************************/
@@ -17,22 +17,22 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MQueryLog : X_AD_QueryLog
+    public class MQueryLog : X_VAF_DBQueryLog
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_QueryLog_ID">id</param>
+        /// <param name="VAF_DBQueryLog_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MQueryLog(Ctx ctx, int AD_QueryLog_ID, Trx trxName)
-            : base(ctx, AD_QueryLog_ID, trxName)
+        public MQueryLog(Ctx ctx, int VAF_DBQueryLog_ID, Trx trxName)
+            : base(ctx, VAF_DBQueryLog_ID, trxName)
         {
-            //super(ctx, AD_QueryLog_ID, trxName);
-            if (AD_QueryLog_ID == 0)
+            //super(ctx, VAF_DBQueryLog_ID, trxName);
+            if (VAF_DBQueryLog_ID == 0)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                SetVAF_Role_ID(VAF_Role_ID);
             }
         }	//	MQueryLog
 

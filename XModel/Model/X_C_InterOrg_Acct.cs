@@ -117,8 +117,8 @@ StringBuilder sb = new StringBuilder ("X_C_InterOrg_Acct[").Append(Get_ID()).App
 return sb.ToString();
 }
 
-/** VAF_OrgTo_ID AD_Reference_ID=130 */
-public static int VAF_ORGTO_ID_AD_Reference_ID=130;
+/** VAF_OrgTo_ID VAF_Control_Ref_ID=130 */
+public static int VAF_ORGTO_ID_VAF_Control_Ref_ID=130;
 /** Set Inter-Organization.
 @param VAF_OrgTo_ID Organization valid for intercompany documents */
 public void SetVAF_OrgTo_ID (int VAF_OrgTo_ID)

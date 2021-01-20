@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRefList
  * Purpose        : 
- * Class Used     : MRefList inherits X_AD_Ref_List
+ * Class Used     : MRefList inherits X_VAF_CtrlRef_List
  * Chronological    Development
  * Raghunandan      04-May-2009 
   ******************************************************/
@@ -23,25 +23,25 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MRefList : X_AD_Ref_List
+    public class MRefList : X_VAF_CtrlRef_List
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(MRefList).FullName);
         // Value Cache						
-        private static CCache<string, string> s_cache = new CCache<string, string>("AD_Ref_List", 20);
+        private static CCache<string, string> s_cache = new CCache<string, string>("VAF_CtrlRef_List", 20);
 
         /// <summary>
         ///Get Reference List 
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Reference_ID">reference</param>
+        /// <param name="VAF_Control_Ref_ID">reference</param>
         /// <param name="Value">value</param>
         /// <param name="trxName">transaction</param>
         /// <returns>List or null</returns>
-        public static MRefList Get(Ctx ctx, int AD_Reference_ID, String Value, Trx trxName)
+        public static MRefList Get(Ctx ctx, int VAF_Control_Ref_ID, String Value, Trx trxName)
         {
             MRefList retValue = null;
-            String sql = "SELECT * FROM AD_Ref_List "
-                + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND Value=" + Value;
+            String sql = "SELECT * FROM VAF_CtrlRef_List "
+                + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND Value=" + Value;
             DataSet ds = null;
             try
             {
@@ -66,26 +66,26 @@ namespace VAdvantage.Model
         ///Get Reference List Value Name (cached)
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Reference_ID">reference</param>
+        /// <param name="VAF_Control_Ref_ID">reference</param>
         /// <param name="Value">value</param>
         /// <returns>List or null</returns>
-        public static String GetListName(Ctx ctx, int AD_Reference_ID, String value)
+        public static String GetListName(Ctx ctx, int VAF_Control_Ref_ID, String value)
         {
             //String VAF_Language = Env.getVAF_Language(ctx);
             string VAF_Language = ctx.GetVAF_Language();
-            string key = VAF_Language + "_" + AD_Reference_ID + "_" + value;
+            string key = VAF_Language + "_" + VAF_Control_Ref_ID + "_" + value;
             string retValue = s_cache[key];
             if (retValue != null)
                 return retValue;
 
-            //bool isBaseLanguage = GlobalVariable.IsBaseLanguage(VAF_Language, "AD_Ref_List");
-            bool isBaseLanguage = Utility.Env.IsBaseLanguage(ctx, "AD_Ref_List");// GlobalVariable.IsBaseLanguage();
+            //bool isBaseLanguage = GlobalVariable.IsBaseLanguage(VAF_Language, "VAF_CtrlRef_List");
+            bool isBaseLanguage = Utility.Env.IsBaseLanguage(ctx, "VAF_CtrlRef_List");// GlobalVariable.IsBaseLanguage();
             String sql = isBaseLanguage ?
-                "SELECT Name FROM AD_Ref_List "
-                + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND Value='" + value + "'" :
-                "SELECT t.Name FROM AD_Ref_List_Trl t"
-                + " INNER JOIN AD_Ref_List r ON (r.AD_Ref_List_ID=t.AD_Ref_List_ID) "
-                + "WHERE r.AD_Reference_ID=" + AD_Reference_ID + " AND r.Value='" + value + "' AND t.VAF_Language=" + VAF_Language;
+                "SELECT Name FROM VAF_CtrlRef_List "
+                + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND Value='" + value + "'" :
+                "SELECT t.Name FROM VAF_CtrlRef_TL t"
+                + " INNER JOIN VAF_CtrlRef_List r ON (r.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID) "
+                + "WHERE r.VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND r.Value='" + value + "' AND t.VAF_Language=" + VAF_Language;
             DataSet ds = null;
             try
             {
@@ -117,14 +117,14 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Reference List
         /// </summary>
-        /// <param name="AD_Reference_ID">reference</param>
+        /// <param name="VAF_Control_Ref_ID">reference</param>
         /// <param name="optional">optional if true add "",""</param>
         /// <returns>List or null</returns>
-        public static ValueNamePair[] GetList(int AD_Reference_ID, bool optional)
+        public static ValueNamePair[] GetList(int VAF_Control_Ref_ID, bool optional)
         {
            
-              string  sql = "SELECT Value, Name FROM AD_Ref_List "
-               + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND IsActive='Y' ORDER BY 1";
+              string  sql = "SELECT Value, Name FROM VAF_CtrlRef_List "
+               + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND IsActive='Y' ORDER BY 1";
             
 
             DataSet ds = null;
@@ -156,27 +156,27 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Reference List
         /// </summary>
-        /// <param name="AD_Reference_ID">reference</param>
+        /// <param name="VAF_Control_Ref_ID">reference</param>
         /// <param name="optional">optional if true add "",""</param>
         /// <returns>List or null</returns>
-        public static ValueNamePair[] GetList(int AD_Reference_ID, bool optional,Ctx ctx)
+        public static ValueNamePair[] GetList(int VAF_Control_Ref_ID, bool optional,Ctx ctx)
         {
-            bool isBaseLanguage = Utility.Env.IsBaseLanguage(ctx, "AD_Ref_List");
+            bool isBaseLanguage = Utility.Env.IsBaseLanguage(ctx, "VAF_CtrlRef_List");
             string sql = string.Empty;
             if (isBaseLanguage)
             {
-                sql = "SELECT Value, Name FROM AD_Ref_List "
-               + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND IsActive='Y' ORDER BY 1";
+                sql = "SELECT Value, Name FROM VAF_CtrlRef_List "
+               + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND IsActive='Y' ORDER BY 1";
             }
             else
             {
                 sql = @"SELECT rl.Value,
                           rlt.Name AS Name
-                        FROM AD_Ref_List rl
-                        INNER JOIN AD_Ref_List_trl rlt
-                        ON (rlt.ad_ref_list_id  =rl.ad_ref_list_id
+                        FROM VAF_CtrlRef_List rl
+                        INNER JOIN VAF_CtrlRef_TL rlt
+                        ON (rlt.VAF_CtrlRef_List_id  =rl.VAF_CtrlRef_List_id
                         AND rlt.VAF_Language     ='" + ctx.GetVAF_Language() + @"')
-                        WHERE rl.AD_Reference_ID=" + AD_Reference_ID + @"
+                        WHERE rl.VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + @"
                         AND rl.IsActive         ='Y'
                         ORDER BY 1";
             }
@@ -210,15 +210,15 @@ namespace VAdvantage.Model
         ///Persistency Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Ref_List_ID">id</param>
+        /// <param name="VAF_CtrlRef_List_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MRefList(Ctx ctx, int AD_Ref_List_ID, Trx trxName)
-            : base(ctx, AD_Ref_List_ID, trxName)
+        public MRefList(Ctx ctx, int VAF_CtrlRef_List_ID, Trx trxName)
+            : base(ctx, VAF_CtrlRef_List_ID, trxName)
         {
-            if (AD_Ref_List_ID == 0)
+            if (VAF_CtrlRef_List_ID == 0)
             {
-                //	setAD_Reference_ID (0);
-                //	setAD_Ref_List_ID (0);
+                //	setVAF_Control_Ref_ID (0);
+                //	setVAF_CtrlRef_List_ID (0);
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
                 //	setName (null);
                 //	setValue (null);

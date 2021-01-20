@@ -4,7 +4,7 @@
     /**
      *	System Display Types.
      *  <pre>
-     *	SELECT AD_Reference_ID, Name FROM AD_Reference WHERE ValidationType = 'D'
+     *	SELECT VAF_Control_Ref_ID, Name FROM VAF_Control_Ref WHERE ValidationType = 'D'
      *  </pre>
      */
 
@@ -252,9 +252,9 @@
 
             if (displayType == VIS.DisplayType.Button) {
 
-                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getAD_Process_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getVAF_Page_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
+                var btn = new VButton(columnName, isMandatory, isReadOnly, isUpdateable, mField.getHeader(), mField.getDescription(), mField.getHelp(), mField.getVAF_Job_ID(), mField.getIsLink(), mField.getIsRightPaneLink(), mField.getVAF_Page_ID(), mField.getIsBackgroundProcess(), mField.getAskUserBGProcess())
                 btn.setField(mField);
-                btn.setReferenceKey(mField.getAD_Reference_Value_ID());
+                btn.setReferenceKey(mField.getVAF_Control_Ref_Value_ID());
                 ctrl = btn;
             }
 
@@ -416,7 +416,7 @@
                 var txt = new VLabel(mField.getHelp(), columnName, false, true);
                 //VAdvantage.Controls.VButton button = new VAdvantage.Controls.VButton();
                 //button.SetAttribute(mField, columnName, mandatory, isReadOnly, isUpdateable,
-                //                    mField.GetHeader(), mField.GetDescription(), mField.GetHelp(), mField.GetAD_Process_ID());
+                //                    mField.GetHeader(), mField.GetDescription(), mField.GetHelp(), mField.GetVAF_Job_ID());
                 txt.setField(mField);
                 ctrl = txt;
             }
@@ -1117,13 +1117,13 @@
      *  @param text text
      *  @param description description
      *  @param help help
-     *  @param AD_Process_ID process to start
+     *  @param VAF_Job_ID process to start
     
      ***************************************************************************/
-    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, AD_Process_ID, isLink, isRightLink, VAF_Page_ID, isBGProcess, isAskUserBGProcess) {
+    function VButton(columnName, mandatory, isReadOnly, isUpdateable, text, description, help, VAF_Job_ID, isLink, isRightLink, VAF_Page_ID, isBGProcess, isAskUserBGProcess) {
 
         this.actionListner;
-        this.AD_Process_ID = AD_Process_ID;
+        this.VAF_Job_ID = VAF_Job_ID;
         this.VAF_Page_ID = VAF_Page_ID;
         this.description = description;
         this.help = help;
@@ -1217,13 +1217,13 @@
             if (!self.isReadOnly) {
                 var sqlQry = "VIS_81";
                 var param = [];
-                param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
+                param[0] = new VIS.DB.SqlParam("@VAF_Job_ID", VAF_Job_ID);
                 isReport = executeScalar(sqlQry, param);
 
 
                 sqlQry = "VIS_149";
                 param = [];
-                param[0] = new VIS.DB.SqlParam("@AD_Process_ID", AD_Process_ID);
+                param[0] = new VIS.DB.SqlParam("@VAF_Job_ID", VAF_Job_ID);
                 var isCrystalReport = executeScalar(sqlQry, param);
 
                 if (isCrystalReport == "Y" && VIS.context.getIsUseCrystalReportViewer()) {
@@ -1280,7 +1280,7 @@
             $ctrl = null;
             self = null;
             //this.actionListner = null;
-            this.AD_Process_ID = null;
+            this.VAF_Job_ID = null;
             this.description = null;
             this.help = null;
             this.setText = null;
@@ -1350,9 +1350,9 @@
 
     /**
      *	Fill m_Values with Ref_List values
-     *  @param AD_Reference_ID reference
+     *  @param VAF_Control_Ref_ID reference
      */
-    VButton.prototype.readReference = function (AD_Reference_ID) {
+    VButton.prototype.readReference = function (VAF_Control_Ref_ID) {
         this.values = {};
         var SQL;
         if (VIS.Env.isBaseLanguage(VIS.Env.getCtx(), "")) {
@@ -1361,7 +1361,7 @@
             SQL = "VIS_148";
         }
         var param = [];
-        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
         try {
             var dr = executeReader(SQL, param);
             while (dr.read()) {
@@ -1376,10 +1376,10 @@
     };	//	readReferenc
     /**
      *  Return process id
-     *  @return ad_process_id
+     *  @return VAF_Job_id
      */
     VButton.prototype.getProcess_ID = function () {
-        return this.AD_Process_ID;
+        return this.VAF_Job_ID;
     };
 
     VButton.prototype.getVAF_Page_ID = function () {
@@ -1559,7 +1559,7 @@
         var disabled = false;
         if (lookup != null) {
 
-            if ((lookup.getDisplayType() == VIS.DisplayType.List && VIS.context.getAD_Role_ID() == 0)
+            if ((lookup.getDisplayType() == VIS.DisplayType.List && VIS.context.getVAF_Role_ID() == 0)
                 || lookup.getDisplayType() != VIS.DisplayType.List)     //  only system admins can change lists, so no need to zoom for others
             {
                 isZoom = true;
@@ -1727,11 +1727,11 @@
                 var keyColumnName = null;
                 //	Check if it is a Table Reference
                 if ((self.lookup != null) && (self.lookup instanceof VIS.MLookup)) {
-                    var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                    if (AD_Reference_ID != 0) {
+                    var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                    if (VAF_Control_Ref_ID != 0) {
                         var query = "VIS_83";
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         try {
                             var dr = executeReader(query, param);
                             if (dr.read()) {
@@ -2558,15 +2558,15 @@
             //	Check if it is a Table Reference
             var dr = null;
             if (_lookup != null && _lookup instanceof VIS.MLookup) {
-                var AD_Reference_ID = _lookup.getAD_Reference_Value_ID();
-                if (AD_Reference_ID != 0) {
+                var VAF_Control_Ref_ID = _lookup.getVAF_Control_Ref_Value_ID();
+                if (VAF_Control_Ref_ID != 0) {
 
                     // Commented 10 Aug 2015 For : not searching based on the identifiers
                     var tblQuery = "VIS_84";
 
                     try {
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@refid", VAF_Control_Ref_ID);
                         dr = executeReader(tblQuery, param);
 
                         while (dr.read()) {
@@ -2599,7 +2599,7 @@
 
                     try {
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@refid", VAF_Control_Ref_ID);
                         param[1] = new VIS.DB.SqlParam("@colname", _columnName);
                         dr = executeReader(query, param);
 
@@ -2646,16 +2646,16 @@
 
                     // Commented 10 Aug 2015 For : not searching based on the identifiers
                     //var query = "SELECT kc.ColumnName, dc.ColumnName, t.TableName "
-                    //    + "FROM AD_Ref_Table rt"
+                    //    + "FROM VAF_CtrlRef_Table rt"
                     //    + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
                     //    + " INNER JOIN VAF_Column dc ON (rt.Column_Display_ID=dc.VAF_Column_ID)"
                     //    + " INNER JOIN VAF_TableView t ON (rt.VAF_TableView_ID=t.VAF_TableView_ID) "
-                    //    + "WHERE rt.AD_Reference_ID=@refid";
+                    //    + "WHERE rt.VAF_Control_Ref_ID=@refid";
                     //var displayColumnName = null;
 
                     //try {
                     //    var param = [];
-                    //    param[0] = new VIS.DB.SqlParam("@refid", AD_Reference_ID);
+                    //    param[0] = new VIS.DB.SqlParam("@refid", VAF_Control_Ref_ID);
                     //    dr = VIS.DB.executeReader(query, param);
                     //    while (dr.read()) {
                     //        _keyColumnName = dr.get(0);
@@ -2897,14 +2897,14 @@
                 var M_Warehouse_ID = 0, M_PriceList_ID = 0, window_ID = 0;
 
                 //
-                var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                if (AD_Reference_ID > 0) {
+                var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                if (VAF_Control_Ref_ID > 0) {
                     query = "VIS_87";
                     var displayColumnName = null;
 
                     try {
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         dr = executeReader(query, param);
                         while (dr.read()) {
                             _keyColumnName = dr.getString(0);//.Table.rows[0].cells['ColumnName']; [0].ToString();
@@ -3113,11 +3113,11 @@
                 var keyColumnName = null;
                 //	Check if it is a Table Reference
                 if ((self.lookup != null) && (self.lookup instanceof VIS.MLookup)) {
-                    var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                    if (AD_Reference_ID != 0) {
+                    var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                    if (VAF_Control_Ref_ID != 0) {
                         var query = "VIS_90";
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         try {
                             var dr = executeReader(query, param);
                             if (dr.read()) {
@@ -4156,11 +4156,11 @@
                 var keyColumnName = null;
                 //	Check if it is a Table Reference
                 if ((self.lookup != null) && (self.lookup instanceof VIS.MLookup)) {
-                    var AD_Reference_ID = self.lookup.getAD_Reference_Value_ID();
-                    if (AD_Reference_ID != 0) {
+                    var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
+                    if (VAF_Control_Ref_ID != 0) {
                         var query = "VIS_91";
                         var param = [];
-                        param[0] = new VIS.DB.SqlParam("@AD_Reference_ID", AD_Reference_ID);
+                        param[0] = new VIS.DB.SqlParam("@VAF_Control_Ref_ID", VAF_Control_Ref_ID);
                         try {
                             var dr = executeReader(query, param);
                             if (dr.read()) {

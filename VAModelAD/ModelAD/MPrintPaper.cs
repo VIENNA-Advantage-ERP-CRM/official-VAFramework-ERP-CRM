@@ -16,37 +16,37 @@ using VAdvantage.Print;
 
 namespace VAdvantage.Model
 {
-    public class MPrintPaper : X_AD_PrintPaper
+    public class MPrintPaper : X_VAF_Print_Rpt_Paper
     {
         /// <summary>
         /// Get Paper
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PrintPaper_ID"AD_PrintPaper_ID></param>
+        /// <param name="VAF_Print_Rpt_Paper_ID"VAF_Print_Rpt_Paper_ID></param>
         /// <returns>Paper</returns>
-        static public MPrintPaper Get(int AD_PrintPaper_ID)
+        static public MPrintPaper Get(int VAF_Print_Rpt_Paper_ID)
         {
-            int key = AD_PrintPaper_ID;
+            int key = VAF_Print_Rpt_Paper_ID;
             MPrintPaper pp = null;
             if (s_papers.ContainsKey(key))
                 pp = s_papers[key];
             if (pp == null)
             {
-                pp = new MPrintPaper(Env.GetContext(), AD_PrintPaper_ID, null);
+                pp = new MPrintPaper(Env.GetContext(), VAF_Print_Rpt_Paper_ID, null);
                 if (s_papers.ContainsKey(key))
                     s_papers[key] = pp;
                 else
                     s_papers.Add(key, pp);
             }
             else
-                s_log.Config("AD_PrintPaper_ID=" + AD_PrintPaper_ID);
+                s_log.Config("VAF_Print_Rpt_Paper_ID=" + VAF_Print_Rpt_Paper_ID);
             return pp;
         }	//	get
 
         /**	Logger				*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MPrintPaper).FullName);
         /** Cached Fonts						*/
-        private static CCache<int, MPrintPaper> s_papers = new CCache<int, MPrintPaper>("AD_PrintPaper", 5);
+        private static CCache<int, MPrintPaper> s_papers = new CCache<int, MPrintPaper>("VAF_Print_Rpt_Paper", 5);
 
 
         /// <summary>
@@ -64,11 +64,11 @@ namespace VAdvantage.Model
             return pp;
         }	//	create
 
-        public MPrintPaper(Context ctx, int AD_PrintPaper_ID, Trx trx)
-            : base(ctx, AD_PrintPaper_ID, trx)
+        public MPrintPaper(Context ctx, int VAF_Print_Rpt_Paper_ID, Trx trx)
+            : base(ctx, VAF_Print_Rpt_Paper_ID, trx)
         {
 
-            if (AD_PrintPaper_ID == 0)
+            if (VAF_Print_Rpt_Paper_ID == 0)
             {
                 SetIsDefault(false);
                 SetIsLandscape(true);
@@ -81,11 +81,11 @@ namespace VAdvantage.Model
         }	//	MPrintPaper
 
 
-        public MPrintPaper(Ctx ctx, int AD_PrintPaper_ID, Trx trx)
-            : base(ctx, AD_PrintPaper_ID, trx)
+        public MPrintPaper(Ctx ctx, int VAF_Print_Rpt_Paper_ID, Trx trx)
+            : base(ctx, VAF_Print_Rpt_Paper_ID, trx)
         {
 
-            if (AD_PrintPaper_ID == 0)
+            if (VAF_Print_Rpt_Paper_ID == 0)
             {
                 SetIsDefault(false);
                 SetIsLandscape(true);

@@ -41,7 +41,7 @@ namespace VAdvantage.Model
             if (VAF_Column_ID == 0)
             {
                 //	setVAF_ColumnDic_ID (0);
-                //	setAD_Reference_ID (0);
+                //	setVAF_Control_Ref_ID (0);
                 //	setColumnName (null);
                 //	setName (null);
                 //	setEntityType (null);	// U
@@ -389,7 +389,7 @@ namespace VAdvantage.Model
         {
             string defaultValue = GetDefaultValue();
             string columnName = GetColumnName();
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             //
             string sql = "";
             if (columnName.Equals("CreatedBy") || columnName.Equals("UpdatedBy"))
@@ -469,7 +469,7 @@ namespace VAdvantage.Model
         public string getSQLDataType()
         {
             string columnName = GetColumnName();
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             return DisplayType.GetSQLDataType(dt, columnName, GetFieldLength());
         }
 
@@ -512,7 +512,7 @@ namespace VAdvantage.Model
             //	Inline Constraint only for oracle now
             if (DatabaseType.IsOracle)
             {
-                if (GetAD_Reference_ID() == DisplayType.YesNo)
+                if (GetVAF_Control_Ref_ID() == DisplayType.YesNo)
                 {
                     sql.Append(" CHECK (").Append(columnName).Append(" IN ('Y','N'))");
                 }
@@ -581,7 +581,7 @@ namespace VAdvantage.Model
             if (!CheckVersions(false))
                 return false;
 
-            int displayType = GetAD_Reference_ID();
+            int displayType = GetVAF_Control_Ref_ID();
             //	Length
             if (DisplayType.IsLOB(displayType))	//	LOBs are 0
             {
@@ -632,7 +632,7 @@ namespace VAdvantage.Model
             //	Encrypted
             if (IsEncrypted())
             {
-                int dt = GetAD_Reference_ID();
+                int dt = GetVAF_Control_Ref_ID();
                 if (IsKey() || IsParent() || IsStandardColumn()
                     || IsVirtualColumn() || IsIdentifier() || IsTranslated()
                     || DisplayType.IsLookup(dt) || DisplayType.IsLOB(dt)
@@ -680,7 +680,7 @@ namespace VAdvantage.Model
         public String GetFKColumnName()
         {
             String keyColumnName = GetColumnName();
-            int displayType = GetAD_Reference_ID();
+            int displayType = GetVAF_Control_Ref_ID();
             if (displayType == DisplayType.List)
                 return "Value";
             if (displayType == DisplayType.Account)
@@ -688,8 +688,8 @@ namespace VAdvantage.Model
             //
             if (displayType == DisplayType.Table)
             {
-                int AD_Reference_ID = GetAD_Reference_Value_ID();
-                MRefTable rt = MRefTable.Get(GetCtx(), AD_Reference_ID);
+                int VAF_Control_Ref_ID = GetVAF_Control_Ref_Value_ID();
+                MRefTable rt = MRefTable.Get(GetCtx(), VAF_Control_Ref_ID);
                 return rt.GetKeyColumnName();
             }
             return keyColumnName;
@@ -704,7 +704,7 @@ namespace VAdvantage.Model
             if (!IsFK())
                 return null;
 
-            int displayType = GetAD_Reference_ID();
+            int displayType = GetVAF_Control_Ref_ID();
             //	Lists
             if (displayType == DisplayType.List)
                 return MTable.Get(GetCtx(), MRefList.Table_ID);
@@ -736,7 +736,7 @@ namespace VAdvantage.Model
         /// <returns>true if has FK</returns>
         public bool IsFK()
         {
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             if (DisplayType.IsID(dt)
                 && dt != DisplayType.ID
                 && !IsKey()
@@ -753,7 +753,7 @@ namespace VAdvantage.Model
         /// <returns>true if volumn is a list</returns>
         public bool IsList()
         {
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             return dt == DisplayType.List;
         }
 
@@ -764,7 +764,7 @@ namespace VAdvantage.Model
         /// <returns>true if volumn is a list</returns>
         public bool IsStringOrText()
         {
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             if (dt == DisplayType.String || dt == DisplayType.TextLong || dt == DisplayType.Text)
                 return true;
             return false;
@@ -777,7 +777,7 @@ namespace VAdvantage.Model
         /// <returns>true if volumn is a list</returns>
         public bool IsDate()
         {
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             return dt == (DisplayType.Date);
         }
 
@@ -787,7 +787,7 @@ namespace VAdvantage.Model
         /// <returns>true if volumn is a list</returns>
         public bool IsDateTime()
         {
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             if (dt == DisplayType.DateTime || dt == DisplayType.Date)
                 return true;
             return false;
@@ -799,7 +799,7 @@ namespace VAdvantage.Model
         /// <returns>true if volumn is a list</returns>
         public bool IsYesNo()
         {
-            int dt = GetAD_Reference_ID();
+            int dt = GetVAF_Control_Ref_ID();
             return dt == DisplayType.YesNo;
         }
 

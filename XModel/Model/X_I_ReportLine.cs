@@ -113,8 +113,8 @@ StringBuilder sb = new StringBuilder ("X_I_ReportLine[").Append(Get_ID()).Append
 return sb.ToString();
 }
 
-/** AmountType AD_Reference_ID=235 */
-public static int AMOUNTTYPE_AD_Reference_ID=235;
+/** AmountType VAF_Control_Ref_ID=235 */
+public static int AMOUNTTYPE_VAF_Control_Ref_ID=235;
 /** Period Balance = BP */
 public static String AMOUNTTYPE_PeriodBalance = "BP";
 /** Total Balance = BT */
@@ -182,8 +182,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** CalculationType AD_Reference_ID=236 */
-public static int CALCULATIONTYPE_AD_Reference_ID=236;
+/** CalculationType VAF_Control_Ref_ID=236 */
+public static int CALCULATIONTYPE_VAF_Control_Ref_ID=236;
 /** Add (Op1+Op2) = A */
 public static String CALCULATIONTYPE_AddOp1PlusOp2 = "A";
 /** Percentage (Op1 of Op2) = P */
@@ -270,8 +270,8 @@ public String GetI_ErrorMsg()
 return (String)Get_Value("I_ErrorMsg");
 }
 
-/** I_IsImported AD_Reference_ID=420 */
-public static int I_ISIMPORTED_AD_Reference_ID=420;
+/** I_IsImported VAF_Control_Ref_ID=420 */
+public static int I_ISIMPORTED_VAF_Control_Ref_ID=420;
 /** Error = E */
 public static String I_ISIMPORTED_Error = "E";
 /** No = N */
@@ -357,8 +357,8 @@ if (oo != null)
 return false;
 }
 
-/** LineType AD_Reference_ID=241 */
-public static int LINETYPE_AD_Reference_ID=241;
+/** LineType VAF_Control_Ref_ID=241 */
+public static int LINETYPE_VAF_Control_Ref_ID=241;
 /** Calculation = C */
 public static String LINETYPE_Calculation = "C";
 /** Segment Value = S */
@@ -461,8 +461,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PostingType AD_Reference_ID=125 */
-public static int POSTINGTYPE_AD_Reference_ID=125;
+/** PostingType VAF_Control_Ref_ID=125 */
+public static int POSTINGTYPE_VAF_Control_Ref_ID=125;
 /** Actual = A */
 public static String POSTINGTYPE_Actual = "A";
 /** Budget = B */

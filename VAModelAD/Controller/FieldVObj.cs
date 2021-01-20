@@ -172,7 +172,7 @@ namespace VAdvantage.Controller
         /**	FK				*/
         public bool IsParent = false;
         /**	Process			*/
-        public int AD_Process_ID = 0;
+        public int VAF_Job_ID = 0;
         /**	Process			*/
         public int VAF_Page_ID = 0;
         /**	Description		*/
@@ -189,7 +189,7 @@ namespace VAdvantage.Controller
         /**	Lookup Validation code	*/
         public String ValidationCode = "";
         /**	Reference Value			*/
-        public int AD_Reference_Value_ID = 0;
+        public int VAF_Control_Ref_Value_ID = 0;
 
         /**	Process Parameter Range		*/
         public bool isRange = false;
@@ -197,7 +197,7 @@ namespace VAdvantage.Controller
         public String DefaultValue2 = "";
 
         /* display Type Id */
-        public int AD_Reference_ID;
+        public int VAF_Control_Ref_ID;
         /* Val_rule_ID */
         public int VAF_DataVal_Rule_ID;
 
@@ -513,7 +513,7 @@ namespace VAdvantage.Controller
         //        ListBoxVO searchList = new ListBoxVO( this.listBoxVO.getOptions(), this.listBoxVO.getDefaultKey() );
         //        searchList.Column_ID = this.listBoxVO.Column_ID;
         //        searchList.TableName = this.listBoxVO.TableName;
-        //        searchList.AD_Reference_Value_ID = this.listBoxVO.AD_Reference_Value_ID;
+        //        searchList.VAF_Control_Ref_Value_ID = this.listBoxVO.VAF_Control_Ref_Value_ID;
         //        searchList.IsCreadedUpdatedBy = this.listBoxVO.IsCreadedUpdatedBy;
         //        searchList.IsValidated = this.listBoxVO.IsValidated;
         //        searchList.IsParent = this.listBoxVO.IsParent;
@@ -530,7 +530,7 @@ namespace VAdvantage.Controller
         //    f.Description = this.Description;
         //    f.Help = this.Help;
         //    f.isQueryCriteria = this.isQueryCriteria;
-        //    f.AD_Reference_ID = this.AD_Reference_ID;
+        //    f.VAF_Control_Ref_ID = this.VAF_Control_Ref_ID;
         //    f.isRange = this.isRange;
         //    f.selectClause = this.selectClause;
         //    f.DefaultValue = this.DefaultValue;
@@ -564,7 +564,7 @@ namespace VAdvantage.Controller
         //    f.IsAlwaysUpdateable = this.IsAlwaysUpdateable;
         //    f.IsMandatoryUI = false;
         //    f.isDependentValue = this.isDependentValue;
-        //    f.AD_Reference_Value_ID = this.AD_Reference_Value_ID;
+        //    f.VAF_Control_Ref_Value_ID = this.VAF_Control_Ref_Value_ID;
         //    f.AD_Window_ID = this.AD_Window_ID;
 
 
@@ -572,7 +572,7 @@ namespace VAdvantage.Controller
         //        ListBoxVO searchList = new ListBoxVO(false);
         //        searchList.Column_ID = this.listBoxVO.Column_ID;
         //        searchList.TableName = this.listBoxVO.TableName;
-        //        searchList.AD_Reference_Value_ID = this.listBoxVO.AD_Reference_Value_ID;
+        //        searchList.VAF_Control_Ref_Value_ID = this.listBoxVO.VAF_Control_Ref_Value_ID;
         //        searchList.IsCreadedUpdatedBy = this.listBoxVO.IsCreadedUpdatedBy;
         //        searchList.IsValidated = this.listBoxVO.IsValidated;
         //        searchList.IsParent = this.listBoxVO.IsParent;
@@ -596,7 +596,7 @@ namespace VAdvantage.Controller
         //    f.Description = this.Description;
         //    f.Help = this.Help;
         //    f.isQueryCriteria = this.isQueryCriteria;
-        //    f.AD_Reference_ID = this.AD_Reference_ID;
+        //    f.VAF_Control_Ref_ID = this.VAF_Control_Ref_ID;
         //    f.isRange = this.isRange;
         //    f.selectClause = this.selectClause;
         //    f.DefaultValue = this.DefaultValue;

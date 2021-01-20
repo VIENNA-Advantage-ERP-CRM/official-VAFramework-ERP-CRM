@@ -203,8 +203,8 @@ SetFiscalYear (null);
             }
             return false;
         }
-        /** CalendarYears AD_Reference_ID=1000188 */
-        public static int CALENDARYEARS_AD_Reference_ID = 1000188;/** 1975 = 1975 */
+        /** CalendarYears VAF_Control_Ref_ID=1000188 */
+        public static int CALENDARYEARS_VAF_Control_Ref_ID = 1000188;/** 1975 = 1975 */
         public static String CALENDARYEARS_1975 = "1975";/** 1976 = 1976 */
         public static String CALENDARYEARS_1976 = "1976";/** 1977 = 1977 */
         public static String CALENDARYEARS_1977 = "1977";/** 1978 = 1978 */

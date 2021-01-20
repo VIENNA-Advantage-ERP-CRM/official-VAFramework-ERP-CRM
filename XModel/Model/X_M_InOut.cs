@@ -162,8 +162,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
         @param VAF_OrgTrx_ID Performing or initiating organization */
         public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
@@ -259,8 +259,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_Charge_ID AD_Reference_ID=200 */
-        public static int C_CHARGE_ID_AD_Reference_ID = 200;
+        /** C_Charge_ID VAF_Control_Ref_ID=200 */
+        public static int C_CHARGE_ID_VAF_Control_Ref_ID = 200;
         /** Set Charge.
         @param C_Charge_ID Additional document charges */
         public void SetC_Charge_ID(int C_Charge_ID)
@@ -278,8 +278,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocType_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPE_ID_AD_Reference_ID = 170;
+        /** C_DocType_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPE_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type.
         @param C_DocType_ID Document type or rules */
         public void SetC_DocType_ID(int C_DocType_ID)
@@ -458,8 +458,8 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("DateReceived");
         }
 
-        /** DeliveryRule AD_Reference_ID=151 */
-        public static int DELIVERYRULE_AD_Reference_ID = 151;
+        /** DeliveryRule VAF_Control_Ref_ID=151 */
+        public static int DELIVERYRULE_VAF_Control_Ref_ID = 151;
         /** Availability = A */
         public static String DELIVERYRULE_Availability = "A";
         /** Force = F */
@@ -500,8 +500,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DeliveryRule");
         }
 
-        /** DeliveryViaRule AD_Reference_ID=152 */
-        public static int DELIVERYVIARULE_AD_Reference_ID = 152;
+        /** DeliveryViaRule VAF_Control_Ref_ID=152 */
+        public static int DELIVERYVIARULE_VAF_Control_Ref_ID = 152;
         /** Delivery = D */
         public static String DELIVERYVIARULE_Delivery = "D";
         /** Pickup = P */
@@ -553,8 +553,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -611,8 +611,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -703,8 +703,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** FreightCostRule AD_Reference_ID=153 */
-        public static int FREIGHTCOSTRULE_AD_Reference_ID = 153;
+        /** FreightCostRule VAF_Control_Ref_ID=153 */
+        public static int FREIGHTCOSTRULE_VAF_Control_Ref_ID = 153;
         /** Calculated = C */
         public static String FREIGHTCOSTRULE_Calculated = "C";
         /** Fix price = F */
@@ -912,8 +912,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** MatchRequirementR AD_Reference_ID=410 */
-        public static int MATCHREQUIREMENTR_AD_Reference_ID = 410;
+        /** MatchRequirementR VAF_Control_Ref_ID=410 */
+        public static int MATCHREQUIREMENTR_VAF_Control_Ref_ID = 410;
         /** Purchase Order and Invoice = B */
         public static String MATCHREQUIREMENTR_PurchaseOrderAndInvoice = "B";
         /** Invoice = I */
@@ -962,8 +962,8 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("MovementDate");
         }
 
-        /** MovementType AD_Reference_ID=189 */
-        public static int MOVEMENTTYPE_AD_Reference_ID = 189;
+        /** MovementType VAF_Control_Ref_ID=189 */
+        public static int MOVEMENTTYPE_VAF_Control_Ref_ID = 189;
         /** Customer Returns = C+ */
         public static String MOVEMENTTYPE_CustomerReturns = "C+";
         /** Customer Shipment = C- */
@@ -1030,8 +1030,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Orig_InOut_ID AD_Reference_ID=337 */
-        public static int ORIG_INOUT_ID_AD_Reference_ID = 337;
+        /** Orig_InOut_ID VAF_Control_Ref_ID=337 */
+        public static int ORIG_INOUT_ID_VAF_Control_Ref_ID = 337;
         /** Set Orig Shipment.
         @param Orig_InOut_ID Original shipment of the RMA */
         public void SetOrig_InOut_ID(int Orig_InOut_ID)
@@ -1047,8 +1047,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Orig_Order_ID AD_Reference_ID=290 */
-        public static int ORIG_ORDER_ID_AD_Reference_ID = 290;
+        /** Orig_Order_ID VAF_Control_Ref_ID=290 */
+        public static int ORIG_ORDER_ID_VAF_Control_Ref_ID = 290;
         /** Set Orig Sales Order.
         @param Orig_Order_ID Original Sales Order for Return Material Authorization */
         public void SetOrig_Order_ID(int Orig_Order_ID)
@@ -1111,8 +1111,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** PriorityRule AD_Reference_ID=154 */
-        public static int PRIORITYRULE_AD_Reference_ID = 154;
+        /** PriorityRule VAF_Control_Ref_ID=154 */
+        public static int PRIORITYRULE_VAF_Control_Ref_ID = 154;
         /** Urgent = 1 */
         public static String PRIORITYRULE_Urgent = "1";
         /** High = 3 */
@@ -1203,8 +1203,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Representative.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)
@@ -1269,8 +1269,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("TrackingNo");
         }
 
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;
         /** Set User List 1.
         @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
@@ -1288,8 +1288,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;
         /** Set User List 2.
         @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
@@ -1351,8 +1351,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** SAP001_ShipToParty AD_Reference_ID=1000197 */
-        public static int SAP001_SHIPTOPARTY_AD_Reference_ID = 1000197;
+        /** SAP001_ShipToParty VAF_Control_Ref_ID=1000197 */
+        public static int SAP001_SHIPTOPARTY_VAF_Control_Ref_ID = 1000197;
         /** Set Ship-To-Party.
         @param SAP001_ShipToParty Ship-To-Party */
         public void SetSAP001_ShipToParty(int SAP001_ShipToParty)
@@ -1502,8 +1502,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** ReversalDoc_ID AD_Reference_ID=337 */
-        public static int REVERSALDOC_ID_AD_Reference_ID = 337;
+        /** ReversalDoc_ID VAF_Control_Ref_ID=337 */
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 337;
         /** Set Reversal Document.@param ReversalDoc_ID Reversal Document */
         public void SetReversalDoc_ID(int ReversalDoc_ID)
         {

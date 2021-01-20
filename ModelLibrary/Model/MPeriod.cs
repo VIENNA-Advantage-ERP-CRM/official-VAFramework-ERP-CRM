@@ -580,7 +580,7 @@ namespace VAdvantage.Model
         {
             if (newRecord)
             {
-                //	SELECT Value FROM AD_Ref_List WHERE AD_Reference_ID=183
+                //	SELECT Value FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=183
                 MDocType[] types = MDocType.GetOfClient(GetCtx());
                 int count = 0;
                 List<String> baseTypes = new List<String>();

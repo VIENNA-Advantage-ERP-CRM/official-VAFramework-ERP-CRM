@@ -113,8 +113,8 @@ StringBuilder sb = new StringBuilder ("X_I_ElementValue[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** VAF_Column_ID AD_Reference_ID=272 */
-public static int VAF_COLUMN_ID_AD_Reference_ID=272;
+/** VAF_Column_ID VAF_Control_Ref_ID=272 */
+public static int VAF_COLUMN_ID_VAF_Control_Ref_ID=272;
 /** Set Column.
 @param VAF_Column_ID Column in the table */
 public void SetVAF_Column_ID (int VAF_Column_ID)
@@ -132,8 +132,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AccountSign AD_Reference_ID=118 */
-public static int ACCOUNTSIGN_AD_Reference_ID=118;
+/** AccountSign VAF_Control_Ref_ID=118 */
+public static int ACCOUNTSIGN_VAF_Control_Ref_ID=118;
 /** Credit = C */
 public static String ACCOUNTSIGN_Credit = "C";
 /** Debit = D */
@@ -167,8 +167,8 @@ public String GetAccountSign()
 return (String)Get_Value("AccountSign");
 }
 
-/** AccountType AD_Reference_ID=117 */
-public static int ACCOUNTTYPE_AD_Reference_ID=117;
+/** AccountType VAF_Control_Ref_ID=117 */
+public static int ACCOUNTTYPE_VAF_Control_Ref_ID=117;
 /** Asset = A */
 public static String ACCOUNTTYPE_Asset = "A";
 /** Expense = E */
@@ -323,8 +323,8 @@ public String GetI_ErrorMsg()
 return (String)Get_Value("I_ErrorMsg");
 }
 
-/** I_IsImported AD_Reference_ID=420 */
-public static int I_ISIMPORTED_AD_Reference_ID=420;
+/** I_IsImported VAF_Control_Ref_ID=420 */
+public static int I_ISIMPORTED_VAF_Control_Ref_ID=420;
 /** Error = E */
 public static String I_ISIMPORTED_Error = "E";
 /** No = N */
@@ -412,8 +412,8 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 
-/** ParentElementValue_ID AD_Reference_ID=182 */
-public static int PARENTELEMENTVALUE_ID_AD_Reference_ID=182;
+/** ParentElementValue_ID VAF_Control_Ref_ID=182 */
+public static int PARENTELEMENTVALUE_ID_VAF_Control_Ref_ID=182;
 /** Set Parent Account.
 @param ParentElementValue_ID The parent (summary) account */
 public void SetParentElementValue_ID (int ParentElementValue_ID)

@@ -527,8 +527,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("CreditCardNumber");
         }
 
-        /** CreditCardType AD_Reference_ID=149 */
-        public static int CREDITCARDTYPE_AD_Reference_ID = 149;
+        /** CreditCardType VAF_Control_Ref_ID=149 */
+        public static int CREDITCARDTYPE_VAF_Control_Ref_ID = 149;
         /** Amex = A */
         public static String CREDITCARDTYPE_Amex = "A";
         /** ATM = C */
@@ -693,8 +693,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("I_ErrorMsg");
         }
 
-        /** I_IsImported AD_Reference_ID=420 */
-        public static int I_ISIMPORTED_AD_Reference_ID = 420;
+        /** I_IsImported VAF_Control_Ref_ID=420 */
+        public static int I_ISIMPORTED_VAF_Control_Ref_ID = 420;
         /** Error = E */
         public static String I_ISIMPORTED_Error = "E";
         /** No = N */
@@ -1099,8 +1099,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** TenderType AD_Reference_ID=214 */
-        public static int TENDERTYPE_AD_Reference_ID = 214;
+        /** TenderType VAF_Control_Ref_ID=214 */
+        public static int TENDERTYPE_VAF_Control_Ref_ID = 214;
         /** Direct Deposit = A */
         public static String TENDERTYPE_DirectDeposit = "A";
         /** Credit Card = C */
@@ -1136,8 +1136,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("TenderType");
         }
 
-        /** TrxType AD_Reference_ID=215 */
-        public static int TRXTYPE_AD_Reference_ID = 215;
+        /** TrxType VAF_Control_Ref_ID=215 */
+        public static int TRXTYPE_VAF_Control_Ref_ID = 215;
         /** Authorization = A */
         public static String TRXTYPE_Authorization = "A";
         /** Credit (Payment) = C */

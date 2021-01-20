@@ -106,7 +106,7 @@ namespace VAdvantage.WF
         public MProcessPara GetProcessPara()
         {
             if (_processPara == null)
-                _processPara = new MProcessPara(GetCtx(), GetAD_Process_Para_ID(), Get_TrxName());
+                _processPara = new MProcessPara(GetCtx(), GetVAF_Job_Para_ID(), Get_TrxName());
             return _processPara;
         }
 
@@ -118,7 +118,7 @@ namespace VAdvantage.WF
         public new String GetAttributeName ()
 	    {
 		    String an = base.GetAttributeName();
-		    if (an == null || an.Length == 0 && GetAD_Process_Para_ID() != 0)
+		    if (an == null || an.Length == 0 && GetVAF_Job_Para_ID() != 0)
 		    {
                 an = GetProcessPara().GetColumnName();
 			    SetAttributeName(an);
@@ -133,7 +133,7 @@ namespace VAdvantage.WF
         /// <returns>display type</returns>
         public int GetDisplayType()
         {
-            return GetProcessPara().GetAD_Reference_ID();
+            return GetProcessPara().GetVAF_Control_Ref_ID();
         }
 
         /// <summary>
@@ -146,12 +146,12 @@ namespace VAdvantage.WF
         }
 
         /// <summary>
-        /// Set AD_Process_Para_ID
+        /// Set VAF_Job_Para_ID
         /// </summary>
-        /// <param name="AD_Process_Para_ID">id</param>
-	    public new void SetAD_Process_Para_ID (int AD_Process_Para_ID)
+        /// <param name="VAF_Job_Para_ID">id</param>
+	    public new void SetVAF_Job_Para_ID (int VAF_Job_Para_ID)
 	    {
-		    base.SetAD_Process_Para_ID(AD_Process_Para_ID);
+		    base.SetVAF_Job_Para_ID(VAF_Job_Para_ID);
 		    SetAttributeName(null);
 	    }
 

@@ -66,7 +66,7 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder();
             sb.Append(info.column_ID).Append(":")
                 .Append(info.keyColumn)
-                .Append(info.AD_Reference_Value_ID)
+                .Append(info.VAF_Control_Ref_Value_ID)
                 .Append(info.query)
                 .Append(info.validationCode);
             //	does not include ctx

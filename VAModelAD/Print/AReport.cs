@@ -68,11 +68,11 @@ namespace VAdvantage.Print
             int VAF_Client_ID = Env.GetContext().GetVAF_Client_ID();
             //
             String sql = MRole.GetDefault(Env.GetContext()).AddAccessSQL(
-                "SELECT AD_PrintFormat_ID, Name, VAF_Client_ID "
-                    + "FROM AD_PrintFormat "
+                "SELECT VAF_Print_Rpt_Layout_ID, Name, VAF_Client_ID "
+                    + "FROM VAF_Print_Rpt_Layout "
                     + "WHERE VAF_TableView_ID='" + VAF_TableView_ID + "' AND IsTableBased='Y' "
                     + "ORDER BY VAF_Client_ID DESC, IsDefault DESC, Name",		//	Own First
-                "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             KeyNamePair pp = null;
 
@@ -188,11 +188,11 @@ namespace VAdvantage.Print
         /// <summary>
         /// Copy the existing format
         /// </summary>
-        /// <param name="AD_PrintFormat_ID">print format id</param>
+        /// <param name="VAF_Print_Rpt_Layout_ID">print format id</param>
         /// <param name="To_Client_ID">client id</param>
-        private void CopyFormat(int AD_PrintFormat_ID, int To_Client_ID)
+        private void CopyFormat(int VAF_Print_Rpt_Layout_ID, int To_Client_ID)
         {
-            MPrintFormat pf = MPrintFormat.CopyToClient(Env.GetContext(), AD_PrintFormat_ID, To_Client_ID);
+            MPrintFormat pf = MPrintFormat.CopyToClient(Env.GetContext(), VAF_Print_Rpt_Layout_ID, To_Client_ID);
             LaunchReport(pf);
         }	//	copyFormatFromClient
 

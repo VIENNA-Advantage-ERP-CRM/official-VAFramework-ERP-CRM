@@ -201,8 +201,8 @@ SetWindowType (null);	// M
             return (String)Get_Value("Description");
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */
@@ -364,8 +364,8 @@ SetWindowType (null);	// M
             return Convert.ToInt32(ii);
         }
 
-        /** WindowType AD_Reference_ID=108 */
-        public static int WINDOWTYPE_AD_Reference_ID = 108;
+        /** WindowType VAF_Control_Ref_ID=108 */
+        public static int WINDOWTYPE_VAF_Control_Ref_ID = 108;
         /** Maintain = M */
         public static String WINDOWTYPE_Maintain = "M";
         /** Query Only = Q */

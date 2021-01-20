@@ -334,8 +334,8 @@ if (oo != null)
 return false;
 }
 
-/** Remote_Client_ID AD_Reference_ID=129 */
-public static int REMOTE_CLIENT_ID_AD_Reference_ID=129;
+/** Remote_Client_ID VAF_Control_Ref_ID=129 */
+public static int REMOTE_CLIENT_ID_VAF_Control_Ref_ID=129;
 /** Set Remote Tenant.
 @param Remote_Client_ID Remote Tenant to be used to replicate / synchronize data with. */
 public void SetRemote_Client_ID (int Remote_Client_ID)
@@ -353,8 +353,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Remote_Org_ID AD_Reference_ID=276 */
-public static int REMOTE_ORG_ID_AD_Reference_ID=276;
+/** Remote_Org_ID VAF_Control_Ref_ID=276 */
+public static int REMOTE_ORG_ID_VAF_Control_Ref_ID=276;
 /** Set Remote Organization.
 @param Remote_Org_ID Remote Organization to be used to replicate / synchronize data with. */
 public void SetRemote_Org_ID (int Remote_Org_ID)

@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class RoleAccessUpdate : ProcessEngine.SvrProcess
     {
         //	Update Role
-        private int _AD_Role_ID = 0;
+        private int _VAF_Role_ID = 0;
         //	Update Roles of Client	
         private int _VAF_Client_ID = 0;
         /// <summary>
@@ -46,9 +46,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("AD_Role_ID"))
+                else if (name.Equals("VAF_Role_ID"))
                 {
-                    _AD_Role_ID = para[i].GetParameterAsInt();
+                    _VAF_Role_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAF_Client_ID"))
                 {
@@ -68,16 +68,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             int lenth = 0;
-            log.Info("VAF_Client_ID=" + _VAF_Client_ID + ", AD_Role_ID=" + _AD_Role_ID);
+            log.Info("VAF_Client_ID=" + _VAF_Client_ID + ", VAF_Role_ID=" + _VAF_Role_ID);
             //
-            if (_AD_Role_ID != 0 && _AD_Role_ID != -1)
+            if (_VAF_Role_ID != 0 && _VAF_Role_ID != -1)
             {
-                UpdateRole(new MRole(GetCtx(), _AD_Role_ID, Get_TrxName()));
+                UpdateRole(new MRole(GetCtx(), _VAF_Role_ID, Get_TrxName()));
 
             }
             else
             {
-                String sql = "SELECT * FROM AD_Role ";
+                String sql = "SELECT * FROM VAF_Role ";
                 if (_VAF_Client_ID != 0)
                 {
                     lenth = 1;

@@ -340,8 +340,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Org_ID AD_Reference_ID=130 */
-public static int ORG_ID_AD_Reference_ID=130;
+/** Org_ID VAF_Control_Ref_ID=130 */
+public static int ORG_ID_VAF_Control_Ref_ID=130;
 /** Set Organization.
 @param Org_ID Organizational entity within client */
 public void SetOrg_ID (int Org_ID)
@@ -389,8 +389,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** C_CommissionType AD_Reference_ID=1000180 */
-public static int C_COMMISSIONTYPE_AD_Reference_ID = 1000180;
+/** C_CommissionType VAF_Control_Ref_ID=1000180 */
+public static int C_COMMISSIONTYPE_VAF_Control_Ref_ID = 1000180;
 /** Amount = A */
 public static String C_COMMISSIONTYPE_Amount = "A";
 /** Quantity = Q */

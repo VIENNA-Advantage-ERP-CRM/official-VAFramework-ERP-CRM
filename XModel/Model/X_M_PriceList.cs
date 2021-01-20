@@ -125,8 +125,8 @@ StringBuilder sb = new StringBuilder ("X_M_PriceList[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 
-/** BasePriceList_ID AD_Reference_ID=166 */
-public static int BASEPRICELIST_ID_AD_Reference_ID=166;
+/** BasePriceList_ID VAF_Control_Ref_ID=166 */
+public static int BASEPRICELIST_ID_VAF_Control_Ref_ID=166;
 /** Set Base Pricelist.
 @param BasePriceList_ID Pricelist to be used, if product not found on this pricelist */
 public void SetBasePriceList_ID (int BasePriceList_ID)
@@ -300,8 +300,8 @@ Object ii = Get_Value("PricePrecision");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** VA008_SalesRegion_ID AD_Reference_ID=1000177 */
-public static int VA008_SALESREGION_ID_AD_Reference_ID = 1000177;
+/** VA008_SalesRegion_ID VAF_Control_Ref_ID=1000177 */
+public static int VA008_SALESREGION_ID_VAF_Control_Ref_ID = 1000177;
 /** Set Sales Region.
 @param VA008_SalesRegion_ID Sales Region */
 public void SetVA008_SalesRegion_ID(int VA008_SalesRegion_ID)

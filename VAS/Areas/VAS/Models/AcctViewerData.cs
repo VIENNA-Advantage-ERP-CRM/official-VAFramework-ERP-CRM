@@ -180,13 +180,13 @@ namespace VIS.Models
         /// Get posting data
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="ad_reference_id"></param>
+        /// <param name="VAF_Control_Ref_id"></param>
         /// <returns></returns>
-        public List<AcctViewerDataPosting> AcctViewerGetPostingType(Ctx ctx, int ad_reference_id)
+        public List<AcctViewerDataPosting> AcctViewerGetPostingType(Ctx ctx, int VAF_Control_Ref_id)
         {
             List<AcctViewerDataPosting> obj = new List<AcctViewerDataPosting>();
-            var sql = " SELECT Value, Name FROM AD_Ref_List "
-            + "WHERE AD_Reference_ID=" + ad_reference_id + " AND IsActive='Y' ORDER BY 1";
+            var sql = " SELECT Value, Name FROM VAF_CtrlRef_List "
+            + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_id + " AND IsActive='Y' ORDER BY 1";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
             {

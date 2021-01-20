@@ -356,7 +356,7 @@ namespace VAdvantage.Model
             string taxRule = string.Empty;
             int _CountED002 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('ED002_' , 'VATAX_' )"));
 
-            string sql = "SELECT VATAX_TaxRule FROM VAF_OrgInfo WHERE VAF_Org_ID=" + inv.GetVAF_Org_ID() + " AND IsActive ='Y' AND VAF_Client_ID =" + GetCtx().GetVAF_Client_ID();
+            string sql = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID=" + inv.GetVAF_Org_ID() + " AND IsActive ='Y' AND VAF_Client_ID =" + GetCtx().GetVAF_Client_ID();
             if (_CountED002 > 0)
             {
                 taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
@@ -417,7 +417,7 @@ namespace VAdvantage.Model
                             }
                         }
                         dsLoc = null;
-                        sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN VAF_OrgInfo org ON loc.C_Location_ID = org.C_Location_ID WHERE org.VAF_Org_ID ="
+                        sql = @"SELECT loc.C_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN VAF_OrgDetail org ON loc.C_Location_ID = org.C_Location_ID WHERE org.VAF_Org_ID ="
                                 + inv.GetVAF_Org_ID() + " AND org.IsActive = 'Y'";
                         dsLoc = DB.ExecuteDataset(sql, null, Get_TrxName());
                         if (dsLoc != null)

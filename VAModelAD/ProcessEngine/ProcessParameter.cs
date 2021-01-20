@@ -14,7 +14,7 @@ namespace VAdvantage.ProcessEngine
     public class ProcessParameter
     {
 
-        public static List<GridField> GetParametersList(Ctx ctx,int AD_Process_ID,int windowNo)
+        public static List<GridField> GetParametersList(Ctx ctx,int VAF_Job_ID,int windowNo)
         {
             List<GridField> fields = new List<GridField>();
 
@@ -23,23 +23,23 @@ namespace VAdvantage.ProcessEngine
             if (Utility.Env.IsBaseLanguage(ctx, ""))//    GlobalVariable.IsBaseLanguage())
             {
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@processid", AD_Process_ID);
+                param[0] = new SqlParameter("@processid", VAF_Job_ID);
                 //strSql = "SELECT p.Name, p.Description, p.Help, "
-                //    + "p.AD_Reference_ID, p.AD_Process_Para_ID, "
+                //    + "p.VAF_Control_Ref_ID, p.VAF_Job_Para_ID, "
                 //    + "p.FieldLength, p.IsMandatory IsMandatoryUI, p.IsRange, p.ColumnName, "
                 //    + "p.DefaultValue, p.DefaultValue2, p.VFormat, p.ValueMin, p.ValueMax, "
-                //    + "p.SeqNo, p.AD_Reference_Value_ID, vr.Code AS ValidationCode "
-                //    + "FROM AD_Process_Para p"
+                //    + "p.SeqNo, p.VAF_Control_Ref_Value_ID, vr.Code AS ValidationCode "
+                //    + "FROM VAF_Job_Para p"
                 //    + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (p.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) "
-                //    + "WHERE p.AD_Process_ID=@processid"		//	1
+                //    + "WHERE p.VAF_Job_ID=@processid"		//	1
                 //    + " AND p.IsActive='Y' "
                 //    + "ORDER BY SeqNo";
 
                 strSql = @"SELECT p.Name,
                                   p.Description,
                                   p.Help,
-                                  p.AD_Reference_ID,
-                                  p.AD_Process_Para_ID,
+                                  p.VAF_Control_Ref_ID,
+                                  p.VAF_Job_Para_ID,
                                   p.FieldLength,
                                   p.IsMandatory IsMandatoryUI,
                                   p.IsRange,
@@ -50,16 +50,16 @@ namespace VAdvantage.ProcessEngine
                                   p.ValueMin,
                                   p.ValueMax,
                                   p.SeqNo,
-                                  p.AD_Reference_Value_ID,
+                                  p.VAF_Control_Ref_Value_ID,
                                   vr.Code AS ValidationCode,
                                   p.VAF_QuickSearchWindow_ID,
                                   p.LoadRecursiveData,
 p.ShowChildOfSelected,
 p.IsEncrypted
-                                FROM AD_Process_Para p
+                                FROM VAF_Job_Para p
                                 LEFT OUTER JOIN VAF_DataVal_Rule vr
                                 ON (p.VAF_DataVal_Rule_ID =vr.VAF_DataVal_Rule_ID)
-                                WHERE p.AD_Process_ID=@processid
+                                WHERE p.VAF_Job_ID=@processid
                                 AND p.IsActive       ='Y'
                                 ORDER BY SeqNo";
 
@@ -67,16 +67,16 @@ p.IsEncrypted
             else
             {
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@processid", AD_Process_ID);
+                param[0] = new SqlParameter("@processid", VAF_Job_ID);
                 //strSql = "SELECT t.Name, t.Description, t.Help, "
-                //    + "p.AD_Reference_ID, p.AD_Process_Para_ID, "
+                //    + "p.VAF_Control_Ref_ID, p.VAF_Job_Para_ID, "
                 //    + "p.FieldLength, p.IsMandatory IsMandatoryUI, p.IsRange, p.ColumnName, "
                 //    + "p.DefaultValue, p.DefaultValue2, p.VFormat, p.ValueMin, p.ValueMax, "
-                //    + "p.SeqNo, p.AD_Reference_Value_ID, vr.Code AS ValidationCode "
-                //    + "FROM AD_Process_Para p"
-                //    + " INNER JOIN AD_Process_Para_Trl t ON (p.AD_Process_Para_ID=t.AD_Process_Para_ID)"
+                //    + "p.SeqNo, p.VAF_Control_Ref_Value_ID, vr.Code AS ValidationCode "
+                //    + "FROM VAF_Job_Para p"
+                //    + " INNER JOIN VAF_Job_Para_TL t ON (p.VAF_Job_Para_ID=t.VAF_Job_Para_ID)"
                 //    + " LEFT OUTER JOIN VAF_DataVal_Rule vr ON (p.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) "
-                //    + "WHERE p.AD_Process_ID=@processid"		//	1
+                //    + "WHERE p.VAF_Job_ID=@processid"		//	1
                 //    + " AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "'"
                 //    + " AND p.IsActive='Y' "
                 //    + "ORDER BY SeqNo";
@@ -84,8 +84,8 @@ p.IsEncrypted
                 strSql = @"SELECT t.Name,
                                   t.Description,
                                   t.Help,
-                                  p.AD_Reference_ID,
-                                  p.AD_Process_Para_ID,
+                                  p.VAF_Control_Ref_ID,
+                                  p.VAF_Job_Para_ID,
                                   p.FieldLength,
                                   p.IsMandatory IsMandatoryUI,
                                   p.IsRange,
@@ -96,18 +96,18 @@ p.IsEncrypted
                                   p.ValueMin,
                                   p.ValueMax,
                                   p.SeqNo,
-                                  p.AD_Reference_Value_ID,
+                                  p.VAF_Control_Ref_Value_ID,
                                   vr.Code AS ValidationCode,
                                   p.VAF_QuickSearchWindow_id,
                                   p.LoadRecursiveData
                                     , p.ShowChildOfSelected,
 p.IsEncrypted
-                                FROM AD_Process_Para p
-                                INNER JOIN AD_Process_Para_Trl t
-                                ON (p.AD_Process_Para_ID=t.AD_Process_Para_ID)
+                                FROM VAF_Job_Para p
+                                INNER JOIN VAF_Job_Para_TL t
+                                ON (p.VAF_Job_Para_ID=t.VAF_Job_Para_ID)
                                 LEFT OUTER JOIN VAF_DataVal_Rule vr
                                 ON (p.VAF_DataVal_Rule_ID =vr.VAF_DataVal_Rule_ID)
-                                WHERE p.AD_Process_ID=@processid
+                                WHERE p.VAF_Job_ID=@processid
                                 AND t.VAF_Language    ='" + Utility.Env.GetVAF_Language(ctx) + @"'
                                 AND p.IsActive       ='Y'
                                 ORDER BY SeqNo";

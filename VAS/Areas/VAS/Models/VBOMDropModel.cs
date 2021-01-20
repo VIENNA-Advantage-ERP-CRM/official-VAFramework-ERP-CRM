@@ -415,9 +415,9 @@ namespace VIS.Models
 
         private string GetBOMType(string BOMTypeValue)
         {
-            string sql = "select lst.Name from ad_ref_list  lst "
-                       + " INNER JOIN ad_reference re"
-                       + " ON re.ad_reference_id=lst.ad_reference_id"
+            string sql = "select lst.Name from VAF_CtrlRef_List  lst "
+                       + " INNER JOIN VAF_Control_Ref re"
+                       + " ON re.VAF_Control_Ref_id=lst.VAF_Control_Ref_id"
                        + " where re.name='M_Product BOM Product TypeX' and lst.value='" + BOMTypeValue + "'";
             return Util.GetValueOfString(DB.ExecuteScalar(sql));
         }

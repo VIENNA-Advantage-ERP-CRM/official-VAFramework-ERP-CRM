@@ -84,7 +84,7 @@ namespace VAdvantage.Model
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("Select L.Value From Ad_Ref_List L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='Revenue Recognition'");
+                _sql.Append("Select L.Value From VAF_CtrlRef_List L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='Revenue Recognition'");
                 var relatedtoProduct = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO assetGroupAcct = null;
@@ -339,7 +339,7 @@ namespace VAdvantage.Model
                             int calendar_ID = 0;
                             DataSet ds = new DataSet();
 
-                            calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM VAF_OrgInfo WHERE vaf_org_id = " + Invoice.GetVAF_Org_ID()));
+                            calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM VAF_OrgDetail WHERE vaf_org_id = " + Invoice.GetVAF_Org_ID()));
                             if (calendar_ID == 0)
                             {
                                 calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Calendar_ID FROM VAF_ClientDetail WHERE vaf_client_id = " + Invoice.GetVAF_Client_ID()));

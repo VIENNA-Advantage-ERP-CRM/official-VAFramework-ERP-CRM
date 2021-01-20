@@ -95,7 +95,7 @@ namespace VAdvantage.Model
 
                 // get value of "Withholding" -- "related to"
                 _sql.Clear();
-                _sql.Append(@"SELECT L.Value FROM Ad_Ref_List L INNER JOIN AD_Reference r ON R.AD_REFERENCE_ID=L.AD_REFERENCE_ID 
+                _sql.Append(@"SELECT L.Value FROM VAF_CtrlRef_List L INNER JOIN VAF_Control_Ref r ON R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID 
                                 WHERE r.name='FRPT_RelatedTo' AND l.name='Witholding'");
                 var relatedtoProduct = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 

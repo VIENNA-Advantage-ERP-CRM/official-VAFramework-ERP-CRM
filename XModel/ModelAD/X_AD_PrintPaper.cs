@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_PrintPaper
+/** Generated Model for VAF_Print_Rpt_Paper
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_PrintPaper : PO
+public class X_VAF_Print_Rpt_Paper : PO
 {
-public X_AD_PrintPaper (Context ctx, int AD_PrintPaper_ID, Trx trxName) : base (ctx, AD_PrintPaper_ID, trxName)
+public X_VAF_Print_Rpt_Paper (Context ctx, int VAF_Print_Rpt_Paper_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_Paper_ID, trxName)
 {
-/** if (AD_PrintPaper_ID == 0)
+/** if (VAF_Print_Rpt_Paper_ID == 0)
 {
-SetAD_PrintPaper_ID (0);
+SetVAF_Print_Rpt_Paper_ID (0);
 SetCode (null);	// iso-a4
 SetIsDefault (false);
 SetIsLandscape (true);	// Y
@@ -32,11 +32,11 @@ SetName (null);
 }
  */
 }
-public X_AD_PrintPaper (Ctx ctx, int AD_PrintPaper_ID, Trx trxName) : base (ctx, AD_PrintPaper_ID, trxName)
+public X_VAF_Print_Rpt_Paper (Ctx ctx, int VAF_Print_Rpt_Paper_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_Paper_ID, trxName)
 {
-/** if (AD_PrintPaper_ID == 0)
+/** if (VAF_Print_Rpt_Paper_ID == 0)
 {
-SetAD_PrintPaper_ID (0);
+SetVAF_Print_Rpt_Paper_ID (0);
 SetCode (null);	// iso-a4
 SetIsDefault (false);
 SetIsLandscape (true);	// Y
@@ -53,7 +53,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintPaper (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_Paper (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,7 +61,7 @@ public X_AD_PrintPaper (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintPaper (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_Paper (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -69,13 +69,13 @@ public X_AD_PrintPaper (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintPaper (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Print_Rpt_Paper (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_PrintPaper()
+static X_VAF_Print_Rpt_Paper()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -88,8 +88,8 @@ public static long updatedMS = 1280389046198L;
 public static int Table_ID;
  // =492;
 
-/** TableName=AD_PrintPaper */
-public static String Table_Name="AD_PrintPaper";
+/** TableName=VAF_Print_Rpt_Paper */
+public static String Table_Name="VAF_Print_Rpt_Paper";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -123,21 +123,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_PrintPaper[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Print_Rpt_Paper[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Print Paper.
-@param AD_PrintPaper_ID Printer paper definition */
-public void SetAD_PrintPaper_ID (int AD_PrintPaper_ID)
+@param VAF_Print_Rpt_Paper_ID Printer paper definition */
+public void SetVAF_Print_Rpt_Paper_ID (int VAF_Print_Rpt_Paper_ID)
 {
-if (AD_PrintPaper_ID < 1) throw new ArgumentException ("AD_PrintPaper_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintPaper_ID", AD_PrintPaper_ID);
+if (VAF_Print_Rpt_Paper_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Paper_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_Paper_ID", VAF_Print_Rpt_Paper_ID);
 }
 /** Get Print Paper.
 @return Printer paper definition */
-public int GetAD_PrintPaper_ID() 
+public int GetVAF_Print_Rpt_Paper_ID() 
 {
-Object ii = Get_Value("AD_PrintPaper_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Paper_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -177,8 +177,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DimensionUnits AD_Reference_ID=375 */
-public static int DIMENSIONUNITS_AD_Reference_ID=375;
+/** DimensionUnits VAF_Control_Ref_ID=375 */
+public static int DIMENSIONUNITS_VAF_Control_Ref_ID=375;
 /** Inch = I */
 public static String DIMENSIONUNITS_Inch = "I";
 /** MM = M */

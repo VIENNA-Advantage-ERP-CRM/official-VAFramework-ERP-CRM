@@ -170,8 +170,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -192,8 +192,8 @@ public String GetEntityType()
 return (String)Get_Value("EntityType");
 }
 
-/** ReplicationType AD_Reference_ID=126 */
-public static int REPLICATIONTYPE_AD_Reference_ID=126;
+/** ReplicationType VAF_Control_Ref_ID=126 */
+public static int REPLICATIONTYPE_VAF_Control_Ref_ID=126;
 /** Local = L */
 public static String REPLICATIONTYPE_Local = "L";
 /** Merge = M */

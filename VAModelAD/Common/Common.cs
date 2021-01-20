@@ -89,7 +89,7 @@ namespace VAdvantage.Common
                 pi.SetVAF_Client_ID(VAF_ClientID);
                 MPInstance pInstance = new MPInstance(process, recordID);
                 //FillParameter(pInstance, trx);
-                pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
 
                 if (process.GetIsCrystalReport() == "Y")
                 {
@@ -100,8 +100,8 @@ namespace VAdvantage.Common
                     pi.SetIsCrystal(false);
                 }
 
-                pi.SetAD_ReportFormat_ID(process.GetAD_ReportFormat_ID());
-                pi.SetAD_ReportMaster_ID(process.GetAD_ReportMaster_ID());
+                pi.SetVAF_ReportLayout_ID(process.GetVAF_ReportLayout_ID());
+                pi.SetVAF_ReportMaster_ID(process.GetVAF_ReportMaster_ID());
                 process.ProcessIt(pi, _trx);
 
                 IReportEngine repo = ReportRun(pi, ctx, _trx);
@@ -172,9 +172,9 @@ namespace VAdvantage.Common
                                 JOIN AD_Sequence_No AD_Sequence_No
                                 On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
                                 AND Ad_Sequence_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
-                                JOIN AD_Process ON AD_Process.AD_Process_ID=AD_Sequence_No.Report_ID
+                                JOIN VAF_Job ON VAF_Job.VAF_Job_ID=AD_Sequence_No.Report_ID
                                 Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
-                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND AD_Process.IsActive='Y'";
+                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND VAF_Job.IsActive='Y'";
 
                     object processID = DB.ExecuteScalar(sql1);
                     if (processID == DBNull.Value || processID == null || Convert.ToInt32(processID) == 0)
@@ -211,7 +211,7 @@ namespace VAdvantage.Common
 
 
                     // Chgeck if Report is linked to TAB of selected report.
-                    sql1 = "SELECT AD_Process_ID FROM VAF_Tab WHERE AD_Window_ID=" + windowID + " AND VAF_TableView_ID=" + tableID;
+                    sql1 = "SELECT VAF_Job_ID FROM VAF_Tab WHERE AD_Window_ID=" + windowID + " AND VAF_TableView_ID=" + tableID;
                     processID = DB.ExecuteScalar(sql1);
                     if (processID != DBNull.Value && processID != null && Convert.ToInt32(processID) > 0)
                     {
@@ -235,15 +235,15 @@ namespace VAdvantage.Common
             ///	
             IReportEngine rpe = null;
             bool isDocxFile = false;
-            int AD_ReportFormat_ID = _pi.GetAD_ReportFormat_ID();
+            int VAF_ReportLayout_ID = _pi.GetVAF_ReportLayout_ID();
 
-            //if("Y".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = "+_pi.GetAD_Process_ID())))
+            //if("Y".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = "+_pi.GetVAF_Job_ID())))
 
             //Dynamic Report    
-            if (_pi.GetAD_ReportMaster_ID() > 0)
+            if (_pi.GetVAF_ReportMaster_ID() > 0)
             {
                 String fqClassName = "", asmName = "";
-                DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM AD_ReportMaster WHERE IsActive='Y' AND AD_ReportMaster_ID = " + _pi.GetAD_ReportMaster_ID());
+                DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM VAF_ReportMaster WHERE IsActive='Y' AND VAF_ReportMaster_ID = " + _pi.GetVAF_ReportMaster_ID());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     fqClassName = ds.Tables[0].Rows[0]["ClassName"].ToString();
@@ -257,13 +257,13 @@ namespace VAdvantage.Common
                 }
             }
 
-            else if (AD_ReportFormat_ID > 0)
+            else if (VAF_ReportLayout_ID > 0)
             {
                 try
                 {
                     string lang = p_ctx.GetVAF_Language().Replace("_", "-");
 
-                    if ((AD_ReportFormat_ID > 0) && (lang == "ar-IQ"))
+                    if ((VAF_ReportLayout_ID > 0) && (lang == "ar-IQ"))
                     {
                         isDocxFile = true;
                         rpe = VAdvantage.ReportFormat.ReportFormatEngine.Get(p_ctx, _pi, true);
@@ -296,11 +296,11 @@ namespace VAdvantage.Common
             else
             {
                 //If user Choose BI Report...................
-                if ("B".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
+                if ("B".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = " + _pi.GetVAF_Job_ID())))
                 {
                     rpe = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
                 }
-                else if ("J".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
+                else if ("J".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = " + _pi.GetVAF_Job_ID())))
                 {
                     //isJasperReport = true;
                     rpe = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
@@ -324,7 +324,7 @@ namespace VAdvantage.Common
         /// Method to get byte array of report.
         /// </summary>
         /// <param name="ctx">Current Context.</param>
-        /// <param name="AD_Process_ID">Process ID.</param>
+        /// <param name="VAF_Job_ID">Process ID.</param>
         /// <param name="Name">Name of process.</param>
         /// <param name="VAF_TableView_ID">Table id for fetching report.</param>
         /// <param name="Record_ID">Record id.</param>
@@ -333,7 +333,7 @@ namespace VAdvantage.Common
         /// <param name="fileType">Report type.</param>
         /// <param name="report">Out parameter to get byte array.</param>
         /// <returns>Returns Process Info list and report byte array.</returns>
-        public Dictionary<string, object> GetReport(Ctx ctx, int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string recIDs, string fileType, out byte[] report, out string rptFilePath)
+        public Dictionary<string, object> GetReport(Ctx ctx, int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string recIDs, string fileType, out byte[] report, out string rptFilePath)
         {
             Dictionary<string, object> d = null;
             report = null;
@@ -343,7 +343,7 @@ namespace VAdvantage.Common
             MPInstance instance = null;
             try
             {
-                instance = new MPInstance(ctx, AD_Process_ID, Record_ID);
+                instance = new MPInstance(ctx, VAF_Job_ID, Record_ID);
             }
             catch (Exception e)
             {
@@ -375,7 +375,7 @@ namespace VAdvantage.Common
 
 
             // Process info
-            ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID, recIDs);
+            ProcessInfo pi = new ProcessInfo(Name, VAF_Job_ID, VAF_TableView_ID, Record_ID, recIDs);
             pi.SetFileType(fileType);
             TryPrintFromDocType(pi);
 
@@ -384,7 +384,7 @@ namespace VAdvantage.Common
 
                 pi.SetAD_User_ID(ctx.GetAD_User_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-                pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
                 ProcessCtl ctl = new ProcessCtl();
                 d = new Dictionary<string, object>();
                 d = ctl.Process(pi, ctx, out report, out rptFilePath);
@@ -427,11 +427,11 @@ namespace VAdvantage.Common
                 {
                     return;
                 }
-                sql = "SELECT AD_ReportFormat_ID FROM C_DocType WHERE C_DocType_ID=" + id;
+                sql = "SELECT VAF_ReportLayout_ID FROM C_DocType WHERE C_DocType_ID=" + id;
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id > 0)
                 {
-                    _pi.SetAD_ReportFormat_ID(id);
+                    _pi.SetVAF_ReportLayout_ID(id);
                 }
 
             }
@@ -698,7 +698,7 @@ namespace VAdvantage.Common
             POInfo _poInfo = POInfo.GetPOInfo(po.GetCtx(), po.Get_Table_ID());
 
             MColumn column = (new MTable(po.GetCtx(), po.Get_Table_ID(), null)).GetColumn(variable);
-            if (column.GetAD_Reference_ID() == DisplayType.Location)
+            if (column.GetVAF_Control_Ref_ID() == DisplayType.Location)
             {
                 StringBuilder sb = new StringBuilder();
                 DataSet ds = DB.ExecuteDataset(@"SELECT l.address1,
@@ -770,16 +770,16 @@ namespace VAdvantage.Common
 
 
 
-            if (column.GetAD_Reference_ID() == DisplayType.Date)
+            if (column.GetVAF_Control_Ref_ID() == DisplayType.Date)
             {
                 //return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
-                return DisplayType.GetDateFormat(column.GetAD_Reference_ID()).Format(value, po.GetCtx().GetContext("#ClientLanguage"), SimpleDateFormat.DATESHORT);
+                return DisplayType.GetDateFormat(column.GetVAF_Control_Ref_ID()).Format(value, po.GetCtx().GetContext("#ClientLanguage"), SimpleDateFormat.DATESHORT);
             }
 
             // Show Amount according to browser culture
-            if (column.GetAD_Reference_ID() == DisplayType.Amount || column.GetAD_Reference_ID() == DisplayType.CostPrice)
+            if (column.GetVAF_Control_Ref_ID() == DisplayType.Amount || column.GetVAF_Control_Ref_ID() == DisplayType.CostPrice)
             {
-                return DisplayType.GetNumberFormat(column.GetAD_Reference_ID()).GetFormatAmount(value, po.GetCtx().GetContext("#ClientLanguage"));
+                return DisplayType.GetNumberFormat(column.GetVAF_Control_Ref_ID()).GetFormatAmount(value, po.GetCtx().GetContext("#ClientLanguage"));
             }
             return value.ToString();
         }
@@ -875,7 +875,7 @@ namespace VAdvantage.Common
             try
             {
                 lookup = VLookUpFactory.GetLookUpInfo(ctx, WindowNo, colInfo.DisplayType, colInfo.VAF_Column_ID, Env.GetLanguage(ctx),
-                   colInfo.ColumnName, colInfo.AD_Reference_Value_ID,
+                   colInfo.ColumnName, colInfo.VAF_Control_Ref_Value_ID,
                    colInfo.IsParent, colInfo.ValidationCode);
             }
             catch
@@ -896,7 +896,7 @@ namespace VAdvantage.Common
                 lookup = VLookUpFactory.Get(ctx, WindowNo, colInfo.VAF_Column_ID,
                     colInfo.DisplayType,
                     colInfo.ColumnName,
-                    colInfo.AD_Reference_Value_ID,
+                    colInfo.VAF_Control_Ref_Value_ID,
                     colInfo.IsParent, colInfo.ValidationCode);
             }
             catch
@@ -926,7 +926,7 @@ namespace VAdvantage.Common
         /// <param name="OriginName">(Form name or window name)</param>
         /// <param name="VAF_TableView_ID">VAF_TableView_ID of table from where action intiated</param>
         /// <param name="Record_ID">Selected Record_ID</param>
-        /// <param name="Process_ID">AD_Process_ID with which report is linked</param>
+        /// <param name="Process_ID">VAF_Job_ID with which report is linked</param>
         /// <param name="ProcessName">Name of Process</param>
         /// <param name="fileType">Requested file type(PDF, CSV, RTF)</param>
         /// <param name="description">Desciption like filename or anything else</param>

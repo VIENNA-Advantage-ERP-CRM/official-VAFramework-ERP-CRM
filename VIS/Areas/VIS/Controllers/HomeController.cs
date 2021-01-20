@@ -182,7 +182,7 @@ namespace VIS.Controllers
                     model.Login1Model.DisplayName = ctx.GetContext("##AD_User_Name");
                     model.Login1Model.LoginLanguage = ctx.GetVAF_Language();
 
-                    model.Login2Model.Role = ctx.GetAD_Role_ID().ToString();
+                    model.Login2Model.Role = ctx.GetVAF_Role_ID().ToString();
                     model.Login2Model.Client = ctx.GetVAF_Client_ID().ToString();
                     model.Login2Model.Org = ctx.GetVAF_Org_ID().ToString();
                     model.Login2Model.Warehouse = ctx.GetAD_Warehouse_ID().ToString();
@@ -202,9 +202,9 @@ namespace VIS.Controllers
                         do  //	read all roles
                         {
                             AD_User_ID = Util.GetValueOfInt(drRoles[0].ToString());
-                            int AD_Role_ID = Util.GetValueOfInt(drRoles[1].ToString());
+                            int VAF_Role_ID = Util.GetValueOfInt(drRoles[1].ToString());
                             String Name = drRoles[2].ToString();
-                            KeyNamePair p = new KeyNamePair(AD_Role_ID, Name);
+                            KeyNamePair p = new KeyNamePair(VAF_Role_ID, Name);
                             RoleList.Add(p);
                             username = Util.GetValueOfString(drRoles["username"].ToString());
                         }
@@ -248,8 +248,8 @@ namespace VIS.Controllers
 
                     //  LoginHelper.GetClients(id)
 
-                    ClientList = LoginHelper.GetClients(ctx.GetAD_Role_ID());// .Add(new KeyNamePair(ctx.GetVAF_Client_ID(), ctx.GetVAF_Client_Name()));
-                    OrgList = LoginHelper.GetOrgs(ctx.GetAD_Role_ID(), ctx.GetAD_User_ID(), ctx.GetVAF_Client_ID());// .Add(new KeyNamePair(ctx.GetVAF_Org_ID(), ctx.GetVAF_Org_Name()));
+                    ClientList = LoginHelper.GetClients(ctx.GetVAF_Role_ID());// .Add(new KeyNamePair(ctx.GetVAF_Client_ID(), ctx.GetVAF_Client_Name()));
+                    OrgList = LoginHelper.GetOrgs(ctx.GetVAF_Role_ID(), ctx.GetAD_User_ID(), ctx.GetVAF_Client_ID());// .Add(new KeyNamePair(ctx.GetVAF_Org_ID(), ctx.GetVAF_Org_Name()));
                     WareHouseList = LoginHelper.GetWarehouse(ctx.GetVAF_Org_ID());// .Add(new KeyNamePair(ctx.GetAD_Warehouse_ID(), ctx.GetContext("#M_Warehouse_Name")));
 
 
@@ -516,7 +516,7 @@ namespace VIS.Controllers
             HomeFolloUpsInfo fllInfo = null;
             if (Session["ctx"] != null)
             {
-                int usr_Role_ID = ct.GetAD_Role_ID();
+                int usr_Role_ID = ct.GetVAF_Role_ID();
                 objHomeHelp = new HomeHelper();
                 string[] arr = FllupsID.Split('-');
                 int ChatID = Util.GetValueOfInt(arr[0]);
@@ -540,7 +540,7 @@ namespace VIS.Controllers
 
             objHomeHelp = new HomeHelper();
             Ctx ctx = Session["ctx"] as Ctx;
-            int usr_Role_ID = ctx.GetAD_Role_ID();
+            int usr_Role_ID = ctx.GetVAF_Role_ID();
             objHomeHelp.SaveFllupsCmnt(ctx, fllChatID, fllSubscriberID, cmntTxt);
             objHomeHelp = new HomeHelper();
             HomeModels hm = new HomeModels();
@@ -584,11 +584,11 @@ namespace VIS.Controllers
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
         [HttpPost]
-        public JsonResult ApproveNotice(int Ad_Note_ID, bool isAcknowldge)
+        public JsonResult ApproveNotice(int VAF_Notice_ID, bool isAcknowldge)
         {
             objHomeHelp = new HomeHelper();
             Ctx ct = Session["ctx"] as Ctx;
-            var res = objHomeHelp.ApproveNotice(ct, Ad_Note_ID, isAcknowldge);
+            var res = objHomeHelp.ApproveNotice(ct, VAF_Notice_ID, isAcknowldge);
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
@@ -824,7 +824,7 @@ namespace VIS.Controllers
         public ActionResult GetReports()
         {
             List<KeyNamePair> lst = new List<KeyNamePair>();
-            var dr = VAdvantage.DataBase.DB.ExecuteReader("SELECT AD_PROCESS_ID, Name FROM AD_PROCESS WHERE IsReport='Y' AND IsActive='Y'");
+            var dr = VAdvantage.DataBase.DB.ExecuteReader("SELECT VAF_JOB_ID, Name FROM VAF_JOB WHERE IsReport='Y' AND IsActive='Y'");
             if (dr != null)
             {
                 while (dr.Read())

@@ -143,8 +143,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** DTD001_ReqFulRule AD_Reference_ID=1000310 */
-        public static int DTD001_REQFULRULE_AD_Reference_ID = 1000310;
+        /** DTD001_ReqFulRule VAF_Control_Ref_ID=1000310 */
+        public static int DTD001_REQFULRULE_VAF_Control_Ref_ID = 1000310;
         /** Full = F */
         public static String DTD001_REQFULRULE_Full = "F";
         /** Partial = P */
@@ -264,8 +264,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** M_RcvLocator_ID AD_Reference_ID=1000044 */
-        public static int M_RCVLOCATOR_ID_AD_Reference_ID = 1000044;
+        /** M_RcvLocator_ID VAF_Control_Ref_ID=1000044 */
+        public static int M_RCVLOCATOR_ID_VAF_Control_Ref_ID = 1000044;
         /** Set Receiving Locator.
         @param M_RcvLocator_ID Receiving Locator */
         public void SetM_RcvLocator_ID(int M_RcvLocator_ID)
@@ -283,8 +283,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_StgLocator_ID AD_Reference_ID=1000044 */
-        public static int M_STGLOCATOR_ID_AD_Reference_ID = 1000044;
+        /** M_StgLocator_ID VAF_Control_Ref_ID=1000044 */
+        public static int M_STGLOCATOR_ID_VAF_Control_Ref_ID = 1000044;
         /** Set Staging Locator.
         @param M_StgLocator_ID Staging Locator */
         public void SetM_StgLocator_ID(int M_StgLocator_ID)
@@ -302,8 +302,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_WarehouseSource_ID AD_Reference_ID=197 */
-        public static int M_WAREHOUSESOURCE_ID_AD_Reference_ID = 197;
+        /** M_WarehouseSource_ID VAF_Control_Ref_ID=197 */
+        public static int M_WAREHOUSESOURCE_ID_VAF_Control_Ref_ID = 197;
         /** Set Source Warehouse.
         @param M_WarehouseSource_ID Optional Warehouse to replenish from */
         public void SetM_WarehouseSource_ID(int M_WarehouseSource_ID)

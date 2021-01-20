@@ -37,7 +37,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private String columnName = null;
 
         /** Tables to delete (not update) for VAF_Org	*/
-        static private String[] s_delete_Org = new String[] { "VAF_OrgInfo" };
+        static private String[] s_delete_Org = new String[] { "VAF_OrgDetail" };
         /** Tables to delete (not update) for AD_User	*/
         static private String[] s_delete_User = new String[] { "AD_User_Roles" };
         /** Tables to delete (not update) for C_BPartner	*/
@@ -250,8 +250,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + " AND c.ColumnSQL is NULL AND ("              // No Virtual Column
                     + "(c.ColumnName=@param1 AND c.IsKey='N')"		//	#1 - direct
                 + " OR "
-                    + "c.AD_Reference_Value_ID IN "				//	Table Reference
-                        + "(SELECT rt.AD_Reference_ID FROM AD_Ref_Table rt"
+                    + "c.VAF_Control_Ref_Value_ID IN "				//	Table Reference
+                        + "(SELECT rt.VAF_Control_Ref_ID FROM VAF_CtrlRef_Table rt"
                         + " INNER JOIN VAF_Column cc ON (rt.VAF_TableView_ID=cc.VAF_TableView_ID AND rt.Column_Key_ID=cc.VAF_Column_ID) "
                         + "WHERE cc.IsKey='Y' AND cc.ColumnName=@param2)"	//	#2
                 + ") "

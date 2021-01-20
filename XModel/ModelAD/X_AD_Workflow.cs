@@ -216,8 +216,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AccessLevel AD_Reference_ID=5 */
-public static int ACCESSLEVEL_AD_Reference_ID=5;
+/** AccessLevel VAF_Control_Ref_ID=5 */
+public static int ACCESSLEVEL_VAF_Control_Ref_ID=5;
 /** Organization = 1 */
 public static String ACCESSLEVEL_Organization = "1";
 /** Client only = 2 */
@@ -352,8 +352,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** DurationUnit AD_Reference_ID=299 */
-public static int DURATIONUNIT_AD_Reference_ID=299;
+/** DurationUnit VAF_Control_Ref_ID=299 */
+public static int DURATIONUNIT_VAF_Control_Ref_ID=299;
 /** Day = D */
 public static String DURATIONUNIT_Day = "D";
 /** Month = M */
@@ -393,8 +393,8 @@ public String GetDurationUnit()
 return (String)Get_Value("DurationUnit");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -506,8 +506,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PublishStatus AD_Reference_ID=310 */
-public static int PUBLISHSTATUS_AD_Reference_ID=310;
+/** PublishStatus VAF_Control_Ref_ID=310 */
+public static int PUBLISHSTATUS_VAF_Control_Ref_ID=310;
 /** Released = R */
 public static String PUBLISHSTATUS_Released = "R";
 /** Test = T */
@@ -631,8 +631,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** WorkflowType AD_Reference_ID=328 */
-public static int WORKFLOWTYPE_AD_Reference_ID=328;
+/** WorkflowType VAF_Control_Ref_ID=328 */
+public static int WORKFLOWTYPE_VAF_Control_Ref_ID=328;
 /** General = G */
 public static String WORKFLOWTYPE_General = "G";
 /** Document Process = P */

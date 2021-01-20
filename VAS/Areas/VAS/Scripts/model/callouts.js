@@ -73,8 +73,8 @@
         /** Blanket Sales Order Sub Type - BO	*/
         var DocSubTypeSO_Blanket = "BO";
 
-        /** DeliveryRule AD_Reference_ID=151 */
-        var XC_DELIVERYRULE_AD_Reference_ID = 151;
+        /** DeliveryRule VAF_Control_Ref_ID=151 */
+        var XC_DELIVERYRULE_VAF_Control_Ref_ID = 151;
         /** Availability = A */
         var XC_DELIVERYRULE_Availability = "A";
         /** Force = F */
@@ -88,7 +88,7 @@
         /** After Receipt = R */
         var XC_DELIVERYRULE_AfterReceipt = "R";
 
-        var XC_INVOICERULE_AD_Reference_ID = 150;
+        var XC_INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
         var XC_INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
@@ -100,8 +100,8 @@
 
 
 
-        /** PaymentRule AD_Reference_ID=195 */
-        var XC_PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        var XC_PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         var XC_PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */
@@ -605,8 +605,8 @@
         /** Sales Order Sub Type - RM	*/
         var DocSubTypeSO_RMA = "RM";
 
-        /** DeliveryRule AD_Reference_ID=151 */
-        var XC_DELIVERYRULE_AD_Reference_ID = 151;
+        /** DeliveryRule VAF_Control_Ref_ID=151 */
+        var XC_DELIVERYRULE_VAF_Control_Ref_ID = 151;
         /** Availability = A */
         var XC_DELIVERYRULE_Availability = "A";
         /** Force = F */
@@ -620,8 +620,8 @@
         /** After Receipt = R */
         var XC_DELIVERYRULE_AfterReceipt = "R";
 
-        /** InvoiceRule AD_Reference_ID=150 */
-        var XC_INVOICERULE_AD_Reference_ID = 150;
+        /** InvoiceRule VAF_Control_Ref_ID=150 */
+        var XC_INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
         var XC_INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
@@ -631,8 +631,8 @@
         /** Customer Schedule after Delivery = S */
         var XC_INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
-        /** PaymentRule AD_Reference_ID=195 */
-        var XC_PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        var XC_PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         var XC_PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */
@@ -1362,8 +1362,8 @@
         /** Sales Order Sub Type - RM	*/
         var DocSubTypeSO_RMA = "RM";
 
-        /** DeliveryRule AD_Reference_ID=151 */
-        var XC_DELIVERYRULE_AD_Reference_ID = 151;
+        /** DeliveryRule VAF_Control_Ref_ID=151 */
+        var XC_DELIVERYRULE_VAF_Control_Ref_ID = 151;
         /** Availability = A */
         var XC_DELIVERYRULE_Availability = "A";
         /** Force = F */
@@ -1378,7 +1378,7 @@
         var XC_DELIVERYRULE_AfterReceipt = "R";
 
 
-        var XC_INVOICERULE_AD_Reference_ID = 150;
+        var XC_INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
         var XC_INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
@@ -1390,8 +1390,8 @@
 
 
 
-        /** PaymentRule AD_Reference_ID=195 */
-        var XC_PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        var XC_PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         var XC_PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */
@@ -2070,7 +2070,7 @@
             //paramString = mTab.getValue("C_Order_ID").toString();
             //var order = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
 
-            //sql = "SELECT VATAX_TaxRule FROM VAF_OrgInfo WHERE VAF_Org_ID=" + Util.getValueOfInt(order["VAF_Org_ID"]) + " AND IsActive ='Y' AND VAF_Client_ID =" + ctx.getVAF_Client_ID();
+            //sql = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID=" + Util.getValueOfInt(order["VAF_Org_ID"]) + " AND IsActive ='Y' AND VAF_Client_ID =" + ctx.getVAF_Client_ID();
             if (_CountVATAX > 0) {
                 //taxRule = Util.getValueOfString(VIS.DB.executeScalar(sql));
                 taxRule = Util.getValueOfString(recDic["taxRule"]);
@@ -2532,7 +2532,7 @@
                 var sql = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = " + C_Order["M_PriceList_ID"];
                 epl = VIS.DB.executeScalar(sql);
                 enforce = (C_Order["IsSOTrx"] && epl != null && epl == "Y");
-                sql = "SELECT OverwritePriceLimit FROM AD_Role WHERE IsActive = 'Y' AND AD_Role_ID = " + ctx.getContext("#AD_Role_ID");
+                sql = "SELECT OverwritePriceLimit FROM VAF_Role WHERE IsActive = 'Y' AND VAF_Role_ID = " + ctx.getContext("#VAF_Role_ID");
                 OverwritePriceLimit = Util.getValueOfBoolean(VIS.DB.executeScalar(sql));
             }
             //end
@@ -12933,7 +12933,7 @@
             //paramString = mTab.getValue("C_Invoice_ID").toString();
             //var invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
 
-            //sql = "SELECT VATAX_TaxRule FROM VAF_OrgInfo WHERE VAF_Org_ID=" + Util.getValueOfInt(invoice["VAF_Org_ID"]) + " AND IsActive ='Y' AND VAF_Client_ID =" + ctx.getVAF_Client_ID();
+            //sql = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID=" + Util.getValueOfInt(invoice["VAF_Org_ID"]) + " AND IsActive ='Y' AND VAF_Client_ID =" + ctx.getVAF_Client_ID();
 
             if (_CountVATAX > 0) {
                 //taxRule = Util.getValueOfString(VIS.DB.executeScalar(sql));
@@ -13575,7 +13575,7 @@
                 var sql = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = " + C_Invoice["M_PriceList_ID"];
                 epl = VIS.DB.executeScalar(sql);
                 enforce = (C_Invoice["IsSOTrx"] && epl != null && epl == "Y");
-                sql = "SELECT OverwritePriceLimit FROM AD_Role WHERE IsActive = 'Y' AND AD_Role_ID = " + ctx.getContext("#AD_Role_ID");
+                sql = "SELECT OverwritePriceLimit FROM VAF_Role WHERE IsActive = 'Y' AND VAF_Role_ID = " + ctx.getContext("#VAF_Role_ID");
                 OverwritePriceLimit = Util.getValueOfBoolean(VIS.DB.executeScalar(sql));
             }
             //end
@@ -19241,8 +19241,8 @@
         /** Customer Schedule after Delivery = S */
         var INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
-        /** InvoiceRule AD_Reference_ID=150 */
-        var INVOICERULE_AD_Reference_ID = 150;
+        /** InvoiceRule VAF_Control_Ref_ID=150 */
+        var INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
         var INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
@@ -19252,8 +19252,8 @@
         /** Customer Schedule after Delivery = S */
         var INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
-        /** DeliveryRule AD_Reference_ID=151 */
-        var DELIVERYRULE_AD_Reference_ID = 151;
+        /** DeliveryRule VAF_Control_Ref_ID=151 */
+        var DELIVERYRULE_VAF_Control_Ref_ID = 151;
         /** Availability = A */
         var DELIVERYRULE_Availability = "A";
         /** Force = F */
@@ -19511,8 +19511,8 @@
         /** Customer Schedule after Delivery = S */
         var INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
-        /** InvoiceRule AD_Reference_ID=150 */
-        var INVOICERULE_AD_Reference_ID = 150;
+        /** InvoiceRule VAF_Control_Ref_ID=150 */
+        var INVOICERULE_VAF_Control_Ref_ID = 150;
         /** After Delivery = D */
         var INVOICERULE_AfterDelivery = "D";
         /** Immediate = I */
@@ -19522,8 +19522,8 @@
         /** Customer Schedule after Delivery = S */
         var INVOICERULE_CustomerScheduleAfterDelivery = "S";
 
-        /** DeliveryRule AD_Reference_ID=151 */
-        var DELIVERYRULE_AD_Reference_ID = 151;
+        /** DeliveryRule VAF_Control_Ref_ID=151 */
+        var DELIVERYRULE_VAF_Control_Ref_ID = 151;
         /** Availability = A */
         var DELIVERYRULE_Availability = "A";
         /** Force = F */

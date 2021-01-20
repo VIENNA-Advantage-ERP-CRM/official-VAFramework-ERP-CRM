@@ -275,7 +275,7 @@ namespace VAdvantage.Model
                 return "";
 
             MColumn column = (new MTable(GetCtx(), po.Get_Table_ID(), Get_Trx())).GetColumn(variable);
-            if (column.GetAD_Reference_ID() == DisplayType.Location)
+            if (column.GetVAF_Control_Ref_ID() == DisplayType.Location)
             {
                 StringBuilder sb = new StringBuilder();
                 DataSet ds = DB.ExecuteDataset(@"SELECT l.address1,
@@ -347,7 +347,7 @@ namespace VAdvantage.Model
 
             
 
-            if (column.GetAD_Reference_ID() == DisplayType.Date)
+            if (column.GetVAF_Control_Ref_ID() == DisplayType.Date)
             {
                 return Util.GetValueOfDateTime(value).Value.Date.ToShortDateString();
             }

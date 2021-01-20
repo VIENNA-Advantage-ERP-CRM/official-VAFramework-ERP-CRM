@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Note
+/** Generated Model for VAF_Notice
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Note : PO
+public class X_VAF_Notice : PO
 {
-public X_AD_Note (Context ctx, int AD_Note_ID, Trx trxName) : base (ctx, AD_Note_ID, trxName)
+public X_VAF_Notice (Context ctx, int VAF_Notice_ID, Trx trxName) : base (ctx, VAF_Notice_ID, trxName)
 {
-/** if (AD_Note_ID == 0)
+/** if (VAF_Notice_ID == 0)
 {
 SetVAF_Msg_Lable_ID (0);
-SetAD_Note_ID (0);
+SetVAF_Notice_ID (0);
 }
  */
 }
-public X_AD_Note (Ctx ctx, int AD_Note_ID, Trx trxName) : base (ctx, AD_Note_ID, trxName)
+public X_VAF_Notice (Ctx ctx, int VAF_Notice_ID, Trx trxName) : base (ctx, VAF_Notice_ID, trxName)
 {
-/** if (AD_Note_ID == 0)
+/** if (VAF_Notice_ID == 0)
 {
 SetVAF_Msg_Lable_ID (0);
-SetAD_Note_ID (0);
+SetVAF_Notice_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Note_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Note (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Notice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_Note (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Note (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Notice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_Note (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Note (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Notice (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Note()
+static X_VAF_Notice()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389045524L;
 public static int Table_ID;
  // =389;
 
-/** TableName=AD_Note */
-public static String Table_Name="AD_Note";
+/** TableName=VAF_Notice */
+public static String Table_Name="VAF_Notice";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,12 +109,12 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Note[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Notice[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** VAF_Msg_Lable_ID AD_Reference_ID=102 */
-public static int VAF_MSG_LABLE_ID_AD_Reference_ID=102;
+/** VAF_Msg_Lable_ID VAF_Control_Ref_ID=102 */
+public static int VAF_MSG_LABLE_ID_VAF_Control_Ref_ID=102;
 /** Set Message.
 @param VAF_Msg_Lable_ID System Message */
 public void SetVAF_Msg_Lable_ID (int VAF_Msg_Lable_ID)
@@ -137,17 +137,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_Msg_Lable_ID().ToString());
 }
 /** Set Notice.
-@param AD_Note_ID System Notice */
-public void SetAD_Note_ID (int AD_Note_ID)
+@param VAF_Notice_ID System Notice */
+public void SetVAF_Notice_ID (int VAF_Notice_ID)
 {
-if (AD_Note_ID < 1) throw new ArgumentException ("AD_Note_ID is mandatory.");
-Set_ValueNoCheck ("AD_Note_ID", AD_Note_ID);
+if (VAF_Notice_ID < 1) throw new ArgumentException ("VAF_Notice_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Notice_ID", VAF_Notice_ID);
 }
 /** Get Notice.
 @return System Notice */
-public int GetAD_Note_ID() 
+public int GetVAF_Notice_ID() 
 {
-Object ii = Get_Value("AD_Note_ID");
+Object ii = Get_Value("VAF_Notice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

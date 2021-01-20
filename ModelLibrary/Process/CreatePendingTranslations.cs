@@ -444,15 +444,15 @@ namespace VAdvantage.Process
                         param[2] = new System.Data.SqlClient.SqlParameter("@help", help);
                     }
                     sql.Clear();
-                    sql.Append(@"Update AD_process_TRL 
+                    sql.Append(@"Update VAF_Job_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
                                             Help=@help                                           
-                                        WHERE AD_process_ID=" + tlps.GetAD_Process_ID() + " AND VAF_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_Job_ID=" + tlps.GetVAF_Job_ID() + " AND VAF_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlps.GetAD_Process_ID() + " ProcessNotTranslated.");
+                        res.Append(tlps.GetVAF_Job_ID() + " ProcessNotTranslated.");
                         break;
                     }
                     tlps.SetIsTranslated(true);
@@ -734,14 +734,14 @@ namespace VAdvantage.Process
                     }
                    
                     sql.Clear();
-                    sql.Append(@"Update AD_Ref_List_TRL 
+                    sql.Append(@"Update VAF_CtrlRef_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description                                                                                    
-                                        WHERE AD_Ref_List_ID=" + tlps.GetAD_Ref_List_ID() + " AND VAF_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_CtrlRef_List_ID=" + tlps.GetVAF_CtrlRef_List_ID() + " AND VAF_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlps.GetAD_Ref_List_ID() + " Ref_ListNotTranslated.");
+                        res.Append(tlps.GetVAF_CtrlRef_List_ID() + " Ref_ListNotTranslated.");
                         break;
                     }
                     tlps.SetIsTranslated(true);

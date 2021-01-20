@@ -119,8 +119,8 @@ namespace VAdvantage.Process
         {
             String state = GetState();	//	is overwritten to update
             /**
-            int AD_Reference_ID = 305;
-            MRefList.getList(AD_Reference_ID, false);
+            int VAF_Control_Ref_ID = 305;
+            MRefList.getList(VAF_Control_Ref_ID, false);
             **/
             if (_ctx != null)
                 return GetStateInfoCultured(state);

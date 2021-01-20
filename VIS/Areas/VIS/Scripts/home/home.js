@@ -1322,18 +1322,18 @@
                             var divtitle_ = "";
                             var title_ = data[s].Description;
                             if (title_.length <= 100) {
-                                divtitle_ = "<pre><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].AD_Note_ID + "'>" + VIS.Utility.encodeText(data[s].Title) + "</strong></pre>";
+                                divtitle_ = "<pre><strong style='color:#666666' data-vishomercrd='title' id='" + data[s].VAF_Notice_ID + "'>" + VIS.Utility.encodeText(data[s].Title) + "</strong></pre>";
                             }
                             else {
                                 divtitle_ = "<pre>"
-                                    + "<strong  id='snoticetitle_" + data[s].AD_Note_ID + "'  style='color:#666666;' >" + VIS.Utility.encodeText(data[s].Title) + "...</strong>"
-                                    + "<strong id='snoticedesc_" + data[s].AD_Note_ID + "' style='display:none; color:#666666;'>" + VIS.Utility.encodeText(data[s].Description) + "...</strong> "
-                                    + "<span id='snoticemore_" + data[s].AD_Note_ID + "' data-vishomercrd='more' style='color:rgba(var(--v-c-primary), 1); float:right;height:20px'>" + VIS.Msg.getMsg("more") + "</span>"
-                                    + "<span id='snoticeless_" + data[s].AD_Note_ID + "' data-vishomercrd='less' style='display:none; color:rgba(var(--v-c-primary), 1); float:right;height:20pxvis-feedTitleBar'>" + VIS.Msg.getMsg("less") + "</span>"
+                                    + "<strong  id='snoticetitle_" + data[s].VAF_Notice_ID + "'  style='color:#666666;' >" + VIS.Utility.encodeText(data[s].Title) + "...</strong>"
+                                    + "<strong id='snoticedesc_" + data[s].VAF_Notice_ID + "' style='display:none; color:#666666;'>" + VIS.Utility.encodeText(data[s].Description) + "...</strong> "
+                                    + "<span id='snoticemore_" + data[s].VAF_Notice_ID + "' data-vishomercrd='more' style='color:rgba(var(--v-c-primary), 1); float:right;height:20px'>" + VIS.Msg.getMsg("more") + "</span>"
+                                    + "<span id='snoticeless_" + data[s].VAF_Notice_ID + "' data-vishomercrd='less' style='display:none; color:rgba(var(--v-c-primary), 1); float:right;height:20pxvis-feedTitleBar'>" + VIS.Msg.getMsg("less") + "</span>"
                                     + "</pre>";
                             }
 
-                            str += "<div data-vishomercrd='view-recrd-cntainer' id='divrecdcntnr_" + data[s].AD_Note_ID + "' class='vis-activityContainer'>"
+                            str += "<div data-vishomercrd='view-recrd-cntainer' id='divrecdcntnr_" + data[s].VAF_Notice_ID + "' class='vis-activityContainer'>"
                                 + " <div class='vis-feedTitleBar'>";
 
                             if (data[s].SpecialTable) {
@@ -1352,12 +1352,12 @@
                             //}
 
                             // Renaming of Approve highlight to Acknowledge under notification
-                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].AD_Note_ID + "  title='" + VIS.Msg.getMsg("Acknowledge") + "' class='vis vis-markx'></a></li>"
-                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].AD_Note_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
+                            str += "<li data-vishomercrd='liapprove'><a href='javascript:void(0)' data-vishomercrd='approve'  id=" + data[s].VAF_Notice_ID + "  title='" + VIS.Msg.getMsg("Acknowledge") + "' class='vis vis-markx'></a></li>"
+                                + "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].VAF_Notice_ID + "|" + data[s].TableName + "|" + data[s].AD_Window_ID + "|" + data[s].Record_ID + " title='" + VIS.Msg.getMsg("View") + "' class='vis vis-find'></a></li>"
                                 + "</ul>"
                                 + "  </div>"
                                 + "</div>"
-                                + "<div data-vishomercrd='more-details' id=" + data[s].AD_Note_ID + " class='vis-feedDetails'>"
+                                + "<div data-vishomercrd='more-details' id=" + data[s].VAF_Notice_ID + " class='vis-feedDetails'>"
                                 + divtitle_
                                 + " <p class='vis-feedDateTime'>" + VIS.Utility.encodeText(dbdate) + "</p>"
                                 + " </div>"
@@ -1395,16 +1395,16 @@
                 }
             });
         }
-        function ApproveNotice(Ad_Note_ID, isAcknowldge) {
+        function ApproveNotice(VAF_Notice_ID, isAcknowldge) {
             $.ajax({
                 url: VIS.Application.contextUrl + 'Home/ApproveNotice',
-                data: { "Ad_Note_ID": Ad_Note_ID, "isAcknowldge": isAcknowldge },
+                data: { "VAF_Notice_ID": VAF_Notice_ID, "isAcknowldge": isAcknowldge },
                 type: 'POST',
                 datatype: 'json',
                 success: function (result) {
                     var data = JSON.parse(result);
-                    $("#divrecdcntnr_" + Ad_Note_ID).animate({ "width": "0px", "height": "132px", "margin-left": "800px" }, 700, "", function () {
-                        $("#divrecdcntnr_" + Ad_Note_ID).remove();
+                    $("#divrecdcntnr_" + VAF_Notice_ID).animate({ "width": "0px", "height": "132px", "margin-left": "800px" }, 700, "", function () {
+                        $("#divrecdcntnr_" + VAF_Notice_ID).remove();
                     });
 
                 }

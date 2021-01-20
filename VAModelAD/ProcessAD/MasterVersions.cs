@@ -231,7 +231,7 @@ namespace VAdvantage.Process
                                 if (sCol.IsKey())
                                 {
                                     colVer.SetConstraintType("R");
-                                    colVer.SetAD_Reference_ID(19);
+                                    colVer.SetVAF_Control_Ref_ID(19);
                                 }
                                 //if (sCol.IsKey())
                                 //    colVer.SetIsParent(true);
@@ -611,7 +611,7 @@ namespace VAdvantage.Process
                 colVer.SetVAF_TableView_ID(Ver_VAF_TableView_ID);
                 colVer.SetColumnName(listDefVerCols[i]);
                 colVer.SetVAF_ColumnDic_ID(_listDefVerElements[i]);
-                colVer.SetAD_Reference_ID(listDefVerRef[i]);
+                colVer.SetVAF_Control_Ref_ID(listDefVerRef[i]);
                 //if (listDefVerCols[i] == "VersionValidFrom")
                 //    colVer.SetIsParent(true);
                 if (listDefVerRef[i] == 10)

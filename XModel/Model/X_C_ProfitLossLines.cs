@@ -44,8 +44,8 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_ProfitLossLines[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** VAF_OrgTrx_ID AD_Reference_ID=276 */
-public static int VAF_ORGTRX_ID_AD_Reference_ID=276;/** Set Trx Organization.
+/** VAF_OrgTrx_ID VAF_Control_Ref_ID=276 */
+public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID=276;/** Set Trx Organization.
 @param VAF_OrgTrx_ID Performing or initiating organization */
 public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID){if (VAF_OrgTrx_ID <= 0) Set_Value ("VAF_OrgTrx_ID", null);else
 Set_Value ("VAF_OrgTrx_ID", VAF_OrgTrx_ID);}/** Get Trx Organization.
@@ -59,8 +59,8 @@ public Decimal GetAccountCredit() {Object bd =Get_Value("AccountCredit");if (bd 
 public void SetAccountDebit (Decimal? AccountDebit){Set_Value ("AccountDebit", (Decimal?)AccountDebit);}/** Get Account Debit.
 @return Account Debit */
 public Decimal GetAccountDebit() {Object bd =Get_Value("AccountDebit");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}
-/** Account_ID AD_Reference_ID=182 */
-public static int ACCOUNT_ID_AD_Reference_ID=182;/** Set Account.
+/** Account_ID VAF_Control_Ref_ID=182 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=182;/** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID){if (Account_ID <= 0) Set_Value ("Account_ID", null);else
 Set_Value ("Account_ID", Account_ID);}/** Get Account.
@@ -85,15 +85,15 @@ public void SetC_Campaign_ID (int C_Campaign_ID){if (C_Campaign_ID <= 0) Set_Val
 Set_Value ("C_Campaign_ID", C_Campaign_ID);}/** Get Campaign.
 @return Marketing Campaign */
 public int GetC_Campaign_ID() {Object ii = Get_Value("C_Campaign_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** C_LocFrom_ID AD_Reference_ID=133 */
-public static int C_LOCFROM_ID_AD_Reference_ID=133;/** Set Location From.
+/** C_LocFrom_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCFROM_ID_VAF_Control_Ref_ID=133;/** Set Location From.
 @param C_LocFrom_ID Location that inventory was moved from */
 public void SetC_LocFrom_ID (int C_LocFrom_ID){if (C_LocFrom_ID <= 0) Set_Value ("C_LocFrom_ID", null);else
 Set_Value ("C_LocFrom_ID", C_LocFrom_ID);}/** Get Location From.
 @return Location that inventory was moved from */
 public int GetC_LocFrom_ID() {Object ii = Get_Value("C_LocFrom_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** C_LocTo_ID AD_Reference_ID=133 */
-public static int C_LOCTO_ID_AD_Reference_ID=133;/** Set Location To.
+/** C_LocTo_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCTO_ID_VAF_Control_Ref_ID=133;/** Set Location To.
 @param C_LocTo_ID Location that inventory was moved to */
 public void SetC_LocTo_ID (int C_LocTo_ID){if (C_LocTo_ID <= 0) Set_Value ("C_LocTo_ID", null);else
 Set_Value ("C_LocTo_ID", C_LocTo_ID);}/** Get Location To.
@@ -163,8 +163,8 @@ public void SetM_Product_ID (int M_Product_ID){if (M_Product_ID <= 0) Set_Value 
 Set_Value ("M_Product_ID", M_Product_ID);}/** Get Product.
 @return Product, Service, Item */
 public int GetM_Product_ID() {Object ii = Get_Value("M_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** PostingType AD_Reference_ID=125 */
-public static int POSTINGTYPE_AD_Reference_ID=125;/** Actual = A */
+/** PostingType VAF_Control_Ref_ID=125 */
+public static int POSTINGTYPE_VAF_Control_Ref_ID=125;/** Actual = A */
 public static String POSTINGTYPE_Actual = "A";/** Budget = B */
 public static String POSTINGTYPE_Budget = "B";/** Commitment = E */
 public static String POSTINGTYPE_Commitment = "E";/** Statistical = S */
@@ -186,15 +186,15 @@ public Decimal GetSourceCredit() {Object bd =Get_Value("SourceCredit");if (bd ==
 public void SetSourceDebit (Decimal? SourceDebit){Set_Value ("SourceDebit", (Decimal?)SourceDebit);}/** Get Source Debit.
 @return Source Debit */
 public Decimal GetSourceDebit() {Object bd =Get_Value("SourceDebit");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}
-/** User1_ID AD_Reference_ID=134 */
-public static int USER1_ID_AD_Reference_ID=134;/** Set User List 1.
+/** User1_ID VAF_Control_Ref_ID=134 */
+public static int USER1_ID_VAF_Control_Ref_ID=134;/** Set User List 1.
 @param User1_ID User defined list element #1 */
 public void SetUser1_ID (int User1_ID){if (User1_ID <= 0) Set_Value ("User1_ID", null);else
 Set_Value ("User1_ID", User1_ID);}/** Get User List 1.
 @return User defined list element #1 */
 public int GetUser1_ID() {Object ii = Get_Value("User1_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** User2_ID AD_Reference_ID=137 */
-public static int USER2_ID_AD_Reference_ID=137;/** Set User List 2.
+/** User2_ID VAF_Control_Ref_ID=137 */
+public static int USER2_ID_VAF_Control_Ref_ID=137;/** Set User List 2.
 @param User2_ID User defined list element #2 */
 public void SetUser2_ID (int User2_ID){if (User2_ID <= 0) Set_Value ("User2_ID", null);else
 Set_Value ("User2_ID", User2_ID);}/** Get User List 2.

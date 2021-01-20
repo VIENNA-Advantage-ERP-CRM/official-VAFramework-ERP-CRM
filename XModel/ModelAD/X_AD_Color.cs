@@ -214,8 +214,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ColorType AD_Reference_ID=243 */
-public static int COLORTYPE_AD_Reference_ID=243;
+/** ColorType VAF_Control_Ref_ID=243 */
+public static int COLORTYPE_VAF_Control_Ref_ID=243;
 /** Normal (Flat) = F */
 public static String COLORTYPE_NormalFlat = "F";
 /** Gradient = G */
@@ -407,8 +407,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** StartPoint AD_Reference_ID=248 */
-public static int STARTPOINT_AD_Reference_ID=248;
+/** StartPoint VAF_Control_Ref_ID=248 */
+public static int STARTPOINT_VAF_Control_Ref_ID=248;
 /** North = 1 */
 public static String STARTPOINT_North = "1";
 /** North East = 2 */

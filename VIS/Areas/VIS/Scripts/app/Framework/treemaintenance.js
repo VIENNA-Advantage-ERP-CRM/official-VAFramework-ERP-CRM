@@ -3790,7 +3790,7 @@
             bindornot = "true";
 
             if (tablename == "VAF_MenuConfig") {
-                var rolCheck = "SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + $treeID;
+                var rolCheck = "SELECT count(*) FROM VAF_Role WHERE ad_tree_menu_id=" + $treeID;
                 var checkCount = executeScalar(rolCheck);
                 if (checkCount > 0) {
                     bindornot = "false";

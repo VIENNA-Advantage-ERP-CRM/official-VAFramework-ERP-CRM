@@ -150,8 +150,8 @@
             return sb.ToString();
         }
 
-        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
         @param VAF_OrgTrx_ID Performing or initiating organization */
         public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
@@ -249,8 +249,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocType_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPE_ID_AD_Reference_ID = 170;
+        /** C_DocType_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPE_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type.
         @param C_DocType_ID Document type or rules */
         public void SetC_DocType_ID(int C_DocType_ID)
@@ -340,8 +340,8 @@
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -398,8 +398,8 @@
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -575,8 +575,8 @@
             return false;
         }
 
-        /** M_Locator_ID AD_Reference_ID=446 */
-        public static int M_LOCATOR_ID_AD_Reference_ID = 446;
+        /** M_Locator_ID VAF_Control_Ref_ID=446 */
+        public static int M_LOCATOR_ID_VAF_Control_Ref_ID = 446;
         /** Set Locator.
         @param M_Locator_ID Warehouse Locator */
         public void SetM_Locator_ID(int M_Locator_ID)
@@ -639,8 +639,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** OperationFrom_ID AD_Reference_ID=451 */
-        public static int OPERATIONFROM_ID_AD_Reference_ID = 451;
+        /** OperationFrom_ID VAF_Control_Ref_ID=451 */
+        public static int OPERATIONFROM_ID_VAF_Control_Ref_ID = 451;
         /** Set Operation From.
         @param OperationFrom_ID Process the operations in a work order transaction starting at this one. */
         public void SetOperationFrom_ID(int OperationFrom_ID)
@@ -658,8 +658,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** OperationTo_ID AD_Reference_ID=451 */
-        public static int OPERATIONTO_ID_AD_Reference_ID = 451;
+        /** OperationTo_ID VAF_Control_Ref_ID=451 */
+        public static int OPERATIONTO_ID_VAF_Control_Ref_ID = 451;
         /** Set Operation To.
         @param OperationTo_ID Process the operations in a work order transaction ending at this one (inclusive). */
         public void SetOperationTo_ID(int OperationTo_ID)
@@ -677,8 +677,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** ParentWorkOrderTxn_ID AD_Reference_ID=452 */
-        public static int PARENTWORKORDERTXN_ID_AD_Reference_ID = 452;
+        /** ParentWorkOrderTxn_ID VAF_Control_Ref_ID=452 */
+        public static int PARENTWORKORDERTXN_ID_VAF_Control_Ref_ID = 452;
         /** Set Parent Work Order Transaction.
         @param ParentWorkOrderTxn_ID Work Order Transaction that created this Work Order Transaction */
         public void SetParentWorkOrderTxn_ID(int ParentWorkOrderTxn_ID)
@@ -765,8 +765,8 @@
             return Convert.ToDecimal(bd);
         }
 
-        /** StepFrom AD_Reference_ID=499 */
-        public static int STEPFROM_AD_Reference_ID = 499;
+        /** StepFrom VAF_Control_Ref_ID=499 */
+        public static int STEPFROM_VAF_Control_Ref_ID = 499;
         /** Queue = Q */
         public static String STEPFROM_Queue = "Q";
         /** Run = R */
@@ -802,8 +802,8 @@
             return (String)Get_Value("StepFrom");
         }
 
-        /** StepTo AD_Reference_ID=499 */
-        public static int STEPTO_AD_Reference_ID = 499;
+        /** StepTo VAF_Control_Ref_ID=499 */
+        public static int STEPTO_VAF_Control_Ref_ID = 499;
         /** Queue = Q */
         public static String STEPTO_Queue = "Q";
         /** Run = R */
@@ -839,8 +839,8 @@
             return (String)Get_Value("StepTo");
         }
 
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;
         /** Set User List 1.
         @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
@@ -858,8 +858,8 @@
             return Convert.ToInt32(ii);
         }
 
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;
         /** Set User List 2.
         @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
@@ -895,8 +895,8 @@
             return false;
         }
 
-        /** WOTxnSource AD_Reference_ID=453 */
-        public static int WOTXNSOURCE_AD_Reference_ID = 453;
+        /** WOTxnSource VAF_Control_Ref_ID=453 */
+        public static int WOTXNSOURCE_VAF_Control_Ref_ID = 453;
         /** Generated = G */
         public static String WOTXNSOURCE_Generated = "G";
         /** Manually Entered = M */
@@ -929,8 +929,8 @@
             return (String)Get_Value("WOTxnSource");
         }
 
-        /** WorkOrderTxnType AD_Reference_ID=454 */
-        public static int WORKORDERTXNTYPE_AD_Reference_ID = 454;
+        /** WorkOrderTxnType VAF_Control_Ref_ID=454 */
+        public static int WORKORDERTXNTYPE_VAF_Control_Ref_ID = 454;
         /** Assembly Completion to Inventory = AI */
         public static String WORKORDERTXNTYPE_AssemblyCompletionToInventory = "AI";
         /** Assembly Return from Inventory = AR */

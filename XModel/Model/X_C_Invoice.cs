@@ -174,8 +174,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
         @param VAF_OrgTrx_ID Performing or initiating organization */
         public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
@@ -287,8 +287,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_Charge_ID AD_Reference_ID=200 */
-        public static int C_CHARGE_ID_AD_Reference_ID = 200;
+        /** C_Charge_ID VAF_Control_Ref_ID=200 */
+        public static int C_CHARGE_ID_VAF_Control_Ref_ID = 200;
         /** Set Charge.
         @param C_Charge_ID Additional document charges */
         public void SetC_Charge_ID(int C_Charge_ID)
@@ -337,8 +337,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeTarget_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPETARGET_ID_AD_Reference_ID = 170;
+        /** C_DocTypeTarget_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPETARGET_ID_VAF_Control_Ref_ID = 170;
         /** Set Target Doc Type.
         @param C_DocTypeTarget_ID Target document type for documents */
         public void SetC_DocTypeTarget_ID(int C_DocTypeTarget_ID)
@@ -563,8 +563,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -621,8 +621,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -738,8 +738,8 @@ namespace VAdvantage.Model
             if (bd == null) return Env.ZERO;
             return Convert.ToDecimal(bd);
         }
-        /** InvoiceCollectionType AD_Reference_ID=394 */
-        public static int INVOICECOLLECTIONTYPE_AD_Reference_ID = 394;
+        /** InvoiceCollectionType VAF_Control_Ref_ID=394 */
+        public static int INVOICECOLLECTIONTYPE_VAF_Control_Ref_ID = 394;
         /** Collection Agency = C */
         public static String INVOICECOLLECTIONTYPE_CollectionAgency = "C";
         /** Dunning = D */
@@ -988,8 +988,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** MatchRequirementI AD_Reference_ID=360 */
-        public static int MATCHREQUIREMENTI_AD_Reference_ID = 360;
+        /** MatchRequirementI VAF_Control_Ref_ID=360 */
+        public static int MATCHREQUIREMENTI_VAF_Control_Ref_ID = 360;
         /** Purchase Order and Receipt = B */
         public static String MATCHREQUIREMENTI_PurchaseOrderAndReceipt = "B";
         /** None = N */
@@ -1042,8 +1042,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("POReference");
         }
 
-        /** PaymentRule AD_Reference_ID=195 */
-        public static int PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        public static int PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         public static String PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */
@@ -1164,8 +1164,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Representative.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)
@@ -1216,8 +1216,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;
         /** Set User List 1.
         @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
@@ -1235,8 +1235,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;
         /** Set User List 2.
         @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
@@ -1305,8 +1305,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PaymentMethod AD_Reference_ID=195 */
-        public static int PAYMENTMETHOD_AD_Reference_ID = 195;/** Cash = B */
+        /** PaymentMethod VAF_Control_Ref_ID=195 */
+        public static int PAYMENTMETHOD_VAF_Control_Ref_ID = 195;/** Cash = B */
         public static String PAYMENTMETHOD_Cash = "B";/** Cash+Card = C */
         public static String PAYMENTMETHOD_CashPlusCard = "C";/** Direct Debit = D */
         public static String PAYMENTMETHOD_DirectDebit = "D";/** Credit Card = K */
@@ -1442,8 +1442,8 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
 
-        /** Ref_C_Invoice_ID AD_Reference_ID=1000238 */
-        public static int REF_C_INVOICE_ID_AD_Reference_ID = 1000238;
+        /** Ref_C_Invoice_ID VAF_Control_Ref_ID=1000238 */
+        public static int REF_C_INVOICE_ID_VAF_Control_Ref_ID = 1000238;
         /** Set Invoice Ref.
         @param Ref_C_Invoice_ID Original reference of reversed invoice document */
         public void SetRef_C_Invoice_ID(int Ref_C_Invoice_ID)

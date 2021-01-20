@@ -129,8 +129,8 @@ StringBuilder sb = new StringBuilder ("X_VAF_Client[").Append(Get_ID()).Append("
 return sb.ToString();
 }
 
-/** VAF_Language AD_Reference_ID=327 */
-public static int VAF_LANGUAGE_AD_Reference_ID=327;
+/** VAF_Language VAF_Control_Ref_ID=327 */
+public static int VAF_LANGUAGE_VAF_Control_Ref_ID=327;
 /** Set Language.
 @param VAF_Language Language for this entity */
 public void SetVAF_Language (String VAF_Language)
@@ -149,8 +149,8 @@ public String GetVAF_Language()
 return (String)Get_Value("VAF_Language");
 }
 
-/** AutoArchive AD_Reference_ID=334 */
-public static int AUTOARCHIVE_AD_Reference_ID=334;
+/** AutoArchive VAF_Control_Ref_ID=334 */
+public static int AUTOARCHIVE_VAF_Control_Ref_ID=334;
 /** All (Reports, Documents) = 1 */
 public static String AUTOARCHIVE_AllReportsDocuments = "1";
 /** Documents = 2 */
@@ -381,8 +381,8 @@ public String GetLDAPQuery()
 return (String)Get_Value("LDAPQuery");
 }
 
-/** MMPolicy AD_Reference_ID=335 */
-public static int MMPOLICY_AD_Reference_ID=335;
+/** MMPolicy VAF_Control_Ref_ID=335 */
+public static int MMPOLICY_VAF_Control_Ref_ID=335;
 /** FiFo = F */
 public static String MMPOLICY_FiFo = "F";
 /** LiFo = L */

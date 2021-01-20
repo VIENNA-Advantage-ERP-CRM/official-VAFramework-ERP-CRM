@@ -705,8 +705,8 @@ namespace VAdvantage.Model
 
 
 
-        /** VA012_ContraType AD_Reference_ID=1000447 */
-        public static int VA012_CONTRATYPE_AD_Reference_ID = 1000447;
+        /** VA012_ContraType VAF_Control_Ref_ID=1000447 */
+        public static int VA012_CONTRATYPE_VAF_Control_Ref_ID = 1000447;
         /** Bank To Bank = BB */
         public static String VA012_CONTRATYPE_BankToBank = "BB";
         /** Cash To Bank = CB */
@@ -739,8 +739,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** VA012_DifferenceType AD_Reference_ID=1000448 */
-        public static int VA012_DIFFERENCETYPE_AD_Reference_ID = 1000448;
+        /** VA012_DifferenceType VAF_Control_Ref_ID=1000448 */
+        public static int VA012_DIFFERENCETYPE_VAF_Control_Ref_ID = 1000448;
         /** Charge = CH */
         public static String VA012_DIFFERENCETYPE_Charge = "CH";
         /** Discount Amount = DA */
@@ -896,8 +896,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** VA012_VoucherType AD_Reference_ID=1000421 */
-        public static int VA012_VOUCHERTYPE_AD_Reference_ID = 1000421;
+        /** VA012_VoucherType VAF_Control_Ref_ID=1000421 */
+        public static int VA012_VOUCHERTYPE_VAF_Control_Ref_ID = 1000421;
         /** Match = M */
         public static String VA012_VOUCHERTYPE_Match = "M";
         /** Voucher = V */

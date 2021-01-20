@@ -297,8 +297,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ElementType AD_Reference_ID=181 */
-public static int ELEMENTTYPE_AD_Reference_ID=181;
+/** ElementType VAF_Control_Ref_ID=181 */
+public static int ELEMENTTYPE_VAF_Control_Ref_ID=181;
 /** Account = AC */
 public static String ELEMENTTYPE_Account = "AC";
 /** Activity = AY */
@@ -463,8 +463,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** Org_ID AD_Reference_ID=130 */
-public static int ORG_ID_AD_Reference_ID=130;
+/** Org_ID VAF_Control_Ref_ID=130 */
+public static int ORG_ID_VAF_Control_Ref_ID=130;
 /** Set Organization.
 @param Org_ID Organizational entity within client */
 public void SetOrg_ID (int Org_ID)

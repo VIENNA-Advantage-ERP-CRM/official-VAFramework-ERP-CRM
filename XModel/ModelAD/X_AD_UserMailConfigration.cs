@@ -368,8 +368,8 @@ public String GetSmtpUsername()
 return (String)Get_Value("SmtpUsername");
 }
 
-/** TableAttach AD_Reference_ID=1000007 */
-public static int TABLEATTACH_AD_Reference_ID=1000007;
+/** TableAttach VAF_Control_Ref_ID=1000007 */
+public static int TABLEATTACH_VAF_Control_Ref_ID=1000007;
 /** User Contact = AD_User */
 public static String TABLEATTACH_UserContact = "AD_User";
 /** Business Partner = C_BPartner */

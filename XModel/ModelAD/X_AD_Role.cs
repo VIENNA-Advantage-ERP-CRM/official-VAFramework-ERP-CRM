@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Role
+    /** Generated Model for VAF_Role
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Role : PO
+    public class X_VAF_Role : PO
     {
-        public X_AD_Role(Context ctx, int AD_Role_ID, Trx trxName)
-            : base(ctx, AD_Role_ID, trxName)
+        public X_VAF_Role(Context ctx, int VAF_Role_ID, Trx trxName)
+            : base(ctx, VAF_Role_ID, trxName)
         {
-            /** if (AD_Role_ID == 0)
+            /** if (VAF_Role_ID == 0)
             {
-            SetAD_Role_ID (0);
+            SetVAF_Role_ID (0);
             SetConfirmQueryRecords (0);	// 0
             SetIsAccessAllOrgs (false);	// N
             SetIsAdministrator (false);	// N
@@ -44,12 +44,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_Role(Ctx ctx, int AD_Role_ID, Trx trxName)
-            : base(ctx, AD_Role_ID, trxName)
+        public X_VAF_Role(Ctx ctx, int VAF_Role_ID, Trx trxName)
+            : base(ctx, VAF_Role_ID, trxName)
         {
-            /** if (AD_Role_ID == 0)
+            /** if (VAF_Role_ID == 0)
             {
-            SetAD_Role_ID (0);
+            SetVAF_Role_ID (0);
             SetConfirmQueryRecords (0);	// 0
             SetIsAccessAllOrgs (false);	// N
             SetIsAdministrator (false);	// N
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Role(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_Role(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Role(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_Role(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -95,14 +95,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Role(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_Role(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Role()
+        static X_VAF_Role()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -115,8 +115,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =156;
 
-        /** TableName=AD_Role */
-        public static String Table_Name = "AD_Role";
+        /** TableName=VAF_Role */
+        public static String Table_Name = "VAF_Role";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -150,27 +150,27 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Role[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Role[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID < 0) throw new ArgumentException("AD_Role_ID is mandatory.");
-            Set_ValueNoCheck("AD_Role_ID", AD_Role_ID);
+            if (VAF_Role_ID < 0) throw new ArgumentException("VAF_Role_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Menu_ID AD_Reference_ID=184 */
-        public static int AD_TREE_MENU_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Menu_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_MENU_ID_VAF_Control_Ref_ID = 184;
         /** Set Menu Tree.
         @param AD_Tree_Menu_ID Tree of the menu */
         public void SetAD_Tree_Menu_ID(int AD_Tree_Menu_ID)
@@ -188,8 +188,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Org_ID AD_Reference_ID=184 */
-        public static int AD_TREE_ORG_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Org_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_ORG_ID_VAF_Control_Ref_ID = 184;
         /** Set Organization Tree.
         @param AD_Tree_Org_ID Tree to determine organizational hierarchy */
         public void SetAD_Tree_Org_ID(int AD_Tree_Org_ID)
@@ -251,8 +251,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** ConnectionProfile AD_Reference_ID=364 */
-        public static int CONNECTIONPROFILE_AD_Reference_ID = 364;
+        /** ConnectionProfile VAF_Control_Ref_ID=364 */
+        public static int CONNECTIONPROFILE_VAF_Control_Ref_ID = 364;
         /** LAN = L */
         public static String CONNECTIONPROFILE_LAN = "L";
         /** Terminal Server = T */
@@ -305,8 +305,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** DisplayClientOrg AD_Reference_ID=427 */
-        public static int DISPLAYCLIENTORG_AD_Reference_ID = 427;
+        /** DisplayClientOrg VAF_Control_Ref_ID=427 */
+        public static int DISPLAYCLIENTORG_VAF_Control_Ref_ID = 427;
         /** Always Tenant, Organziation = A */
         public static String DISPLAYCLIENTORG_AlwaysTenantOrganziation = "A";
         /** No Tenant nor Org = N */
@@ -630,8 +630,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** PreferenceType AD_Reference_ID=330 */
-        public static int PREFERENCETYPE_AD_Reference_ID = 330;
+        /** PreferenceType VAF_Control_Ref_ID=330 */
+        public static int PREFERENCETYPE_VAF_Control_Ref_ID = 330;
         /** Client = C */
         public static String PREFERENCETYPE_Client = "C";
         /** None = N */
@@ -668,8 +668,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("PreferenceType");
         }
 
-        /** Supervisor_ID AD_Reference_ID=286 */
-        public static int SUPERVISOR_ID_AD_Reference_ID = 286;
+        /** Supervisor_ID VAF_Control_Ref_ID=286 */
+        public static int SUPERVISOR_ID_VAF_Control_Ref_ID = 286;
         /** Set Supervisor.
         @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
         public void SetSupervisor_ID(int Supervisor_ID)
@@ -687,8 +687,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** UserLevel AD_Reference_ID=226 */
-        public static int USERLEVEL_AD_Reference_ID = 226;
+        /** UserLevel VAF_Control_Ref_ID=226 */
+        public static int USERLEVEL_VAF_Control_Ref_ID = 226;
         /** Organization =   O */
         public static String USERLEVEL_Organization = "  O";
         /** Client =  C  */
@@ -725,8 +725,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("UserLevel");
         }
 
-        /** WinUserDefLevel AD_Reference_ID=428 */
-        public static int WINUSERDEFLEVEL_AD_Reference_ID = 428;
+        /** WinUserDefLevel VAF_Control_Ref_ID=428 */
+        public static int WINUSERDEFLEVEL_VAF_Control_Ref_ID = 428;
         /** Tenant (or Role or User) = C */
         public static String WINUSERDEFLEVEL_TenantOrRoleOrUser = "C";
         /** None = N */
@@ -761,8 +761,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("WinUserDefLevel");
         }
-        /** HomePage_ID AD_Reference_ID=1000387 */
-        public static int HOMEPAGE_ID_AD_Reference_ID = 1000387;/** Set Home Page.
+        /** HomePage_ID VAF_Control_Ref_ID=1000387 */
+        public static int HOMEPAGE_ID_VAF_Control_Ref_ID = 1000387;/** Set Home Page.
 @param HomePage_ID Home Page */
         public void SetHomePage_ID(int HomePage_ID)
         {

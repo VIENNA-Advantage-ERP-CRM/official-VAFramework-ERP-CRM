@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_AD_Ref_Table
+ * Class Used     : X_VAF_CtrlRef_Table
  * Chronological Development
  * Veena Pandey     12-May-2009
  ******************************************************/
@@ -20,21 +20,21 @@ namespace VAdvantage.Model
     /// <summary>
     /// Table Referenece Model
     /// </summary>
-  public  class MRefTable : X_AD_Ref_Table
+  public  class MRefTable : X_VAF_CtrlRef_Table
     {
         /**	Cache						*/
-        private static CCache<int, MRefTable> cache = new CCache<int, MRefTable>("AD_Ref_Table", 20);
+        private static CCache<int, MRefTable> cache = new CCache<int, MRefTable>("VAF_CtrlRef_Table", 20);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Reference_ID">id</param>
+        /// <param name="VAF_Control_Ref_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MRefTable(Ctx ctx, int AD_Reference_ID, Trx trxName)
-            : base(ctx, AD_Reference_ID, trxName)
+        public MRefTable(Ctx ctx, int VAF_Control_Ref_ID, Trx trxName)
+            : base(ctx, VAF_Control_Ref_ID, trxName)
         {
-            if (AD_Reference_ID == 0)
+            if (VAF_Control_Ref_ID == 0)
             {
                 //	setVAF_TableView_ID (0);
                 SetEntityType(ENTITYTYPE_UserMaintained);	// U
@@ -57,15 +57,15 @@ namespace VAdvantage.Model
         /// Get MRefTable from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Reference_ID">id</param>
+        /// <param name="VAF_Control_Ref_ID">id</param>
         /// <returns>MRefTable</returns>
-        public static MRefTable Get(Ctx ctx, int AD_Reference_ID)
+        public static MRefTable Get(Ctx ctx, int VAF_Control_Ref_ID)
         {
-            int key = AD_Reference_ID;
+            int key = VAF_Control_Ref_ID;
             MRefTable retValue = (MRefTable)cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MRefTable(ctx, AD_Reference_ID, null);
+            retValue = new MRefTable(ctx, VAF_Control_Ref_ID, null);
             if (retValue.Get_ID() != 0)
                 cache.Add(key, retValue);
             return retValue;
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MRefTable[");
-            sb.Append(GetAD_Reference_ID()).Append("-")
+            sb.Append(GetVAF_Control_Ref_ID()).Append("-")
                 .Append(GetVAF_TableView_ID()).Append("]");
             return sb.ToString();
         }

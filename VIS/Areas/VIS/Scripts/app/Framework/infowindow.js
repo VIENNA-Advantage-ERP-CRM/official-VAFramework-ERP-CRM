@@ -238,8 +238,8 @@
 
                     var srchCtrl = {
                     };
-                    displayType = schema[item].AD_Reference_ID;
-                    ctrl = getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+                    displayType = schema[item].VAF_Control_Ref_ID;
+                    ctrl = getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
                     srchCtrl.Ctrl = ctrl;
 
                     // check if there is some value needed to be set on this control.- Added by Mohit- 13 Feb 2019
@@ -315,7 +315,7 @@
                     }
 
 
-                    srchCtrl.AD_Reference_ID = schema[item].AD_Reference_ID;
+                    srchCtrl.VAF_Control_Ref_ID = schema[item].VAF_Control_Ref_ID;
                     srchCtrl.ColumnName = schema[item].SelectClause;
                     if (srchCtrl.ColumnName.toUpperCase().indexOf(" AS ") > -1) {
                         srchCtrl.SearchColumnName = srchCtrl.ColumnName.substring(0, srchCtrl.ColumnName.toUpperCase().indexOf(" AS "));
@@ -385,7 +385,7 @@
                         if (appendTopMargin) {
                             ctrl.getControl();
                         }
-                        if (schema[item].AD_Reference_ID == VIS.DisplayType.YesNo) {
+                        if (schema[item].VAF_Control_Ref_ID == VIS.DisplayType.YesNo) {
                             ctrl.getControl();
                             //tr.addClass('vis-check-mb-dec');
                         }
@@ -404,7 +404,7 @@
                         tr = $("<tr>");
                         tableSArea.append(tr);
 
-                        ctrl = getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name);
+                        ctrl = getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name);
                         srchCtrl.CtrlTo = ctrl;
                         var tdctrlTo = $("<td>");
                         tr.append(tdctrlTo);
@@ -441,7 +441,7 @@
                             if (appendTopMargin) {
                                 ctrl.getControl();
                             }
-                            if (schema[item].AD_Reference_ID == VIS.DisplayType.YesNo) {
+                            if (schema[item].VAF_Control_Ref_ID == VIS.DisplayType.YesNo) {
                                 ctrl.getControl();
                                 //tr.addClass('vis-check-mb-dec');
                             }
@@ -464,9 +464,9 @@
                     srchCtrls.push(srchCtrl);
 
                     //	No Label for FieldOnly, CheckBox, Button
-                    if (!(schema[item].AD_Reference_ID == VIS.DisplayType.YesNo
-                        || schema[item].AD_Reference_ID == VIS.DisplayType.Button
-                        || schema[item].AD_Reference_ID == VIS.DisplayType.Label)) {
+                    if (!(schema[item].VAF_Control_Ref_ID == VIS.DisplayType.YesNo
+                        || schema[item].VAF_Control_Ref_ID == VIS.DisplayType.Button
+                        || schema[item].VAF_Control_Ref_ID == VIS.DisplayType.Label)) {
                         //Set label
                         label = new VIS.Controls.VLabel(schema[item].Name, schema[item].ColumnName);
                         var lblctrl = label.getControl();
@@ -649,12 +649,12 @@
                 if (schema[item].IsKey) {
                     keyCol = cName.toUpperCase();
                 }
-                displayType = schema[item].AD_Reference_ID;
+                displayType = schema[item].VAF_Control_Ref_ID;
                 if (displayType == VIS.DisplayType.YesNo) {
                     sql += " ( CASE " + colName + " WHEN 'Y' THEN  'True' ELSE 'False'  END ) AS " + (cName);
                 }
                 else if (displayType == VIS.DisplayType.List) {
-                    //    ValueNamePair[] values = MRefList.GetList(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_REFERENCE_VALUE_ID"]), false);
+                    //    ValueNamePair[] values = MRefList.GetList(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_CONTROL_REF_VALUE_ID"]), false);
                     //    sql.Append(" CASE ");
                     //    for (int j = 0; j < values.Length; j++)
                     //    {
@@ -690,14 +690,14 @@
                     srchValue = srchCtrls[i].Ctrl.getValue();
 
                     //JID_0905:  In Case of Date Range, if From Date is not selected then check if To Date is selected
-                    if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date && srchCtrls[i].IsRange) {
+                    if (srchCtrls[i].VAF_Control_Ref_ID == VIS.DisplayType.Date && srchCtrls[i].IsRange) {
                         if (srchValue == null) {
                             srchValue = srchCtrls[i].CtrlTo.getValue();
                         }
                     }
 
                     // Consider checkbox value only in case of true value
-                    if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].AD_Reference_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
+                    if (srchValue == null || srchValue.length == 0 || (srchValue == 0 && srchCtrls[i].VAF_Control_Ref_ID != VIS.DisplayType.YesNo) || srchValue == -1 || !srchValue) {
                         continue;
                     }
 
@@ -705,9 +705,9 @@
                         if (appendAND == true) {
                             whereClause += " AND ";
                         }
-                        if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.String
-                            || srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Text
-                            || srchCtrls[i].AD_Reference_ID == VIS.DisplayType.TextLong) {
+                        if (srchCtrls[i].VAF_Control_Ref_ID == VIS.DisplayType.String
+                            || srchCtrls[i].VAF_Control_Ref_ID == VIS.DisplayType.Text
+                            || srchCtrls[i].VAF_Control_Ref_ID == VIS.DisplayType.TextLong) {
 
 
                             if (!(String(srchValue).indexOf("%") == 0)) {
@@ -722,7 +722,7 @@
                             srchValue = VIS.DB.to_string(srchValue);
                             whereClause += "  UPPER(" + srchCtrls[i].SearchColumnName + ") LIKE " + srchValue.toUpperCase();
                         }
-                        else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.Date) {
+                        else if (srchCtrls[i].VAF_Control_Ref_ID == VIS.DisplayType.Date) {
                             var fromValue = null;
                             var toValue = null;
                             var date = new Date(srchCtrls[i].Ctrl.getValue());
@@ -743,7 +743,7 @@
                                 whereClause += srchCtrls[i].SearchColumnName + " =" + fromValue;
                             }
                         }
-                        else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.DateTime) {
+                        else if (srchCtrls[i].VAF_Control_Ref_ID == VIS.DisplayType.DateTime) {
                             var fromValue = null;
                             var toValue = null;
                             var date = new Date(srchCtrls[i].Ctrl.getValue());
@@ -759,7 +759,7 @@
                             }
                         }
 
-                        else if (srchCtrls[i].AD_Reference_ID == VIS.DisplayType.YesNo) {
+                        else if (srchCtrls[i].VAF_Control_Ref_ID == VIS.DisplayType.YesNo) {
 
 
                             srchValue = srchCtrls[i].Ctrl.getValue() == true ? "Y" : "N";
@@ -901,7 +901,7 @@
 
                     resizable: true
                 }
-                displayType = schema[item].AD_Reference_ID;
+                displayType = schema[item].VAF_Control_Ref_ID;
 
                 oColumn.caption = schema[item].Name;
                 oColumn.field = dynData[item].ColumnName.toUpperCase();

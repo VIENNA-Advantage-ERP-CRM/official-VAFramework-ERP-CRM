@@ -150,24 +150,24 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Print Format.
-        @param AD_PrintFormat_ID Data Print Format */
-        public void SetAD_PrintFormat_ID(int AD_PrintFormat_ID)
+        @param VAF_Print_Rpt_Layout_ID Data Print Format */
+        public void SetVAF_Print_Rpt_Layout_ID(int VAF_Print_Rpt_Layout_ID)
         {
-            if (AD_PrintFormat_ID <= 0) Set_Value("AD_PrintFormat_ID", null);
+            if (VAF_Print_Rpt_Layout_ID <= 0) Set_Value("VAF_Print_Rpt_Layout_ID", null);
             else
-                Set_Value("AD_PrintFormat_ID", AD_PrintFormat_ID);
+                Set_Value("VAF_Print_Rpt_Layout_ID", VAF_Print_Rpt_Layout_ID);
         }
         /** Get Print Format.
         @return Data Print Format */
-        public int GetAD_PrintFormat_ID()
+        public int GetVAF_Print_Rpt_Layout_ID()
         {
-            Object ii = Get_Value("AD_PrintFormat_ID");
+            Object ii = Get_Value("VAF_Print_Rpt_Layout_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeDifference_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPEDIFFERENCE_ID_AD_Reference_ID = 170;
+        /** C_DocTypeDifference_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPEDIFFERENCE_ID_VAF_Control_Ref_ID = 170;
         /** Set Difference Document.
         @param C_DocTypeDifference_ID Document type for generating in dispute Shipments */
         public void SetC_DocTypeDifference_ID(int C_DocTypeDifference_ID)
@@ -185,8 +185,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeInvoice_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPEINVOICE_ID_AD_Reference_ID = 170;
+        /** C_DocTypeInvoice_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPEINVOICE_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type for Invoice.
         @param C_DocTypeInvoice_ID Document type used for invoices generated from this sales document */
         public void SetC_DocTypeInvoice_ID(int C_DocTypeInvoice_ID)
@@ -204,8 +204,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeProforma_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPEPROFORMA_ID_AD_Reference_ID = 170;
+        /** C_DocTypeProforma_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPEPROFORMA_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type for ProForma.
         @param C_DocTypeProforma_ID Document type used for pro forma invoices generated from this sales document */
         public void SetC_DocTypeProforma_ID(int C_DocTypeProforma_ID)
@@ -223,8 +223,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_DocTypeShipment_ID AD_Reference_ID=170 */
-        public static int C_DOCTYPESHIPMENT_ID_AD_Reference_ID = 170;
+        /** C_DocTypeShipment_ID VAF_Control_Ref_ID=170 */
+        public static int C_DOCTYPESHIPMENT_ID_VAF_Control_Ref_ID = 170;
         /** Set Document Type for Shipment.
         @param C_DocTypeShipment_ID Document type used for shipments generated from this sales document */
         public void SetC_DocTypeShipment_ID(int C_DocTypeShipment_ID)
@@ -274,8 +274,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** DocBaseType AD_Reference_ID=432 */
-        public static int DOCBASETYPE_AD_Reference_ID = 432;
+        /** DocBaseType VAF_Control_Ref_ID=432 */
+        public static int DOCBASETYPE_VAF_Control_Ref_ID = 432;
         /** Set Document BaseType.
         @param DocBaseType Logical type of document */
         public void SetDocBaseType(String DocBaseType)
@@ -294,8 +294,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocBaseType");
         }
 
-        /** DocNoSequence_ID AD_Reference_ID=128 */
-        public static int DOCNOSEQUENCE_ID_AD_Reference_ID = 128;
+        /** DocNoSequence_ID VAF_Control_Ref_ID=128 */
+        public static int DOCNOSEQUENCE_ID_VAF_Control_Ref_ID = 128;
         /** Set Document Sequence.
         @param DocNoSequence_ID Document sequence determines the numbering of documents */
         public void SetDocNoSequence_ID(int DocNoSequence_ID)
@@ -313,8 +313,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** DocSubTypeSO AD_Reference_ID=148 */
-        public static int DOCSUBTYPESO_AD_Reference_ID = 148;
+        /** DocSubTypeSO VAF_Control_Ref_ID=148 */
+        public static int DOCSUBTYPESO_VAF_Control_Ref_ID = 148;
         /** Quotation = OB */
         public static String DOCSUBTYPESO_Quotation = "OB";
         /** Proposal = ON */
@@ -683,8 +683,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("PrintName");
         }
 
-        /** R_MailText_ID AD_Reference_ID=274 */
-        public static int R_MAILTEXT_ID_AD_Reference_ID = 274;
+        /** R_MailText_ID VAF_Control_Ref_ID=274 */
+        public static int R_MAILTEXT_ID_VAF_Control_Ref_ID = 274;
         /** Set Mail Template.
         @param R_MailText_ID Text templates for mailings */
         public void SetR_MailText_ID(int R_MailText_ID)
@@ -710,8 +710,8 @@ namespace VAdvantage.Model
         public void SetVA019_IsWastage(Boolean VA019_IsWastage) { Set_Value("VA019_IsWastage", VA019_IsWastage); }/** Get Wastage.
         @return Wastage */
         public Boolean IsVA019_IsWastage() { Object oo = Get_Value("VA019_IsWastage"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
-        /** VAPOS_OrderType AD_Reference_ID=1000308 */
-        public static int VAPOS_ORDERTYPE_AD_Reference_ID = 1000308;/** Dine In = E */
+        /** VAPOS_OrderType VAF_Control_Ref_ID=1000308 */
+        public static int VAPOS_ORDERTYPE_VAF_Control_Ref_ID = 1000308;/** Dine In = E */
         public static String VAPOS_ORDERTYPE_DineIn = "E";/** Home Delivery = H */
         public static String VAPOS_ORDERTYPE_HomeDelivery = "H";/** Pick Order = P */
         public static String VAPOS_ORDERTYPE_PickOrder = "P";/** QSR = Q */
@@ -729,8 +729,8 @@ namespace VAdvantage.Model
         }/** Get POS Order Type.
         @return POS Order Type */
         public String GetVAPOS_OrderType() { return (String)Get_Value("VAPOS_OrderType"); }
-        /** VAPOS_POSMode AD_Reference_ID=1000561 */
-        public static int VAPOS_POSMODE_AD_Reference_ID = 1000561;/** Resturant = RS */
+        /** VAPOS_POSMode VAF_Control_Ref_ID=1000561 */
+        public static int VAPOS_POSMODE_VAF_Control_Ref_ID = 1000561;/** Resturant = RS */
         public static String VAPOS_POSMODE_Resturant = "RS";/** Retail = RT */
         public static String VAPOS_POSMODE_Retail = "RT";/** Is test a valid value.
         @param test testvalue
@@ -841,8 +841,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** CompletedSequence_ID AD_Reference_ID=128 */
-        public static int COMPLETEDSEQUENCE_ID_AD_Reference_ID = 128;
+        /** CompletedSequence_ID VAF_Control_Ref_ID=128 */
+        public static int COMPLETEDSEQUENCE_ID_VAF_Control_Ref_ID = 128;
         /** Set Document Sequence On Complete.
         @param CompletedSequence_ID Document Sequence On Complete */
         public void SetCompletedSequence_ID(int CompletedSequence_ID)

@@ -76,7 +76,7 @@
             //})
 
             var pInfo = new VIS.ProcessInfo(name, id, 0, 0);
-            pInfo.setAD_PInstance_ID(self.pInstanceId);
+            pInfo.setVAF_JInstance_ID(self.pInstanceId);
             pInfo.setWindowNo(windowNo);
 
             var data = { processInfo: pInfo.toJson() };
@@ -101,7 +101,7 @@
             }
 
             if (json.ShowParameter) { //Open Paramter Dialog
-                self.pInstanceId = json.AD_PInstance_ID;
+                self.pInstanceId = json.VAF_JInstance_ID;
                 self.fields = json.ProcessFields;
             }
             else {
@@ -198,7 +198,7 @@
                 self.paraList = paraList;
                 //var data = {
                 //    Process_ID: self.processId,
-                //    AD_PInstance_ID: self.pInstanceId,
+                //    VAF_JInstance_ID: self.pInstanceId,
                 //    Name: self.name,
                 //    VAF_TableView_ID: 0,
                 //    Record_ID: 0,
@@ -223,7 +223,7 @@
                 //})
 
                 var pInfo = new VIS.ProcessInfo(self.name, self.processId, 0, 0);
-                pInfo.setAD_PInstance_ID(self.pInstanceId);
+                pInfo.setVAF_JInstance_ID(self.pInstanceId);
 
                 VIS.dataContext.executeProcess({ processInfo: pInfo.toJson(), parameterList: paraList }, function (jsonStr) {
                     loadfieldspara(jsonStr);
@@ -484,7 +484,7 @@
             para = {};
 
 
-            //MPInstancePara para = new MPInstancePara (Env.getCtx(), m_processInfo.getAD_PInstance_ID(), i);
+            //MPInstancePara para = new MPInstancePara (Env.getCtx(), m_processInfo.getVAF_JInstance_ID(), i);
             var mField = this.mFields[i];
             para.Name = mField.getColumnName();
             para.DisplayType = mField.getDisplayType();

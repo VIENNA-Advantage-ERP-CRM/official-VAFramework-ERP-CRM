@@ -35,7 +35,7 @@ namespace VAdvantage.Model
         public static String ACCESSLEVEL_SystemPlusClient = "6";
         /** All = 7 */
         public static String ACCESSLEVEL_All = "7";
-        /** TableTrxType AD_Reference_ID=493 */
+        /** TableTrxType VAF_Control_Ref_ID=493 */
         /** Mandatory Organization = M */
         public static String TABLETRXTYPE_MandatoryOrganization = "M";
         /** No Organization = N */
@@ -101,11 +101,11 @@ namespace VAdvantage.Model
             List<POInfoColumn> list = new List<POInfoColumn>(20);
 
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT t.TableName, c.ColumnName,c.AD_Reference_ID,"    //  1..3
+            sql.Append("SELECT t.TableName, c.ColumnName,c.VAF_Control_Ref_ID,"    //  1..3
                 + "c.IsMandatory,c.IsUpdateable,c.DefaultValue,"                //  4..6
                 + "e.Name,e.Description, c.VAF_Column_ID, "						//  7..9
                 + "c.IsKey,c.IsParent, "										//	10..11
-                + "c.AD_Reference_Value_ID, vr.Code, "							//	12..13
+                + "c.VAF_Control_Ref_Value_ID, vr.Code, "							//	12..13
                 + "c.FieldLength, c.ValueMin, c.ValueMax, c.IsTranslated, "		//	14..17
                 + "t.AccessLevel, c.ColumnSQL, c.IsEncrypted , c.IsCopy ");				//	18..21
             sql.Append("FROM VAF_TableView t"
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
                     if (m_TableName == "")
                         m_TableName = Util.GetValueOfString(dr[0]);
                     string ColumnName = Util.GetValueOfString(dr[1]);
-                    int AD_Reference_ID = Util.GetValueOfInt(dr[2]);
+                    int VAF_Control_Ref_ID = Util.GetValueOfInt(dr[2]);
                     bool IsMandatory = "Y".Equals(dr[3]);
                     bool IsUpdateable = "Y".Equals(dr[4]);
                     string DefaultLogic = Util.GetValueOfString(dr[5]);
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
                     if (IsKey)
                         m_hasKeyColumn = true;
                     bool IsParent = "Y".Equals(Util.GetValueOfString(dr[10]));
-                    int AD_Reference_Value_ID = Util.GetValueOfInt(dr[11]);
+                    int VAF_Control_Ref_Value_ID = Util.GetValueOfInt(dr[11]);
                     string ValidationCode = Util.GetValueOfString(dr[12]);
                     int FieldLength = Util.GetValueOfInt(dr[13]);
                     string ValueMin = Util.GetValueOfString(dr[14]);
@@ -153,11 +153,11 @@ namespace VAdvantage.Model
                     bool IsEncrypted = "Y".Equals(Util.GetValueOfString(dr[19]));
                     bool IsCopy = "Y".Equals(Util.GetValueOfString(dr[20]));
                     POInfoColumn col = new POInfoColumn(
-                        VAF_Column_ID, ColumnName, ColumnSQL, AD_Reference_ID,
+                        VAF_Column_ID, ColumnName, ColumnSQL, VAF_Control_Ref_ID,
                         IsMandatory, IsUpdateable,
                         DefaultLogic, Name, Description,
                         IsKey, IsParent,
-                        AD_Reference_Value_ID, ValidationCode,
+                        VAF_Control_Ref_Value_ID, ValidationCode,
                         FieldLength, ValueMin, ValueMax,
                         IsTranslated, IsEncrypted, IsCopy);
                     list.Add(col);
@@ -259,7 +259,7 @@ namespace VAdvantage.Model
         //                if (DisplayType.IsLookup(column.DisplayType))
         //                {
         //                    VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
-        //                        column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+        //                        column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.VAF_Control_Ref_Value_ID,
         //                        column.IsParent, column.ValidationCode);
 
         //                    if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")
@@ -672,7 +672,7 @@ namespace VAdvantage.Model
         //        lookup = VLookUpFactory.Get(m_ctx, WindowNo, m_columns[index].VAF_Column_ID,
         //            m_columns[index].DisplayType,
         //            m_columns[index].ColumnName,
-        //            m_columns[index].AD_Reference_Value_ID,
+        //            m_columns[index].VAF_Control_Ref_Value_ID,
         //            m_columns[index].IsParent, m_columns[index].ValidationCode);
         //    }
         //    catch
@@ -708,7 +708,7 @@ namespace VAdvantage.Model
         //    try
         //    {
         //        lookup = VLookUpFactory.GetLookUpInfo(m_ctx, WindowNo, m_columns[index].DisplayType, m_columns[index].VAF_Column_ID, Env.GetLanguage(m_ctx),
-        //            m_columns[index].ColumnName, m_columns[index].AD_Reference_Value_ID,
+        //            m_columns[index].ColumnName, m_columns[index].VAF_Control_Ref_Value_ID,
         //            m_columns[index].IsParent, m_columns[index].ValidationCode);
         //    }
         //    catch
@@ -801,7 +801,7 @@ namespace VAdvantage.Model
             public bool IsEncrypted;
 
             /** Reference Value	*/
-            public int AD_Reference_Value_ID;
+            public int VAF_Control_Ref_Value_ID;
             /** Validation		*/
             public string ValidationCode;
             public Type ColumnClass;
@@ -828,7 +828,7 @@ namespace VAdvantage.Model
                                  bool isMandatory, bool isUpdateable, string defaultLogic,
                                  string columnLabel, string columnDescription,
                                  bool isKey, bool isParent,
-                                 int ad_Reference_Value_ID, string validationCode,
+                                 int VAF_Control_Ref_Value_ID, string validationCode,
                                  int fieldLength, string valueMin, string valueMax,
                                  bool isTranslated, bool isEncrypted, bool isCopy)
             {
@@ -869,7 +869,7 @@ namespace VAdvantage.Model
                 IsKey = isKey;
                 IsParent = isParent;
                 //
-                AD_Reference_Value_ID = ad_Reference_Value_ID;
+                VAF_Control_Ref_Value_ID = VAF_Control_Ref_Value_ID;
                 ValidationCode = validationCode;
                 FieldLength = fieldLength;
                 ValueMin = valueMin;
@@ -915,7 +915,7 @@ namespace VAdvantage.Model
              clone.ColumnDescription = ColumnDescription;
              clone.IsKey = IsKey;
              clone.IsParent = IsParent;
-             clone.AD_Reference_Value_ID = AD_Reference_Value_ID;
+             clone.VAF_Control_Ref_Value_ID = VAF_Control_Ref_Value_ID;
              clone.ValidationCode = ValidationCode;
              clone.FieldLength = FieldLength;
              clone.ValueMin = ValueMin;

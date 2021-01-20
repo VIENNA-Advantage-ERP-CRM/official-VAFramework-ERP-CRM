@@ -176,8 +176,8 @@
         //control on form
 
 
-        /** ElementType AD_Reference_ID=181 */
-        var eLEMENTTYPE_AD_Reference_ID = 181;
+        /** ElementType VAF_Control_Ref_ID=181 */
+        var eLEMENTTYPE_VAF_Control_Ref_ID = 181;
         /** Account = AC */
         var eLEMENTTYPE_Account = "AC";
         /** Activity = AY */
@@ -1817,7 +1817,7 @@
             f_C_Project_ID = null; f_C_SalesRegion_ID = null; f_VAF_OrgTrx_ID = null; f_C_Activity_ID = null;
             f_User1_ID = null; f_User2_ID = null;
             this.log = null;
-            eLEMENTTYPE_AD_Reference_ID = null;
+            eLEMENTTYPE_VAF_Control_Ref_ID = null;
             eLEMENTTYPE_Account = null;
             eLEMENTTYPE_Activity = null;
             eLEMENTTYPE_BPartner = null;

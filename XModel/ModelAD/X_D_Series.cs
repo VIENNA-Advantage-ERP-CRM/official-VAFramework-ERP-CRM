@@ -142,8 +142,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** VAF_Column_X_ID AD_Reference_ID=414 */
-        public static int VAF_COLUMN_X_ID_AD_Reference_ID = 414;
+        /** VAF_Column_X_ID VAF_Control_Ref_ID=414 */
+        public static int VAF_COLUMN_X_ID_VAF_Control_Ref_ID = 414;
         /** Set Column X.
         @param VAF_Column_X_ID Column X */
         public void SetVAF_Column_X_ID(int VAF_Column_X_ID)
@@ -160,8 +160,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_Column_Y_ID AD_Reference_ID=414 */
-        public static int VAF_COLUMN_Y_ID_AD_Reference_ID = 414;
+        /** VAF_Column_Y_ID VAF_Control_Ref_ID=414 */
+        public static int VAF_COLUMN_Y_ID_VAF_Control_Ref_ID = 414;
         /** Set Column Y.
         @param VAF_Column_Y_ID Column Y */
         public void SetVAF_Column_Y_ID(int VAF_Column_Y_ID)
@@ -178,8 +178,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_DateColumn_ID AD_Reference_ID=414 */
-        public static int AD_DATECOLUMN_ID_AD_Reference_ID = 414;
+        /** AD_DateColumn_ID VAF_Control_Ref_ID=414 */
+        public static int AD_DATECOLUMN_ID_VAF_Control_Ref_ID = 414;
         /** Set Date Column.
         @param AD_DateColumn_ID Date Column */
         public void SetAD_DateColumn_ID(int AD_DateColumn_ID)
@@ -197,8 +197,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Gradient_Color_ID AD_Reference_ID=266 */
-        public static int AD_GRADIENT_COLOR_ID_AD_Reference_ID = 266;
+        /** AD_Gradient_Color_ID VAF_Control_Ref_ID=266 */
+        public static int AD_GRADIENT_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Series Gradient Color.
         @param AD_Gradient_Color_ID Series Gradient Color */
         public void SetAD_Gradient_Color_ID(int AD_Gradient_Color_ID)
@@ -216,8 +216,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Series_Color_ID AD_Reference_ID=266 */
-        public static int AD_SERIES_COLOR_ID_AD_Reference_ID = 266;
+        /** AD_Series_Color_ID VAF_Control_Ref_ID=266 */
+        public static int AD_SERIES_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Series Color.
         @param AD_Series_Color_ID Series Color */
         public void SetAD_Series_Color_ID(int AD_Series_Color_ID)
@@ -251,8 +251,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TableView_ID AD_Reference_ID=415 */
-        public static int VAF_TABLEVIEW_ID_AD_Reference_ID = 415;
+        /** VAF_TableView_ID VAF_Control_Ref_ID=415 */
+        public static int VAF_TABLEVIEW_ID_VAF_Control_Ref_ID = 415;
         /** Set Table.
         @param VAF_TableView_ID Database Table information */
         public void SetVAF_TableView_ID(int VAF_TableView_ID)
@@ -399,8 +399,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** DataType_X AD_Reference_ID=1000001 */
-        public static int DATATYPE_X_AD_Reference_ID = 1000001;
+        /** DataType_X VAF_Control_Ref_ID=1000001 */
+        public static int DATATYPE_X_VAF_Control_Ref_ID = 1000001;
         /** String = (10,14)       */
         public static String DATATYPE_X_String = "(10,14)      ";
         /** Date = (15,16)       */
@@ -435,8 +435,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DataType_X");
         }
 
-        /** DataType_Y AD_Reference_ID=1000001 */
-        public static int DATATYPE_Y_AD_Reference_ID = 1000001;
+        /** DataType_Y VAF_Control_Ref_ID=1000001 */
+        public static int DATATYPE_Y_VAF_Control_Ref_ID = 1000001;
         /** String = (10,14)       */
         public static String DATATYPE_Y_String = "(10,14)      ";
         /** Date = (15,16)       */
@@ -483,8 +483,8 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("DateFrom");
         }
 
-        /** DateTimeTypes AD_Reference_ID=1000002 */
-        public static int DATETIMETYPES_AD_Reference_ID = 1000002;
+        /** DateTimeTypes VAF_Control_Ref_ID=1000002 */
+        public static int DATETIMETYPES_VAF_Control_Ref_ID = 1000002;
         /** Last ? Days = A */
         public static String DATETIMETYPES_LastDays = "A";
         /** Last ? Months = B */
@@ -864,8 +864,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Name");
         }
 
-        /** OrderByColumn AD_Reference_ID=1000003 */
-        public static int ORDERBYCOLUMN_AD_Reference_ID = 1000003;
+        /** OrderByColumn VAF_Control_Ref_ID=1000003 */
+        public static int ORDERBYCOLUMN_VAF_Control_Ref_ID = 1000003;
         /** ColX = 1 */
         public static String ORDERBYCOLUMN_ColX = "1";
         /** ColY = 2 */
@@ -898,8 +898,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("OrderByColumn");
         }
 
-        /** ShowView AD_Reference_ID=1000004 */
-        public static int SHOWVIEW_AD_Reference_ID = 1000004;
+        /** ShowView VAF_Control_Ref_ID=1000004 */
+        public static int SHOWVIEW_VAF_Control_Ref_ID = 1000004;
         ///** Set ShowView.
         //@param ShowView ShowView */
         //public void SetShowView(int ShowView)
@@ -950,8 +950,8 @@ namespace VAdvantage.Model
 
 
 
-        /** TableView_ID AD_Reference_ID=1000186 */
-        public static int TABLEVIEW_ID_AD_Reference_ID = 1000186;
+        /** TableView_ID VAF_Control_Ref_ID=1000186 */
+        public static int TABLEVIEW_ID_VAF_Control_Ref_ID = 1000186;
         /** Set Table View.
         @param TableView_ID Table View */
         public void SetTableView_ID(int TableView_ID)
@@ -1006,8 +1006,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("WhereClause");
         }
 
-        /** WhereCondition AD_Reference_ID=1000005 */
-        public static int WHERECONDITION_AD_Reference_ID = 1000005;
+        /** WhereCondition VAF_Control_Ref_ID=1000005 */
+        public static int WHERECONDITION_VAF_Control_Ref_ID = 1000005;
         /** = = 1 */
         public static String WHERECONDITION_Eq = "1";
         /** != = 2 */

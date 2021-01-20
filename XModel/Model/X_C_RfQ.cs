@@ -217,8 +217,8 @@ SetSalesRep_ID (0);} */
         public void SetPublishRfQ(String PublishRfQ) { if (PublishRfQ != null && PublishRfQ.Length > 1) { log.Warning("Length > 1 - truncated"); PublishRfQ = PublishRfQ.Substring(0, 1); } Set_Value("PublishRfQ", PublishRfQ); }/** Get Publish RfQ.
 @return Publish RfQ */
         public String GetPublishRfQ() { return (String)Get_Value("PublishRfQ"); }
-        /** QuoteType AD_Reference_ID=314 */
-        public static int QUOTETYPE_AD_Reference_ID = 314;/** Quote All Lines = A */
+        /** QuoteType VAF_Control_Ref_ID=314 */
+        public static int QUOTETYPE_VAF_Control_Ref_ID = 314;/** Quote All Lines = A */
         public static String QUOTETYPE_QuoteAllLines = "A";/** Quote Selected Lines = S */
         public static String QUOTETYPE_QuoteSelectedLines = "S";/** Quote Total only = T */
         public static String QUOTETYPE_QuoteTotalOnly = "T";/** Is test a valid value.
@@ -247,8 +247,8 @@ SetSalesRep_ID (0);} */
         public void SetRankRfQ(String RankRfQ) { if (RankRfQ != null && RankRfQ.Length > 1) { log.Warning("Length > 1 - truncated"); RankRfQ = RankRfQ.Substring(0, 1); } Set_Value("RankRfQ", RankRfQ); }/** Get Rank RfQ.
 @return Rank RfQ */
         public String GetRankRfQ() { return (String)Get_Value("RankRfQ"); }
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;/** Set Sales Rep.
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;/** Set Sales Rep.
 @param SalesRep_ID Company Agent like Sales Representative, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID) { if (SalesRep_ID < 1) throw new ArgumentException("SalesRep_ID is mandatory."); Set_Value("SalesRep_ID", SalesRep_ID); }/** Get Sales Rep.
 @return Company Agent like Sales Representative, Customer Service Representative, ... */

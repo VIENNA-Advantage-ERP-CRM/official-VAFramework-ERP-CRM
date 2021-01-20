@@ -34,7 +34,7 @@ namespace VAdvantage.WF
                 throw new ArgumentException("Multi-Key");
             else
             {
-                //	setAD_Role_ID (0);
+                //	setVAF_Role_ID (0);
                 //	setAD_Workflow_ID (0);
                 SetIsReadWrite(true);
             }
@@ -55,13 +55,13 @@ namespace VAdvantage.WF
         ///Parent Constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        /// <param name="AD_Role_ID">role id</param>
-        public MWorkflowAccess(MWorkflow parent, int AD_Role_ID)
+        /// <param name="VAF_Role_ID">role id</param>
+        public MWorkflowAccess(MWorkflow parent, int VAF_Role_ID)
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
             SetAD_Workflow_ID(parent.GetAD_Workflow_ID());
-            SetAD_Role_ID(AD_Role_ID);
+            SetVAF_Role_ID(VAF_Role_ID);
         }
 
     }

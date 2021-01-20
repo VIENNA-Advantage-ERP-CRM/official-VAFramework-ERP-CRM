@@ -641,11 +641,11 @@
 
             if (ulRole != null) {
                 ulRole.on("click", "li", function () {
-                    var roleID = $(this).attr("ad_role_id");
+                    var roleID = $(this).attr("VAF_Role_id");
                     if (!$(this).find("input").is(":checked")) {
                         $(this).find("input").prop("checked", false);
                         for (var i = 0; i < LstRoleID.length; i++) {
-                            if (LstRoleID[i].AD_Role_ID == roleID) {
+                            if (LstRoleID[i].VAF_Role_ID == roleID) {
                                 LstRoleID.splice(i, 1);
                             }
 
@@ -653,7 +653,7 @@
                     }
                     else {
                         $(this).find("input").prop("checked", true);
-                        LstRoleID.push({ AD_Role_ID: parseInt(roleID) });
+                        LstRoleID.push({ VAF_Role_ID: parseInt(roleID) });
                     }
 
                 });
@@ -1181,7 +1181,7 @@
             if (root != null)
             { root.children().remove(); }
             for (var i = 0; i < roleInfo.length; i++) {
-                root.append("<li ad_role_id=" + roleInfo[i].AD_Role_ID + " > <input type='checkbox' " + d + "> " + w2utils.encodeTags(roleInfo[i].RoleName) + "</li>");
+                root.append("<li VAF_Role_id=" + roleInfo[i].VAF_Role_ID + " > <input type='checkbox' " + d + "> " + w2utils.encodeTags(roleInfo[i].RoleName) + "</li>");
             }
             for (var i = 0; i < LstCardViewRole.length; i++) {
                 if (LstCardViewRole[i] == null) {
@@ -1189,13 +1189,13 @@
                 }
                 for (var j = 0; j < LstCardViewRole[i].length; j++) {
                     if (LstCardViewRole[i][j].VAF_CardView_ID == VAF_CardView_ID) {
-                        root.find("[ad_role_id='" + LstCardViewRole[i][j].AD_Role_ID + "']").find("input").prop('checked', true);
-                        LstRoleID.push({ AD_Role_ID: LstCardViewRole[i][j].AD_Role_ID });
+                        root.find("[VAF_Role_id='" + LstCardViewRole[i][j].VAF_Role_ID + "']").find("input").prop('checked', true);
+                        LstRoleID.push({ VAF_Role_ID: LstCardViewRole[i][j].VAF_Role_ID });
                     }
                 }
             }
             //if (cardViewUserID > 0)
-            //    root.find("[ad_role_id='" + cardViewUserID + "']").attr("selected", "selected");
+            //    root.find("[VAF_Role_id='" + cardViewUserID + "']").attr("selected", "selected");
         };
         var changeHeader = function () {
             if (cardViewUserID > 0) {
@@ -1255,7 +1255,7 @@
                 // get field's column name
                 var columnName = field.getColumnName();
                 if (field.getDisplayType() == VIS.DisplayType.Button) {
-                    if (field.getAD_Reference_Value_ID() == 0)
+                    if (field.getVAF_Control_Ref_Value_ID() == 0)
                         continue;
                     if (columnName.endsWith("_ID"))
                         field.setDisplayType(VIS.DisplayType.Table);

@@ -129,8 +129,8 @@ StringBuilder sb = new StringBuilder ("X_C_ProjectLine[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 
-/** C_OrderPO_ID AD_Reference_ID=290 */
-public static int C_ORDERPO_ID_AD_Reference_ID=290;
+/** C_OrderPO_ID VAF_Control_Ref_ID=290 */
+public static int C_ORDERPO_ID_VAF_Control_Ref_ID=290;
 /** Set Purchase Order.
 @param C_OrderPO_ID Purchase Order */
 public void SetC_OrderPO_ID (int C_OrderPO_ID)

@@ -125,8 +125,8 @@ StringBuilder sb = new StringBuilder ("X_C_Commission[").Append(Get_ID()).Append
 return sb.ToString();
 }
 
-/** C_BPartner_ID AD_Reference_ID=232 */
-public static int C_BPARTNER_ID_AD_Reference_ID=232;
+/** C_BPartner_ID VAF_Control_Ref_ID=232 */
+public static int C_BPARTNER_ID_VAF_Control_Ref_ID=232;
 /** Set Business Partner.
 @param C_BPartner_ID Identifies a Business Partner */
 public void SetC_BPartner_ID (int C_BPartner_ID)
@@ -234,8 +234,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DocBasisType AD_Reference_ID=224 */
-public static int DOCBASISTYPE_AD_Reference_ID=224;
+/** DocBasisType VAF_Control_Ref_ID=224 */
+public static int DOCBASISTYPE_VAF_Control_Ref_ID=224;
 /** Invoice = I */
 public static String DOCBASISTYPE_Invoice = "I";
 /** Order = O */
@@ -270,8 +270,8 @@ public String GetDocBasisType()
 return (String)Get_Value("DocBasisType");
 }
 
-/** FrequencyType AD_Reference_ID=225 */
-public static int FREQUENCYTYPE_AD_Reference_ID=225;
+/** FrequencyType VAF_Control_Ref_ID=225 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=225;
 /** Monthly = M */
 public static String FREQUENCYTYPE_Monthly = "M";
 /** Quarterly = Q */

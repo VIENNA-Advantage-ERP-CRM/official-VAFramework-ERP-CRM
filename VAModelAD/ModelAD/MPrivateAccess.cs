@@ -10,7 +10,7 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
 
-    public class MPrivateAccess : X_AD_Private_Access
+    public class MPrivateAccess : X_VAF_Private_Rights
     {
         #region Private Variables
         //private static long serialVersionUID = -5649529789751432279L;
@@ -28,7 +28,7 @@ namespace VAdvantage.Model
         public static MPrivateAccess Get(Ctx ctx, int AD_User_ID, int VAF_TableView_ID, int Record_ID)
         {
             MPrivateAccess retValue = null;
-            String sql = "SELECT * FROM AD_Private_Access WHERE AD_User_ID=" + AD_User_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID;
+            String sql = "SELECT * FROM VAF_Private_Rights WHERE AD_User_ID=" + AD_User_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND Record_ID=" + Record_ID;
             IDataReader idr = null;
             try
             {
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
             /*
             ArrayList<Integer> list = new ArrayList<Integer>();
             PreparedStatement pstmt = null;
-            String sql = "SELECT Record_ID FROM AD_Private_Access WHERE VAF_TableView_ID=? AND AD_User_ID<>? AND IsActive='Y'";
+            String sql = "SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_TableView_ID=? AND AD_User_ID<>? AND IsActive='Y'";
             try
             {
                 pstmt = DB.prepareStatement(sql, null);
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
             }
             sb.append(")");
             return sb.toString();*/
-            String whereClause = " NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE VAF_TableView_ID = "
+            String whereClause = " NOT IN ( SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_TableView_ID = "
                 + VAF_TableView_ID + " AND AD_User_ID <> " + AD_User_ID + " AND IsActive = 'Y' )";
             return whereClause;
         }

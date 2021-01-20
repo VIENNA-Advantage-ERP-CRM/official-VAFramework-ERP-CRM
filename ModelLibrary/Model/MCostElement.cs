@@ -92,7 +92,7 @@ namespace VAdvantage.Model
             //	Create New
             retValue = new MCostElement(po.GetCtx(), 0, po.Get_TrxName());
             retValue.SetClientOrg(po.GetVAF_Client_ID(), 0);
-            String name = MRefList.GetListName(po.GetCtx(), COSTINGMETHOD_AD_Reference_ID, CostingMethod);
+            String name = MRefList.GetListName(po.GetCtx(), COSTINGMETHOD_VAF_Control_Ref_ID, CostingMethod);
             if (name == null || name.Length == 0)
                 name = CostingMethod;
             retValue.SetName(name);

@@ -20,7 +20,7 @@ public X_AD_User_Roles (Context ctx, int AD_User_Roles_ID, Trx trxName) : base (
 {
 /** if (AD_User_Roles_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetAD_User_ID (0);
 }
  */
@@ -29,7 +29,7 @@ public X_AD_User_Roles (Ctx ctx, int AD_User_Roles_ID, Trx trxName) : base (ctx,
 {
 /** if (AD_User_Roles_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetAD_User_ID (0);
 }
  */
@@ -113,17 +113,17 @@ StringBuilder sb = new StringBuilder ("X_AD_User_Roles[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -131,7 +131,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Role_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set User/Contact.
 @param AD_User_ID User within the system - Internal or Business Partner Contact */

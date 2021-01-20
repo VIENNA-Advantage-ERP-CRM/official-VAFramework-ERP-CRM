@@ -492,7 +492,7 @@
 
         curEle = tabEle = null;
 
-        //if (this.curTab.getAD_Process_ID() == 0) {
+        //if (this.curTab.getVAF_Job_ID() == 0) {
         //    this.aPrint.setEnabled(false);
         //}
         //else this.aPrint.setEnabled(true);

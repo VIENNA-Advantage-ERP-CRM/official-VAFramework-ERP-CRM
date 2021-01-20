@@ -420,8 +420,8 @@ namespace VAdvantage.Process
             }
 
             string periodSql = "SELECT C_Period_ID From C_Period pr  INNER JOIN c_year yr ON (yr.c_year_id = pr.c_year_id AND yr.c_calendar_id= " +
-                "(CASE WHEN (SELECT NVL(C_Calendar_ID,0) FROM VAF_Orginfo WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + " ) =0 THEN (SELECT  NVL(C_Calendar_ID,0) FROM VAF_ClientDetail WHERE VAF_Client_ID =" + revenueRecognitionPlan.GetVAF_Client_ID() + ") ELSE " +
-                "(SELECT NVL(C_Calendar_ID,0) FROM VAF_Orginfo WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + ") END ) ) WHERE " + GlobalVariable.TO_DATE(revenurecognitionRun.GetRecognitionDate(), true) + " BETWEEN StartDate and EndDate";
+                "(CASE WHEN (SELECT NVL(C_Calendar_ID,0) FROM VAF_OrgDetail WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + " ) =0 THEN (SELECT  NVL(C_Calendar_ID,0) FROM VAF_ClientDetail WHERE VAF_Client_ID =" + revenueRecognitionPlan.GetVAF_Client_ID() + ") ELSE " +
+                "(SELECT NVL(C_Calendar_ID,0) FROM VAF_OrgDetail WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + ") END ) ) WHERE " + GlobalVariable.TO_DATE(revenurecognitionRun.GetRecognitionDate(), true) + " BETWEEN StartDate and EndDate";
 
             C_Period_ID = Util.GetValueOfInt(DB.ExecuteScalar(periodSql));
 
@@ -594,7 +594,7 @@ namespace VAdvantage.Process
         private string CompleteOrReverse(Ctx ctx, int Record_ID, int Process_ID, string DocAction)
         {
             string result = "";
-            MRole role = MRole.Get(ctx, ctx.GetAD_Role_ID());
+            MRole role = MRole.Get(ctx, ctx.GetVAF_Role_ID());
             if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
             {
                 DB.ExecuteQuery("UPDATE GL_Journal SET DocAction = '" + DocAction + "' WHERE GL_Journal_ID = " + Record_ID);
@@ -626,7 +626,7 @@ namespace VAdvantage.Process
                 ProcessInfo pi = new ProcessInfo("WF", Process_ID);
                 pi.SetAD_User_ID(ctx.GetAD_User_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-                pi.SetAD_PInstance_ID(pin.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(pin.GetVAF_JInstance_ID());
                 pi.SetRecord_ID(Record_ID);
                 if (Process_ID == 169)
                 {

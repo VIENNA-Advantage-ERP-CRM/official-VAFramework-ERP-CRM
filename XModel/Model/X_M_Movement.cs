@@ -134,8 +134,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
         @param VAF_OrgTrx_ID Performing or initiating organization */
         public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
@@ -259,8 +259,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -317,8 +317,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -513,8 +513,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** User1_ID AD_Reference_ID=134 */
-        public static int USER1_ID_AD_Reference_ID = 134;
+        /** User1_ID VAF_Control_Ref_ID=134 */
+        public static int USER1_ID_VAF_Control_Ref_ID = 134;
         /** Set User List 1.
         @param User1_ID User defined list element #1 */
         public void SetUser1_ID(int User1_ID)
@@ -532,8 +532,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** User2_ID AD_Reference_ID=137 */
-        public static int USER2_ID_AD_Reference_ID = 137;
+        /** User2_ID VAF_Control_Ref_ID=137 */
+        public static int USER2_ID_VAF_Control_Ref_ID = 137;
         /** Set User List 2.
         @param User2_ID User defined list element #2 */
         public void SetUser2_ID(int User2_ID)
@@ -550,8 +550,8 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** DTD001_MWarehouseSource_ID AD_Reference_ID=1000313 */
-        public static int DTD001_MWAREHOUSESOURCE_ID_AD_Reference_ID = 1000313;
+        /** DTD001_MWarehouseSource_ID VAF_Control_Ref_ID=1000313 */
+        public static int DTD001_MWAREHOUSESOURCE_ID_VAF_Control_Ref_ID = 1000313;
         /** Set Source Warehouse.
         @param DTD001_MWarehouseSource_ID Source Warehouse */
         public void SetDTD001_MWarehouseSource_ID(int DTD001_MWarehouseSource_ID)
@@ -611,8 +611,8 @@ namespace VAdvantage.Model
         /** Get Reversed Cost Calculated. @return Reversed Cost Calculated */
         public Boolean IsReversedCostCalculated() { Object oo = Get_Value("IsReversedCostCalculated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
-        /** ReversalDoc_ID AD_Reference_ID=1000206 */
-        public static int REVERSALDOC_ID_AD_Reference_ID = 1000206;
+        /** ReversalDoc_ID VAF_Control_Ref_ID=1000206 */
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 1000206;
         /** Set Reversal Document.@param ReversalDoc_ID Reversal Document */
         public void SetReversalDoc_ID(int ReversalDoc_ID)
         {

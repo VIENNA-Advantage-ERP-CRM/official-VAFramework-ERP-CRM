@@ -162,8 +162,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** ModerationType AD_Reference_ID=395 */
-public static int MODERATIONTYPE_AD_Reference_ID=395;
+/** ModerationType VAF_Control_Ref_ID=395 */
+public static int MODERATIONTYPE_VAF_Control_Ref_ID=395;
 /** After Publishing = A */
 public static String MODERATIONTYPE_AfterPublishing = "A";
 /** Before Publishing = B */

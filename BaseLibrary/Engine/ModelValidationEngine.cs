@@ -33,10 +33,10 @@ namespace VAdvantage.Model
         /// Called before preferences are set
         /// </summary>
         /// <param name="VAF_Org_ID">VAF_Org_ID</param>
-        /// <param name="AD_Role_ID">AD_Role_ID</param>
+        /// <param name="VAF_Role_ID">VAF_Role_ID</param>
         /// <param name="AD_User_ID">AD_User_ID</param>
         /// <returns>error message or null</returns>
-        String Login(int VAF_Org_ID, int AD_Role_ID, int AD_User_ID);
+        String Login(int VAF_Org_ID, int VAF_Role_ID, int AD_User_ID);
 
         /// <summary>
         /// Model Change of a monitored Table.
@@ -248,17 +248,17 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAF_Client_ID">client id</param>
         /// <param name="VAF_Org_ID">organization Id</param>
-        /// <param name="AD_Role_ID">role id</param>
+        /// <param name="VAF_Role_ID">role id</param>
         /// <param name="AD_User_ID">user id</param>
         /// <returns>error message if any</returns>
-        public String LoginComplete(int VAF_Client_ID, int VAF_Org_ID, int AD_Role_ID, int AD_User_ID)
+        public String LoginComplete(int VAF_Client_ID, int VAF_Org_ID, int VAF_Role_ID, int AD_User_ID)
         {
             for (int i = 0; i < _validators.Count; i++)
             {
                 ModelValidator validator = (ModelValidator)_validators[i];
                 if (VAF_Client_ID == validator.GetVAF_Client_ID())
                 {
-                    String error = validator.Login(VAF_Org_ID, AD_Role_ID, AD_User_ID);
+                    String error = validator.Login(VAF_Org_ID, VAF_Role_ID, AD_User_ID);
                     if (error != null && error.Length > 0)
                         return error;
                 }

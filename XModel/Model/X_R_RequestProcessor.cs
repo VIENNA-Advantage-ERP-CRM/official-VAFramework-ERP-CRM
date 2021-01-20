@@ -196,8 +196,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */
@@ -374,8 +374,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Supervisor_ID AD_Reference_ID=286 */
-public static int SUPERVISOR_ID_AD_Reference_ID=286;
+/** Supervisor_ID VAF_Control_Ref_ID=286 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=286;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)

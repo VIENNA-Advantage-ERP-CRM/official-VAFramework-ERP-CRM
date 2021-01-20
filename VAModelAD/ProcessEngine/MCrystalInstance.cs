@@ -14,16 +14,16 @@ namespace VAdvantage.ProcessEngine
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PInstance_ID">instance or 0</param>
+        /// <param name="VAF_JInstance_ID">instance or 0</param>
         /// <param name="ignored">no transaction support</param>
         public MCrystalInstance(Ctx ctx, int AD_CrytalInstance_ID, string ignored)
             : base(ctx, AD_CrytalInstance_ID, null)
         {
             if (AD_CrytalInstance_ID == 0)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                if (AD_Role_ID != 0)
-                    SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                if (VAF_Role_ID != 0)
+                    SetVAF_Role_ID(VAF_Role_ID);
                 SetIsProcessing(false);
             }
         }
@@ -44,12 +44,12 @@ namespace VAdvantage.ProcessEngine
         ///// New Constructor
         ///// </summary>
         ///// <param name="ctx">context</param>
-        ///// <param name="AD_Process_ID">Process ID</param>
+        ///// <param name="VAF_Job_ID">Process ID</param>
         ///// <param name="Record_ID">record</param>
         public MCrystalInstance(Ctx ctx, int VAF_Page_ID, int Record_ID)
             : this(ctx, 0, null)
         {
-            //SetAD_Process_ID(AD_Process_ID);
+            //SetVAF_Job_ID(VAF_Job_ID);
             SetVAF_Page_ID(VAF_Page_ID);
             SetRecord_ID(Record_ID);
             //SetAD_User_ID(ctx.GetAD_User_ID());
@@ -57,19 +57,19 @@ namespace VAdvantage.ProcessEngine
         }
 
         /// <summary>
-        /// Set AD_Process_ID.
+        /// Set VAF_Job_ID.
         /// Check Role if process can be performed
         /// </summary>
-        /// <param name="AD_Process_ID">process</param>
-        public  void SetAD_Process_ID(int AD_CrytalProcess_ID)
+        /// <param name="VAF_Job_ID">process</param>
+        public  void SetVAF_Job_ID(int AD_CrytalProcess_ID)
         {
             if (AD_CrytalProcess_ID <= 0)
                 return;
             Console.WriteLine(AD_CrytalProcess_ID.ToString());
-            int AD_Role_ID = Utility.Env.GetContext().GetAD_Role_ID();
-            if (AD_Role_ID != 0)
+            int VAF_Role_ID = Utility.Env.GetContext().GetVAF_Role_ID();
+            if (VAF_Role_ID != 0)
             {
-                MRole role = MRole.Get(GetCtx(), AD_Role_ID);
+                MRole role = MRole.Get(GetCtx(), VAF_Role_ID);
                 //bool? access = role.GetProcessAccess(AD_CrytalProcess_ID);
                 //if (access == null)
                 //    throw new Exception("Cannot access Process " + AD_CrytalProcess_ID

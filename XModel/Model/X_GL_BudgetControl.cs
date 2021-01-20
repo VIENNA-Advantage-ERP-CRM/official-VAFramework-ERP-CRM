@@ -123,8 +123,8 @@ StringBuilder sb = new StringBuilder ("X_GL_BudgetControl[").Append(Get_ID()).Ap
 return sb.ToString();
 }
 
-/** BudgetControlScope AD_Reference_ID=361 */
-public static int BUDGETCONTROLSCOPE_AD_Reference_ID=361;
+/** BudgetControlScope VAF_Control_Ref_ID=361 */
+public static int BUDGETCONTROLSCOPE_VAF_Control_Ref_ID=361;
 /** Period only = P */
 public static String BUDGETCONTROLSCOPE_PeriodOnly = "P";
 /** Total = T */
@@ -174,8 +174,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** CommitmentType AD_Reference_ID=359 */
-public static int COMMITMENTTYPE_AD_Reference_ID=359;
+/** CommitmentType VAF_Control_Ref_ID=359 */
+public static int COMMITMENTTYPE_VAF_Control_Ref_ID=359;
 /** Commitment & Reservation = B */
 public static String COMMITMENTTYPE_CommitmentReservation = "B";
 /** Commitment only = C */

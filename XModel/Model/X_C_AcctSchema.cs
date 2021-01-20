@@ -152,8 +152,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** VAF_OrgOnly_ID AD_Reference_ID=322 */
-        public static int VAF_ORGONLY_ID_AD_Reference_ID = 322;
+        /** VAF_OrgOnly_ID VAF_Control_Ref_ID=322 */
+        public static int VAF_ORGONLY_ID_VAF_Control_Ref_ID = 322;
         /** Set Only Organization.
         @param VAF_OrgOnly_ID Create posting entries only for this organization */
         public void SetVAF_OrgOnly_ID(int VAF_OrgOnly_ID)
@@ -265,8 +265,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** CommitmentType AD_Reference_ID=359 */
-        public static int COMMITMENTTYPE_AD_Reference_ID = 359;
+        /** CommitmentType VAF_Control_Ref_ID=359 */
+        public static int COMMITMENTTYPE_VAF_Control_Ref_ID = 359;
         /** Commitment & Reservation = B */
         public static String COMMITMENTTYPE_CommitmentReservation = "B";
         /** Commitment only = C */
@@ -302,8 +302,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** CostingLevel AD_Reference_ID=355 */
-        public static int COSTINGLEVEL_AD_Reference_ID = 355;/** Org + Batch = A */
+        /** CostingLevel VAF_Control_Ref_ID=355 */
+        public static int COSTINGLEVEL_VAF_Control_Ref_ID = 355;/** Org + Batch = A */
         public static String COSTINGLEVEL_OrgPlusBatch = "A";/** Batch/Lot = B */
         public static String COSTINGLEVEL_BatchLot = "B";/** Client = C */
         public static String COSTINGLEVEL_Client = "C";/** Warehouse + Batch = D */
@@ -331,8 +331,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("CostingLevel");
         }
 
-        /** CostingMethod AD_Reference_ID=122 */
-        public static int COSTINGMETHOD_AD_Reference_ID = 122;
+        /** CostingMethod VAF_Control_Ref_ID=122 */
+        public static int COSTINGMETHOD_VAF_Control_Ref_ID = 122;
         /** Average PO = A */
         public static String COSTINGMETHOD_AveragePO = "A";
         /** Fifo = F */
@@ -456,8 +456,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("FRPT_Process");
         }
 
-        /** GAAP AD_Reference_ID=123 */
-        public static int GAAP_AD_Reference_ID = 123;
+        /** GAAP VAF_Control_Ref_ID=123 */
+        public static int GAAP_VAF_Control_Ref_ID = 123;
         /** German HGB = DE */
         public static String GAAP_GermanHGB = "DE";
         /** French Accounting Standard = FR */
@@ -711,8 +711,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** PeriodControl AD_Reference_ID=1000113 */
-        public static int PERIODCONTROL_AD_Reference_ID = 1000113;
+        /** PeriodControl VAF_Control_Ref_ID=1000113 */
+        public static int PERIODCONTROL_VAF_Control_Ref_ID = 1000113;
         /** Automatic = A */
         public static String PERIODCONTROL_Automatic = "A";
         /** Manual = M */
@@ -808,8 +808,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Separator");
         }
 
-        /** TaxCorrectionType AD_Reference_ID=392 */
-        public static int TAXCORRECTIONTYPE_AD_Reference_ID = 392;
+        /** TaxCorrectionType VAF_Control_Ref_ID=392 */
+        public static int TAXCORRECTIONTYPE_VAF_Control_Ref_ID = 392;
         /** Write-off and Discount = B */
         public static String TAXCORRECTIONTYPE_Write_OffAndDiscount = "B";
         /** Discount only = D */
@@ -846,8 +846,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("TaxCorrectionType");
         }
 
-        /** VACTWZ_PeriodEndMonth AD_Reference_ID=1000135 */
-        public static int VACTWZ_PERIODENDMONTH_AD_Reference_ID = 1000135;
+        /** VACTWZ_PeriodEndMonth VAF_Control_Ref_ID=1000135 */
+        public static int VACTWZ_PERIODENDMONTH_VAF_Control_Ref_ID = 1000135;
         /** January = 01 */
         public static String VACTWZ_PERIODENDMONTH_January = "01";
         /** February = 02 */
@@ -899,8 +899,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VACTWZ_PeriodEndMonth");
         }
 
-        /** VACTWZ_PeriodEndsAtDay AD_Reference_ID=1000136 */
-        public static int VACTWZ_PERIODENDSATDAY_AD_Reference_ID = 1000136;
+        /** VACTWZ_PeriodEndsAtDay VAF_Control_Ref_ID=1000136 */
+        public static int VACTWZ_PERIODENDSATDAY_VAF_Control_Ref_ID = 1000136;
         /** 01 = 01 */
         public static String VACTWZ_PERIODENDSATDAY_01 = "01";
         /** 02 = 02 */
@@ -990,8 +990,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VACTWZ_PeriodEndsAtDay");
         }
 
-        /** VACTWZ_PeriodStartFromDay AD_Reference_ID=1000136 */
-        public static int VACTWZ_PERIODSTARTFROMDAY_AD_Reference_ID = 1000136;
+        /** VACTWZ_PeriodStartFromDay VAF_Control_Ref_ID=1000136 */
+        public static int VACTWZ_PERIODSTARTFROMDAY_VAF_Control_Ref_ID = 1000136;
         /** 01 = 01 */
         public static String VACTWZ_PERIODSTARTFROMDAY_01 = "01";
         /** 02 = 02 */
@@ -1081,8 +1081,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("VACTWZ_PeriodStartFromDay");
         }
 
-        /** VACTWZ_PeriodStartFromMonth AD_Reference_ID=1000135 */
-        public static int VACTWZ_PERIODSTARTFROMMONTH_AD_Reference_ID = 1000135;
+        /** VACTWZ_PeriodStartFromMonth VAF_Control_Ref_ID=1000135 */
+        public static int VACTWZ_PERIODSTARTFROMMONTH_VAF_Control_Ref_ID = 1000135;
         /** January = 01 */
         public static String VACTWZ_PERIODSTARTFROMMONTH_January = "01";
         /** February = 02 */

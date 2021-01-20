@@ -138,8 +138,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_ProjectTaskPrerequisite_ID AD_Reference_ID=409 */
-public static int C_PROJECTTASKPREREQUISITE_ID_AD_Reference_ID=409;
+/** C_ProjectTaskPrerequisite_ID VAF_Control_Ref_ID=409 */
+public static int C_PROJECTTASKPREREQUISITE_ID_VAF_Control_Ref_ID=409;
 /** Set Prerequisite Task.
 @param C_ProjectTaskPrerequisite_ID Task to be completed first before this can start */
 public void SetC_ProjectTaskPrerequisite_ID (int C_ProjectTaskPrerequisite_ID)
@@ -301,8 +301,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** ProjInvoiceRule AD_Reference_ID=383 */
-public static int PROJINVOICERULE_AD_Reference_ID=383;
+/** ProjInvoiceRule VAF_Control_Ref_ID=383 */
+public static int PROJINVOICERULE_VAF_Control_Ref_ID=383;
 /** None = - */
 public static String PROJINVOICERULE_None = "-";
 /** Committed Amount = C */
@@ -376,8 +376,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetSeqNo().ToString());
 }
 
-/** TaskType AD_Reference_ID=408 */
-public static int TASKTYPE_AD_Reference_ID=408;
+/** TaskType VAF_Control_Ref_ID=408 */
+public static int TASKTYPE_VAF_Control_Ref_ID=408;
 /** Personal Activity = A */
 public static String TASKTYPE_PersonalActivity = "A";
 /** Delegation = D */

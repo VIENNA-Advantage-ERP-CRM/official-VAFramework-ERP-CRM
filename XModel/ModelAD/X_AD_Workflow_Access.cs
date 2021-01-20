@@ -20,7 +20,7 @@ public X_AD_Workflow_Access (Context ctx, int AD_Workflow_Access_ID, Trx trxName
 {
 /** if (AD_Workflow_Access_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetAD_Workflow_ID (0);
 SetIsReadWrite (false);
 }
@@ -30,7 +30,7 @@ public X_AD_Workflow_Access (Ctx ctx, int AD_Workflow_Access_ID, Trx trxName) : 
 {
 /** if (AD_Workflow_Access_ID == 0)
 {
-SetAD_Role_ID (0);
+SetVAF_Role_ID (0);
 SetAD_Workflow_ID (0);
 SetIsReadWrite (false);
 }
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_AD_Workflow_Access[").Append(Get_ID()).
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID < 0) throw new ArgumentException ("AD_Role_ID is mandatory.");
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+if (VAF_Role_ID < 0) throw new ArgumentException ("VAF_Role_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,7 +133,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Role_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set Workflow.
 @param AD_Workflow_ID Workflow or combination of tasks */

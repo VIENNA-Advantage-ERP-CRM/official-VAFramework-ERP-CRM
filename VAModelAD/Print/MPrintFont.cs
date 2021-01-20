@@ -20,19 +20,19 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Print
 {
-    public class MPrintFont : X_AD_PrintFont
+    public class MPrintFont : X_VAF_Print_Rpt_Font
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PrintFont_ID">AD_PrintFont_ID</param>
+        /// <param name="VAF_Print_Rpt_Font_ID">VAF_Print_Rpt_Font_ID</param>
         /// <param name="trxName">transaction</param>
-        public MPrintFont(Context ctx, int AD_PrintFont_ID, Trx trxName)
-            : base(ctx, AD_PrintFont_ID, trxName)
+        public MPrintFont(Context ctx, int VAF_Print_Rpt_Font_ID, Trx trxName)
+            : base(ctx, VAF_Print_Rpt_Font_ID, trxName)
         {
 
-            if (AD_PrintFont_ID == 0)
+            if (VAF_Print_Rpt_Font_ID == 0)
                 SetIsDefault(false);
         }	//	MPrintFont
 
@@ -233,15 +233,15 @@ namespace VAdvantage.Print
 
 
         /** Cached Fonts						*/
-        static private CCache<int, MPrintFont> _fonts = new CCache<int, MPrintFont>("AD_PrintFont", 20);
+        static private CCache<int, MPrintFont> _fonts = new CCache<int, MPrintFont>("VAF_Print_Rpt_Font", 20);
 
-        static public MPrintFont Get(int AD_PrintFont_ID)
+        static public MPrintFont Get(int VAF_Print_Rpt_Font_ID)
         {
-            int key = AD_PrintFont_ID;
+            int key = VAF_Print_Rpt_Font_ID;
             MPrintFont pf = (MPrintFont)_fonts[key];
             if (pf == null)
             {
-                pf = new MPrintFont(VAdvantage.Utility.Env.GetContext(), AD_PrintFont_ID, null);
+                pf = new MPrintFont(VAdvantage.Utility.Env.GetContext(), VAF_Print_Rpt_Font_ID, null);
                 _fonts.Add(key, pf);
             }
             return pf;

@@ -45,7 +45,7 @@ namespace ViennaAdvantageSvc.Classes
             engine.AddModelChange(X_C_Invoice.Table_Name, this);
         }
 
-        public string Login(int VAF_Org_ID, int AD_Role_ID, int AD_User_ID)
+        public string Login(int VAF_Org_ID, int VAF_Role_ID, int AD_User_ID)
         {
             return "";
         }

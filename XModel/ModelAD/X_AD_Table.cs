@@ -16,8 +16,8 @@ namespace VAdvantage.Model
      *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_VAF_TableView : PO
     {
-        /** TableTrxType AD_Reference_ID=493 */
-        public static int TABLETRXTYPE_AD_Reference_ID = 493;
+        /** TableTrxType VAF_Control_Ref_ID=493 */
+        public static int TABLETRXTYPE_VAF_Control_Ref_ID = 493;
         /** Mandatory Organization = M */
         public static String TABLETRXTYPE_MandatoryOrganization = "M";
         /** No Organization = N */
@@ -196,8 +196,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AccessLevel AD_Reference_ID=5 */
-        public static int ACCESSLEVEL_AD_Reference_ID = 5;
+        /** AccessLevel VAF_Control_Ref_ID=5 */
+        public static int ACCESSLEVEL_VAF_Control_Ref_ID = 5;
         /** Organization = 1 */
         public static String ACCESSLEVEL_Organization = "1";
         /** Client only = 2 */
@@ -267,8 +267,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
         @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */
@@ -445,8 +445,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Name");
         }
 
-        /** PO_Window_ID AD_Reference_ID=284 */
-        public static int PO_WINDOW_ID_AD_Reference_ID = 284;
+        /** PO_Window_ID VAF_Control_Ref_ID=284 */
+        public static int PO_WINDOW_ID_VAF_Control_Ref_ID = 284;
         /** Set PO Window.
         @param PO_Window_ID Purchase Order Window */
         public void SetPO_Window_ID(int PO_Window_ID)
@@ -464,8 +464,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Referenced_Table_ID AD_Reference_ID=415 */
-        public static int REFERENCED_TABLE_ID_AD_Reference_ID = 415;
+        /** Referenced_Table_ID VAF_Control_Ref_ID=415 */
+        public static int REFERENCED_TABLE_ID_VAF_Control_Ref_ID = 415;
         /** Set Referenced Table.
         @param Referenced_Table_ID Referenced Table */
         public void SetReferenced_Table_ID(int Referenced_Table_ID)
@@ -483,8 +483,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** ReplicationType AD_Reference_ID=126 */
-        public static int REPLICATIONTYPE_AD_Reference_ID = 126;
+        /** ReplicationType VAF_Control_Ref_ID=126 */
+        public static int REPLICATIONTYPE_VAF_Control_Ref_ID = 126;
         /** Local = L */
         public static String REPLICATIONTYPE_Local = "L";
         /** Merge = M */
@@ -544,8 +544,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** Base_Table_ID AD_Reference_ID=415 */
-        public static int BASE_TABLE_ID_AD_Reference_ID = 415;
+        /** Base_Table_ID VAF_Control_Ref_ID=415 */
+        public static int BASE_TABLE_ID_VAF_Control_Ref_ID = 415;
         /** Set Base Table.
         @param Base_Table_ID Base Table for Sub-Tables */
         public void SetBase_Table_ID(int Base_Table_ID)
@@ -556,8 +556,8 @@ namespace VAdvantage.Model
                 Set_Value("Base_Table_ID", (int)Base_Table_ID);
 
         }
-        /** SubTableType AD_Reference_ID=447 */
-        public static int SUBTABLETYPE_AD_Reference_ID = 447;
+        /** SubTableType VAF_Control_Ref_ID=447 */
+        public static int SUBTABLETYPE_VAF_Control_Ref_ID = 447;
         /** History - Daily = D */
         public static String SUBTABLETYPE_History_Daily = X_Ref_VAF_TableView_SubTableType.HISTORY__DAILY;
         /** History - Each = E */
@@ -658,7 +658,7 @@ namespace VAdvantage.Model
         public static string DELTA__USER = "U";
 
 
-        public static int AD_Reference_ID = 447;
+        public static int VAF_Control_Ref_ID = 447;
         private String value;
         private X_Ref_VAF_TableView_SubTableType(String value)
         {

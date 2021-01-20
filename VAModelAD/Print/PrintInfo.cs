@@ -25,10 +25,10 @@ namespace VAdvantage.Print
         public PrintInfo(ProcessInfo pi)
         {
             SetName(pi.GetTitle());
-            SetAD_Process_ID(pi.GetAD_Process_ID());
+            SetVAF_Job_ID(pi.GetVAF_Job_ID());
             SetVAF_TableView_ID(pi.GetTable_ID());
             SetRecord_ID(pi.GetRecord_ID());
-            SetAD_PInstance_ID(pi.GetAD_PInstance_ID());
+            SetVAF_JInstance_ID(pi.GetVAF_JInstance_ID());
         }	//	PrintInfo
 
 
@@ -69,11 +69,11 @@ namespace VAdvantage.Print
         private String _Name = null;
         private String _Description = null;
         private String _Help = null;
-        private int _AD_Process_ID = 0;
+        private int _VAF_Job_ID = 0;
         private int _VAF_TableView_ID = 0;
         private int _Record_ID = 0;
         private int _C_BPartner_ID = 0;
-        private int _AD_PInstance_ID = 0;
+        private int _VAF_JInstance_ID = 0;
 
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace VAdvantage.Print
         /// <returns>true if report</returns>
         public bool IsReport()
         {
-            return _AD_Process_ID != 0	//	Menu Report
+            return _VAF_Job_ID != 0	//	Menu Report
                 || _C_BPartner_ID == 0;
         }	//	isReport
 
@@ -175,9 +175,9 @@ namespace VAdvantage.Print
         /// Gets the processID
         /// </summary>
         /// <returns>Process ID</returns>
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            return _AD_Process_ID;
+            return _VAF_Job_ID;
         }
 
 
@@ -185,9 +185,9 @@ namespace VAdvantage.Print
         /// Set Process ID
         /// </summary>
         /// <param name="process_ID"></param>
-        public void SetAD_Process_ID(int process_ID)
+        public void SetVAF_Job_ID(int process_ID)
         {
-            _AD_Process_ID = process_ID;
+            _VAF_Job_ID = process_ID;
         }
 
         /// <summary>
@@ -307,8 +307,8 @@ namespace VAdvantage.Print
         {
             StringBuilder sb = new StringBuilder("PrintInfo[");
             sb.Append(GetName());
-            if (GetAD_Process_ID() != 0)
-                sb.Append(",AD_Process_ID=").Append(GetAD_Process_ID());
+            if (GetVAF_Job_ID() != 0)
+                sb.Append(",VAF_Job_ID=").Append(GetVAF_Job_ID());
             if (GetVAF_TableView_ID() != 0)
                 sb.Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID());
             if (GetRecord_ID() != 0)
@@ -329,18 +329,18 @@ namespace VAdvantage.Print
         /// Get Record ID
         /// </summary>
         /// <returns>Record ID</returns>
-        public int GetAD_PInstance_ID()
+        public int GetVAF_JInstance_ID()
         {
-            return _AD_PInstance_ID;
+            return _VAF_JInstance_ID;
         }
 
         /// <summary>
         /// Set Record ID
         /// </summary>
         /// <param name="record_ID">Record ID</param>
-        public void SetAD_PInstance_ID(int AD_PInstance_ID)
+        public void SetVAF_JInstance_ID(int VAF_JInstance_ID)
         {
-            _AD_PInstance_ID = AD_PInstance_ID;
+            _VAF_JInstance_ID = VAF_JInstance_ID;
         }
 
     }

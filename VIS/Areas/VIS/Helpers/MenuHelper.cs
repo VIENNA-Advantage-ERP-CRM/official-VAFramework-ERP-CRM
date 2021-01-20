@@ -42,8 +42,8 @@ namespace VIS.Helpers
             int AD_Tree_ID = DB.GetSQLValue(null,
           "SELECT COALESCE(r.AD_Tree_Menu_ID, ci.AD_Tree_Menu_ID)"
                           + "FROM VAF_ClientDetail ci"
-                          + " INNER JOIN AD_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
-                          + "WHERE AD_Role_ID=" + _ctx.GetAD_Role_ID());
+                          + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
+                          + "WHERE VAF_Role_ID=" + _ctx.GetVAF_Role_ID());
 
             MRole.GetDefault(_ctx, true); // init MRole
 

@@ -154,7 +154,7 @@ namespace VIS.Controllers
 
             if (VAdvantage.Model.MUser.IsSalesRep(_ctx.GetAD_User_ID()))
                 _ctx.SetContext("#SalesRep_ID", _ctx.GetAD_User_ID());
-            if (_ctx.GetAD_Role_ID() == 0)	//	User is a Sys Admin
+            if (_ctx.GetVAF_Role_ID() == 0)	//	User is a Sys Admin
                 _ctx.SetContext("#SysAdmin", "Y");
 
             _ctx.SetContext("#IsAdmin", VAdvantage.Model.MRole.GetDefault(_ctx, false).IsAdministrator() ? "Y" : "N");

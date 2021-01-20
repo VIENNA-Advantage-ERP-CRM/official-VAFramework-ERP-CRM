@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_PrintLabel
+/** Generated Model for VAF_Print_Rpt_Lbl
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_PrintLabel : PO
+public class X_VAF_Print_Rpt_Lbl : PO
 {
-public X_AD_PrintLabel (Context ctx, int AD_PrintLabel_ID, Trx trxName) : base (ctx, AD_PrintLabel_ID, trxName)
+public X_VAF_Print_Rpt_Lbl (Context ctx, int VAF_Print_Rpt_Lbl_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_Lbl_ID, trxName)
 {
-/** if (AD_PrintLabel_ID == 0)
+/** if (VAF_Print_Rpt_Lbl_ID == 0)
 {
 SetAD_LabelPrinter_ID (0);
-SetAD_PrintLabel_ID (0);
+SetVAF_Print_Rpt_Lbl_ID (0);
 SetVAF_TableView_ID (0);
 SetIsLandscape (false);
 SetLabelHeight (0);
@@ -30,12 +30,12 @@ SetName (null);
 }
  */
 }
-public X_AD_PrintLabel (Ctx ctx, int AD_PrintLabel_ID, Trx trxName) : base (ctx, AD_PrintLabel_ID, trxName)
+public X_VAF_Print_Rpt_Lbl (Ctx ctx, int VAF_Print_Rpt_Lbl_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_Lbl_ID, trxName)
 {
-/** if (AD_PrintLabel_ID == 0)
+/** if (VAF_Print_Rpt_Lbl_ID == 0)
 {
 SetAD_LabelPrinter_ID (0);
-SetAD_PrintLabel_ID (0);
+SetVAF_Print_Rpt_Lbl_ID (0);
 SetVAF_TableView_ID (0);
 SetIsLandscape (false);
 SetLabelHeight (0);
@@ -49,7 +49,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintLabel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_Lbl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_AD_PrintLabel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintLabel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_Lbl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_AD_PrintLabel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintLabel (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Print_Rpt_Lbl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_PrintLabel()
+static X_VAF_Print_Rpt_Lbl()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389046136L;
 public static int Table_ID;
  // =570;
 
-/** TableName=AD_PrintLabel */
-public static String Table_Name="AD_PrintLabel";
+/** TableName=VAF_Print_Rpt_Lbl */
+public static String Table_Name="VAF_Print_Rpt_Lbl";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_PrintLabel[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Print_Rpt_Lbl[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Label printer.
@@ -138,17 +138,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Label.
-@param AD_PrintLabel_ID Label Format to print */
-public void SetAD_PrintLabel_ID (int AD_PrintLabel_ID)
+@param VAF_Print_Rpt_Lbl_ID Label Format to print */
+public void SetVAF_Print_Rpt_Lbl_ID (int VAF_Print_Rpt_Lbl_ID)
 {
-if (AD_PrintLabel_ID < 1) throw new ArgumentException ("AD_PrintLabel_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintLabel_ID", AD_PrintLabel_ID);
+if (VAF_Print_Rpt_Lbl_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Lbl_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_Lbl_ID", VAF_Print_Rpt_Lbl_ID);
 }
 /** Get Print Label.
 @return Label Format to print */
-public int GetAD_PrintLabel_ID() 
+public int GetVAF_Print_Rpt_Lbl_ID() 
 {
-Object ii = Get_Value("AD_PrintLabel_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Lbl_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

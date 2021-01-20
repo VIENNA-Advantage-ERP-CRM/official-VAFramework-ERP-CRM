@@ -341,7 +341,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid PostingType, ' "
                 + "WHERE PostingType IS NULL OR NOT EXISTS"
-                + " (SELECT * FROM AD_Ref_List r WHERE r.AD_Reference_ID=125 AND i.PostingType=r.Value)"
+                + " (SELECT * FROM VAF_CtrlRef_List r WHERE r.VAF_Control_Ref_ID=125 AND i.PostingType=r.Value)"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

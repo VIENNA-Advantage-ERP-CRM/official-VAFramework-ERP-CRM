@@ -1016,14 +1016,14 @@ and ai.record_id = " + _Record_ID;
 
 
                 sql = @"select * from (select distinct ab.VAF_TableView_ID,ab.ColumnName,ai.record_ID,'A'  as Attachtype,att.TableName from appointmentsinfo ai JOIN   (SELECT  VAF_TableView_ID,
-                                ColumnName FROM VAF_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND ad_reference_Value_id IN
-                                (SELECT ad_reference_id FROM ad_ref_table WHERE column_key_id= (SELECT VAF_Column_ID FROM VAF_Column  WHERE columnname='AD_User_ID'
+                                ColumnName FROM VAF_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND VAF_Control_Ref_Value_id IN
+                                (SELECT VAF_Control_Ref_id FROM VAF_CtrlRef_Table WHERE column_key_id= (SELECT VAF_Column_ID FROM VAF_Column  WHERE columnname='AD_User_ID'
                                   AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='AD_User' ) ) ) ) ab ON ab.VAF_TableView_ID=ai.VAF_TableView_ID
                               JOIN VAF_TableView att on ai.VAF_TableView_ID=att.VAF_TableView_ID
                               UNION
                               select distinct ab.VAF_TableView_ID,ab.ColumnName,ai.record_ID,'M' as  Attachtype,att.TableName from mailattachment1 ai JOIN   (SELECT  VAF_TableView_ID,
-                                ColumnName FROM VAF_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND ad_reference_Value_id IN
-                                (SELECT ad_reference_id FROM ad_ref_table WHERE column_key_id= (SELECT VAF_Column_ID FROM VAF_Column WHERE columnname='AD_User_ID'
+                                ColumnName FROM VAF_Column WHERE lower(ColumnName)   !='updatedby' AND lower(columnname)     !='createdby' AND VAF_Control_Ref_Value_id IN
+                                (SELECT VAF_Control_Ref_id FROM VAF_CtrlRef_Table WHERE column_key_id= (SELECT VAF_Column_ID FROM VAF_Column WHERE columnname='AD_User_ID'
                                   AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='AD_User' ) ) ) ) ab ON ab.VAF_TableView_ID=ai.VAF_TableView_ID ";
                              // JOIN VAF_TableView att on ai.VAF_TableView_ID=att.VAF_TableView_ID) as foo order by tablename";
 

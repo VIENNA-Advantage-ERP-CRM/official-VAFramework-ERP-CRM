@@ -342,9 +342,9 @@ namespace VAdvantage.DBPort
                 "AD_PACKAGE_IMP_DETAIL",
                 "AD_PACKAGE_IMP_INST",
                 "AD_PACKAGE_IMP_PROC",
-                "AD_PINSTANCE",
-                "AD_PINSTANCE_LOG",
-                "AD_PINSTANCE_PARA",
+                "VAF_JINSTANCE",
+                "VAF_JINSTANCE_LOG",
+                "VAF_JINSTANCE_PARA",
                 "AD_REPLICATION_LOG",
                 "AD_SCHEDULERLOG",
                 "AD_SESSION",
@@ -367,7 +367,7 @@ namespace VAdvantage.DBPort
                 "T_TRANSACTION",
                 "T_TRIALBALANCE",
 				// Do not log *Access records - teo_Sarca BF [ 2782095 ]
-				"AD_PROCESS_ACCESS",
+				"VAF_JOB_RIGHTS",
                 "AD_WINDOW_ACCESS",
                 "AD_WORKFLOW_ACCESS",
                 "VAF_Page_Rights",
@@ -378,7 +378,7 @@ namespace VAdvantage.DBPort
             if (uppStmt.StartsWith("SELECT "))
                 return true;
             // don't log update to statistic process
-            if (uppStmt.StartsWith("UPDATE AD_PROCESS SET STATISTIC_"))
+            if (uppStmt.StartsWith("UPDATE VAF_JOB SET STATISTIC_"))
                 return true;
             // Don't log DELETE FROM Some_Table WHERE VAF_TableView_ID=? AND Record_ID=?
             if (uppStmt.StartsWith("DELETE FROM ") && uppStmt.EndsWith(" WHERE VAF_TABLEVIEW_ID=? AND RECORD_ID=?"))

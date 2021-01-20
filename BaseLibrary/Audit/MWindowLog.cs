@@ -30,8 +30,8 @@ namespace VAdvantage.Model
 
             if (AD_WindowLog_ID == 0)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                SetVAF_Role_ID(VAF_Role_ID);
             }
         }	//	MWindowLog
 

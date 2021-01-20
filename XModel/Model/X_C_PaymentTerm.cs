@@ -119,8 +119,8 @@ public void SetName (String Name){if (Name == null) throw new ArgumentException 
 public String GetName() {return (String)Get_Value("Name");}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetName());}
-/** NetDay AD_Reference_ID=167 */
-public static int NETDAY_AD_Reference_ID=167;/** Monday = 1 */
+/** NetDay VAF_Control_Ref_ID=167 */
+public static int NETDAY_VAF_Control_Ref_ID=167;/** Monday = 1 */
 public static String NETDAY_Monday = "1";/** Tuesday = 2 */
 public static String NETDAY_Tuesday = "2";/** Wednesday = 3 */
 public static String NETDAY_Wednesday = "3";/** Thursday = 4 */

@@ -151,8 +151,8 @@ StringBuilder sb = new StringBuilder ("X_VAMFG_M_WorkOrder[").Append(Get_ID()).A
 return sb.ToString();
 }
 
-/** VAF_OrgTrx_ID AD_Reference_ID=1000147 */
-public static int VAF_ORGTRX_ID_AD_Reference_ID=1000147;
+/** VAF_OrgTrx_ID VAF_Control_Ref_ID=1000147 */
+public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID=1000147;
 /** Set Trx Organization.
 @param VAF_OrgTrx_ID Performing or initiating organization */
 public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID)
@@ -248,8 +248,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_DocType_ID AD_Reference_ID=1000135 */
-public static int C_DOCTYPE_ID_AD_Reference_ID=1000135;
+/** C_DocType_ID VAF_Control_Ref_ID=1000135 */
+public static int C_DOCTYPE_ID_VAF_Control_Ref_ID=1000135;
 /** Set Document Type.
 @param C_DocType_ID Document type or rules */
 public void SetC_DocType_ID (int C_DocType_ID)
@@ -329,8 +329,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** DocAction AD_Reference_ID=135 */
-public static int DOCACTION_AD_Reference_ID=135;
+/** DocAction VAF_Control_Ref_ID=135 */
+public static int DOCACTION_VAF_Control_Ref_ID=135;
 /** <None> = -- */
 public static String DOCACTION_None = "--";
 /** Approve = AP */
@@ -387,8 +387,8 @@ public String GetDocAction()
 return (String)Get_Value("DocAction");
 }
 
-/** DocStatus AD_Reference_ID=131 */
-public static int DOCSTATUS_AD_Reference_ID=131;
+/** DocStatus VAF_Control_Ref_ID=131 */
+public static int DOCSTATUS_VAF_Control_Ref_ID=131;
 /** Unknown = ?? */
 public static String DOCSTATUS_Unknown = "??";
 /** Approved = AP */
@@ -549,8 +549,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_Locator_ID AD_Reference_ID=1000134 */
-public static int M_LOCATOR_ID_AD_Reference_ID=1000134;
+/** M_Locator_ID VAF_Control_Ref_ID=1000134 */
+public static int M_LOCATOR_ID_VAF_Control_Ref_ID=1000134;
 /** Set Locator.
 @param M_Locator_ID Warehouse Locator */
 public void SetM_Locator_ID (int M_Locator_ID)
@@ -652,8 +652,8 @@ if (oo != null)
 return false;
 }
 
-/** SalesRep_ID AD_Reference_ID=1000142 */
-public static int SALESREP_ID_AD_Reference_ID=1000142;
+/** SalesRep_ID VAF_Control_Ref_ID=1000142 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=1000142;
 /** Set Sales Rep.
 @param SalesRep_ID Company Agent like Sales Representitive, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)
@@ -671,8 +671,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Supervisor_ID AD_Reference_ID=1000142 */
-public static int SUPERVISOR_ID_AD_Reference_ID=1000142;
+/** Supervisor_ID VAF_Control_Ref_ID=1000142 */
+public static int SUPERVISOR_ID_VAF_Control_Ref_ID=1000142;
 /** Set Supervisor.
 @param Supervisor_ID Supervisor for this user/organization - used for escalation and approval */
 public void SetSupervisor_ID (int Supervisor_ID)
@@ -865,8 +865,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** VAMFG_PriorityRule AD_Reference_ID=1000141 */
-public static int VAMFG_PRIORITYRULE_AD_Reference_ID=1000141;
+/** VAMFG_PriorityRule VAF_Control_Ref_ID=1000141 */
+public static int VAMFG_PRIORITYRULE_VAF_Control_Ref_ID=1000141;
 /** Urgent = 1 */
 public static String VAMFG_PRIORITYRULE_Urgent = "1";
 /** High = 3 */
@@ -983,8 +983,8 @@ if (oo != null)
 return false;
 }
 
-/** VAMFG_User1_ID AD_Reference_ID=1000143 */
-public static int VAMFG_USER1_ID_AD_Reference_ID=1000143;
+/** VAMFG_User1_ID VAF_Control_Ref_ID=1000143 */
+public static int VAMFG_USER1_ID_VAF_Control_Ref_ID=1000143;
 /** Set User List 1.
 @param VAMFG_User1_ID User defined list element #1 */
 public void SetVAMFG_User1_ID (int VAMFG_User1_ID)
@@ -1002,8 +1002,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** VAMFG_User2_ID AD_Reference_ID=1000144 */
-public static int VAMFG_USER2_ID_AD_Reference_ID=1000144;
+/** VAMFG_User2_ID VAF_Control_Ref_ID=1000144 */
+public static int VAMFG_USER2_ID_VAF_Control_Ref_ID=1000144;
 /** Set User List 2.
 @param VAMFG_User2_ID User defined list element #2 */
 public void SetVAMFG_User2_ID (int VAMFG_User2_ID)
@@ -1021,8 +1021,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** VAMFG_WOSource AD_Reference_ID=1000145 */
-public static int VAMFG_WOSOURCE_AD_Reference_ID=1000145;
+/** VAMFG_WOSource VAF_Control_Ref_ID=1000145 */
+public static int VAMFG_WOSOURCE_VAF_Control_Ref_ID=1000145;
 /** Sales Order = O */
 public static String VAMFG_WOSOURCE_SalesOrder = "O";
 /** Is test a valid value.
@@ -1052,8 +1052,8 @@ public String GetVAMFG_WOSource()
 return (String)Get_Value("VAMFG_WOSource");
 }
 
-/** VAMFG_WOType AD_Reference_ID=1000146 */
-public static int VAMFG_WOTYPE_AD_Reference_ID=1000146;
+/** VAMFG_WOType VAF_Control_Ref_ID=1000146 */
+public static int VAMFG_WOTYPE_VAF_Control_Ref_ID=1000146;
 /** Refurbish = F */
 public static String VAMFG_WOTYPE_Refurbish = "F";
 /** Repair = R */

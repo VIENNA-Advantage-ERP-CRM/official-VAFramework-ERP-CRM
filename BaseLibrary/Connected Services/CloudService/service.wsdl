@@ -3167,7 +3167,7 @@
       <s:element name="GetCustomerNotificationM1">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="Ad_Note_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAF_Notice_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -3182,7 +3182,7 @@
       <s:element name="AcknowledgeCustomerNotification">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="Ad_note_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAF_Notice_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>

@@ -159,37 +159,37 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Reference.
-@param AD_Reference_ID System Reference and Validation */
-public void SetAD_Reference_ID (int AD_Reference_ID)
+@param VAF_Control_Ref_ID System Reference and Validation */
+public void SetVAF_Control_Ref_ID (int VAF_Control_Ref_ID)
 {
-if (AD_Reference_ID <= 0) Set_Value ("AD_Reference_ID", null);
+if (VAF_Control_Ref_ID <= 0) Set_Value ("VAF_Control_Ref_ID", null);
 else
-Set_Value ("AD_Reference_ID", AD_Reference_ID);
+Set_Value ("VAF_Control_Ref_ID", VAF_Control_Ref_ID);
 }
 /** Get Reference.
 @return System Reference and Validation */
-public int GetAD_Reference_ID() 
+public int GetVAF_Control_Ref_ID() 
 {
-Object ii = Get_Value("AD_Reference_ID");
+Object ii = Get_Value("VAF_Control_Ref_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_Reference_Value_ID AD_Reference_ID=4 */
-public static int AD_REFERENCE_VALUE_ID_AD_Reference_ID=4;
+/** VAF_Control_Ref_Value_ID VAF_Control_Ref_ID=4 */
+public static int VAF_CONTROL_REF_VALUE_ID_VAF_Control_Ref_ID=4;
 /** Set Reference Key.
-@param AD_Reference_Value_ID Required to specify, if data type is Table or List */
-public void SetAD_Reference_Value_ID (int AD_Reference_Value_ID)
+@param VAF_Control_Ref_Value_ID Required to specify, if data type is Table or List */
+public void SetVAF_Control_Ref_Value_ID (int VAF_Control_Ref_Value_ID)
 {
-if (AD_Reference_Value_ID <= 0) Set_Value ("AD_Reference_Value_ID", null);
+if (VAF_Control_Ref_Value_ID <= 0) Set_Value ("VAF_Control_Ref_Value_ID", null);
 else
-Set_Value ("AD_Reference_Value_ID", AD_Reference_Value_ID);
+Set_Value ("VAF_Control_Ref_Value_ID", VAF_Control_Ref_Value_ID);
 }
 /** Get Reference Key.
 @return Required to specify, if data type is Table or List */
-public int GetAD_Reference_Value_ID() 
+public int GetVAF_Control_Ref_Value_ID() 
 {
-Object ii = Get_Value("AD_Reference_Value_ID");
+Object ii = Get_Value("VAF_Control_Ref_Value_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -68,7 +68,7 @@
         VIS.translatedTexts = VIS.Msg.translate(VIS.Env.getCtx(), elements, true);
 
 
-        this.ELEMENTTYPE_AD_Reference_ID = 181;
+        this.ELEMENTTYPE_VAF_Control_Ref_ID = 181;
         this.ELEMENTTYPE_Account = "AC";
         this.ELEMENTTYPE_Activity = "AY";
         this.ELEMENTTYPE_BPartner = "BP";
@@ -330,14 +330,14 @@
 
     // Get posting Data  
     AcctViewerData.prototype.getPostingType = function () {
-        var AD_Reference_ID = 125;
+        var VAF_Control_Ref_ID = 125;
         var obj = [];
 
         $.ajax({
             url: VIS.Application.contextUrl + "AcctViewerData/AcctViewerGetPostingType",
             type: 'POST',
             async: false,
-            data: { reference_id: AD_Reference_ID },
+            data: { reference_id: VAF_Control_Ref_ID },
             success: function (data) {
                 var res = data.result;
                 if (res) {
@@ -358,11 +358,11 @@
 
 
     //AcctViewerData.prototype.getPostingType = function () {
-    //    var AD_Reference_ID = 125;
+    //    var VAF_Control_Ref_ID = 125;
     //    var obj = [];
 
-    //    var sql = " SELECT Value, Name FROM AD_Ref_List "
-    //        + "WHERE AD_Reference_ID=" + AD_Reference_ID + " AND IsActive='Y' ORDER BY 1";
+    //    var sql = " SELECT Value, Name FROM VAF_CtrlRef_List "
+    //        + "WHERE VAF_Control_Ref_ID=" + VAF_Control_Ref_ID + " AND IsActive='Y' ORDER BY 1";
 
     //    var dr = VIS.DB.executeReader(sql.toString(), null, null);
     //    obj.push({ 'Key': 0, 'Name': "" });

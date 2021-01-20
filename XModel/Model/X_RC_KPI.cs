@@ -150,18 +150,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Role.
-        @param AD_Role_ID Responsibility Role */
-        public void SetAD_Role_ID(int AD_Role_ID)
+        @param VAF_Role_ID Responsibility Role */
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            if (AD_Role_ID <= 0) Set_Value("AD_Role_ID", null);
+            if (VAF_Role_ID <= 0) Set_Value("VAF_Role_ID", null);
             else
-                Set_Value("AD_Role_ID", AD_Role_ID);
+                Set_Value("VAF_Role_ID", VAF_Role_ID);
         }
         /** Get Role.
         @return Responsibility Role */
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            Object ii = Get_Value("AD_Role_ID");
+            Object ii = Get_Value("VAF_Role_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -213,8 +213,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_UserQuery_ID_1 AD_Reference_ID=1000182 */
-        public static int AD_USERQUERY_ID_1_AD_Reference_ID = 1000182;
+        /** AD_UserQuery_ID_1 VAF_Control_Ref_ID=1000182 */
+        public static int AD_USERQUERY_ID_1_VAF_Control_Ref_ID = 1000182;
         /** Set User Query for Comparison.
         @param AD_UserQuery_ID_1 User Query for Comparison */
         public void SetAD_UserQuery_ID_1(int AD_UserQuery_ID_1)
@@ -246,8 +246,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Ad_Chart_BG_Color_ID AD_Reference_ID=266 */
-        public static int AD_CHART_BG_COLOR_ID_AD_Reference_ID = 266;
+        /** Ad_Chart_BG_Color_ID VAF_Control_Ref_ID=266 */
+        public static int AD_CHART_BG_COLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Chart Background Color.
         @param Ad_Chart_BG_Color_ID Chart Background Color */
         public void SetAd_Chart_BG_Color_ID(int Ad_Chart_BG_Color_ID)
@@ -458,8 +458,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** KPIType AD_Reference_ID=1000179 */
-        public static int KPITYPE_AD_Reference_ID = 1000179;
+        /** KPIType VAF_Control_Ref_ID=1000179 */
+        public static int KPITYPE_VAF_Control_Ref_ID = 1000179;
         /** Linear = Li */
         public static String KPITYPE_Linear = "Li";
         /** Radial = Ra */
@@ -493,8 +493,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("KPIType");
         }
 
-        /** LabelColor_ID AD_Reference_ID=266 */
-        public static int LABELCOLOR_ID_AD_Reference_ID = 266;
+        /** LabelColor_ID VAF_Control_Ref_ID=266 */
+        public static int LABELCOLOR_ID_VAF_Control_Ref_ID = 266;
         /** Set Label Color.
         @param LabelColor_ID Label Color */
         public void SetLabelColor_ID(int LabelColor_ID)
@@ -700,8 +700,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** TableView_ID AD_Reference_ID=1000186 */
-        public static int TABLEVIEW_ID_AD_Reference_ID = 1000186;
+        /** TableView_ID VAF_Control_Ref_ID=1000186 */
+        public static int TABLEVIEW_ID_VAF_Control_Ref_ID = 1000186;
         /** Set Table View.
         @param TableView_ID Table View */
         public void SetTableView_ID(int TableView_ID)

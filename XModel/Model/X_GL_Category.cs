@@ -117,8 +117,8 @@ StringBuilder sb = new StringBuilder ("X_GL_Category[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 
-/** CategoryType AD_Reference_ID=207 */
-public static int CATEGORYTYPE_AD_Reference_ID=207;
+/** CategoryType VAF_Control_Ref_ID=207 */
+public static int CATEGORYTYPE_VAF_Control_Ref_ID=207;
 /** Document = D */
 public static String CATEGORYTYPE_Document = "D";
 /** Import = I */

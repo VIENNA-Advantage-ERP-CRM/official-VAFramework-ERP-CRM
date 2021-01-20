@@ -183,8 +183,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** ModificationType AD_Reference_ID=429 */
-public static int MODIFICATIONTYPE_AD_Reference_ID=429;
+/** ModificationType VAF_Control_Ref_ID=429 */
+public static int MODIFICATIONTYPE_VAF_Control_Ref_ID=429;
 /** Functionality Improvement = 1 */
 public static String MODIFICATIONTYPE_FunctionalityImprovement = "1";
 /** Technology Improvement = 2 */

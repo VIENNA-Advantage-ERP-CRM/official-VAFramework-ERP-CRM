@@ -179,7 +179,7 @@ namespace VAdvantage.Controller
 
             //  --  Get Window
 
-            int AD_Role_ID = vo.ctx.GetAD_Role_ID();
+            int VAF_Role_ID = vo.ctx.GetVAF_Role_ID();
 
             StringBuilder sql01 = new StringBuilder("SELECT Name,Description,Help,WindowType, "
              + "VAF_Colour_ID,VAF_Image_ID, IsReadWrite, WinHeight,WinWidth, "
@@ -190,14 +190,14 @@ namespace VAdvantage.Controller
             if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
             {
                 sql01.Append("FROM AD_Window_v WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-                sql01.Append(" AND AD_Role_ID=" + AD_Role_ID);
+                sql01.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
             }
 
 
             else
             {
                 sql01.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-                sql01.Append(" AND AD_Role_ID=" + AD_Role_ID);
+                sql01.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
                 sql01.Append(" AND VAF_Language='")
                 .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             }
@@ -212,14 +212,14 @@ namespace VAdvantage.Controller
             //if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
             //{
             //    sql.Append("FROM AD_Window_v WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-            //    sql.Append(" AND AD_Role_ID=" + AD_Role_ID);
+            //    sql.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
             //}
 
 
             //else
             //{
             //    sql.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-            //    sql.Append(" AND AD_Role_ID=" + AD_Role_ID);
+            //    sql.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
             //    sql.Append(" AND VAF_Language='")
             //    .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             //}
@@ -232,13 +232,13 @@ namespace VAdvantage.Controller
             //if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
             //{
             //    sql2.Append("FROM AD_Window_v WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-            //    sql2.Append(" AND AD_Role_ID=" + AD_Role_ID);
+            //    sql2.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
             //}
 
             //else
             //{
             //    sql2.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-            //    sql2.Append(" AND AD_Role_ID=" + AD_Role_ID);
+            //    sql2.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
             //    sql2.Append(" AND VAF_Language='")
             //    .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             //}
@@ -252,13 +252,13 @@ namespace VAdvantage.Controller
             //if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
             //{
             //    sql3.Append("FROM AD_Window_v WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-            //    sql3.Append(" AND AD_Role_ID=" + AD_Role_ID);
+            //    sql3.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
             //}
 
             //else
             //{
             //    sql3.Append("FROM AD_Window_vt w WHERE AD_Window_ID=" + vo.AD_Window_ID.ToString());
-            //    sql3.Append(" AND AD_Role_ID=" + AD_Role_ID);
+            //    sql3.Append(" AND VAF_Role_ID=" + VAF_Role_ID);
             //    sql3.Append(" AND VAF_Language='")
             //    .Append(Utility.Env.GetVAF_Language(vo.ctx)).Append("'");
             //}
@@ -382,7 +382,7 @@ namespace VAdvantage.Controller
             if (vo == null)
             {
                 VLogger.Get().Log(Level.SEVERE, "No Window - AD_Window_ID=" + AD_Window_ID
-                    + ", AD_Role_ID=" + AD_Role_ID + " - " + sql01);
+                    + ", VAF_Role_ID=" + VAF_Role_ID + " - " + sql01);
                 VLogger.Get().SaveError("AccessTableNoView", "(Not found)");
                 return null;
             }
@@ -419,7 +419,7 @@ namespace VAdvantage.Controller
             IDataReader dr = null;
             //  --  Get Window
 
-            //int AD_Role_ID = vo.ctx.GetAD_Role_ID();
+            //int VAF_Role_ID = vo.ctx.GetVAF_Role_ID();
             bool isBase = false;
 
             if (Utility.Env.IsBaseLanguage(vo.ctx, "AD_Window"))
@@ -432,14 +432,14 @@ namespace VAdvantage.Controller
             StringBuilder sql = new StringBuilder("SELECT ");
 
 
-            //w.ad_window_id, u.vaf_client_id, u.ad_role_id AS userdef_role_id, u.ad_user_id,u.ad_userdef_win_id, u.customizationname, COALESCE(u.name, w.name) AS name,")
+            //w.ad_window_id, u.vaf_client_id, u.VAF_Role_id AS userdef_role_id, u.ad_user_id,u.ad_userdef_win_id, u.customizationname, COALESCE(u.name, w.name) AS name,")
             // .Append("COALESCE(u.description, w.description) AS description, COALESCE(u.help, w.help) AS help, w.windowtype, w.ad_color_id, w.VAF_Image_id, COALESCE(u.winheight, w.winheight) AS winheight,")
             // .Append("COALESCE(u.winwidth, w.winwidth) AS winwidth, w.VAF_ContextScope_id,'Y' AS IsSOTrx,'Y' AS IsReadWrite, w.isdefault ");
 
 
             sql.Append(" w.AD_Window_ID                          AS AD_Window_ID      , ")
                .Append(" u.VAF_Client_ID                            AS VAF_Client_ID      , ")
-               .Append(" u.AD_Role_ID                            AS userdef_role_id   , ")
+               .Append(" u.VAF_Role_ID                            AS userdef_role_id   , ")
                .Append(" u.AD_user_ID                            AS AD_User_ID        , ")
                .Append(" u.AD_UserDef_Win_ID                     AS AD_UserDef_Win_ID , ")
                .Append(" u.CustomizationName                     AS CustomizationName , ");
@@ -464,7 +464,7 @@ namespace VAdvantage.Controller
             .Append(" COALESCE(u.WinWidth,w.WinWidth)         AS WinWidth          , ")
             .Append(" w.VAF_ContextScope_ID                         AS VAF_ContextScope_ID     , ")
             .Append(" COALESCE((SELECT IsSOTrx FROM VAF_ContextScope ctx WHERE w.VAF_ContextScope_ID=ctx.VAF_ContextScope_ID ),'Y')        AS IsSOTrx    , ")
-            .Append(" a.AD_Role_ID                            AS AD_Role_ID        , ")
+            .Append(" a.VAF_Role_ID                            AS VAF_Role_ID        , ")
             .Append(" a.IsReadWrite                           AS IsReadWrite       , ")
             .Append(" w.IsDefault                             AS IsDefault           ");
 
@@ -586,7 +586,7 @@ namespace VAdvantage.Controller
             .Append(" t.AD_Window_ID                              AS AD_Window_ID         , ")
             .Append(" t.VAF_TableView_ID                               AS VAF_TableView_ID          , ")
             .Append(" t.VAF_ContextScope_ID                             AS VAF_ContextScope_ID        , ")
-            .Append(" uw.AD_Role_ID                               AS UserDef_Role_ID      , ")
+            .Append(" uw.VAF_Role_ID                               AS UserDef_Role_ID      , ")
             .Append(" uw.AD_User_ID                               AS AD_User_ID           , ")
             .Append(" uw.AD_UserDef_Win_ID                        AS AD_UserDef_Win_ID    , ")
             .Append(" uw.CustomizationName                        AS CustomizationName    , ")
@@ -629,7 +629,7 @@ namespace VAdvantage.Controller
             .Append(" COALESCE(u.DisplayLogic,t.DisplayLogic)     AS DisplayLogic         , ")
             .Append(" t.VAF_Column_ID                              AS VAF_Column_ID         , ")
             .Append(" c.ColumnName                                AS LinkColumnName       , ")
-            .Append(" t.AD_Process_ID                             AS AD_Process_ID        , ")
+            .Append(" t.VAF_Job_ID                             AS VAF_Job_ID        , ")
             .Append(" t.IsSortTab                                 AS IsSortTab            , ")
             .Append(" t.IsAdvancedTab                             AS IsAdvancedTab        , ")
             .Append(" COALESCE(u.IsInsertRecord,t.IsInsertRecord) AS IsInsertRecord       , ")

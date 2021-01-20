@@ -418,7 +418,7 @@ namespace VAdvantage.Model
          */
         public String GetConfirmTypeName()
         {
-            return MRefList.GetListName(GetCtx(), CONFIRMTYPE_AD_Reference_ID, GetConfirmType());
+            return MRefList.GetListName(GetCtx(), CONFIRMTYPE_VAF_Control_Ref_ID, GetConfirmType());
         }
 
         /**

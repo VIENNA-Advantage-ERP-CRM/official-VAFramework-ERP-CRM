@@ -63,7 +63,7 @@ namespace VAdvantage.Controller
         /** Table High Volume	*/
         public bool IsHighVolume = false;
         /** Process			*/
-        public int AD_Process_ID = 0;
+        public int VAF_Job_ID = 0;
         /** Commit Warning	*/
         public String CommitWarning;
         /** Where			*/
@@ -446,9 +446,9 @@ namespace VAdvantage.Controller
                 if (vo.OrderByClause == null)
                     vo.OrderByClause = "";
 
-                vo.AD_Process_ID = Utility.Util.GetValueOfInt(dr["AD_Process_ID"]);
+                vo.VAF_Job_ID = Utility.Util.GetValueOfInt(dr["VAF_Job_ID"]);
                 //if (dr.wasNull())
-                //    vo.AD_Process_ID = 0;
+                //    vo.VAF_Job_ID = 0;
                 vo.VAF_Image_ID = Utility.Util.GetValueOfInt(dr["VAF_Image_ID"]);
                 //if (dr.wasNull())
                 //    vo.VAF_Image_ID = 0;
@@ -687,7 +687,7 @@ namespace VAdvantage.Controller
            .Append(" f.VAF_Field_ID                                                       AS VAF_Field_ID          , ")
            .Append(" tbl.VAF_TableView_ID                                                     AS VAF_TableView_ID          , ")
            .Append(" f.VAF_Column_ID                                                      AS VAF_Column_ID         , ")
-           .Append(" uw.AD_Role_ID                                                       AS UserDef_Role_ID      , ")
+           .Append(" uw.VAF_Role_ID                                                       AS UserDef_Role_ID      , ")
            .Append(" uw.AD_User_ID                                                       AS AD_User_ID           , ")
            .Append(" uw.AD_UserDef_Win_ID                                                AS AD_UserDef_Win_ID    , ")
            .Append(" uw.CustomizationName                                                AS CustomizationName    , ")
@@ -731,12 +731,12 @@ namespace VAdvantage.Controller
                .Append(" COALESCE(COALESCE(u.IsMandatoryUI,f.IsMandatoryUI),c.IsMandatoryUI) AS IsMandatoryUI        , ")
                .Append(" c.IsIdentifier                                                      AS IsIdentifier         , ")
                .Append(" c.IsTranslated                                                      AS IsTranslated         , ")
-               .Append(" c.AD_Reference_Value_ID                                             AS AD_Reference_Value_ID, ")
+               .Append(" c.VAF_Control_Ref_Value_ID                                             AS VAF_Control_Ref_Value_ID, ")
                .Append(" c.Callout                                                           AS Callout              , ")
                .Append(" c.IsCallout                                                         AS IsCallout            , ")
-               .Append(" COALESCE(f.AD_Reference_ID,c.AD_Reference_ID)                       AS AD_Reference_ID      , ")
+               .Append(" COALESCE(f.VAF_Control_Ref_ID,c.VAF_Control_Ref_ID)                       AS VAF_Control_Ref_ID      , ")
                .Append(" c.VAF_DataVal_Rule_ID                                                    AS VAF_DataVal_Rule_ID       , ")
-               .Append(" c.AD_Process_ID                                                     AS AD_Process_ID        , ")
+               .Append(" c.VAF_Job_ID                                                     AS VAF_Job_ID        , ")
                .Append(" c.IsAlwaysUpdateable                                                AS IsAlwaysUpdateable   , ")
                .Append(" c.ReadOnlyLogic                                                     AS ReadOnlyLogic        , ")
                .Append(" c.IsUpdateable                                                      AS IsUpdateable         , ")
@@ -771,7 +771,7 @@ namespace VAdvantage.Controller
                 sql.Append(" VAF_FieldSection_Tl fgt ON (f.VAF_FieldSection_ID = fgt.VAF_FieldSection_ID  AND trl.VAF_Language  =fgt.VAF_Language) ");
             }
             sql.Append(" LEFT OUTER JOIN VAF_Column c  ON (f.VAF_Column_ID = c.VAF_Column_ID) INNER JOIN VAF_TableView tbl ON (c.VAF_TableView_ID = tbl.VAF_TableView_ID) ")
-               .Append(" INNER JOIN AD_Reference r ON (c.AD_Reference_ID = r.AD_Reference_ID) LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) ")
+               .Append(" INNER JOIN VAF_Control_Ref r ON (c.VAF_Control_Ref_ID = r.VAF_Control_Ref_ID) LEFT OUTER JOIN VAF_DataVal_Rule vr ON (c.VAF_DataVal_Rule_ID=vr.VAF_DataVal_Rule_ID) ")
                .Append(" LEFT OUTER JOIN AD_UserDef_Field u ON (f.VAF_Field_ID=u.VAF_Field_ID) LEFT OUTER JOIN AD_UserDef_Tab ut ON (ut.AD_UserDef_Tab_ID=u.AD_UserDef_Tab_ID) ")
                .Append(" LEFT OUTER JOIN AD_UserDef_Win uw ON (uw.AD_UserDef_Win_ID=ut.AD_UserDef_Win_ID) ")
 
@@ -911,7 +911,7 @@ namespace VAdvantage.Controller
             clone.IsSecurityEnabled = IsSecurityEnabled;
             clone.IsDeleteable = IsDeleteable;
             clone.IsHighVolume = IsHighVolume;
-            clone.AD_Process_ID = AD_Process_ID;
+            clone.VAF_Job_ID = VAF_Job_ID;
             clone.CommitWarning = CommitWarning;
             clone.WhereClause = WhereClause;
             clone.OrderByClause = OrderByClause;

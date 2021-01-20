@@ -141,8 +141,8 @@ StringBuilder sb = new StringBuilder ("X_C_PaymentProcessor[").Append(Get_ID()).
 return sb.ToString();
 }
 
-/** AD_Sequence_ID AD_Reference_ID=128 */
-public static int AD_SEQUENCE_ID_AD_Reference_ID=128;
+/** AD_Sequence_ID VAF_Control_Ref_ID=128 */
+public static int AD_SEQUENCE_ID_VAF_Control_Ref_ID=128;
 /** Set Sequence.
 @param AD_Sequence_ID Document Sequence */
 public void SetAD_Sequence_ID (int AD_Sequence_ID)

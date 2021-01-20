@@ -74,7 +74,7 @@ namespace VAdvantage.Model
 	/** Window ID       */
     private int         AD_Window_ID;
     /** Process ID      */
-    private int         AD_Process_ID;
+    private int         VAF_Job_ID;
     /** Form ID         */
     private int         VAF_Page_ID;
     /** Workflow ID     */
@@ -157,18 +157,18 @@ namespace VAdvantage.Model
     /**
      * Get Process ID
      */
-    public int GetAD_Process_ID()
+    public int GetVAF_Job_ID()
     {
-        return AD_Process_ID;
+        return VAF_Job_ID;
     }
     
     /**
      * Set Process ID
      * @param int processID
      */
-    public void SetAD_Process_ID(int processID)
+    public void SetVAF_Job_ID(int processID)
     {
-        this.AD_Process_ID = processID;
+        this.VAF_Job_ID = processID;
     }
     
     /**

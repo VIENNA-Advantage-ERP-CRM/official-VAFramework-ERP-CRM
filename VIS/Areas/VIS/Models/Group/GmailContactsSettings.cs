@@ -48,7 +48,7 @@ namespace VIS.Models
 //        {
 
 //            string sql = @"  SELECT u.AD_User_ID ,
-//                          r.AD_Role_ID       ,
+//                          r.VAF_Role_ID       ,
 //                          r.Name             ,
 //                          u.ConnectionProfile,
 //                          u.Password
@@ -56,8 +56,8 @@ namespace VIS.Models
 //                        INNER JOIN AD_User_Roles ur
 //                             ON (u.AD_User_ID=ur.AD_User_ID
 //                        AND ur.IsActive      ='Y')
-//                        INNER JOIN AD_Role r
-//                             ON (ur.AD_Role_ID             =r.AD_Role_ID
+//                        INNER JOIN VAF_Role r
+//                             ON (ur.VAF_Role_ID             =r.VAF_Role_ID
 //                        AND r.IsActive                     ='Y')
 //                          WHERE COALESCE(u.LDAPUser,u.Name)='" + ctx.GetAD_User_Name() + @"'
 //                        AND u.IsActive                     ='Y'
@@ -84,7 +84,7 @@ namespace VIS.Models
 //                    lstRole.Add(new RolesInfo()
 //                    {
 //                        UserID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_User_ID"]),
-//                        AD_Role_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Role_ID"]),
+//                        VAF_Role_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]),
 //                        Name = Convert.ToString(ds.Tables[0].Rows[i]["NAME"]),
 //                        ConnectionProfile = Convert.ToString(ds.Tables[0].Rows[i]["ConnectionProfile"]),
 //                        Password = Convert.ToString(ds.Tables[0].Rows[i]["Password"]),
@@ -114,7 +114,7 @@ namespace VIS.Models
 
 //                    string username = config.GetWSP_Username();
 //                    string password = config.GetWSP_Password();
-//                    int Role = config.GetAD_Role_ID();
+//                    int Role = config.GetVAF_Role_ID();
 //                    bool isUpdate = config.IsWSP_IsUpdateExistingRecord();
 //                    retDic["Username"] = username;
 //                    retDic["Password"] = password;
@@ -179,11 +179,11 @@ namespace VIS.Models
 //            }
 //            if (role > 0)
 //            {
-//                Configs.SetAD_Role_ID(role);
+//                Configs.SetVAF_Role_ID(role);
 //            }
 //            else
 //            {
-//                Configs.SetAD_Role_ID(ctx.GetAD_Role_ID());
+//                Configs.SetVAF_Role_ID(ctx.GetVAF_Role_ID());
 //            }
 //            if (UpdateExistingRecord != null)
 //            {
@@ -246,11 +246,11 @@ namespace VIS.Models
 ////            }
 ////            if (role > 0)
 ////            {
-////                Configs.SetAD_Role_ID(role);
+////                Configs.SetVAF_Role_ID(role);
 ////            }
 ////            else
 ////            {
-////                Configs.SetAD_Role_ID(ctx.GetAD_Role_ID());
+////                Configs.SetVAF_Role_ID(ctx.GetVAF_Role_ID());
 ////            }
 ////            if (UpdateExistingRecord != null)
 ////            {
@@ -591,7 +591,7 @@ namespace VIS.Models
 //        /// <param name="ctx"></param>
 //        private void GetIDList(Ctx ctx)
 //        {
-//            string sql = "SELECT VAF_Org_ID FROM ad_role_orgaccess WHERE ad_role_id=" + ctx.GetAD_Role_ID() + " and VAF_CLIENT_Id=" + ctx.GetVAF_Client_ID();
+//            string sql = "SELECT VAF_Org_ID FROM VAF_Role_OrgRights WHERE VAF_Role_id=" + ctx.GetVAF_Role_ID() + " and VAF_CLIENT_Id=" + ctx.GetVAF_Client_ID();
 //            DataSet dsorgList = DB.ExecuteDataset(sql, null);
 //            if (dsorgList == null || dsorgList.Tables[0].Rows.Count == 0)
 //            {
@@ -1176,7 +1176,7 @@ namespace VIS.Models
 ////            {
 ////                return "NWF";
 ////            }
-////            MRole role = new MRole(ctx, ctx.GetAD_Role_ID(), null);
+////            MRole role = new MRole(ctx, ctx.GetVAF_Role_ID(), null);
 ////            if (ds.Tables[0].Rows[0]["AD_WINDOW_ID"] != null && ds.Tables[0].Rows[0]["AD_WINDOW_ID"].ToString() != "")
 ////            {
 ////                if (role.GetWindowAccess(Util.GetValueOfInt(Util.GetValueOfString(ds.Tables[0].Rows[0]["AD_WINDOW_ID"]))) == null)

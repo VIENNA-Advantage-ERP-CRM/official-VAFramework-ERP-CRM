@@ -23,25 +23,25 @@ namespace VIS.Helpers
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(ProcessHelper).FullName);
         private static int msgID = 0;
-        public static ProcessDataOut GetProcessInfo(int AD_Process_ID, Ctx ctx)
+        public static ProcessDataOut GetProcessInfo(int VAF_Job_ID, Ctx ctx)
         {
             ProcessDataOut outt = new ProcessDataOut();
 
-            bool trl = !Env.IsBaseLanguage(ctx, "AD_Process");
-            String sql = "SELECT p.Name, p.Description, p.Help, p.IsReport, p.VAF_ContextScope_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
+            bool trl = !Env.IsBaseLanguage(ctx, "VAF_Job");
+            String sql = "SELECT p.Name, p.Description, p.Help, p.IsReport, p.VAF_ContextScope_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(VAF_Job_ID) FROM VAF_Job_Para where VAF_Job_ID=p.VAF_Job_ID) as para,p.iSCrystalReport "
                 + " ,img.FontName ,    img.ImageURl   AS ImageUrl"
-                    + " FROM AD_Process p "
+                    + " FROM VAF_Job p "
                     + "LEFT OUTER JOIN VAF_ContextScope ca ON (p.VAF_ContextScope_ID=ca.VAF_ContextScope_ID) "
                     + " Left Outer Join VAF_Image Img On  p.VAF_Image_ID=img.VAF_Image_ID "
-                    + "WHERE AD_Process_ID=" + AD_Process_ID;
+                    + "WHERE VAF_Job_ID=" + VAF_Job_ID;
             if (trl)
-                sql = "SELECT t.Name, t.Description, t.Help, p.IsReport, p.VAF_ContextScope_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(AD_Process_ID) FROM AD_Process_Para where AD_Process_ID=p.AD_Process_ID) as para,p.iSCrystalReport "
+                sql = "SELECT t.Name, t.Description, t.Help, p.IsReport, p.VAF_ContextScope_ID, ca.IsSOTrx, p.IsBackgroundProcess, p.AskUserBGProcess, (select COunt(VAF_Job_ID) FROM VAF_Job_Para where VAF_Job_ID=p.VAF_Job_ID) as para,p.iSCrystalReport "
                     + " ,img.FontName ,   img.ImageURl      AS ImageUrl"
-                    + " FROM AD_Process p "
+                    + " FROM VAF_Job p "
                     + "LEFT OUTER JOIN VAF_ContextScope ca ON (p.VAF_ContextScope_ID=ca.VAF_ContextScope_ID) "
-                    + " INNER JOIN AD_Process_Trl t ON (p.AD_Process_ID=t.AD_Process_ID) "
+                    + " INNER JOIN VAF_Job_TL t ON (p.VAF_Job_ID=t.VAF_Job_ID) "
                     + " Left Outer Join VAF_Image Img On  p.VAF_Image_ID=img.VAF_Image_ID "
-                    + "WHERE p.AD_Process_ID=" + AD_Process_ID + " AND t.VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
+                    + "WHERE p.VAF_Job_ID=" + VAF_Job_ID + " AND t.VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
 
             IDataReader dr = null;
 
@@ -112,7 +112,7 @@ namespace VIS.Helpers
         /// <summary>
         /// Get locks from lock dictionary
         /// </summary>
-        /// <param name="adProcessID">Pass process id e.g. AD_Process_ID to set it into Dictionary</param>
+        /// <param name="adProcessID">Pass process id e.g. VAF_Job_ID to set it into Dictionary</param>
         /// <returns>Object Lock</returns>
         public static object GetLock(string adProcessID)
         {
@@ -150,14 +150,14 @@ namespace VIS.Helpers
                         ret = ExecuteProcess(ctx, processInfo, pList);
 
                         // Insert Result into Pinstance Result table.
-                        X_AD_PInstance_Result pResult = new X_AD_PInstance_Result(ctx, 0, null);
-                        pResult.SetAD_PInstance_ID(ret.AD_PInstance_ID);
+                        X_VAF_JInstance_Result pResult = new X_VAF_JInstance_Result(ctx, 0, null);
+                        pResult.SetVAF_JInstance_ID(ret.VAF_JInstance_ID);
 
 
                         StringBuilder sBuilder = new StringBuilder();
                         string sqlk = "SELECT Log_ID, P_ID, P_Date, P_Number, P_Msg "
-                + "FROM AD_PInstance_Log "
-                + "WHERE AD_PInstance_ID= " + ret.AD_PInstance_ID
+                + "FROM VAF_JInstance_Log "
+                + "WHERE VAF_JInstance_ID= " + ret.VAF_JInstance_ID
                 + " ORDER BY Log_ID";
 
                         DataSet ds = DB.ExecuteDataset(sqlk);
@@ -191,7 +191,7 @@ namespace VIS.Helpers
                         note.SetTextMsg(Msg.GetMsg(ctx, "ProcessCompleted") + ": " + pro.GetName());
 
                         note.SetDescription(pro.GetName());
-                        note.SetRecord(X_AD_PInstance_Result.Table_ID, pResult.GetAD_PInstance_Result_ID());
+                        note.SetRecord(X_VAF_JInstance_Result.Table_ID, pResult.GetVAF_JInstance_Result_ID());
                         note.Save();
                         if (ret.Result != null && ret.Result.Length > 100)
                         {
@@ -214,10 +214,10 @@ namespace VIS.Helpers
 
             //Saved Action Log
             if (pi.GetIsReport())
-                VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(), pi.GetOriginName(), pi.GetTable_ID(), pi.GetRecord_ID(), pi.GetAD_Process_ID(), pi.GetTitle(), pi.GetFileType(), "", "");
+                VAdvantage.Common.Common.SaveActionLog(ctx, pi.GetActionOrigin(), pi.GetOriginName(), pi.GetTable_ID(), pi.GetRecord_ID(), pi.GetVAF_Job_ID(), pi.GetTitle(), pi.GetFileType(), "", "");
             pi.SetAD_User_ID(ctx.GetAD_User_ID());
             pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-            if (pi.GetAD_PInstance_ID() == 0)
+            if (pi.GetVAF_JInstance_ID() == 0)
             {
                 MPInstance instance = null;
                 instance = new MPInstance(ctx, Util.GetValueOfInt(processInfo["Process_ID"]), Util.GetValueOfInt(processInfo["Record_ID"]));
@@ -226,7 +226,7 @@ namespace VIS.Helpers
                 {
 
                 }
-                pi.SetAD_PInstance_ID(instance.Get_ID());
+                pi.SetVAF_JInstance_ID(instance.Get_ID());
             }
 
             int vala = 0;
@@ -236,7 +236,7 @@ namespace VIS.Helpers
                 {
                     var pp = pList[i];
                     //	Create Parameter
-                    MPInstancePara para = new MPInstancePara(ctx, pi.GetAD_PInstance_ID(), i);
+                    MPInstancePara para = new MPInstancePara(ctx, pi.GetVAF_JInstance_ID(), i);
                     para.SetParameterName(pp.Name);
 
                     if (DisplayType.IsDate(pp.DisplayType))
@@ -344,7 +344,7 @@ namespace VIS.Helpers
                             para.SetP_String_To(pp.Result.ToString());
                         }
                     }
-                    para.SetAD_Process_Para_ID(pp.VAF_Column_ID);
+                    para.SetVAF_Job_Para_ID(pp.VAF_Column_ID);
 
                     para.SetInfo(pp.Info);
 
@@ -365,10 +365,10 @@ namespace VIS.Helpers
             ProcessReportInfo rep = new ProcessReportInfo();
             try
             {
-                //ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID);
+                //ProcessInfo pi = new ProcessInfo(Name, VAF_Job_ID, VAF_TableView_ID, Record_ID);
                 //pi.SetAD_User_ID(ctx.GetAD_User_ID());
                 //pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-                //pi.SetAD_PInstance_ID(AD_PInstance_ID);
+                //pi.SetVAF_JInstance_ID(VAF_JInstance_ID);
                 //pi.SetAD_Window_ID(AD_Window_ID);
                 //pi.FileType = fileType;
                 //report = null;
@@ -393,19 +393,19 @@ namespace VIS.Helpers
                 //}
 
                 rep.ReportString = ctl.ReportString;
-                //rep.AD_ReportView_ID = ctl.GetAD_ReportView_ID();
+                //rep.VAF_ReportView_ID = ctl.GetVAF_ReportView_ID();
                 rep.ReportFilePath = rptFilePath;
                 // rep.IsRCReport = ctl.IsRCReport();
                 // rep.TotalRecords = pi.GetTotalRecords();
                 // rep.IsReportFormat = pi.GetIsReportFormat();
                 // rep.IsTelerikReport = pi.GetIsTelerik();
                 // rep.IsJasperReport = pi.GetIsJasperReport();
-                //  rep.AD_PrintFormat_ID = ctl.GetAD_PrintFormat_ID();
-                // if (d.ContainsKey("AD_PrintFormat_ID"))
+                //  rep.VAF_Print_Rpt_Layout_ID = ctl.GetVAF_Print_Rpt_Layout_ID();
+                // if (d.ContainsKey("VAF_Print_Rpt_Layout_ID"))
                 // {
-                //    rep.AD_PrintFormat_ID = Convert.ToInt32(d["AD_PrintFormat_ID"]);
+                //    rep.VAF_Print_Rpt_Layout_ID = Convert.ToInt32(d["VAF_Print_Rpt_Layout_ID"]);
                 // }
-                rep.AD_PInstance_ID = pi.GetAD_PInstance_ID();
+                rep.VAF_JInstance_ID = pi.GetVAF_JInstance_ID();
                 rep.Result = pi.GetSummary();
 
                 ctl.ReportString = null;
@@ -437,7 +437,7 @@ namespace VIS.Helpers
         /// Excecute Process
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <param name="Name"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
@@ -474,8 +474,8 @@ namespace VIS.Helpers
                     ret.Message = Msg.GetMsg(ctx, "ProcessNoInstance");
                     return ret;
                 }
-                ret.AD_PInstance_ID = instance.GetAD_PInstance_ID();
-                processInfo["AD_PInstance_ID"] = ret.AD_PInstance_ID.ToString();
+                ret.VAF_JInstance_ID = instance.GetVAF_JInstance_ID();
+                processInfo["VAF_JInstance_ID"] = ret.VAF_JInstance_ID.ToString();
                 ret = ExecuteProcessCommon(ctx, processInfo, null);
             }
             else// If  parameter exist, then instance is created after user clciks OK
@@ -532,7 +532,7 @@ namespace VIS.Helpers
         private static object _lock = new object();
         private static object _lockcsv = new object();
         private static VLogger log = VLogger.GetVLogger(typeof(ReportEngine_N).FullName);
-        public GridReportInfo GenerateReport(Ctx _ctx, int id, List<string> queryInfo, Object code, bool isCreateNew, Dictionary<string, string> nProcessInfo, int pageNo, int AD_PInstance_ID, string fileType, int? nodeID, int? treeID, bool showSummary)
+        public GridReportInfo GenerateReport(Ctx _ctx, int id, List<string> queryInfo, Object code, bool isCreateNew, Dictionary<string, string> nProcessInfo, int pageNo, int VAF_JInstance_ID, string fileType, int? nodeID, int? treeID, bool showSummary)
         {
             GridReportInfo res = new GridReportInfo();
             VIS.Models.PageSetting ps = new Models.PageSetting();
@@ -550,15 +550,15 @@ namespace VIS.Helpers
 
 
             // _ctx.SetContext("#TimeZoneName", "India Standard Time");
-            if (queryInfo.Count > 0 || AD_PInstance_ID > 0)
+            if (queryInfo.Count > 0 || VAF_JInstance_ID > 0)
             {
                 string tableName = queryInfo[0];
-                if (AD_PInstance_ID > 0)
+                if (VAF_JInstance_ID > 0)
                 {
                     if ((code).GetType() == typeof(int))	//	Form = one record
                         _query = Query.GetEqualQuery(tableName, ((int)code));
                     else
-                        _query = Query.Get(_ctx, AD_PInstance_ID, tableName);
+                        _query = Query.Get(_ctx, VAF_JInstance_ID, tableName);
 
                 }
                 else
@@ -643,7 +643,7 @@ namespace VIS.Helpers
 
                 if (!isCreateNew)
                 {
-                    bool isPFExist = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM AD_PrintFormat WHERE AD_PrintFormat_ID=" + id)) > 0;
+                    bool isPFExist = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_Print_Rpt_Layout WHERE VAF_Print_Rpt_Layout_ID=" + id)) > 0;
                     if (isPFExist)
                     {
                         pf = MPrintFormat.Get(_ctx, id, true);
@@ -678,7 +678,7 @@ namespace VIS.Helpers
                 rep = new ProcessReportInfo();
                 pf.SetName(Env.TrimModulePrefix(pf.GetName()));
                 if (nProcessInfo == null || pageNo > 0 || (Util.GetValueOfInt(nProcessInfo["Record_ID"]) == 0 && Util.GetValueOfInt(nProcessInfo["Process_ID"]) == 0 &&
-                    Util.GetValueOfInt(nProcessInfo["AD_PInstance_ID"]) == 0))
+                    Util.GetValueOfInt(nProcessInfo["VAF_JInstance_ID"]) == 0))
                 {
                     PrintInfo info = new PrintInfo(pf.GetName(), pf.GetVAF_TableView_ID(), Record_ID);
                     info.SetDescription(_query == null ? "" : _query.GetInfo());
@@ -687,7 +687,7 @@ namespace VIS.Helpers
                 else
                 {
                     ProcessInfo pi = new ProcessInfo().FromList(nProcessInfo);
-                    pi.Set_AD_PrintFormat_ID(id);
+                    pi.Set_VAF_Print_Rpt_Layout_ID(id);
                     ProcessCtl ctl = new ProcessCtl();
                     ctl.Process(pi, _ctx, out b, out re);
                     re.SetPrintFormat(pf);
@@ -707,7 +707,7 @@ namespace VIS.Helpers
                     {
                         rep.ReportFilePath = re.GetReportFilePath(true, out b);
                         rep.HTML = re.GetRptHtml().ToString();
-                        rep.AD_PrintFormat_ID = re.GetPrintFormat().GetAD_PrintFormat_ID();
+                        rep.VAF_Print_Rpt_Layout_ID = re.GetPrintFormat().GetVAF_Print_Rpt_Layout_ID();
                         rep.ReportProcessInfo = null;
                         rep.Report = re.CreatePDF();
                     }
@@ -718,7 +718,7 @@ namespace VIS.Helpers
                 // b = re.CreatePDF();
                 //rep.Report = b;
                 //rep.HTML = re.GetRptHtml().ToString();
-                //rep.AD_PrintFormat_ID = re.GetPrintFormat().GetAD_PrintFormat_ID();
+                //rep.VAF_Print_Rpt_Layout_ID = re.GetPrintFormat().GetVAF_Print_Rpt_Layout_ID();
                 //rep.ReportProcessInfo = null;
             }
             catch (Exception ex)
@@ -737,7 +737,7 @@ namespace VIS.Helpers
         /// This function executes when user select record (one OR more) from window and click print button.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <param name="Name"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
@@ -745,16 +745,16 @@ namespace VIS.Helpers
         /// <param name="recIDs"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        public static ProcessReportInfo GeneratePrint(Ctx ctx, int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string recIDs, string fileType, string actionOrigin, string originName)
+        public static ProcessReportInfo GeneratePrint(Ctx ctx, int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string recIDs, string fileType, string actionOrigin, string originName)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
             MPInstance instance = null;
             //Saved Action Log
-            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, VAF_TableView_ID, Record_ID, AD_Process_ID, MProcess.Get(ctx, AD_Process_ID).GetName(), fileType, "", "");
+            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, VAF_TableView_ID, Record_ID, VAF_Job_ID, MProcess.Get(ctx, VAF_Job_ID).GetName(), fileType, "", "");
 
             try
             {
-                instance = new MPInstance(ctx, AD_Process_ID, Record_ID);
+                instance = new MPInstance(ctx, VAF_Job_ID, Record_ID);
             }
             catch (Exception e)
             {
@@ -769,7 +769,7 @@ namespace VIS.Helpers
                 ret.Message = Msg.GetMsg(ctx, "ProcessNoInstance");
                 return ret;
             }
-            ret.AD_PInstance_ID = instance.GetAD_PInstance_ID();
+            ret.VAF_JInstance_ID = instance.GetVAF_JInstance_ID();
 
 
 
@@ -789,7 +789,7 @@ namespace VIS.Helpers
             //storedPath += clientName;
             //VLogMgt.Initialize(true, storedPath);
             ////////////////
-            ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID, recIDs);
+            ProcessInfo pi = new ProcessInfo(Name, VAF_Job_ID, VAF_TableView_ID, Record_ID, recIDs);
             pi.SetFileType(fileType);
             TryPrintFromDocType(pi);
             //if (ret != null)
@@ -799,7 +799,7 @@ namespace VIS.Helpers
 
 
             ret = new ProcessReportInfo();
-            ret.AD_PInstance_ID = instance.GetAD_PInstance_ID();
+            ret.VAF_JInstance_ID = instance.GetVAF_JInstance_ID();
             byte[] report = null;
             string rptFilePath = null;
             // ProcessReportInfo rep = new ProcessReportInfo();
@@ -808,7 +808,7 @@ namespace VIS.Helpers
 
                 pi.SetAD_User_ID(ctx.GetAD_User_ID());
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-                pi.SetAD_PInstance_ID(ret.AD_PInstance_ID);
+                pi.SetVAF_JInstance_ID(ret.VAF_JInstance_ID);
 
                 //report = null;
                 ProcessCtl ctl = new ProcessCtl();
@@ -829,7 +829,7 @@ namespace VIS.Helpers
                 ret.IsTelerikReport = pi.GetIsTelerik();
                 ret.VAF_TableView_ID = pi.GetTable_ID();
                 ret.RecordID = pi.GetRecord_ID();
-                ret.AD_Process_ID = pi.GetAD_Process_ID();
+                ret.VAF_Job_ID = pi.GetVAF_Job_ID();
                 ret.RecordIDs = pi.GetRecIds();
                 ctl.ReportString = null;
 
@@ -846,7 +846,7 @@ namespace VIS.Helpers
             System.Threading.Thread.CurrentThread.CurrentUICulture = original;
 
             //return ret;
-            //ret = ExecuteProcess(ctx, AD_Process_ID, Name, ret.AD_PInstance_ID, VAF_TableView_ID, Record_ID, null,true);
+            //ret = ExecuteProcess(ctx, VAF_Job_ID, Name, ret.VAF_JInstance_ID, VAF_TableView_ID, Record_ID, null,true);
             // VAdvantage.Classes.CleanUp.Get().Start();
             return ret;
         }
@@ -880,20 +880,20 @@ namespace VIS.Helpers
                 {
                     return;
                 }
-                sql = "SELECT AD_ReportFormat_ID FROM C_DocType WHERE C_DocType_ID=" + id;
+                sql = "SELECT VAF_ReportLayout_ID FROM C_DocType WHERE C_DocType_ID=" + id;
                 id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (id > 0)
                 {
-                    _pi.SetAD_ReportFormat_ID(id);
+                    _pi.SetVAF_ReportLayout_ID(id);
                 }
                 //ProcessReportInfo ret = new ProcessReportInfo();
                 //string reportFilePath = null;
                 //byte[] report = null;
                 //string ReportString = null;
-                //ProcessInfo pi = new ProcessInfo(Name, AD_Process_ID, VAF_TableView_ID, Record_ID, recIDs);
+                //ProcessInfo pi = new ProcessInfo(Name, VAF_Job_ID, VAF_TableView_ID, Record_ID, recIDs);
                 //pi.SetAD_User_ID(ctx.GetAD_User_ID());
                 //pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-                //pi.SetAD_PInstance_ID(AD_PInstance_ID);
+                //pi.SetVAF_JInstance_ID(VAF_JInstance_ID);
                 //pi.IsArabicReportFromOutside = false;
                 //pi.SetFileType(fileType);
 
@@ -944,7 +944,7 @@ namespace VIS.Helpers
         /// Archieve Reports data
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <param name="Name"></param>
         /// <param name="VAF_TableView_ID"></param>
         /// <param name="Record_ID"></param>
@@ -953,12 +953,12 @@ namespace VIS.Helpers
         /// <param name="binaryData"></param>
         /// <param name="reportPath"></param>
         /// <returns></returns>
-        public static bool ArchiveDoc(Ctx ctx, int AD_Process_ID, string Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
+        public static bool ArchiveDoc(Ctx ctx, int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int C_BPartner_ID, bool isReport, byte[] binaryData, string reportPath)
         {
             MArchive archive = new MArchive(ctx, 0, null);
             archive.SetName(Name);
             archive.SetIsReport(isReport);
-            archive.SetAD_Process_ID(AD_Process_ID);
+            archive.SetVAF_Job_ID(VAF_Job_ID);
             archive.SetVAF_TableView_ID(VAF_TableView_ID);
             archive.SetRecord_ID(Record_ID);
             archive.SetC_BPartner_ID(C_BPartner_ID);
@@ -987,36 +987,36 @@ namespace VIS.Helpers
         /// Get Report Type list 
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <returns></returns>
-        public static List<ValueNamePair> GetReportFileTypes(Ctx ctx, int AD_Process_ID)
+        public static List<ValueNamePair> GetReportFileTypes(Ctx ctx, int VAF_Job_ID)
         {
             List<ValueNamePair> list = new List<ValueNamePair>();
             string sql = "";
 
             if (ctx.GetUseCrystalReportViewer().Equals("Y"))
             {
-                object isCrystal = DB.ExecuteScalar("SELECT  IsCrystalReport FROM AD_Process WHERE IsActive='Y' AND AD_Process_ID=" + AD_Process_ID);
+                object isCrystal = DB.ExecuteScalar("SELECT  IsCrystalReport FROM VAF_Job WHERE IsActive='Y' AND VAF_Job_ID=" + VAF_Job_ID);
                 if (isCrystal.Equals("Y"))
                 {
                     return list;
                 }
             }
 
-            int refListID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Reference_ID FROM AD_Reference WHERE Export_ID='VIS_1000195'"));
-            bool showRTF = IsShowRTF(AD_Process_ID);
+            int refListID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Control_Ref_ID FROM VAF_Control_Ref WHERE Export_ID='VIS_1000195'"));
+            bool showRTF = IsShowRTF(VAF_Job_ID);
 
             bool isBaseLanguage = VAdvantage.Utility.Env.IsBaseLanguage(ctx, "");
             if (isBaseLanguage)
             {
-                sql = "SELECT Value, Name FROM AD_Ref_List "
-                 + "WHERE AD_Reference_ID=" + refListID + " AND IsActive='Y' ORDER BY 1";
+                sql = "SELECT Value, Name FROM VAF_CtrlRef_List "
+                 + "WHERE VAF_Control_Ref_ID=" + refListID + " AND IsActive='Y' ORDER BY 1";
             }
             else
             {
-                sql = @"SELECT r.Value, rt.Name FROM AD_Ref_List r
-                      inner join ad_ref_list_trl rt on (r.AD_Ref_List_ID=rt.AD_Ref_List_ID)
-                      WHERE r.AD_Reference_ID=" + refListID + " AND r.IsActive='Y' AND rt.VAF_Language='" + ctx.GetVAF_Language() + "' ORDER BY 1";
+                sql = @"SELECT r.Value, rt.Name FROM VAF_CtrlRef_List r
+                      inner join VAF_CtrlRef_TL rt on (r.VAF_CtrlRef_List_ID=rt.VAF_CtrlRef_List_ID)
+                      WHERE r.VAF_Control_Ref_ID=" + refListID + " AND r.IsActive='Y' AND rt.VAF_Language='" + ctx.GetVAF_Language() + "' ORDER BY 1";
             }
             DataSet ds = null;
             try
@@ -1053,16 +1053,16 @@ namespace VIS.Helpers
         /// <summary>
         /// Is RTF is supported by Report
         /// </summary>
-        /// <param name="AD_Process_ID"></param>
+        /// <param name="VAF_Job_ID"></param>
         /// <returns></returns>
-        private static bool IsShowRTF(int AD_Process_ID)
+        private static bool IsShowRTF(int VAF_Job_ID)
         {
-            int rfID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_ReportFormat_ID FROM AD_Process WHERE IsActive='Y' AND AD_Process_ID=" + AD_Process_ID));
+            int rfID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_ReportLayout_ID FROM VAF_Job WHERE IsActive='Y' AND VAF_Job_ID=" + VAF_Job_ID));
             if (rfID > 0)
             {
                 return true;
             }
-            DataSet ds = DB.ExecuteDataset("SELECT  IsReport,IsCrystalReport,ReportPath FROM AD_Process WHERE IsActive='Y' AND AD_Process_ID=" + AD_Process_ID);
+            DataSet ds = DB.ExecuteDataset("SELECT  IsReport,IsCrystalReport,ReportPath FROM VAF_Job WHERE IsActive='Y' AND VAF_Job_ID=" + VAF_Job_ID);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (Util.GetValueOfString(ds.Tables[0].Rows[0]["IsReport"]) == "Y"

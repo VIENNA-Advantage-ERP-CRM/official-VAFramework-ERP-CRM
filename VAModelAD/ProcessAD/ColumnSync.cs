@@ -318,7 +318,7 @@ namespace VAdvantage.Process
                     ConstraintType.Clear();
                     ConstraintName.Clear();
 
-                    if ((column.GetAD_Reference_ID() == DisplayType.Account)
+                    if ((column.GetVAF_Control_Ref_ID() == DisplayType.Account)
                         && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
                     {
                         fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
@@ -328,12 +328,12 @@ namespace VAdvantage.Process
                             + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)"
                             + " INNER JOIN VAF_Column cPK ON (cPK.VAF_Column_ID=1014)"
                             + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
-                            + "WHERE c.IsKey='N' AND c.AD_Reference_ID=25 AND C.VAF_Column_ID= @param"   //	Acct
+                            + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_ID=25 AND C.VAF_Column_ID= @param"   //	Acct
                             + " AND c.ColumnName<>'C_ValidCombination_ID'"
                             + " AND t.IsView='N' "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
-                    else if ((column.GetAD_Reference_ID() == DisplayType.PAttribute)
+                    else if ((column.GetVAF_Control_Ref_ID() == DisplayType.PAttribute)
                         && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
                     {
                         fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
@@ -343,13 +343,13 @@ namespace VAdvantage.Process
                             + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)"
                             + " INNER JOIN VAF_Column cPK ON (cPK.VAF_Column_ID=8472)"
                             + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
-                            + "WHERE c.IsKey='N' AND c.AD_Reference_ID=35 AND C.VAF_Column_ID=@param"    //	Product Attribute
+                            + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_ID=35 AND C.VAF_Column_ID=@param"    //	Product Attribute
                             + " AND c.ColumnName<>'C_ValidCombination_ID'"
                             + " AND t.IsView='N' "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
-                    else if (((column.GetAD_Reference_ID() == DisplayType.TableDir) || (column.GetAD_Reference_ID() == DisplayType.Search))
-                        && (column.GetAD_Reference_Value_ID() == 0))
+                    else if (((column.GetVAF_Control_Ref_ID() == DisplayType.TableDir) || (column.GetVAF_Control_Ref_ID() == DisplayType.Search))
+                        && (column.GetVAF_Control_Ref_Value_ID() == 0))
                     {
                         fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
                             + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
@@ -358,7 +358,7 @@ namespace VAdvantage.Process
                             + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID)"
                             + " INNER JOIN VAF_Column cPK ON (c.VAF_ColumnDic_ID=cPK.VAF_ColumnDic_ID AND cPK.IsKey='Y')"
                             + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID AND tPK.IsView='N') "
-                            + "WHERE c.IsKey='N' AND c.AD_Reference_Value_ID IS NULL AND C.VAF_Column_ID=@param"
+                            + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_Value_ID IS NULL AND C.VAF_Column_ID=@param"
                             + " AND t.IsView='N' AND c.ColumnSQL IS NULL "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
@@ -368,8 +368,8 @@ namespace VAdvantage.Process
                             + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
                             + " 'FK' || t.VAF_TableView_ID || '_' || c.VAF_Column_ID AS ConstraintName "
                             + "FROM VAF_TableView t"
-                            + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID AND c.AD_Reference_Value_ID IS NOT NULL)"
-                            + " INNER JOIN AD_Ref_Table rt ON (c.AD_Reference_Value_ID=rt.AD_Reference_ID)"
+                            + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID AND c.VAF_Control_Ref_Value_ID IS NOT NULL)"
+                            + " INNER JOIN VAF_CtrlRef_Table rt ON (c.VAF_Control_Ref_Value_ID=rt.VAF_Control_Ref_ID)"
                             + " INNER JOIN VAF_Column cPK ON (rt.Column_Key_ID=cPK.VAF_Column_ID)"
                             + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
                             + "WHERE c.IsKey='N'"

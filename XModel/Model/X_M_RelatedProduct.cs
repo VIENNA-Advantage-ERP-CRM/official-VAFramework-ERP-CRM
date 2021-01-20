@@ -173,8 +173,8 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 
-/** RelatedProductType AD_Reference_ID=313 */
-public static int RELATEDPRODUCTTYPE_AD_Reference_ID=313;
+/** RelatedProductType VAF_Control_Ref_ID=313 */
+public static int RELATEDPRODUCTTYPE_VAF_Control_Ref_ID=313;
 /** Alternative = A */
 public static String RELATEDPRODUCTTYPE_Alternative = "A";
 /** Web Promotion = P */
@@ -209,8 +209,8 @@ public String GetRelatedProductType()
 return (String)Get_Value("RelatedProductType");
 }
 
-/** RelatedProduct_ID AD_Reference_ID=162 */
-public static int RELATEDPRODUCT_ID_AD_Reference_ID=162;
+/** RelatedProduct_ID VAF_Control_Ref_ID=162 */
+public static int RELATEDPRODUCT_ID_VAF_Control_Ref_ID=162;
 /** Set Related Product.
 @param RelatedProduct_ID Related Product */
 public void SetRelatedProduct_ID (int RelatedProduct_ID)

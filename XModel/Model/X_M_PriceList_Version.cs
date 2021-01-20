@@ -181,8 +181,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_Pricelist_Version_Base_ID AD_Reference_ID=188 */
-public static int M_PRICELIST_VERSION_BASE_ID_AD_Reference_ID=188;
+/** M_Pricelist_Version_Base_ID VAF_Control_Ref_ID=188 */
+public static int M_PRICELIST_VERSION_BASE_ID_VAF_Control_Ref_ID=188;
 /** Set Base Price List.
 @param M_Pricelist_Version_Base_ID Source for Price list calculations */
 public void SetM_Pricelist_Version_Base_ID (int M_Pricelist_Version_Base_ID)

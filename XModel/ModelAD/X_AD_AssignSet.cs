@@ -147,8 +147,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AutoAssignRule AD_Reference_ID=424 */
-public static int AUTOASSIGNRULE_AD_Reference_ID=424;
+/** AutoAssignRule VAF_Control_Ref_ID=424 */
+public static int AUTOASSIGNRULE_VAF_Control_Ref_ID=424;
 /** Create and Update = B */
 public static String AUTOASSIGNRULE_CreateAndUpdate = "B";
 /** Create only = C */

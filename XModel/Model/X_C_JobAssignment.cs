@@ -187,8 +187,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** JobAssignmentType AD_Reference_ID=400 */
-public static int JOBASSIGNMENTTYPE_AD_Reference_ID=400;
+/** JobAssignmentType VAF_Control_Ref_ID=400 */
+public static int JOBASSIGNMENTTYPE_VAF_Control_Ref_ID=400;
 /** Other = O */
 public static String JOBASSIGNMENTTYPE_Other = "O";
 /** Primary = P */

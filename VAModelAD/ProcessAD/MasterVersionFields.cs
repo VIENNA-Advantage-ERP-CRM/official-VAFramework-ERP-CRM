@@ -100,12 +100,12 @@ namespace VAdvantage.Process
             }
 
             // check access for Version window
-            int countAcc = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_Role_ID) FROM AD_Window_Access WHERE AD_Window_ID = " + Ver_AD_Window_ID + " AND IsReadWrite = 'Y'", null, Get_Trx()));
+            int countAcc = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_Role_ID) FROM AD_Window_Access WHERE AD_Window_ID = " + Ver_AD_Window_ID + " AND IsReadWrite = 'Y'", null, Get_Trx()));
             if (countAcc <= 0)
             {
                 // Provide access to Version window, for the roles which parent (Master window) has
                 countAcc = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE AD_Window_Access SET IsReadWrite = 'Y' WHERE AD_Window_ID = " + Ver_AD_Window_ID + @" 
-                            AND AD_Role_ID IN (SELECT AD_Role_ID FROM AD_Window_Access WHERE AD_Window_ID = " + tab.GetAD_Window_ID() + @"  AND IsReadWrite = 'Y')", null, Get_Trx()));
+                            AND VAF_Role_ID IN (SELECT VAF_Role_ID FROM AD_Window_Access WHERE AD_Window_ID = " + tab.GetAD_Window_ID() + @"  AND IsReadWrite = 'Y')", null, Get_Trx()));
             }
 
             // check for version tab
@@ -442,16 +442,16 @@ namespace VAdvantage.Process
         /// <returns></returns>
         public string CreateMasterVersionTable(int VAF_Column_ID, int VAF_TableView_ID)
         {
-            int AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_Process_ID FROM AD_Process WHERE Value = 'MasterDataVersions'", null, Get_Trx()));
-            MPInstance instance = new MPInstance(GetCtx(), AD_Process_ID, 0);
+            int VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Job_ID FROM VAF_Job WHERE Value = 'MasterDataVersions'", null, Get_Trx()));
+            MPInstance instance = new MPInstance(GetCtx(), VAF_Job_ID, 0);
             if (!instance.Save())
             {
                 log.Info(Msg.GetMsg(GetCtx(), "ProcessNoInstance"));
                 return Msg.GetMsg(GetCtx(), "ProcessNoInstance");
             }
 
-            ProcessInfo pi = new ProcessInfo("", AD_Process_ID);
-            pi.SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+            ProcessInfo pi = new ProcessInfo("", VAF_Job_ID);
+            pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
             pi.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
 
             //	Add Parameters

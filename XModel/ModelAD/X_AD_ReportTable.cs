@@ -11,28 +11,28 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_ReportTable
+    /** Generated Model for VAF_ReportTable
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_ReportTable : PO
+    public class X_VAF_ReportTable : PO
     {
-        public X_AD_ReportTable(Context ctx, int AD_ReportTable_ID, Trx trxName)
-            : base(ctx, AD_ReportTable_ID, trxName)
+        public X_VAF_ReportTable(Context ctx, int VAF_ReportTable_ID, Trx trxName)
+            : base(ctx, VAF_ReportTable_ID, trxName)
         {
-            /** if (AD_ReportTable_ID == 0)
+            /** if (VAF_ReportTable_ID == 0)
             {
-            SetAD_ReportFormat_ID (0);
-            SetAD_ReportTable_ID (0);
+            SetVAF_ReportLayout_ID (0);
+            SetVAF_ReportTable_ID (0);
             }
              */
         }
-        public X_AD_ReportTable(Ctx ctx, int AD_ReportTable_ID, Trx trxName)
-            : base(ctx, AD_ReportTable_ID, trxName)
+        public X_VAF_ReportTable(Ctx ctx, int VAF_ReportTable_ID, Trx trxName)
+            : base(ctx, VAF_ReportTable_ID, trxName)
         {
-            /** if (AD_ReportTable_ID == 0)
+            /** if (VAF_ReportTable_ID == 0)
             {
-            SetAD_ReportFormat_ID (0);
-            SetAD_ReportTable_ID (0);
+            SetVAF_ReportLayout_ID (0);
+            SetVAF_ReportTable_ID (0);
             }
              */
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ReportTable(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_ReportTable(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ReportTable(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_ReportTable(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_ReportTable(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_ReportTable(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_ReportTable()
+        static X_VAF_ReportTable()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000727;
 
-        /** TableName=AD_ReportTable */
-        public static String Table_Name = "AD_ReportTable";
+        /** TableName=VAF_ReportTable */
+        public static String Table_Name = "VAF_ReportTable";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_ReportTable[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_ReportTable[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Column.
@@ -133,33 +133,33 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set AD_ReportFormat_ID.
-        @param AD_ReportFormat_ID AD_ReportFormat_ID */
-        public void SetAD_ReportFormat_ID(int AD_ReportFormat_ID)
+        /** Set VAF_ReportLayout_ID.
+        @param VAF_ReportLayout_ID VAF_ReportLayout_ID */
+        public void SetVAF_ReportLayout_ID(int VAF_ReportLayout_ID)
         {
-            if (AD_ReportFormat_ID < 1) throw new ArgumentException("AD_ReportFormat_ID is mandatory.");
-            Set_ValueNoCheck("AD_ReportFormat_ID", AD_ReportFormat_ID);
+            if (VAF_ReportLayout_ID < 1) throw new ArgumentException("VAF_ReportLayout_ID is mandatory.");
+            Set_ValueNoCheck("VAF_ReportLayout_ID", VAF_ReportLayout_ID);
         }
-        /** Get AD_ReportFormat_ID.
-        @return AD_ReportFormat_ID */
-        public int GetAD_ReportFormat_ID()
+        /** Get VAF_ReportLayout_ID.
+        @return VAF_ReportLayout_ID */
+        public int GetVAF_ReportLayout_ID()
         {
-            Object ii = Get_Value("AD_ReportFormat_ID");
+            Object ii = Get_Value("VAF_ReportLayout_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set AD_ReportTable_ID.
-        @param AD_ReportTable_ID AD_ReportTable_ID */
-        public void SetAD_ReportTable_ID(int AD_ReportTable_ID)
+        /** Set VAF_ReportTable_ID.
+        @param VAF_ReportTable_ID VAF_ReportTable_ID */
+        public void SetVAF_ReportTable_ID(int VAF_ReportTable_ID)
         {
-            if (AD_ReportTable_ID < 1) throw new ArgumentException("AD_ReportTable_ID is mandatory.");
-            Set_ValueNoCheck("AD_ReportTable_ID", AD_ReportTable_ID);
+            if (VAF_ReportTable_ID < 1) throw new ArgumentException("VAF_ReportTable_ID is mandatory.");
+            Set_ValueNoCheck("VAF_ReportTable_ID", VAF_ReportTable_ID);
         }
-        /** Get AD_ReportTable_ID.
-        @return AD_ReportTable_ID */
-        public int GetAD_ReportTable_ID()
+        /** Get VAF_ReportTable_ID.
+        @return VAF_ReportTable_ID */
+        public int GetVAF_ReportTable_ID()
         {
-            Object ii = Get_Value("AD_ReportTable_ID");
+            Object ii = Get_Value("VAF_ReportTable_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -180,8 +180,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** VAF_TableView_ID_1 AD_Reference_ID=1000147 */
-        public static int VAF_TABLEVIEW_ID_1_AD_Reference_ID = 1000147;
+        /** VAF_TableView_ID_1 VAF_Control_Ref_ID=1000147 */
+        public static int VAF_TABLEVIEW_ID_1_VAF_Control_Ref_ID = 1000147;
         /** Set Parent Table.
         @param VAF_TableView_ID_1 Parent Table */
         public void SetVAF_TableView_ID_1(int VAF_TableView_ID_1)

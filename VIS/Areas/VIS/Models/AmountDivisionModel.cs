@@ -37,7 +37,7 @@ namespace VIS.Models
         public List<InfoRefList> GetDimensionType(Ctx ctx)
         {
             List<InfoRefList> list = new List<InfoRefList>();
-            int Reference_ID = Convert.ToInt32(VAdvantage.DataBase.DB.ExecuteScalar("SELECT AD_Reference_Value_ID FROM VAF_Column WHERE Export_ID='VIS_2663'"));
+            int Reference_ID = Convert.ToInt32(VAdvantage.DataBase.DB.ExecuteScalar("SELECT VAF_Control_Ref_Value_ID FROM VAF_Column WHERE Export_ID='VIS_2663'"));
             ValueNamePair[] refList = MRefList.GetList(Reference_ID, true, ctx);
             InfoRefList itm = null;// new InfoRefList();
             // itm.Key = "";
@@ -598,16 +598,16 @@ namespace VIS.Models
                     //    sql += " left join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                     //       "  Left join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                     //       " left JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                    //       " left join ad_ref_list adref on adref.value=ct.elementtype " +
-                    //       " left join vaf_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                    //       " left join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                    //       " left join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
                     //}
                     //else
                     //{
                     sql += " inner join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                        "  inner join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                        " inner JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                       " inner join ad_ref_list adref on adref.value=ct.elementtype " +
-                       " inner join vaf_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                       " inner join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                       " inner join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
 
                     // }
                     if (uElementTable != "")
@@ -650,16 +650,16 @@ namespace VIS.Models
                         sqlcount += " left join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                            "  Left join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                            " left JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                           " left join ad_ref_list adref on adref.value=ct.elementtype " +
-                           " left join vaf_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                           " left join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                           " left join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
                     }
                     else
                     {
                         sqlcount += " inner join c_dimamtaccttype ct on cdm.c_dimamt_id=ct.c_dimamt_id " +
                            "  inner join  c_dimamtline cl ON cl.c_dimAmt_ID=ct.c_dimAmt_ID and cl.c_dimamtaccttype_id=ct.c_dimamtaccttype_id" +
                            " inner JOIN c_acctschema_element rl ON ct.elementtype     =rl.elementtype AND ct.c_acctschema_id=rl.c_Acctschema_ID " +
-                           " inner join ad_ref_list adref on adref.value=ct.elementtype " +
-                           " inner join vaf_column adc on adc.AD_Reference_Value_ID=adref.AD_Reference_ID and adc.export_id='VIS_2663'";
+                           " inner join VAF_CtrlRef_List adref on adref.value=ct.elementtype " +
+                           " inner join vaf_column adc on adc.VAF_Control_Ref_Value_ID=adref.VAF_Control_Ref_ID and adc.export_id='VIS_2663'";
 
                     }
                     sqlcount += " LEFT JOIN vaf_column ac ON cl.vaf_column_ID=ac.vaf_column_ID " +

@@ -231,8 +231,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** Limit_Base AD_Reference_ID=194 */
-public static int LIMIT_BASE_AD_Reference_ID=194;
+/** Limit_Base VAF_Control_Ref_ID=194 */
+public static int LIMIT_BASE_VAF_Control_Ref_ID=194;
 /** Fixed Price = F */
 public static String LIMIT_BASE_FixedPrice = "F";
 /** List Price = L */
@@ -332,8 +332,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** Limit_Rounding AD_Reference_ID=155 */
-public static int LIMIT_ROUNDING_AD_Reference_ID=155;
+/** Limit_Rounding VAF_Control_Ref_ID=155 */
+public static int LIMIT_ROUNDING_VAF_Control_Ref_ID=155;
 /** Whole Number .00 = 0 */
 public static String LIMIT_ROUNDING_WholeNumber00 = "0";
 /** Nickel .05, .10, .15, ... = 5 */
@@ -395,8 +395,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** List_Base AD_Reference_ID=194 */
-public static int LIST_BASE_AD_Reference_ID=194;
+/** List_Base VAF_Control_Ref_ID=194 */
+public static int LIST_BASE_VAF_Control_Ref_ID=194;
 /** Fixed Price = F */
 public static String LIST_BASE_FixedPrice = "F";
 /** List Price = L */
@@ -492,8 +492,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** List_Rounding AD_Reference_ID=155 */
-public static int LIST_ROUNDING_AD_Reference_ID=155;
+/** List_Rounding VAF_Control_Ref_ID=155 */
+public static int LIST_ROUNDING_VAF_Control_Ref_ID=155;
 /** Whole Number .00 = 0 */
 public static String LIST_ROUNDING_WholeNumber00 = "0";
 /** Nickel .05, .10, .15, ... = 5 */
@@ -639,8 +639,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** Std_Base AD_Reference_ID=194 */
-public static int STD_BASE_AD_Reference_ID=194;
+/** Std_Base VAF_Control_Ref_ID=194 */
+public static int STD_BASE_VAF_Control_Ref_ID=194;
 /** Fixed Price = F */
 public static String STD_BASE_FixedPrice = "F";
 /** List Price = L */
@@ -736,8 +736,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** Std_Rounding AD_Reference_ID=155 */
-public static int STD_ROUNDING_AD_Reference_ID=155;
+/** Std_Rounding VAF_Control_Ref_ID=155 */
+public static int STD_ROUNDING_VAF_Control_Ref_ID=155;
 /** Whole Number .00 = 0 */
 public static String STD_ROUNDING_WholeNumber00 = "0";
 /** Nickel .05, .10, .15, ... = 5 */

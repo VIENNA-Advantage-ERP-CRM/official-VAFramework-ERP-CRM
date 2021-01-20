@@ -237,8 +237,8 @@ public String GetStatisticsInfo()
 return (String)Get_Value("StatisticsInfo");
 }
 
-/** SystemStatus AD_Reference_ID=374 */
-public static int SYSTEMSTATUS_AD_Reference_ID=374;
+/** SystemStatus VAF_Control_Ref_ID=374 */
+public static int SYSTEMSTATUS_VAF_Control_Ref_ID=374;
 /** Evaluation = E */
 public static String SYSTEMSTATUS_Evaluation = "E";
 /** Implementation = I */

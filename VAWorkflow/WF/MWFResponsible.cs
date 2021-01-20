@@ -70,7 +70,7 @@ namespace VAdvantage.WF
         {
             if (!IsRole())
                 return null;
-            return MRole.Get(GetCtx(), GetAD_Role_ID());
+            return MRole.Get(GetCtx(), GetVAF_Role_ID());
         }
 
         /// <summary>
@@ -83,18 +83,18 @@ namespace VAdvantage.WF
             //	if (RESPONSIBLETYPE_Human.equals(getResponsibleType()) && getAD_User_ID() == 0)
             //		return true;
             if (RESPONSIBLETYPE_Role.Equals(GetResponsibleType())
-                && GetAD_Role_ID() == 0
+                && GetVAF_Role_ID() == 0
                 && GetVAF_Client_ID() > 0)
             {
-                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@RequiredEnter@ @AD_Role_ID@"));
+                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@RequiredEnter@ @VAF_Role_ID@"));
                 return false;
             }
             //	User not used
             if (!RESPONSIBLETYPE_Human.Equals(GetResponsibleType()) && GetAD_User_ID() == 0)
                 SetAD_User_ID(0);
             //	Role not used
-            if (!RESPONSIBLETYPE_Role.Equals(GetResponsibleType()) && GetAD_Role_ID() == 0)
-                SetAD_Role_ID(0);
+            if (!RESPONSIBLETYPE_Role.Equals(GetResponsibleType()) && GetVAF_Role_ID() == 0)
+                SetVAF_Role_ID(0);
 
 
 
@@ -105,11 +105,11 @@ namespace VAdvantage.WF
                 {
                     return false;
                 }
-                SetAD_Role_ID(0);
+                SetVAF_Role_ID(0);
             }
             else if (RESPONSIBLETYPE_Role.Equals(GetResponsibleType()))
             {
-                if (GetAD_Role_ID() == 0)
+                if (GetVAF_Role_ID() == 0)
                 {
                     return false;
                 }
@@ -117,7 +117,7 @@ namespace VAdvantage.WF
             }
             else if (RESPONSIBLETYPE_Organization.Equals(GetResponsibleType()))
             {
-                SetAD_Role_ID(0);
+                SetVAF_Role_ID(0);
                 SetAD_User_ID(0);
             }
             //Lakhwinder
@@ -160,7 +160,7 @@ namespace VAdvantage.WF
         /// <returns>true if invoker</returns>
         public bool IsInvoker()
         {
-            return GetAD_User_ID() == 0 && GetAD_Role_ID() == 0
+            return GetAD_User_ID() == 0 && GetVAF_Role_ID() == 0
                 && GetResponsibleType() != X_AD_WF_Responsible.RESPONSIBLETYPE_SQL
                 && GetResponsibleType() != X_AD_WF_Responsible.RESPONSIBLETYPE_Organization;
         }
@@ -172,7 +172,7 @@ namespace VAdvantage.WF
         public bool IsRole()
         {
             return RESPONSIBLETYPE_Role.Equals(GetResponsibleType())
-                && GetAD_Role_ID() != 0;
+                && GetVAF_Role_ID() != 0;
         }
 
         /// <summary>
@@ -187,8 +187,8 @@ namespace VAdvantage.WF
                 .Append(",Type=").Append(GetResponsibleType());
             if (GetAD_User_ID() != 0)
                 sb.Append(",AD_User_ID=").Append(GetAD_User_ID());
-            if (GetAD_Role_ID() != 0)
-                sb.Append(",AD_Role_ID=").Append(GetAD_Role_ID());
+            if (GetVAF_Role_ID() != 0)
+                sb.Append(",VAF_Role_ID=").Append(GetVAF_Role_ID());
             sb.Append("]");
             return sb.ToString();
         }

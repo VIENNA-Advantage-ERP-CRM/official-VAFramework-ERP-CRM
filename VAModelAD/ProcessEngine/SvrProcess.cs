@@ -166,9 +166,9 @@ namespace VAdvantage.ProcessEngine
             return _pi.GetTitle();
         }
 
-        protected int GetAD_PInstance_ID()
+        protected int GetVAF_JInstance_ID()
         {
-            return _pi.GetAD_PInstance_ID();
+            return _pi.GetVAF_JInstance_ID();
         }
 
         protected int GetTable_ID()
@@ -189,12 +189,12 @@ namespace VAdvantage.ProcessEngine
         {
             if (_pi.GetAD_User_ID() == null || _pi.GetVAF_Client_ID() == null)
             {
-                String sql = "SELECT AD_User_ID, VAF_Client_ID FROM AD_PInstance WHERE AD_PInstance_ID=@instanceid";
+                String sql = "SELECT AD_User_ID, VAF_Client_ID FROM VAF_JInstance WHERE VAF_JInstance_ID=@instanceid";
                 IDataReader dr = null;
                 try
                 {
                     SqlParameter[] param = new SqlParameter[1];
-                    param[0] = new SqlParameter("@instanceid", _pi.GetAD_PInstance_ID());
+                    param[0] = new SqlParameter("@instanceid", _pi.GetVAF_JInstance_ID());
                     dr = SqlExec.ExecuteQuery.ExecuteReader(sql, param);
                     while (dr.Read())
                     {
@@ -324,9 +324,9 @@ namespace VAdvantage.ProcessEngine
 
         private void Lock()
         {
-            log.Fine("AD_PInstance_ID=" + _pi.GetAD_PInstance_ID());
-            SqlExec.ExecuteQuery.ExecuteNonQuery("UPDATE AD_PInstance SET IsProcessing='Y' WHERE AD_PInstance_ID="
-                + _pi.GetAD_PInstance_ID());		//	outside trx
+            log.Fine("VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID());
+            SqlExec.ExecuteQuery.ExecuteNonQuery("UPDATE VAF_JInstance SET IsProcessing='Y' WHERE VAF_JInstance_ID="
+                + _pi.GetVAF_JInstance_ID());		//	outside trx
         }   //  lock
 
 
@@ -336,11 +336,11 @@ namespace VAdvantage.ProcessEngine
         /// </summary>
         private void Unlock()
         {
-            //MPInstance mpi = new MPInstance(Utility.Env.GetContext(), _pi.GetAD_PInstance_ID(), null);
-            X_AD_PInstance mpi = new X_AD_PInstance(ctxContext, _pi.GetAD_PInstance_ID(), null);
+            //MPInstance mpi = new MPInstance(Utility.Env.GetContext(), _pi.GetVAF_JInstance_ID(), null);
+            X_VAF_JInstance mpi = new X_VAF_JInstance(ctxContext, _pi.GetVAF_JInstance_ID(), null);
             if (mpi.Get_ID() == 0)
             {
-                log.Log(Level.SEVERE, "Did not find PInstance " + _pi.GetAD_PInstance_ID());
+                log.Log(Level.SEVERE, "Did not find PInstance " + _pi.GetVAF_JInstance_ID());
                 return;
             }
             mpi.SetIsProcessing(false);

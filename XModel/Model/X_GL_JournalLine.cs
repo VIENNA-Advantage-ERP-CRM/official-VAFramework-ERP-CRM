@@ -316,8 +316,8 @@ namespace VAdvantage.Model
 
 
 
-        /** ElementType AD_Reference_ID=181 */
-        public static int ELEMENTTYPE_AD_Reference_ID = 181;/** Organization = OO */
+        /** ElementType VAF_Control_Ref_ID=181 */
+        public static int ELEMENTTYPE_VAF_Control_Ref_ID = 181;/** Organization = OO */
         public static String ELEMENTTYPE_Organization = "OO";/** Account = AC */
         public static String ELEMENTTYPE_Account = "AC";/** Product = PR */
         public static String ELEMENTTYPE_Product = "PR";/** BPartner = BP */
@@ -512,9 +512,9 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// VAF_OrgTrx_ID AD_Reference_ID=130 
+        /// VAF_OrgTrx_ID VAF_Control_Ref_ID=130 
         /// </summary>
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /// <summary>
         ///  Set Trx Organization.
         /// </summary>

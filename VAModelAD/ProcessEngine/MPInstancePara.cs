@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Process
  * Purpose        : 
- * Class Used     : X_AD_Process_Access
+ * Class Used     : X_VAF_Job_Rights
  * Chronological Development
  * Jagmohan Bhatt    12-May-2009
  ******************************************************/
@@ -22,7 +22,7 @@ namespace VAdvantage.ProcessEngine
     /// <summary>
     /// Process Instance Parameter Model
     /// </summary>
-    public class MPInstancePara : X_AD_PInstance_Para
+    public class MPInstancePara : X_VAF_JInstance_Para
     {
         /// <summary>
         /// Persistency Constructor
@@ -46,7 +46,7 @@ namespace VAdvantage.ProcessEngine
         public MPInstancePara(Ctx ctx, int AD_PInstace_ID, int SeqNo)
             : base(ctx, 0, null)
         {
-            SetAD_PInstance_ID(AD_PInstace_ID);
+            SetVAF_JInstance_ID(AD_PInstace_ID);
             SetSeqNo(SeqNo);
         }
 
@@ -58,7 +58,7 @@ namespace VAdvantage.ProcessEngine
         public MPInstancePara(MPInstance instance, int SeqNo)
             : base(instance.GetCtx(), 0, instance.Get_Trx())
         {
-            SetAD_PInstance_ID(instance.GetAD_PInstance_ID());
+            SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
             SetSeqNo(SeqNo);
         }
 

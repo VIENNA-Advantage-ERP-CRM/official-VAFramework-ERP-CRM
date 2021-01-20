@@ -225,8 +225,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetLine().ToString());
         }
 
-        /** M_AttributeSetInstanceTo_ID AD_Reference_ID=418 */
-        public static int M_ATTRIBUTESETINSTANCETO_ID_AD_Reference_ID = 418;
+        /** M_AttributeSetInstanceTo_ID VAF_Control_Ref_ID=418 */
+        public static int M_ATTRIBUTESETINSTANCETO_ID_VAF_Control_Ref_ID = 418;
         /** Set Attribute Set Instance To.
         @param M_AttributeSetInstanceTo_ID Target Product Attribute Set Instance */
         public void SetM_AttributeSetInstanceTo_ID(int M_AttributeSetInstanceTo_ID)
@@ -260,8 +260,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_LocatorTo_ID AD_Reference_ID=191 */
-        public static int M_LOCATORTO_ID_AD_Reference_ID = 191;
+        /** M_LocatorTo_ID VAF_Control_Ref_ID=191 */
+        public static int M_LOCATORTO_ID_VAF_Control_Ref_ID = 191;
         /** Set Locator To.
         @param M_LocatorTo_ID Location inventory is moved to */
         public void SetM_LocatorTo_ID(int M_LocatorTo_ID)
@@ -323,8 +323,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_Product_ID AD_Reference_ID=171 */
-        public static int M_PRODUCT_ID_AD_Reference_ID = 171;
+        /** M_Product_ID VAF_Control_Ref_ID=171 */
+        public static int M_PRODUCT_ID_VAF_Control_Ref_ID = 171;
         /** Set Product.
         @param M_Product_ID Product, Service, Item */
         public void SetM_Product_ID(int M_Product_ID)
@@ -510,8 +510,8 @@ namespace VAdvantage.Model
         public int GetM_ProductContainer_ID() { Object ii = Get_Value("M_ProductContainer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
 
-        /** Ref_M_ProductContainerTo_ID AD_Reference_ID=1000205 */
-        public static int REF_M_PRODUCTCONTAINERTO_ID_AD_Reference_ID = 1000205;
+        /** Ref_M_ProductContainerTo_ID VAF_Control_Ref_ID=1000205 */
+        public static int REF_M_PRODUCTCONTAINERTO_ID_VAF_Control_Ref_ID = 1000205;
         /** Set To Container.@param Ref_M_ProductContainerTo_ID To Container */
         public void SetRef_M_ProductContainerTo_ID(int Ref_M_ProductContainerTo_ID)
         {
@@ -537,8 +537,8 @@ namespace VAdvantage.Model
         /** Get Move Full Container.@return Move Full Container */
         public Boolean IsMoveFullContainer() { Object oo = Get_Value("MoveFullContainer"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
-        /** ReversalDoc_ID AD_Reference_ID=1000207 */
-        public static int REVERSALDOC_ID_AD_Reference_ID = 1000207;
+        /** ReversalDoc_ID VAF_Control_Ref_ID=1000207 */
+        public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 1000207;
         /** Set Reversal Document.@param ReversalDoc_ID Reversal Document */
         public void SetReversalDoc_ID(int ReversalDoc_ID)
         {
@@ -559,8 +559,8 @@ namespace VAdvantage.Model
         /** Get Actual Requisition Reserved / Ordered.@return Actual Requisition Reserved / Ordered */
         public Decimal GetActualReqReserved() { Object bd = Get_Value("ActualReqReserved"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
-        /** TargetContainer_ID AD_Reference_ID=1000205 */
-        public static int TARGETCONTAINER_ID_AD_Reference_ID = 1000205;
+        /** TargetContainer_ID VAF_Control_Ref_ID=1000205 */
+        public static int TARGETCONTAINER_ID_VAF_Control_Ref_ID = 1000205;
         /** Set Target Container.@param TargetContainer_ID Is Used to refer the Parent product container to whom user try to move into another product container. */
         public void SetTargetContainer_ID(int TargetContainer_ID)
         {

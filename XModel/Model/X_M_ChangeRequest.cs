@@ -255,8 +255,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_FixChangeNotice_ID AD_Reference_ID=351 */
-public static int M_FIXCHANGENOTICE_ID_AD_Reference_ID=351;
+/** M_FixChangeNotice_ID VAF_Control_Ref_ID=351 */
+public static int M_FIXCHANGENOTICE_ID_VAF_Control_Ref_ID=351;
 /** Set Fixed in.
 @param M_FixChangeNotice_ID Fixed in Change Notice */
 public void SetM_FixChangeNotice_ID (int M_FixChangeNotice_ID)

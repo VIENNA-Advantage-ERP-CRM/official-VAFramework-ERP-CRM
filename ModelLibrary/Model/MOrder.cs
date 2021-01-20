@@ -4147,8 +4147,8 @@ namespace VAdvantage.Model
         public String GetNonSelectedDimension(List<String> selectedDimension)
         {
             String where = "";
-            String sql = @" SELECT AD_Ref_List.Value FROM AD_Reference INNER JOIN AD_Ref_List ON AD_Ref_List.AD_Reference_ID = AD_Reference.AD_Reference_ID 
-                            WHERE  AD_Reference.AD_Reference_ID=181 AND AD_Ref_List.Value NOT IN ('AC' , 'SA')";
+            String sql = @" SELECT VAF_CtrlRef_List.Value FROM VAF_Control_Ref INNER JOIN VAF_CtrlRef_List ON VAF_CtrlRef_List.VAF_Control_Ref_ID = VAF_Control_Ref.VAF_Control_Ref_ID 
+                            WHERE  VAF_Control_Ref.VAF_Control_Ref_ID=181 AND VAF_CtrlRef_List.Value NOT IN ('AC' , 'SA')";
             DataSet dsElementType = DB.ExecuteDataset(sql, null, null);
             if (dsElementType != null && dsElementType.Tables.Count > 0)
             {

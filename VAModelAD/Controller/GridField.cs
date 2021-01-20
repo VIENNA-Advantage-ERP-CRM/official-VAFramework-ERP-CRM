@@ -88,7 +88,7 @@ namespace VAdvantage.Model
                 if (_vo.lookupInfo == null)
                 {
                     _vo.lookupInfo = VLookUpFactory.GetLookUpInfo(ml, _vo.VAF_Column_ID,
-                    Env.GetLanguage(_vo.GetCtx()), _vo.ColumnName, _vo.AD_Reference_Value_ID,
+                    Env.GetLanguage(_vo.GetCtx()), _vo.ColumnName, _vo.VAF_Control_Ref_Value_ID,
                     _vo.IsParent, _vo.ValidationCode);
 
                     //_vo.lookupInfo = VLookUpFactory.GetLookUpInfo(_vo.GetContext(), _vo.GetWindowNum(), _vo.DISPLAYTYPE, _vo.VAF_COLUMN_ID,
@@ -884,12 +884,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get AD_Process_ID
+        /// Get VAF_Job_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Process_ID()
+        public int GetVAF_Job_ID()
         {
-            return _vo.AD_Process_ID;
+            return _vo.VAF_Job_ID;
         }
 
         /// <summary>
@@ -919,9 +919,9 @@ namespace VAdvantage.Model
             return _vo.ValueMax;
         }
 
-        public int GetAD_Reference_Value_ID()
+        public int GetVAF_Control_Ref_Value_ID()
         {
-            return _vo.AD_Reference_Value_ID;
+            return _vo.VAF_Control_Ref_Value_ID;
         }
 
         public void SetDisplayType(int displayType)

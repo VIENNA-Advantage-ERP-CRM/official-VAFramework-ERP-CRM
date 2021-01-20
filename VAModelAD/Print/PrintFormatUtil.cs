@@ -36,7 +36,7 @@ namespace VAdvantage.Print
         public void AddMissingColumns()
         {
             int total = 0;
-            String sql = "SELECT * FROM AD_PrintFormat pf "
+            String sql = "SELECT * FROM VAF_Print_Rpt_Layout pf "
                 + "ORDER BY Name";
             try
             {
@@ -67,11 +67,11 @@ namespace VAdvantage.Print
                 + "FROM VAF_Column c "
                 + "WHERE NOT EXISTS "
                     + "(SELECT * "
-                    + "FROM AD_PrintFormatItem pfi"
-                    + " INNER JOIN AD_PrintFormat pf ON (pfi.AD_PrintFormat_ID=pf.AD_PrintFormat_ID) "
+                    + "FROM VAF_Print_Rpt_LItem pfi"
+                    + " INNER JOIN VAF_Print_Rpt_Layout pf ON (pfi.VAF_Print_Rpt_Layout_ID=pf.VAF_Print_Rpt_Layout_ID) "
                     + "WHERE pf.VAF_TableView_ID=c.VAF_TableView_ID"
                     + " AND pfi.VAF_Column_ID=c.VAF_Column_ID"
-                    + " AND pfi.AD_PrintFormat_ID='" + pf.GetAD_PrintFormat_ID() + "')"	//	1 
+                    + " AND pfi.VAF_Print_Rpt_Layout_ID='" + pf.GetVAF_Print_Rpt_Layout_ID() + "')"	//	1 
                 + " AND c.VAF_TableView_ID='" + pf.GetVAF_TableView_ID() + "' "				//	2
                 + "ORDER BY 1";
             int counter = 0;

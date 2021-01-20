@@ -391,7 +391,7 @@ namespace VIS.Models
                     index = ((DocOptions)po).customizeValidActions(docStatus, processing, orderType, isSOTrx ? "Y" : "N",
                             VAF_TableView_ID, docActionHolder, options, index);
 
-                options = DocumentEngine.checkActionAccess(ctx, ctx.GetVAF_Client_ID(), ctx.GetAD_Role_ID(), C_DocType_ID, options, ref index);
+                options = DocumentEngine.checkActionAccess(ctx, ctx.GetVAF_Client_ID(), ctx.GetVAF_Role_ID(), C_DocType_ID, options, ref index);
             }
 
             for (int i = 0; i < _values.Count() && defaultV.Equals(""); i++)

@@ -118,7 +118,7 @@ namespace VAdvantage.Model
                 "INNER JOIN (SELECT DISTINCT D_CHART_ID FROM D_Series WHERE ISACTIVE ='Y') ds " +
                 "ON DS.D_CHART_ID = DCA.D_CHART_ID " +
                 "WHERE pfi.IsActive='Y' " +
-                "AND DCA.AD_ROLE_ID='" + ctx.GetAD_Role_ID() + "' AND DCA.ISACTIVE='Y' AND DCA.ISREADWRITE = 'Y' ORDER BY SeqNo asc";
+                "AND DCA.VAF_ROLE_ID='" + ctx.GetVAF_Role_ID() + "' AND DCA.ISACTIVE='Y' AND DCA.ISREADWRITE = 'Y' ORDER BY SeqNo asc";
 
             MRole role = MRole.GetDefault(ctx, false);
             if (role.IsTableAccess(Table_ID, false))

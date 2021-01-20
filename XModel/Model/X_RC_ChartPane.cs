@@ -243,8 +243,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Width AD_Reference_ID=1000201 */
-        public static int WIDTH_AD_Reference_ID = 1000201;
+        /** Width VAF_Control_Ref_ID=1000201 */
+        public static int WIDTH_VAF_Control_Ref_ID = 1000201;
         /** 100% = 100 */
         public static String WIDTH_100 = "100";
         /** 25% = 25 */

@@ -43,11 +43,11 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="CM_Container_ID">id</param>
-        /// <param name="AD_Role_ID"> 0 or role check</param>
+        /// <param name="VAF_Role_ID"> 0 or role check</param>
         /// <param name="C_BPGroup_ID"> 0 or bpartner to check</param>
         /// <returns>true if access to container</returns>
         public static bool IsAccessContainer(Ctx ctx, int CM_Container_ID,
-            int AD_Role_ID, int C_BPGroup_ID)
+            int VAF_Role_ID, int C_BPGroup_ID)
         {
             //	NIT
             return true;

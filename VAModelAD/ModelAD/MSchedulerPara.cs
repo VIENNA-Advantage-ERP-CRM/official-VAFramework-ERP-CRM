@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         public String GetColumnName()
         {
             if (m_parameter == null)
-                m_parameter = MProcessPara.Get(GetCtx(), GetAD_Process_Para_ID());
+                m_parameter = MProcessPara.Get(GetCtx(), GetVAF_Job_Para_ID());
             return m_parameter.GetColumnName();
         }	//	getColumnName
 
@@ -71,8 +71,8 @@ namespace VAdvantage.Model
         public int GetDisplayType()
         {
             if (m_parameter == null)
-                m_parameter = MProcessPara.Get(GetCtx(), GetAD_Process_Para_ID());
-            return m_parameter.GetAD_Reference_ID();
+                m_parameter = MProcessPara.Get(GetCtx(), GetVAF_Job_Para_ID());
+            return m_parameter.GetVAF_Control_Ref_ID();
         }	//	getDisplayType
 
         /// <summary>

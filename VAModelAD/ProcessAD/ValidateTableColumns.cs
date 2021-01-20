@@ -78,7 +78,7 @@ namespace VAdvantage.Process
                 return Msg.GetMsg(GetCtx(), "VIS_TableNotSelected");
             }
 
-            DataSet dsDT = DB.ExecuteDataset("SELECT AD_Reference_ID, Name FROM AD_Reference WHERE IsActive = 'Y' AND ValidationType = 'D'");
+            DataSet dsDT = DB.ExecuteDataset("SELECT VAF_Control_Ref_ID, Name FROM VAF_Control_Ref WHERE IsActive = 'Y' AND ValidationType = 'D'");
 
             string[] tableIDs = p_VAF_TableView_ID.Split(',');
 
@@ -150,7 +150,7 @@ namespace VAdvantage.Process
                         if (hasDBCols && dt.Tables[0].Rows.Count > 0)
                             dr = dt.Tables[0].Select("COLUMN_NAME = '" + adColName.ToString() + "'");
 
-                        DataRow[] drRef = dsDT.Tables[0].Select("AD_Reference_ID = " + col.GetAD_Reference_ID());
+                        DataRow[] drRef = dsDT.Tables[0].Select("VAF_Control_Ref_ID = " + col.GetVAF_Control_Ref_ID());
 
                         // if column is virtual, then add style
                         var style = " color: red; font-style: italic;";
@@ -160,7 +160,7 @@ namespace VAdvantage.Process
                         // add different style for key column
                         string keyCol = "";
                         // Condition for Multikey columns and Single key to mark as Primary key columns
-                        if ((hasSingleKey && col.GetAD_Reference_ID() == 13) || (!hasSingleKey && col.IsParent()))
+                        if ((hasSingleKey && col.GetVAF_Control_Ref_ID() == 13) || (!hasSingleKey && col.IsParent()))
                         {
                             keyCol = " * ";
                             style += " font-weight: bold; font-size: initial;";

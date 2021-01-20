@@ -109,8 +109,8 @@ SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false)
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */
         public String GetDescription() { return (String)Get_Value("Description"); }
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;/** <None> = -- */
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;/** <None> = -- */
         public static String DOCACTION_None = "--";/** Approve = AP */
         public static String DOCACTION_Approve = "AP";/** Close = CL */
         public static String DOCACTION_Close = "CL";/** Complete = CO */
@@ -137,8 +137,8 @@ SetDocumentNo (null);SetIsApproved (false);SetIsManual (false);SetPosted (false)
         }/** Get Document Action.
 @return The targeted status of the document */
         public String GetDocAction() { return (String)Get_Value("DocAction"); }
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;/** Unknown = ?? */
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;/** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";/** Approved = AP */
         public static String DOCSTATUS_Approved = "AP";/** Closed = CL */
         public static String DOCSTATUS_Closed = "CL";/** Completed = CO */

@@ -274,8 +274,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Cancel");
         }
 
-        /** CashType AD_Reference_ID=217 */
-        public static int CASHTYPE_AD_Reference_ID = 217;
+        /** CashType VAF_Control_Ref_ID=217 */
+        public static int CASHTYPE_VAF_Control_Ref_ID = 217;
         /** Cash Book Transfer = A */
         public static String CASHTYPE_CashBookTransfer = "A";
         /** Business Partner = B */
@@ -455,8 +455,8 @@ namespace VAdvantage.Model
             return false;
         }
 
-        /** VSS_PAYMENTTYPE AD_Reference_ID=1000108 */
-        public static int VSS_PAYMENTTYPE_AD_Reference_ID = 1000108;
+        /** VSS_PAYMENTTYPE VAF_Control_Ref_ID=1000108 */
+        public static int VSS_PAYMENTTYPE_VAF_Control_Ref_ID = 1000108;
         /** Payment = P */
         public static String VSS_PAYMENTTYPE_Payment = "P";
         /** Receipt = R */
@@ -575,8 +575,8 @@ namespace VAdvantage.Model
 
 
 
-        /** C_CashLine_ID_1 AD_Reference_ID=1000168 */
-        public static int C_CASHLINE_ID_1_AD_Reference_ID = 1000168;
+        /** C_CashLine_ID_1 VAF_Control_Ref_ID=1000168 */
+        public static int C_CASHLINE_ID_1_VAF_Control_Ref_ID = 1000168;
         /** Set Cash Journal Transection.
         @param C_CashLine_ID_1 Cash Journal Transection */
         public void SetC_CashLine_ID_1(int C_CashLine_ID_1)
@@ -680,8 +680,8 @@ namespace VAdvantage.Model
 
 
         //pratap
-        /** TransferType AD_Reference_ID=1000295 */
-        public static int TRANSFERTYPE_AD_Reference_ID = 1000295;
+        /** TransferType VAF_Control_Ref_ID=1000295 */
+        public static int TRANSFERTYPE_VAF_Control_Ref_ID = 1000295;
         /** Cash = CH */
         public static String TRANSFERTYPE_Cash = "CH";
         /** Check = CK */

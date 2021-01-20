@@ -221,8 +221,8 @@ public String GetDataFormat()
 return (String)Get_Value("DataFormat");
 }
 
-/** DataType AD_Reference_ID=210 */
-public static int DATATYPE_AD_Reference_ID=210;
+/** DataType VAF_Control_Ref_ID=210 */
+public static int DATATYPE_VAF_Control_Ref_ID=210;
 /** Constant = C */
 public static String DATATYPE_Constant = "C";
 /** Date = D */

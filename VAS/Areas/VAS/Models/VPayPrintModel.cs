@@ -271,26 +271,26 @@ namespace VIS.Models
             }
 
             int table_ID = 0;
-            int AD_Process_ID = 0;
+            int VAF_Job_ID = 0;
             string sql = "";
             int paymentTable_ID = 0;
-            int paymentAD_Process_ID = 0;
+            int paymentVAF_Job_ID = 0;
             try
             {
 
                 sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelectionCheck'";
                 table_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                //sql = "select ad_process_id from ad_process where value = 'CheckPrint'";
-                sql = "select ad_process_id from ad_process where ad_printformat_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and c_bankaccountdoc.isactive = 'Y' and rownum =1)";
-                AD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                //sql = "select VAF_Job_id from VAF_Job where value = 'CheckPrint'";
+                sql = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from c_bankaccountdoc where c_bankaccount_id = (select c_bankaccount_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and c_bankaccountdoc.isactive = 'Y' and rownum =1)";
+                VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select ad_process_id from ad_process where value = 'PaymentPrintFormat'";
-                paymentAD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                // int paymentAD_Process_ID = 313;
+                sql = "select VAF_Job_id from VAF_Job where value = 'PaymentPrintFormat'";
+                paymentVAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                // int paymentVAF_Job_ID = 313;
             }
             catch
             {
@@ -301,7 +301,7 @@ namespace VIS.Models
             //{
 
             //    int record_ID = Util.GetValueOfInt(checkID);
-            //  VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(null, AD_Process_ID, table_ID, Util.GetValueOfInt(check_ID[j]));
+            //  VAdvantage.ProcessEngine.ProcessInfo pi = new VAdvantage.ProcessEngine.ProcessInfo(null, VAF_Job_ID, table_ID, Util.GetValueOfInt(check_ID[j]));
             //    pi.SetAD_User_ID(ctx.GetAD_User_ID());
             //    pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             //    byte[] reportData = null;
@@ -366,18 +366,18 @@ namespace VIS.Models
         public string VPayPrintRemittance(Ctx ctx, List<int> payment_ID)
         {
             int table_ID = 0;
-            int AD_Process_ID = 0;
+            int VAF_Job_ID = 0;
             string sql = "";
             int paymentTable_ID = 0;
-            int paymentAD_Process_ID = 0;
+            int paymentVAF_Job_ID = 0;
             VAdvantage.ProcessEngine.ProcessCtl pctrl = null;
             try
             {
                 sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select ad_process_id from ad_process where value = 'PaymentPrintFormat'";
-                paymentAD_Process_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                sql = "select VAF_Job_id from VAF_Job where value = 'PaymentPrintFormat'";
+                paymentVAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
             }
             catch
@@ -388,7 +388,7 @@ namespace VIS.Models
             //{
             //    byte[] reportData = null;
             //    string result = "";
-            //    VAdvantage.ProcessEngine.ProcessInfo pin = new VAdvantage.ProcessEngine.ProcessInfo(null, paymentAD_Process_ID, paymentTable_ID, Util.GetValueOfInt(payment_ID[l]));
+            //    VAdvantage.ProcessEngine.ProcessInfo pin = new VAdvantage.ProcessEngine.ProcessInfo(null, paymentVAF_Job_ID, paymentTable_ID, Util.GetValueOfInt(payment_ID[l]));
             //    pin.SetAD_User_ID(ctx.GetAD_User_ID());
             //    pin.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             //    pctrl = new VAdvantage.ProcessEngine.ProcessCtl(ctx,null, pin, null);

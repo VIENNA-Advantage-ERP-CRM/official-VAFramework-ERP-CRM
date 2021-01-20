@@ -372,8 +372,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** MandatoryType AD_Reference_ID=324 */
-        public static int MANDATORYTYPE_AD_Reference_ID = 324;
+        /** MandatoryType VAF_Control_Ref_ID=324 */
+        public static int MANDATORYTYPE_VAF_Control_Ref_ID = 324;
         /** Not Mandatary = N */
         public static String MANDATORYTYPE_NotMandatary = "N";
         /** When Shipping = S */

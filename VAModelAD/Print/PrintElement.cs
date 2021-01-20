@@ -119,8 +119,8 @@ namespace VAdvantage.Print
             p_maxWidth = maxWidth;
             p_FieldAlignmentType = FieldAlignmentType;
 
-            if ((string.IsNullOrEmpty(p_FieldAlignmentType)) || (p_FieldAlignmentType == X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Default))
-                p_FieldAlignmentType = X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft;
+            if ((string.IsNullOrEmpty(p_FieldAlignmentType)) || (p_FieldAlignmentType == X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_Default))
+                p_FieldAlignmentType = X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_LeadingLeft;
 
             p_sizeCalculated = CalculateSize();
         } //Layout

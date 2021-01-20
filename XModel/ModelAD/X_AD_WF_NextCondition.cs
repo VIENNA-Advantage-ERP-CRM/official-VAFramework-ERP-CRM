@@ -170,8 +170,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AndOr AD_Reference_ID=204 */
-public static int ANDOR_AD_Reference_ID=204;
+/** AndOr VAF_Control_Ref_ID=204 */
+public static int ANDOR_VAF_Control_Ref_ID=204;
 /** And = A */
 public static String ANDOR_And = "A";
 /** Or = O */
@@ -204,8 +204,8 @@ public String GetAndOr()
 return (String)Get_Value("AndOr");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -226,8 +226,8 @@ public String GetEntityType()
 return (String)Get_Value("EntityType");
 }
 
-/** Operation AD_Reference_ID=205 */
-public static int OPERATION_AD_Reference_ID=205;
+/** Operation VAF_Control_Ref_ID=205 */
+public static int OPERATION_VAF_Control_Ref_ID=205;
 /** != = != */
 public static String OPERATION_NotEq = "!=";
 /** < = << */

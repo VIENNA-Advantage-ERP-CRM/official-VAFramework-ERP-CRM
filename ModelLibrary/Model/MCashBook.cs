@@ -149,7 +149,7 @@ namespace VAdvantage.Model
             if (count > 0)
             {
                 _sql.Clear();
-                _sql.Append("SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where r.name='FRPT_RelatedTo' and l.name='CashBook'");
+                _sql.Append("SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where r.name='FRPT_RelatedTo' and l.name='CashBook'");
                 var relatedtoCashbook = Convert.ToString(DB.ExecuteScalar(_sql.ToString()));
 
                 PO cshbkact = null;

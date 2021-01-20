@@ -30,8 +30,8 @@ namespace VIS.Helpers
                 #region Request Count
                 //To Get Request count
                 strQuery = " SELECT  count(R_Request.r_request_id) FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-                strQuery += " AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.AD_Role_ID =" + ctx.GetAD_Role_ID() + ")"
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery += " AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
                  + " AND R_Request.Processed ='N'"
                 + " AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N'))";
                 dsData = new DataSet();
@@ -46,8 +46,8 @@ namespace VIS.Helpers
 
                 # region Notice Count
                 //To get Notice Count
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL("SELECT count(AD_Note_ID) FROM AD_Note "
-                    , "AD_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT count(VAF_Notice_ID) FROM VAF_Notice "
+                    , "VAF_Notice", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 strQuery += " AND AD_User_ID IN (" + ctx.GetAD_User_ID() + ")"
                   + " AND Processed='N'";
                 dsData = new DataSet();
@@ -72,7 +72,7 @@ namespace VIS.Helpers
                 //      + " OR EXISTS (SELECT * FROM AD_WF_Responsible r WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID"
                 //      + " AND r.AD_User_ID=" + ctx.GetAD_User_ID() + ")"  // #3
                 //    // Responsible Role
-                //      + " OR EXISTS (SELECT * FROM AD_WF_Responsible r INNER JOIN AD_User_Roles ur ON (r.AD_Role_ID=ur.AD_Role_ID)"
+                //      + " OR EXISTS (SELECT * FROM AD_WF_Responsible r INNER JOIN AD_User_Roles ur ON (r.VAF_Role_ID=ur.VAF_Role_ID)"
                 //      + " WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID AND ur.AD_User_ID=" + ctx.GetAD_User_ID() + " and a.VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " and a.VAF_Org_ID=" + ctx.GetVAF_Org_ID() + ")" // #4
                 //    //
                 //      + ") ORDER BY a.Priority DESC, a.Created";
@@ -125,7 +125,7 @@ namespace VIS.Helpers
                               (SELECT *
                               FROM AD_WF_Responsible r
                               INNER JOIN AD_User_Roles ur
-                              ON (r.AD_Role_ID            =ur.AD_Role_ID)
+                              ON (r.VAF_Role_ID            =ur.VAF_Role_ID)
                               WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
                               AND (ur.AD_User_ID          =" + ctx.GetAD_User_ID() + @"
                               OR a.AD_User_ID            IN
@@ -179,7 +179,7 @@ namespace VIS.Helpers
 
                 #region Notes
                 //To get The Notes count
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL("SELECT COUNT(wsp_note_id) As NCount FROM WSP_Note", "WSP_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO) + " AND AD_USER_ID=" + ctx.GetAD_User_ID() + " Order BY Created DESC";
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT COUNT(wsp_note_id) As NCount FROM WSP_Note", "WSP_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO) + " AND AD_USER_ID=" + ctx.GetAD_User_ID() + " Order BY Created DESC";
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
                 int nNotes = 0;
@@ -206,7 +206,7 @@ namespace VIS.Helpers
                 //DateTime.UtcNow.AddDays(1).ToShortDateString() 
                 strQuery += " 23.59','mm/dd/yy HH24:MI') "
                           + "  OR  to_date('" + DateTime.Now.ToString("M/dd/yy") + "','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetAD_User_ID() + " AND AppointmentsInfo.AD_User_ID  = " + ctx.GetAD_User_ID() + ") AppointmentsInfo";
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
@@ -225,7 +225,7 @@ namespace VIS.Helpers
                 #region Task Assign By me count
 
                 strQuery = " SELECT COUNT(AppointmentsInfo.Appointmentsinfo_id)   FROM AppointmentsInfo ";
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 strQuery += "  AND  AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='Y'  AND AppointmentsInfo.isClosed ='N'  AND  AppointmentsInfo.CreatedBy =" + ctx.GetAD_User_ID() + "  AND  AppointmentsInfo.AD_User_ID !=" + ctx.GetAD_User_ID() + "";
 
                 dsData = new DataSet();
@@ -242,7 +242,7 @@ namespace VIS.Helpers
 
 
                 strQuery = " SELECT COUNT(AppointmentsInfo.Appointmentsinfo_id)   FROM AppointmentsInfo ";
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 strQuery += "  AND   AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='Y' AND AppointmentsInfo.isClosed ='N'  AND AppointmentsInfo.AD_User_ID =" + ctx.GetAD_User_ID() + " ";
 
                 dsData = new DataSet();
@@ -268,7 +268,7 @@ namespace VIS.Helpers
 
                 #region KPI COUNT
                 int userid = ctx.GetAD_User_ID();
-                int roleid = ctx.GetAD_Role_ID();
+                int roleid = ctx.GetVAF_Role_ID();
 
                 string sql = @"SELECT Distinct  kpi.RC_KPI_ID
                                         FROM RC_KPI kpi
@@ -284,7 +284,7 @@ namespace VIS.Helpers
                                             (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='RC_KPI'
                                             )
                                           AND AD_User_ID=" + userid + ") ";
-                //sql += " AND ( (acc.AD_User_ID = " + userid + @")   OR ( acc.AD_Role_ID = " + roleid + @") ) ";
+                //sql += " AND ( (acc.AD_User_ID = " + userid + @")   OR ( acc.VAF_Role_ID = " + roleid + @") ) ";
 
 
 
@@ -844,8 +844,8 @@ namespace VIS.Helpers
             try
             {
                 //To get Notice Count
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL("SELECT count(AD_Note_ID) FROM AD_Note "
-                    , "AD_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT count(VAF_Notice_ID) FROM VAF_Notice "
+                    , "VAF_Notice", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 strQuery += " AND AD_User_ID IN (" + ctx.GetAD_User_ID() + ")"
                   + " AND Processed='N'";
 
@@ -866,41 +866,41 @@ namespace VIS.Helpers
             try
             {
                 //Notice
-                //strQuery = "SELECT  substr(AD_Note.textmsg,0,100) as Title, AD_Note.textmsg as Description , AD_Note.Created  as dbDate,AD_Note.vaf_tableview_id"
-                //+ ",VAF_TableView.tablename,ad_note_id as ID   FROM AD_Note JOIN VAF_TableView on vaf_tableview.vaf_tableview_ID=Ad_Note.vaf_tableview_ID ";
+                //strQuery = "SELECT  substr(VAF_Notice.textmsg,0,100) as Title, VAF_Notice.textmsg as Description , VAF_Notice.Created  as dbDate,VAF_Notice.vaf_tableview_id"
+                //+ ",VAF_TableView.tablename,VAF_Notice_id as ID   FROM VAF_Notice JOIN VAF_TableView on vaf_tableview.vaf_tableview_ID=VAF_Notice.vaf_tableview_ID ";
 
-                //                strQuery = @"SELECT SUBSTR(AD_Note.textmsg,0,100) AS Title,
-                //                            AD_Note.textmsg    AS Description ,
-                //                            AD_Note.Created    AS dbDate,
+                //                strQuery = @"SELECT SUBSTR(VAF_Notice.textmsg,0,100) AS Title,
+                //                            VAF_Notice.textmsg    AS Description ,
+                //                            VAF_Notice.Created    AS dbDate,
                 //                            VAF_Msg_Lable.msgtext as MsgType,
-                //                            AD_Note.VAF_TableView_ID , 
-                //                            AD_Note.Record_ID,
-                //                            (SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='AD_Note') TableName,
-                //                            (SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='AD_Note') AD_Window_ID,
-                //                            AD_Note.AD_Note_ID
-                //                            FROM AD_Note INNER JOIN VAF_Msg_Lable ON VAF_Msg_Lable.VAF_Msg_Lable_ID=AD_Note.VAF_Msg_Lable_ID";
-                strQuery = @"SELECT SUBSTR(AD_Note.textmsg,0,100) AS Title,
-                              AD_Note.textmsg                    AS Description ,
-                              AD_Note.Created                    AS dbDate,
+                //                            VAF_Notice.VAF_TableView_ID , 
+                //                            VAF_Notice.Record_ID,
+                //                            (SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAF_Notice') TableName,
+                //                            (SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAF_Notice') AD_Window_ID,
+                //                            VAF_Notice.VAF_Notice_ID
+                //                            FROM VAF_Notice INNER JOIN VAF_Msg_Lable ON VAF_Msg_Lable.VAF_Msg_Lable_ID=VAF_Notice.VAF_Msg_Lable_ID";
+                strQuery = @"SELECT SUBSTR(VAF_Notice.textmsg,0,100) AS Title,
+                              VAF_Notice.textmsg                    AS Description ,
+                              VAF_Notice.Created                    AS dbDate,
                               VAF_Msg_Lable.msgtext                 AS MsgType,
-                              AD_Note.VAF_TableView_ID ,
-                              AD_Note.Record_ID,
-                              (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='AD_Note'
+                              VAF_Notice.VAF_TableView_ID ,
+                              VAF_Notice.Record_ID,
+                              (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='VAF_Notice'
                               ) TableName,
                               (SELECT VAF_TableView.Ad_Window_ID
                               FROM VAF_TableView
-                              WHERE VAF_TableView.TableName='AD_Note'
+                              WHERE VAF_TableView.TableName='VAF_Notice'
                               ) AD_Window_ID,
-                              AD_Note.AD_Note_ID
-                            FROM AD_Note
+                              VAF_Notice.VAF_Notice_ID
+                            FROM VAF_Notice
                             INNER JOIN VAF_Msg_Lable
-                            ON VAF_Msg_Lable.VAF_Msg_Lable_ID         =AD_Note.VAF_Msg_Lable_ID";
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "AD_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                            ON VAF_Msg_Lable.VAF_Msg_Lable_ID         =VAF_Notice.VAF_Msg_Lable_ID";
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAF_Notice", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
-                strQuery += "  AND AD_Note.AD_User_ID IN (0," + ctx.GetAD_User_ID() + ")"
-                + " AND AD_Note.Processed='N' ORDER BY AD_Note.Created DESC";
+                strQuery += "  AND VAF_Notice.AD_User_ID IN (0," + ctx.GetAD_User_ID() + ")"
+                + " AND VAF_Notice.Processed='N' ORDER BY VAF_Notice.Created DESC";
 
-                int PResultTableID = MTable.Get_Table_ID("AD_PInstance_Result");
+                int PResultTableID = MTable.Get_Table_ID("VAF_JInstance_Result");
 
                 dsData = VIS.DBase.DB.ExecuteDatasetPaging(strQuery, page, PageSize);
                 dsData = VAdvantage.DataBase.DB.SetUtcDateTime(dsData);
@@ -912,7 +912,7 @@ namespace VIS.Helpers
                     for (int i = 0; i < dsData.Tables[0].Rows.Count; i++)
                     {
                         var Alrt = new HomeNotice();
-                        Alrt.AD_Note_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["AD_Note_ID"].ToString());
+                        Alrt.VAF_Notice_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_Notice_ID"].ToString());
                         Alrt.VAF_TableView_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_TableView_ID"].ToString());
                         Alrt.AD_Window_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["AD_Window_ID"].ToString());
                         Alrt.Record_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["Record_ID"].ToString());
@@ -922,7 +922,7 @@ namespace VIS.Helpers
                         if (PResultTableID == Alrt.VAF_TableView_ID)
                         {
                             Alrt.ProcessWindowID = Util.GetValueOfInt(windowID);
-                            Alrt.ProcessTableName = "AD_PInstance_Result";
+                            Alrt.ProcessTableName = "VAF_JInstance_Result";
                             Alrt.SpecialTable = true;
                         }
                         else
@@ -948,9 +948,9 @@ namespace VIS.Helpers
             return lstNts;
         }
         //Approve Notice
-        public bool ApproveNotice(Ctx ctx, int Ad_Note_ID, bool isAcknowldge)
+        public bool ApproveNotice(Ctx ctx, int VAF_Notice_ID, bool isAcknowldge)
         {
-            MNote objNote = new MNote(ctx, Ad_Note_ID, null);
+            MNote objNote = new MNote(ctx, VAF_Notice_ID, null);
             objNote.SetProcessed(isAcknowldge);
             if (objNote.Save())
             {
@@ -981,13 +981,13 @@ namespace VIS.Helpers
                         ON R_Request.r_requesttype_id = rt.r_requesttype_ID
                         LEFT OUTER JOIN R_Status rs
                         ON rs.R_Status_ID=R_request.R_Status_ID
-                        LEFT OUTER JOIN ad_ref_list adl
+                        LEFT OUTER JOIN VAF_CtrlRef_List adl
                         ON adl.Value=R_Request.Priority
-                        JOIN AD_reference adr
-                        ON adr.AD_Reference_ID=adl.AD_Reference_ID ";
+                        JOIN VAF_Control_Ref adr
+                        ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
-                strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-                strQuery += "  AND adr.Name='_PriorityRule'  AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.AD_Role_ID =" + ctx.GetAD_Role_ID() + ")"
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery += "  AND adr.Name='_PriorityRule'  AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
                  + " AND R_Request.Processed ='N'"
                 + " AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N'))";
 
@@ -1015,8 +1015,8 @@ namespace VIS.Helpers
             //+ " INNER JOIN C_BPartner on R_Request.C_BPartner_ID=C_BPartner.C_BPartner_ID"
             //+ " INNER JOIN r_requesttype rt ON R_Request.r_requesttype_id = rt.r_requesttype_ID"
             //+ " Left outer JOIN  R_Status rs on rs.R_Status_ID=R_request.R_Status_ID"
-            //+ " Left Outer JOIN  ad_ref_list adl on adl.Value=R_Request.Priority"
-            //+ " JOIN  AD_reference adr on adr.AD_Reference_ID=adl.AD_Reference_ID";
+            //+ " Left Outer JOIN  VAF_CtrlRef_List adl on adl.Value=R_Request.Priority"
+            //+ " JOIN  VAF_Control_Ref adr on adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID";
 
             //            strQuery = @" SELECT C_BPartner.Name ,
             //                          rt.Name AS CaseType,
@@ -1042,10 +1042,10 @@ namespace VIS.Helpers
             //                        ON R_Request.r_requesttype_id = rt.r_requesttype_ID
             //                        LEFT OUTER JOIN R_Status rs
             //                        ON rs.R_Status_ID=R_request.R_Status_ID
-            //                        LEFT OUTER JOIN ad_ref_list adl
+            //                        LEFT OUTER JOIN VAF_CtrlRef_List adl
             //                        ON adl.Value=R_Request.Priority
-            //                        JOIN AD_reference adr
-            //                        ON adr.AD_Reference_ID=adl.AD_Reference_ID ";
+            //                        JOIN VAF_Control_Ref adr
+            //                        ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
 
             strQuery = @" SELECT C_BPartner.Name ,
@@ -1072,15 +1072,15 @@ namespace VIS.Helpers
                         ON R_Request.r_requesttype_id = rt.r_requesttype_ID
                         LEFT OUTER JOIN R_Status rs
                         ON rs.R_Status_ID=R_request.R_Status_ID
-                        LEFT OUTER JOIN ad_ref_list adl
+                        LEFT OUTER JOIN VAF_CtrlRef_List adl
                         ON adl.Value=R_Request.Priority
-                        JOIN AD_reference adr
-                        ON adr.AD_Reference_ID=adl.AD_Reference_ID ";
+                        JOIN VAF_Control_Ref adr
+                        ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
 
 
-            strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-            strQuery += "  AND adr.Name='_PriorityRule' AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.AD_Role_ID =" + ctx.GetAD_Role_ID() + ")"
+            strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            strQuery += "  AND adr.Name='_PriorityRule' AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
             + " AND R_Request.Processed ='N'  AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N')) ORDER By R_Request.Updated, R_Request.Priority ";
             // change to sort Requests based on updated date and time
 
@@ -1088,8 +1088,8 @@ namespace VIS.Helpers
             //Request
             //strQuery = " SELECT rt.Name ,R_Request.Summary , R_Request.StartDate ,R_Request.DateNextAction,DateLastAction.Created"
             // + " R_Request.R_Request_ID  FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
-            //strQuery = MRole.Get(ctx, ctx.GetAD_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-            //strQuery += " AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.AD_Role_ID =" + ctx.GetAD_Role_ID() + ")"
+            //strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            //strQuery += " AND ( R_Request.SalesRep_ID =" + ctx.GetAD_User_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
             //+ " AND R_Request.Processed ='N' AND (R_Request.DateNextAction IS NULL OR TRUNC(R_Request.DateNextAction, 'DD') <= TRUNC(SysDate, 'DD'))"
             //+ " AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N'))";
 
@@ -1164,7 +1164,7 @@ namespace VIS.Helpers
                 itm.Action = nodes[i].GetAction();
                 itm.WindowID = nodes[i].AD_Window_ID;
                 itm.FormID = nodes[i].VAF_Page_ID;
-                itm.ProcessID = nodes[i].AD_Process_ID;
+                itm.ProcessID = nodes[i].VAF_Job_ID;
                 itm.NodeID = nodes[i].GetNode_ID();
                 items.Add(itm);
             }
@@ -1179,8 +1179,8 @@ namespace VIS.Helpers
             int AD_Tree_ID = DB.GetSQLValue(null,
                         "SELECT COALESCE(r.AD_Tree_Menu_ID, ci.AD_Tree_Menu_ID)"
                        + "FROM VAF_ClientDetail ci"
-                       + " INNER JOIN AD_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
-                       + "WHERE AD_Role_ID=" + ctx.GetAD_Role_ID());
+                       + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
+                       + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID());
             string sql = "INSERT INTO AD_TreeBar "
                                  + "(AD_Tree_ID,AD_User_ID,Node_ID, "
                                  + "VAF_Client_ID,VAF_Org_ID, "
@@ -1197,8 +1197,8 @@ namespace VIS.Helpers
             int AD_Tree_ID = DB.GetSQLValue(null,
                         "SELECT COALESCE(r.AD_Tree_Menu_ID, ci.AD_Tree_Menu_ID)"
                        + "FROM VAF_ClientDetail ci"
-                       + " INNER JOIN AD_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
-                       + "WHERE AD_Role_ID=" + ctx.GetAD_Role_ID());
+                       + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
+                       + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID());
             string sql = sql = "DELETE FROM AD_TreeBar WHERE AD_Tree_ID=" + AD_Tree_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID()
                        + " AND Node_ID=" + nodeID;
             return DB.ExecuteQuery(sql, null).ToString();

@@ -291,8 +291,8 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
 
-        /** SupportLevel AD_Reference_ID=412 */
-        public static int SUPPORTLEVEL_AD_Reference_ID = 412;
+        /** SupportLevel VAF_Control_Ref_ID=412 */
+        public static int SUPPORTLEVEL_VAF_Control_Ref_ID = 412;
         /** Enterprise = E */
         public static String SUPPORTLEVEL_Enterprise = "E";
         /** Standard = S */

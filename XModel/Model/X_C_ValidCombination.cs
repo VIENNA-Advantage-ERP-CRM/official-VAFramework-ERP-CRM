@@ -117,8 +117,8 @@ StringBuilder sb = new StringBuilder ("X_C_ValidCombination[").Append(Get_ID()).
 return sb.ToString();
 }
 
-/** VAF_OrgTrx_ID AD_Reference_ID=130 */
-public static int VAF_ORGTRX_ID_AD_Reference_ID=130;
+/** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID=130;
 /** Set Trx Organization.
 @param VAF_OrgTrx_ID Performing or initiating organization */
 public void SetVAF_OrgTrx_ID (int VAF_OrgTrx_ID)
@@ -136,8 +136,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** Account_ID AD_Reference_ID=362 */
-public static int ACCOUNT_ID_AD_Reference_ID=362;
+/** Account_ID VAF_Control_Ref_ID=362 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=362;
 /** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID)
@@ -186,8 +186,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Activity_ID AD_Reference_ID=142 */
-public static int C_ACTIVITY_ID_AD_Reference_ID=142;
+/** C_Activity_ID VAF_Control_Ref_ID=142 */
+public static int C_ACTIVITY_ID_VAF_Control_Ref_ID=142;
 /** Set Activity.
 @param C_Activity_ID Business Activity */
 public void SetC_Activity_ID (int C_Activity_ID)
@@ -205,8 +205,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_BPartner_ID AD_Reference_ID=138 */
-public static int C_BPARTNER_ID_AD_Reference_ID=138;
+/** C_BPartner_ID VAF_Control_Ref_ID=138 */
+public static int C_BPARTNER_ID_VAF_Control_Ref_ID=138;
 /** Set Business Partner.
 @param C_BPartner_ID Identifies a Business Partner */
 public void SetC_BPartner_ID (int C_BPartner_ID)
@@ -224,8 +224,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Campaign_ID AD_Reference_ID=143 */
-public static int C_CAMPAIGN_ID_AD_Reference_ID=143;
+/** C_Campaign_ID VAF_Control_Ref_ID=143 */
+public static int C_CAMPAIGN_ID_VAF_Control_Ref_ID=143;
 /** Set Campaign.
 @param C_Campaign_ID Marketing Campaign */
 public void SetC_Campaign_ID (int C_Campaign_ID)
@@ -243,8 +243,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocFrom_ID AD_Reference_ID=133 */
-public static int C_LOCFROM_ID_AD_Reference_ID=133;
+/** C_LocFrom_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCFROM_ID_VAF_Control_Ref_ID=133;
 /** Set Location From.
 @param C_LocFrom_ID Location that inventory was moved from */
 public void SetC_LocFrom_ID (int C_LocFrom_ID)
@@ -262,8 +262,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_LocTo_ID AD_Reference_ID=133 */
-public static int C_LOCTO_ID_AD_Reference_ID=133;
+/** C_LocTo_ID VAF_Control_Ref_ID=133 */
+public static int C_LOCTO_ID_VAF_Control_Ref_ID=133;
 /** Set Location To.
 @param C_LocTo_ID Location that inventory was moved to */
 public void SetC_LocTo_ID (int C_LocTo_ID)
@@ -281,8 +281,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Project_ID AD_Reference_ID=141 */
-public static int C_PROJECT_ID_AD_Reference_ID=141;
+/** C_Project_ID VAF_Control_Ref_ID=141 */
+public static int C_PROJECT_ID_VAF_Control_Ref_ID=141;
 /** Set Project.
 @param C_Project_ID Financial Project */
 public void SetC_Project_ID (int C_Project_ID)
@@ -300,8 +300,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_SalesRegion_ID AD_Reference_ID=144 */
-public static int C_SALESREGION_ID_AD_Reference_ID=144;
+/** C_SalesRegion_ID VAF_Control_Ref_ID=144 */
+public static int C_SALESREGION_ID_VAF_Control_Ref_ID=144;
 /** Set Sales Region.
 @param C_SalesRegion_ID Sales coverage region */
 public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
@@ -408,8 +408,8 @@ if (oo != null)
 return false;
 }
 
-/** M_Product_ID AD_Reference_ID=162 */
-public static int M_PRODUCT_ID_AD_Reference_ID=162;
+/** M_Product_ID VAF_Control_Ref_ID=162 */
+public static int M_PRODUCT_ID_VAF_Control_Ref_ID=162;
 /** Set Product.
 @param M_Product_ID Product, Service, Item */
 public void SetM_Product_ID (int M_Product_ID)
@@ -427,8 +427,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** User1_ID AD_Reference_ID=134 */
-public static int USER1_ID_AD_Reference_ID=134;
+/** User1_ID VAF_Control_Ref_ID=134 */
+public static int USER1_ID_VAF_Control_Ref_ID=134;
 /** Set User List 1.
 @param User1_ID User defined list element #1 */
 public void SetUser1_ID (int User1_ID)
@@ -446,8 +446,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** User2_ID AD_Reference_ID=137 */
-public static int USER2_ID_AD_Reference_ID=137;
+/** User2_ID VAF_Control_Ref_ID=137 */
+public static int USER2_ID_VAF_Control_Ref_ID=137;
 /** Set User List 2.
 @param User2_ID User defined list element #2 */
 public void SetUser2_ID (int User2_ID)

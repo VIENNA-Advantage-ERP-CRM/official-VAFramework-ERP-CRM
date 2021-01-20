@@ -607,7 +607,7 @@ VIS.MRole.getRecordWhere = function (VAF_TableView_ID, keyColumnName, rw) {
     if (!this.vo.IsPersonalAccess) {
 
         if (!this.vo.tableData[VAF_TableView_ID].IsView && this.vo.tableData[VAF_TableView_ID].HasKey) {
-            var lockedIDs = " NOT IN ( SELECT Record_ID FROM AD_Private_Access WHERE VAF_TableView_ID = "
+            var lockedIDs = " NOT IN ( SELECT Record_ID FROM VAF_Private_Rights WHERE VAF_TableView_ID = "
                     + VAF_TableView_ID + " AND AD_User_ID <> " + this.vo.AD_User_ID + " AND IsActive = 'Y' )";
             //if (lockedIDs.length > 0) {
             if (sb.length() > 0)
@@ -937,8 +937,8 @@ VIS.MRole.getFormAccess = function (VAF_Page_ID) {
     else return false;
 }; //get form access
 
-VIS.MRole.getProcessAccess = function (AD_Process_ID) {
-    if (this.vo.processAccess[AD_Process_ID])
+VIS.MRole.getProcessAccess = function (VAF_Job_ID) {
+    if (this.vo.processAccess[VAF_Job_ID])
         return true;
     else return false;
 }; //get process access
@@ -1014,7 +1014,7 @@ VIS.MRole.getHomePage = function () {
 
 VIS.MRole.toStringX = function (ctx) {
     var sb = new StringBuilder();
-    sb.append(VIS.Msg.translate(ctx, "AD_Role_ID")).append("=").append(
+    sb.append(VIS.Msg.translate(ctx, "VAF_Role_ID")).append("=").append(
             this.getName()).append(" - ").append(
                     VIS.Msg.translate(ctx, "IsCanExport")).append("=").append(
                             this.getIsCanExport()).append(" - ").append(

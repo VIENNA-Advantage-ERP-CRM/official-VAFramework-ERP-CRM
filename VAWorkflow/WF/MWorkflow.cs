@@ -645,8 +645,8 @@ namespace VAdvantage.WF
 
             if (newRecord)
             {
-                int AD_Role_ID = GetCtx().GetAD_Role_ID();
-                MWorkflowAccess wa = new MWorkflowAccess(this, AD_Role_ID);
+                int VAF_Role_ID = GetCtx().GetVAF_Role_ID();
+                MWorkflowAccess wa = new MWorkflowAccess(this, VAF_Role_ID);
                 wa.Save();
             }
             //	Menu/Workflow

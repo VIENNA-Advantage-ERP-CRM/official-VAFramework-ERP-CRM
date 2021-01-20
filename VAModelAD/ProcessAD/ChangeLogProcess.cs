@@ -206,9 +206,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		{
 			String tableName = _table.GetTableName();
 			_keyColumn = _table.GetTableName() + "_ID";
-            if (tableName.Equals("AD_Ref_Table"))
+            if (tableName.Equals("VAF_CtrlRef_Table"))
             {
-                _keyColumn = "AD_Reference_ID";
+                _keyColumn = "VAF_Control_Ref_ID";
             }
 			//
 			_sqlUpdate = new StringBuilder ("UPDATE ")
@@ -308,17 +308,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			return "NULL";
 		
 		//	Data Types
-		if (DisplayType.IsNumeric (_column.GetAD_Reference_ID())
-			|| DisplayType.IsID (_column.GetAD_Reference_ID()) )
+		if (DisplayType.IsNumeric (_column.GetVAF_Control_Ref_ID())
+			|| DisplayType.IsID (_column.GetVAF_Control_Ref_ID()) )
 			return value;
-		if (DisplayType.YesNo == _column.GetAD_Reference_ID()) 
+		if (DisplayType.YesNo == _column.GetVAF_Control_Ref_ID()) 
 		{
 			if (value.Equals("true"))
 				return "'Y'";
 			else
 				return "'N'";
 		}
-		if (DisplayType.IsDate(_column.GetAD_Reference_ID()) )
+		if (DisplayType.IsDate(_column.GetVAF_Control_Ref_ID()) )
 			return DataBase.DB.TO_DATE (Convert.ToDateTime(value));
 
 		//	String, etc.
@@ -420,8 +420,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				
 				String tableName = table.GetTableName();
 				String columnName = tableName + "_ID";
-				if (tableName.Equals("AD_Ref_Table"))
-					columnName = "AD_Reference_ID";
+				if (tableName.Equals("VAF_CtrlRef_Table"))
+					columnName = "VAF_Control_Ref_ID";
 				update = new StringBuilder ("UPDATE VAF_AlterLog SET IsCustomization='Y' "
 					+ "WHERE VAF_TableView_ID=").Append(table.GetVAF_TableView_ID());
 				update.Append (" AND Record_ID IN (SELECT ")

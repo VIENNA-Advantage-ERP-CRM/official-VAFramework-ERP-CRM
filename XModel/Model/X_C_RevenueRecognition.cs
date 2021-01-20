@@ -84,8 +84,8 @@ namespace VAdvantage.Model
         public void SetNoMonths(int NoMonths) { Set_Value("NoMonths", NoMonths); }/** Get Number of Months.
 @return Number of Months */
         public int GetNoMonths() { Object ii = Get_Value("NoMonths"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** RecognitionFrequency AD_Reference_ID=196 */
-        public static int RECOGNITIONFREQUENCY_AD_Reference_ID = 196;/** Day = D */
+        /** RecognitionFrequency VAF_Control_Ref_ID=196 */
+        public static int RECOGNITIONFREQUENCY_VAF_Control_Ref_ID = 196;/** Day = D */
         public static String RECOGNITIONFREQUENCY_Day = "D";/** Month = M */
         public static String RECOGNITIONFREQUENCY_Month = "M";/** Quarter = Q */
         public static String RECOGNITIONFREQUENCY_Quarter = "Q";/** Year = Y */
@@ -102,8 +102,8 @@ namespace VAdvantage.Model
         }/** Get Recognition frequency.
 @return   */
         public String GetRecognitionFrequency() { return (String)Get_Value("RecognitionFrequency"); }
-        /** RecognitionType AD_Reference_ID=1000235 */
-        public static int RECOGNITIONTYPE_AD_Reference_ID = 1000235;/** Expense = E */
+        /** RecognitionType VAF_Control_Ref_ID=1000235 */
+        public static int RECOGNITIONTYPE_VAF_Control_Ref_ID = 1000235;/** Expense = E */
         public static String RECOGNITIONTYPE_Expense = "E";/** Revenue = R */
         public static String RECOGNITIONTYPE_Revenue = "R";/** Is test a valid value.
 @param test testvalue

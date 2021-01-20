@@ -263,8 +263,8 @@ public Decimal GetVA025_DiscountAmount() {Object bd =Get_Value("VA025_DiscountAm
 public void SetVA025_DiscountPAmt (String VA025_DiscountPAmt){if (VA025_DiscountPAmt != null && VA025_DiscountPAmt.Length > 50){log.Warning("Length > 50 - truncated");VA025_DiscountPAmt = VA025_DiscountPAmt.Substring(0,50);}Set_Value ("VA025_DiscountPAmt", VA025_DiscountPAmt);}/** Get Discount Percentage(Amt).
 @return Discount Percentage(Amt) */
 public String GetVA025_DiscountPAmt() {return (String)Get_Value("VA025_DiscountPAmt");}
-/** VA025_DiscountType AD_Reference_ID=1000485 */
-public static int VA025_DISCOUNTTYPE_AD_Reference_ID=1000485;/** Amount = A */
+/** VA025_DiscountType VAF_Control_Ref_ID=1000485 */
+public static int VA025_DISCOUNTTYPE_VAF_Control_Ref_ID=1000485;/** Amount = A */
 public static String VA025_DISCOUNTTYPE_Amount = "A";/** Qty And Amount = B */
 public static String VA025_DISCOUNTTYPE_QtyAndAmount = "B";/** Quantity = Q */
 public static String VA025_DISCOUNTTYPE_Quantity = "Q";/** Is test a valid value.

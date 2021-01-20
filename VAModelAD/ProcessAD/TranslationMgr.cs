@@ -508,7 +508,7 @@ namespace VAdvantage.Process
                     }
                     foreach (String element in trlColumns)
                     {
-                        if (!baseTableName.Equals("AD_PrintFormatItem"))
+                        if (!baseTableName.Equals("VAF_Print_Rpt_LItem"))
                         {
                             if (translationLevel.Equals(TranslationImportExport.TranslationLevel_LabelOnly)
                                 && element.IndexOf("Name") == -1)
@@ -665,7 +665,7 @@ namespace VAdvantage.Process
                     }
                     foreach (String element in trlColumns)
                     {
-                        if (!baseTableName.Equals("AD_PrintFormatItem"))
+                        if (!baseTableName.Equals("VAF_Print_Rpt_LItem"))
                         {
                             if (translationLevel.Equals(TranslationImportExport.TranslationLevel_LabelOnly)
                                 && element.IndexOf("Name") == -1)
@@ -750,7 +750,7 @@ namespace VAdvantage.Process
                 + "FROM VAF_Column c"
                 + " INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
                 + "WHERE t.TableName=@param"
-                + " AND c.AD_Reference_ID IN (10,14) "
+                + " AND c.VAF_Control_Ref_ID IN (10,14) "
                   + " AND c.ColumnName <> 'Export_ID' "
                 + "ORDER BY IsMandatory DESC, ColumnName";
             List<String> list = new List<String>();
@@ -817,10 +817,10 @@ namespace VAdvantage.Process
                 return "o.VAF_ColumnDic_ID IN (SELECT VAF_ColumnDic_ID FROM VAF_Column c"
                     + " INNER JOIN VAF_TableView tt ON (c.VAF_TableView_ID=tt.VAF_TableView_ID) "
                     + "WHERE tt.AccessLevel <> '4')";
-            if (baseTableName.Equals("AD_Process"))
+            if (baseTableName.Equals("VAF_Job"))
                 return "o.AccessLevel <> '4'";
-            if (baseTableName.Equals("AD_Process_Para"))
-                return "o.AD_Process_ID IN (SELECT AD_Process_ID FROM AD_Process WHERE AccessLevel<>'4')";
+            if (baseTableName.Equals("VAF_Job_Para"))
+                return "o.VAF_Job_ID IN (SELECT VAF_Job_ID FROM VAF_Job WHERE AccessLevel<>'4')";
 
             return null;
         }	//	getScopeSQL

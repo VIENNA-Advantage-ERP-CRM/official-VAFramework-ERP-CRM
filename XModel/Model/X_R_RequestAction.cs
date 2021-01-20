@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_R_RequestAction[").Append(Get_ID()).App
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_ValueNoCheck ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_ValueNoCheck ("VAF_Role_ID", null);
 else
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -257,8 +257,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ConfidentialType AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPE_AD_Reference_ID=340;
+/** ConfidentialType VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPE_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPE_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -342,8 +342,8 @@ public DateTime? GetEndDate()
 return (DateTime?)Get_Value("EndDate");
 }
 
-/** IsEscalated AD_Reference_ID=319 */
-public static int ISESCALATED_AD_Reference_ID=319;
+/** IsEscalated VAF_Control_Ref_ID=319 */
+public static int ISESCALATED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISESCALATED_No = "N";
 /** Yes = Y */
@@ -375,8 +375,8 @@ public String GetIsEscalated()
 return (String)Get_Value("IsEscalated");
 }
 
-/** IsInvoiced AD_Reference_ID=319 */
-public static int ISINVOICED_AD_Reference_ID=319;
+/** IsInvoiced VAF_Control_Ref_ID=319 */
+public static int ISINVOICED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISINVOICED_No = "N";
 /** Yes = Y */
@@ -408,8 +408,8 @@ public String GetIsInvoiced()
 return (String)Get_Value("IsInvoiced");
 }
 
-/** IsSelfService AD_Reference_ID=319 */
-public static int ISSELFSERVICE_AD_Reference_ID=319;
+/** IsSelfService VAF_Control_Ref_ID=319 */
+public static int ISSELFSERVICE_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSELFSERVICE_No = "N";
 /** Yes = Y */
@@ -457,8 +457,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_ProductSpent_ID AD_Reference_ID=162 */
-public static int M_PRODUCTSPENT_ID_AD_Reference_ID=162;
+/** M_ProductSpent_ID VAF_Control_Ref_ID=162 */
+public static int M_PRODUCTSPENT_ID_VAF_Control_Ref_ID=162;
 /** Set Product Used.
 @param M_ProductSpent_ID Product/Resource/Service used in Request */
 public void SetM_ProductSpent_ID (int M_ProductSpent_ID)
@@ -509,8 +509,8 @@ public String GetNullColumns()
 return (String)Get_Value("NullColumns");
 }
 
-/** Priority AD_Reference_ID=154 */
-public static int PRIORITY_AD_Reference_ID=154;
+/** Priority VAF_Control_Ref_ID=154 */
+public static int PRIORITY_VAF_Control_Ref_ID=154;
 /** Urgent = 1 */
 public static String PRIORITY_Urgent = "1";
 /** High = 3 */
@@ -548,8 +548,8 @@ public String GetPriority()
 return (String)Get_Value("Priority");
 }
 
-/** PriorityUser AD_Reference_ID=154 */
-public static int PRIORITYUSER_AD_Reference_ID=154;
+/** PriorityUser VAF_Control_Ref_ID=154 */
+public static int PRIORITYUSER_VAF_Control_Ref_ID=154;
 /** Urgent = 1 */
 public static String PRIORITYUSER_Urgent = "1";
 /** High = 3 */
@@ -739,8 +739,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** SalesRep_ID AD_Reference_ID=110 */
-public static int SALESREP_ID_AD_Reference_ID=110;
+/** SalesRep_ID VAF_Control_Ref_ID=110 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=110;
 /** Set Representative.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)
@@ -787,8 +787,8 @@ public String GetSummary()
 return (String)Get_Value("Summary");
 }
 
-/** TaskStatus AD_Reference_ID=366 */
-public static int TASKSTATUS_AD_Reference_ID=366;
+/** TaskStatus VAF_Control_Ref_ID=366 */
+public static int TASKSTATUS_VAF_Control_Ref_ID=366;
 /** 0% Not Started = 0 */
 public static String TASKSTATUS_0NotStarted = "0";
 /** 20% Started = 2 */

@@ -52,8 +52,8 @@ public int GetVAF_ModuleInfo_ID() {Object ii = Get_Value("VAF_ModuleInfo_ID");if
 public void SetVAF_Module_DBScript_ID (int VAF_Module_DBScript_ID){if (VAF_Module_DBScript_ID < 1) throw new ArgumentException ("VAF_Module_DBScript_ID is mandatory.");Set_ValueNoCheck ("VAF_Module_DBScript_ID", VAF_Module_DBScript_ID);}/** Get Module DBScript.
 @return Module DBScript */
 public int GetVAF_Module_DBScript_ID() {Object ii = Get_Value("VAF_Module_DBScript_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** DBType AD_Reference_ID=1000008 */
-public static int DBTYPE_AD_Reference_ID=1000008;/** Oracle = 1 */
+/** DBType VAF_Control_Ref_ID=1000008 */
+public static int DBTYPE_VAF_Control_Ref_ID=1000008;/** Oracle = 1 */
 public static String DBTYPE_Oracle = "1";/** Postgre SQL = 2 */
 public static String DBTYPE_PostgreSQL = "2";/** Is test a valid value.
 @param test testvalue

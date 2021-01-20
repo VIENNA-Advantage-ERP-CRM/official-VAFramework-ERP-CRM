@@ -254,8 +254,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** TaskType AD_Reference_ID=408 */
-public static int TASKTYPE_AD_Reference_ID=408;
+/** TaskType VAF_Control_Ref_ID=408 */
+public static int TASKTYPE_VAF_Control_Ref_ID=408;
 /** Personal Activity = A */
 public static String TASKTYPE_PersonalActivity = "A";
 /** Delegation = D */

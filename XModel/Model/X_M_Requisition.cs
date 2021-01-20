@@ -212,8 +212,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** DocAction AD_Reference_ID=135 */
-public static int DOCACTION_AD_Reference_ID=135;
+/** DocAction VAF_Control_Ref_ID=135 */
+public static int DOCACTION_VAF_Control_Ref_ID=135;
 /** <None> = -- */
 public static String DOCACTION_None = "--";
 /** Approve = AP */
@@ -270,8 +270,8 @@ public String GetDocAction()
 return (String)Get_Value("DocAction");
 }
 
-/** DocStatus AD_Reference_ID=131 */
-public static int DOCSTATUS_AD_Reference_ID=131;
+/** DocStatus VAF_Control_Ref_ID=131 */
+public static int DOCSTATUS_VAF_Control_Ref_ID=131;
 /** Unknown = ?? */
 public static String DOCSTATUS_Unknown = "??";
 /** Approved = AP */
@@ -446,8 +446,8 @@ if (oo != null)
 return false;
 }
 
-/** PriorityRule AD_Reference_ID=154 */
-public static int PRIORITYRULE_AD_Reference_ID=154;
+/** PriorityRule VAF_Control_Ref_ID=154 */
+public static int PRIORITYRULE_VAF_Control_Ref_ID=154;
 /** Urgent = 1 */
 public static String PRIORITYRULE_Urgent = "1";
 /** High = 3 */
@@ -536,8 +536,8 @@ Object bd =Get_Value("TotalLines");
 if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
-/** DTD001_MWarehouseSource_ID AD_Reference_ID=1000313 */
-public static int DTD001_MWAREHOUSESOURCE_ID_AD_Reference_ID = 1000313;
+/** DTD001_MWarehouseSource_ID VAF_Control_Ref_ID=1000313 */
+public static int DTD001_MWAREHOUSESOURCE_ID_VAF_Control_Ref_ID = 1000313;
 /** Set Source Warehouse.
 @param DTD001_MWarehouseSource_ID Source Warehouse */
 public void SetDTD001_MWarehouseSource_ID(int DTD001_MWarehouseSource_ID)

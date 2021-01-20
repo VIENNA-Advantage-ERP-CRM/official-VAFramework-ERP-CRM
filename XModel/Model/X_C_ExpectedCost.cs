@@ -80,8 +80,8 @@ SetM_CostElement_ID (0);} */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }
-        /** LandedCostDistribution AD_Reference_ID=339 */
-        public static int LANDEDCOSTDISTRIBUTION_AD_Reference_ID = 339;/** Costs = C */
+        /** LandedCostDistribution VAF_Control_Ref_ID=339 */
+        public static int LANDEDCOSTDISTRIBUTION_VAF_Control_Ref_ID = 339;/** Costs = C */
         public static String LANDEDCOSTDISTRIBUTION_Costs = "C";/** Invoice Value = I */
         public static String LANDEDCOSTDISTRIBUTION_InvoiceValue = "I";/** Line = L */
         public static String LANDEDCOSTDISTRIBUTION_Line = "L";/** Quantity = Q */

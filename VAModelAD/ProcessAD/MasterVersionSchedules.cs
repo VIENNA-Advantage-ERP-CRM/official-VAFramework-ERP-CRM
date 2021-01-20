@@ -105,7 +105,7 @@ namespace VAdvantage.Process
             int BaseTableID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = '" + BaseTblName + "'"));
 
             // Get Column information of Master Table
-            DataSet dsDBColNames = DB.ExecuteDataset("SELECT ColumnName, AD_Reference_ID, IsUpdateable, IsAlwaysUpdateable FROM VAF_Column WHERE VAF_TableView_ID = " + BaseTableID);
+            DataSet dsDBColNames = DB.ExecuteDataset("SELECT ColumnName, VAF_Control_Ref_ID, IsUpdateable, IsAlwaysUpdateable FROM VAF_Column WHERE VAF_TableView_ID = " + BaseTableID);
 
             if (dsDBColNames != null && dsDBColNames.Tables[0].Rows.Count > 0)
             {
@@ -211,7 +211,7 @@ namespace VAdvantage.Process
                         if (sbColName.ToString().Equals(BaseTblName + "_ID"))
                             continue;
                         // if column is of "Yes-No" type i.e. Reference ID is 20 (Fixed) then set True/False
-                        if (Util.GetValueOfInt(dsDBColNames.Tables[0].Rows[j]["AD_Reference_ID"]) == 20)
+                        if (Util.GetValueOfInt(dsDBColNames.Tables[0].Rows[j]["VAF_Control_Ref_ID"]) == 20)
                         {
                             Object val = false;
                             if (poSource.Get_Value(sbColName.ToString()) != null)

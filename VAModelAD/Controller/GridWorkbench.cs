@@ -247,7 +247,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         private bool InitWorkbenchWindows()
         {
-            String sql = "SELECT AD_Window_ID, VAF_Page_ID, AD_Process_ID, AD_Task_ID "
+            String sql = "SELECT AD_Window_ID, VAF_Page_ID, VAF_Job_ID, AD_Task_ID "
                 + "FROM AD_WorkbenchWindow "
                 + "WHERE AD_Workbench_ID=" + AD_Workbench_ID.ToString() + " AND IsActive='Y'"
                 + "ORDER BY SeqNo";
@@ -259,15 +259,15 @@ namespace VAdvantage.Model
                 {
                     int AD_Window_ID = Utility.Util.GetValueOfInt(dr[0]);
                     int VAF_Page_ID = Utility.Util.GetValueOfInt(dr[1]);
-                    int AD_Process_ID = Utility.Util.GetValueOfInt(dr[2]);
+                    int VAF_Job_ID = Utility.Util.GetValueOfInt(dr[2]);
                     int AD_Task_ID = Utility.Util.GetValueOfInt(dr[3]);
                     //
                     if (AD_Window_ID > 0)
                         _windows.Add(new WBWindow(TYPE_WINDOW, AD_Window_ID));
                     else if (VAF_Page_ID > 0)
                         _windows.Add(new WBWindow(TYPE_FORM, VAF_Page_ID));
-                    else if (AD_Process_ID > 0)
-                        _windows.Add(new WBWindow(TYPE_PROCESS, AD_Process_ID));
+                    else if (VAF_Job_ID > 0)
+                        _windows.Add(new WBWindow(TYPE_PROCESS, VAF_Job_ID));
                     else if (AD_Task_ID > 0)
                         _windows.Add(new WBWindow(TYPE_TASK, AD_Task_ID));
                 }

@@ -588,7 +588,7 @@ namespace VAdvantage.WF
         /// <returns>state text</returns>
         public String GetWFStateText()
         {
-            return MRefList.GetListName(GetCtx(), WFSTATE_AD_Reference_ID, GetWFState());
+            return MRefList.GetListName(GetCtx(), WFSTATE_VAF_Control_Ref_ID, GetWFState());
         }
 
         /// <summary>
@@ -840,7 +840,7 @@ namespace VAdvantage.WF
         private bool PerformWork(Trx trx)
         {
             ReportCtl.Report = null;
-            // AD_ReportFormat_ID = 0;
+            // VAF_ReportLayout_ID = 0;
 
             log.Info(_node + " [" + trx + "]");
             _postImmediate = null;
@@ -968,39 +968,39 @@ namespace VAdvantage.WF
             /******	Report						******/
             else if (MWFNode.ACTION_AppsReport.Equals(action))
             {
-                log.Fine("Report:AD_Process_ID=" + _node.GetAD_Process_ID());
+                log.Fine("Report:VAF_Job_ID=" + _node.GetVAF_Job_ID());
                 //	Process
-                MProcess process = MProcess.Get(GetCtx(), _node.GetAD_Process_ID());
+                MProcess process = MProcess.Get(GetCtx(), _node.GetVAF_Job_ID());
 
-                if (!process.IsReport() || (process.GetAD_PrintFormat_ID() == 0
-                                             && process.GetAD_ReportView_ID() == 0
+                if (!process.IsReport() || (process.GetVAF_Print_Rpt_Layout_ID() == 0
+                                             && process.GetVAF_ReportView_ID() == 0
                                              && process.GetIsCrystalReport() == "N"
-                                              && process.GetAD_ReportFormat_ID() == 0
+                                              && process.GetVAF_ReportLayout_ID() == 0
                                               && !process.Get_Value("IsCrystalReport").Equals("B")
                                               && !process.Get_Value("IsCrystalReport").Equals("J")
-                                                 && process.GetAD_ReportMaster_ID() == 0))
+                                                 && process.GetVAF_ReportMaster_ID() == 0))
 
-                // if (!process.IsReport() || process.GetAD_ReportView_ID() == 0)
+                // if (!process.IsReport() || process.GetVAF_ReportView_ID() == 0)
                 {
 
-                    //throw new IllegalStateException("Not a Report AD_Process_ID=" + _node.getAD_Process_ID());
-                    throw new Exception("Not a Report AD_Process_ID=" + _node.GetAD_Process_ID());
+                    //throw new IllegalStateException("Not a Report VAF_Job_ID=" + _node.getVAF_Job_ID());
+                    throw new Exception("Not a Report VAF_Job_ID=" + _node.GetVAF_Job_ID());
 
                 }
                 //
-                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetAD_Process_ID(),
+                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetVAF_Job_ID(),
                     GetVAF_TableView_ID(), GetRecord_ID());
                 pi.SetAD_User_ID(GetAD_User_ID());
                 pi.SetVAF_Client_ID(GetVAF_Client_ID());
                 MPInstance pInstance = new MPInstance(process, GetRecord_ID());
                 FillParameter(pInstance, trx);
-                pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
                 //	Report
                 //ReportEngine_N re = ReportEngine_N.Get(GetCtx(), pi);
                 //if (re == null)
                 //{
-                //    //throw new IllegalStateException("Cannot create Report AD_Process_ID=" + _node.getAD_Process_ID());
-                //    throw new Exception("Cannot create Report AD_Process_ID=" + _node.GetAD_Process_ID());
+                //    //throw new IllegalStateException("Cannot create Report VAF_Job_ID=" + _node.getVAF_Job_ID());
+                //    throw new Exception("Cannot create Report VAF_Job_ID=" + _node.GetVAF_Job_ID());
                 //}
 
                 if (process.GetIsCrystalReport() == "Y")
@@ -1012,8 +1012,8 @@ namespace VAdvantage.WF
                     pi.SetIsCrystal(false);
                 }
 
-                pi.SetAD_ReportFormat_ID(process.GetAD_ReportFormat_ID());
-                pi.SetAD_ReportMaster_ID(process.GetAD_ReportMaster_ID());
+                pi.SetVAF_ReportLayout_ID(process.GetVAF_ReportLayout_ID());
+                pi.SetVAF_ReportMaster_ID(process.GetVAF_ReportMaster_ID());
                 process.ProcessIt(pi, trx);
                 ReportRun(pi);
                 SendNoticeEMail(trx);
@@ -1026,13 +1026,13 @@ namespace VAdvantage.WF
             /******	Process						******/
             else if (MWFNode.ACTION_AppsProcess.Equals(action))
             {
-                log.Fine("Process:AD_Process_ID=" + _node.GetAD_Process_ID());
+                log.Fine("Process:VAF_Job_ID=" + _node.GetVAF_Job_ID());
                 //	Process
-                MProcess process = MProcess.Get(GetCtx(), _node.GetAD_Process_ID());
+                MProcess process = MProcess.Get(GetCtx(), _node.GetVAF_Job_ID());
                 MPInstance pInstance = new MPInstance(process, GetRecord_ID());
                 FillParameter(pInstance, trx);
                 //
-                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetAD_Process_ID(),
+                ProcessInfo pi = new ProcessInfo(_node.GetName(true), _node.GetVAF_Job_ID(),
                     GetVAF_TableView_ID(), GetRecord_ID());
                 pi.SetAD_User_ID(GetAD_User_ID());
                 pi.SetVAF_Client_ID(GetVAF_Client_ID());
@@ -1041,7 +1041,7 @@ namespace VAdvantage.WF
                 if (Util.GetValueOfInt(_process.GetAD_Window_ID()) > 0)
                     pi.SetAD_Window_ID(_process.GetAD_Window_ID());
 
-                pi.SetAD_PInstance_ID(pInstance.GetAD_PInstance_ID());
+                pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
                 return process.ProcessIt(pi, trx);
             }
 
@@ -1106,7 +1106,7 @@ namespace VAdvantage.WF
                 String value = _node.GetAttributeValue();
                 log.Fine("SetVariable:VAF_Column_ID=" + _node.GetVAF_Column_ID() + " to " + value);
                 MColumn column = _node.GetColumn();
-                int dt = column.GetAD_Reference_ID();
+                int dt = column.GetVAF_Control_Ref_ID();
                 return SetVariable(value, dt, null);
             }
 
@@ -1282,7 +1282,7 @@ namespace VAdvantage.WF
                     //        doc.Save();
                     //    }
                     //    MColumn column = _node.GetColumn();
-                    //    int dt = column.GetAD_Reference_ID();
+                    //    int dt = column.GetVAF_Control_Ref_ID();
                     //    SetVariable("Y", dt, null);
                     //    return true;
                     //}
@@ -1678,7 +1678,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         }
 
         volatile IReportEngine re = null;
-        int AD_ReportFormat_ID = 0;
+        int VAF_ReportLayout_ID = 0;
         /// <summary>
         /// Report through work order
         /// </summary>
@@ -1690,15 +1690,15 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             ///	
 
 
-            //int AD_ReportFormat_ID = _pi.GetAD_ReportFormat_ID();
+            //int VAF_ReportLayout_ID = _pi.GetVAF_ReportLayout_ID();
 
-            ////if("Y".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = "+_pi.GetAD_Process_ID())))
+            ////if("Y".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = "+_pi.GetVAF_Job_ID())))
 
             ////Dynamic Report    
-            //if (_pi.GetAD_ReportMaster_ID() > 0)
+            //if (_pi.GetVAF_ReportMaster_ID() > 0)
             //{
             //    String fqClassName = "", asmName = "";
-            //    DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM AD_ReportMaster WHERE IsActive='Y' AND AD_ReportMaster_ID = " + _pi.GetAD_ReportMaster_ID());
+            //    DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM VAF_ReportMaster WHERE IsActive='Y' AND VAF_ReportMaster_ID = " + _pi.GetVAF_ReportMaster_ID());
             //    if (ds != null && ds.Tables[0].Rows.Count > 0)
             //    {
             //        fqClassName = ds.Tables[0].Rows[0]["ClassName"].ToString();
@@ -1712,13 +1712,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //    }
             //}
 
-            //else if (AD_ReportFormat_ID > 0)
+            //else if (VAF_ReportLayout_ID > 0)
             //{
             //    try
             //    {
             //        string lang = p_ctx.GetVAF_Language().Replace("_", "-");
 
-            //        if ((AD_ReportFormat_ID > 0) && (lang == "ar-IQ"))
+            //        if ((VAF_ReportLayout_ID > 0) && (lang == "ar-IQ"))
             //        {
             //            isDocxFile = true;
             //            re = VAdvantage.ReportFormat.ReportFormatEngine.Get(p_ctx, _pi, true);
@@ -1751,11 +1751,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //else
             //{
             //    //If user Choose BI Report...................
-            //    if ("B".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
+            //    if ("B".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = " + _pi.GetVAF_Job_ID())))
             //    {
             //        re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.BIReportEngine");
             //    }
-            //    else if ("J".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM AD_Process WHERE AD_Process_ID = " + _pi.GetAD_Process_ID())))
+            //    else if ("J".Equals(DB.ExecuteScalar("SELECT IsCrystalReport FROM VAF_Job WHERE VAF_Job_ID = " + _pi.GetVAF_Job_ID())))
             //    {
             //        //isJasperReport = true;
             //        re = VAdvanatge.Report.ReportEngine.GetReportEngine(p_ctx, _pi, _trx, "VA039", "VA039.Classes.JasperReportEngine");
@@ -1952,7 +1952,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                         ////	Attachment
                         if (report != null)
                         {
-                            MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetAD_Note_ID(), trx);
+                            MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), trx);
                             if (isDocxFile)
                             {
                                 attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".Docx", report);
@@ -3260,7 +3260,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
                 //Save to VAF_MailQueue table
                 ViennaAdvantage.Model.X_VAF_MailQueue mailQueue = new ViennaAdvantage.Model.X_VAF_MailQueue(_ctxClient, 0, _trx);
-                mailQueue.SetAD_Role_ID(_ctxClient.GetAD_Role_ID());
+                mailQueue.SetVAF_Role_ID(_ctxClient.GetVAF_Role_ID());
                 mailQueue.SetToEMail(toEMail);
                 mailQueue.SetToName(toName);
                 mailQueue.SetMailSubject(subject);
@@ -3946,13 +3946,13 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 {
                     recipientUser.Add(userID);
                 }
-                roleID = wfRecipient.GetAD_Role_ID();
+                roleID = wfRecipient.GetVAF_Role_ID();
                 if (roleID == 0)
                 {
                     continue;
                 }
                 //role = new MRole(Env.GetCtx(), roleID, Get_TrxName());
-                dsUserRole = DB.ExecuteDataset("SELECT AD_User_ID FROM AD_User_roles WHERE IsActive='Y' AND AD_Role_ID=" + roleID);
+                dsUserRole = DB.ExecuteDataset("SELECT AD_User_ID FROM AD_User_roles WHERE IsActive='Y' AND VAF_Role_ID=" + roleID);
                 if (dsUserRole == null || dsUserRole.Tables[0].Rows.Count == 0)
                 {
                     continue;
@@ -4010,7 +4010,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 wfRecipient = new X_AD_WF_Recipient(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_WF_Recipient_ID"]), Get_TrxName());
 
-                roleID = wfRecipient.GetAD_Role_ID();
+                roleID = wfRecipient.GetVAF_Role_ID();
                 if (roleID > 0 && !(recipientRoles.Contains(roleID)))
                 {
                     recipientRoles.Add(roleID);
@@ -4031,7 +4031,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             }
             else if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_Role))
             {
-                return Util.GetValueOfInt(DB.ExecuteScalar("select ad_user_ID from ad_user_roles where Ad_role_ID=" + resp.GetAD_Role_ID() + " AND isactive='Y'"));
+                return Util.GetValueOfInt(DB.ExecuteScalar("select ad_user_ID from ad_user_roles where VAF_Role_ID=" + resp.GetVAF_Role_ID() + " AND isactive='Y'"));
             }
             // Handled code for new Responsible type being added
             else if (resp.GetResponsibleType().Equals(MWFResponsible.RESPONSIBLETYPE_SQL))

@@ -188,8 +188,8 @@ namespace VAdvantage.Model
             if (AD_Session_ID == 0)
             {
                 SetProcessed(false);
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                SetVAF_Role_ID(VAF_Role_ID);
             }
         }	//	MSess
 
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
                 SetRemote_Addr(cmpIP);
 
                 //InetAddress lh = InetAddress.getLocalHost();
-                SetAD_Role_ID(ctx.GetAD_Role_ID());
+                SetVAF_Role_ID(ctx.GetVAF_Role_ID());
 
 
 
@@ -304,15 +304,15 @@ namespace VAdvantage.Model
 
         private bool IsRoleChangeLog(Ctx ctx)
         {
-            int AD_Role_ID = ctx.GetAD_Role_ID();
+            int VAF_Role_ID = ctx.GetVAF_Role_ID();
             bool isChangeLog = false;
-            if (roleChangeLog.ContainsKey(AD_Role_ID))
-                isChangeLog = roleChangeLog[AD_Role_ID];
+            if (roleChangeLog.ContainsKey(VAF_Role_ID))
+                isChangeLog = roleChangeLog[VAF_Role_ID];
             else
             {
                 isChangeLog = Utility.Util.GetValueOfBool(
-                    DB.ExecuteScalar("SELECT IsChangeLog FROM AD_Role WHERE AD_Role_ID = " + AD_Role_ID) == "Y");
-                roleChangeLog[AD_Role_ID] = isChangeLog;
+                    DB.ExecuteScalar("SELECT IsChangeLog FROM VAF_Role WHERE VAF_Role_ID = " + VAF_Role_ID) == "Y");
+                roleChangeLog[VAF_Role_ID] = isChangeLog;
             }
             return isChangeLog;
         }

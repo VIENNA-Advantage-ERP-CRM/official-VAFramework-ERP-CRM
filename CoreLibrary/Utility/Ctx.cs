@@ -756,21 +756,21 @@ namespace VAdvantage.Utility
         }	
 
         /// <summary>
-        ///Get Login AD_Role_ID
+        ///Get Login VAF_Role_ID
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Role_ID()
+        public int GetVAF_Role_ID()
         {
-            return GetContextAsInt("#AD_Role_ID");
+            return GetContextAsInt("#VAF_Role_ID");
         }	
 
         /// <summary>
-        ///	Set Login AD_Role_ID
+        ///	Set Login VAF_Role_ID
         /// </summary>
-        /// <param name="AD_Role_ID"></param>
-        public void SetAD_Role_ID(int AD_Role_ID)
+        /// <param name="VAF_Role_ID"></param>
+        public void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            SetContext("#AD_Role_ID", AD_Role_ID);
+            SetContext("#VAF_Role_ID", VAF_Role_ID);
         }	
 
         /// <summary>
@@ -1265,12 +1265,12 @@ namespace VAdvantage.Utility
         }
   
         /// <summary>
-        ///	Get Login AD_Role_Name
+        ///	Get Login VAF_Role_Name
         /// </summary>
         /// <returns></returns>
-        public string GetAD_Role_Name()
+        public string GetVAF_Role_Name()
         {
-            return GetContext("#AD_Role_Name");
+            return GetContext("#VAF_Role_Name");
         }
 
         /// <summary>

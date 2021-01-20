@@ -275,13 +275,13 @@ namespace VAdvantage.Report
     /// <returns>Message to be translated</returns>
     protected override String DoIt()
     {
-        log.Info("AD_PInstance_ID=" + GetAD_PInstance_ID());
+        log.Info("VAF_JInstance_ID=" + GetVAF_JInstance_ID());
         //	** Create Temporary and empty Report Lines from PA_ReportLine
-        //	- AD_PInstance_ID, PA_ReportLine_ID, 0, 0
+        //	- VAF_JInstance_ID, PA_ReportLine_ID, 0, 0
         int PA_ReportLineSet_ID = _report.GetLineSet().GetPA_ReportLineSet_ID();
         StringBuilder sql = new StringBuilder ("INSERT INTO T_Report "
-            + "(AD_PInstance_ID, PA_ReportLine_ID, Record_ID,Fact_Acct_ID, SeqNo,LevelNo, Name,Description) "
-            + "SELECT ").Append(GetAD_PInstance_ID()).Append(", PA_ReportLine_ID, 0,0, SeqNo,0, Name,Description "
+            + "(VAF_JInstance_ID, PA_ReportLine_ID, Record_ID,Fact_Acct_ID, SeqNo,LevelNo, Name,Description) "
+            + "SELECT ").Append(GetVAF_JInstance_ID()).Append(", PA_ReportLine_ID, 0,0, SeqNo,0, Name,Description "
             + "FROM PA_ReportLine "
             + "WHERE IsActive='Y' AND PA_ReportLineSet_ID=").Append(PA_ReportLineSet_ID);
 
@@ -483,7 +483,7 @@ namespace VAdvantage.Report
         if (update.Length> 0)
         {
             update.Insert (0, "UPDATE T_Report SET ");
-            update.Append(" WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+            update.Append(" WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(" AND PA_ReportLine_ID=").Append(_lines[line.Value].GetPA_ReportLine_ID())
                 .Append(" AND ABS(LevelNo)<2");		//	0=Line 1=Acct
             int no = DataBase.DB.ExecuteQuery(update.ToString(),null, Get_TrxName());
@@ -539,7 +539,7 @@ namespace VAdvantage.Report
                       //  sb.Append(", ");
                     sb.Append("COALESCE(SUM(Col_").Append(col).Append("),0)");
                 //}
-                    sb.Append(" FROM T_Report WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                    sb.Append(" FROM T_Report WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                     .Append(" AND PA_ReportLine_ID IN (");
                 if (_lines[line].IsCalculationTypeAdd())
                 {
@@ -558,7 +558,7 @@ namespace VAdvantage.Report
                 }
                 	//	0=Line 1=Acct
 
-                    sb.Append(" WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                    sb.Append(" WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                     .Append(" AND PA_ReportLine_ID=").Append(_lines[line].GetPA_ReportLine_ID())
                     .Append(" AND ABS(LevelNo)<1");		//	not trx
                 int no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
@@ -585,7 +585,7 @@ namespace VAdvantage.Report
                     sb.Append("Col_").Append(col);
                     sb.Append(" = (SELECT ");
                     sb.Append("COALESCE(r2.Col_").Append(col).Append(",0)");
-                    sb.Append(" FROM T_Report r2 WHERE r2.AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                    sb.Append(" FROM T_Report r2 WHERE r2.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                     .Append(" AND r2.PA_ReportLine_ID=").Append(oper_1)
                     .Append(" AND r2.Record_ID=0 AND r2.Fact_Acct_ID=0)");
                     if (col < (_columns.Length - 1))
@@ -604,7 +604,7 @@ namespace VAdvantage.Report
                     
                 //}
                     //
-                    sb.Append(" WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                    sb.Append(" WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                        .Append(" AND PA_ReportLine_ID=").Append(_lines[line].GetPA_ReportLine_ID())
                     .Append(" AND ABS(LevelNo)<1");			//	0=Line 1=Acct
                 int no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
@@ -638,7 +638,7 @@ namespace VAdvantage.Report
                     {
                         sb.Append(" *100");
                     }
-                     sb.Append(" FROM T_Report r2 WHERE r2.AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                     sb.Append(" FROM T_Report r2 WHERE r2.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                     .Append(" AND r2.PA_ReportLine_ID=").Append(oper_2)
                     .Append(" AND r2.Record_ID=0 AND r2.Fact_Acct_ID=0)");
                      if (col < (_columns.Length - 1))
@@ -655,7 +655,7 @@ namespace VAdvantage.Report
                 //}
                
                     //
-                    sb.Append( "WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+                    sb.Append( "WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                        .Append(" AND PA_ReportLine_ID=").Append(_lines[line].GetPA_ReportLine_ID())
                     .Append(" AND ABS(LevelNo)<1");			//	0=Line 1=Acct
                 no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
@@ -733,7 +733,7 @@ namespace VAdvantage.Report
                     sb.Append("+COALESCE(Col_").Append(ii).Append(",0)");
             }
             //
-            sb.Append(" WHERE AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+            sb.Append(" WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(" AND ABS(LevelNo)<2");			//	0=Line 1=Acct
             int no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
             if (no < 1)
@@ -876,7 +876,7 @@ namespace VAdvantage.Report
         sql = new StringBuilder ("UPDATE T_Report r1 "
             + "SET SeqNo = (SELECT SeqNo "
                 + "FROM T_Report r2 "
-                + "WHERE r1.AD_PInstance_ID=r2.AD_PInstance_ID AND r1.PA_ReportLine_ID=r2.PA_ReportLine_ID"
+                + "WHERE r1.VAF_JInstance_ID=r2.VAF_JInstance_ID AND r1.PA_ReportLine_ID=r2.PA_ReportLine_ID"
                 + " AND r2.Record_ID=0 AND r2.Fact_Acct_ID=0)"
             + "WHERE SeqNo IS NULL");
         no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
@@ -894,8 +894,8 @@ namespace VAdvantage.Report
         //	Translated Version ...
         sql = new StringBuilder ("UPDATE T_Report r SET (Name,Description)=(")
             .Append(sql_select).Append(") "
-            + "WHERE Fact_Acct_ID <> 0 AND AD_PInstance_ID=")
-            .Append(GetAD_PInstance_ID());
+            + "WHERE Fact_Acct_ID <> 0 AND VAF_JInstance_ID=")
+            .Append(GetVAF_JInstance_ID());
         no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
         if (VLogMgt.IsLevelFinest())
             log.Fine("Trx Name #=" + no + " - " + sql.ToString());
@@ -903,7 +903,7 @@ namespace VAdvantage.Report
 
     /// <summary>
     /// Insert Detail Line per Source.	For all columns (in a line) with relative period access
-     // 	- AD_PInstance_ID, PA_ReportLine_ID, variable, 0 - Level 1
+     // 	- VAF_JInstance_ID, PA_ReportLine_ID, variable, 0 - Level 1
     /// </summary>
     /// <param name="line"> line</param>
     private void InsertLineSource (int line)
@@ -921,12 +921,12 @@ namespace VAdvantage.Report
 
         //	Insert
         StringBuilder insert = new StringBuilder("INSERT INTO T_Report "
-            + "(AD_PInstance_ID, PA_ReportLine_ID, Record_ID,Fact_Acct_ID,LevelNo ");
+            + "(VAF_JInstance_ID, PA_ReportLine_ID, Record_ID,Fact_Acct_ID,LevelNo ");
         for (int col = 0; col < _columns.Length; col++)
             insert.Append(",Col_").Append(col);
         //	Select
         insert.Append(") SELECT ")
-            .Append(GetAD_PInstance_ID()).Append(",")
+            .Append(GetVAF_JInstance_ID()).Append(",")
             .Append(_lines[line].GetPA_ReportLine_ID())
             .Append(",").Append(variable).Append(",0,");	//	Record_ID, Fact_Acct_ID
         if (_DetailsSourceFirst)							//	LevelNo
@@ -1031,7 +1031,7 @@ namespace VAdvantage.Report
         StringBuilder sql = new StringBuilder ("UPDATE T_Report SET (Name,Description)=(")
             .Append(_lines[line].GetSourceValueQuery()).Append("Record_ID) "
             //
-            + "WHERE Record_ID <> 0 AND AD_PInstance_ID=").Append(GetAD_PInstance_ID())
+            + "WHERE Record_ID <> 0 AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
             .Append(" AND PA_ReportLine_ID=").Append(_lines[line].GetPA_ReportLine_ID())
             .Append(" AND Fact_Acct_ID=0");
         no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
@@ -1043,7 +1043,7 @@ namespace VAdvantage.Report
     }	//	insertLineSource
 
     /// <summary>
-    ///	Create Trx Line per Source Detail. 	- AD_PInstance_ID, PA_ReportLine_ID, variable, Fact_Acct_ID - Level 2
+    ///	Create Trx Line per Source Detail. 	- VAF_JInstance_ID, PA_ReportLine_ID, variable, Fact_Acct_ID - Level 2
     /// </summary>
     /// <param name="line">line</param>
     /// <param name="variable">variable, e.g. Account_ID</param>
@@ -1054,12 +1054,12 @@ namespace VAdvantage.Report
 
         //	Insert
         StringBuilder insert = new StringBuilder("INSERT INTO T_Report "
-            + "(AD_PInstance_ID, PA_ReportLine_ID, Record_ID,Fact_Acct_ID,LevelNo ");
+            + "(VAF_JInstance_ID, PA_ReportLine_ID, Record_ID,Fact_Acct_ID,LevelNo ");
         for (int col = 0; col < _columns.Length; col++)
             insert.Append(",Col_").Append(col);
         //	Select
         insert.Append(") SELECT ")
-            .Append(GetAD_PInstance_ID()).Append(",")
+            .Append(GetVAF_JInstance_ID()).Append(",")
             .Append(rLine.GetPA_ReportLine_ID()).Append(",")
             .Append(variable).Append(",Fact_Acct_ID, ");
         if (_DetailsSourceFirst)
@@ -1139,7 +1139,7 @@ namespace VAdvantage.Report
             //	Not Printed - Delete in T
             if (!_lines[line].IsPrinted())
             {
-                String sql = "DELETE FROM T_Report WHERE AD_PInstance_ID=" + GetAD_PInstance_ID()
+                String sql = "DELETE FROM T_Report WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID()
                     + " AND PA_ReportLine_ID=" + _lines[line].GetPA_ReportLine_ID();
                 int no = DataBase.DB.ExecuteQuery(sql,null, Get_TrxName());
                 if (no > 0)
@@ -1155,22 +1155,22 @@ namespace VAdvantage.Report
     /// <returns>print format</returns>
     private MPrintFormat GetPrintFormat()
     {
-        int AD_PrintFormat_ID = _report.GetAD_PrintFormat_ID();
-        log.Info("AD_PrintFormat_ID=" + AD_PrintFormat_ID);
+        int VAF_Print_Rpt_Layout_ID = _report.GetVAF_Print_Rpt_Layout_ID();
+        log.Info("VAF_Print_Rpt_Layout_ID=" + VAF_Print_Rpt_Layout_ID);
         MPrintFormat pf = null;
-        bool createNew = AD_PrintFormat_ID == 0;
+        bool createNew = VAF_Print_Rpt_Layout_ID == 0;
 
         //	Create New
         if (createNew)
         {
             int VAF_TableView_ID = 544;		//	T_Report
             pf = MPrintFormat.CreateFromTable(GetCtx(), VAF_TableView_ID);
-            AD_PrintFormat_ID = pf.GetAD_PrintFormat_ID();
-            _report.SetAD_PrintFormat_ID(AD_PrintFormat_ID);
+            VAF_Print_Rpt_Layout_ID = pf.GetVAF_Print_Rpt_Layout_ID();
+            _report.SetVAF_Print_Rpt_Layout_ID(VAF_Print_Rpt_Layout_ID);
             _report.Save();
         }
         else
-            pf = MPrintFormat.Get(GetCtx(), AD_PrintFormat_ID, false);	//	use Cache
+            pf = MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);	//	use Cache
 
         //	Print Format Sync
         if (!_report.GetName().Equals(pf.GetName()))
@@ -1286,7 +1286,7 @@ namespace VAdvantage.Report
         pf.SetTranslation();
         //	First one is unsorted - just re-load
         if (createNew)
-            pf = MPrintFormat.Get(GetCtx(), AD_PrintFormat_ID, false);	//	use Cache
+            pf = MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);	//	use Cache
         return pf;
     }	//	getPrintFormat
 

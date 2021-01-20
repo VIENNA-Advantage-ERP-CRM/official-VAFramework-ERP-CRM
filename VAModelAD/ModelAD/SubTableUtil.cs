@@ -298,7 +298,7 @@ namespace VAdvantage.Model
                 if (tCol.IsKey())
                 {
                     tCol.SetIsKey(false);
-                    tCol.SetAD_Reference_ID(DisplayType.TableDir);
+                    tCol.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                 }
                 if (tCol.Save())
                     throw new Exception("Cannot save column " + sCol.GetColumnName());
@@ -321,20 +321,20 @@ namespace VAdvantage.Model
                         ele.Save();
                     }
                     key.SetVAF_ColumnDic_ID(ele.GetVAF_ColumnDic_ID());
-                    key.SetAD_Reference_ID(DisplayType.ID);
+                    key.SetVAF_Control_Ref_ID(DisplayType.ID);
                     key.Save();
                 }
                 addlColumns.Add(keyColumnName);
                 //	Addl References
                 if (m_userDef)
                 {
-                    String colName = "AD_Role_ID";
+                    String colName = "VAF_Role_ID";
                     addlColumns.Add(colName);
                     if (target.GetColumn(colName) == null)
                     {
                         MColumn col = new MColumn(target);
                         col.SetColumnName(colName);
-                        col.SetAD_Reference_ID(DisplayType.TableDir);
+                        col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                         CreateColumn(col, target, false);
                         col.SetIsUpdateable(false);
                         col.SetIsMandatory(false);
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
                     {
                         MColumn col = new MColumn(target);
                         col.SetColumnName(colName);
-                        col.SetAD_Reference_ID(DisplayType.TableDir);
+                        col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                         col.SetIsUpdateable(false);
                         col.SetIsMandatory(false);
                         CreateColumn(col, target, false);
@@ -359,7 +359,7 @@ namespace VAdvantage.Model
                     {
                         MColumn col = new MColumn(target);
                         col.SetColumnName(colName);
-                        col.SetAD_Reference_ID(DisplayType.YesNo);
+                        col.SetVAF_Control_Ref_ID(DisplayType.YesNo);
                         col.SetDefaultValue("N");
                         col.SetIsUpdateable(false);
                         col.SetIsMandatory(true);
@@ -424,7 +424,7 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.ID);
+                col.SetVAF_Control_Ref_ID(DisplayType.ID);
                 col.SetIsKey(true);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
@@ -437,7 +437,7 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.TableDir);
+                col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
                 col.SetVAF_DataVal_Rule_ID(116);	//	Client Login
@@ -452,7 +452,7 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.TableDir);
+                col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
                 col.SetIsMandatoryUI(true);
@@ -468,7 +468,7 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.DateTime);
+                col.SetVAF_Control_Ref_ID(DisplayType.DateTime);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
                 col.SetEntityType(EntityType);
@@ -480,7 +480,7 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.DateTime);
+                col.SetVAF_Control_Ref_ID(DisplayType.DateTime);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
                 col.SetEntityType(EntityType);
@@ -492,8 +492,8 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.Table);
-                col.SetAD_Reference_Value_ID(110);
+                col.SetVAF_Control_Ref_ID(DisplayType.Table);
+                col.SetVAF_Control_Ref_Value_ID(110);
                 col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
@@ -506,8 +506,8 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.Table);
-                col.SetAD_Reference_Value_ID(110);
+                col.SetVAF_Control_Ref_ID(DisplayType.Table);
+                col.SetVAF_Control_Ref_Value_ID(110);
                 col.SetConstraintType(X_VAF_Column.CONSTRAINTTYPE_DoNOTCreate);
                 col.SetIsUpdateable(false);
                 col.SetIsMandatory(true);
@@ -520,7 +520,7 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.YesNo);
+                col.SetVAF_Control_Ref_ID(DisplayType.YesNo);
                 col.SetDefaultValue("Y");
                 col.SetIsUpdateable(true);
                 col.SetIsMandatory(true);
@@ -533,7 +533,7 @@ namespace VAdvantage.Model
             {
                 MColumn col = new MColumn(table);
                 col.SetColumnName(colName);
-                col.SetAD_Reference_ID(DisplayType.String);
+                col.SetVAF_Control_Ref_ID(DisplayType.String);
                 col.SetIsUpdateable(true);
                 col.SetIsMandatory(false);
                 col.SetEntityType(EntityType);

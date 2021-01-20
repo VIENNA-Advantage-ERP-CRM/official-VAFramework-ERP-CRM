@@ -185,8 +185,8 @@ namespace VAdvantage.Model
                 int count = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                 if (count > 0)
                 {
-                    string sql = " SELECT L.VALUE FROM AD_REF_LIST L" +
-                                                     " INNER JOIN AD_Reference r ON R.AD_REFERENCE_ID=L.AD_REFERENCE_ID" +
+                    string sql = " SELECT L.VALUE FROM VAF_CTRLREF_LIST L" +
+                                                     " INNER JOIN VAF_Control_Ref r ON R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID" +
                                                      " WHERE r.name='FRPT_RelatedTo' AND l.name='BankAccount'";
 
                     var relatedto = Convert.ToString(DB.ExecuteScalar(sql));

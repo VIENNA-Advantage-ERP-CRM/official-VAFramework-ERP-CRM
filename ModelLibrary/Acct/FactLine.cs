@@ -930,7 +930,7 @@ namespace VAdvantage.Acct
                 return;
             }
             int C_Location_ID = 0;
-            String sql = "SELECT C_Location_ID FROM VAF_OrgInfo WHERE VAF_Org_ID=" + VAF_Org_ID;
+            String sql = "SELECT C_Location_ID FROM VAF_OrgDetail WHERE VAF_Org_ID=" + VAF_Org_ID;
             IDataReader idr = null;
             try
             {

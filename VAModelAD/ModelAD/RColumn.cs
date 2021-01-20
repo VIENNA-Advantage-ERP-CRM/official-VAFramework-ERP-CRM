@@ -62,9 +62,9 @@ namespace VAdvantage.Model
         /// <param name="ctx">context </param>
         /// <param name="columnName">column name</param>
         /// <param name="displayType">display type</param>
-        /// <param name="AD_Reference_Value_ID">List/Table Reference</param>
-        public RColumn(Ctx ctx, String columnName, int displayType, int AD_Reference_Value_ID)
-            : this(ctx, columnName, displayType, null, AD_Reference_Value_ID, null)
+        /// <param name="VAF_Control_Ref_Value_ID">List/Table Reference</param>
+        public RColumn(Ctx ctx, String columnName, int displayType, int VAF_Control_Ref_Value_ID)
+            : this(ctx, columnName, displayType, null, VAF_Control_Ref_Value_ID, null)
         {
             
         }
@@ -90,11 +90,11 @@ namespace VAdvantage.Model
         /// <param name="columnName">column name</param>
         /// <param name="displayType">display type</param>
         /// <param name="sql">sql (if null then columnName is used). </param>
-        /// <param name="AD_Reference_Value_ID">List/Table Reference</param>
+        /// <param name="VAF_Control_Ref_Value_ID">List/Table Reference</param>
         /// <param name="refColumnName">UserReference column name
         /// Will be overwritten if TableDir or Search</param>
         public RColumn(Ctx ctx, String columnName, int displayType,
-            String sql, int AD_Reference_Value_ID, String refColumnName)
+            String sql, int VAF_Control_Ref_Value_ID, String refColumnName)
         {
             _colHeader = Msg.Translate(ctx, columnName);
             if (refColumnName != null)
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
 
                 Language language = Language.GetLanguage(Env.GetVAF_Language(ctx));
                 _colSQL = "(" + VLookUpFactory.GetLookup_ListEmbed(
-                    language, AD_Reference_Value_ID, columnName) + ")";
+                    language, VAF_Control_Ref_Value_ID, columnName) + ")";
                 _colClass = typeof(String);// String.class;
                 _isIDcol = false;
             }
@@ -157,7 +157,7 @@ namespace VAdvantage.Model
             {
                 Language language = Language.getLanguage(Env.getVAF_Language(ctx));
                 _colSQL += ",(" + MLookupFactory.getLookup_TableEmbed(
-                    language, columnName, RModel.TABLE_ALIAS, AD_Reference_Value_ID) + ")";
+                    language, columnName, RModel.TABLE_ALIAS, VAF_Control_Ref_Value_ID) + ")";
                 _colClass = String.class;
                 _isIDcol = false;
             }	**/

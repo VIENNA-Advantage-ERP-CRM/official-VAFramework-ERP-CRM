@@ -74,13 +74,13 @@ public void SetVAF_QuickSearchWindow_ID (int VAF_QuickSearchWindow_ID){if (VAF_Q
 Set_Value ("VAF_QuickSearchWindow_ID", VAF_QuickSearchWindow_ID);}/** Get Info Window.
 @return Info and search/select Window */
 public int GetVAF_QuickSearchWindow_ID() {Object ii = Get_Value("VAF_QuickSearchWindow_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** AD_Reference_ID AD_Reference_ID=1 */
-public static int AD_REFERENCE_ID_AD_Reference_ID=1;/** Set Reference.
-@param AD_Reference_ID System Reference and Validation */
-public void SetAD_Reference_ID (int AD_Reference_ID){if (AD_Reference_ID <= 0) Set_Value ("AD_Reference_ID", null);else
-Set_Value ("AD_Reference_ID", AD_Reference_ID);}/** Get Reference.
+/** VAF_Control_Ref_ID VAF_Control_Ref_ID=1 */
+public static int VAF_CONTROL_REF_ID_VAF_Control_Ref_ID=1;/** Set Reference.
+@param VAF_Control_Ref_ID System Reference and Validation */
+public void SetVAF_Control_Ref_ID (int VAF_Control_Ref_ID){if (VAF_Control_Ref_ID <= 0) Set_Value ("VAF_Control_Ref_ID", null);else
+Set_Value ("VAF_Control_Ref_ID", VAF_Control_Ref_ID);}/** Get Reference.
 @return System Reference and Validation */
-public int GetAD_Reference_ID() {Object ii = Get_Value("AD_Reference_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Tab.
+public int GetVAF_Control_Ref_ID() {Object ii = Get_Value("VAF_Control_Ref_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Tab.
 @param VAF_Tab_ID Tab within a Window */
 public void SetVAF_Tab_ID (int VAF_Tab_ID){if (VAF_Tab_ID < 1) throw new ArgumentException ("VAF_Tab_ID is mandatory.");Set_ValueNoCheck ("VAF_Tab_ID", VAF_Tab_ID);}/** Get Tab.
 @return Tab within a Window */
@@ -105,8 +105,8 @@ public int GetDisplayLength() {Object ii = Get_Value("DisplayLength");if (ii == 
 public void SetDisplayLogic (String DisplayLogic){if (DisplayLogic != null && DisplayLogic.Length > 2000){log.Warning("Length > 2000 - truncated");DisplayLogic = DisplayLogic.Substring(0,2000);}Set_Value ("DisplayLogic", DisplayLogic);}/** Get Display Logic.
 @return If the Field is displayed, the result determines if the field is actually displayed */
 public String GetDisplayLogic() {return (String)Get_Value("DisplayLogic");}
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;/** Set Entity Type.
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;/** Set Entity Type.
 @param EntityType Dictionary Entity Type; Determines ownership and synchronization */
 public void SetEntityType (String EntityType){if (EntityType.Length > 4){log.Warning("Length > 4 - truncated");EntityType = EntityType.Substring(0,4);}Set_Value ("EntityType", EntityType);}/** Get Entity Type.
 @return Dictionary Entity Type; Determines ownership and synchronization */
@@ -119,8 +119,8 @@ public String GetExport_ID() {return (String)Get_Value("Export_ID");}/** Set HTM
 public void SetHTMLStyle (String HTMLStyle){if (HTMLStyle != null && HTMLStyle.Length > 2000){log.Warning("Length > 2000 - truncated");HTMLStyle = HTMLStyle.Substring(0,2000);}Set_Value ("HTMLStyle", HTMLStyle);}/** Get HTML Style.
 @return HTML style for field on single layout */
 public String GetHTMLStyle() {return (String)Get_Value("HTMLStyle");}
-/** HeaderHeadingOnly AD_Reference_ID=319 */
-public static int HEADERHEADINGONLY_AD_Reference_ID=319;/** No = N */
+/** HeaderHeadingOnly VAF_Control_Ref_ID=319 */
+public static int HEADERHEADINGONLY_VAF_Control_Ref_ID=319;/** No = N */
 public static String HEADERHEADINGONLY_No = "N";/** Yes = Y */
 public static String HEADERHEADINGONLY_Yes = "Y";/** Is test a valid value.
 @param test testvalue
@@ -131,8 +131,8 @@ public void SetHeaderHeadingOnly (String HeaderHeadingOnly){if (!IsHeaderHeading
 throw new ArgumentException ("HeaderHeadingOnly Invalid value - " + HeaderHeadingOnly + " - Reference_ID=319 - N - Y");if (HeaderHeadingOnly != null && HeaderHeadingOnly.Length > 1){log.Warning("Length > 1 - truncated");HeaderHeadingOnly = HeaderHeadingOnly.Substring(0,1);}Set_Value ("HeaderHeadingOnly", HeaderHeadingOnly);}/** Get Show Header Heading Only.
 @return Show Header Heading Only. If yes, then only heading will be displayed with that field in header panel. */
 public String GetHeaderHeadingOnly() {return (String)Get_Value("HeaderHeadingOnly");}
-/** HeaderIconOnly AD_Reference_ID=319 */
-public static int HEADERICONONLY_AD_Reference_ID=319;/** No = N */
+/** HeaderIconOnly VAF_Control_Ref_ID=319 */
+public static int HEADERICONONLY_VAF_Control_Ref_ID=319;/** No = N */
 public static String HEADERICONONLY_No = "N";/** Yes = Y */
 public static String HEADERICONONLY_Yes = "Y";/** Is test a valid value.
 @param test testvalue
@@ -143,8 +143,8 @@ public void SetHeaderIconOnly (String HeaderIconOnly){if (!IsHeaderIconOnlyValid
 throw new ArgumentException ("HeaderIconOnly Invalid value - " + HeaderIconOnly + " - Reference_ID=319 - N - Y");if (HeaderIconOnly != null && HeaderIconOnly.Length > 1){log.Warning("Length > 1 - truncated");HeaderIconOnly = HeaderIconOnly.Substring(0,1);}Set_Value ("HeaderIconOnly", HeaderIconOnly);}/** Get Show Header Icon Only.
 @return Show Header Icon Only. If checked, then only icon will be displayed with field value in header panel. */
 public String GetHeaderIconOnly() {return (String)Get_Value("HeaderIconOnly");}
-/** HeaderOverrideReference AD_Reference_ID=1 */
-public static int HEADEROVERRIDEREFERENCE_AD_Reference_ID=1;/** Set Header Override Reference.
+/** HeaderOverrideReference VAF_Control_Ref_ID=1 */
+public static int HEADEROVERRIDEREFERENCE_VAF_Control_Ref_ID=1;/** Set Header Override Reference.
 @param HeaderOverrideReference Override reference of field to be displayed in header panel. */
 public void SetHeaderOverrideReference (int HeaderOverrideReference){Set_Value ("HeaderOverrideReference", HeaderOverrideReference);}/** Get Header Override Reference.
 @return Override reference of field to be displayed in header panel. */
@@ -165,8 +165,8 @@ public String GetHelp() {return (String)Get_Value("Help");}/** Set Centrally mai
 public void SetIsCentrallyMaintained (Boolean IsCentrallyMaintained){Set_Value ("IsCentrallyMaintained", IsCentrallyMaintained);}/** Get Centrally maintained.
 @return Information maintained in System Element table */
 public Boolean IsCentrallyMaintained() {Object oo = Get_Value("IsCentrallyMaintained");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}
-/** IsCopy AD_Reference_ID=319 */
-public static int ISCOPY_AD_Reference_ID=319;/** No = N */
+/** IsCopy VAF_Control_Ref_ID=319 */
+public static int ISCOPY_VAF_Control_Ref_ID=319;/** No = N */
 public static String ISCOPY_No = "N";/** Yes = Y */
 public static String ISCOPY_Yes = "Y";/** Is test a valid value.
 @param test testvalue
@@ -201,8 +201,8 @@ public Boolean IsHeaderPanelItem() {Object oo = Get_Value("IsHeaderPanelItem");i
 public void SetIsHeading (Boolean IsHeading){Set_Value ("IsHeading", IsHeading);}/** Get Heading only.
 @return Field without Column - Only label is displayed */
 public Boolean IsHeading() {Object oo = Get_Value("IsHeading");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}
-/** IsMandatoryUI AD_Reference_ID=319 */
-public static int ISMANDATORYUI_AD_Reference_ID=319;/** No = N */
+/** IsMandatoryUI VAF_Control_Ref_ID=319 */
+public static int ISMANDATORYUI_VAF_Control_Ref_ID=319;/** No = N */
 public static String ISMANDATORYUI_No = "N";/** Yes = Y */
 public static String ISMANDATORYUI_Yes = "Y";/** Is test a valid value.
 @param test testvalue
@@ -221,8 +221,8 @@ public Boolean IsReadOnly() {Object oo = Get_Value("IsReadOnly");if (oo != null)
 public void SetIsSameLine (Boolean IsSameLine){Set_Value ("IsSameLine", IsSameLine);}/** Get Same Line.
 @return Displayed on same line as previous field */
 public Boolean IsSameLine() {Object oo = Get_Value("IsSameLine");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}
-/** MRIsDisplayed AD_Reference_ID=319 */
-public static int MRISDISPLAYED_AD_Reference_ID=319;/** No = N */
+/** MRIsDisplayed VAF_Control_Ref_ID=319 */
+public static int MRISDISPLAYED_VAF_Control_Ref_ID=319;/** No = N */
 public static String MRISDISPLAYED_No = "N";/** Yes = Y */
 public static String MRISDISPLAYED_Yes = "Y";/** Is test a valid value.
 @param test testvalue
@@ -245,8 +245,8 @@ public int GetMaxHeight() {Object ii = Get_Value("MaxHeight");if (ii == null) re
 public void SetMaxWidth (int MaxWidth){Set_Value ("MaxWidth", MaxWidth);}/** Get Max Width.
 @return Maximum Width in 1/72 if an inch - 0 = no restriction */
 public int GetMaxWidth() {Object ii = Get_Value("MaxWidth");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** MobileListingFormat AD_Reference_ID=1000128 */
-public static int MOBILELISTINGFORMAT_AD_Reference_ID=1000128;/** Header = 1 */
+/** MobileListingFormat VAF_Control_Ref_ID=1000128 */
+public static int MOBILELISTINGFORMAT_VAF_Control_Ref_ID=1000128;/** Header = 1 */
 public static String MOBILELISTINGFORMAT_Header = "1";/** SubHeader = 2 */
 public static String MOBILELISTINGFORMAT_SubHeader = "2";/** DateHeader = 3 */
 public static String MOBILELISTINGFORMAT_DateHeader = "3";/** FooterNote = 4 */
@@ -265,8 +265,8 @@ public void SetName (String Name){if (Name == null) throw new ArgumentException 
 public String GetName() {return (String)Get_Value("Name");}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetName());}
-/** ObscureType AD_Reference_ID=291 */
-public static int OBSCURETYPE_AD_Reference_ID=291;/** Obscure Digits but last 4 = 904 */
+/** ObscureType VAF_Control_Ref_ID=291 */
+public static int OBSCURETYPE_VAF_Control_Ref_ID=291;/** Obscure Digits but last 4 = 904 */
 public static String OBSCURETYPE_ObscureDigitsButLast4 = "904";/** Obscure Digits but first/last 4 = 944 */
 public static String OBSCURETYPE_ObscureDigitsButFirstLast4 = "944";/** Obscure AlphaNumeric but last 4 = A04 */
 public static String OBSCURETYPE_ObscureAlphaNumericButLast4 = "A04";/** Obscure AlphaNumeric but first/last 4 = A44 */
@@ -291,8 +291,8 @@ public Boolean IsShowIcon() {Object oo = Get_Value("ShowIcon");if (oo != null) {
 public void SetSortNo (Decimal? SortNo){Set_Value ("SortNo", (Decimal?)SortNo);}/** Get Record Sort No.
 @return Determines in what order the records are displayed */
 public Decimal GetSortNo() {Object bd =Get_Value("SortNo");if (bd == null) return Env.ZERO;return  Convert.ToDecimal(bd);}
-/** ZoomWindow_ID AD_Reference_ID=284 */
-public static int ZOOMWINDOW_ID_AD_Reference_ID=284;/** Set Zoom Window.
+/** ZoomWindow_ID VAF_Control_Ref_ID=284 */
+public static int ZOOMWINDOW_ID_VAF_Control_Ref_ID=284;/** Set Zoom Window.
 @param ZoomWindow_ID Zoom Window */
 public void SetZoomWindow_ID (int ZoomWindow_ID){if (ZoomWindow_ID <= 0) Set_Value ("ZoomWindow_ID", null);else
 Set_Value ("ZoomWindow_ID", ZoomWindow_ID);}/** Get Zoom Window.

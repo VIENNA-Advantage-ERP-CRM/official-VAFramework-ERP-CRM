@@ -53,11 +53,11 @@ namespace VIS.Models
                  + "INNER JOIN C_Currency c ON (ba.C_Currency_ID=c.C_Currency_ID) "
                  + " AND ba.IsActive = 'Y'"
                  + " AND EXISTS (SELECT * FROM C_BankAccountDoc d WHERE d.C_BankAccount_ID=ba.C_BankAccount_ID) "
-                 + " AND (ba.VAF_Org_ID IN (SELECT ro.VAF_Org_ID FROM AD_Role_OrgAccess ro"
-                 + " WHERE ro.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND ro.IsActive = 'Y')"
-                 + " OR (ba.VAF_Org_ID = 0 AND EXISTS (SELECT ro.VAF_Org_ID FROM AD_Role_OrgAccess ro"
-                 + " WHERE ro.AD_Role_ID = " + ctx.GetAD_Role_ID() + " AND ro.IsActive = 'Y')) "
-                 + " OR EXISTS (SELECT NULL FROM AD_Role WHERE AD_Role_ID=" + ctx.GetAD_Role_ID() + " AND IsAccessAllOrgs='Y'))"
+                 + " AND (ba.VAF_Org_ID IN (SELECT ro.VAF_Org_ID FROM VAF_Role_OrgRights ro"
+                 + " WHERE ro.VAF_Role_ID = " + ctx.GetVAF_Role_ID() + " AND ro.IsActive = 'Y')"
+                 + " OR (ba.VAF_Org_ID = 0 AND EXISTS (SELECT ro.VAF_Org_ID FROM VAF_Role_OrgRights ro"
+                 + " WHERE ro.VAF_Role_ID = " + ctx.GetVAF_Role_ID() + " AND ro.IsActive = 'Y')) "
+                 + " OR EXISTS (SELECT NULL FROM VAF_Role WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsAccessAllOrgs='Y'))"
                  //+ " AND ba.vaf_org_id = " + ctx.GetVAF_Org_ID()
                  + " ORDER BY 2";
             ds = DB.ExecuteDataset(sqlBankAccount, null, null);
@@ -119,8 +119,8 @@ namespace VIS.Models
         {
             List<PaymentMethod> lstPaymentMethod = new List<PaymentMethod>();
             DataSet ds = new DataSet();
-            string sqlPaymentRule = "select Name, Value from ad_ref_list where ad_reference_id = 195 "
-                  + " AND AD_Ref_List.Value IN (SELECT PaymentRule FROM C_BankAccountDoc WHERE C_BankAccount_ID=" + C_BankAccount_ID + ") ORDER BY 2";
+            string sqlPaymentRule = "select Name, Value from VAF_CtrlRef_List where VAF_Control_Ref_id = 195 "
+                  + " AND VAF_CtrlRef_List.Value IN (SELECT PaymentRule FROM C_BankAccountDoc WHERE C_BankAccount_ID=" + C_BankAccount_ID + ") ORDER BY 2";
             ds = DB.ExecuteDataset(sqlPaymentRule, null, null);
             if (ds != null)
             {

@@ -341,20 +341,20 @@
         function roleTemplate() {
             var script = ' <script type="text/x-handlebars-template">' +
                 '{{#each this}}' +
-                '<div class="vis-group-user-wrap vis-group-roless vis-group-role-pad"  data-UID="{{AD_Role_ID}}">' +
+                '<div class="vis-group-user-wrap vis-group-roless vis-group-role-pad"  data-UID="{{VAF_Role_ID}}">' +
                     	'<div class="vis-group-user-profile">' +
                         '{{#if IsAssignedToUser}}' +
                         '{{#if IsUpdate}}' +
-                        	'<input type="checkbox" data-UID="{{AD_Role_ID}}" checked="">' +            // if selected user can be updated
+                        	'<input type="checkbox" data-UID="{{VAF_Role_ID}}" checked="">' +            // if selected user can be updated
                             '{{else}}' +
-                            '<input disabled type="checkbox" data-UID="{{AD_Role_ID}}" checked="">' +            // if selected user cannot be updated
+                            '<input disabled type="checkbox" data-UID="{{VAF_Role_ID}}" checked="">' +            // if selected user cannot be updated
                             '{{/if}}' +
                             '<label style="color: rgba(var(--v-c-on-secondary), 1);font-weight: bold;">{{Name}}</label>' +
                             '{{else}}' +
                             '{{#if IsUpdate}}' +
-                            '<input type="checkbox" data-UID="{{AD_Role_ID}}" >' +                                  // if selected user can be updated
+                            '<input type="checkbox" data-UID="{{VAF_Role_ID}}" >' +                                  // if selected user can be updated
                             '{{else}}' +
-                             '<input disabled type="checkbox" data-UID="{{AD_Role_ID}}" >' +                 // if selected user cannot be updated
+                             '<input disabled type="checkbox" data-UID="{{VAF_Role_ID}}" >' +                 // if selected user cannot be updated
                              '{{/if}}' +
                             '<label>{{Name}}</label>' +
                             '{{/if}}' +
@@ -362,7 +362,7 @@
                         '</div>' +
                             '<div class="vis-group-user-right">' +
                         	'<ul>' +
-                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{AD_Role_ID}}-{{roleWindowID}}"></span></li>' +
+                '<li><span class="vis-group-user-ico vis-group-edit vis vis-edit" title="' + VIS.Msg.getMsg("Edit") +'" data-UID="{{VAF_Role_ID}}-{{roleWindowID}}"></span></li>' +
                             '</ul>' +
                             '</div>' +
                 '</div>' +
@@ -649,7 +649,7 @@
 
 
                     for (var i = 0; i < data.length; i++) {
-                        roleAssigned.push({ AD_Role_ID: data[i].AD_Role_ID, IsAssignedToUser: data[i].IsAssignedToUser })
+                        roleAssigned.push({ VAF_Role_ID: data[i].VAF_Role_ID, IsAssignedToUser: data[i].IsAssignedToUser })
                     }
 
                     $($divRoleDataContainer.find('input')).off("click");
@@ -672,7 +672,7 @@
             var name = $searchGroup.val();
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/GetGroupInfo",
-                data: ({ AD_Role_ID: roleID, name: name }),
+                data: ({ VAF_Role_ID: roleID, name: name }),
                 success: function (result) {
                     var data = JSON.parse(result);
 
@@ -743,7 +743,7 @@
                 roleID = target.data("uid");
                 roleID = roleID.split('-');
                 var zoomQuery = new VIS.Query();
-                zoomQuery.addRestriction("AD_Role_ID", VIS.Query.prototype.EQUAL, roleID[0]);
+                zoomQuery.addRestriction("VAF_Role_ID", VIS.Query.prototype.EQUAL, roleID[0]);
                 VIS.viewManager.startWindow(roleID[1], zoomQuery);
                 roleID = roleID[0];
             }
@@ -821,7 +821,7 @@
 
             //this is used to set if role is assigned or assigned to user.
             var element = $.grep(roleAssigned, function (ele, index) {
-                return ele.AD_Role_ID == target.data('uid');
+                return ele.VAF_Role_ID == target.data('uid');
             });
             if (element != null && element.length > 0) {
                 element[0].IsAssignedToUser = target.prop('checked');
@@ -935,7 +935,7 @@
             $.ajax({
                 url: VIS.Application.contextUrl + "Group/UpdateUserGroups",
                 type: "Post",
-                data: { AD_Role_ID: roleID, VAF_Group_ID: groupID, groups: JSON.stringify(groupAssigned) },
+                data: { VAF_Role_ID: roleID, VAF_Group_ID: groupID, groups: JSON.stringify(groupAssigned) },
                 success: function () {
                     $($($rightPanel.find('h7'))[0]).show();
                     $($($rightPanel.find('h7'))[0]).fadeOut(1600, "linear");

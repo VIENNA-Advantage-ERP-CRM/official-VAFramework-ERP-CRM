@@ -124,8 +124,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** BOMType AD_Reference_ID=347 */
-        public static int BOMTYPE_AD_Reference_ID = 347;
+        /** BOMType VAF_Control_Ref_ID=347 */
+        public static int BOMTYPE_VAF_Control_Ref_ID = 347;
         /** Current Active = A */
         public static String BOMTYPE_CurrentActive = "A";
         /** Future = F */
@@ -168,8 +168,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("BOMType");
         }
 
-        /** BOMUse AD_Reference_ID=348 */
-        public static int BOMUSE_AD_Reference_ID = 348;
+        /** BOMUse VAF_Control_Ref_ID=348 */
+        public static int BOMUSE_VAF_Control_Ref_ID = 348;
         /** Master = A */
         public static String BOMUSE_Master = "A";
         /** Engineering = E */

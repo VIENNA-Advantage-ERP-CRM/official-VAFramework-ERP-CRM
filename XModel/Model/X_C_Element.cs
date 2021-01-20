@@ -168,8 +168,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** ElementType AD_Reference_ID=116 */
-public static int ELEMENTTYPE_AD_Reference_ID=116;
+/** ElementType VAF_Control_Ref_ID=116 */
+public static int ELEMENTTYPE_VAF_Control_Ref_ID=116;
 /** Account = A */
 public static String ELEMENTTYPE_Account = "A";
 /** User defined = U */

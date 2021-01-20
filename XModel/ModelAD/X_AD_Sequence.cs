@@ -493,8 +493,8 @@ public String GetVFormat()
 {
 return (String)Get_Value("VFormat");
 }
-/** YearMonthFormat AD_Reference_ID=1000221 */
-public static int YEARMONTHFORMAT_AD_Reference_ID = 1000221;/** YYYYMM = 1 */
+/** YearMonthFormat VAF_Control_Ref_ID=1000221 */
+public static int YEARMONTHFORMAT_VAF_Control_Ref_ID = 1000221;/** YYYYMM = 1 */
 public static String YEARMONTHFORMAT_YYYYMM = "1";/** YYMM = 2 */
 public static String YEARMONTHFORMAT_YYMM = "2";/** Is test a valid value.
 @param test testvalue

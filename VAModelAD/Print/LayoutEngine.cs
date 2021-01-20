@@ -151,7 +151,7 @@ namespace VAdvantage.Print
             //	Set Paper
             bool tempHasLayout = m_hasLayout;
             m_hasLayout = false;	//	do not start re-calculation
-            MPrintPaper mPaper = MPrintPaper.Get(format.GetAD_PrintPaper_ID());
+            MPrintPaper mPaper = MPrintPaper.Get(format.GetVAF_Print_Rpt_Paper_ID());
             if (m_format.IsStandardHeaderFooter())
                 SetPaper(mPaper.GetCPaper());
             else
@@ -159,8 +159,8 @@ namespace VAdvantage.Print
                     m_format.GetHeaderMargin(), m_format.GetFooterMargin());
             m_hasLayout = tempHasLayout;
             //
-            m_printColor = MPrintColor.Get(GetCtx(), format.GetAD_PrintColor_ID());
-            m_printFont = MPrintFont.Get(format.GetAD_PrintFont_ID());
+            m_printColor = MPrintColor.Get(GetCtx(), format.GetVAF_Print_Rpt_Colour_ID());
+            m_printFont = MPrintFont.Get(format.GetVAF_Print_Rpt_Font_ID());
 
             //	Print Context
             m_printCtx.SetContext(Page.CONTEXT_REPORTNAME, m_format.GetName());
@@ -518,10 +518,10 @@ namespace VAdvantage.Print
                         else
                         {
                             ///////////change To pickImage on the Bases of Organisations////////
-                            //object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + GetCtx().GetVAF_Org_ID());
+                            //object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgDetail WHERE ISACTIVE='Y' AND VAF_Org_ID=" + GetCtx().GetVAF_Org_ID());
                             if (_vaf_org_id > -1)
                             {
-                                object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _vaf_org_id);
+                                object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgDetail WHERE ISACTIVE='Y' AND VAF_Org_ID=" + _vaf_org_id);
                                 if (logo != null && logo != DBNull.Value)
                                 {
                                     MemoryStream ms = new MemoryStream((Byte[])logo);
@@ -559,7 +559,7 @@ namespace VAdvantage.Print
                         if (maxWidth == 0 && item.IsFieldAlignBlock())
                             maxWidth = GetAreaBounds().Width;
                         element = CreateStringElement(item.GetPrintName(m_format.GetLanguage()),
-                            item.GetAD_PrintColor_ID(), item.GetAD_PrintFont_ID(),
+                            item.GetVAF_Print_Rpt_Colour_ID(), item.GetVAF_Print_Rpt_Font_ID(),
                             maxWidth, item.GetMaxHeight(), item.IsHeightOneLine(), alignment, true);
                     }
 
@@ -616,23 +616,23 @@ namespace VAdvantage.Print
             }	//	for every row
         }	//	layoutForm
 
-        private PrintElement CreateStringElement(String content, int AD_PrintColor_ID, int AD_PrintFont_ID,
+        private PrintElement CreateStringElement(String content, int VAF_Print_Rpt_Colour_ID, int VAF_Print_Rpt_Font_ID,
     int maxWidth, int maxHeight, bool isHeightOneLine, String FieldAlignmentType, bool isTranslated)
         {
             if (content == null || content.Length == 0)
                 return null;
             //	Color / Font
             Color color = GetColor();	//	default
-            if (AD_PrintColor_ID != 0 && m_printColor.Get_ID() != AD_PrintColor_ID)
+            if (VAF_Print_Rpt_Colour_ID != 0 && m_printColor.Get_ID() != VAF_Print_Rpt_Colour_ID)
             {
-                MPrintColor c = MPrintColor.Get(GetCtx(), AD_PrintColor_ID);
+                MPrintColor c = MPrintColor.Get(GetCtx(), VAF_Print_Rpt_Colour_ID);
                 if (c.GetColor() != null)
                     color = c.GetColor();
             }
             Font font = m_printFont.GetFont();		//	default
-            if (AD_PrintFont_ID != 0 && m_printFont.Get_ID() != AD_PrintFont_ID)
+            if (VAF_Print_Rpt_Font_ID != 0 && m_printFont.Get_ID() != VAF_Print_Rpt_Font_ID)
             {
-                MPrintFont f = MPrintFont.Get(AD_PrintFont_ID);
+                MPrintFont f = MPrintFont.Get(VAF_Print_Rpt_Font_ID);
                 if (f.GetFont() != null)
                     font = f.GetFont();
             }
@@ -682,10 +682,10 @@ namespace VAdvantage.Print
         private PrintElement CreateBoxElement(MPrintFormatItem item)
         {
             Color color = GetColor();	//	default
-            if (item.GetAD_PrintColor_ID() != 0
-                && m_printColor.Get_ID() != item.GetAD_PrintColor_ID())
+            if (item.GetVAF_Print_Rpt_Colour_ID() != 0
+                && m_printColor.Get_ID() != item.GetVAF_Print_Rpt_Colour_ID())
             {
-                MPrintColor c = MPrintColor.Get(GetCtx(), item.GetAD_PrintColor_ID());
+                MPrintColor c = MPrintColor.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
                 if (c.GetColor() != null)
                     color = c.GetColor();
             }
@@ -755,29 +755,29 @@ namespace VAdvantage.Print
                 else if (value is ValueNamePair)
                     ID = new ValueNamePair(((ValueNamePair)value).GetValue(), item.GetColumnName());
             }
-            else if (X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_Default.Equals(FieldAlignmentType))
+            else if (X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_Default.Equals(FieldAlignmentType))
             {
                 if (data.IsNumeric())
-                    FieldAlignmentType = X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight;
+                    FieldAlignmentType = X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_TrailingRight;
                 else
-                    FieldAlignmentType = X_AD_PrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft;
+                    FieldAlignmentType = X_VAF_Print_Rpt_LItem.FIELDALIGNMENTTYPE_LeadingLeft;
             }
 
             //	Get Color/ Font
             Color color = GetColor();	//	default
             if (ID != null && !isForm)
             { }								//	link color/underline handeled in PrintElement classes
-            else if (item.GetAD_PrintColor_ID() != 0 && m_printColor.Get_ID() != item.GetAD_PrintColor_ID())
+            else if (item.GetVAF_Print_Rpt_Colour_ID() != 0 && m_printColor.Get_ID() != item.GetVAF_Print_Rpt_Colour_ID())
             {
-                MPrintColor c = MPrintColor.Get(GetCtx(), item.GetAD_PrintColor_ID());
+                MPrintColor c = MPrintColor.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
                 if (c.GetColor() != null)
                     color = c.GetColor();
             }
 
             Font font = m_printFont.GetFont();		//	default
-            if (item.GetAD_PrintFont_ID() != 0 && m_printFont.Get_ID() != item.GetAD_PrintFont_ID())
+            if (item.GetVAF_Print_Rpt_Font_ID() != 0 && m_printFont.Get_ID() != item.GetVAF_Print_Rpt_Font_ID())
             {
-                MPrintFont f = MPrintFont.Get(item.GetAD_PrintFont_ID());
+                MPrintFont f = MPrintFont.Get(item.GetVAF_Print_Rpt_Font_ID());
                 if (f.GetFont() != null)
                     font = f.GetFont();
             }
@@ -811,7 +811,7 @@ namespace VAdvantage.Print
             NewLine();
             PrintElement element = null;
             //
-            MPrintFormat format = MPrintFormat.Get(GetCtx(), item.GetAD_PrintFormatChild_ID(), false);
+            MPrintFormat format = MPrintFormat.Get(GetCtx(), item.GetVAF_Print_Rpt_LayoutChild_ID(), false);
             format.SetLanguage(m_format.GetLanguage());
             if (m_format.IsTranslationView())
                 format.SetTranslationLanguage(m_format.GetLanguage());
@@ -1232,7 +1232,7 @@ namespace VAdvantage.Print
             /** Removing/modifying the Vienna logo/trademark/copyright is a violation of the license	*/
 
             /////////change To pickImage on the Bases of Organisations////////
-            //object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgInfo WHERE ISACTIVE='Y' AND VAF_Org_ID=" + GetCtx().GetVAF_Org_ID());
+            //object logo = DB.ExecuteScalar("SELECT LOGO FROM VAF_OrgDetail WHERE ISACTIVE='Y' AND VAF_Org_ID=" + GetCtx().GetVAF_Org_ID());
             //Image img = null;
             //if (logo != null)
             //{
@@ -1403,14 +1403,14 @@ namespace VAdvantage.Print
             MPrintTableFormat tf = format.GetTableFormat();
             //	Initial Values
             HashMap<Point, Font> rowColFont = new HashMap<Point, Font>();
-            MPrintFont printFont = MPrintFont.Get(format.GetAD_PrintFont_ID());
+            MPrintFont printFont = MPrintFont.Get(format.GetVAF_Print_Rpt_Font_ID());
             rowColFont.Put(new Point(TableElement.ALL, TableElement.ALL), printFont.GetFont());
             tf.SetStandard_Font(printFont.GetFont());
             rowColFont.Put(new Point(TableElement.HEADER_ROW, TableElement.ALL), tf.GetHeader_Font());
 
             //
             HashMap<Point, Color> rowColColor = new HashMap<Point, Color>();
-            MPrintColor printColor = MPrintColor.Get(GetCtx(), format.GetAD_PrintColor_ID());
+            MPrintColor printColor = MPrintColor.Get(GetCtx(), format.GetVAF_Print_Rpt_Colour_ID());
             rowColColor.Put(new Point(TableElement.ALL, TableElement.ALL), printColor.GetColor());
             rowColColor.Put(new Point(TableElement.HEADER_ROW, TableElement.ALL), tf.GetHeaderFG_Color());
             //
@@ -1482,15 +1482,15 @@ namespace VAdvantage.Print
                     if (columnJustification[col] == null || columnJustification[col].Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Default))
                         columnJustification[col] = MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft;	//	when generated sets correct alignment
                     //	Column Fonts
-                    if (item.GetAD_PrintFont_ID() != 0 && item.GetAD_PrintFont_ID() != format.GetAD_PrintFont_ID())
+                    if (item.GetVAF_Print_Rpt_Font_ID() != 0 && item.GetVAF_Print_Rpt_Font_ID() != format.GetVAF_Print_Rpt_Font_ID())
                     {
-                        MPrintFont font = MPrintFont.Get(item.GetAD_PrintFont_ID());
+                        MPrintFont font = MPrintFont.Get(item.GetVAF_Print_Rpt_Font_ID());
                         rowColFont.Put(new Point(TableElement.ALL, col), font.GetFont());
                     }
-                    if (item.GetAD_PrintColor_ID() != 0 && item.GetAD_PrintColor_ID() != format.GetAD_PrintColor_ID())
+                    if (item.GetVAF_Print_Rpt_Colour_ID() != 0 && item.GetVAF_Print_Rpt_Colour_ID() != format.GetVAF_Print_Rpt_Colour_ID())
                     {
                         //QueryRestriction
-                        MPrintColor color = MPrintColor.Get(GetCtx(), item.GetAD_PrintColor_ID());
+                        MPrintColor color = MPrintColor.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
                         rowColColor.Put(new Point(TableElement.ALL, col), color.GetColor());
                     }
                     //

@@ -149,8 +149,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_SourceColumn_ID AD_Reference_ID=414 */
-public static int AD_SOURCECOLUMN_ID_AD_Reference_ID=414;
+/** AD_SourceColumn_ID VAF_Control_Ref_ID=414 */
+public static int AD_SOURCECOLUMN_ID_VAF_Control_Ref_ID=414;
 /** Set Source Column.
 @param AD_SourceColumn_ID The column used as the criteria */
 public void SetAD_SourceColumn_ID (int AD_SourceColumn_ID)
@@ -184,8 +184,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** Operation AD_Reference_ID=205 */
-public static int OPERATION_AD_Reference_ID=205;
+/** Operation VAF_Control_Ref_ID=205 */
+public static int OPERATION_VAF_Control_Ref_ID=205;
 /** != = != */
 public static String OPERATION_NotEq = "!=";
 /** < = << */

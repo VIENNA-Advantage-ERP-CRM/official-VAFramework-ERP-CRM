@@ -161,8 +161,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Region_ID AD_Reference_ID=157 */
-public static int C_REGION_ID_AD_Reference_ID=157;
+/** C_Region_ID VAF_Control_Ref_ID=157 */
+public static int C_REGION_ID_VAF_Control_Ref_ID=157;
 /** Set Region.
 @param C_Region_ID Identifies a geographical Region */
 public void SetC_Region_ID (int C_Region_ID)

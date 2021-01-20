@@ -146,9 +146,9 @@
                 var srchCtrl = {
                 };
 
-                ctrl = new VIS.Controls.VTextBox("Name", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+                ctrl = new VIS.Controls.VTextBox("Name", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "Name";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);
@@ -171,9 +171,9 @@
                 var srchCtrl = {
                 };
 
-                ctrl = new VIS.Controls.VTextBox("Reference", false, false, true, 50, 100, null, null, false);// getControl(schema[item].AD_Reference_ID, schema[item].ColumnName, schema[item].Name, schema[item].AD_Reference_Value_ID, schema[item].lookup);
+                ctrl = new VIS.Controls.VTextBox("Reference", false, false, true, 50, 100, null, null, false);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "Reference";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);
@@ -198,7 +198,7 @@
 
                 ctrl = new VIS.Controls.VDate("TrxFromDate", false, false, true, VIS.DisplayType.Date, VIS.Msg.translate("FromDate"));
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "TrxFromDate";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);
@@ -224,7 +224,7 @@
 
                 ctrl = new VIS.Controls.VDate("TrxToDate", false, false, true, VIS.DisplayType.Date, VIS.Msg.translate("ToDate"));
                 srchCtrl.Ctrl = ctrl;
-                srchCtrl.AD_Reference_ID = 10;
+                srchCtrl.VAF_Control_Ref_ID = 10;
                 srchCtrl.ColumnName = "TrxToDate";
                 var tdctrl = $("<td>");
                 //tr.append(tdctrl);

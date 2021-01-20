@@ -118,8 +118,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** VAF_OrgTrx_ID AD_Reference_ID=130 */
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
         /** Set Trx Organization.
         @param VAF_OrgTrx_ID Performing or initiating organization */
         public void SetVAF_OrgTrx_ID(int VAF_OrgTrx_ID)
@@ -204,8 +204,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("BPartnerValue");
         }
 
-        /** BillTo_ID AD_Reference_ID=159 */
-        public static int BILLTO_ID_AD_Reference_ID = 159;
+        /** BillTo_ID VAF_Control_Ref_ID=159 */
+        public static int BILLTO_ID_VAF_Control_Ref_ID = 159;
         /** Set Invoice To.
         @param BillTo_ID Bill to Address */
         public void SetBillTo_ID(int BillTo_ID)
@@ -637,8 +637,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("I_ErrorMsg");
         }
 
-        /** I_IsImported AD_Reference_ID=420 */
-        public static int I_ISIMPORTED_AD_Reference_ID = 420;
+        /** I_IsImported VAF_Control_Ref_ID=420 */
+        public static int I_ISIMPORTED_VAF_Control_Ref_ID = 420;
         /** Error = E */
         public static String I_ISIMPORTED_Error = "E";
         /** No = N */
@@ -804,8 +804,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("Name");
         }
 
-        /** PaymentRule AD_Reference_ID=195 */
-        public static int PAYMENTRULE_AD_Reference_ID = 195;
+        /** PaymentRule VAF_Control_Ref_ID=195 */
+        public static int PAYMENTRULE_VAF_Control_Ref_ID = 195;
         /** Cash = B */
         public static String PAYMENTRULE_Cash = "B";
         /** Direct Debit = D */
@@ -1028,8 +1028,8 @@ namespace VAdvantage.Model
             return (String)Get_Value("SKU");
         }
 
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Representative.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)

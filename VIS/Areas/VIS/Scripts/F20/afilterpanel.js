@@ -866,7 +866,7 @@
             // get field's column name
             var columnName = field.getColumnName();
             if (field.getDisplayType() == VIS.DisplayType.Button) {
-                if (field.getAD_Reference_Value_ID() == 0)
+                if (field.getVAF_Control_Ref_Value_ID() == 0)
                     // change done here to display textbox for search in case where buttons don't have Reference List bind with Column
                     //continue;
                     field.setDisplayType(VIS.DisplayType.String);
@@ -968,7 +968,7 @@
 
             var data = {
                 keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
-                , tableName: lookupTableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: this.curTab.getTableName(),
+                , tableName: lookupTableName, VAF_Control_Refvalue_ID: field.getVAF_Control_Ref_Value_ID(), pTableName: this.curTab.getTableName(),
                 pColumnName: field.getColumnName(), whereClause: whereClause,
             };
             var tht = this;
@@ -1310,7 +1310,7 @@
                 //    url: VIS.Application.contextUrl + "JsonData/GetRecordForFilter",
                 //    data: {
                 //        keyCol: keyCol, displayCol: displayCol, validationCode: validationCode
-                //        , tableName: lookupTableName, AD_Referencevalue_ID: field.getAD_Reference_Value_ID(), pTableName: that.curTab.getTableName(), pColumnName: field.getColumnName(), whereClause: finalWhere
+                //        , tableName: lookupTableName, VAF_Control_Refvalue_ID: field.getVAF_Control_Ref_Value_ID(), pTableName: that.curTab.getTableName(), pColumnName: field.getColumnName(), whereClause: finalWhere
                 //    },
                 //    success: function (data) {
                 //        data = JSON.parse(data);

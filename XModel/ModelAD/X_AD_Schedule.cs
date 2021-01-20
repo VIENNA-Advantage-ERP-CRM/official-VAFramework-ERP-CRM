@@ -177,8 +177,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** FrequencyType AD_Reference_ID=221 */
-public static int FREQUENCYTYPE_AD_Reference_ID=221;
+/** FrequencyType VAF_Control_Ref_ID=221 */
+public static int FREQUENCYTYPE_VAF_Control_Ref_ID=221;
 /** Day = D */
 public static String FREQUENCYTYPE_Day = "D";
 /** Hour = H */
@@ -470,8 +470,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ScheduleType AD_Reference_ID=318 */
-public static int SCHEDULETYPE_AD_Reference_ID=318;
+/** ScheduleType VAF_Control_Ref_ID=318 */
+public static int SCHEDULETYPE_VAF_Control_Ref_ID=318;
 /** Frequency = F */
 public static String SCHEDULETYPE_Frequency = "F";
 /** Month Day = M */
@@ -506,8 +506,8 @@ public String GetScheduleType()
 return (String)Get_Value("ScheduleType");
 }
 
-/** WeekDay AD_Reference_ID=167 */
-public static int WEEKDAY_AD_Reference_ID=167;
+/** WeekDay VAF_Control_Ref_ID=167 */
+public static int WEEKDAY_VAF_Control_Ref_ID=167;
 /** Monday = 1 */
 public static String WEEKDAY_Monday = "1";
 /** Tuesday = 2 */

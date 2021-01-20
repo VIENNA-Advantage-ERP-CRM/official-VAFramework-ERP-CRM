@@ -383,12 +383,12 @@
                     var sql = "VIS_152";
                     var params = [];
                     params[0] = new VIS.DB.SqlParam("@BankAcct_ID", C_BankAccount_ID);
-                    var ad_process_id = executeScalar(sql, params);
+                    var VAF_Job_id = executeScalar(sql, params);
 
                     sql = "VIS_150";
                     var vaf_tableview_id = executeScalar(sql);
 
-                    var prin = new VIS.APrint(ad_process_id, vaf_tableview_id, parseInt($cmbPaymentSelect.val()), $self.windowNo);
+                    var prin = new VIS.APrint(VAF_Job_id, vaf_tableview_id, parseInt($cmbPaymentSelect.val()), $self.windowNo);
                     prin.startPdf(null);
                     isBusy(false);
                     var data = JSON.parse(jsonResult);
@@ -428,23 +428,23 @@
                     isBusy(false);
                     var data = JSON.parse(jsonResult);
                     if (paymentID != null || paymentID != undefined) {
-                        //var ad_process_id = VIS.DB.executeScalar("select ad_process_id from ad_process where value = 'remittanceprintformat'");
+                        //var VAF_Job_id = VIS.DB.executeScalar("select VAF_Job_id from VAF_Job where value = 'remittanceprintformat'");
                         // Change by mohit to print remittance slip.
                         var sql = "VIS_151";
 
-                        var ad_process_id = executeScalar(sql);
+                        var VAF_Job_id = executeScalar(sql);
 
 
                         sql = "VIS_150";
                         var vaf_tableview_id = executeScalar(sql);
                         // for (var j = 0; j < data.check_id; j++) {
-                        //var pi = new VIS.ProcessInfo(null, ad_process_id, vaf_tableview_id, paymentID[0]);
+                        //var pi = new VIS.ProcessInfo(null, VAF_Job_id, vaf_tableview_id, paymentID[0]);
                         //pi.setAD_User_ID(VIS.context.getAD_User_ID());
                         //var ctl = new VIS.ProcessCtl($self, pi, null);
                         //ctl.setIsPdf(true);
                         //ctl.process($self.windowNo); //call dispose intenally
                         //ctl = null;
-                        var prin = new VIS.APrint(ad_process_id, vaf_tableview_id, parseInt($cmbPaymentSelect.val()), $self.windowNo);
+                        var prin = new VIS.APrint(VAF_Job_id, vaf_tableview_id, parseInt($cmbPaymentSelect.val()), $self.windowNo);
                         prin.startPdf(null);
                         $self.dispose();
                         // }

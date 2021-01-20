@@ -133,8 +133,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** CM_ChatEntryGrandParent_ID AD_Reference_ID=399 */
-public static int CM_CHATENTRYGRANDPARENT_ID_AD_Reference_ID=399;
+/** CM_ChatEntryGrandParent_ID VAF_Control_Ref_ID=399 */
+public static int CM_CHATENTRYGRANDPARENT_ID_VAF_Control_Ref_ID=399;
 /** Set Chat Entry Grandparent.
 @param CM_ChatEntryGrandParent_ID Link to Grand Parent (root level) */
 public void SetCM_ChatEntryGrandParent_ID (int CM_ChatEntryGrandParent_ID)
@@ -152,8 +152,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** CM_ChatEntryParent_ID AD_Reference_ID=399 */
-public static int CM_CHATENTRYPARENT_ID_AD_Reference_ID=399;
+/** CM_ChatEntryParent_ID VAF_Control_Ref_ID=399 */
+public static int CM_CHATENTRYPARENT_ID_VAF_Control_Ref_ID=399;
 /** Set Chat Entry Parent.
 @param CM_ChatEntryParent_ID Link to direct Parent */
 public void SetCM_ChatEntryParent_ID (int CM_ChatEntryParent_ID)
@@ -219,8 +219,8 @@ public String GetCharacterData()
 return (String)Get_Value("CharacterData");
 }
 
-/** ChatEntryType AD_Reference_ID=398 */
-public static int CHATENTRYTYPE_AD_Reference_ID=398;
+/** ChatEntryType VAF_Control_Ref_ID=398 */
+public static int CHATENTRYTYPE_VAF_Control_Ref_ID=398;
 /** Forum (threaded) = F */
 public static String CHATENTRYTYPE_ForumThreaded = "F";
 /** Note (flat) = N */
@@ -255,8 +255,8 @@ public String GetChatEntryType()
 return (String)Get_Value("ChatEntryType");
 }
 
-/** ConfidentialType AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPE_AD_Reference_ID=340;
+/** ConfidentialType VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPE_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPE_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -293,8 +293,8 @@ public String GetConfidentialType()
 return (String)Get_Value("ConfidentialType");
 }
 
-/** ModeratorStatus AD_Reference_ID=396 */
-public static int MODERATORSTATUS_AD_Reference_ID=396;
+/** ModeratorStatus VAF_Control_Ref_ID=396 */
+public static int MODERATORSTATUS_VAF_Control_Ref_ID=396;
 /** Not Displayed = N */
 public static String MODERATORSTATUS_NotDisplayed = "N";
 /** Published = P */

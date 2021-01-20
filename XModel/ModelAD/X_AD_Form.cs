@@ -160,8 +160,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AccessLevel AD_Reference_ID=5 */
-public static int ACCESSLEVEL_AD_Reference_ID=5;
+/** AccessLevel VAF_Control_Ref_ID=5 */
+public static int ACCESSLEVEL_VAF_Control_Ref_ID=5;
 /** Organization = 1 */
 public static String ACCESSLEVEL_Organization = "1";
 /** Client only = 2 */
@@ -236,8 +236,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

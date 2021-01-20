@@ -115,8 +115,8 @@ StringBuilder sb = new StringBuilder ("X_W_CounterCount[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** C_BPartner_ID AD_Reference_ID=232 */
-public static int C_BPARTNER_ID_AD_Reference_ID=232;
+/** C_BPartner_ID VAF_Control_Ref_ID=232 */
+public static int C_BPARTNER_ID_VAF_Control_Ref_ID=232;
 /** Set Business Partner.
 @param C_BPartner_ID Identifies a Business Partner */
 public void SetC_BPartner_ID (int C_BPartner_ID)

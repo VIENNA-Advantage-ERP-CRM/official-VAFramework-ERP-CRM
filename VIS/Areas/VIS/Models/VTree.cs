@@ -235,7 +235,7 @@ namespace VAdvantage.Classes
         private VTreeNode GetNodeDetail(int Node_ID, int Parent_ID, int seqNo, bool onBar)
         {
             int AD_Window_ID = 0;
-            int AD_Process_ID = 0;
+            int VAF_Job_ID = 0;
             int VAF_Page_ID = 0;
             int AD_Workflow_ID = 0;
             int AD_Task_ID = 0;
@@ -281,7 +281,7 @@ namespace VAdvantage.Classes
                         actionColor = dr[index++].ToString();
                         AD_Window_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
-                        AD_Process_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
+                        VAF_Job_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
                         VAF_Page_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
@@ -299,7 +299,7 @@ namespace VAdvantage.Classes
                         else if (VTreeNode.ACTION_PROCESS.Equals(actionColor)
                                 || VTreeNode.ACTION_REPORT.Equals(actionColor))
                         {
-                            blnAccess = role.GetProcessAccess(AD_Process_ID);
+                            blnAccess = role.GetProcessAccess(VAF_Job_ID);
                         }
                         else if (VTreeNode.ACTION_FORM.Equals(actionColor))
                         {
@@ -335,7 +335,7 @@ namespace VAdvantage.Classes
             {
                 // set VTreeNode ID's
                 retValue.AD_Window_ID = AD_Window_ID;
-                retValue.AD_Process_ID = AD_Process_ID;
+                retValue.VAF_Job_ID = VAF_Job_ID;
                 retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.AD_Workflow_ID = AD_Workflow_ID;
                 retValue.AD_Task_ID = AD_Task_ID;
@@ -384,15 +384,15 @@ namespace VAdvantage.Classes
                 strSql = "SELECT o.VAF_ORG_ID,o.Name,o.Description,o.ISSUMMARY,o.VAF_CLIENT_ID,c.NAME as Tenant,o.VALUE as SearchKey,"
                     + "(case o.ISACTIVE when 'Y' then 'True' else 'False' end) as Active,"
                     + "(case o.ISSUMMARY when 'Y' then 'True' else 'False' end) as Summary "
-                    + "FROM AD_Role r, VAF_Client c"
+                    + "FROM VAF_Role r, VAF_Client c"
                     + " INNER JOIN VAF_Org o ON (c.VAF_Client_ID=o.VAF_Client_ID) "
                     + "WHERE "
-                    //r.AD_Role_ID=" + DataBase.GlobalVariable.AD_ROLE_ID
+                    //r.VAF_Role_ID=" + DataBase.GlobalVariable.VAF_ROLE_ID
                     //+ " AND 
                     +"(c.VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " OR c.vaf_client_id=0)"
                     //+ " AND (r.IsAccessAllOrgs='Y' "
-                    //    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_Role_OrgAccess ra "
-                    //        + "WHERE ra.AD_Role_ID=r.AD_Role_ID AND ra.IsActive='Y')) "
+                    //    + "OR (r.IsUseUserOrgAccess='N' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM VAF_Role_OrgRights ra "
+                    //        + "WHERE ra.VAF_Role_ID=r.VAF_Role_ID AND ra.IsActive='Y')) "
                     //    + "OR (r.IsUseUserOrgAccess='Y' AND o.VAF_Org_ID IN (SELECT VAF_Org_ID FROM AD_User_OrgAccess ua "
                     //        + "WHERE ua.AD_User_ID=" + ctx.GetAD_User_ID + " AND ua.IsActive='Y'))"
                     //    + ") "
@@ -405,13 +405,13 @@ namespace VAdvantage.Classes
                  if (isBase)
                  {
                      strSql = @"SELECT m.VAF_MenuConfig_ID, m.Name,m.Description,m.IsSummary,m.Action, m.AD_Window_ID,
-                       m.AD_Process_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
+                       m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
                        FROM VAF_MenuConfig m WHERE";
                  }
                  else
                  {
                      strSql = @"SELECT m.VAF_MenuConfig_ID, t.Name,t.Description,m.IsSummary,m.Action, m.AD_Window_ID,
-                        m.AD_Process_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
+                        m.VAF_Job_ID, m.VAF_Page_ID, m.AD_Workflow_ID, m.AD_Task_ID, m.AD_Workbench_ID 
                       FROM VAF_MenuConfig m, VAF_MenuConfig_TL t WHERE m.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID AND t.VAF_Language='" + Utility.Env.GetVAF_Language(ctx) + "' And";
                  }
                  if (!_editable)
@@ -421,7 +421,7 @@ namespace VAdvantage.Classes
                  strSql += @" 
                        (m.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window w WHERE m.AD_Window_ID=w.AD_Window_ID AND w.IsBetaFunctionality='N'))
                        AND 
-                       (m.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM AD_Process p WHERE m.AD_Process_ID=p.AD_Process_ID AND p.IsBetaFunctionality='N')) 
+                       (m.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job p WHERE m.VAF_Job_ID=p.VAF_Job_ID AND p.IsBetaFunctionality='N')) 
                        AND 
                        (m.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page f WHERE m.VAF_Page_ID=f.VAF_Page_ID AND f.IsBetaFunctionality='N')) ";
                  if (!_editable)
@@ -455,9 +455,9 @@ namespace VAdvantage.Classes
         /// <returns>org ids</returns>
         public string GetOrgID()
         {
-            if (ctx.GetAD_Role_ID().ToString() != "" && ctx.GetAD_Role_ID().ToString() != "0")
+            if (ctx.GetVAF_Role_ID().ToString() != "" && ctx.GetVAF_Role_ID().ToString() != "0")
             {
-                return "0," + ctx.GetAD_Role_ID().ToString();
+                return "0," + ctx.GetVAF_Role_ID().ToString();
             }
             else
             {
@@ -660,7 +660,7 @@ namespace VAdvantage.Classes
 
     //           AD_Window_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : int.Parse(dt.Rows[i][index].ToString());
     //           index++;
-    //           AD_Process_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
+    //           VAF_Job_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
     //           VAF_Page_ID = (dt.Rows[i][index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dt.Rows[i][index].ToString());
     //           index++;
@@ -677,24 +677,24 @@ namespace VAdvantage.Classes
 
     //               if (VTreeNode.ACTION_WINDOW.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetWindowAccess(AD_Window_ID);
+    //                   blnAccess = VAF_ROLE.GetWindowAccess(AD_Window_ID);
     //               }
     //               else if (VTreeNode.ACTION_PROCESS.Equals(actionColor)
     //                       || VTreeNode.ACTION_REPORT.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetProcessAccess(AD_Process_ID);
+    //                   blnAccess = VAF_ROLE.GetProcessAccess(VAF_Job_ID);
     //               }
     //               else if (VTreeNode.ACTION_FORM.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetFormAccess(VAF_Page_ID);
+    //                   blnAccess = VAF_ROLE.GetFormAccess(VAF_Page_ID);
     //               }
     //               else if (VTreeNode.ACTION_WORKFLOW.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetWorkflowAccess(AD_Workflow_ID);
+    //                   blnAccess = VAF_ROLE.GetWorkflowAccess(AD_Workflow_ID);
     //               }
     //               else if (VTreeNode.ACTION_TASK.Equals(actionColor))
     //               {
-    //                   blnAccess = AD_ROLE.GetTaskAccess(AD_Task_ID);
+    //                   blnAccess = VAF_ROLE.GetTaskAccess(AD_Task_ID);
     //               }
 
     //               if (blnAccess != null)		//	rw or ro for Role 

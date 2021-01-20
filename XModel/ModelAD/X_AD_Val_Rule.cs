@@ -166,8 +166,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */
@@ -212,8 +212,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 
-/** Type AD_Reference_ID=101 */
-public static int TYPE_AD_Reference_ID=101;
+/** Type VAF_Control_Ref_ID=101 */
+public static int TYPE_VAF_Control_Ref_ID=101;
 /** Java Script = E */
 public static String TYPE_JavaScript = "E";
 /** Java Language = J */

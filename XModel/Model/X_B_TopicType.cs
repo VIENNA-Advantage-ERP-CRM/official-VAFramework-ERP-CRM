@@ -203,8 +203,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_ProductMember_ID AD_Reference_ID=162 */
-public static int M_PRODUCTMEMBER_ID_AD_Reference_ID=162;
+/** M_ProductMember_ID VAF_Control_Ref_ID=162 */
+public static int M_PRODUCTMEMBER_ID_VAF_Control_Ref_ID=162;
 /** Set Membership.
 @param M_ProductMember_ID Product used to deternine the price of the membership for the topic type */
 public void SetM_ProductMember_ID (int M_ProductMember_ID)

@@ -713,8 +713,8 @@ namespace VAdvantage.Model
                 //MFRPTProductAcct obj = null;
                 int _MProduct_ID = GetM_Product_ID();
                 int _PCategory_ID = GetM_Product_Category_ID();
-                string sql = "SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where   r.name='FRPT_RelatedTo' and l.name='Product'";
-                //"select VALUE from AD_Ref_List where name='Product'";
+                string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Product'";
+                //"select VALUE from VAF_CtrlRef_List where name='Product'";
                 string _RelatedToProduct = Convert.ToString(DB.ExecuteScalar(sql));
                 //string _RelatedToProduct = X_FRPT_AcctDefault.FRPT_RELATEDTO_Product.ToString();
 

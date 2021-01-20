@@ -31,20 +31,20 @@ namespace VAdvantage.Model
             return ii;
         }	//	getAD_User_ID
 
-        public new int GetAD_Role_ID()
+        public new int GetVAF_Role_ID()
         {
-            int ii = Util.GetValueOfInt(Get_Value("AD_Role_ID"));
+            int ii = Util.GetValueOfInt(Get_Value("VAF_Role_ID"));
             //if (ii == null)
             //    return -1;
             return ii;
-        }	//	getAD_Role_ID
+        }	//	getVAF_Role_ID
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder("MAlertRecipient[");
             sb.Append(Get_ID())
                 .Append(",AD_User_ID=").Append(GetAD_User_ID())
-                .Append(",AD_Role_ID=").Append(GetAD_Role_ID())
+                .Append(",VAF_Role_ID=").Append(GetVAF_Role_ID())
                 .Append("]");
             return sb.ToString();
             

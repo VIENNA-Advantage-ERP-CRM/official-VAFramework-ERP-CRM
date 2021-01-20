@@ -283,11 +283,11 @@ namespace VAdvantage.WF
         {
             String action = GetAction();
             if (ACTION_AppsProcess.Equals(action))
-                return "Process:AD_Process_ID=" + GetAD_Process_ID();
+                return "Process:VAF_Job_ID=" + GetVAF_Job_ID();
             else if (ACTION_DocumentAction.Equals(action))
                 return "DocumentAction=" + GetDocAction();
             else if (ACTION_AppsReport.Equals(action))
-                return "Report:AD_Process_ID=" + GetAD_Process_ID();
+                return "Report:VAF_Job_ID=" + GetVAF_Job_ID();
             else if (ACTION_AppsTask.Equals(action))
                 return "Task:AD_Task_ID=" + GetAD_Task_ID();
             else if (ACTION_SetVariable.Equals(action))
@@ -488,9 +488,9 @@ namespace VAdvantage.WF
             }
             else if (action.Equals(ACTION_AppsProcess) || action.Equals(ACTION_AppsReport))
             {
-                if (GetAD_Process_ID() == 0)
+                if (GetVAF_Job_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Process_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Job_ID"));
                     return false;
                 }
             }

@@ -1364,7 +1364,7 @@ namespace VIS.Models
              bindornot = "true";            
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE ad_tree_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1756,7 +1756,7 @@ namespace VIS.Models
             string menu_id = "";
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE ad_tree_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1902,7 +1902,7 @@ namespace VIS.Models
             return Msg.GetMsg(_ctx, "ItemsUpdate");
         }
 
-        ////rolCheck = MRole.GetDefault(_ctx).AddAccessSQL(rolCheck, "AD_Role", true, false);
+        ////rolCheck = MRole.GetDefault(_ctx).AddAccessSQL(rolCheck, "VAF_Role", true, false);
         public String RemoveLinkedItemFromTree(Ctx _ctx, int treeID, string menuId)
         {
             MTree tree = new MTree(_ctx, treeID, null);
@@ -1917,7 +1917,7 @@ namespace VIS.Models
 
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM AD_Role WHERE ad_tree_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE ad_tree_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {

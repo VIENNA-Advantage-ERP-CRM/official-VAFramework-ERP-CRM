@@ -127,8 +127,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** VAF_TableView_ID AD_Reference_ID=415 */
-public static int VAF_TABLEVIEW_ID_AD_Reference_ID=415;
+/** VAF_TableView_ID VAF_Control_Ref_ID=415 */
+public static int VAF_TABLEVIEW_ID_VAF_Control_Ref_ID=415;
 /** Set Table.
 @param VAF_TableView_ID Database Table information */
 public void SetVAF_TableView_ID (int VAF_TableView_ID)
@@ -211,8 +211,8 @@ public String GetValueTo()
 return (String)Get_Value("ValueTo");
 }
 
-/** WhereCondition AD_Reference_ID=1000004 */
-public static int WHERECONDITION_AD_Reference_ID=1000004;
+/** WhereCondition VAF_Control_Ref_ID=1000004 */
+public static int WHERECONDITION_VAF_Control_Ref_ID=1000004;
 /** = = 1 */
 public static String WHERECONDITION_Eq = "1";
 /** != = 2 */

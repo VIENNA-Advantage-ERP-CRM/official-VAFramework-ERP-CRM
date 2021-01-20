@@ -135,18 +135,18 @@ StringBuilder sb = new StringBuilder ("X_R_Request[").Append(Get_ID()).Append("]
 return sb.ToString();
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_Value ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_Value ("VAF_Role_ID", null);
 else
-Set_Value ("AD_Role_ID", AD_Role_ID);
+Set_Value ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -215,8 +215,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_BPartnerSR_ID AD_Reference_ID=353 */
-public static int C_BPARTNERSR_ID_AD_Reference_ID=353;
+/** C_BPartnerSR_ID VAF_Control_Ref_ID=353 */
+public static int C_BPARTNERSR_ID_VAF_Control_Ref_ID=353;
 /** Set BPartner (Agent).
 @param C_BPartnerSR_ID Business Partner (Agent or Sales Rep) */
 public void SetC_BPartnerSR_ID (int C_BPartnerSR_ID)
@@ -266,8 +266,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_InvoiceRequest_ID AD_Reference_ID=336 */
-public static int C_INVOICEREQUEST_ID_AD_Reference_ID=336;
+/** C_InvoiceRequest_ID VAF_Control_Ref_ID=336 */
+public static int C_INVOICEREQUEST_ID_VAF_Control_Ref_ID=336;
 /** Set Request Invoice.
 @param C_InvoiceRequest_ID The generated invoice for this request */
 public void SetC_InvoiceRequest_ID (int C_InvoiceRequest_ID)
@@ -393,8 +393,8 @@ public DateTime? GetCloseDate()
 return (DateTime?)Get_Value("CloseDate");
 }
 
-/** ConfidentialType AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPE_AD_Reference_ID=340;
+/** ConfidentialType VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPE_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPE_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -431,8 +431,8 @@ public String GetConfidentialType()
 return (String)Get_Value("ConfidentialType");
 }
 
-/** ConfidentialTypeEntry AD_Reference_ID=340 */
-public static int CONFIDENTIALTYPEENTRY_AD_Reference_ID=340;
+/** ConfidentialTypeEntry VAF_Control_Ref_ID=340 */
+public static int CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID=340;
 /** Public Information = A */
 public static String CONFIDENTIALTYPEENTRY_PublicInformation = "A";
 /** Partner Confidential = C */
@@ -553,8 +553,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetDocumentNo());
 }
 
-/** DueType AD_Reference_ID=222 */
-public static int DUETYPE_AD_Reference_ID=222;
+/** DueType VAF_Control_Ref_ID=222 */
+public static int DUETYPE_VAF_Control_Ref_ID=222;
 /** Overdue = 3 */
 public static String DUETYPE_Overdue = "3";
 /** Due = 5 */
@@ -688,8 +688,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_FixChangeNotice_ID AD_Reference_ID=351 */
-public static int M_FIXCHANGENOTICE_ID_AD_Reference_ID=351;
+/** M_FixChangeNotice_ID VAF_Control_Ref_ID=351 */
+public static int M_FIXCHANGENOTICE_ID_VAF_Control_Ref_ID=351;
 /** Set Fixed in.
 @param M_FixChangeNotice_ID Fixed in Change Notice */
 public void SetM_FixChangeNotice_ID (int M_FixChangeNotice_ID)
@@ -723,8 +723,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_ProductSpent_ID AD_Reference_ID=162 */
-public static int M_PRODUCTSPENT_ID_AD_Reference_ID=162;
+/** M_ProductSpent_ID VAF_Control_Ref_ID=162 */
+public static int M_PRODUCTSPENT_ID_VAF_Control_Ref_ID=162;
 /** Set Product Used.
 @param M_ProductSpent_ID Product/Resource/Service used in Request */
 public void SetM_ProductSpent_ID (int M_ProductSpent_ID)
@@ -758,8 +758,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** NextAction AD_Reference_ID=219 */
-public static int NEXTACTION_AD_Reference_ID=219;
+/** NextAction VAF_Control_Ref_ID=219 */
+public static int NEXTACTION_VAF_Control_Ref_ID=219;
 /** Follow up = F */
 public static String NEXTACTION_FollowUp = "F";
 /** None = N */
@@ -791,8 +791,8 @@ public String GetNextAction()
 return (String)Get_Value("NextAction");
 }
 
-/** Priority AD_Reference_ID=154 */
-public static int PRIORITY_AD_Reference_ID=154;
+/** Priority VAF_Control_Ref_ID=154 */
+public static int PRIORITY_VAF_Control_Ref_ID=154;
 /** Urgent = 1 */
 public static String PRIORITY_Urgent = "1";
 /** High = 3 */
@@ -831,8 +831,8 @@ public String GetPriority()
 return (String)Get_Value("Priority");
 }
 
-/** PriorityUser AD_Reference_ID=154 */
-public static int PRIORITYUSER_AD_Reference_ID=154;
+/** PriorityUser VAF_Control_Ref_ID=154 */
+public static int PRIORITYUSER_VAF_Control_Ref_ID=154;
 /** Urgent = 1 */
 public static String PRIORITYUSER_Urgent = "1";
 /** High = 3 */
@@ -978,8 +978,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** R_RequestRelated_ID AD_Reference_ID=341 */
-public static int R_REQUESTRELATED_ID_AD_Reference_ID=341;
+/** R_RequestRelated_ID VAF_Control_Ref_ID=341 */
+public static int R_REQUESTRELATED_ID_VAF_Control_Ref_ID=341;
 /** Set Related Request.
 @param R_RequestRelated_ID Related Request (Master Issue, ..) */
 public void SetR_RequestRelated_ID (int R_RequestRelated_ID)
@@ -1139,8 +1139,8 @@ public String GetResult()
 return (String)Get_Value("Result");
 }
 
-/** SalesRep_ID AD_Reference_ID=286 */
-public static int SALESREP_ID_AD_Reference_ID=286;
+/** SalesRep_ID VAF_Control_Ref_ID=286 */
+public static int SALESREP_ID_VAF_Control_Ref_ID=286;
 /** Set Representative.
 @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
 public void SetSalesRep_ID (int SalesRep_ID)
@@ -1200,8 +1200,8 @@ public String GetSummary()
 return (String)Get_Value("Summary");
 }
 
-/** TaskStatus AD_Reference_ID=366 */
-public static int TASKSTATUS_AD_Reference_ID=366;
+/** TaskStatus VAF_Control_Ref_ID=366 */
+public static int TASKSTATUS_VAF_Control_Ref_ID=366;
 /** 0% Not Started = 0 */
 public static String TASKSTATUS_0NotStarted = "0";
 /** 20% Started = 2 */

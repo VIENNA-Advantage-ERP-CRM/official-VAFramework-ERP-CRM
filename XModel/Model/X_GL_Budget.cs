@@ -115,8 +115,8 @@ StringBuilder sb = new StringBuilder ("X_GL_Budget[").Append(Get_ID()).Append("]
 return sb.ToString();
 }
 
-/** BudgetStatus AD_Reference_ID=178 */
-public static int BUDGETSTATUS_AD_Reference_ID=178;
+/** BudgetStatus VAF_Control_Ref_ID=178 */
+public static int BUDGETSTATUS_VAF_Control_Ref_ID=178;
 /** Approved = A */
 public static String BUDGETSTATUS_Approved = "A";
 /** Draft = D */

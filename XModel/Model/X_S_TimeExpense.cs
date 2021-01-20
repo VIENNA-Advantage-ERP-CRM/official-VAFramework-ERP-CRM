@@ -164,8 +164,8 @@ using System.Data;
             return Convert.ToDecimal(bd);
         }
 
-        /** C_BPartner_ID AD_Reference_ID=277 */
-        public static int C_BPARTNER_ID_AD_Reference_ID = 277;
+        /** C_BPartner_ID VAF_Control_Ref_ID=277 */
+        public static int C_BPARTNER_ID_VAF_Control_Ref_ID = 277;
         /** Set Customer/Prospect.
         @param C_BPartner_ID Identifies a Customer/Prospect */
         public void SetC_BPartner_ID(int C_BPartner_ID)
@@ -212,8 +212,8 @@ using System.Data;
             return (String)Get_Value("Description");
         }
 
-        /** DocAction AD_Reference_ID=135 */
-        public static int DOCACTION_AD_Reference_ID = 135;
+        /** DocAction VAF_Control_Ref_ID=135 */
+        public static int DOCACTION_VAF_Control_Ref_ID = 135;
         /** <None> = -- */
         public static String DOCACTION_None = "--";
         /** Approve = AP */
@@ -270,8 +270,8 @@ using System.Data;
             return (String)Get_Value("DocAction");
         }
 
-        /** DocStatus AD_Reference_ID=131 */
-        public static int DOCSTATUS_AD_Reference_ID = 131;
+        /** DocStatus VAF_Control_Ref_ID=131 */
+        public static int DOCSTATUS_VAF_Control_Ref_ID = 131;
         /** Unknown = ?? */
         public static String DOCSTATUS_Unknown = "??";
         /** Approved = AP */
@@ -488,8 +488,8 @@ using System.Data;
         {
             return (DateTime?)Get_Value("ToDate");
         }
-        /** SalesRep_ID AD_Reference_ID=190 */
-        public static int SALESREP_ID_AD_Reference_ID = 190;
+        /** SalesRep_ID VAF_Control_Ref_ID=190 */
+        public static int SALESREP_ID_VAF_Control_Ref_ID = 190;
         /** Set Representative.
         @param SalesRep_ID Company Agent like Sales Representitive, Purchase Agent, Customer Service Representative, ... */
         public void SetSalesRep_ID(int SalesRep_ID)

@@ -178,8 +178,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_Ref_CostElement AD_Reference_ID=1000170 */
-public static int M_REF_COSTELEMENT_AD_Reference_ID=1000170;
+/** M_Ref_CostElement VAF_Control_Ref_ID=1000170 */
+public static int M_REF_COSTELEMENT_VAF_Control_Ref_ID=1000170;
 /** Set Cost Element.
 @param M_Ref_CostElement Cost Element */
 public void SetM_Ref_CostElement (int M_Ref_CostElement)

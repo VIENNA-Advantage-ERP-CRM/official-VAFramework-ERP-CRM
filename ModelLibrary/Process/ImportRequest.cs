@@ -439,11 +439,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Role
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET AD_Role_ID = "
-                      + " (SELECT AD_Role_ID FROM AD_Role ar "
+                      + " SET VAF_Role_ID = "
+                      + " (SELECT VAF_Role_ID FROM VAF_Role ar "
                       + " WHERE ar.Name = r.RoleName )"
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.AD_Role_ID is NULL"
+                      + " AND r.VAF_Role_ID is NULL"
                       + " AND r.RoleName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Role=" + no);
@@ -452,7 +452,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid RoleName, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.AD_Role_ID is NULL"
+                      + " AND r.VAF_Role_ID is NULL"
                       + " AND r.RoleName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

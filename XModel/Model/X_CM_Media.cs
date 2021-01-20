@@ -244,8 +244,8 @@ if (oo != null)
 return false;
 }
 
-/** MediaType AD_Reference_ID=388 */
-public static int MEDIATYPE_AD_Reference_ID=388;
+/** MediaType VAF_Control_Ref_ID=388 */
+public static int MEDIATYPE_VAF_Control_Ref_ID=388;
 /** text/css = CSS */
 public static String MEDIATYPE_TextCss = "CSS";
 /** image/gif = GIF */

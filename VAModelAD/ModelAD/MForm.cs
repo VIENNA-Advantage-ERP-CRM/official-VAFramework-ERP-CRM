@@ -57,8 +57,8 @@ namespace VAdvantage.Model
         {
             if (newRecord)
             {
-                int AD_Role_ID = GetCtx().GetAD_Role_ID();
-                MFormAccess pa = new MFormAccess(this, AD_Role_ID);
+                int VAF_Role_ID = GetCtx().GetVAF_Role_ID();
+                MFormAccess pa = new MFormAccess(this, VAF_Role_ID);
                 pa.Save();
             }
             return success;

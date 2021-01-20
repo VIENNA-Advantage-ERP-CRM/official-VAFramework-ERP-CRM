@@ -19,16 +19,16 @@ namespace VAdvantage.Model
         /// Get User Roles Of Role
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Role_ID">role id</param>
+        /// <param name="VAF_Role_ID">role id</param>
         /// <returns>Array of user roles</returns>
-        public static MUserRoles[] GetOfRole(Ctx ctx, int AD_Role_ID)
+        public static MUserRoles[] GetOfRole(Ctx ctx, int VAF_Role_ID)
         {
-            String sql = "SELECT * FROM AD_User_Roles WHERE AD_Role_ID=@roleid";
+            String sql = "SELECT * FROM AD_User_Roles WHERE VAF_Role_ID=@roleid";
             List<MUserRoles> list = new List<MUserRoles>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@roleid", AD_Role_ID);
+                param[0] = new SqlParameter("@roleid", VAF_Role_ID);
 
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, param);
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -119,14 +119,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="AD_User_ID">user id</param>
-        /// <param name="AD_Role_ID">role id</param>
+        /// <param name="VAF_Role_ID">role id</param>
         /// <param name="trxName">optional transaction name</param>
-        public MUserRoles(Ctx ctx, int AD_User_ID, int AD_Role_ID, Trx trxName)
+        public MUserRoles(Ctx ctx, int AD_User_ID, int VAF_Role_ID, Trx trxName)
             : this(ctx, 0, trxName)
         {
             role_ctx = ctx;
             SetAD_User_ID(AD_User_ID);
-            SetAD_Role_ID(AD_Role_ID);
+            SetVAF_Role_ID(VAF_Role_ID);
         }	//	MUserRoles
 
         /// <summary>
@@ -143,11 +143,11 @@ namespace VAdvantage.Model
         /// Set Role
         /// Responsiblity Role
         /// </summary>
-        /// <param name="AD_Role_ID">Role ID</param>
-        public new void SetAD_Role_ID(int AD_Role_ID)
+        /// <param name="VAF_Role_ID">Role ID</param>
+        public new void SetVAF_Role_ID(int VAF_Role_ID)
         {
-            Set_ValueNoCheck("AD_Role_ID", AD_Role_ID);
-        }	//	setAD_Role_ID
+            Set_ValueNoCheck("VAF_Role_ID", VAF_Role_ID);
+        }	//	setVAF_Role_ID
 
         protected override bool AfterSave(bool newRecord, bool success)
         {
@@ -183,7 +183,7 @@ namespace VAdvantage.Model
 
         private void deleteRoleForLogin()
         {
-            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE AD_User_ID=" + GetAD_User_ID() + " AND AD_Role_ID = " + GetAD_Role_ID());
+            DB.ExecuteQuery("DELETE FROM VAF_Loginsetting WHERE AD_User_ID=" + GetAD_User_ID() + " AND VAF_Role_ID = " + GetVAF_Role_ID());
         }
     }
 }

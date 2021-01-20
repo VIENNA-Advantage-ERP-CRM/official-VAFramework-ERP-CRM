@@ -48,8 +48,8 @@ public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAF_H
 public void SetVAF_HeaderLayout_ID (int VAF_HeaderLayout_ID){if (VAF_HeaderLayout_ID < 1) throw new ArgumentException ("VAF_HeaderLayout_ID is mandatory.");Set_ValueNoCheck ("VAF_HeaderLayout_ID", VAF_HeaderLayout_ID);}/** Get Header Layout.
 @return Header Layout */
 public int GetVAF_HeaderLayout_ID() {Object ii = Get_Value("VAF_HeaderLayout_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** Alignment AD_Reference_ID=1000223 */
-public static int ALIGNMENT_AD_Reference_ID=1000223;/** Horizontal = H */
+/** Alignment VAF_Control_Ref_ID=1000223 */
+public static int ALIGNMENT_VAF_Control_Ref_ID=1000223;/** Horizontal = H */
 public static String ALIGNMENT_Horizontal = "H";/** Vertical = V */
 public static String ALIGNMENT_Vertical = "V";/** Is test a valid value.
 @param test testvalue

@@ -71,11 +71,11 @@ namespace VIS.Controllers
             FormModel model = new FormModel(ctx);
 
             string sql = MRole.GetDefault(ctx).AddAccessSQL(
-                     "SELECT AD_PrintFormat_ID, Name, Description,IsDefault "
-                         + "FROM AD_PrintFormat "
+                     "SELECT VAF_Print_Rpt_Layout_ID, Name, Description,IsDefault "
+                         + "FROM VAF_Print_Rpt_Layout "
                          + "WHERE VAF_TableView_ID= " + VAF_TableView_ID
                          + " ORDER BY Name",
-                     "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                     "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
 
             SqlParamsIn sqlP = new SqlParamsIn();

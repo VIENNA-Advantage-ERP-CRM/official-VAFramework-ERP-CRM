@@ -145,7 +145,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MColumnAccess[");
-            sb.Append("AD_Role_ID=").Append(GetAD_Role_ID())
+            sb.Append("VAF_Role_ID=").Append(GetVAF_Role_ID())
                 .Append(",VAF_TableView_ID=").Append(GetVAF_TableView_ID())
                 .Append(",VAF_Column_ID=").Append(GetVAF_Column_ID())
                 .Append(",Exclude=").Append(IsExclude());

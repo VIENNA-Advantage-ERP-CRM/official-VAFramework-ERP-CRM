@@ -175,8 +175,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_Product_ID AD_Reference_ID=211 */
-public static int M_PRODUCT_ID_AD_Reference_ID=211;
+/** M_Product_ID VAF_Control_Ref_ID=211 */
+public static int M_PRODUCT_ID_VAF_Control_Ref_ID=211;
 /** Set Product.
 @param M_Product_ID Product, Service, Item */
 public void SetM_Product_ID (int M_Product_ID)

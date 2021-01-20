@@ -159,8 +159,8 @@ public String GetDBName()
 return (String)Get_Value("DBName");
 }
 
-/** DatabaseType AD_Reference_ID=1000073 */
-public static int DATABASETYPE_AD_Reference_ID=1000073;
+/** DatabaseType VAF_Control_Ref_ID=1000073 */
+public static int DATABASETYPE_VAF_Control_Ref_ID=1000073;
 /** Oracle = 1 */
 public static String DATABASETYPE_Oracle = "1";
 /** Postgre SQL = 2 */

@@ -20,7 +20,7 @@ public X_T_Spool (Context ctx, int T_Spool_ID, Trx trxName) : base (ctx, T_Spool
 {
 /** if (T_Spool_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetMsgText (null);
 SetSeqNo (0);
 }
@@ -30,7 +30,7 @@ public X_T_Spool (Ctx ctx, int T_Spool_ID, Trx trxName) : base (ctx, T_Spool_ID,
 {
 /** if (T_Spool_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetMsgText (null);
 SetSeqNo (0);
 }
@@ -115,17 +115,17 @@ StringBuilder sb = new StringBuilder ("X_T_Spool[").Append(Get_ID()).Append("]")
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,7 +133,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_PInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_JInstance_ID().ToString());
 }
 /** Set Message Text.
 @param MsgText Textual Informational, Menu or Error Message */

@@ -121,8 +121,8 @@ StringBuilder sb = new StringBuilder ("X_AD_WF_NodeNext[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 
-/** AD_WF_Next_ID AD_Reference_ID=109 */
-public static int AD_WF_NEXT_ID_AD_Reference_ID=109;
+/** AD_WF_Next_ID VAF_Control_Ref_ID=109 */
+public static int AD_WF_NEXT_ID_VAF_Control_Ref_ID=109;
 /** Set Next Node.
 @param AD_WF_Next_ID Next Node in workflow */
 public void SetAD_WF_Next_ID (int AD_WF_Next_ID)
@@ -192,8 +192,8 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 
-/** EntityType AD_Reference_ID=389 */
-public static int ENTITYTYPE_AD_Reference_ID=389;
+/** EntityType VAF_Control_Ref_ID=389 */
+public static int ENTITYTYPE_VAF_Control_Ref_ID=389;
 /** Set Entity Type.
 @param EntityType Dictionary Entity Type;
  Determines ownership and synchronization */

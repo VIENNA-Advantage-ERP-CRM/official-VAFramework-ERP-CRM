@@ -94,7 +94,7 @@ namespace VAdvantage.WF
                 value2 = "";
 
             // If column is of bool type and user insert y or n in condition, then convert them to true or false to match with value got from PO.
-            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetAD_Reference_ID().Equals(DisplayType.YesNo))
+            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetVAF_Control_Ref_ID().Equals(DisplayType.YesNo))
             {
                 if (value1.ToLower().Equals("y"))
                 {

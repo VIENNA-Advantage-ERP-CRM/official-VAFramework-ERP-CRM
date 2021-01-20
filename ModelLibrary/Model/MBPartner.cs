@@ -1208,8 +1208,8 @@ namespace VAdvantage.Model
                     //MFRPTBPCustomerAcct obj = null;
                     int Customer_ID = GetC_BPartner_ID();
                     int C_BP_Group_ID = GetC_BP_Group_ID();
-                    string sql = "SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where   r.name='FRPT_RelatedTo' and l.name='Customer'";
-                    //string sql = "select VALUE from AD_Ref_List where name='Customer'";
+                    string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Customer'";
+                    //string sql = "select VALUE from VAF_CtrlRef_List where name='Customer'";
                     string _RelatedToCustmer = Convert.ToString(DB.ExecuteScalar(sql));
 
                     _sql.Clear();
@@ -1253,8 +1253,8 @@ namespace VAdvantage.Model
                     //MFRPTBPVendorAcct obj = null;
                     int Vendor_ID = GetC_BPartner_ID();
                     int C_BP_Group_ID = GetC_BP_Group_ID();
-                    string sql = "SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where   r.name='FRPT_RelatedTo' and l.name='Vendor'";
-                    //string sql = "select VALUE from AD_Ref_List where name='Vendor'";
+                    string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Vendor'";
+                    //string sql = "select VALUE from VAF_CtrlRef_List where name='Vendor'";
                     string _RelatedToVendor = Convert.ToString(DB.ExecuteScalar(sql));
                     //string _RelatedToVendor = X_FRPT_AcctDefault.FRPT_RELATEDTO_Vendor.ToString();
 
@@ -1299,8 +1299,8 @@ namespace VAdvantage.Model
                     // MFRPTBPEmployeeAcct obj = null;
                     int Employee_ID = GetC_BPartner_ID();
                     int C_BP_Group_ID = GetC_BP_Group_ID();
-                    string sql = "SELECT L.VALUE FROM AD_REF_LIST L inner join AD_Reference r on R.AD_REFERENCE_ID=L.AD_REFERENCE_ID where   r.name='FRPT_RelatedTo' and l.name='Employee'";
-                    //string sql = "select VALUE from AD_Ref_List where name='Employee'";
+                    string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Employee'";
+                    //string sql = "select VALUE from VAF_CtrlRef_List where name='Employee'";
                     string _RelatedToEmployee = Convert.ToString(DB.ExecuteScalar(sql));
                     //string _RelatedToEmployee = X_FRPT_AcctDefault.FRPT_RELATEDTO_Employee.ToString();
 

@@ -2198,7 +2198,7 @@ namespace VAdvantage.Model
                     Object keyInfo = Get_ID();
                     if (_mIDs.Length != 1)
                         keyInfo = Get_WhereClause(true);
-                    if ((this.Get_TableName() != "AD_PInstance_Para") && (this.Get_TableName() != "AD_PInstance"))
+                    if ((this.Get_TableName() != "VAF_JInstance_Para") && (this.Get_TableName() != "VAF_JInstance"))
                     {
                         MChangeLog cLog = session.ChangeLog(
                                 _trx, VAF_AlterLog_ID,
@@ -2606,7 +2606,7 @@ namespace VAdvantage.Model
                     if (_mIDs.Length != 1)
                         keyInfo = Get_WhereClause(true);
 
-                    if ((this.Get_TableName() != "AD_PInstance_Para") && (this.Get_TableName() != "AD_PInstance"))
+                    if ((this.Get_TableName() != "VAF_JInstance_Para") && (this.Get_TableName() != "VAF_JInstance"))
                     {
 
                         MChangeLog cLog = session.ChangeLog(
@@ -2796,7 +2796,7 @@ namespace VAdvantage.Model
                 String keyColumn = p_info.GetTableName() + "_ID";
                 String keyValue = Get_ID().ToString();
 
-                StringBuilder sql = new StringBuilder("DELETE FROM AD_Preference WHERE Attribute='")
+                StringBuilder sql = new StringBuilder("DELETE FROM VAF_ValuePreference WHERE Attribute='")
                     .Append(keyColumn).Append("' AND Value='").Append(keyValue).Append("'");
                 DataBase.DB.ExecuteQuery(sql.ToString(), null, null);
 
@@ -3534,7 +3534,7 @@ namespace VAdvantage.Model
                 acctColumns = new List<String>();
                 String sql = "SELECT c.ColumnName "
                     + "FROM VAF_Column c INNER JOIN VAF_TableView t ON (c.VAF_TableView_ID=t.VAF_TableView_ID) "
-                    + "WHERE t.TableName='" + acctTable + "' AND c.IsActive='Y' AND c.AD_Reference_ID=25 ORDER BY 1";
+                    + "WHERE t.TableName='" + acctTable + "' AND c.IsActive='Y' AND c.VAF_Control_Ref_ID=25 ORDER BY 1";
                 DataSet ds = null;
                 try
                 {

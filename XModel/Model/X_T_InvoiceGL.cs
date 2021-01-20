@@ -20,7 +20,7 @@ public X_T_InvoiceGL (Context ctx, int T_InvoiceGL_ID, Trx trxName) : base (ctx,
 {
 /** if (T_InvoiceGL_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetAmtAcctBalance (0.0);
 SetAmtRevalCr (0.0);
 SetAmtRevalCrDiff (0.0);
@@ -41,7 +41,7 @@ public X_T_InvoiceGL (Ctx ctx, int T_InvoiceGL_ID, Trx trxName) : base (ctx, T_I
 {
 /** if (T_InvoiceGL_ID == 0)
 {
-SetAD_PInstance_ID (0);
+SetVAF_JInstance_ID (0);
 SetAmtAcctBalance (0.0);
 SetAmtRevalCr (0.0);
 SetAmtRevalCrDiff (0.0);
@@ -137,17 +137,17 @@ StringBuilder sb = new StringBuilder ("X_T_InvoiceGL[").Append(Get_ID()).Append(
 return sb.ToString();
 }
 /** Set Process Instance.
-@param AD_PInstance_ID Instance of the process */
-public void SetAD_PInstance_ID (int AD_PInstance_ID)
+@param VAF_JInstance_ID Instance of the process */
+public void SetVAF_JInstance_ID (int VAF_JInstance_ID)
 {
-if (AD_PInstance_ID < 1) throw new ArgumentException ("AD_PInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_PInstance_ID", AD_PInstance_ID);
+if (VAF_JInstance_ID < 1) throw new ArgumentException ("VAF_JInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JInstance_ID", VAF_JInstance_ID);
 }
 /** Get Process Instance.
 @return Instance of the process */
-public int GetAD_PInstance_ID() 
+public int GetVAF_JInstance_ID() 
 {
-Object ii = Get_Value("AD_PInstance_ID");
+Object ii = Get_Value("VAF_JInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -155,11 +155,11 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_PInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_JInstance_ID().ToString());
 }
 
-/** APAR AD_Reference_ID=332 */
-public static int APAR_AD_Reference_ID=332;
+/** APAR VAF_Control_Ref_ID=332 */
+public static int APAR_VAF_Control_Ref_ID=332;
 /** Receivables & Payables = A */
 public static String APAR_ReceivablesPayables = "A";
 /** Payables only = P */
@@ -283,8 +283,8 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 
-/** C_ConversionTypeReval_ID AD_Reference_ID=352 */
-public static int C_CONVERSIONTYPEREVAL_ID_AD_Reference_ID=352;
+/** C_ConversionTypeReval_ID VAF_Control_Ref_ID=352 */
+public static int C_CONVERSIONTYPEREVAL_ID_VAF_Control_Ref_ID=352;
 /** Set Revaluation Conversion Type.
 @param C_ConversionTypeReval_ID Revaluation Currency Conversion Type */
 public void SetC_ConversionTypeReval_ID (int C_ConversionTypeReval_ID)
@@ -301,8 +301,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_DocTypeReval_ID AD_Reference_ID=170 */
-public static int C_DOCTYPEREVAL_ID_AD_Reference_ID=170;
+/** C_DocTypeReval_ID VAF_Control_Ref_ID=170 */
+public static int C_DOCTYPEREVAL_ID_VAF_Control_Ref_ID=170;
 /** Set Revaluation Document Type.
 @param C_DocTypeReval_ID Document Type for Revaluation Journal */
 public void SetC_DocTypeReval_ID (int C_DocTypeReval_ID)

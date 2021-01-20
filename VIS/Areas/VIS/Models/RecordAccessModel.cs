@@ -11,15 +11,15 @@ namespace VIS.Areas.VIS.Models
 {
     public class RecordAccessModel
     {
-        public bool SaveAccess(Ctx ctx,int AD_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities,bool isUpdate)
+        public bool SaveAccess(Ctx ctx,int VAF_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities,bool isUpdate)
         {
             if (isUpdate)
             {
-                string sql = "UPDATE AD_Record_Access SET IsActive='" + (isActive ? 'Y' : 'N') + @"',
+                string sql = "UPDATE VAF_Record_Rights SET IsActive='" + (isActive ? 'Y' : 'N') + @"',
                               IsExclude='" + (isExclude ? 'Y' : 'N') + @"',
                               IsReadOnly='" + (isReadOnly ? 'Y' : 'N') + @"',
                               IsDependentEntities='" + (isDependentEntities ? 'Y' : 'N') + @"'
-                              WHERE AD_Role_ID=" + AD_Role_ID + @"
+                              WHERE VAF_Role_ID=" + VAF_Role_ID + @"
                               AND Record_ID=" + Record_ID + @"
                               AND VAF_TableView_ID=" + VAF_TableView_ID ;
                 int res = VAdvantage.DataBase.DB.ExecuteQuery(sql);
@@ -30,7 +30,7 @@ namespace VIS.Areas.VIS.Models
                 return false;
             }
 
-            MRecordAccess recData = new MRecordAccess(ctx, AD_Role_ID, VAF_TableView_ID, Record_ID, null);
+            MRecordAccess recData = new MRecordAccess(ctx, VAF_Role_ID, VAF_TableView_ID, Record_ID, null);
             recData.SetIsActive(isActive);
             recData.SetIsExclude(isExclude);
             recData.SetIsReadOnly(isReadOnly);
@@ -38,9 +38,9 @@ namespace VIS.Areas.VIS.Models
             bool success = recData.Save();
             return success;
         }
-        public bool DeleteRecordAccess( int AD_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities)
+        public bool DeleteRecordAccess( int VAF_Role_ID, int VAF_TableView_ID, int Record_ID, bool isActive, bool isExclude, bool isReadOnly, bool isDependentEntities)
         {
-            string sql = "DELETE FROM  AD_Record_Access WHERE AD_Role_ID=" + AD_Role_ID + @"
+            string sql = "DELETE FROM  VAF_Record_Rights WHERE VAF_Role_ID=" + VAF_Role_ID + @"
                         AND Record_ID=" + Record_ID + @"
                         AND VAF_TableView_ID=" + VAF_TableView_ID + @"
                         AND IsActive='" + (isActive ? 'Y' : 'N') + @"'
@@ -59,7 +59,7 @@ namespace VIS.Areas.VIS.Models
         public List<Dictionary<string, object>> GetRoles(Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT AD_Role_ID, Name FROM AD_Role ORDER BY 2", "AD_Role", MRole.SQL_NOTQUALIFIED, MRole.SQL_RW);
+            string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT VAF_Role_ID, Name FROM VAF_Role ORDER BY 2", "VAF_Role", MRole.SQL_NOTQUALIFIED, MRole.SQL_RW);
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -67,7 +67,7 @@ namespace VIS.Areas.VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     Dictionary<string, object> obj = new Dictionary<string, object>();
-                    obj["AD_Role_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                    obj["VAF_Role_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                     obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);                    
                     retDic.Add(obj);
                 }
@@ -79,7 +79,7 @@ namespace VIS.Areas.VIS.Models
         public List<Dictionary<string, object>> GetRecordAccess(int _VAF_TableView_ID, int _Record_ID, Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = @"SELECT AD_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM AD_Record_Access WHERE VAF_TableView_ID=" + _VAF_TableView_ID 
+            string sql = @"SELECT VAF_ROLE_ID,ISACTIVE,ISDEPENDENTENTITIES,ISEXCLUDE,ISREADONLY FROM VAF_Record_Rights WHERE VAF_TableView_ID=" + _VAF_TableView_ID 
                 + " AND Record_ID=" + _Record_ID + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID();
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -88,7 +88,7 @@ namespace VIS.Areas.VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     Dictionary<string, object> obj = new Dictionary<string, object>();
-                    obj["AD_ROLE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_ROLE_ID"]);
+                    obj["VAF_ROLE_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_ROLE_ID"]);
                     obj["ISACTIVE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISACTIVE"]);
                     obj["ISDEPENDENTENTITIES"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISDEPENDENTENTITIES"]);
                     obj["ISEXCLUDE"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["ISEXCLUDE"]);

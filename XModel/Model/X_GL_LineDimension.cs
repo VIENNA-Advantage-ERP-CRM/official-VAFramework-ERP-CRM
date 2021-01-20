@@ -167,8 +167,8 @@ namespace VAdvantage.Model
 
 
 
-        /** LineType AD_Reference_ID=181 */
-        public static int LINETYPE_AD_Reference_ID = 181;/** Organization = OO */
+        /** LineType VAF_Control_Ref_ID=181 */
+        public static int LINETYPE_VAF_Control_Ref_ID = 181;/** Organization = OO */
         public static String LINETYPE_Organization = "OO";/** Account = AC */
         public static String LINETYPE_Account = "AC";/** Product = PR */
         public static String LINETYPE_Product = "PR";/** BPartner = BP */
@@ -225,8 +225,8 @@ namespace VAdvantage.Model
         }/** Get Product.
 @return Product, Service, Item */
         public int GetM_Product_ID() { Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Org_ID AD_Reference_ID=130 */
-        public static int ORG_ID_AD_Reference_ID = 130;/** Set Organization.
+        /** Org_ID VAF_Control_Ref_ID=130 */
+        public static int ORG_ID_VAF_Control_Ref_ID = 130;/** Set Organization.
 @param Org_ID Organizational entity within client */
         public void SetOrg_ID(int Org_ID)
         {

@@ -135,8 +135,8 @@ public String GetCalculateCost()
     return (String)Get_Value("CalculateCost");
 }
 
-/** CostElementType AD_Reference_ID=338 */
-public static int COSTELEMENTTYPE_AD_Reference_ID=338;
+/** CostElementType VAF_Control_Ref_ID=338 */
+public static int COSTELEMENTTYPE_VAF_Control_Ref_ID=338;
 /** Burden (M.Overhead) = B */
 public static String COSTELEMENTTYPE_BurdenMOverhead = "B";
 /** Cost Combination = C */
@@ -177,8 +177,8 @@ public String GetCostElementType()
 return (String)Get_Value("CostElementType");
 }
 
-/** CostingMethod AD_Reference_ID=122 */
-public static int COSTINGMETHOD_AD_Reference_ID=122;
+/** CostingMethod VAF_Control_Ref_ID=122 */
+public static int COSTINGMETHOD_VAF_Control_Ref_ID=122;
 /** Average PO = A */
 public static String COSTINGMETHOD_AveragePO = "A";
 /** Cost Combination = C */

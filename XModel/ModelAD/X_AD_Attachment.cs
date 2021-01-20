@@ -222,8 +222,8 @@ namespace VAdvantage.Model
         }
 
 
-        /** FileLocation AD_Reference_ID=1000154 */
-        public static int FILELOCATION_AD_Reference_ID = 1000154;
+        /** FileLocation VAF_Control_Ref_ID=1000154 */
+        public static int FILELOCATION_VAF_Control_Ref_ID = 1000154;
         /** Database = DB */
         public static String FILELOCATION_Database = "DB";
         /** FTP Location = FT */
@@ -254,8 +254,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("FileLocation");
         }
-        /** CryptAndZipWay AD_Reference_ID=1000155 */
-        public static int CRYPTANDZIPWAY_AD_Reference_ID = 1000155;
+        /** CryptAndZipWay VAF_Control_Ref_ID=1000155 */
+        public static int CRYPTANDZIPWAY_VAF_Control_Ref_ID = 1000155;
         /** Key Encryption And Old Zip = KSZ */
         public static String CRYPTANDZIPWAY_KeyEncryptionAndServerSideZip = "KSZ";
         /** Password Encryption And New Zip = PCZ */

@@ -20,7 +20,7 @@ public X_AD_Scheduler_Para (Context ctx, int AD_Scheduler_Para_ID, Trx trxName) 
 {
 /** if (AD_Scheduler_Para_ID == 0)
 {
-SetAD_Process_Para_ID (0);
+SetVAF_Job_Para_ID (0);
 SetAD_Scheduler_ID (0);
 }
  */
@@ -29,7 +29,7 @@ public X_AD_Scheduler_Para (Ctx ctx, int AD_Scheduler_Para_ID, Trx trxName) : ba
 {
 /** if (AD_Scheduler_Para_ID == 0)
 {
-SetAD_Process_Para_ID (0);
+SetVAF_Job_Para_ID (0);
 SetAD_Scheduler_ID (0);
 }
  */
@@ -113,17 +113,17 @@ StringBuilder sb = new StringBuilder ("X_AD_Scheduler_Para[").Append(Get_ID()).A
 return sb.ToString();
 }
 /** Set Process Parameter.
-@param AD_Process_Para_ID Process Parameter */
-public void SetAD_Process_Para_ID (int AD_Process_Para_ID)
+@param VAF_Job_Para_ID Process Parameter */
+public void SetVAF_Job_Para_ID (int VAF_Job_Para_ID)
 {
-if (AD_Process_Para_ID < 1) throw new ArgumentException ("AD_Process_Para_ID is mandatory.");
-Set_ValueNoCheck ("AD_Process_Para_ID", AD_Process_Para_ID);
+if (VAF_Job_Para_ID < 1) throw new ArgumentException ("VAF_Job_Para_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Job_Para_ID", VAF_Job_Para_ID);
 }
 /** Get Process Parameter.
 @return Process Parameter */
-public int GetAD_Process_Para_ID() 
+public int GetVAF_Job_Para_ID() 
 {
-Object ii = Get_Value("AD_Process_Para_ID");
+Object ii = Get_Value("VAF_Job_Para_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -118,8 +118,8 @@ namespace VAdvantage.Model
         }/** Get Match Invoice.
 @return Match Shipment/Receipt to Invoice */
         public int GetM_MatchInv_ID() { Object ii = Get_Value("M_MatchInv_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** Rev_C_InvoiceLine_ID AD_Reference_ID=1000371 */
-        public static int REV_C_INVOICELINE_ID_AD_Reference_ID = 1000371;/** Set Reverse Invoice Line.
+        /** Rev_C_InvoiceLine_ID VAF_Control_Ref_ID=1000371 */
+        public static int REV_C_INVOICELINE_ID_VAF_Control_Ref_ID = 1000371;/** Set Reverse Invoice Line.
 @param Rev_C_InvoiceLine_ID Reverse Invoice Line */
         public void SetRev_C_InvoiceLine_ID(int Rev_C_InvoiceLine_ID)
         {

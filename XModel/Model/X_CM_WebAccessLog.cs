@@ -264,8 +264,8 @@ public String GetIP_Address()
 return (String)Get_Value("IP_Address");
 }
 
-/** LogType AD_Reference_ID=390 */
-public static int LOGTYPE_AD_Reference_ID=390;
+/** LogType VAF_Control_Ref_ID=390 */
+public static int LOGTYPE_VAF_Control_Ref_ID=390;
 /** Ad display = A */
 public static String LOGTYPE_AdDisplay = "A";
 /** Redirect = R */

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MPInstance
  * Purpose        : Process Instance Model
- * Class Used     : X_AD_PInstance
+ * Class Used     : X_VAF_JInstance
  * Chronological    Development
  * Raghunandan     27-Oct-2009
   ******************************************************/
@@ -28,7 +28,7 @@ using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.ProcessEngine
 {
-    public class MPInstance : X_AD_PInstance
+    public class MPInstance : X_VAF_JInstance
     {
         #region private Variable
         // Result OK = 1			
@@ -47,16 +47,16 @@ namespace VAdvantage.ProcessEngine
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_PInstance_ID">instance or 0</param>
+        /// <param name="VAF_JInstance_ID">instance or 0</param>
         /// <param name="ignored">no transaction support</param>
-        public MPInstance(Ctx ctx, int AD_PInstance_ID, string ignored)
-            : base(ctx, AD_PInstance_ID, null)
+        public MPInstance(Ctx ctx, int VAF_JInstance_ID, string ignored)
+            : base(ctx, VAF_JInstance_ID, null)
         {
-            if (AD_PInstance_ID == 0)
+            if (VAF_JInstance_ID == 0)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                if (AD_Role_ID != 0)
-                    SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                if (VAF_Role_ID != 0)
+                    SetVAF_Role_ID(VAF_Role_ID);
                 SetIsProcessing(false);
             }
         }
@@ -82,7 +82,7 @@ namespace VAdvantage.ProcessEngine
         {
             if (process.Get_ID() <= 0)
                 return;
-            SetAD_Process_ID(process.GetAD_Process_ID());
+            SetVAF_Job_ID(process.GetVAF_Job_ID());
             SetRecord_ID(Record_ID);
             SetAD_User_ID(process.GetCtx().GetAD_User_ID());
 
@@ -105,12 +105,12 @@ namespace VAdvantage.ProcessEngine
         /// New Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Process_ID">Process ID</param>
+        /// <param name="VAF_Job_ID">Process ID</param>
         /// <param name="Record_ID">record</param>
-        public MPInstance(Ctx ctx, int AD_Process_ID, int Record_ID)
+        public MPInstance(Ctx ctx, int VAF_Job_ID, int Record_ID)
             : this(ctx, 0, null)
         {
-            SetAD_Process_ID(AD_Process_ID);
+            SetVAF_Job_ID(VAF_Job_ID);
             SetRecord_ID(Record_ID);
             SetAD_User_ID(ctx.GetAD_User_ID());
             SetIsProcessing(false);
@@ -126,9 +126,9 @@ namespace VAdvantage.ProcessEngine
                 return _parameter;
 
             List<MPInstancePara> list = new List<MPInstancePara>();
-            string strSql = "SELECT * FROM AD_PInstance_Para WHERE AD_PInstance_ID=@instanceid";
+            string strSql = "SELECT * FROM VAF_JInstance_Para WHERE VAF_JInstance_ID=@instanceid";
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("@instanceid", GetAD_PInstance_ID());
+            param[0] = new SqlParameter("@instanceid", GetVAF_JInstance_ID());
             DataSet ds = DataBase.DB.ExecuteDataset(strSql, param);
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
@@ -148,7 +148,7 @@ namespace VAdvantage.ProcessEngine
         {
             //	load it from DB
             _log.Clear();
-            String sql = "SELECT * FROM AD_PInstance_Log WHERE AD_PInstance_ID=" + GetAD_PInstance_ID() + " ORDER BY Log_ID";
+            String sql = "SELECT * FROM VAF_JInstance_Log WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID() + " ORDER BY Log_ID";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -193,7 +193,7 @@ namespace VAdvantage.ProcessEngine
         /// <param name="P_Msg">msg</param>
         public void AddLog(DateTime P_Date, int P_ID, Decimal P_Number, String msg)
         {
-            MPInstanceLog logEntry = new MPInstanceLog(GetAD_PInstance_ID(), _log.Count + 1,
+            MPInstanceLog logEntry = new MPInstanceLog(GetVAF_JInstance_ID(), _log.Count + 1,
                 P_Date, P_ID, P_Number, msg);
             _log.Add(logEntry);
             //	save it to DB ?
@@ -201,25 +201,25 @@ namespace VAdvantage.ProcessEngine
         }
 
         /// <summary>
-        /// Set AD_Process_ID.
+        /// Set VAF_Job_ID.
         /// Check Role if process can be performed
         /// </summary>
-        /// <param name="AD_Process_ID">process</param>
-        public new void SetAD_Process_ID(int AD_Process_ID)
+        /// <param name="VAF_Job_ID">process</param>
+        public new void SetVAF_Job_ID(int VAF_Job_ID)
         {
-            if (AD_Process_ID <= 0)
+            if (VAF_Job_ID <= 0)
                 return;
-            Console.WriteLine(AD_Process_ID.ToString());
-            int AD_Role_ID = GetCtx().GetAD_Role_ID();
-            if (AD_Role_ID != 0)
+            Console.WriteLine(VAF_Job_ID.ToString());
+            int VAF_Role_ID = GetCtx().GetVAF_Role_ID();
+            if (VAF_Role_ID != 0)
             {
-                MRole role = MRole.Get(GetCtx(), AD_Role_ID);
-                bool? access = role.GetProcessAccess(AD_Process_ID, AD_Role_ID);
+                MRole role = MRole.Get(GetCtx(), VAF_Role_ID);
+                bool? access = role.GetProcessAccess(VAF_Job_ID, VAF_Role_ID);
                 if (access == null)
-                    throw new Exception("Cannot access Process " + AD_Process_ID
+                    throw new Exception("Cannot access Process " + VAF_Job_ID
                         + " with Role: " + role.Get_Value("Name"));
             }
-            base.SetAD_Process_ID(AD_Process_ID);
+            base.SetVAF_Job_ID(VAF_Job_ID);
         }
 
         /// <summary>
@@ -331,7 +331,7 @@ namespace VAdvantage.ProcessEngine
                 {
                     seconds = 1;
                 }
-                MProcess prc = MProcess.Get(GetCtx(), GetAD_Process_ID());
+                MProcess prc = MProcess.Get(GetCtx(), GetVAF_Job_ID());
                 prc.AddStatistics(seconds);
                 if (prc.Get_ID() != 0 && prc.Save())
                 {

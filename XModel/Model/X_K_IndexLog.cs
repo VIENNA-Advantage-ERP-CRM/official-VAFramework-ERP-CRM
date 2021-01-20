@@ -170,8 +170,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** QuerySource AD_Reference_ID=391 */
-public static int QUERYSOURCE_AD_Reference_ID=391;
+/** QuerySource VAF_Control_Ref_ID=391 */
+public static int QUERYSOURCE_VAF_Control_Ref_ID=391;
 /** Collaboration Management = C */
 public static String QUERYSOURCE_CollaborationManagement = "C";
 /** HTML Client = H */

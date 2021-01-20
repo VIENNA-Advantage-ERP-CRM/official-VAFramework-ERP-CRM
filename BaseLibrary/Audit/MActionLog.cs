@@ -17,11 +17,11 @@ namespace VAdvantage.Model
         public MActionLog(Ctx ctx, int AD_ActionLog_ID, Trx trxName)
             : base(ctx, AD_ActionLog_ID, trxName)
         {
-            //super(ctx, AD_QueryLog_ID, trxName);
+            //super(ctx, VAF_DBQueryLog_ID, trxName);
             if (AD_ActionLog_ID == 0)
             {
-                int AD_Role_ID = ctx.GetAD_Role_ID();
-                SetAD_Role_ID(AD_Role_ID);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                SetVAF_Role_ID(VAF_Role_ID);
             }
         }
 
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 SetVAF_TableView_ID(VAF_TableView_ID);
             if (Record_ID > 0)
                 SetRecord_ID(Record_ID);
-            SetAD_Role_ID(ctx.GetAD_Role_ID());
+            SetVAF_Role_ID(ctx.GetVAF_Role_ID());
         }
     }
 }

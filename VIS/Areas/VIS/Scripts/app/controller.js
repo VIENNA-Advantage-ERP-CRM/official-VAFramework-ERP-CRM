@@ -801,9 +801,9 @@
 	 *	Get Process ID
 	 *  @return Process ID
 	 */
-    GridTab.prototype.getAD_Process_ID = function () {
-        return this.vo.AD_Process_ID;
-    };	//	getAD_Process_ID
+    GridTab.prototype.getVAF_Job_ID = function () {
+        return this.vo.VAF_Job_ID;
+    };	//	getVAF_Job_ID
 
     /**
 	 *  Get Current Table Key ID
@@ -1265,7 +1265,7 @@
     };   //  setValue
 
     GridTab.prototype.getIsStdColumn = function (colName) {
-        if (colName == "AD_USER_ID" || colName == "AD_ROLE_ID" || colName == "VAF_CLIENT_ID" || colName == "VAF_ORG_ID") {
+        if (colName == "AD_USER_ID" || colName == "VAF_ROLE_ID" || colName == "VAF_CLIENT_ID" || colName == "VAF_ORG_ID") {
             return true;
         }
         return false;
@@ -1482,9 +1482,9 @@
         //	Find Refernce Column e.g. BillTo_ID -> C_BPartner_Location_ID
         //var sql = "SELECT cc.ColumnName "
         //	+ "FROM VAF_Column c"
-        //	+ " INNER JOIN AD_Ref_Table r ON (c.AD_Reference_Value_ID=r.AD_Reference_ID)"
+        //	+ " INNER JOIN VAF_CtrlRef_Table r ON (c.VAF_Control_Ref_Value_ID=r.VAF_Control_Ref_ID)"
         //	+ " INNER JOIN VAF_Column cc ON (r.Column_Key_ID=cc.VAF_Column_ID) "
-        //	+ "WHERE c.AD_Reference_ID IN (18,30)" 	//	Table/Search
+        //	+ "WHERE c.VAF_Control_Ref_ID IN (18,30)" 	//	Table/Search
         //	+ " AND c.ColumnName='" + colName + "'";
         var sql = "VIS_104";
         var param = [];
@@ -1551,16 +1551,16 @@
         }
 
         //	Special Reference Handling
-        if (tabKeyColumn.equals("AD_Reference_ID")) {
-            //	Column=AccessLevel, Key=AD_Reference_ID, Query=AccessLevel='6'
-            //sql = "SELECT AD_Reference_ID FROM VAF_Column WHERE ColumnName='" + colName + "'";
+        if (tabKeyColumn.equals("VAF_Control_Ref_ID")) {
+            //	Column=AccessLevel, Key=VAF_Control_Ref_ID, Query=AccessLevel='6'
+            //sql = "SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName='" + colName + "'";
 
             sql = "VIS_106";
             var param = [];
             param[0] = new VIS.DB.SqlParam("@colName", colName);
-            var AD_Reference_ID = executeScalar(sql, param);
+            var VAF_Control_Ref_ID = executeScalar(sql, param);
 
-            return "AD_Reference_ID=" + AD_Reference_ID;
+            return "VAF_Control_Ref_ID=" + VAF_Control_Ref_ID;
         }
 
         //	Causes could be functions in query
@@ -2815,9 +2815,9 @@
         //    }
         //    if (VIS.MRole.getIsPersonalLock()) {
         //        ServerValues.IsPLock = true;
-        //        tableIndex.AD_Private_Access = sb.length;
+        //        tableIndex.VAF_Private_Rights = sb.length;
         //        sb.push("");
-        //        //sb.push("SELECT Record_ID FROM AD_Private_Access WHERE AD_User_ID=" + VIS.context.getAD_User_ID() + " AND VAF_TableView_ID=" + this.getVAF_TableView_ID() + " AND IsActive='Y' ORDER BY Record_ID");
+        //        //sb.push("SELECT Record_ID FROM VAF_Private_Rights WHERE AD_User_ID=" + VIS.context.getAD_User_ID() + " AND VAF_TableView_ID=" + this.getVAF_TableView_ID() + " AND IsActive='Y' ORDER BY Record_ID");
         //    }
         //    if (windowVo.IsSubscribeRecord) {
         //        ServerValues.IsSubscribeRecord = true;
@@ -2904,7 +2904,7 @@
 
         //        if (VIS.MRole.getIsPersonalLock()) {
 
-        //            var _dtLocked = ds.getTables()[tableIndex.AD_Private_Access];
+        //            var _dtLocked = ds.getTables()[tableIndex.VAF_Private_Rights];
         //            //Locks
         //            //this._Lock = [];
         //            if (this._Lock == null)
@@ -5685,8 +5685,8 @@
         return this.vo.Help;
     };
 
-    GridField.prototype.getAD_Process_ID = function () {
-        return this.vo.AD_Process_ID;
+    GridField.prototype.getVAF_Job_ID = function () {
+        return this.vo.VAF_Job_ID;
     };
 
 
@@ -6634,8 +6634,8 @@
         this.inserting = inserting;
     };
 
-    GridField.prototype.getAD_Reference_Value_ID = function () {
-        return this.vo.AD_Reference_Value_ID;
+    GridField.prototype.getVAF_Control_Ref_Value_ID = function () {
+        return this.vo.VAF_Control_Ref_Value_ID;
     };
 
     GridField.prototype.setDisplayType = function (displayType) {

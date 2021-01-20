@@ -130,8 +130,8 @@ public String GetExport_ID()
 return (String)Get_Value("Export_ID");
 }
 
-/** Font_Color_ID AD_Reference_ID=266 */
-public static int FONT_COLOR_ID_AD_Reference_ID=266;
+/** Font_Color_ID VAF_Control_Ref_ID=266 */
+public static int FONT_COLOR_ID_VAF_Control_Ref_ID=266;
 /** Set Font Color.
 @param Font_Color_ID Font Color */
 public void SetFont_Color_ID (int Font_Color_ID)

@@ -34,7 +34,7 @@ namespace VIS.Helpers
                                     THEN o.AD_Window_ID
                                     WHEN o.Action='P'
                                     OR o.Action  ='R'
-                                    THEN o.AD_Process_ID
+                                    THEN o.VAF_Job_ID
                                     WHEN o.Action = 'B'
                                     THEN o.AD_Workbench_ID
                                     WHEN o.Action = 'T'
@@ -75,9 +75,9 @@ namespace VIS.Helpers
 
             sql.Append(" WHERE o.VAF_Client_ID = 0 AND o.IsActive ='Y' AND o.IsChild = 'N' ");
 
-            sql.Append(@"AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM Ad_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
-                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.ad_form_id=o.VAF_Page_ID AND f.isreadwrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
-                        AND (o.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM ad_process_access p WHERE p.ad_process_id=o.AD_Process_ID AND p.isreadwrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))");
+            sql.Append(@"AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM Ad_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
+                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.ad_form_id=o.VAF_Page_ID AND f.isreadwrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
+                        AND (o.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job_Rights p WHERE p.VAF_Job_id=o.VAF_Job_ID AND p.isreadwrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))");
             sql.Append("  ORDER BY SeqNo");
 
             IDataReader dr = null;
@@ -286,7 +286,7 @@ namespace VIS.Helpers
                                     THEN o.ad_window_id
                                     WHEN o.action='P'
                                     OR o.action  ='R'
-                                    THEN o.ad_process_id
+                                    THEN o.VAF_Job_id
                                     WHEN o.action = 'B'
                                     THEN o.ad_workbench_id
                                     WHEN o.action = 'T'
@@ -312,9 +312,9 @@ namespace VIS.Helpers
                                   AND o.IsActive         ='Y'
                                   AND o.IsChild          = 'Y'
                                  AND o.Parent_ID =  " + AD_Shortcut_ID + @"
-                        AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
-                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.VAF_Page_ID=o.VAF_Page_ID AND f.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
-                        AND (o.AD_Process_ID IS NULL OR EXISTS (SELECT * FROM AD_Process_Access p WHERE p.AD_Process_ID=o.AD_Process_ID AND p.IsReadWrite='Y' and AD_Role_ID=" + ctx.GetAD_Role_ID() + @"))
+                        AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
+                        AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.VAF_Page_ID=o.VAF_Page_ID AND f.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
+                        AND (o.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job_Rights p WHERE p.VAF_Job_ID=o.VAF_Job_ID AND p.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         ORDER BY SeqNo";
 
             IDataReader dr = null;

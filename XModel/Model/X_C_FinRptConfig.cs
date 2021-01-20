@@ -225,8 +225,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetC_ReportName());
 }
 
-/** C_ReportType AD_Reference_ID=1000156 */
-public static int C_REPORTTYPE_AD_Reference_ID=1000156;
+/** C_ReportType VAF_Control_Ref_ID=1000156 */
+public static int C_REPORTTYPE_VAF_Control_Ref_ID=1000156;
 /** Balance Sheet = B */
 public static String C_REPORTTYPE_BalanceSheet = "B";
 /** Cashflow Statement = C */

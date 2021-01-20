@@ -213,7 +213,7 @@ namespace VAdvantage.Model
                 m_ctx.SetContext("#AD_User_U_ID", 0);
                 return false;
             }
-            m_ctx.SetContext("#Admin_Role_ID", admin.GetAD_Role_ID());
+            m_ctx.SetContext("#Admin_Role_ID", admin.GetVAF_Role_ID());
             //	OrgAccess x, 0
             MRoleOrgAccess adminClientAccess = new MRoleOrgAccess(admin, 0);
             if (!adminClientAccess.Save())
@@ -224,7 +224,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "Admin Role_OrgAccess NOT created");
 
             //  Info - Admin Role
-            m_info.Append(Msg.Translate(m_lang, "AD_Role_ID")).Append("=").Append(name).Append("\n");
+            m_info.Append(Msg.Translate(m_lang, "VAF_Role_ID")).Append("=").Append(name).Append("\n");
 
 
             MRole user = new MRole(m_ctx, 0, m_trx);
@@ -251,7 +251,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "User Role_OrgAccess NOT created");
             }
             //  Info - Client Role
-            m_info.Append(Msg.Translate(m_lang, "AD_Role_ID")).Append("=").Append(name).Append("\n");
+            m_info.Append(Msg.Translate(m_lang, "VAF_Role_ID")).Append("=").Append(name).Append("\n");
 
             /**
              *  Create Users
@@ -317,14 +317,14 @@ namespace VAdvantage.Model
                 m_info.Append(Msg.Translate(m_lang, "AD_User_ID")).Append("=").Append(AD_User_U_Name).Append("/").Append(AD_User_U_Name).Append("\n");
 
 
-                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
-                    + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + user.GetAD_Role_ID() + ")";
+                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,VAF_Role_ID)"
+                    + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + user.GetVAF_Role_ID() + ")";
                 no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, m_trx);
                 if (no != 1)
                     log.Log(Level.SEVERE, "UserRole ClientUser+User NOT inserted");
                 //  OrgUser             - User
-                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
-                    + " VALUES (" + m_stdValues + "," + AD_User_U_ID + "," + user.GetAD_Role_ID() + ")";
+                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,VAF_Role_ID)"
+                    + " VALUES (" + m_stdValues + "," + AD_User_U_ID + "," + user.GetVAF_Role_ID() + ")";
                 no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, m_trx);
                 if (no != 1)
                     log.Log(Level.SEVERE, "UserRole OrgUser+Org NOT inserted");
@@ -338,8 +338,8 @@ namespace VAdvantage.Model
              *  Create User-Role
              */
             //  ClientUser          - Admin & User
-            sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
-                + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + admin.GetAD_Role_ID() + ")";
+            sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,VAF_Role_ID)"
+                + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + admin.GetVAF_Role_ID() + ")";
             no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, m_trx);
             if (no != 1)
                 log.Log(Level.SEVERE, "UserRole ClientUser+Admin NOT inserted");
@@ -476,7 +476,7 @@ namespace VAdvantage.Model
                 m_ctx.SetContext("#AD_User_U_ID", 0);
                 return false;
             }
-            m_ctx.SetContext("#Admin_Role_ID", admin.GetAD_Role_ID());
+            m_ctx.SetContext("#Admin_Role_ID", admin.GetVAF_Role_ID());
             //	OrgAccess x, 0
             MRoleOrgAccess adminClientAccess = new MRoleOrgAccess(admin, 0);
             if (!adminClientAccess.Save())
@@ -487,7 +487,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "Admin Role_OrgAccess NOT created");
 
             //  Info - Admin Role
-            m_info.Append(Msg.Translate(m_lang, "AD_Role_ID")).Append("=").Append(name).Append("\n");
+            m_info.Append(Msg.Translate(m_lang, "VAF_Role_ID")).Append("=").Append(name).Append("\n");
 
 
             MRole user = new MRole(m_ctx, 0, m_trx);
@@ -514,7 +514,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "User Role_OrgAccess NOT created");
             }
             //  Info - Client Role
-            m_info.Append(Msg.Translate(m_lang, "AD_Role_ID")).Append("=").Append(name).Append("\n");
+            m_info.Append(Msg.Translate(m_lang, "VAF_Role_ID")).Append("=").Append(name).Append("\n");
 
             /**
              *  Create Users
@@ -553,7 +553,7 @@ namespace VAdvantage.Model
 
             //Save Default Login Settings for Admin User
             //string str =
-            SetupDefaultLogin(m_trx, m_client.GetVAF_Client_ID(), admin.GetAD_Role_ID(), m_org.GetVAF_Org_ID(), AD_User_ID, 0);
+            SetupDefaultLogin(m_trx, m_client.GetVAF_Client_ID(), admin.GetVAF_Role_ID(), m_org.GetVAF_Org_ID(), AD_User_ID, 0);
             
             
             //  Info
@@ -590,19 +590,19 @@ namespace VAdvantage.Model
 
                 //Save Default Login Settings for Org User
                 //str =
-                SetupDefaultLogin(m_trx, m_client.GetVAF_Client_ID(), user.GetAD_Role_ID(), m_org.GetVAF_Org_ID(), AD_User_U_ID, 0);
+                SetupDefaultLogin(m_trx, m_client.GetVAF_Client_ID(), user.GetVAF_Role_ID(), m_org.GetVAF_Org_ID(), AD_User_U_ID, 0);
                 //  Info
                 m_info.Append(Msg.Translate(m_lang, "AD_User_ID")).Append("=").Append(AD_User_U_Name).Append("/").Append(AD_User_U_Name).Append("\n");
 
 
-                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
-                    + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + user.GetAD_Role_ID() + ")";
+                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,VAF_Role_ID)"
+                    + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + user.GetVAF_Role_ID() + ")";
                 no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, m_trx);
                 if (no != 1)
                     log.Log(Level.SEVERE, "UserRole ClientUser+User NOT inserted");
                 //  OrgUser             - User
-                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
-                    + " VALUES (" + m_stdValues + "," + AD_User_U_ID + "," + user.GetAD_Role_ID() + ")";
+                sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,VAF_Role_ID)"
+                    + " VALUES (" + m_stdValues + "," + AD_User_U_ID + "," + user.GetVAF_Role_ID() + ")";
                 no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, m_trx);
                 if (no != 1)
                     log.Log(Level.SEVERE, "UserRole OrgUser+Org NOT inserted");
@@ -616,8 +616,8 @@ namespace VAdvantage.Model
              *  Create User-Role
              */
             //  ClientUser          - Admin & User
-            sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,AD_Role_ID)"
-                + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + admin.GetAD_Role_ID() + ")";
+            sql = "INSERT INTO AD_User_Roles(" + m_stdColumns + ",AD_User_ID,VAF_Role_ID)"
+                + " VALUES (" + m_stdValues + "," + AD_User_ID + "," + admin.GetVAF_Role_ID() + ")";
             no = CoreLibrary.DataBase.DB.ExecuteQuery(sql, null, m_trx);
             if (no != 1)
                 log.Log(Level.SEVERE, "UserRole ClientUser+Admin NOT inserted");
@@ -645,15 +645,15 @@ namespace VAdvantage.Model
             //CopyPrintFormat();
             ////////Create CurrencySource//////
             //CreateCurrencySource();
-            CreateKpi(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
+            CreateKpi(admin.GetVAF_Role_ID()); // Update by Paramjeet Singh
             CreateKPIPane(); // Update by Paramjeet Singh
             CreateChartPane(); // Update by Paramjeet Singh
-            CreateView(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
-            CreateTopMenu(admin.GetAD_Role_ID());
+            CreateView(admin.GetVAF_Role_ID()); // Update by Paramjeet Singh
+            CreateTopMenu(admin.GetVAF_Role_ID());
             CreateAppointmentCategory(); // Update by Paramjeet Singh
             CreateCostElement();
-            CopyRoleCenter(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
-            CopyDashBoard(admin.GetAD_Role_ID()); // Update by Paramjeet Singh
+            CopyRoleCenter(admin.GetVAF_Role_ID()); // Update by Paramjeet Singh
+            CopyDashBoard(admin.GetVAF_Role_ID()); // Update by Paramjeet Singh
             CopyOrgType();
 
 
@@ -663,16 +663,16 @@ namespace VAdvantage.Model
         string tableName = string.Empty;
         private void CreateDefaultRoles(int adminUserID)
         {
-            string sql = @"select * from ad_role where vaf_client_id=0 and vaf_org_id=0 and name!='Sys Admin' and name!='System Administrator' AND IsForNewTenant='Y'";
+            string sql = @"select * from VAF_Role where vaf_client_id=0 and vaf_org_id=0 and name!='Sys Admin' and name!='System Administrator' AND IsForNewTenant='Y'";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
             {
                 MRole role = null;
                 DataSet dsComm = null;
-                X_AD_Role_OrgAccess orgAcess = null;
+                X_VAF_Role_OrgRights orgAcess = null;
                 X_AD_User_Roles userRole = null;
                 X_AD_Window_Access winAcess = null;
-                X_AD_Process_Access processAcess = null;
+                X_VAF_Job_Rights processAcess = null;
                 X_VAF_Page_Rights formAcess = null;
                 X_AD_Workflow_Access workAccess = null;
                 X_AD_Task_Access taskAcess = null;
@@ -802,16 +802,16 @@ namespace VAdvantage.Model
                     else
                     {
                         /////////Save OrgAccess
-                        dsComm = DB.ExecuteDataset("Select * From AD_Role_OrgAccess WHERE AD_Role_ID=" + ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                        dsComm = DB.ExecuteDataset("Select * From VAF_Role_OrgRights WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                         if (dsComm != null)
                         {
                             for (int j = 0; j < dsComm.Tables[0].Rows.Count; j++)
                             {
-                                orgAcess = new X_AD_Role_OrgAccess(m_ctx, 0, m_trx);
+                                orgAcess = new X_VAF_Role_OrgRights(m_ctx, 0, m_trx);
                                 orgAcess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 orgAcess.SetIsActive(true);
                                 orgAcess.SetVAF_Org_ID(0);
-                                orgAcess.SetAD_Role_ID(role.GetAD_Role_ID());
+                                orgAcess.SetVAF_Role_ID(role.GetVAF_Role_ID());
                                 if (dsComm.Tables[0].Rows[j]["IsReadOnly"] != null && dsComm.Tables[0].Rows[j]["IsReadOnly"] != DBNull.Value)
                                 {
                                     orgAcess.SetIsReadOnly(dsComm.Tables[0].Rows[j]["IsReadOnly"].ToString().Equals("Y"));
@@ -831,14 +831,14 @@ namespace VAdvantage.Model
                         userRole.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                         userRole.SetVAF_Org_ID(0);
                         userRole.SetIsActive(true);
-                        userRole.SetAD_Role_ID(role.GetAD_Role_ID());
+                        userRole.SetVAF_Role_ID(role.GetVAF_Role_ID());
                         userRole.SetAD_User_ID(adminUserID);
                         if (!userRole.Save(m_trx))
                         {
                             log.Info(role.GetName() + " UserAccessNotSaved");
                         }
                         /////////////Window Access
-                        dsComm = DB.ExecuteDataset("Select * From AD_Window_Access WHERE AD_Role_ID=" + ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                        dsComm = DB.ExecuteDataset("Select * From AD_Window_Access WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                         if (dsComm != null)
                         {
                             for (int j = 0; j < dsComm.Tables[0].Rows.Count; j++)
@@ -847,7 +847,7 @@ namespace VAdvantage.Model
                                 winAcess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 winAcess.SetIsActive(true);
                                 winAcess.SetVAF_Org_ID(0);
-                                winAcess.SetAD_Role_ID(role.GetAD_Role_ID());
+                                winAcess.SetVAF_Role_ID(role.GetVAF_Role_ID());
                                 if (dsComm.Tables[0].Rows[j]["IsReadWrite"] != null && dsComm.Tables[0].Rows[j]["IsReadWrite"] != DBNull.Value)
                                 {
                                     winAcess.SetIsReadWrite(dsComm.Tables[0].Rows[j]["IsReadWrite"].ToString().Equals("Y"));
@@ -867,16 +867,16 @@ namespace VAdvantage.Model
                             }
                         }
                         ////////Save PRocess Acceess
-                        dsComm = DB.ExecuteDataset("Select * From AD_Process_Access WHERE AD_Role_ID=" + ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                        dsComm = DB.ExecuteDataset("Select * From VAF_Job_Rights WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                         if (dsComm != null)
                         {
                             for (int j = 0; j < dsComm.Tables[0].Rows.Count; j++)
                             {
-                                processAcess = new X_AD_Process_Access(m_ctx, 0, m_trx);
+                                processAcess = new X_VAF_Job_Rights(m_ctx, 0, m_trx);
                                 processAcess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 processAcess.SetIsActive(true);
                                 processAcess.SetVAF_Org_ID(0);
-                                processAcess.SetAD_Role_ID(role.GetAD_Role_ID());
+                                processAcess.SetVAF_Role_ID(role.GetVAF_Role_ID());
                                 if (dsComm.Tables[0].Rows[j]["IsReadWrite"] != null && dsComm.Tables[0].Rows[j]["IsReadWrite"] != DBNull.Value)
                                 {
                                     processAcess.SetIsReadWrite(dsComm.Tables[0].Rows[j]["IsReadWrite"].ToString().Equals("Y"));
@@ -885,9 +885,9 @@ namespace VAdvantage.Model
                                 {
                                     processAcess.SetIsReadWrite(false);
                                 }
-                                if (dsComm.Tables[0].Rows[j]["AD_Process_ID"] != null && dsComm.Tables[0].Rows[j]["AD_Process_ID"] != DBNull.Value)
+                                if (dsComm.Tables[0].Rows[j]["VAF_Job_ID"] != null && dsComm.Tables[0].Rows[j]["VAF_Job_ID"] != DBNull.Value)
                                 {
-                                    processAcess.SetAD_Process_ID(Util.GetValueOfInt(dsComm.Tables[0].Rows[j]["AD_Process_ID"]));
+                                    processAcess.SetVAF_Job_ID(Util.GetValueOfInt(dsComm.Tables[0].Rows[j]["VAF_Job_ID"]));
                                 }
                                 if (!processAcess.Save(m_trx))
                                 {
@@ -897,7 +897,7 @@ namespace VAdvantage.Model
                         }
 
                         ////////Save FormAccess 
-                        dsComm = DB.ExecuteDataset("Select * From VAF_Page_Rights WHERE AD_Role_ID=" + ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                        dsComm = DB.ExecuteDataset("Select * From VAF_Page_Rights WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                         if (dsComm != null)
                         {
                             for (int j = 0; j < dsComm.Tables[0].Rows.Count; j++)
@@ -906,7 +906,7 @@ namespace VAdvantage.Model
                                 formAcess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 formAcess.SetIsActive(true);
                                 formAcess.SetVAF_Org_ID(0);
-                                formAcess.SetAD_Role_ID(role.GetAD_Role_ID());
+                                formAcess.SetVAF_Role_ID(role.GetVAF_Role_ID());
                                 if (dsComm.Tables[0].Rows[j]["IsReadWrite"] != null && dsComm.Tables[0].Rows[j]["IsReadWrite"] != DBNull.Value)
                                 {
                                     formAcess.SetIsReadWrite(dsComm.Tables[0].Rows[j]["IsReadWrite"].ToString().Equals("Y"));
@@ -926,7 +926,7 @@ namespace VAdvantage.Model
                             }
                         }
                         /////////////Save WorkFlow Access
-                        dsComm = DB.ExecuteDataset("Select * From AD_Workflow_Access WHERE AD_Role_ID=" + ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                        dsComm = DB.ExecuteDataset("Select * From AD_Workflow_Access WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                         if (dsComm != null)
                         {
                             for (int j = 0; j < dsComm.Tables[0].Rows.Count; j++)
@@ -935,7 +935,7 @@ namespace VAdvantage.Model
                                 workAccess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 workAccess.SetIsActive(true);
                                 workAccess.SetVAF_Org_ID(0);
-                                workAccess.SetAD_Role_ID(role.GetAD_Role_ID());
+                                workAccess.SetVAF_Role_ID(role.GetVAF_Role_ID());
                                 if (dsComm.Tables[0].Rows[j]["IsReadWrite"] != null && dsComm.Tables[0].Rows[j]["IsReadWrite"] != DBNull.Value)
                                 {
                                     workAccess.SetIsReadWrite(dsComm.Tables[0].Rows[j]["IsReadWrite"].ToString().Equals("Y"));
@@ -955,7 +955,7 @@ namespace VAdvantage.Model
                             }
                         }
                         /////////Save TaskAcess
-                        dsComm = DB.ExecuteDataset("Select * From AD_Task_Access WHERE AD_Role_ID=" + ds.Tables[0].Rows[i]["AD_Role_ID"]);
+                        dsComm = DB.ExecuteDataset("Select * From AD_Task_Access WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                         if (dsComm != null)
                         {
                             for (int j = 0; j < dsComm.Tables[0].Rows.Count; j++)
@@ -964,7 +964,7 @@ namespace VAdvantage.Model
                                 taskAcess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 taskAcess.SetIsActive(true);
                                 taskAcess.SetVAF_Org_ID(0);
-                                taskAcess.SetAD_Role_ID(role.GetAD_Role_ID());
+                                taskAcess.SetVAF_Role_ID(role.GetVAF_Role_ID());
                                 if (dsComm.Tables[0].Rows[j]["IsReadWrite"] != null && dsComm.Tables[0].Rows[j]["IsReadWrite"] != DBNull.Value)
                                 {
                                     taskAcess.SetIsReadWrite(dsComm.Tables[0].Rows[j]["IsReadWrite"].ToString().Equals("Y"));
@@ -1265,11 +1265,11 @@ namespace VAdvantage.Model
                         {
                             kpi.SetVAF_Tab_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Tab_ID"]));
                         }
-                        //if (ds.Tables[0].Rows[i]["AD_Role_ID"] != null && ds.Tables[0].Rows[i]["AD_Role_ID"] != DBNull.Value)
+                        //if (ds.Tables[0].Rows[i]["VAF_Role_ID"] != null && ds.Tables[0].Rows[i]["VAF_Role_ID"] != DBNull.Value)
                         //{
-                        //    kpi.SetAD_Role_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                        //    kpi.SetVAF_Role_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                         //}
-                        kpi.SetAD_Role_ID(role_ID);
+                        kpi.SetVAF_Role_ID(role_ID);
                         if (ds.Tables[0].Rows[i]["Record_ID"] != null && ds.Tables[0].Rows[i]["Record_ID"] != DBNull.Value)
                         {
                             kpi.SetRecord_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["Record_ID"]));
@@ -1342,7 +1342,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            dsAccess = DB.ExecuteDataset("SELECT AD_USER_ID,AD_ROLE_ID FROM RC_KPIACCESS WHERE RC_KPI_ID=" + ds.Tables[0].Rows[i]["RC_KPI_ID"]);
+                            dsAccess = DB.ExecuteDataset("SELECT AD_USER_ID,VAF_ROLE_ID FROM RC_KPIACCESS WHERE RC_KPI_ID=" + ds.Tables[0].Rows[i]["RC_KPI_ID"]);
                             if (dsAccess != null)
                             {
                                 for (int j = 0; j < dsAccess.Tables[0].Rows.Count; j++)
@@ -1356,11 +1356,11 @@ namespace VAdvantage.Model
                                     {
                                         kpiA.SetAD_User_ID(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["AD_USER_ID"]));
                                     }
-                                    //if (dsAccess.Tables[0].Rows[j]["AD_Role_ID"] != null && dsAccess.Tables[0].Rows[j]["AD_Role_ID"] != DBNull.Value)
+                                    //if (dsAccess.Tables[0].Rows[j]["VAF_Role_ID"] != null && dsAccess.Tables[0].Rows[j]["VAF_Role_ID"] != DBNull.Value)
                                     //{
-                                    //    kpiA.SetAD_Role_ID(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["AD_Role_ID"]));
+                                    //    kpiA.SetVAF_Role_ID(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["VAF_Role_ID"]));
                                     //}
-                                    kpiA.SetAD_Role_ID(role_ID);
+                                    kpiA.SetVAF_Role_ID(role_ID);
                                     if (!kpiA.Save(m_trx))
                                     {
                                         log.Info(kpiA.GetRC_KPI_ID() + " KpiNotSaved");
@@ -1534,11 +1534,11 @@ namespace VAdvantage.Model
                         {
                             view.SetVAF_Tab_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Tab_ID"]));
                         }
-                        //if (ds.Tables[0].Rows[i]["AD_Role_ID"] != null && ds.Tables[0].Rows[i]["AD_Role_ID"] != DBNull.Value)
+                        //if (ds.Tables[0].Rows[i]["VAF_Role_ID"] != null && ds.Tables[0].Rows[i]["VAF_Role_ID"] != DBNull.Value)
                         //{
-                        //view.SetAD_Role_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                        //view.SetVAF_Role_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                         //}
-                        view.SetAD_Role_ID(adminRole_ID);
+                        view.SetVAF_Role_ID(adminRole_ID);
                         //if (ds.Tables[0].Rows[i]["AD_User_ID"] != null && ds.Tables[0].Rows[i]["AD_User_ID"] != DBNull.Value)
                         //{
                         //    view.SetAD_User_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_User_ID"]));
@@ -1636,11 +1636,11 @@ namespace VAdvantage.Model
                                     //{
                                     //    vAccess.SetAD_User_ID(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["AD_User_ID"]));
                                     //}
-                                    //if (dsAccess.Tables[0].Rows[j]["AD_Role_ID"] != null && dsAccess.Tables[0].Rows[j]["AD_Role_ID"] != DBNull.Value)
+                                    //if (dsAccess.Tables[0].Rows[j]["VAF_Role_ID"] != null && dsAccess.Tables[0].Rows[j]["VAF_Role_ID"] != DBNull.Value)
                                     //{
-                                    //    vAccess.SetAD_Role_ID(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["AD_Role_ID"]));
+                                    //    vAccess.SetVAF_Role_ID(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["VAF_Role_ID"]));
                                     //}
-                                    vAccess.SetAD_Role_ID(adminRole_ID);
+                                    vAccess.SetVAF_Role_ID(adminRole_ID);
                                     if (!vAccess.Save(m_trx))
                                     {
                                         log.Info(view.GetName() + " KPIPaneNotSaved");
@@ -1779,7 +1779,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        dsRole = DB.ExecuteDataset("SELECT VAF_ModuleRole_ID,AD_Role_ID FROM VAF_ModuleRole WHERE VAF_Module_ID=" + ds.Tables[0].Rows[i]["VAF_Module_ID"]);
+                        dsRole = DB.ExecuteDataset("SELECT VAF_ModuleRole_ID,VAF_Role_ID FROM VAF_ModuleRole WHERE VAF_Module_ID=" + ds.Tables[0].Rows[i]["VAF_Module_ID"]);
                         if (dsRole != null)
                         {
                             for (int j = 0; j < dsRole.Tables[0].Rows.Count; j++)
@@ -1789,11 +1789,11 @@ namespace VAdvantage.Model
                                 role.SetVAF_Org_ID(0);
                                 role.SetIsActive(true);
                                 role.SetVAF_Module_ID(mod.Get_ID());
-                                //if (dsRole.Tables[0].Rows[j]["AD_Role_ID"] != null && dsRole.Tables[0].Rows[j]["AD_Role_ID"] != DBNull.Value)
+                                //if (dsRole.Tables[0].Rows[j]["VAF_Role_ID"] != null && dsRole.Tables[0].Rows[j]["VAF_Role_ID"] != DBNull.Value)
                                 //{
-                                //    role.SetAD_Role_ID(Util.GetValueOfInt(dsRole.Tables[0].Rows[j]["AD_Role_ID"]));
+                                //    role.SetVAF_Role_ID(Util.GetValueOfInt(dsRole.Tables[0].Rows[j]["VAF_Role_ID"]));
                                 //}
-                                role.SetAD_Role_ID(role_ID);
+                                role.SetVAF_Role_ID(role_ID);
                                 if (!role.Save(m_trx))
                                 {
                                     log.Info(mod.GetName() + " TopMenuRoleNotSaved");
@@ -1877,7 +1877,7 @@ namespace VAdvantage.Model
             {
                 return;
             }
-            DataSet ds = DB.ExecuteDataset("select * from ad_ref_list where value in ('A','F','I','p','i') and ad_reference_id=122");
+            DataSet ds = DB.ExecuteDataset("select * from VAF_CtrlRef_List where value in ('A','F','I','p','i') and VAF_Control_Ref_id=122");
             if (ds != null)
             {
 
@@ -1954,11 +1954,11 @@ namespace VAdvantage.Model
                         {
                             rcmngr.SetName(ds.Tables[0].Rows[i]["Name"].ToString());
                         }
-                        //if (ds.Tables[0].Rows[i]["AD_Role_ID"] != null && ds.Tables[0].Rows[i]["AD_Role_ID"] != DBNull.Value)
+                        //if (ds.Tables[0].Rows[i]["VAF_Role_ID"] != null && ds.Tables[0].Rows[i]["VAF_Role_ID"] != DBNull.Value)
                         //{
-                        //    rcmngr.SetAD_Role_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Role_ID"]));
+                        //    rcmngr.SetVAF_Role_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                         //}
-                        rcmngr.SetAD_Role_ID(role_ID);
+                        rcmngr.SetVAF_Role_ID(role_ID);
                         if (!rcmngr.Save(m_trx))
                         {
                             log.Info(rcmngr.GetName() + " RoleCenterNotSaved");
@@ -2108,11 +2108,11 @@ namespace VAdvantage.Model
                                     cAcess.SetVAF_Org_ID(0);
                                     cAcess.SetIsActive(true);
                                     cAcess.SetD_Chart_ID(chart.Get_ID());
-                                    //if (dsAs.Tables[0].Rows[j]["AD_ROLE_ID"] != null && dsAs.Tables[0].Rows[j]["AD_ROLE_ID"] != DBNull.Value)
+                                    //if (dsAs.Tables[0].Rows[j]["VAF_ROLE_ID"] != null && dsAs.Tables[0].Rows[j]["VAF_ROLE_ID"] != DBNull.Value)
                                     //{
-                                    //    cAcess.SetAD_Role_ID(Util.GetValueOfInt(dsAs.Tables[0].Rows[j]["AD_ROLE_ID"]));
+                                    //    cAcess.SetVAF_Role_ID(Util.GetValueOfInt(dsAs.Tables[0].Rows[j]["VAF_ROLE_ID"]));
                                     //}
-                                    cAcess.SetAD_Role_ID(role_ID);
+                                    cAcess.SetVAF_Role_ID(role_ID);
                                     if (dsAs.Tables[0].Rows[j]["IsReadWrite"] != null && dsAs.Tables[0].Rows[j]["IsReadWrite"] != DBNull.Value)
                                     {
                                         cAcess.SetIsReadWrite((dsAs.Tables[0].Rows[j]["IsReadWrite"].ToString().Equals("Y")));
@@ -2302,13 +2302,13 @@ namespace VAdvantage.Model
         }
         private void CopyOrgType()
         {
-            DataSet ds = DB.ExecuteDataset(@"Select * From VAF_OrgType Where ISACTIVE='Y' AND vaf_client_ID=0 AND IsForNewTenant='Y' ");
+            DataSet ds = DB.ExecuteDataset(@"Select * From VAF_OrgCategory Where ISACTIVE='Y' AND vaf_client_ID=0 AND IsForNewTenant='Y' ");
             if (ds != null)
             {
-                X_VAF_OrgType orgType = null;
+                X_VAF_OrgCategory orgType = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    orgType = new X_VAF_OrgType(m_ctx, 0, m_trx);
+                    orgType = new X_VAF_OrgCategory(m_ctx, 0, m_trx);
                     orgType.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                     orgType.SetVAF_Org_ID(0);
                     orgType.SetIsActive(true);
@@ -2321,9 +2321,9 @@ namespace VAdvantage.Model
                     {
                         orgType.SetDescription(ds.Tables[0].Rows[i]["Description"].ToString());
                     }
-                    if (ds.Tables[0].Rows[i]["AD_PrintColor_ID"] != null && ds.Tables[0].Rows[i]["AD_PrintColor_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_Print_Rpt_Colour_ID"] != null && ds.Tables[0].Rows[i]["VAF_Print_Rpt_Colour_ID"] != DBNull.Value)
                     {
-                        orgType.SetAD_PrintColor_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_PrintColor_ID"]));
+                        orgType.SetVAF_Print_Rpt_Colour_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Print_Rpt_Colour_ID"]));
                     }
                     if (!orgType.Save(m_trx))
                     {
@@ -2455,11 +2455,11 @@ namespace VAdvantage.Model
              *  Create AccountingSchema Elements (Structure)
              */
             String sql2 = null;
-            if (Env.IsBaseLanguage(m_lang, "AD_Reference"))	//	Get ElementTypes & Name
-                sql2 = "SELECT Value, Name FROM AD_Ref_List WHERE AD_Reference_ID=181";
+            if (Env.IsBaseLanguage(m_lang, "VAF_Control_Ref"))	//	Get ElementTypes & Name
+                sql2 = "SELECT Value, Name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=181";
             else
-                sql2 = "SELECT l.Value, t.Name FROM AD_Ref_List l, AD_Ref_List_Trl t "
-                    + "WHERE l.AD_Reference_ID=181 AND l.AD_Ref_List_ID=t.AD_Ref_List_ID";
+                sql2 = "SELECT l.Value, t.Name FROM VAF_CtrlRef_List l, VAF_CtrlRef_TL t "
+                    + "WHERE l.VAF_Control_Ref_ID=181 AND l.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID";
             //
             int Element_OO = 0, Element_AC = 0, Element_PR = 0, Element_BP = 0, Element_PJ = 0,
                 Element_MC = 0, Element_SR = 0;
@@ -3318,7 +3318,7 @@ namespace VAdvantage.Model
             loc.Save();
 
 
-            sqlCmd = new StringBuilder("UPDATE VAF_OrgInfo SET C_Location_ID=");
+            sqlCmd = new StringBuilder("UPDATE VAF_OrgDetail SET C_Location_ID=");
             sqlCmd.Append(loc.GetC_Location_ID()).Append(" WHERE VAF_Org_ID=").Append(GetVAF_Org_ID());
             no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
             if (no != 1)
@@ -3573,11 +3573,11 @@ namespace VAdvantage.Model
         /// <param name="AD_Window_ID">window id</param>
         private void CreatePreference(String Attributes, String Value, int AD_Window_ID)
         {
-            int AD_Preference_ID = GetNextID(GetVAF_Client_ID(), "AD_Preference");
-            StringBuilder sqlCmd = new StringBuilder("INSERT INTO AD_Preference ");
-            sqlCmd.Append("(AD_Preference_ID,").Append(m_stdColumns).Append(",");
+            int VAF_ValuePreference_ID = GetNextID(GetVAF_Client_ID(), "VAF_ValuePreference");
+            StringBuilder sqlCmd = new StringBuilder("INSERT INTO VAF_ValuePreference ");
+            sqlCmd.Append("(VAF_ValuePreference_ID,").Append(m_stdColumns).Append(",");
             sqlCmd.Append("Attribute,Value,AD_Window_ID) VALUES (");
-            sqlCmd.Append(AD_Preference_ID).Append(",").Append(m_stdValues).Append(",");
+            sqlCmd.Append(VAF_ValuePreference_ID).Append(",").Append(m_stdValues).Append(",");
             sqlCmd.Append("'").Append(Attributes).Append("','").Append(Value).Append("',");
             if (AD_Window_ID == 0)
                 sqlCmd.Append("NULL )");  //jz nullif
@@ -3680,17 +3680,17 @@ namespace VAdvantage.Model
             UpdatePrintFormatHeader(Invoice_PrintFormat_ID, InvoiceLine_PrintFormat_ID);
             UpdatePrintFormatHeader(Shipment_PrintFormat_ID, ShipmentLine_PrintFormat_ID);
             UpdatePrintFormatHeader(Remittance_PrintFormat_ID, RemittanceLine_PrintFormat_ID);
-            //int Order_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_PRINTFORMAT_ID FROM AD_PRINTFORMAT WHERE REF_PRINTFORMAT='Order Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
-            //int Invoice_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_PRINTFORMAT_ID FROM AD_PRINTFORMAT WHERE REF_PRINTFORMAT='Invoice Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
-            //int Shipment_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_PRINTFORMAT_ID FROM AD_PRINTFORMAT WHERE REF_PRINTFORMAT='Shipment Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
-            //int Remittance_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT AD_PRINTFORMAT_ID FROM AD_PRINTFORMAT WHERE REF_PRINTFORMAT='Remittance Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
+            //int Order_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_PRINT_RPT_LAYOUT_ID FROM VAF_PRINT_RPT_LAYOUT WHERE REF_PRINTFORMAT='Order Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
+            //int Invoice_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_PRINT_RPT_LAYOUT_ID FROM VAF_PRINT_RPT_LAYOUT WHERE REF_PRINTFORMAT='Invoice Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
+            //int Shipment_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_PRINT_RPT_LAYOUT_ID FROM VAF_PRINT_RPT_LAYOUT WHERE REF_PRINTFORMAT='Shipment Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
+            //int Remittance_PrintFormat_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_PRINT_RPT_LAYOUT_ID FROM VAF_PRINT_RPT_LAYOUT WHERE REF_PRINTFORMAT='Remittance Print Format' AND VAF_CLIENT_ID=" + VAF_Client_ID));
             //	TODO: MPrintForm	
             //	MPrintForm form = new MPrintForm(); 
-            int AD_PrintForm_ID = DataBase.DB.GetNextID(VAF_Client_ID, "AD_PrintForm", null);
-            String sql = "INSERT INTO AD_PrintForm(VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,AD_PrintForm_ID,"
+            int VAF_Print_Rpt_Page_ID = DataBase.DB.GetNextID(VAF_Client_ID, "VAF_Print_Rpt_Page", null);
+            String sql = "INSERT INTO VAF_Print_Rpt_Page(VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,VAF_Print_Rpt_Page_ID,"
                 + "Name,Order_PrintFormat_ID,Invoice_PrintFormat_ID,Remittance_PrintFormat_ID,Shipment_PrintFormat_ID)"
                 //
-                + " VALUES (" + VAF_Client_ID + ",0,'Y',SysDate,0,SysDate,0," + AD_PrintForm_ID + ","
+                + " VALUES (" + VAF_Client_ID + ",0,'Y',SysDate,0,SysDate,0," + VAF_Print_Rpt_Page_ID + ","
                 + "'" + Msg.Translate(m_ctx, "Standard") + "',"
                 + Order_PrintFormat_ID + "," + Invoice_PrintFormat_ID + ","
                 + Remittance_PrintFormat_ID + "," + Shipment_PrintFormat_ID + ")";
@@ -3707,9 +3707,9 @@ namespace VAdvantage.Model
         private void UpdatePrintFormatHeader(int Header_ID, int Line_ID)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("UPDATE AD_PrintFormatItem SET AD_PrintFormatChild_ID=")
+            sb.Append("UPDATE VAF_Print_Rpt_LItem SET VAF_Print_Rpt_LayoutChild_ID=")
                 .Append(Line_ID)
-                .Append(" WHERE AD_PrintFormatChild_ID IS NOT NULL AND AD_PrintFormat_ID=")
+                .Append(" WHERE VAF_Print_Rpt_LayoutChild_ID IS NOT NULL AND VAF_Print_Rpt_Layout_ID=")
                 .Append(Header_ID);
             CoreLibrary.DataBase.DB.ExecuteQuery(sb.ToString(), null);
         }	//	updatePrintFormatHeader
@@ -3717,12 +3717,12 @@ namespace VAdvantage.Model
 
 
 
-        private string SetupDefaultLogin(Trx trx, int VAF_Client_ID, int AD_Role_ID, int VAF_Org_ID, int AD_User_ID, int M_Warehouse_ID)
+        private string SetupDefaultLogin(Trx trx, int VAF_Client_ID, int VAF_Role_ID, int VAF_Org_ID, int AD_User_ID, int M_Warehouse_ID)
         {
             int VAF_LoginSetting_ID = MSequence.GetNextID(m_ctx.GetVAF_Client_ID(), "VAF_LoginSetting", trx);
             StringBuilder sql = new StringBuilder("");
-            sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,AD_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
-            sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + AD_Role_ID + "," + AD_User_ID + ",");
+            sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,VAF_ROLE_ID,AD_USER_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
+            sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + VAF_Role_ID + "," + AD_User_ID + ",");
             sql.Append(GlobalVariable.TO_DATE(DateTime.Now, false) + "," + m_ctx.GetAD_User_ID() + ",NULL,");
             if (M_Warehouse_ID == 0)
                 sql.Append("NULL");

@@ -140,8 +140,8 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetC_UOM_Conversion_ID().ToString());
 }
 
-/** C_UOM_ID AD_Reference_ID=114 */
-public static int C_UOM_ID_AD_Reference_ID=114;
+/** C_UOM_ID VAF_Control_Ref_ID=114 */
+public static int C_UOM_ID_VAF_Control_Ref_ID=114;
 /** Set UOM.
 @param C_UOM_ID Unit of Measure */
 public void SetC_UOM_ID (int C_UOM_ID)
@@ -158,8 +158,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_UOM_To_ID AD_Reference_ID=114 */
-public static int C_UOM_TO_ID_AD_Reference_ID=114;
+/** C_UOM_To_ID VAF_Control_Ref_ID=114 */
+public static int C_UOM_TO_ID_VAF_Control_Ref_ID=114;
 /** Set UoM To.
 @param C_UOM_To_ID Target or destination Unit of Measure */
 public void SetC_UOM_To_ID (int C_UOM_To_ID)

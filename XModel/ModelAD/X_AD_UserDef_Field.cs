@@ -250,8 +250,8 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 
-/** IsDisplayed AD_Reference_ID=319 */
-public static int ISDISPLAYED_AD_Reference_ID=319;
+/** IsDisplayed VAF_Control_Ref_ID=319 */
+public static int ISDISPLAYED_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISDISPLAYED_No = "N";
 /** Yes = Y */
@@ -283,8 +283,8 @@ public String GetIsDisplayed()
 return (String)Get_Value("IsDisplayed");
 }
 
-/** IsMandatoryUI AD_Reference_ID=319 */
-public static int ISMANDATORYUI_AD_Reference_ID=319;
+/** IsMandatoryUI VAF_Control_Ref_ID=319 */
+public static int ISMANDATORYUI_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISMANDATORYUI_No = "N";
 /** Yes = Y */
@@ -316,8 +316,8 @@ public String GetIsMandatoryUI()
 return (String)Get_Value("IsMandatoryUI");
 }
 
-/** IsReadOnly AD_Reference_ID=319 */
-public static int ISREADONLY_AD_Reference_ID=319;
+/** IsReadOnly VAF_Control_Ref_ID=319 */
+public static int ISREADONLY_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISREADONLY_No = "N";
 /** Yes = Y */
@@ -349,8 +349,8 @@ public String GetIsReadOnly()
 return (String)Get_Value("IsReadOnly");
 }
 
-/** IsSameLine AD_Reference_ID=319 */
-public static int ISSAMELINE_AD_Reference_ID=319;
+/** IsSameLine VAF_Control_Ref_ID=319 */
+public static int ISSAMELINE_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSAMELINE_No = "N";
 /** Yes = Y */
@@ -382,8 +382,8 @@ public String GetIsSameLine()
 return (String)Get_Value("IsSameLine");
 }
 
-/** IsSelectionColumn AD_Reference_ID=319 */
-public static int ISSELECTIONCOLUMN_AD_Reference_ID=319;
+/** IsSelectionColumn VAF_Control_Ref_ID=319 */
+public static int ISSELECTIONCOLUMN_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSELECTIONCOLUMN_No = "N";
 /** Yes = Y */
@@ -415,8 +415,8 @@ public String GetIsSelectionColumn()
 return (String)Get_Value("IsSelectionColumn");
 }
 
-/** IsSummaryColumn AD_Reference_ID=319 */
-public static int ISSUMMARYCOLUMN_AD_Reference_ID=319;
+/** IsSummaryColumn VAF_Control_Ref_ID=319 */
+public static int ISSUMMARYCOLUMN_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISSUMMARYCOLUMN_No = "N";
 /** Yes = Y */
@@ -448,8 +448,8 @@ public String GetIsSummaryColumn()
 return (String)Get_Value("IsSummaryColumn");
 }
 
-/** IsUpdateable AD_Reference_ID=319 */
-public static int ISUPDATEABLE_AD_Reference_ID=319;
+/** IsUpdateable VAF_Control_Ref_ID=319 */
+public static int ISUPDATEABLE_VAF_Control_Ref_ID=319;
 /** No = N */
 public static String ISUPDATEABLE_No = "N";
 /** Yes = Y */

@@ -148,18 +148,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role.
-@param AD_Role_ID Responsibility Role */
-public void SetAD_Role_ID (int AD_Role_ID)
+@param VAF_Role_ID Responsibility Role */
+public void SetVAF_Role_ID (int VAF_Role_ID)
 {
-if (AD_Role_ID <= 0) Set_ValueNoCheck ("AD_Role_ID", null);
+if (VAF_Role_ID <= 0) Set_ValueNoCheck ("VAF_Role_ID", null);
 else
-Set_ValueNoCheck ("AD_Role_ID", AD_Role_ID);
+Set_ValueNoCheck ("VAF_Role_ID", VAF_Role_ID);
 }
 /** Get Role.
 @return Responsibility Role */
-public int GetAD_Role_ID() 
+public int GetVAF_Role_ID() 
 {
-Object ii = Get_Value("AD_Role_ID");
+Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -200,8 +200,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** ChangeLogType AD_Reference_ID=430 */
-public static int CHANGELOGTYPE_AD_Reference_ID=430;
+/** ChangeLogType VAF_Control_Ref_ID=430 */
+public static int CHANGELOGTYPE_VAF_Control_Ref_ID=430;
 /** Delete = D */
 public static String CHANGELOGTYPE_Delete = "D";
 /** Insert = I */

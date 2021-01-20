@@ -266,8 +266,8 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("QtyType");
         }
-        /** QtyType AD_Reference_ID=533 */
-        public static int QTYTYPE_AD_Reference_ID = 533;
+        /** QtyType VAF_Control_Ref_ID=533 */
+        public static int QTYTYPE_VAF_Control_Ref_ID = 533;
         /** Allocated = A */
         public static String QTYTYPE_Allocated = "A";
         /** Dedicated = D */

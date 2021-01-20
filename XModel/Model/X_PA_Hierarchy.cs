@@ -134,8 +134,8 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
 
-        /** AD_Tree_Account_ID AD_Reference_ID=184 */
-        public static int AD_TREE_ACCOUNT_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Account_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_ACCOUNT_ID_VAF_Control_Ref_ID = 184;
         /** Set Account Tree.
         @param AD_Tree_Account_ID Tree for Natural Account Tree */
         public void SetAD_Tree_Account_ID(int AD_Tree_Account_ID)
@@ -152,8 +152,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Activity_ID AD_Reference_ID=184 */
-        public static int AD_TREE_ACTIVITY_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Activity_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_ACTIVITY_ID_VAF_Control_Ref_ID = 184;
         /** Set Activity Tree.
         @param AD_Tree_Activity_ID Tree to determine activity hierarchy */
         public void SetAD_Tree_Activity_ID(int AD_Tree_Activity_ID)
@@ -170,8 +170,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_BPartner_ID AD_Reference_ID=184 */
-        public static int AD_TREE_BPARTNER_ID_AD_Reference_ID = 184;
+        /** AD_Tree_BPartner_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_BPARTNER_ID_VAF_Control_Ref_ID = 184;
         /** Set BPartner Tree.
         @param AD_Tree_BPartner_ID Tree to determine business partner hierarchy */
         public void SetAD_Tree_BPartner_ID(int AD_Tree_BPartner_ID)
@@ -188,8 +188,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Campaign_ID AD_Reference_ID=184 */
-        public static int AD_TREE_CAMPAIGN_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Campaign_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_CAMPAIGN_ID_VAF_Control_Ref_ID = 184;
         /** Set Campaign Tree.
         @param AD_Tree_Campaign_ID Tree to determine marketing campaign hierarchy */
         public void SetAD_Tree_Campaign_ID(int AD_Tree_Campaign_ID)
@@ -206,8 +206,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Org_ID AD_Reference_ID=184 */
-        public static int AD_TREE_ORG_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Org_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_ORG_ID_VAF_Control_Ref_ID = 184;
         /** Set Organization Tree.
         @param AD_Tree_Org_ID Tree to determine organizational hierarchy */
         public void SetAD_Tree_Org_ID(int AD_Tree_Org_ID)
@@ -224,8 +224,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Product_ID AD_Reference_ID=184 */
-        public static int AD_TREE_PRODUCT_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Product_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_PRODUCT_ID_VAF_Control_Ref_ID = 184;
         /** Set Product Tree.
         @param AD_Tree_Product_ID Tree to determine product hierarchy */
         public void SetAD_Tree_Product_ID(int AD_Tree_Product_ID)
@@ -242,8 +242,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Project_ID AD_Reference_ID=184 */
-        public static int AD_TREE_PROJECT_ID_AD_Reference_ID = 184;
+        /** AD_Tree_Project_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_PROJECT_ID_VAF_Control_Ref_ID = 184;
         /** Set Project Tree.
         @param AD_Tree_Project_ID Tree to determine project hierarchy */
         public void SetAD_Tree_Project_ID(int AD_Tree_Project_ID)
@@ -260,8 +260,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_SalesRegion_ID AD_Reference_ID=184 */
-        public static int AD_TREE_SALESREGION_ID_AD_Reference_ID = 184;
+        /** AD_Tree_SalesRegion_ID VAF_Control_Ref_ID=184 */
+        public static int AD_TREE_SALESREGION_ID_VAF_Control_Ref_ID = 184;
         /** Set Sales Region Tree.
         @param AD_Tree_SalesRegion_ID Tree to determine sales regional hierarchy */
         public void SetAD_Tree_SalesRegion_ID(int AD_Tree_SalesRegion_ID)

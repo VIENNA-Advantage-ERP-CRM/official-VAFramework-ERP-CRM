@@ -121,8 +121,8 @@ StringBuilder sb = new StringBuilder ("X_PA_RatioElement[").Append(Get_ID()).App
 return sb.ToString();
 }
 
-/** Account_ID AD_Reference_ID=331 */
-public static int ACCOUNT_ID_AD_Reference_ID=331;
+/** Account_ID VAF_Control_Ref_ID=331 */
+public static int ACCOUNT_ID_VAF_Control_Ref_ID=331;
 /** Set Account.
 @param Account_ID Account used */
 public void SetAccount_ID (int Account_ID)
@@ -220,8 +220,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PA_RatioUsed_ID AD_Reference_ID=371 */
-public static int PA_RATIOUSED_ID_AD_Reference_ID=371;
+/** PA_RatioUsed_ID VAF_Control_Ref_ID=371 */
+public static int PA_RATIOUSED_ID_VAF_Control_Ref_ID=371;
 /** Set Ratio Used.
 @param PA_RatioUsed_ID Performace Ratio Used */
 public void SetPA_RatioUsed_ID (int PA_RatioUsed_ID)
@@ -254,8 +254,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PostingType AD_Reference_ID=125 */
-public static int POSTINGTYPE_AD_Reference_ID=125;
+/** PostingType VAF_Control_Ref_ID=125 */
+public static int POSTINGTYPE_VAF_Control_Ref_ID=125;
 /** Actual = A */
 public static String POSTINGTYPE_Actual = "A";
 /** Budget = B */
@@ -293,8 +293,8 @@ public String GetPostingType()
 return (String)Get_Value("PostingType");
 }
 
-/** RatioElementType AD_Reference_ID=372 */
-public static int RATIOELEMENTTYPE_AD_Reference_ID=372;
+/** RatioElementType VAF_Control_Ref_ID=372 */
+public static int RATIOELEMENTTYPE_VAF_Control_Ref_ID=372;
 /** Account Value = A */
 public static String RATIOELEMENTTYPE_AccountValue = "A";
 /** Constant = C */
@@ -331,8 +331,8 @@ public String GetRatioElementType()
 return (String)Get_Value("RatioElementType");
 }
 
-/** RatioOperand AD_Reference_ID=373 */
-public static int RATIOOPERAND_AD_Reference_ID=373;
+/** RatioOperand VAF_Control_Ref_ID=373 */
+public static int RATIOOPERAND_VAF_Control_Ref_ID=373;
 /** Divide = D */
 public static String RATIOOPERAND_Divide = "D";
 /** Multiply = M */

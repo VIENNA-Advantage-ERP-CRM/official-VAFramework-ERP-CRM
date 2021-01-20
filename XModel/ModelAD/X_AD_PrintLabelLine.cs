@@ -11,18 +11,18 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_PrintLabelLine
+/** Generated Model for VAF_Print_Rpt_LblLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_PrintLabelLine : PO
+public class X_VAF_Print_Rpt_LblLine : PO
 {
-public X_AD_PrintLabelLine (Context ctx, int AD_PrintLabelLine_ID, Trx trxName) : base (ctx, AD_PrintLabelLine_ID, trxName)
+public X_VAF_Print_Rpt_LblLine (Context ctx, int VAF_Print_Rpt_LblLine_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_LblLine_ID, trxName)
 {
-/** if (AD_PrintLabelLine_ID == 0)
+/** if (VAF_Print_Rpt_LblLine_ID == 0)
 {
 SetAD_LabelPrinterFunction_ID (0);
-SetAD_PrintLabelLine_ID (0);
-SetAD_PrintLabel_ID (0);
+SetVAF_Print_Rpt_LblLine_ID (0);
+SetVAF_Print_Rpt_Lbl_ID (0);
 SetLabelFormatType (null);	// F
 SetName (null);
 SetSeqNo (0);
@@ -31,13 +31,13 @@ SetYPosition (0);
 }
  */
 }
-public X_AD_PrintLabelLine (Ctx ctx, int AD_PrintLabelLine_ID, Trx trxName) : base (ctx, AD_PrintLabelLine_ID, trxName)
+public X_VAF_Print_Rpt_LblLine (Ctx ctx, int VAF_Print_Rpt_LblLine_ID, Trx trxName) : base (ctx, VAF_Print_Rpt_LblLine_ID, trxName)
 {
-/** if (AD_PrintLabelLine_ID == 0)
+/** if (VAF_Print_Rpt_LblLine_ID == 0)
 {
 SetAD_LabelPrinterFunction_ID (0);
-SetAD_PrintLabelLine_ID (0);
-SetAD_PrintLabel_ID (0);
+SetVAF_Print_Rpt_LblLine_ID (0);
+SetVAF_Print_Rpt_Lbl_ID (0);
 SetLabelFormatType (null);	// F
 SetName (null);
 SetSeqNo (0);
@@ -51,7 +51,7 @@ SetYPosition (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintLabelLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_LblLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_AD_PrintLabelLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintLabelLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Print_Rpt_LblLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_AD_PrintLabelLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_PrintLabelLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Print_Rpt_LblLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_PrintLabelLine()
+static X_VAF_Print_Rpt_LblLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389046167L;
 public static int Table_ID;
  // =569;
 
-/** TableName=AD_PrintLabelLine */
-public static String Table_Name="AD_PrintLabelLine";
+/** TableName=VAF_Print_Rpt_LblLine */
+public static String Table_Name="VAF_Print_Rpt_LblLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_PrintLabelLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Print_Rpt_LblLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Column.
@@ -156,38 +156,38 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Label Line.
-@param AD_PrintLabelLine_ID Print Label Line Format */
-public void SetAD_PrintLabelLine_ID (int AD_PrintLabelLine_ID)
+@param VAF_Print_Rpt_LblLine_ID Print Label Line Format */
+public void SetVAF_Print_Rpt_LblLine_ID (int VAF_Print_Rpt_LblLine_ID)
 {
-if (AD_PrintLabelLine_ID < 1) throw new ArgumentException ("AD_PrintLabelLine_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintLabelLine_ID", AD_PrintLabelLine_ID);
+if (VAF_Print_Rpt_LblLine_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_LblLine_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_LblLine_ID", VAF_Print_Rpt_LblLine_ID);
 }
 /** Get Print Label Line.
 @return Print Label Line Format */
-public int GetAD_PrintLabelLine_ID() 
+public int GetVAF_Print_Rpt_LblLine_ID() 
 {
-Object ii = Get_Value("AD_PrintLabelLine_ID");
+Object ii = Get_Value("VAF_Print_Rpt_LblLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Print Label.
-@param AD_PrintLabel_ID Label Format to print */
-public void SetAD_PrintLabel_ID (int AD_PrintLabel_ID)
+@param VAF_Print_Rpt_Lbl_ID Label Format to print */
+public void SetVAF_Print_Rpt_Lbl_ID (int VAF_Print_Rpt_Lbl_ID)
 {
-if (AD_PrintLabel_ID < 1) throw new ArgumentException ("AD_PrintLabel_ID is mandatory.");
-Set_ValueNoCheck ("AD_PrintLabel_ID", AD_PrintLabel_ID);
+if (VAF_Print_Rpt_Lbl_ID < 1) throw new ArgumentException ("VAF_Print_Rpt_Lbl_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Print_Rpt_Lbl_ID", VAF_Print_Rpt_Lbl_ID);
 }
 /** Get Print Label.
 @return Label Format to print */
-public int GetAD_PrintLabel_ID() 
+public int GetVAF_Print_Rpt_Lbl_ID() 
 {
-Object ii = Get_Value("AD_PrintLabel_ID");
+Object ii = Get_Value("VAF_Print_Rpt_Lbl_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** LabelFormatType AD_Reference_ID=280 */
-public static int LABELFORMATTYPE_AD_Reference_ID=280;
+/** LabelFormatType VAF_Control_Ref_ID=280 */
+public static int LABELFORMATTYPE_VAF_Control_Ref_ID=280;
 /** Field = F */
 public static String LABELFORMATTYPE_Field = "F";
 /** Text = T */

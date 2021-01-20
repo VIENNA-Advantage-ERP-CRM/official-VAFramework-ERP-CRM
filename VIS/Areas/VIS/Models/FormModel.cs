@@ -705,8 +705,8 @@ namespace VIS.Models
         #region AReport
         public List<JTable> GetPrintFormats(int VAF_TableView_ID, int VAF_Tab_ID)
         {
-            string sql = "SELECT AD_PrintFormat_ID, Name, VAF_Client_ID "
-                       + "FROM AD_PrintFormat "
+            string sql = "SELECT VAF_Print_Rpt_Layout_ID, Name, VAF_Client_ID "
+                       + "FROM VAF_Print_Rpt_Layout "
                        + "WHERE VAF_TableView_ID='" + VAF_TableView_ID + "' AND IsTableBased='Y' ";
             if (VAF_Tab_ID > 0)
             {
@@ -714,7 +714,7 @@ namespace VIS.Models
             }
             sql = sql + "ORDER BY VAF_Client_ID DESC, IsDefault DESC, Name";	//	Own First
             sql = MRole.GetDefault(_ctx).AddAccessSQL(sql,		//	Own First
-                   "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                   "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql;
@@ -725,15 +725,15 @@ namespace VIS.Models
 
         public List<JTable> GetShowReportDetails(int VAF_TableView_ID, int VAF_Tab_ID)
         {
-            string sql = "SELECT AD_PrintFormat_ID, Name, Description,IsDefault "
-                               + "FROM AD_PrintFormat "
+            string sql = "SELECT VAF_Print_Rpt_Layout_ID, Name, Description,IsDefault "
+                               + "FROM VAF_Print_Rpt_Layout "
                                + "WHERE VAF_TableView_ID=" + VAF_TableView_ID;
             if (VAF_Tab_ID > 0)
             {
                 sql = sql + " AND VAF_Tab_ID=" + VAF_Tab_ID;
             }
             sql = sql + " ORDER BY Name";
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "AD_PrintFormat", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql;
@@ -789,7 +789,7 @@ namespace VIS.Models
             }
             if (ServerValues.IsPLock)
             {
-                sqlArray.Add("SELECT Record_ID FROM AD_Private_Access WHERE AD_User_ID=" + ServerValues.AD_User_ID + " AND VAF_TableView_ID=" + ServerValues.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID");
+                sqlArray.Add("SELECT Record_ID FROM VAF_Private_Rights WHERE AD_User_ID=" + ServerValues.AD_User_ID + " AND VAF_TableView_ID=" + ServerValues.VAF_TableView_ID + " AND IsActive='Y' ORDER BY Record_ID");
             }
             if (ServerValues.IsSubscribeRecord)
             {
@@ -1265,10 +1265,10 @@ namespace VIS.Models
             DataSet dsColumns = null;
             // check if Maintain Version is marked on table
             if (tbl.IsMaintainVersions())
-                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, VAF_Column_ID, AD_Reference_ID FROM VAF_Column WHERE VAF_TableView_ID = " + VAF_TableView_ID);
+                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, VAF_Column_ID, VAF_Control_Ref_ID FROM VAF_Column WHERE VAF_TableView_ID = " + VAF_TableView_ID);
             // else get columns on which maintain version is marked
             else
-                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, VAF_Column_ID, AD_Reference_ID FROM VAF_Column WHERE VAF_TableView_ID = " + VAF_TableView_ID + " AND IsMaintainVersions = 'Y'");
+                dsColumns = DB.ExecuteDataset("SELECT Name, ColumnName, VAF_Column_ID, VAF_Control_Ref_ID FROM VAF_Column WHERE VAF_TableView_ID = " + VAF_TableView_ID + " AND IsMaintainVersions = 'Y'");
             // return if maintain version not found either on table or column level
             if (!(dsColumns != null && dsColumns.Tables[0].Rows.Count > 0))
                 return data;
@@ -1325,7 +1325,7 @@ namespace VIS.Models
                 if (defColNames.Contains(sbColName.ToString()) || (sbColName.ToString() == origTableName + "_ID") || (sbColName.ToString() == origTableName + "_Ver_ID"))
                     continue;
 
-                if (Util.GetValueOfInt(dsColumns.Tables[0].Rows[i]["AD_Reference_ID"]) == 20)
+                if (Util.GetValueOfInt(dsColumns.Tables[0].Rows[i]["VAF_Control_Ref_ID"]) == 20)
                     dr[sbColName.ToString()] = (Util.GetValueOfString(dr[sbColName.ToString()]) == "Y") ? true : false;
 
                 var val = od[sbColName.ToString().ToLower()];
@@ -1383,7 +1383,7 @@ namespace VIS.Models
                         if (DisplayType.IsLookup(column.DisplayType))
                         {
                             VLookUpInfo lookupInfo = VLookUpFactory.GetLookUpInfo(m_ctx, 0, column.DisplayType,
-                                column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.AD_Reference_Value_ID,
+                                column.VAF_Column_ID, Env.GetLanguage(m_ctx), column.ColumnName, column.VAF_Control_Ref_Value_ID,
                                 column.IsParent, column.ValidationCode);
 
                             if (lookupInfo != null && lookupInfo.displayColSubQ != null && lookupInfo.displayColSubQ.Trim() != "")

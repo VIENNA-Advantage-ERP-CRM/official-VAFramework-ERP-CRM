@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Ref_Table
+    /** Generated Model for VAF_CtrlRef_Table
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Ref_Table : PO
+    public class X_VAF_CtrlRef_Table : PO
     {
-        public X_AD_Ref_Table(Context ctx, int AD_Ref_Table_ID, Trx trxName)
-            : base(ctx, AD_Ref_Table_ID, trxName)
+        public X_VAF_CtrlRef_Table(Context ctx, int VAF_CtrlRef_Table_ID, Trx trxName)
+            : base(ctx, VAF_CtrlRef_Table_ID, trxName)
         {
-            /** if (AD_Ref_Table_ID == 0)
+            /** if (VAF_CtrlRef_Table_ID == 0)
             {
-            SetAD_Reference_ID (0);
+            SetVAF_Control_Ref_ID (0);
             SetVAF_TableView_ID (0);
             SetColumn_Display_ID (0);
             SetColumn_Key_ID (0);
@@ -30,12 +30,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_AD_Ref_Table(Ctx ctx, int AD_Ref_Table_ID, Trx trxName)
-            : base(ctx, AD_Ref_Table_ID, trxName)
+        public X_VAF_CtrlRef_Table(Ctx ctx, int VAF_CtrlRef_Table_ID, Trx trxName)
+            : base(ctx, VAF_CtrlRef_Table_ID, trxName)
         {
-            /** if (AD_Ref_Table_ID == 0)
+            /** if (VAF_CtrlRef_Table_ID == 0)
             {
-            SetAD_Reference_ID (0);
+            SetVAF_Control_Ref_ID (0);
             SetVAF_TableView_ID (0);
             SetColumn_Display_ID (0);
             SetColumn_Key_ID (0);
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Ref_Table(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_CtrlRef_Table(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Ref_Table(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_CtrlRef_Table(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -67,14 +67,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Ref_Table(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_CtrlRef_Table(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Ref_Table()
+        static X_VAF_CtrlRef_Table()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -87,8 +87,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =103;
 
-        /** TableName=AD_Ref_Table */
-        public static String Table_Name = "AD_Ref_Table";
+        /** TableName=VAF_CtrlRef_Table */
+        public static String Table_Name = "VAF_CtrlRef_Table";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(4);
@@ -122,21 +122,21 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Ref_Table[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_CtrlRef_Table[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Reference.
-        @param AD_Reference_ID System Reference and Validation */
-        public void SetAD_Reference_ID(int AD_Reference_ID)
+        @param VAF_Control_Ref_ID System Reference and Validation */
+        public void SetVAF_Control_Ref_ID(int VAF_Control_Ref_ID)
         {
-            if (AD_Reference_ID < 1) throw new ArgumentException("AD_Reference_ID is mandatory.");
-            Set_ValueNoCheck("AD_Reference_ID", AD_Reference_ID);
+            if (VAF_Control_Ref_ID < 1) throw new ArgumentException("VAF_Control_Ref_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Control_Ref_ID", VAF_Control_Ref_ID);
         }
         /** Get Reference.
         @return System Reference and Validation */
-        public int GetAD_Reference_ID()
+        public int GetVAF_Control_Ref_ID()
         {
-            Object ii = Get_Value("AD_Reference_ID");
+            Object ii = Get_Value("VAF_Control_Ref_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetAD_Reference_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAF_Control_Ref_ID().ToString());
         }
         /** Set Table.
         @param VAF_TableView_ID Database Table information */
@@ -162,8 +162,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Column_Display_ID AD_Reference_ID=3 */
-        public static int COLUMN_DISPLAY_ID_AD_Reference_ID = 3;
+        /** Column_Display_ID VAF_Control_Ref_ID=3 */
+        public static int COLUMN_DISPLAY_ID_VAF_Control_Ref_ID = 3;
         /** Set Display column.
         @param Column_Display_ID Column that will display */
         public void SetColumn_Display_ID(int Column_Display_ID)
@@ -180,8 +180,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** Column_Key_ID AD_Reference_ID=3 */
-        public static int COLUMN_KEY_ID_AD_Reference_ID = 3;
+        /** Column_Key_ID VAF_Control_Ref_ID=3 */
+        public static int COLUMN_KEY_ID_VAF_Control_Ref_ID = 3;
         /** Set Key column.
         @param Column_Key_ID Unique identifier of a record */
         public void SetColumn_Key_ID(int Column_Key_ID)
@@ -198,8 +198,8 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** EntityType AD_Reference_ID=389 */
-        public static int ENTITYTYPE_AD_Reference_ID = 389;
+        /** EntityType VAF_Control_Ref_ID=389 */
+        public static int ENTITYTYPE_VAF_Control_Ref_ID = 389;
         /** Set Entity Type.
         @param EntityType Dictionary Entity Type;
          Determines ownership and synchronization */

@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_ReportFormat
+/** Generated Model for VAF_ReportLayout
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_ReportFormat : PO
+public class X_VAF_ReportLayout : PO
 {
-public X_AD_ReportFormat (Context ctx, int AD_ReportFormat_ID, Trx trxName) : base (ctx, AD_ReportFormat_ID, trxName)
+public X_VAF_ReportLayout (Context ctx, int VAF_ReportLayout_ID, Trx trxName) : base (ctx, VAF_ReportLayout_ID, trxName)
 {
-/** if (AD_ReportFormat_ID == 0)
+/** if (VAF_ReportLayout_ID == 0)
 {
-SetAD_ReportFormat_ID (0);
+SetVAF_ReportLayout_ID (0);
 }
  */
 }
-public X_AD_ReportFormat (Ctx ctx, int AD_ReportFormat_ID, Trx trxName) : base (ctx, AD_ReportFormat_ID, trxName)
+public X_VAF_ReportLayout (Ctx ctx, int VAF_ReportLayout_ID, Trx trxName) : base (ctx, VAF_ReportLayout_ID, trxName)
 {
-/** if (AD_ReportFormat_ID == 0)
+/** if (VAF_ReportLayout_ID == 0)
 {
-SetAD_ReportFormat_ID (0);
+SetVAF_ReportLayout_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetAD_ReportFormat_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportFormat (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportLayout (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_AD_ReportFormat (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportFormat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_ReportLayout (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_AD_ReportFormat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_ReportFormat (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_ReportLayout (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_ReportFormat()
+static X_VAF_ReportLayout()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1375278717617L;
 public static int Table_ID;
  // =1000726;
 
-/** TableName=AD_ReportFormat */
-public static String Table_Name="AD_ReportFormat";
+/** TableName=VAF_ReportLayout */
+public static String Table_Name="VAF_ReportLayout";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -107,21 +107,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_ReportFormat[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_ReportLayout[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_ReportFormat_ID.
-@param AD_ReportFormat_ID AD_ReportFormat_ID */
-public void SetAD_ReportFormat_ID (int AD_ReportFormat_ID)
+/** Set VAF_ReportLayout_ID.
+@param VAF_ReportLayout_ID VAF_ReportLayout_ID */
+public void SetVAF_ReportLayout_ID (int VAF_ReportLayout_ID)
 {
-if (AD_ReportFormat_ID < 1) throw new ArgumentException ("AD_ReportFormat_ID is mandatory.");
-Set_ValueNoCheck ("AD_ReportFormat_ID", AD_ReportFormat_ID);
+if (VAF_ReportLayout_ID < 1) throw new ArgumentException ("VAF_ReportLayout_ID is mandatory.");
+Set_ValueNoCheck ("VAF_ReportLayout_ID", VAF_ReportLayout_ID);
 }
-/** Get AD_ReportFormat_ID.
-@return AD_ReportFormat_ID */
-public int GetAD_ReportFormat_ID() 
+/** Get VAF_ReportLayout_ID.
+@return VAF_ReportLayout_ID */
+public int GetVAF_ReportLayout_ID() 
 {
-Object ii = Get_Value("AD_ReportFormat_ID");
+Object ii = Get_Value("VAF_ReportLayout_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

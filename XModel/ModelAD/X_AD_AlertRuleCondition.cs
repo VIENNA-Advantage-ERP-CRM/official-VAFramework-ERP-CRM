@@ -56,8 +56,8 @@ public int GetVAF_AlertSetting_ID() {Object ii = Get_Value("VAF_AlertSetting_ID"
 public void SetAlphaNumValue (String AlphaNumValue){if (AlphaNumValue != null && AlphaNumValue.Length > 100){log.Warning("Length > 100 - truncated");AlphaNumValue = AlphaNumValue.Substring(0,100);}Set_Value ("AlphaNumValue", AlphaNumValue);}/** Get Value.
 @return Value */
 public String GetAlphaNumValue() {return (String)Get_Value("AlphaNumValue");}
-/** AndOr AD_Reference_ID=204 */
-public static int ANDOR_AD_Reference_ID=204;/** And = A */
+/** AndOr VAF_Control_Ref_ID=204 */
+public static int ANDOR_VAF_Control_Ref_ID=204;/** And = A */
 public static String ANDOR_And = "A";/** Or = O */
 public static String ANDOR_Or = "O";/** Is test a valid value.
 @param test testvalue
@@ -68,8 +68,8 @@ public void SetAndOr (String AndOr){if (!IsAndOrValid(AndOr))
 throw new ArgumentException ("AndOr Invalid value - " + AndOr + " - Reference_ID=204 - A - O");if (AndOr != null && AndOr.Length > 1){log.Warning("Length > 1 - truncated");AndOr = AndOr.Substring(0,1);}Set_Value ("AndOr", AndOr);}/** Get And/Or.
 @return Logical operation: AND or OR */
 public String GetAndOr() {return (String)Get_Value("AndOr");}
-/** DateOperation AD_Reference_ID=1000331 */
-public static int DATEOPERATION_AD_Reference_ID=1000331;/** LastxDays = LD */
+/** DateOperation VAF_Control_Ref_ID=1000331 */
+public static int DATEOPERATION_VAF_Control_Ref_ID=1000331;/** LastxDays = LD */
 public static String DATEOPERATION_LastxDays = "LD";/** LastxMonth = LM */
 public static String DATEOPERATION_LastxMonth = "LM";/** LastxYear = LY */
 public static String DATEOPERATION_LastxYear = "LY";/** Now = NW */
@@ -103,8 +103,8 @@ public Boolean IsDynamic() {Object oo = Get_Value("IsDynamic");if (oo != null) {
 public void SetMONTH (int MONTH){Set_Value ("MONTH", MONTH);}/** Get Month.
 @return Month */
 public int GetMONTH() {Object ii = Get_Value("MONTH");if (ii == null) return 0;return Convert.ToInt32(ii);}
-/** Operator AD_Reference_ID=205 */
-public static int OPERATOR_AD_Reference_ID=205;/** != = != */
+/** Operator VAF_Control_Ref_ID=205 */
+public static int OPERATOR_VAF_Control_Ref_ID=205;/** != = != */
 public static String OPERATOR_NotEq = "!=";/** < = << */
 public static String OPERATOR_Le = "<<";/** <= = <= */
 public static String OPERATOR_LeEq = "<=";/**  = = == */
@@ -122,8 +122,8 @@ public void SetOperator (String Operator){if (Operator == null) throw new Argume
 throw new ArgumentException ("Operator Invalid value - " + Operator + " - Reference_ID=205 - != - << - <= - == - >= - >> - AB - SQ - ~~");if (Operator.Length > 2){log.Warning("Length > 2 - truncated");Operator = Operator.Substring(0,2);}Set_Value ("Operator", Operator);}/** Get Operator.
 @return Operator */
 public String GetOperator() {return (String)Get_Value("Operator");}
-/** ReturnValueType AD_Reference_ID=1000330 */
-public static int RETURNVALUETYPE_AD_Reference_ID=1000330;/** Date = DT */
+/** ReturnValueType VAF_Control_Ref_ID=1000330 */
+public static int RETURNVALUETYPE_VAF_Control_Ref_ID=1000330;/** Date = DT */
 public static String RETURNVALUETYPE_Date = "DT";/** Number = NM */
 public static String RETURNVALUETYPE_Number = "NM";/** String = ST */
 public static String RETURNVALUETYPE_String = "ST";/** Is test a valid value.

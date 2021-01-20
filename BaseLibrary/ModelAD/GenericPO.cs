@@ -22,7 +22,7 @@ namespace VAdvantage.Model
        // private static long serialVersionUID = -6558017105997010172L;
         private int tableID = 0;
         private String tableName = null;
-        public static int VAF_ORGTRX_ID_AD_Reference_ID = 130;
+        public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;
 
         #endregion
 

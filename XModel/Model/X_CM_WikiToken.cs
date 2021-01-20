@@ -237,8 +237,8 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** TokenType AD_Reference_ID=397 */
-public static int TOKENTYPE_AD_Reference_ID=397;
+/** TokenType VAF_Control_Ref_ID=397 */
+public static int TOKENTYPE_VAF_Control_Ref_ID=397;
 /** External Link = E */
 public static String TOKENTYPE_ExternalLink = "E";
 /** Internal Link = I */

@@ -533,22 +533,22 @@
 
     /**
 	 *	Dynamic Initialization process
-	 *  @param AD_Process_ID process
+	 *  @param VAF_Job_ID process
      *  @param callback to add menu item for form
 	 *  @return true if loaded OK
 	 */
-    AWindow.prototype.initProcess = function (AD_Process_ID, callback, action, splitUI, extrnalForm) {
+    AWindow.prototype.initProcess = function (VAF_Job_ID, callback, action, splitUI, extrnalForm) {
 
-        this.cPanel = new VIS.AProcess(AD_Process_ID, VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT, splitUI, extrnalForm); //initlize AForm
+        this.cPanel = new VIS.AProcess(VAF_Job_ID, VIS.Env.getScreenHeight() - AWINDOW_HEADER_HEIGHT, splitUI, extrnalForm); //initlize AForm
 
         //set variable
         var windowNo = VIS.Env.getWindowNo();
-        this.id = windowNo + "_" + AD_Process_ID;
-        this.hid = action + "=" + AD_Process_ID;
+        this.id = windowNo + "_" + VAF_Job_ID;
+        this.hid = action + "=" + VAF_Job_ID;
 
         var self = this;
         this.hideHeader(true);
-        VIS.dataContext.getProcessDataString({ AD_Process_ID: AD_Process_ID }, function (json) {
+        VIS.dataContext.getProcessDataString({ VAF_Job_ID: VAF_Job_ID }, function (json) {
             if (json.error != null) {
                 VIS.ADialog.error(json.error);    //log error
                 self.dispose();
@@ -570,7 +570,7 @@
             self.setTitle("");
             self.setName(jsonData.Name);
 
-            jsonData.AD_Process_ID = AD_Process_ID;
+            jsonData.VAF_Job_ID = VAF_Job_ID;
             //console.log(jsonData);
             self.cPanel.setActionOrigin(VIS.ProcessCtl.prototype.ORIGIN_MENU);
             if (!self.cPanel.init(jsonData, self, windowNo)) {
@@ -611,13 +611,13 @@
     };
 
 
-    AWindow.prototype.refreshProcess = function (AD_Process_ID, callback, action, splitUI, externalForm) {
+    AWindow.prototype.refreshProcess = function (VAF_Job_ID, callback, action, splitUI, externalForm) {
         if (this.cPanel) {
             this.cPanel.disposeComponent();
             this.cPanel = null;
         }
         splitUI = true;
-        this.initProcess(AD_Process_ID, callback, action, splitUI, externalForm);
+        this.initProcess(VAF_Job_ID, callback, action, splitUI, externalForm);
         if (externalForm.disposeComponent) {
             externalForm.getParameterContainer().empty().append(this.cPanel.getParametersContainer());
             this.cPanel.getContentTable().css('height', externalForm.getContentContainer().height());

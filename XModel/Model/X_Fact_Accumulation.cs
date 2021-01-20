@@ -44,8 +44,8 @@ protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, T
 @return info
 */
 public override String ToString(){StringBuilder sb = new StringBuilder ("X_Fact_Accumulation[").Append(Get_ID()).Append("]");return sb.ToString();}
-/** BALANCEACCUMULATION AD_Reference_ID=1000073 */
-public static int BALANCEACCUMULATION_AD_Reference_ID=1000073;/** Daily = D */
+/** BALANCEACCUMULATION VAF_Control_Ref_ID=1000073 */
+public static int BALANCEACCUMULATION_VAF_Control_Ref_ID=1000073;/** Daily = D */
 public static String BALANCEACCUMULATION_Daily = "D";/** Calendar Month = M */
 public static String BALANCEACCUMULATION_CalendarMonth = "M";/** Period of VA Calendar = P */
 public static String BALANCEACCUMULATION_PeriodOfAViennaCalendar = "P";/** Calendar Week = W */
