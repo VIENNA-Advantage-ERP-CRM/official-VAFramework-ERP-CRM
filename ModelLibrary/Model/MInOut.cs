@@ -2269,8 +2269,12 @@ namespace VAdvantage.Model
                         {
                             if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
                             {
-                                _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
-                                return DocActionVariables.STATUS_INPROGRESS;
+                                //Check if the Software Industry module is not installed, then only validtion will work.
+                                if (!Env.IsModuleInstalled("VA077_"))
+                                {
+                                    _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
+                                    return DocActionVariables.STATUS_INPROGRESS;
+                                }
                             }
                         }
                     }
@@ -3581,6 +3585,59 @@ namespace VAdvantage.Model
                                 Info.Append(asset.GetValue());
                             }
                             #endregion
+                        }
+                        //Create Asset Delivery
+                    }
+                    //Check if the Software Industry module installed and is SO Transation then Create Asset
+                    else if (Env.IsModuleInstalled("VA077_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0)
+                    {
+                        log.Fine("Asset");
+                        Info.Append("@A_Asset_ID@: ");
+                        int noAssets = (int)sLine.GetMovementQty();
+
+                        // Check Added only run when Product is one Asset Per UOM
+                        if (product.IsOneAssetPerUOM())
+                        {
+                            for (int i = 0; i < noAssets; i++)
+                            {
+                                if (i > 0)
+                                    Info.Append(" - ");
+                                int deliveryCount = i + 1;
+                                if (product.IsOneAssetPerUOM())
+                                    deliveryCount = 0;
+                                MAsset asset = new MAsset(this, sLine, deliveryCount);
+                                if (!asset.Save(Get_TrxName()))
+                                {
+                                    _processMsg = "Could not create Asset";
+                                    return DocActionVariables.STATUS_INVALID;
+                                }
+                                else
+                                {
+                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                                    asset.Save(Get_TrxName());
+                                }
+                                Info.Append(asset.GetValue());
+                            }
+                        }
+                        else
+                        {
+                            
+                            if (noAssets > 0)
+                            {
+                                MAsset asset = new MAsset(this, sLine, noAssets);
+                                if (!asset.Save(Get_TrxName()))
+                                {
+                                    _processMsg = "Could not create Asset";
+                                    return DocActionVariables.STATUS_INVALID;
+                                }
+                                else
+                                {
+                                    asset.SetName(asset.GetName() + "_" + asset.GetValue());
+                                    asset.Save(Get_TrxName());
+                                }
+                                Info.Append(asset.GetValue());
+                            }                           
                         }
                         //Create Asset Delivery
                     }
