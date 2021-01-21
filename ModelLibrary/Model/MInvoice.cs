@@ -148,6 +148,7 @@ namespace VAdvantage.Model
             to.SetDateAcct(dateDoc);
             to.SetDatePrinted(null);
             to.SetIsPrinted(false);
+                        
             //    
             to.SetIsApproved(false);
             to.SetC_Payment_ID(0);
@@ -1217,7 +1218,7 @@ namespace VAdvantage.Model
          *	@return pay schedule is valid
          */
         public bool ValidatePaySchedule()
-        {
+        {            
             MInvoicePaySchedule[] schedule = MInvoicePaySchedule.GetInvoicePaySchedule
                 (GetCtx(), GetC_Invoice_ID(), 0, Get_Trx());
             log.Fine("#" + schedule.Length);
@@ -1265,7 +1266,14 @@ namespace VAdvantage.Model
         /// <param name="newRecord">newRecord new</param>
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
-        {
+        {            
+            /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null && Util.GetValueOfDateTime(GetDueDate()) < Util.GetValueOfDateTime(GetDateInvoiced()))
+            {
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "DueDateLessThanInvoiceDate"));
+                return false;
+            }
+
             //	No Partner Info - set Template
             if (GetC_BPartner_ID() == 0)
                 SetBPartner(MBPartner.GetTemplate(GetCtx(), GetAD_Client_ID()));
@@ -2176,10 +2184,10 @@ namespace VAdvantage.Model
             {
                 SetWithholdingAmount(this);
             }
-
-            // not crating schedule in prepare stage, to be created in completed stage
-            // Create Invoice schedule
-            if (!CreatePaySchedule())
+            
+                // not crating schedule in prepare stage, to be created in completed stage
+                // Create Invoice schedule
+                if (!CreatePaySchedule())
             {
                 ValueNamePair pp = VLogger.RetrieveError();
                 if (pp != null && !string.IsNullOrEmpty(pp.GetName()))
@@ -2571,7 +2579,7 @@ namespace VAdvantage.Model
          *	@return true if valid schedule
          */
         private bool CreatePaySchedule()
-        {
+        { 
             if (GetC_PaymentTerm_ID() == 0)
                 return false;
             MPaymentTerm pt = new MPaymentTerm(GetCtx(), GetC_PaymentTerm_ID(), Get_TrxName());
@@ -4966,6 +4974,10 @@ namespace VAdvantage.Model
                 C_DocTypeTarget_ID, true, Get_TrxName(), true);
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
+                        
+            /** Adhoc Payment - Setting DueDate for Counter Doc ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (Get_ColumnIndex("DueDate") >= 0 && GetDueDate() != null)
+                counter.SetDueDate(GetDueDate());
             //
             counter.SetProcessing(false);
             counter.Save(Get_TrxName());
@@ -6227,6 +6239,6 @@ namespace VAdvantage.Model
         }
 
         #endregion
-
+               
     }
 }

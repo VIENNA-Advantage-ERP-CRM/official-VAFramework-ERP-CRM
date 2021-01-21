@@ -65,7 +65,8 @@ namespace VAdvantage.Model
         /// Get Payment Schedule
         /// </summary>
         /// <param name="requery">requery if true re-query</param>
-        /// <returns>array of schedule</returns>
+        /// <param name="invoice">invoice</param>
+        /// <returns></returns>
         public MPaySchedule[] GetSchedule(bool requery)
         {
             if (_schedule != null && !requery)
@@ -479,10 +480,20 @@ namespace VAdvantage.Model
                             {
                                 payDueDate = TimeUtil.AddDays(dueDate, mschedule.GetNetDays());
                             }
-                            schedule.SetDueDate(payDueDate);
 
-                            schedule.SetVA009_FollowupDate(schedule.GetDueDate().Value.AddDays(payterm.GetGraceDays()));
-                            schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
+                            /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+                            if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                            {
+                                schedule.SetDueDate(invoice.GetDueDate());
+                                schedule.SetVA009_FollowupDate(invoice.GetDueDate());
+                                schedule.SetVA009_PlannedDueDate(invoice.GetDueDate());
+                            }
+                            else
+                            {
+                                schedule.SetDueDate(payDueDate);
+                                schedule.SetVA009_FollowupDate(schedule.GetDueDate().Value.AddDays(payterm.GetGraceDays()));
+                                schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
+                            }
 
                             // check next business days in case of Discount Date                                
                             if (payterm.IsNextBusinessDay())
@@ -493,7 +504,16 @@ namespace VAdvantage.Model
                             {
                                 payDueDate = schedule.GetDiscountDate();
                             }
-                            schedule.SetDiscountDate(payDueDate);
+
+                            /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+                            if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                            {
+                                schedule.SetDiscountDate(invoice.GetDueDate());
+                            }
+                            else
+                            {
+                                schedule.SetDiscountDate(payDueDate);
+                            }
 
                             if (!schedule.Save(invoice.Get_Trx()))
                             {
@@ -827,7 +847,17 @@ namespace VAdvantage.Model
 
             if (schedule.GetDueAmt() == 0)
             {
-                schedule.SetDueDate(invoice.GetDateAcct());
+                /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+                if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                {
+                    schedule.SetDueDate(invoice.GetDueDate());
+                    schedule.SetDiscountDate(invoice.GetDueDate());
+                }
+                else
+                {
+                    schedule.SetDueDate(invoice.GetDateAcct());
+                    schedule.SetDiscountDate(invoice.GetDateAcct());
+                }
 
                 decimal dueAmt = MConversionRate.Convert(GetCtx(), payAmt ?? payAmt.Value, payCur, order.GetC_Currency_ID(),
                                                                     order.GetDateAcct(), order.GetC_ConversionType_ID(), order.GetAD_Client_ID(), order.GetAD_Org_ID());
@@ -838,7 +868,7 @@ namespace VAdvantage.Model
                 }
 
                 schedule.SetDueAmt(dueAmt);
-                schedule.SetDiscountDate(invoice.GetDateAcct());
+
                 //schedule.SetDiscountAmt((Util.GetValueOfDecimal((invoice.GetGrandTotal() * payterm.GetDiscount()) / 100)));
 
                 //  schedule.SetDiscountDays2(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2())));
@@ -848,9 +878,21 @@ namespace VAdvantage.Model
             //  MPaymentTerm paytrm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
             //  int _graceDay = paytrm.GetGraceDays();
             //DateTime? _followUpDay = GetDueDate(invoice);
-            schedule.SetVA009_FollowupDate(invoice.GetDateAcct());
+
+            /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            {
+                schedule.SetVA009_FollowupDate(invoice.GetDueDate());
+                schedule.SetVA009_PlannedDueDate(invoice.GetDueDate());
+            }
+            else
+            {
+                schedule.SetVA009_FollowupDate(invoice.GetDateAcct());
+                schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
+            }
+
             //schedule.SetVA009_PlannedDueDate(GetDueDate(invoice));
-            schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
+
             //schedule.SetDueDate(GetDueDate(invoice));
 
             // set open amount in base currency
@@ -918,80 +960,22 @@ namespace VAdvantage.Model
             MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), invoice.Get_Trx());
             MInvoicePaySchedule schedule = null;
             StringBuilder _sql = new StringBuilder();
-            //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
-            if (Env.IsModuleInstalled("VA009_"))
+
+            /** Adhoc Payment - Creating an InvoicePaySchedule based on DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_PaySchedule_ID) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + invoice.GetC_PaymentTerm_ID())) < 1)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(ips.C_InvoicePaySchedule_ID) FROM C_InvoicePaySchedule ips WHERE ips.IsActive = 'Y' AND ips.C_Invoice_ID=" + invoice.GetC_Invoice_ID(), null, invoice.Get_Trx())) < 1)
                 {
                     schedule = new MInvoicePaySchedule(GetCtx(), 0, Get_Trx());
-
                     InsertSchedule(invoice, schedule);
 
-                    if (!schedule.Save())
+                    if (!schedule.Save(invoice.Get_Trx()))
                     {
                         return false;
                     }
-                    /* we can not commit record in between - otherwise impact can't be rollback 
-                               SO (POS) --> shipment created successfully --> Invoice document created but not completed --> 
-                               system need to be rollback all those record which are created or impacted */
-                    //if (Get_Trx() != null)
-                    //{
-                    //    Get_Trx().Commit();
-                    //}
                     remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
                 }
-                else
-                {
-                    // Get due Date based on Month offSet and Month Cutoff
-                    DateTime? dueDate = GetDueDate(invoice);
-                    DateTime? payDueDate = null;
-                    for (int i = 0; i < _schedule.Length; i++)
-                    {
-                        schedule = new MInvoicePaySchedule(invoice, _schedule[i]);
-                        MPaySchedule mschedule = new MPaySchedule(GetCtx(), _schedule[i].GetC_PaySchedule_ID(), Get_Trx());
 
-                        InsertSchedule(invoice, schedule);
-
-                        // Get Next Business Day if Next Business Days check box is set to true
-                        if (payterm.IsNextBusinessDay())
-                        {
-                            payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetAD_Org_ID());
-                        }
-                        else
-                        {
-                            payDueDate = TimeUtil.AddDays(dueDate, mschedule.GetNetDays());
-                        }
-                        schedule.SetDueDate(payDueDate);
-
-                        // check next business days in case of Discount Date
-                        if (payterm.IsNextBusinessDay())
-                        {
-                            payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetAD_Org_ID());
-                        }
-                        else
-                        {
-                            payDueDate = schedule.GetDiscountDate();
-                        }
-                        schedule.SetDiscountDate(payDueDate);
-
-                        // Set Planned Due Date and Follow Up Date from Due Date
-                        schedule.SetVA009_FollowupDate(schedule.GetDueDate().Value.AddDays(payterm.GetGraceDays()));
-                        schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
-
-                        if (!schedule.Save())
-                        {
-                            return false;
-                        }
-                        /* we can not commit record in between - otherwise impact can't be rollback 
-                                SO (POS) --> shipment created successfully --> Invoice document created but not completed --> 
-                                system need to be rollback all those record which are created or impacted */
-                        //if (Get_Trx() != null)
-                        //{
-                        //    Get_Trx().Commit();
-                        //}
-                        remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
-                    }
-                }
                 if (remainder.CompareTo(Env.ZERO) != 0 && schedule != null)
                 {
                     schedule.SetDueAmt(Decimal.Add(schedule.GetDueAmt(), remainder));
@@ -1000,9 +984,96 @@ namespace VAdvantage.Model
                 }
                 if (invoice.GetC_PaymentTerm_ID() != GetC_PaymentTerm_ID())
                     invoice.SetC_PaymentTerm_ID(GetC_PaymentTerm_ID());
+
                 return invoice.ValidatePaySchedule();
             }
+            else
+            {
+                //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
+                if (Env.IsModuleInstalled("VA009_"))
+                {
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(C_PaySchedule_ID) FROM C_PaySchedule WHERE IsActive = 'Y' AND C_PaymentTerm_ID=" + invoice.GetC_PaymentTerm_ID())) < 1)
+                    {
+                        schedule = new MInvoicePaySchedule(GetCtx(), 0, Get_Trx());
 
+                        InsertSchedule(invoice, schedule);
+
+                        if (!schedule.Save())
+                        {
+                            return false;
+                        }
+                        /* we can not commit record in between - otherwise impact can't be rollback 
+                                   SO (POS) --> shipment created successfully --> Invoice document created but not completed --> 
+                                   system need to be rollback all those record which are created or impacted */
+                        //if (Get_Trx() != null)
+                        //{
+                        //    Get_Trx().Commit();
+                        //}
+                        remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
+                    }
+                    else
+                    {
+                        // Get due Date based on Month offSet and Month Cutoff
+                        DateTime? dueDate = GetDueDate(invoice);
+                        DateTime? payDueDate = null;
+                        for (int i = 0; i < _schedule.Length; i++)
+                        {
+                            schedule = new MInvoicePaySchedule(invoice, _schedule[i]);
+                            MPaySchedule mschedule = new MPaySchedule(GetCtx(), _schedule[i].GetC_PaySchedule_ID(), Get_Trx());
+
+                            InsertSchedule(invoice, schedule);
+
+                            // Get Next Business Day if Next Business Days check box is set to true
+                            if (payterm.IsNextBusinessDay())
+                            {
+                                payDueDate = GetNextBusinessDate(TimeUtil.AddDays(dueDate, mschedule.GetNetDays()), invoice.GetAD_Org_ID());
+                            }
+                            else
+                            {
+                                payDueDate = TimeUtil.AddDays(dueDate, mschedule.GetNetDays());
+                            }
+                            schedule.SetDueDate(payDueDate);
+
+                            // check next business days in case of Discount Date
+                            if (payterm.IsNextBusinessDay())
+                            {
+                                payDueDate = GetNextBusinessDate(schedule.GetDiscountDate(), invoice.GetAD_Org_ID());
+                            }
+                            else
+                            {
+                                payDueDate = schedule.GetDiscountDate();
+                            }
+                            schedule.SetDiscountDate(payDueDate);
+
+                            // Set Planned Due Date and Follow Up Date from Due Date
+                            schedule.SetVA009_FollowupDate(schedule.GetDueDate().Value.AddDays(payterm.GetGraceDays()));
+                            schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
+
+                            if (!schedule.Save())
+                            {
+                                return false;
+                            }
+                            /* we can not commit record in between - otherwise impact can't be rollback 
+                                    SO (POS) --> shipment created successfully --> Invoice document created but not completed --> 
+                                    system need to be rollback all those record which are created or impacted */
+                            //if (Get_Trx() != null)
+                            //{
+                            //    Get_Trx().Commit();
+                            //}
+                            remainder = Decimal.Subtract(remainder, schedule.GetDueAmt());
+                        }
+                    }
+                    if (remainder.CompareTo(Env.ZERO) != 0 && schedule != null)
+                    {
+                        schedule.SetDueAmt(Decimal.Add(schedule.GetDueAmt(), remainder));
+                        schedule.Save(invoice.Get_Trx());
+                        log.Fine("Remainder=" + remainder + " - " + schedule);
+                    }
+                    if (invoice.GetC_PaymentTerm_ID() != GetC_PaymentTerm_ID())
+                        invoice.SetC_PaymentTerm_ID(GetC_PaymentTerm_ID());
+                    return invoice.ValidatePaySchedule();
+                }
+            }
             return true;
         }
 
@@ -1172,7 +1243,7 @@ namespace VAdvantage.Model
 
             if (schedule.GetDueAmt() == 0)
             {
-                // Get Next Business Day if Next Business Days check box is set to true
+                // Get Next Business Day if Next Business Days check box is set to true                
                 DateTime? dueDate = GetDueDate(invoice);
                 DateTime? payDueDate = null;
                 if (payterm.IsNextBusinessDay())
@@ -1183,8 +1254,15 @@ namespace VAdvantage.Model
                 {
                     payDueDate = dueDate;
                 }
-                schedule.SetDueDate(payDueDate);
-
+                /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+                if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                {
+                    schedule.SetDueDate(invoice.GetDueDate());
+                }
+                else
+                {
+                    schedule.SetDueDate(payDueDate);
+                }
                 //schedule.SetDueDate(GetDueDate(invoice));
                 schedule.SetDueAmt((invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
                     && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal()));
@@ -1198,9 +1276,17 @@ namespace VAdvantage.Model
                 {
                     payDueDate = invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays()));
                 }
-                schedule.SetDiscountDate(payDueDate);
+                /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+                if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                {
+                    schedule.SetDiscountDate(invoice.GetDueDate());
+                }
+                else
+                {
+                    schedule.SetDiscountDate(payDueDate);
+                }
 
-                //schedule.SetDiscountDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays())));
+                //schedule.SetDiscountDate(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays())));                
                 schedule.SetDiscountAmt((Util.GetValueOfDecimal((invoice.GetGrandTotal() * payterm.GetDiscount()) / 100)));
 
                 if (payterm.IsNextBusinessDay())
@@ -1211,7 +1297,15 @@ namespace VAdvantage.Model
                 {
                     payDueDate = invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2()));
                 }
-                schedule.SetDiscountDays2(payDueDate);
+                /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+                if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+                {
+                    schedule.SetDiscountDays2(invoice.GetDueDate());
+                }
+                else
+                {
+                    schedule.SetDiscountDays2(payDueDate);
+                }
 
                 //schedule.SetDiscountDays2(invoice.GetDateInvoiced().Value.AddDays(Util.GetValueOfInt(payterm.GetDiscountDays2())));
                 schedule.SetDiscount2((Util.GetValueOfDecimal((invoice.GetGrandTotal() * payterm.GetDiscount2()) / 100)));
@@ -1220,9 +1314,19 @@ namespace VAdvantage.Model
             MPaymentTerm paytrm = new MPaymentTerm(GetCtx(), invoice.GetC_PaymentTerm_ID(), Get_Trx());
             int _graceDay = paytrm.GetGraceDays();
             //DateTime? _followUpDay = GetDueDate(invoice);
-            schedule.SetVA009_FollowupDate(schedule.GetDueDate().Value.AddDays(_graceDay));
+            /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            {
+                schedule.SetVA009_FollowupDate(invoice.GetDueDate());
+                schedule.SetVA009_PlannedDueDate(invoice.GetDueDate());
+            }
+            else
+            {
+                schedule.SetVA009_FollowupDate(schedule.GetDueDate().Value.AddDays(_graceDay));
+                schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
+            }
+
             //schedule.SetVA009_PlannedDueDate(GetDueDate(invoice));
-            schedule.SetVA009_PlannedDueDate(schedule.GetDueDate());
             //schedule.SetDueDate(GetDueDate(invoice));
 
             // set open amount in base currency
@@ -1318,8 +1422,17 @@ namespace VAdvantage.Model
             if (schedule.GetVA009_PaymentMethod_ID() <= 0)
                 schedule.SetVA009_PaymentMethod_ID(invoice.GetVA009_PaymentMethod_ID());
 
-            schedule.SetDueDate(invoice.GetDateInvoiced());
-            schedule.SetDiscountDate(Util.GetValueOfDateTime(_ds["DiscountDate"]));
+            /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            {
+                schedule.SetDueDate(invoice.GetDueDate());
+                schedule.SetDiscountDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
+            }
+            else
+            {
+                schedule.SetDueDate(invoice.GetDateInvoiced());
+                schedule.SetDiscountDate(Util.GetValueOfDateTime(_ds["DiscountDate"]));
+            }
 
             // amount which is to be left whose invoice schedule not created 
             Decimal remainingDueAmount = Decimal.Subtract(Util.GetValueOfDecimal(_ds["DueAmt"]), Util.GetValueOfDecimal(_ds["VA009_AllocatedAmt"]));
@@ -1386,14 +1499,26 @@ namespace VAdvantage.Model
             schedule.SetVA009_IsPaid(Util.GetValueOfString(_ds["VA009_IsPaid"]).Equals("Y"));
 
             schedule.SetC_Payment_ID(Util.GetValueOfInt(_ds["C_Payment_ID"]));
-            schedule.SetDiscountDays2(Util.GetValueOfDateTime(_ds["DiscountDays2"]));
 
-            schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(_ds["VA009_PlannedDueDate"]));
+            /** Adhoc Payment - Setting DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            if (invoice.Get_ColumnIndex("DueDate") >= 0 && Util.GetValueOfDateTime(invoice.GetDueDate()) >= Util.GetValueOfDateTime(invoice.GetDateInvoiced()))
+            {
+                schedule.SetDiscountDays2(Util.GetValueOfDateTime(invoice.GetDueDate()));
+                schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
+                schedule.SetVA009_FollowupDate(Util.GetValueOfDateTime(invoice.GetDueDate()));
+            }
+            else
+            {
+                schedule.SetDiscountDays2(Util.GetValueOfDateTime(_ds["DiscountDays2"]));
+                schedule.SetVA009_PlannedDueDate(Util.GetValueOfDateTime(_ds["VA009_PlannedDueDate"]));
+                schedule.SetVA009_FollowupDate(Util.GetValueOfDateTime(_ds["VA009_FollowUpDate"]));
+            }
+
             schedule.SetC_Currency_ID(Util.GetValueOfInt(_ds["C_Currency_ID"]));
             schedule.SetVA009_BseCurrncy(Util.GetValueOfInt(_ds["VA009_bseCurrncy"]));
 
             schedule.SetC_BPartner_ID(Util.GetValueOfInt(_ds["C_Bpartner_ID"]));
-            schedule.SetVA009_FollowupDate(Util.GetValueOfDateTime(_ds["VA009_FollowUpDate"]));
+
             schedule.SetVA009_PaymentMode(Util.GetValueOfString(_ds["va009_paymentmode"]));
             if (!String.IsNullOrEmpty(Convert.ToString(_ds["va009_paymenttype"])))
             {

@@ -11974,8 +11974,8 @@
 
             //set isreturntrx
             if (mTab.getField("IsReturnTrx") != null)
-            {              
-                mTab.setValue("IsReturnTrx", Util.getValueOfBoolean(dr["IsReturnTrx"]));               
+            {
+                mTab.setValue("IsReturnTrx", Util.getValueOfBoolean(dr["IsReturnTrx"]));
             }
         }
         catch (err) {
@@ -14214,6 +14214,39 @@
             //MessageBox.Show("Callout--PriceList");
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+    CalloutInvoice.prototype.CheckDueDate = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+
+        if (mTab.getValue("DateInvoiced") == null || mTab.getValue("DateInvoiced") == "") {
+            this.setCalloutActive(false);
+            return "";
+        }
+        else {
+            try {
+                this.setCalloutActive(true);
+
+                var invDate = new Date(mTab.getValue("DateInvoiced"));
+                var dueDate = new Date(mTab.getValue("DueDate"));
+                if (dueDate < invDate) {
+                    VIS.ADialog.error("DueDateLessThanInvoiceDate");
+                    mTab.setValue("DueDate","");
+                }
+                ctx = windowNo = mTab = mField = value = oldValue = null;
+                this.setCalloutActive(false);
+                //---------------------End---------------------------------------
+            }
+            catch (err) {
+                this.setCalloutActive(false);
+                return err;
+            }
+        }
         return "";
     };
 
@@ -20644,7 +20677,8 @@
             }
         }
         else if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "R" ||
-            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A") { /*Payment Return and Receipt*/
+            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A")
+        { /*Payment Return and Receipt*/
             if (Util.getValueOfDecimal(mTab.getValue("amount")) < 0) {
                 mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
             }
