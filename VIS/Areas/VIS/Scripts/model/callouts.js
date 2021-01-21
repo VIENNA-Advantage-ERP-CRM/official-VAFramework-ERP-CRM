@@ -14220,7 +14220,7 @@
     /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
     CalloutInvoice.prototype.CheckDueDate = function (ctx, windowNo, mTab, mField, value, oldValue) {
 
-        if (value == null || value.toString() == "") {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
             return "";
         }
 
@@ -14233,9 +14233,10 @@
                 this.setCalloutActive(true);
 
                 var invDate = new Date(mTab.getValue("DateInvoiced"));
-                var dueDate = new Date(value);
+                var dueDate = new Date(mTab.getValue("DueDate"));
                 if (dueDate < invDate) {
                     VIS.ADialog.error("DueDateLessThanInvoiceDate");
+                    mTab.setValue("DueDate","");
                 }
                 ctx = windowNo = mTab = mField = value = oldValue = null;
                 this.setCalloutActive(false);
