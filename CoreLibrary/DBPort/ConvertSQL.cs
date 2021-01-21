@@ -346,7 +346,7 @@ namespace VAdvantage.DBPort
                 "VAF_JINSTANCE_LOG",
                 "VAF_JINSTANCE_PARA",
                 "AD_REPLICATION_LOG",
-                "AD_SCHEDULERLOG",
+                "VAF_JOBRUN_LOG",
                 "AD_SESSION",
                 "AD_WORKFLOWPROCESSORLOG",
                 "CM_WEBACCESSLOG",

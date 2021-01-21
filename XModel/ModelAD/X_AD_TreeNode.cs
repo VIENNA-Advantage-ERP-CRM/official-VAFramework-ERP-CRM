@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_TreeNode
+/** Generated Model for VAF_TreeInfoChild
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_TreeNode : PO
+public class X_VAF_TreeInfoChild : PO
 {
-public X_AD_TreeNode (Context ctx, int AD_TreeNode_ID, Trx trxName) : base (ctx, AD_TreeNode_ID, trxName)
+public X_VAF_TreeInfoChild (Context ctx, int VAF_TreeInfoChild_ID, Trx trxName) : base (ctx, VAF_TreeInfoChild_ID, trxName)
 {
-/** if (AD_TreeNode_ID == 0)
+/** if (VAF_TreeInfoChild_ID == 0)
 {
-SetAD_Tree_ID (0);
+SetVAF_TreeInfo_ID (0);
 SetNode_ID (0);
 SetSeqNo (0);
 }
  */
 }
-public X_AD_TreeNode (Ctx ctx, int AD_TreeNode_ID, Trx trxName) : base (ctx, AD_TreeNode_ID, trxName)
+public X_VAF_TreeInfoChild (Ctx ctx, int VAF_TreeInfoChild_ID, Trx trxName) : base (ctx, VAF_TreeInfoChild_ID, trxName)
 {
-/** if (AD_TreeNode_ID == 0)
+/** if (VAF_TreeInfoChild_ID == 0)
 {
-SetAD_Tree_ID (0);
+SetVAF_TreeInfo_ID (0);
 SetNode_ID (0);
 SetSeqNo (0);
 }
@@ -41,7 +41,7 @@ SetSeqNo (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TreeNode (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TreeInfoChild (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_TreeNode (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TreeNode (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TreeInfoChild (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_TreeNode (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TreeNode (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_TreeInfoChild (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_TreeNode()
+static X_VAF_TreeInfoChild()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389047828L;
 public static int Table_ID;
  // =289;
 
-/** TableName=AD_TreeNode */
-public static String Table_Name="AD_TreeNode";
+/** TableName=VAF_TreeInfoChild */
+public static String Table_Name="VAF_TreeInfoChild";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_TreeNode[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_TreeInfoChild[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Tree.
-@param AD_Tree_ID Identifies a Tree */
-public void SetAD_Tree_ID (int AD_Tree_ID)
+@param VAF_TreeInfo_ID Identifies a Tree */
+public void SetVAF_TreeInfo_ID (int VAF_TreeInfo_ID)
 {
-if (AD_Tree_ID < 1) throw new ArgumentException ("AD_Tree_ID is mandatory.");
-Set_ValueNoCheck ("AD_Tree_ID", AD_Tree_ID);
+if (VAF_TreeInfo_ID < 1) throw new ArgumentException ("VAF_TreeInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TreeInfo_ID", VAF_TreeInfo_ID);
 }
 /** Get Tree.
 @return Identifies a Tree */
-public int GetAD_Tree_ID() 
+public int GetVAF_TreeInfo_ID() 
 {
-Object ii = Get_Value("AD_Tree_ID");
+Object ii = Get_Value("VAF_TreeInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,7 +133,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Tree_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_TreeInfo_ID().ToString());
 }
 /** Set Node_ID.
 @param Node_ID Node_ID */

@@ -644,7 +644,7 @@ namespace VAdvantage.Controller
             else
             {
                 sql.Append(" FROM VAF_Tab t ")
-               .Append("  INNER JOIN VAF_Tab_Trl trl ON t.VAF_Tab_ID = trl.VAF_Tab_ID ");
+               .Append("  INNER JOIN VAF_Tab_TL trl ON t.VAF_Tab_ID = trl.VAF_Tab_ID ");
                 isBase = true;
             }
 

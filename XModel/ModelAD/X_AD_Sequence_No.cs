@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Sequence_No
+/** Generated Model for VAF_Record_Seq_No
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Sequence_No : PO
+public class X_VAF_Record_Seq_No : PO
 {
-public X_AD_Sequence_No (Context ctx, int AD_Sequence_No_ID, Trx trxName) : base (ctx, AD_Sequence_No_ID, trxName)
+public X_VAF_Record_Seq_No (Context ctx, int VAF_Record_Seq_No_ID, Trx trxName) : base (ctx, VAF_Record_Seq_No_ID, trxName)
 {
-/** if (AD_Sequence_No_ID == 0)
+/** if (VAF_Record_Seq_No_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetCalendarYear (null);
 SetCurrentNext (0);
 }
  */
 }
-public X_AD_Sequence_No (Ctx ctx, int AD_Sequence_No_ID, Trx trxName) : base (ctx, AD_Sequence_No_ID, trxName)
+public X_VAF_Record_Seq_No (Ctx ctx, int VAF_Record_Seq_No_ID, Trx trxName) : base (ctx, VAF_Record_Seq_No_ID, trxName)
 {
-/** if (AD_Sequence_No_ID == 0)
+/** if (VAF_Record_Seq_No_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetCalendarYear (null);
 SetCurrentNext (0);
 }
@@ -41,7 +41,7 @@ SetCurrentNext (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence_No (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Record_Seq_No (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Sequence_No (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence_No (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Record_Seq_No (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Sequence_No (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence_No (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Record_Seq_No (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Sequence_No()
+static X_VAF_Record_Seq_No()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389047358L;
 public static int Table_ID;
  // =122;
 
-/** TableName=AD_Sequence_No */
-public static String Table_Name="AD_Sequence_No";
+/** TableName=VAF_Record_Seq_No */
+public static String Table_Name="VAF_Record_Seq_No";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Sequence_No[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Record_Seq_No[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Sequence.
-@param AD_Sequence_ID Document Sequence */
-public void SetAD_Sequence_ID (int AD_Sequence_ID)
+@param VAF_Record_Seq_ID Document Sequence */
+public void SetVAF_Record_Seq_ID (int VAF_Record_Seq_ID)
 {
-if (AD_Sequence_ID < 1) throw new ArgumentException ("AD_Sequence_ID is mandatory.");
-Set_ValueNoCheck ("AD_Sequence_ID", AD_Sequence_ID);
+if (VAF_Record_Seq_ID < 1) throw new ArgumentException ("VAF_Record_Seq_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Record_Seq_ID", VAF_Record_Seq_ID);
 }
 /** Get Sequence.
 @return Document Sequence */
-public int GetAD_Sequence_ID() 
+public int GetVAF_Record_Seq_ID() 
 {
-Object ii = Get_Value("AD_Sequence_ID");
+Object ii = Get_Value("VAF_Record_Seq_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -133,7 +133,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Sequence_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Record_Seq_ID().ToString());
 }
 /** Set Year & Month.
 @param CalendarYear Calendar Year & Month */

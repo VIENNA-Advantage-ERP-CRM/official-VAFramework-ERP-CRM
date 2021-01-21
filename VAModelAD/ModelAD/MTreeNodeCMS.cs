@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTreeNodeCMS
  * Purpose        : (Disk) Tree Node Model CM Stage
- * Class Used     : X_AD_TreeNodeCMS
+ * Class Used     : X_VAF_TreeInfoChildCMS
  * Chronological    Development
  * Deepak           27-Nov-2009 
   ******************************************************/
@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTreeNodeCMS : X_AD_TreeNodeCMS
+    public class MTreeNodeCMS : X_VAF_TreeInfoChildCMS
     {
         /**	Static Logger	*/
 	private static VLogger	_log	= VLogger.GetVLogger (typeof(MTreeNodeCMS).FullName);
@@ -31,25 +31,25 @@ namespace VAdvantage.Model
    /// Get Tree
    /// </summary>
    /// <param name="ctx">context</param>
-   /// <param name="AD_Tree_ID">tree</param>
+   /// <param name="VAF_TreeInfo_ID">tree</param>
    /// <param name="trxName">transaction</param>
    /// <returns>array of nodes</returns>
-	public static MTreeNodeCMS[] GetTree(Ctx ctx, int AD_Tree_ID, Trx trxName)
+	public static MTreeNodeCMS[] GetTree(Ctx ctx, int VAF_TreeInfo_ID, Trx trxName)
 	{
 		List<MTreeNodeCMS> list = new List<MTreeNodeCMS>();
-		String sql = "SELECT * FROM AD_TreeNodeCMS WHERE AD_Tree_ID=@Param ORDER BY Node_ID";
+		String sql = "SELECT * FROM VAF_TreeInfoChildCMS WHERE VAF_TreeInfo_ID=@Param ORDER BY Node_ID";
 		SqlParameter[] Param=new SqlParameter[1];
         IDataReader idr=null;
         DataTable dt=null;
 		try
 		{
-            Param[0]=new SqlParameter("@Param",AD_Tree_ID);
+            Param[0]=new SqlParameter("@Param",VAF_TreeInfo_ID);
 			//pstmt = DataBase.prepareStatement (sql, trxName);
             idr=DataBase.DB.ExecuteReader(sql,Param,trxName);
             dt=new DataTable();
             dt.Load(idr);
             idr.Close();
-			//pstmt.setInt (1, AD_Tree_ID);
+			//pstmt.setInt (1, VAF_TreeInfo_ID);
 			//ResultSet rs = pstmt.executeQuery ();
 			foreach(DataRow dr in dt.Rows)
 			{
@@ -84,15 +84,15 @@ namespace VAdvantage.Model
 	public static MTreeNodeCMS Get(MTree tree, int Node_ID)
 	{
 		MTreeNodeCMS retValue = null;
-		String sql = "SELECT * FROM AD_TreeNodeCMS WHERE AD_Tree_ID=@Param1 AND Node_ID=@Param2";
+		String sql = "SELECT * FROM VAF_TreeInfoChildCMS WHERE VAF_TreeInfo_ID=@Param1 AND Node_ID=@Param2";
 		SqlParameter[] Param=new SqlParameter[2];
         IDataReader idr=null;
         DataTable dt=null;
 		try
 		{
 			//pstmt = DataBase.prepareStatement (sql, tree.get_TrxName());
-			//pstmt.setInt (1, tree.getAD_Tree_ID());
-            Param[0]=new SqlParameter("@Param1",tree.GetAD_Tree_ID());
+			//pstmt.setInt (1, tree.getVAF_TreeInfo_ID());
+            Param[0]=new SqlParameter("@Param1",tree.GetVAF_TreeInfo_ID());
 			//pstmt.setInt (2, Node_ID);
             Param[1]=new SqlParameter("@Param2",Node_ID);
             idr=DataBase.DB.ExecuteReader(sql,Param,tree.Get_TrxName());
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
 	{
 		//super (tree.GetCtx(), 0, tree.get_TrxName());
 		SetClientOrg(tree);
-		SetAD_Tree_ID (tree.GetAD_Tree_ID());
+		SetVAF_TreeInfo_ID (tree.GetVAF_TreeInfo_ID());
 		SetNode_ID(Node_ID);
 		//	Add to root
 		SetParent_ID(0);
@@ -156,7 +156,7 @@ namespace VAdvantage.Model
     {
         //super (tree.GetCtx(), 0, tree.get_TrxName());
         SetClientOrg(tree);
-        SetAD_Tree_ID(tree.GetAD_Tree_ID());
+        SetVAF_TreeInfo_ID(tree.GetVAF_TreeInfo_ID());
         SetNode_ID(Node_ID);
         //	Add to root
         SetParent_ID(0);

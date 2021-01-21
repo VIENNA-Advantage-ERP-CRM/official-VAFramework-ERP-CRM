@@ -744,7 +744,7 @@ namespace VAdvantage.Print
             else
             {
                 sql1 = sql1 + " Distinct tt.Name, (SELECT COUNT(*) FROM VAF_Print_Rpt_Layout x WHERE x.VAF_Tab_ID =t.VAF_Tab_ID  AND x.VAF_Client_ID=c.VAF_Client_ID ) AS COUNT"
-                            + " FROM VAF_Client c, VAF_Tab t JOIN VAF_Tab_Trl tt ON (tt.VAF_Tab_ID=t.vaf_tab_id)"
+                            + " FROM VAF_Client c, VAF_Tab t JOIN VAF_Tab_TL tt ON (tt.VAF_Tab_ID=t.vaf_tab_id)"
                             + " WHERE t.VAF_Tab_ID ='" + VAF_Tab_ID + "'  AND tt.VAF_Language='" + VAF_Language + "'"
                             + " AND c.VAF_Client_ID='" + VAF_Client_ID + "'";
             }

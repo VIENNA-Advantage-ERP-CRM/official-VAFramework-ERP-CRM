@@ -67,7 +67,7 @@ namespace VAdvantage.Controller
             String sql = "SELECT panel.classname, panel.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.vaf_tabpanel_id, panel.vaf_tab_id, panel.ExtraInfo FROM VAF_TabPanel panel WHERE panel.VAF_Tab_ID =@tabID AND panel.IsActive='Y'";
             if (!Env.IsBaseLanguage(ctx, "AD_Window"))
             {
-                sql = "SELECT panel.classname, trl.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.vaf_tabpanel_id, panel.vaf_tab_id, panel.ExtraInfo FROM VAF_TabPanel panel JOIN VAF_TabPanel_trl  trl ON panel.vaf_tabpanel_id=trl.vaf_tabpanel_id "
+                sql = "SELECT panel.classname, trl.Name, panel.iconpath, panel.isdefault, panel.seqno, panel.vaf_tabpanel_id, panel.vaf_tab_id, panel.ExtraInfo FROM VAF_TabPanel panel JOIN VAF_TabPanel_TL  trl ON panel.vaf_tabpanel_id=trl.vaf_tabpanel_id "
                     + " WHERE panel.VAF_Tab_ID =@tabID AND trl.VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
             }
             sql += " ORDER BY panel.SeqNo, panel.vaf_tabpanel_id asc";

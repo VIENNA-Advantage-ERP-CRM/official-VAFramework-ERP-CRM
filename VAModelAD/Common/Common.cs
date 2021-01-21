@@ -164,17 +164,17 @@ namespace VAdvantage.Common
                 {
                     // Check if Document Sequence has organization Level checked, if yes then get report from there.
                     // If Not, then try to get report from Document Type.
-                    sql1 = @"SELECT AD_Sequence_No.Report_ID
-                                From Ad_Sequence Ad_Sequence
+                    sql1 = @"SELECT VAF_Record_Seq_No.Report_ID
+                                From VAF_Record_Seq VAF_Record_Seq
                                 JOIN C_Doctype C_Doctype
-                                ON (C_Doctype.Docnosequence_Id =Ad_Sequence.Ad_Sequence_Id 
+                                ON (C_Doctype.Docnosequence_Id =VAF_Record_Seq.VAF_Record_Seq_Id 
                                 AND C_DocType.ISDOCNOCONTROLLED='Y')  
-                                JOIN AD_Sequence_No AD_Sequence_No
-                                On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
-                                AND Ad_Sequence_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
-                                JOIN VAF_Job ON VAF_Job.VAF_Job_ID=AD_Sequence_No.Report_ID
+                                JOIN VAF_Record_Seq_No VAF_Record_Seq_No
+                                On (VAF_Record_Seq_No.VAF_Record_Seq_Id=VAF_Record_Seq.VAF_Record_Seq_Id
+                                AND VAF_Record_Seq_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
+                                JOIN VAF_Job ON VAF_Job.VAF_Job_ID=VAF_Record_Seq_No.Report_ID
                                 Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
-                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND VAF_Job.IsActive='Y'";
+                                And VAF_Record_Seq.Isorglevelsequence='Y' AND VAF_Record_Seq.IsActive='Y' AND VAF_Job.IsActive='Y'";
 
                     object processID = DB.ExecuteScalar(sql1);
                     if (processID == DBNull.Value || processID == null || Convert.ToInt32(processID) == 0)
@@ -816,41 +816,41 @@ namespace VAdvantage.Common
 
         public static int GetRootNode(string TreeType)
         {
-            int AD_Tree_ID = 0;
-            if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and treetype='" + TreeType + "' and isAllNodes='Y'")) > 0)
+            int VAF_TreeInfo_ID = 0;
+            if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from VAF_TreeInfo where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and treetype='" + TreeType + "' and isAllNodes='Y'")) > 0)
             {
-                if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and " +
+                if (int.Parse(ExecuteQuery.ExecuteScalar("select count(1) from VAF_TreeInfo where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and " +
                 "isdefault='Y' and treetype='" + TreeType + "'").ToString()) > 0)
                 {
-                    AD_Tree_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select ad_TREE_ID" +
-                   " from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and isdefault='Y' AND " +
-                   "created <=(select MIN(created) FROM ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " " +
+                    VAF_TreeInfo_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select VAF_TreeInfo_ID" +
+                   " from VAF_TreeInfo where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and isdefault='Y' AND " +
+                   "created <=(select MIN(created) FROM VAF_TreeInfo where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " " +
                    "and isdefault='Y' and TREETYPE='" + TreeType + "') and TREETYPE='" + TreeType + "'"));
                 }
                 else
                 {
-                    AD_Tree_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select ad_TREE_ID" +
-                  " from ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and isAllNodes='Y' AND " +
-                  "created <=(select MIN(created) FROM ad_tree where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " " +
+                    VAF_TreeInfo_ID = int.Parse(SqlExec.ExecuteQuery.ExecuteScalar("select VAF_TreeInfo_ID" +
+                  " from VAF_TreeInfo where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " and isAllNodes='Y' AND " +
+                  "created <=(select MIN(created) FROM VAF_TreeInfo where vaf_client_id=" + Utility.Env.GetContext().GetVAF_Client_ID() + " " +
                   "and isAllNodes='Y' and TREETYPE='" + TreeType + "') and TREETYPE='" + TreeType + "'"));
                 }
 
             }
-            return AD_Tree_ID;
+            return VAF_TreeInfo_ID;
         }
 
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_TREE_ID">Tree ID</param>
+        /// <param name="VAF_TreeInfo_ID">Tree ID</param>
         /// <param name="strTable">Table Name</param>
         /// <param name="ChkecSeqno"></param>
         /// <returns></returns>
         /// <author>Kiran Sangwan</author>
-        public static int GetTotalMenues(int AD_TREE_ID, string strTable, bool ChkecSeqno)
+        public static int GetTotalMenues(int VAF_TreeInfo_ID, string strTable, bool ChkecSeqno)
         {
-            string strQuery = "select count(1) from " + strTable + " where AD_Tree_Id=" + AD_TREE_ID;
+            string strQuery = "select count(1) from " + strTable + " where VAF_TreeInfo_Id=" + VAF_TreeInfo_ID;
             if (ChkecSeqno == true)
             {
                 strQuery += " and seqno=9999";

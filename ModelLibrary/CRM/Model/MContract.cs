@@ -798,14 +798,14 @@ namespace VAdvantage.Model
 
             //  String sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',"			//	1..3
             //      + "d.IsDocNoControlled,s.CurrentNext,s.CurrentNextSys,"     //  4..6
-            //      + "s.AD_Sequence_ID,d.IsSOTrx,d.IsReturnTrx "               //	7..9
+            //      + "s.VAF_Record_Seq_ID,d.IsSOTrx,d.IsReturnTrx "               //	7..9
             //      + "FROM C_DocType d "
-            //      + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
+            //      + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
             //      + "WHERE C_DocType_ID=";	//	#1
             //  DataTable dt = null;
             //  try
             //  {
-            //      int AD_Sequence_ID = 0;
+            //      int VAF_Record_Seq_ID = 0;
 
             //      IDataReader idr = null;
             //      //	Get old AD_SeqNo for comparison
@@ -818,7 +818,7 @@ namespace VAdvantage.Model
             //          idr.Close();
             //          foreach (DataRow dr in dt.Rows)
             //          {
-            //              AD_Sequence_ID = Util.GetValueOfInt(dr[5].ToString());
+            //              VAF_Record_Seq_ID = Util.GetValueOfInt(dr[5].ToString());
             //          }
             //          dt = null;
             //      }
@@ -892,7 +892,7 @@ namespace VAdvantage.Model
             //          //	DocumentNo
             //          if (dr[3].ToString().Equals("Y"))			//	IsDocNoControlled
             //          {
-            //              if (!newDocNo && AD_Sequence_ID != Util.GetValueOfInt(dr[6].ToString()))
+            //              if (!newDocNo && VAF_Record_Seq_ID != Util.GetValueOfInt(dr[6].ToString()))
             //                  newDocNo = true;
             //              if (newDocNo)
             //                  {

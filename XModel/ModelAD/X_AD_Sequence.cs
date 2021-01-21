@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Sequence
+/** Generated Model for VAF_Record_Seq
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Sequence : PO
+public class X_VAF_Record_Seq : PO
 {
-public X_AD_Sequence (Context ctx, int AD_Sequence_ID, Trx trxName) : base (ctx, AD_Sequence_ID, trxName)
+public X_VAF_Record_Seq (Context ctx, int VAF_Record_Seq_ID, Trx trxName) : base (ctx, VAF_Record_Seq_ID, trxName)
 {
-/** if (AD_Sequence_ID == 0)
+/** if (VAF_Record_Seq_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetCurrentNext (0);	// 1000000
 SetCurrentNextSys (0);	// 100
 SetIncrementNo (0);	// 1
@@ -30,11 +30,11 @@ SetStartNo (0);	// 1000000
 }
  */
 }
-public X_AD_Sequence (Ctx ctx, int AD_Sequence_ID, Trx trxName) : base (ctx, AD_Sequence_ID, trxName)
+public X_VAF_Record_Seq (Ctx ctx, int VAF_Record_Seq_ID, Trx trxName) : base (ctx, VAF_Record_Seq_ID, trxName)
 {
-/** if (AD_Sequence_ID == 0)
+/** if (VAF_Record_Seq_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetCurrentNext (0);	// 1000000
 SetCurrentNextSys (0);	// 100
 SetIncrementNo (0);	// 1
@@ -49,7 +49,7 @@ SetStartNo (0);	// 1000000
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Record_Seq (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_AD_Sequence (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Record_Seq (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_AD_Sequence (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Record_Seq (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Sequence()
+static X_VAF_Record_Seq()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389047264L;
 public static int Table_ID;
  // =115;
 
-/** TableName=AD_Sequence */
-public static String Table_Name="AD_Sequence";
+/** TableName=VAF_Record_Seq */
+public static String Table_Name="VAF_Record_Seq";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,21 +119,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Sequence[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Record_Seq[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Sequence.
-@param AD_Sequence_ID Document Sequence */
-public void SetAD_Sequence_ID (int AD_Sequence_ID)
+@param VAF_Record_Seq_ID Document Sequence */
+public void SetVAF_Record_Seq_ID (int VAF_Record_Seq_ID)
 {
-if (AD_Sequence_ID < 1) throw new ArgumentException ("AD_Sequence_ID is mandatory.");
-Set_ValueNoCheck ("AD_Sequence_ID", AD_Sequence_ID);
+if (VAF_Record_Seq_ID < 1) throw new ArgumentException ("VAF_Record_Seq_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Record_Seq_ID", VAF_Record_Seq_ID);
 }
 /** Get Sequence.
 @return Document Sequence */
-public int GetAD_Sequence_ID() 
+public int GetVAF_Record_Seq_ID() 
 {
-Object ii = Get_Value("AD_Sequence_ID");
+Object ii = Get_Value("VAF_Record_Seq_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

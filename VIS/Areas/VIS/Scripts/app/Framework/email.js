@@ -2304,7 +2304,7 @@
                 var selectedRow = mailformat.getSelectedRow();
                 if (selectedRow != null && selectedRow != undefined) {
                     // changes done by Bharat on 27 Sep 2018 to habdle issue of open text format
-                    selectedTemplateID = selectedRow.AD_TEXTTEMPLATE_ID;
+                    selectedTemplateID = selectedRow.VAF_TEXTTEMPLATE_ID;
                     openFormatClientID = selectedRow.VAF_CLIENT_ID;
                     $subject.val(selectedRow.SUBJECT);
 

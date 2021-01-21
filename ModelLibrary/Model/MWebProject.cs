@@ -89,25 +89,25 @@ namespace VAdvantage.Model
 				GetName()+MTree.TREETYPE_CMContainer, MTree.TREETYPE_CMContainer, Get_TrxName());
 			if (!tree.Save())
 				return false;
-			SetAD_TreeCMC_ID(tree.GetAD_Tree_ID());
+			SetVAF_TreeInfoCMC_ID(tree.GetVAF_TreeInfo_ID());
 			//
 			tree = new MTree (GetCtx(), 
 				GetName()+MTree.TREETYPE_CMContainerStage, MTree.TREETYPE_CMContainerStage, Get_TrxName());
 			if (!tree.Save())
 				return false;
-			SetAD_TreeCMS_ID(tree.GetAD_Tree_ID());
+			SetVAF_TreeInfoCMS_ID(tree.GetVAF_TreeInfo_ID());
 			//
 			tree = new MTree (GetCtx(), 
 				GetName()+MTree.TREETYPE_CMTemplate, MTree.TREETYPE_CMTemplate, Get_TrxName());
 			if (!tree.Save())
 				return false;
-			SetAD_TreeCMT_ID(tree.GetAD_Tree_ID());
+			SetVAF_TreeInfoCMT_ID(tree.GetVAF_TreeInfo_ID());
 			//
 			tree = new MTree (GetCtx(), 
 				GetName()+MTree.TREETYPE_CMMedia, MTree.TREETYPE_CMMedia, Get_TrxName());
 			if (!tree.Save())
 				return false;
-			SetAD_TreeCMM_ID(tree.GetAD_Tree_ID());
+			SetVAF_TreeInfoCMM_ID(tree.GetVAF_TreeInfo_ID());
 		}
 		return true;
 	}	//	beforeSave

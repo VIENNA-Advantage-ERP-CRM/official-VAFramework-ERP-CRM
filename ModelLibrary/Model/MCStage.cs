@@ -76,8 +76,8 @@ namespace VAdvantage.Model
 		IDataReader idr=null;
         SqlParameter[] param=new SqlParameter[4];
 		String sql = "SELECT * FROM CM_CStage WHERE CM_WebProject_ID=@param1 AND RelativeURL LIKE @param2 " + //1,2
-				"AND CM_CStage_ID IN (SELECT Node_ID FROM AD_TreeNodeCMS WHERE " +
-					" AD_Tree_ID=@param3 AND Parent_ID=@param4)" + // 3, 4
+				"AND CM_CStage_ID IN (SELECT Node_ID FROM VAF_TreeInfoChildCMS WHERE " +
+					" VAF_TreeInfo_ID=@param3 AND Parent_ID=@param4)" + // 3, 4
 				"ORDER BY CM_CStage_ID";
 		try
 		{
@@ -86,8 +86,8 @@ namespace VAdvantage.Model
            param[0]=new SqlParameter("@param1", project.GetCM_WebProject_ID());
 			//pstmt.setString (2, RelativeURL);
             param[1]=new SqlParameter("@param2", RelativeURL);
-			//pstmt.setInt (3, project.getAD_TreeCMS_ID ());
-            param[2]=new SqlParameter("@param3",project.GetAD_TreeCMS_ID());
+			//pstmt.setInt (3, project.getVAF_TreeInfoCMS_ID ());
+            param[2]=new SqlParameter("@param3",project.GetVAF_TreeInfoCMS_ID());
 			//pstmt.setInt (4, parent_ID);
             param[3]=new SqlParameter("@param4",parent_ID);
 	       	idr=DataBase.DB.ExecuteReader(sql,param,project.Get_TrxName());
@@ -233,13 +233,13 @@ namespace VAdvantage.Model
 	}	//	getWebProject
 	
 	/// <summary>
-    /// Get AD_Tree_ID
+    /// Get VAF_TreeInfo_ID
 	/// </summary>
 	/// <returns>tree</returns>
-	public int GetAD_Tree_ID()
+	public int GetVAF_TreeInfo_ID()
 	{
-		return GetWebProject().GetAD_TreeCMS_ID();
-	}	//	getAD_Tree_ID;
+		return GetWebProject().GetVAF_TreeInfoCMS_ID();
+	}	//	getVAF_TreeInfo_ID;
 	
 	/// <summary>
     /// String Representation
@@ -290,12 +290,12 @@ namespace VAdvantage.Model
 		}
 		if (newRecord)
 		{
-			StringBuilder sb = new StringBuilder ("INSERT INTO AD_TreeNodeCMS "
+			StringBuilder sb = new StringBuilder ("INSERT INTO VAF_TreeInfoChildCMS "
 				+ "(VAF_Client_ID,VAF_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
-				+ "AD_Tree_ID, Node_ID, Parent_ID, SeqNo) "
+				+ "VAF_TreeInfo_ID, Node_ID, Parent_ID, SeqNo) "
 				+ "VALUES (")
 				.Append(GetVAF_Client_ID()).Append(",0, 'Y', SysDate, 0, SysDate, 0,")
-				.Append(GetAD_Tree_ID()).Append(",").Append(Get_ID())
+				.Append(GetVAF_TreeInfo_ID()).Append(",").Append(Get_ID())
 				.Append(", 0, 999)");
 			int no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
 			if (no > 0)
@@ -318,9 +318,9 @@ namespace VAdvantage.Model
 		if (!success)
 			return success;
 		//
-		StringBuilder sb = new StringBuilder ("DELETE FROM AD_TreeNodeCMS ")
+		StringBuilder sb = new StringBuilder ("DELETE FROM VAF_TreeInfoChildCMS ")
 			.Append(" WHERE Node_ID=").Append(Get_IDOld())
-			.Append(" AND AD_Tree_ID=").Append(GetAD_Tree_ID());
+			.Append(" AND VAF_TreeInfo_ID=").Append(GetVAF_TreeInfo_ID());
 		int no = DataBase.DB.ExecuteQuery(sb.ToString(),null, Get_TrxName());
 		if (no > 0)
 			log.Fine("#" + no + " - TreeType=CMS");

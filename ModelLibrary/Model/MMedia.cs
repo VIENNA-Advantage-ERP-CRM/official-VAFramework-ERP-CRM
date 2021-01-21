@@ -192,13 +192,13 @@ namespace VAdvantage.Model
         }	//	getWebProject
 
         /// <summary>
-        /// Get AD_Tree_ID
+        /// Get VAF_TreeInfo_ID
         /// </summary>
         /// <returns>tree</returns>
-        public int GetAD_Tree_ID()
+        public int GetVAF_TreeInfo_ID()
         {
-            return GetWebProject().GetAD_TreeCMM_ID();
-        }	//	getAD_Tree_ID;
+            return GetWebProject().GetVAF_TreeInfoCMM_ID();
+        }	//	getVAF_TreeInfo_ID;
 
 
         /// <summary>
@@ -228,12 +228,12 @@ namespace VAdvantage.Model
                 return success;
             if (newRecord)
             {
-                StringBuilder sb = new StringBuilder("INSERT INTO AD_TreeNodeCMM "
+                StringBuilder sb = new StringBuilder("INSERT INTO VAF_TreeInfoChildCMM "
                     + "(VAF_Client_ID,VAF_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, "
-                    + "AD_Tree_ID, Node_ID, Parent_ID, SeqNo) "
+                    + "VAF_TreeInfo_ID, Node_ID, Parent_ID, SeqNo) "
                     + "VALUES (")
                     .Append(GetVAF_Client_ID()).Append(",0, 'Y', SysDate, 0, SysDate, 0,")
-                    .Append(GetAD_Tree_ID()).Append(",").Append(Get_ID())
+                    .Append(GetVAF_TreeInfo_ID()).Append(",").Append(Get_ID())
                     .Append(", 0, 999)");
                 int no = DataBase.DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
                 if (no > 0)
@@ -304,9 +304,9 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
             // Delete from tree
-            StringBuilder sb = new StringBuilder("DELETE FROM AD_TreeNodeCMM ")
+            StringBuilder sb = new StringBuilder("DELETE FROM VAF_TreeInfoChildCMM ")
                 .Append(" WHERE Node_ID=").Append(Get_IDOld())
-                .Append(" AND AD_Tree_ID=").Append(GetAD_Tree_ID());
+                .Append(" AND VAF_TreeInfo_ID=").Append(GetVAF_TreeInfo_ID());
             int no = DataBase.DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
             if (no > 0)
                 log.Fine("#" + no + " - TreeType=CMM");

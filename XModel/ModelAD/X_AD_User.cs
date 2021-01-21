@@ -175,40 +175,40 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_MenuFavorite_ID VAF_Control_Ref_ID=184 */
-        public static int AD_TREE_MENUFAVORITE_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_TreeInfo_MenuFavorite_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_TreeInfo_MENUFAVORITE_ID_VAF_Control_Ref_ID = 184;
         /** Set Favorite Menu Tree.
-        @param AD_Tree_MenuFavorite_ID Tree of the personal Favorite menu */
-        public void SetAD_Tree_MenuFavorite_ID(int AD_Tree_MenuFavorite_ID)
+        @param VAF_TreeInfo_MenuFavorite_ID Tree of the personal Favorite menu */
+        public void SetVAF_TreeInfo_MenuFavorite_ID(int VAF_TreeInfo_MenuFavorite_ID)
         {
-            if (AD_Tree_MenuFavorite_ID <= 0) Set_ValueNoCheck("AD_Tree_MenuFavorite_ID", null);
+            if (VAF_TreeInfo_MenuFavorite_ID <= 0) Set_ValueNoCheck("VAF_TreeInfo_MenuFavorite_ID", null);
             else
-                Set_ValueNoCheck("AD_Tree_MenuFavorite_ID", AD_Tree_MenuFavorite_ID);
+                Set_ValueNoCheck("VAF_TreeInfo_MenuFavorite_ID", VAF_TreeInfo_MenuFavorite_ID);
         }
         /** Get Favorite Menu Tree.
         @return Tree of the personal Favorite menu */
-        public int GetAD_Tree_MenuFavorite_ID()
+        public int GetVAF_TreeInfo_MenuFavorite_ID()
         {
-            Object ii = Get_Value("AD_Tree_MenuFavorite_ID");
+            Object ii = Get_Value("VAF_TreeInfo_MenuFavorite_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_MenuNew_ID VAF_Control_Ref_ID=184 */
-        public static int AD_TREE_MENUNEW_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_TreeInfo_MenuNew_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_TreeInfo_MENUNEW_ID_VAF_Control_Ref_ID = 184;
         /** Set New Menu Tree.
-        @param AD_Tree_MenuNew_ID Tree of the personal Favorite menu for new items */
-        public void SetAD_Tree_MenuNew_ID(int AD_Tree_MenuNew_ID)
+        @param VAF_TreeInfo_MenuNew_ID Tree of the personal Favorite menu for new items */
+        public void SetVAF_TreeInfo_MenuNew_ID(int VAF_TreeInfo_MenuNew_ID)
         {
-            if (AD_Tree_MenuNew_ID <= 0) Set_ValueNoCheck("AD_Tree_MenuNew_ID", null);
+            if (VAF_TreeInfo_MenuNew_ID <= 0) Set_ValueNoCheck("VAF_TreeInfo_MenuNew_ID", null);
             else
-                Set_ValueNoCheck("AD_Tree_MenuNew_ID", AD_Tree_MenuNew_ID);
+                Set_ValueNoCheck("VAF_TreeInfo_MenuNew_ID", VAF_TreeInfo_MenuNew_ID);
         }
         /** Get New Menu Tree.
         @return Tree of the personal Favorite menu for new items */
-        public int GetAD_Tree_MenuNew_ID()
+        public int GetVAF_TreeInfo_MenuNew_ID()
         {
-            Object ii = Get_Value("AD_Tree_MenuNew_ID");
+            Object ii = Get_Value("VAF_TreeInfo_MenuNew_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

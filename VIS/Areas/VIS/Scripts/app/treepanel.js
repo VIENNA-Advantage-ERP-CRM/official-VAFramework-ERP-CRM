@@ -15,7 +15,7 @@
         var contextNode = null;
         var movingNode = null;
         var targetNode = null;
-        var AD_Tree_ID = 0;
+        var VAF_TreeInfo_ID = 0;
         var VAF_Tab_ID = 0;
 
         this.onDemandTree = onDemandTrees;
@@ -105,15 +105,15 @@
             VAF_Tab_ID = tabID;
         };
 
-        this.initTree = function (_AD_Tree_ID) {
-            AD_Tree_ID = _AD_Tree_ID;
+        this.initTree = function (_VAF_TreeInfo_ID) {
+            VAF_TreeInfo_ID = _VAF_TreeInfo_ID;
 
             if (this.onDemandTree == "undefined" || this.onDemandTree == null) {
                 this.onDemandTree = false;
             }
 
-            var data = { AD_Tree_ID: AD_Tree_ID, editable: editable, windowNo: windowNo, onDemandTree: this.onDemandTree, VAF_Tab_ID: VAF_Tab_ID };
-            AD_Tree_ID = AD_Tree_ID;
+            var data = { VAF_TreeInfo_ID: VAF_TreeInfo_ID, editable: editable, windowNo: windowNo, onDemandTree: this.onDemandTree, VAF_Tab_ID: VAF_Tab_ID };
+            VAF_TreeInfo_ID = VAF_TreeInfo_ID;
             VIS.dataContext.getTreeAsString(data, function (str) {
                 $treeRoot.html(str);
                 createArray();
@@ -192,7 +192,7 @@
                 //StringBuilder sql = new StringBuilder("UPDATE ");
                 //sql = "UPDATE ";
                 //sql += tableName + " SET Parent_ID=" + oldId + ", SeqNo=" + i + ", Updated=SysDate" +
-                //                  " WHERE AD_Tree_ID=" + AD_Tree_ID + " AND Node_ID=" + nd.data("value");
+                //                  " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + " AND Node_ID=" + nd.data("value");
                 ////log.Fine(sql.ToString());
                 //queries.push(sql);
             }
@@ -208,7 +208,7 @@
                     //sql = "UPDATE ";
                     //sql += tableName + " SET Parent_ID=" + newId +
                     //", SeqNo=" + i + ", Updated=SysDate" +
-                    // " WHERE AD_Tree_ID=" + AD_Tree_ID +
+                    // " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID +
                     //  " AND Node_ID=" + nd.data("value");
                     //queries.push(sql);
                 }
@@ -224,7 +224,7 @@
                     newParentChildren: JSON.stringify(newParentIDs),
                     oldId: oldId,
                     newId: newId,
-                    AD_Tree_ID: AD_Tree_ID,
+                    VAF_TreeInfo_ID: VAF_TreeInfo_ID,
                     tableName: tableName
                 },
                 success: function (data) {
@@ -240,7 +240,7 @@
             //    //StringBuilder sql = new StringBuilder("UPDATE ");
             //    sql = "UPDATE ";
             //    sql += tableName + " SET Parent_ID=" + oldId + ", SeqNo=" + i + ", Updated=SysDate" +
-            //                      " WHERE AD_Tree_ID=" + AD_Tree_ID + " AND Node_ID=" + nd.data("value");
+            //                      " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + " AND Node_ID=" + nd.data("value");
             //    //log.Fine(sql.ToString());
             //    queries.push(sql);
             //}
@@ -252,7 +252,7 @@
             //        sql = "UPDATE ";
             //        sql += tableName + " SET Parent_ID=" + newId +
             //        ", SeqNo=" + i + ", Updated=SysDate" +
-            //         " WHERE AD_Tree_ID=" + AD_Tree_ID +
+            //         " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID +
             //          " AND Node_ID=" + nd.data("value");
             //        queries.push(sql);
             //    }
@@ -420,7 +420,7 @@
                     //grd = null;
                     //keyCName = null;
                 }
-                var dataIns = { nodeID: selectedIDs, oldParentID: 0, newParentID: contextNode.data("value"), AD_Tree_ID: AD_Tree_ID };
+                var dataIns = { nodeID: selectedIDs, oldParentID: 0, newParentID: contextNode.data("value"), VAF_TreeInfo_ID: VAF_TreeInfo_ID };
 
                 $.ajax({
                     url: VIS.Application.contextUrl + "Tree/UpdateTree",

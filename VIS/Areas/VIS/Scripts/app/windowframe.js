@@ -6405,7 +6405,7 @@
 
 
         //  Tree Graphics Layout
-        var AD_Tree_ID = 0;
+        var VAF_TreeInfo_ID = 0;
 
         if (mTab.getIsTreeTab()) {
             //, Name
@@ -6414,14 +6414,14 @@
             var param = [];
             param[0] = new VIS.DB.SqlParam("@VAF_Client_ID", VIS.Env.getCtx().getVAF_Client_ID());
             param[1] = new VIS.DB.SqlParam("@VAF_TableView_ID", mTab.getVAF_TableView_ID());
-            AD_Tree_ID = executeScalar(sql, param);
+            VAF_TreeInfo_ID = executeScalar(sql, param);
 
-            //if (AD_Tree_ID > 0) {
+            //if (VAF_TreeInfo_ID > 0) {
             //    this.m_tree = new VIS.TreePanel(curWindowNo, false, true);
             //    //Set Style
             //    if (mTab.getTabNo() == 0)	//	initialize other tabs later
             //    {
-            //        this.m_tree.initTree(AD_Tree_ID);
+            //        this.m_tree.initTree(VAF_TreeInfo_ID);
             //    }
 
             //    this.getTreeArea().append(this.m_tree.getRoot());
@@ -6431,8 +6431,8 @@
             //    this.m_tree.setSize(this.getTreeArea().height());
 
             //}
-            if (AD_Tree_ID > 0) {
-                this.treeID = AD_Tree_ID;
+            if (VAF_TreeInfo_ID > 0) {
+                this.treeID = VAF_TreeInfo_ID;
                 if (mTab.getShowSummaryLevel()) {
                     this.onDemandTree = true;
                     this.m_tree = new VIS.TreePanel(curWindowNo, false, true, true, this);
@@ -6448,7 +6448,7 @@
                 //Set Style
                 if (mTab.getTabNo() == 0)	//	initialize other tabs later
                 {
-                    this.m_tree.initTree(AD_Tree_ID);
+                    this.m_tree.initTree(VAF_TreeInfo_ID);
                 }
 
                 this.getTreeArea().append(this.m_tree.getRoot());
@@ -6921,25 +6921,25 @@
     VIS.GridController.prototype.activateTree = function () {
         //	Tree to be initiated on second/.. tab
         if (this.gTab.getIsTreeTab() && (this.gTab.getTabNo() > 0)) {
-            var AD_Tree_ID = 0;
-            if (this.gTab.getTabLevel() > 0)	//	check previous tab for AD_Tree_ID
+            var VAF_TreeInfo_ID = 0;
+            if (this.gTab.getTabLevel() > 0)	//	check previous tab for VAF_TreeInfo_ID
             {
                 var keyColumnName = this.gTab.getKeyColumnName();
-                var treeName = "AD_Tree_ID";
+                var treeName = "VAF_TreeInfo_ID";
                 if (keyColumnName.startsWith("CM")) {
                     if (keyColumnName.equals("CM_Container_ID"))
-                        treeName = "AD_TreeCMC_ID";
+                        treeName = "VAF_TreeInfoCMC_ID";
                     else if (keyColumnName.equals("CM_CStage_ID"))
-                        treeName = "AD_TreeCMS_ID";
+                        treeName = "VAF_TreeInfoCMS_ID";
                     else if (keyColumnName.equals("CM_Template_ID"))
-                        treeName = "AD_TreeCMT_ID";
+                        treeName = "VAF_TreeInfoCMT_ID";
                     else if (keyColumnName.equals("CM_Media_ID"))
-                        treeName = "AD_TreeCMM_ID";
+                        treeName = "VAF_TreeInfoCMM_ID";
                 }
-                AD_Tree_ID = VIS.Env.getCtx().getWindowContextAsInt(this.windowNo, treeName);
-                //log.config(keyColumnName + " -> " + treeName + " = " + AD_Tree_ID);
+                VAF_TreeInfo_ID = VIS.Env.getCtx().getWindowContextAsInt(this.windowNo, treeName);
+                //log.config(keyColumnName + " -> " + treeName + " = " + VAF_TreeInfo_ID);
             }
-            if (AD_Tree_ID == 0) {
+            if (VAF_TreeInfo_ID == 0) {
 
                 var VAF_TableView_ID = this.gTab.getVAF_TableView_ID();
                 var VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
@@ -6947,9 +6947,9 @@
                 if (VAF_TableView_ID == 0)
                     return 0;
 
-                //var dr = executeReader("SELECT AD_Tree_ID, Name FROM AD_Tree "
+                //var dr = executeReader("SELECT VAF_TreeInfo_ID, Name FROM VAF_TreeInfo "
                 //    + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND VAF_TableView_ID=" + VAF_TableView_ID + " AND IsActive='Y' AND IsAllNodes='Y' "
-                //    + "ORDER BY IsDefault DESC, AD_Tree_ID");
+                //    + "ORDER BY IsDefault DESC, VAF_TreeInfo_ID");
 
                 var sql = "VIS_121";
                 var param = [];
@@ -6958,15 +6958,15 @@
                 var dr = executeReader(sql, param);
 
                 if (dr.read()) {
-                    AD_Tree_ID = dr.getInt(0);
+                    VAF_TreeInfo_ID = dr.getInt(0);
                 }
                 dr = null;
-                //AD_Tree_ID = 101;
-                //MTree.getDefaultAD_Tree_ID(
+                //VAF_TreeInfo_ID = 101;
+                //MTree.getDefaultVAF_TreeInfo_ID(
                 //		Env.getCtx().getVAF_Client_ID(), m_mTab.getVAF_TableView_ID());
             }
-            if (this.m_tree != null && AD_Tree_ID > 0)
-                this.m_tree.initTree(AD_Tree_ID);
+            if (this.m_tree != null && VAF_TreeInfo_ID > 0)
+                this.m_tree.initTree(VAF_TreeInfo_ID);
         }
     };	//	activate
 

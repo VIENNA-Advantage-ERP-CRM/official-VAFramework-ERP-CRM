@@ -117,18 +117,18 @@ StringBuilder sb = new StringBuilder ("X_AD_WorkflowProcessor[").Append(Get_ID()
 return sb.ToString();
 }
 /** Set Schedule.
-@param AD_Schedule_ID Execution Schedule */
-public void SetAD_Schedule_ID (int AD_Schedule_ID)
+@param VAF_Plan_ID Execution Schedule */
+public void SetVAF_Plan_ID (int VAF_Plan_ID)
 {
-if (AD_Schedule_ID <= 0) Set_Value ("AD_Schedule_ID", null);
+if (VAF_Plan_ID <= 0) Set_Value ("VAF_Plan_ID", null);
 else
-Set_Value ("AD_Schedule_ID", AD_Schedule_ID);
+Set_Value ("VAF_Plan_ID", VAF_Plan_ID);
 }
 /** Get Schedule.
 @return Execution Schedule */
-public int GetAD_Schedule_ID() 
+public int GetVAF_Plan_ID() 
 {
-Object ii = Get_Value("AD_Schedule_ID");
+Object ii = Get_Value("VAF_Plan_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

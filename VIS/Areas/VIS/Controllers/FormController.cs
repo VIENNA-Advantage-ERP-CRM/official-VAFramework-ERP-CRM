@@ -183,7 +183,7 @@ namespace VIS.Controllers
         #endregion
 
         #region TreePanel
-        public ContentResult UpdateTree(string oldParentChildren, string newParentChildren, int oldId, int newId, int AD_Tree_ID, string tableName)
+        public ContentResult UpdateTree(string oldParentChildren, string newParentChildren, int oldId, int newId, int VAF_TreeInfo_ID, string tableName)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             FormModel model = new FormModel(ctx);
@@ -200,7 +200,7 @@ namespace VIS.Controllers
                 newParentChildrens = JsonConvert.DeserializeObject<List<int>>(newParentChildren);
             }
 
-            return Content(model.UpdateTree(oldParentChildrens, newParentChildrens, oldId, newId, AD_Tree_ID, tableName));
+            return Content(model.UpdateTree(oldParentChildrens, newParentChildrens, oldId, newId, VAF_TreeInfo_ID, tableName));
         }
         #endregion
 

@@ -724,9 +724,9 @@ namespace VIS.Controllers
 
         [AjaxAuthorizeAttribute]
         [AjaxSessionFilterAttribute]
-        public ActionResult GetSettingItems(int AD_Shortcut_ID)
+        public ActionResult GetSettingItems(int VAF_Shortcut_ID)
         {
-            return Json(JsonConvert.SerializeObject(ShortcutHelper.GetSettingItems(Session["ctx"] as Ctx, AD_Shortcut_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(ShortcutHelper.GetSettingItems(Session["ctx"] as Ctx, VAF_Shortcut_ID)), JsonRequestBehavior.AllowGet);
         }
 
         #endregion

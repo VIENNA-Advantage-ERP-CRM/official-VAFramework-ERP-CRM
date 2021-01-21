@@ -60,10 +60,10 @@ namespace VAdvantage.Model
          int GetFrequency();
 
         /// <summary>
-        ///Get AD_Schedule_ID
+        ///Get VAF_Plan_ID
         /// </summary>
         /// <returns>schedule</returns>
-         int GetAD_Schedule_ID();
+         int GetVAF_Plan_ID();
 
         /// <summary>
         ///Get Unique ID

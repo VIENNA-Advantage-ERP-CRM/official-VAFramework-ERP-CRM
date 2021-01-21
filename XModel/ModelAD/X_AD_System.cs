@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_System
+/** Generated Model for VAF_System
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_System : PO
+public class X_VAF_System : PO
 {
-public X_AD_System (Context ctx, int AD_System_ID, Trx trxName) : base (ctx, AD_System_ID, trxName)
+public X_VAF_System (Context ctx, int VAF_System_ID, Trx trxName) : base (ctx, VAF_System_ID, trxName)
 {
-/** if (AD_System_ID == 0)
+/** if (VAF_System_ID == 0)
 {
-SetAD_System_ID (0);
+SetVAF_System_ID (0);
 SetIsAllowStatistics (false);
 SetIsAutoErrorReport (true);	// Y
 SetName (null);
@@ -33,11 +33,11 @@ SetVersion (null);
 }
  */
 }
-public X_AD_System (Ctx ctx, int AD_System_ID, Trx trxName) : base (ctx, AD_System_ID, trxName)
+public X_VAF_System (Ctx ctx, int VAF_System_ID, Trx trxName) : base (ctx, VAF_System_ID, trxName)
 {
-/** if (AD_System_ID == 0)
+/** if (VAF_System_ID == 0)
 {
-SetAD_System_ID (0);
+SetVAF_System_ID (0);
 SetIsAllowStatistics (false);
 SetIsAutoErrorReport (true);	// Y
 SetName (null);
@@ -55,7 +55,7 @@ SetVersion (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_System (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_System (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_AD_System (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_System (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_System (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_AD_System (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_System (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_System (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_System()
+static X_VAF_System()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -90,8 +90,8 @@ public static long updatedMS = 1280389047421L;
 public static int Table_ID;
  // =531;
 
-/** TableName=AD_System */
-public static String Table_Name="AD_System";
+/** TableName=VAF_System */
+public static String Table_Name="VAF_System";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -125,21 +125,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_System[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_System[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set System.
-@param AD_System_ID System Definition */
-public void SetAD_System_ID (int AD_System_ID)
+@param VAF_System_ID System Definition */
+public void SetVAF_System_ID (int VAF_System_ID)
 {
-if (AD_System_ID < 1) throw new ArgumentException ("AD_System_ID is mandatory.");
-Set_ValueNoCheck ("AD_System_ID", AD_System_ID);
+if (VAF_System_ID < 1) throw new ArgumentException ("VAF_System_ID is mandatory.");
+Set_ValueNoCheck ("VAF_System_ID", VAF_System_ID);
 }
 /** Get System.
 @return System Definition */
-public int GetAD_System_ID() 
+public int GetVAF_System_ID() 
 {
-Object ii = Get_Value("AD_System_ID");
+Object ii = Get_Value("VAF_System_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

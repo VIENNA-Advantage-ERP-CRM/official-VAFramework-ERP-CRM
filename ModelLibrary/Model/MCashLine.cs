@@ -721,7 +721,7 @@ namespace VAdvantage.Model
             //        String paymenttype = GetVSS_PAYMENTTYPE();
             //        String test_name = "DocNo_" + org_name + "_" + paymenttype;
 
-            //        int[] s = MSequence.GetAllIDs("AD_Sequence", "Name= '" + test_name + "'", Get_TrxName());
+            //        int[] s = MSequence.GetAllIDs("VAF_Record_Seq", "Name= '" + test_name + "'", Get_TrxName());
 
             //        if (s != null && s.Length != 0)
             //        {

@@ -32,7 +32,7 @@ namespace VAdvantage.Classes
      #region declaration 
        
         private  Context ctx = Utility.Env.GetContext(); // Get Context object
-        private int _AD_Tree_ID;
+        private int _VAF_TreeInfo_ID;
         private bool _editable;
         private bool _clientTree;
         private TreeType treeType;
@@ -47,13 +47,13 @@ namespace VAdvantage.Classes
        /// <summary>
        /// Constructror initilize variable
        /// </summary>
-       /// <param name="AD_Tree_ID">tree id</param>
+       /// <param name="VAF_TreeInfo_ID">tree id</param>
        /// <param name="_editable">_editable or not</param>
        /// <param name="_clientTree"></param>
        /// <param name="menuType">tree type</param>
-        public VTree(int AD_Tree_ID, bool editable, bool clientTree,TreeType menuType)
+        public VTree(int VAF_TreeInfo_ID, bool editable, bool clientTree,TreeType menuType)
         {
-            _AD_Tree_ID = AD_Tree_ID;
+            _VAF_TreeInfo_ID = VAF_TreeInfo_ID;
             _editable = editable;
              treeType = menuType;
         }
@@ -61,11 +61,11 @@ namespace VAdvantage.Classes
         /// <summary>
         /// Initilize tree loading process
         /// </summary>
-        /// <param name="AD_Tree_ID">tree key id</param>
-        public void InitTree(int AD_Tree_ID)
+        /// <param name="VAF_TreeInfo_ID">tree key id</param>
+        public void InitTree(int VAF_TreeInfo_ID)
         {
             //Get Root node info
-            string str = "Select name,description from ad_tree where ad_tree_id =" + AD_Tree_ID;
+            string str = "Select name,description from VAF_TreeInfo where VAF_TreeInfo_id =" + VAF_TreeInfo_ID;
             IDataReader drRoot = DataBase.DB.ExecuteReader(str);
             string strRootName, strDesc;
             drRoot.Read();
@@ -76,9 +76,9 @@ namespace VAdvantage.Classes
             StringBuilder sql = new StringBuilder("SELECT ")
             .Append(" tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive ")
             .Append(" FROM " + GetTableName() + "  tn")
-            .Append(" LEFT OUTER JOIN AD_TreeBar tb ON (tn.AD_Tree_ID=tb.AD_Tree_ID")
+            .Append(" LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID")
             .Append(" AND tn.Node_ID=tb.Node_ID AND tb.AD_User_ID=" + ctx.GetAD_User_ID() + ") ")	//	#1
-            .Append(" WHERE tn.AD_Tree_ID=" + AD_Tree_ID);
+            .Append(" WHERE tn.VAF_TreeInfo_ID=" + VAF_TreeInfo_ID);
             
             if (!_editable)
             {
@@ -490,11 +490,11 @@ namespace VAdvantage.Classes
             string strReturn = "";
             if (treeType == TreeType.OO)
             {
-                strReturn= "AD_TREENODE";
+                strReturn= "VAF_TreeInfoChild";
             }
             else
             {
-                strReturn = "AD_TREENODEMM";
+                strReturn = "VAF_TreeInfoChildMenu";
             }
             return strReturn;
         }
@@ -534,10 +534,10 @@ namespace VAdvantage.Classes
         public bool SaveNodeToBar(int iNodeId)
         {
             bool blnReturn = true;
-            string strSql = @"Insert into AD_TreeBar (VAF_CLIENT_ID, VAF_ORG_ID, AD_TREE_ID, AD_USER_ID, 
+            string strSql = @"Insert into VAF_TreeInfoBar (VAF_CLIENT_ID, VAF_ORG_ID, VAF_TreeInfo_ID, AD_USER_ID, 
                              CREATEDBY, ISACTIVE, NODE_ID,UPDATEDBY) 
                              values (" + ctx.GetVAF_Client_ID() + "," + ctx.GetVAF_Org_ID() + @",
-                                     " + _AD_Tree_ID + "," + ctx.GetAD_User_ID() + "," + ctx.GetAD_User_ID() + @",
+                                     " + _VAF_TreeInfo_ID + "," + ctx.GetAD_User_ID() + "," + ctx.GetAD_User_ID() + @",
                                     " + "'Y'," + iNodeId.ToString() + "," + ctx.GetAD_User_ID() + ")";
             try
             {
@@ -626,8 +626,8 @@ namespace VAdvantage.Classes
         public bool RemoveNodeFromBar(string strNodeId)
         {
             bool blnReturn = true;
-            string strSql = @"Delete from AD_TreeBar Where " +
-                             " AD_TREE_ID = " + _AD_Tree_ID + " and AD_USER_ID=" + ctx.GetAD_User_ID() + " and  NODE_ID=" + strNodeId;
+            string strSql = @"Delete from VAF_TreeInfoBar Where " +
+                             " VAF_TreeInfo_ID = " + _VAF_TreeInfo_ID + " and AD_USER_ID=" + ctx.GetAD_User_ID() + " and  NODE_ID=" + strNodeId;
             try
             {
                 SqlExec.ExecuteQuery.ExecuteNonQuery(strSql);

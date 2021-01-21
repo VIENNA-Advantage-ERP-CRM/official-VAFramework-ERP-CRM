@@ -209,13 +209,13 @@ namespace VAdvantage.Model
         }	//	getFrequencyType
 
         /// <summary>
-        /// Get AD_Schedule_ID
+        /// Get VAF_Plan_ID
         /// </summary>
         /// <returns>0</returns>
-        public int GetAD_Schedule_ID()
+        public int GetVAF_Plan_ID()
         {
             return 0;
-        }	//	getAD_Schedule_ID
+        }	//	getVAF_Plan_ID
 
         /// <summary>
         ///	String Representation

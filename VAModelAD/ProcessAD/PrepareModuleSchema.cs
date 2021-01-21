@@ -1464,13 +1464,13 @@ namespace VAdvantage.Process
             if (HasModulePrefix("Name", "AD_WorkflowProcessor", "AD_WorkflowProcessor_ID =" + sAD_WorkflowProcessor_ID, out name))
             {
 
-                int sAD_Scheduler_ID = GetID("AD_WorkflowProcessor", "AD_Schedule_ID", "AD_WorkflowProcessor_ID =" + sAD_WorkflowProcessor_ID);
-                if (sAD_Scheduler_ID != 0)
+                int sVAF_JobRun_Plan_ID = GetID("AD_WorkflowProcessor", "VAF_Plan_ID", "AD_WorkflowProcessor_ID =" + sAD_WorkflowProcessor_ID);
+                if (sVAF_JobRun_Plan_ID != 0)
                 {
-                    //Select AD_Schedule_ID Form AD_Schedule Where Name = '" + sch.GetName() + "'"));
-                    if (HasModulePrefix("Name", "AD_Schedule", "AD_Schedule_ID=" + sAD_Scheduler_ID, out name))
+                    //Select VAF_Plan_ID Form VAF_Plan Where Name = '" + sch.GetName() + "'"));
+                    if (HasModulePrefix("Name", "VAF_Plan", "VAF_Plan_ID=" + sVAF_JobRun_Plan_ID, out name))
                     {
-                        InsertIntoDBSchema(X_AD_Schedule.Table_ID, sAD_Scheduler_ID, X_AD_Schedule.Table_Name, name, "AD_Schedule_ID=" + sAD_Scheduler_ID);
+                        InsertIntoDBSchema(X_VAF_Plan.Table_ID, sVAF_JobRun_Plan_ID, X_VAF_Plan.Table_Name, name, "VAF_Plan_ID=" + sVAF_JobRun_Plan_ID);
                     }
                 }
                 InsertIntoDBSchema(X_AD_WorkflowProcessor.Table_ID, sAD_WorkflowProcessor_ID, X_AD_WorkflowProcessor.Table_Name, name, "AD_WorkflowProcessor_ID =" + sAD_WorkflowProcessor_ID);

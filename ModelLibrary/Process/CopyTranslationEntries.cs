@@ -430,7 +430,7 @@ namespace VAdvantage.Process
                                               description       ,
                                               help, 
                                               commitwarning
-                                               FROM vaf_tab_trl
+                                               FROM VAF_Tab_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -1456,7 +1456,7 @@ namespace VAdvantage.Process
                                               description       ,
                                               help, 
                                               commitwarning
-                                               FROM vaf_tab_trl
+                                               FROM VAF_Tab_TL
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)

@@ -22,17 +22,17 @@ namespace VAdvantage.Model
     /// <summary>
     /// Schedule  Model
     /// </summary>
-    public class MSchedule : X_AD_Schedule
+    public class MSchedule : X_VAF_Plan
     {
         /// <summary>
         /// Get Schedule from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Schedule_ID">id</param>
+        /// <param name="VAF_Plan_ID">id</param>
         /// <returns>MSchedule</returns>
-        public static MSchedule Get(Ctx ctx, int AD_Schedule_ID)
+        public static MSchedule Get(Ctx ctx, int VAF_Plan_ID)
         {
-            int key = AD_Schedule_ID;
+            int key = VAF_Plan_ID;
             MSchedule retValue = null;
 
             if(s_cache.ContainsKey(key))
@@ -40,27 +40,27 @@ namespace VAdvantage.Model
 
             if (retValue != null)
                 return retValue;
-            retValue = new MSchedule(ctx, AD_Schedule_ID, null);
+            retValue = new MSchedule(ctx, VAF_Plan_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache[key] = retValue;
             return retValue;
         }
 
         /**	Cache						*/
-        private static CCache<int, MSchedule> s_cache = new CCache<int, MSchedule>("AD_Schedule", 20);
+        private static CCache<int, MSchedule> s_cache = new CCache<int, MSchedule>("VAF_Plan", 20);
 
        // int s = 0;
         /// <summary>
         /// Default Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Schedule_ID">id</param>
+        /// <param name="VAF_Plan_ID">id</param>
         /// <param name="trxName">optional transaction</param>
-        public MSchedule(Ctx ctx, int AD_Schedule_ID, Trx trxName)
-            : base(ctx, AD_Schedule_ID, trxName)
+        public MSchedule(Ctx ctx, int VAF_Plan_ID, Trx trxName)
+            : base(ctx, VAF_Plan_ID, trxName)
         {
 
-            if (AD_Schedule_ID == 0)
+            if (VAF_Plan_ID == 0)
             {
                 //	setName (null);
                 SetScheduleType(SCHEDULETYPE_Frequency);

@@ -96,8 +96,8 @@ namespace VAdvantage.Process
                     //da.Fill(dt);
                     if (dt.Rows.Count > 0)
                     {
-                        sql = "select ad_tree_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
-                        int ad_tree_id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                        sql = "select VAF_TreeInfo_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
+                        int VAF_TreeInfo_id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                         for (int i = 0; i < dt.Rows.Count; i++)
                         {
                             string key = Util.GetValueOfString(dt.Rows[i]["(Account_Value)"]);
@@ -272,7 +272,7 @@ namespace VAdvantage.Process
                                         log.SaveError("NotSaved", "");
                                         return msg;
                                     }
-                                    VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), ad_tree_id, null);
+                                    VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), VAF_TreeInfo_id, null);
                                     C_ElementValue_ID = C_ElementValue_ID + 1;
                                     VAdvantage.Model.MTreeNode mNode = new VAdvantage.Model.MTreeNode(obj, C_ElementValue_ID);
                                     mNode.SetParent_ID(C_ElementValue_ID_Parent);

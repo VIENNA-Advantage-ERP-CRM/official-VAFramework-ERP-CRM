@@ -1199,10 +1199,10 @@ namespace VIS.Helpers
             {
                 MTree tre = new MTree(ctx, inn.TreeID, null);
 
-                string sql = "Update " + tre.GetNodeTableName() + " SET SeqNo=Seqno+1, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Parent_ID=" + inn.ParentNodeID;
+                string sql = "Update " + tre.GetNodeTableName() + " SET SeqNo=Seqno+1, updated=SYSDATE WHERE VAF_TreeInfo_ID=" + inn.TreeID + " AND Parent_ID=" + inn.ParentNodeID;
                 DB.ExecuteQuery(sql, null, trx);
 
-                DB.ExecuteQuery("UPDATE " + tre.GetNodeTableName() + " SET Parent_ID=" + inn.ParentNodeID + ", seqNo=0, updated=SYSDATE WHERE AD_Tree_ID=" + inn.TreeID + " AND Node_ID=" + po.Get_ID(), null, trx);
+                DB.ExecuteQuery("UPDATE " + tre.GetNodeTableName() + " SET Parent_ID=" + inn.ParentNodeID + ", seqNo=0, updated=SYSDATE WHERE VAF_TreeInfo_ID=" + inn.TreeID + " AND Node_ID=" + po.Get_ID(), null, trx);
             }
 
             //ErrorLog.FillErrorLog("Table Object", whereClause, "information", VAdvantage.Framework.Message.MessageType.INFORMATION);
@@ -1405,6 +1405,11 @@ namespace VIS.Helpers
                     value = SecureEngineBridge.DecryptByClientKey((string)rowData[columnName.ToLower()], key);// GetValueAccordingPO(rowData[col], field.GetDisplayType(), isClientOrgId);
                     oldValue = isEmpty ? null : SecureEngineBridge.DecryptByClientKey((string)_rowData[columnName.ToLower()], key);// GetValueAccordingPO(_rowData[col], field.GetDisplayType(), isClientOrgId);
                 }
+
+                if (value == DBNull.Value)
+                    value = null;
+                if (oldValue == DBNull.Value)
+                    oldValue = null;
 
                 //	RowID
                 if (DisplayType.IsDate(field.DisplayType))
@@ -2157,7 +2162,7 @@ namespace VIS.Helpers
 
                 GetChildNodesID(sqlIn.treeNode_ID, tree.GetNodeTableName(), sqlIn.tree_id, tableName);
 
-                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND AD_Tree_ID=" + sqlIn.tree_id;
+                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND VAF_TreeInfo_ID=" + sqlIn.tree_id;
 
                 string sqlQuery = sqlIn.sql;
                 string sqlDirect = sqlIn.sqlDirect;
@@ -2180,7 +2185,7 @@ namespace VIS.Helpers
             }
             else
             {
-                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + sqlIn.tree_id + " AND (Parent_ID = " + sqlIn.treeNode_ID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
+                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + sqlIn.tree_id + " AND (Parent_ID = " + sqlIn.treeNode_ID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
 
                 string sqlQuery = sqlIn.sql;
                 string sqlDirect = sqlIn.sqlDirect;
@@ -2305,7 +2310,7 @@ namespace VIS.Helpers
 
                 GetChildNodesID(treeNodeID, tree.GetNodeTableName(), treeID, tableName);
 
-                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND AD_Tree_ID=" + treeID;
+                string sqlWhere = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE (Parent_ID IN (" + parentIDs + ")  OR Node_ID IN (" + parentIDs + ")) AND VAF_TreeInfo_ID=" + treeID;
 
                 string sqlQuery = sqlIn.sql;
 
@@ -2323,7 +2328,7 @@ namespace VIS.Helpers
             }
             else
             {
-                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND (Parent_ID = " + treeNodeID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
+                string sql = "SELECT node_ID FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND (Parent_ID = " + treeNodeID + " AND NODE_ID IN (SELECT " + tableName + "_ID FROM " + tableName + " WHERE ISActive='Y' AND IsSummary='N'))";
 
                 string sqlQuery = sqlIn.sql;
 
@@ -2421,10 +2426,10 @@ namespace VIS.Helpers
             }
 
 
-            //  string sql = "SELECT node_ID FROM " + tableName + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID = " + currentnode + " AND NODE_ID IN (SELECT " + adtableName + "_ID FROM " + adtableName + " WHERE ISActive='Y' AND IsSummary='Y')";
+            //  string sql = "SELECT node_ID FROM " + tableName + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID = " + currentnode + " AND NODE_ID IN (SELECT " + adtableName + "_ID FROM " + adtableName + " WHERE ISActive='Y' AND IsSummary='Y')";
 
 
-            string sql = "SELECT pr.node_ID FROM " + tableName + "   pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id  WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND mp.ISActive='Y' AND mp.IsSummary='Y'";
+            string sql = "SELECT pr.node_ID FROM " + tableName + "   pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id  WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND mp.ISActive='Y' AND mp.IsSummary='Y'";
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds == null || ds.Tables[0].Rows.Count > 0)
@@ -2440,14 +2445,14 @@ namespace VIS.Helpers
         int strtreeNodesCount = 1;
         private void GetChildNodesCount(int currentnode, string tableName, int treeID, string adtableName, string whereClause, bool ShowSummaryNodes)
         {
-            //string sql = "SELECT count(*) FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND AD_Tree_ID=" + treeID;
+            //string sql = "SELECT count(*) FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND VAF_TreeInfo_ID=" + treeID;
             //var count = DB.ExecuteScalar(sql);
             //if (count != null && count != DBNull.Value)
             //{
             //    strtreeNodesCount += Util.GetValueOfInt(count);
             //}
 
-            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
+            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
 
             //DataSet ds = DB.ExecuteDataset(sql);
             //if (ds == null || ds.Tables[0].Rows.Count > 0)
@@ -2459,9 +2464,9 @@ namespace VIS.Helpers
             //}
 
 
-            //string sql = "SELECT Node_ID, IsSummary FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND AD_Tree_ID=" + treeID;
+            //string sql = "SELECT Node_ID, IsSummary FROM " + tableName + " WHERE Parent_ID=" + currentnode + " AND VAF_TreeInfo_ID=" + treeID;
 
-            string sqls = "SELECT node_ID, " + adtableName + ".IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " " + adtableName + " on pr.Node_ID=" + adtableName + "." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode;
+            string sqls = "SELECT node_ID, " + adtableName + ".IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " " + adtableName + " on pr.Node_ID=" + adtableName + "." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode;
             if (whereClause.Length > 0)
             {
                 sqls = sqls + " AND " + whereClause;
@@ -2473,11 +2478,11 @@ namespace VIS.Helpers
                 strtreeNodesCount += countDs.Tables[0].Rows.Count;
             }
 
-            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
+            //sql = "SELECT node_ID FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " AND  mp.ISActive='Y' AND mp.IsSummary='Y'";
 
             //DataSet ds = DB.ExecuteDataset(sql);
 
-            sqls = "SELECT node_ID, mp.IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.AD_Tree_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " ";
+            sqls = "SELECT node_ID, mp.IsSummary FROM " + tableName + "  pr JOIN " + adtableName + " mp on pr.Node_ID=mp." + adtableName + "_id WHERE pr.VAF_TreeInfo_ID=" + treeID + " AND pr.Parent_ID = " + currentnode + " ";
             countDs = DB.ExecuteDataset(sqls);
 
             DataRow[] rows = countDs.Tables[0].Select("IsSummary='Y'");
@@ -2517,7 +2522,7 @@ namespace VIS.Helpers
                 strtreeNodesCount = 0;
             }
 
-            if (tree != null && tree.GetAD_Tree_ID() > 0)
+            if (tree != null && tree.GetVAF_TreeInfo_ID() > 0)
             {
                 if (treeNodeID > 0)
                 {
@@ -2525,7 +2530,7 @@ namespace VIS.Helpers
                 }
                 else
                 {
-                    string sql = "SELECT Count(*) FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID = " + 0 + " AND NODE_ID IN (SELECT " + MTable.GetTableName(ctx, VAF_TableView_ID) + "_ID FROM " + MTable.GetTableName(ctx, VAF_TableView_ID) + " WHERE  IsSummary='N' ";
+                    string sql = "SELECT Count(*) FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID = " + 0 + " AND NODE_ID IN (SELECT " + MTable.GetTableName(ctx, VAF_TableView_ID) + "_ID FROM " + MTable.GetTableName(ctx, VAF_TableView_ID) + " WHERE  IsSummary='N' ";
 
                     if (whereClause.Length > 0)
                     {

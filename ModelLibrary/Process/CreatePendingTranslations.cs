@@ -359,7 +359,7 @@ namespace VAdvantage.Process
                         param[3] = new System.Data.SqlClient.SqlParameter("@cm", tlTab.GetCommitWarning());
                     }
                     sql.Clear();
-                    sql.Append(@"Update VAF_Tab_TRL 
+                    sql.Append(@"Update VAF_Tab_TL 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,

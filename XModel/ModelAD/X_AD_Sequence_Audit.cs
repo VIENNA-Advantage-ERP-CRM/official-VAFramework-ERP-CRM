@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Sequence_Audit
+/** Generated Model for VAF_Record_Seq_Audit
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Sequence_Audit : PO
+public class X_VAF_Record_Seq_Audit : PO
 {
-public X_AD_Sequence_Audit (Context ctx, int AD_Sequence_Audit_ID, Trx trxName) : base (ctx, AD_Sequence_Audit_ID, trxName)
+public X_VAF_Record_Seq_Audit (Context ctx, int VAF_Record_Seq_Audit_ID, Trx trxName) : base (ctx, VAF_Record_Seq_Audit_ID, trxName)
 {
-/** if (AD_Sequence_Audit_ID == 0)
+/** if (VAF_Record_Seq_Audit_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetVAF_TableView_ID (0);
 SetDocumentNo (null);
 SetRecord_ID (0);
 }
  */
 }
-public X_AD_Sequence_Audit (Ctx ctx, int AD_Sequence_Audit_ID, Trx trxName) : base (ctx, AD_Sequence_Audit_ID, trxName)
+public X_VAF_Record_Seq_Audit (Ctx ctx, int VAF_Record_Seq_Audit_ID, Trx trxName) : base (ctx, VAF_Record_Seq_Audit_ID, trxName)
 {
-/** if (AD_Sequence_Audit_ID == 0)
+/** if (VAF_Record_Seq_Audit_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetVAF_TableView_ID (0);
 SetDocumentNo (null);
 SetRecord_ID (0);
@@ -43,7 +43,7 @@ SetRecord_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence_Audit (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Record_Seq_Audit (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_AD_Sequence_Audit (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence_Audit (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Record_Seq_Audit (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_AD_Sequence_Audit (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Sequence_Audit (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Record_Seq_Audit (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Sequence_Audit()
+static X_VAF_Record_Seq_Audit()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389047311L;
 public static int Table_ID;
  // =121;
 
-/** TableName=AD_Sequence_Audit */
-public static String Table_Name="AD_Sequence_Audit";
+/** TableName=VAF_Record_Seq_Audit */
+public static String Table_Name="VAF_Record_Seq_Audit";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Sequence_Audit[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Record_Seq_Audit[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Sequence.
-@param AD_Sequence_ID Document Sequence */
-public void SetAD_Sequence_ID (int AD_Sequence_ID)
+@param VAF_Record_Seq_ID Document Sequence */
+public void SetVAF_Record_Seq_ID (int VAF_Record_Seq_ID)
 {
-if (AD_Sequence_ID < 1) throw new ArgumentException ("AD_Sequence_ID is mandatory.");
-Set_ValueNoCheck ("AD_Sequence_ID", AD_Sequence_ID);
+if (VAF_Record_Seq_ID < 1) throw new ArgumentException ("VAF_Record_Seq_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Record_Seq_ID", VAF_Record_Seq_ID);
 }
 /** Get Sequence.
 @return Document Sequence */
-public int GetAD_Sequence_ID() 
+public int GetVAF_Record_Seq_ID() 
 {
-Object ii = Get_Value("AD_Sequence_ID");
+Object ii = Get_Value("VAF_Record_Seq_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,7 +135,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Sequence_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_Record_Seq_ID().ToString());
 }
 /** Set Table.
 @param VAF_TableView_ID Database Table information */

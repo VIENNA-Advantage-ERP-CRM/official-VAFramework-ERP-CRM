@@ -487,17 +487,17 @@ namespace VIS.Controllers
                 {
                     // Check if Document Sequence has organization Level checked, if yes then get report from there.
                     // If Not, then try to get report from Document Type.
-                    sql1 = @"SELECT AD_Sequence_No.Report_ID
-                                From Ad_Sequence Ad_Sequence
+                    sql1 = @"SELECT VAF_Record_Seq_No.Report_ID
+                                From VAF_Record_Seq VAF_Record_Seq
                                 JOIN C_Doctype C_Doctype
-                                ON (C_Doctype.Docnosequence_Id =Ad_Sequence.Ad_Sequence_Id 
+                                ON (C_Doctype.Docnosequence_Id =VAF_Record_Seq.VAF_Record_Seq_Id 
                                 AND C_DocType.ISDOCNOCONTROLLED='Y')  
-                                JOIN AD_Sequence_No AD_Sequence_No
-                                On (Ad_Sequence_No.Ad_Sequence_Id=Ad_Sequence.Ad_Sequence_Id
-                                AND Ad_Sequence_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
-                                JOIN VAF_Job ON VAF_Job.VAF_Job_ID=AD_Sequence_No.Report_ID
+                                JOIN VAF_Record_Seq_No VAF_Record_Seq_No
+                                On (VAF_Record_Seq_No.VAF_Record_Seq_Id=VAF_Record_Seq.VAF_Record_Seq_Id
+                                AND VAF_Record_Seq_No.VAF_Org_ID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]) + @")
+                                JOIN VAF_Job ON VAF_Job.VAF_Job_ID=VAF_Record_Seq_No.Report_ID
                                 Where C_Doctype.C_Doctype_Id     = " + Convert.ToInt32(ds.Tables[0].Rows[0][0]) + @"
-                                And Ad_Sequence.Isorglevelsequence='Y' AND Ad_Sequence.IsActive='Y' AND VAF_Job.IsActive='Y'";
+                                And VAF_Record_Seq.Isorglevelsequence='Y' AND VAF_Record_Seq.IsActive='Y' AND VAF_Job.IsActive='Y'";
 
                     object processID = DB.ExecuteScalar(sql1);
                     if (processID == DBNull.Value || processID == null || Convert.ToInt32(processID) == 0)
@@ -1108,24 +1108,24 @@ namespace VIS.Controllers
     /// </summary>
     public class TreeController : Controller
     {
-        public ActionResult GetTreeAsString(int AD_Tree_ID, bool editable, int windowNo, bool onDemandTree, int VAF_Tab_ID)
+        public ActionResult GetTreeAsString(int VAF_TreeInfo_ID, bool editable, int windowNo, bool onDemandTree, int VAF_Tab_ID)
         {
             var html = "";
             if (Session["ctx"] != null)
             {
                 var m = new MenuHelper(Session["ctx"] as Ctx);
-                var tree = m.GetMenuTree(AD_Tree_ID, editable, onDemandTree, 0, VAF_Tab_ID, windowNo);
+                var tree = m.GetMenuTree(VAF_TreeInfo_ID, editable, onDemandTree, 0, VAF_Tab_ID, windowNo);
                 html = m.GetMenuTreeUI(tree.GetRootNode(), @Url.Content("~/"), windowNo.ToString(), tree.GetNodeTableName());
                 m.dispose();
             }
             return Content(html);
         }
 
-        public ActionResult UpdateTree(string nodeID, int oldParentID, int newParentID, int AD_Tree_ID)
+        public ActionResult UpdateTree(string nodeID, int oldParentID, int newParentID, int VAF_TreeInfo_ID)
         {
             Ctx ctx = Session["ctx"] as Ctx;
             var m = new MenuHelper(ctx);
-            return Json(JsonConvert.SerializeObject(m.updateTree(ctx, nodeID, oldParentID, newParentID, AD_Tree_ID)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(m.updateTree(ctx, nodeID, oldParentID, newParentID, VAF_TreeInfo_ID)), JsonRequestBehavior.AllowGet);
         }
 
 

@@ -431,13 +431,13 @@ namespace VIS.Classes
 
             queryList.VIS_119 = "select versionno FROM VAF_ModuleInfo where Prefix='VAREPH_'";
 
-            queryList.VIS_120 = "SELECT AD_Tree_ID FROM AD_Tree "
+            queryList.VIS_120 = "SELECT VAF_TreeInfo_ID FROM VAF_TreeInfo "
             + "WHERE VAF_Client_ID=@VAF_Client_ID AND VAF_TableView_ID=@VAF_TableView_ID AND IsActive='Y' AND IsAllNodes='Y' "
-                        + "ORDER BY IsDefault DESC, AD_Tree_ID";
+                        + "ORDER BY IsDefault DESC, VAF_TreeInfo_ID";
 
-            queryList.VIS_121 = "SELECT AD_Tree_ID, Name FROM AD_Tree "
+            queryList.VIS_121 = "SELECT VAF_TreeInfo_ID, Name FROM VAF_TreeInfo "
                     + "WHERE VAF_Client_ID=@VAF_Client_ID AND VAF_TableView_ID=@VAF_TableView_ID AND IsActive='Y' AND IsAllNodes='Y' "
-                    + "ORDER BY IsDefault DESC, AD_Tree_ID";
+                    + "ORDER BY IsDefault DESC, VAF_TreeInfo_ID";
 
 
             queryList.VIS_122 = "SELECT t.TableName, c.VAF_Column_ID, c.ColumnName, e.Name,"	//	1..4

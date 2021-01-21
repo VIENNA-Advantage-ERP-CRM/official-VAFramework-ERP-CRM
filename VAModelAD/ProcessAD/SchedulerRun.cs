@@ -18,14 +18,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class SchedulerRun : ProcessEngine.SvrProcess
     {
         /** Scheduler		*/
-        private int p_AD_Scheduler_ID = 0;
+        private int p_VAF_JobRun_Plan_ID = 0;
 
         /// <summary>
         /// Prepare
         /// </summary>
         protected override void Prepare()
         {
-            p_AD_Scheduler_ID = GetRecord_ID();
+            p_VAF_JobRun_Plan_ID = GetRecord_ID();
         }	//	prepare
 
 
@@ -35,8 +35,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns></returns>
         protected override string DoIt()
         {
-            log.Info("AD_Scheduler_ID=" + p_AD_Scheduler_ID);
-            MScheduler scheduler = new MScheduler(GetCtx(), p_AD_Scheduler_ID, Get_TrxName());
+            log.Info("VAF_JobRun_Plan_ID=" + p_VAF_JobRun_Plan_ID);
+            MScheduler scheduler = new MScheduler(GetCtx(), p_VAF_JobRun_Plan_ID, Get_TrxName());
             return scheduler.Execute(Get_Trx());            
         }
     }

@@ -169,40 +169,40 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Menu_ID VAF_Control_Ref_ID=184 */
-        public static int AD_TREE_MENU_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_TreeInfo_Menu_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_TreeInfo_MENU_ID_VAF_Control_Ref_ID = 184;
         /** Set Menu Tree.
-        @param AD_Tree_Menu_ID Tree of the menu */
-        public void SetAD_Tree_Menu_ID(int AD_Tree_Menu_ID)
+        @param VAF_TreeInfo_Menu_ID Tree of the menu */
+        public void SetVAF_TreeInfo_Menu_ID(int VAF_TreeInfo_Menu_ID)
         {
-            if (AD_Tree_Menu_ID <= 0) Set_Value("AD_Tree_Menu_ID", null);
+            if (VAF_TreeInfo_Menu_ID <= 0) Set_Value("VAF_TreeInfo_Menu_ID", null);
             else
-                Set_Value("AD_Tree_Menu_ID", AD_Tree_Menu_ID);
+                Set_Value("VAF_TreeInfo_Menu_ID", VAF_TreeInfo_Menu_ID);
         }
         /** Get Menu Tree.
         @return Tree of the menu */
-        public int GetAD_Tree_Menu_ID()
+        public int GetVAF_TreeInfo_Menu_ID()
         {
-            Object ii = Get_Value("AD_Tree_Menu_ID");
+            Object ii = Get_Value("VAF_TreeInfo_Menu_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** AD_Tree_Org_ID VAF_Control_Ref_ID=184 */
-        public static int AD_TREE_ORG_ID_VAF_Control_Ref_ID = 184;
+        /** VAF_TreeInfo_Org_ID VAF_Control_Ref_ID=184 */
+        public static int VAF_TreeInfo_ORG_ID_VAF_Control_Ref_ID = 184;
         /** Set Organization Tree.
-        @param AD_Tree_Org_ID Tree to determine organizational hierarchy */
-        public void SetAD_Tree_Org_ID(int AD_Tree_Org_ID)
+        @param VAF_TreeInfo_Org_ID Tree to determine organizational hierarchy */
+        public void SetVAF_TreeInfo_Org_ID(int VAF_TreeInfo_Org_ID)
         {
-            if (AD_Tree_Org_ID <= 0) Set_Value("AD_Tree_Org_ID", null);
+            if (VAF_TreeInfo_Org_ID <= 0) Set_Value("VAF_TreeInfo_Org_ID", null);
             else
-                Set_Value("AD_Tree_Org_ID", AD_Tree_Org_ID);
+                Set_Value("VAF_TreeInfo_Org_ID", VAF_TreeInfo_Org_ID);
         }
         /** Get Organization Tree.
         @return Tree to determine organizational hierarchy */
-        public int GetAD_Tree_Org_ID()
+        public int GetVAF_TreeInfo_Org_ID()
         {
-            Object ii = Get_Value("AD_Tree_Org_ID");
+            Object ii = Get_Value("VAF_TreeInfo_Org_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

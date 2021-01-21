@@ -9,12 +9,12 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAlert : X_AD_Alert
+    public class MAlert : X_VAF_Alert
     {
-        public MAlert(Ctx ctx, int AD_Alert_ID, Trx trx)
-            : base(ctx, AD_Alert_ID, trx)
+        public MAlert(Ctx ctx, int VAF_Alert_ID, Trx trx)
+            : base(ctx, VAF_Alert_ID, trx)
         {
-            if (AD_Alert_ID == 0)
+            if (VAF_Alert_ID == 0)
             {
                 //	setVAF_AlertHandler_ID (0);
                 //	setName (null);
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
             if (m_rules != null && !reload)
                 return m_rules;
             String sql = "SELECT * FROM VAF_AlertSetting "
-                + "WHERE isactive='Y' AND AD_Alert_ID=" + GetAD_Alert_ID();
+                + "WHERE isactive='Y' AND VAF_Alert_ID=" + GetVAF_Alert_ID();
             List<MAlertRule> list = new List<MAlertRule>();
 
             DataSet ds = DB.ExecuteDataset(sql);
@@ -70,8 +70,8 @@ namespace VAdvantage.Model
         {
             if (m_recipients != null && !reload)
                 return m_recipients;
-            String sql = "SELECT * FROM AD_AlertRecipient "
-                + "WHERE AD_Alert_ID=" + GetAD_Alert_ID();
+            String sql = "SELECT * FROM VAF_AlertRecipient "
+                + "WHERE VAF_Alert_ID=" + GetVAF_Alert_ID();
             List<MAlertRecipient> list = new List<MAlertRecipient>();
             try
             {
@@ -308,7 +308,7 @@ namespace VAdvantage.Model
             {
                 return Value.Equals(compareValue, StringComparison.OrdinalIgnoreCase);
             }
-            //else if (X_AD_AlertCondition.OPERATOR_Like.Equals(operation))
+            //else if (X_VAF_AlertCondition.OPERATOR_Like.Equals(operation))
             //{
 
             //    return Value.ToLower().Contains(compareValue.ToLower());

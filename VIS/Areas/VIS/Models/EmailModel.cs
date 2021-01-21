@@ -473,7 +473,7 @@ namespace VIS.Models
         /// <returns></returns>
         public int SaveFormats(int id, int VAF_Client_ID, int VAF_Org_ID, string name, bool isDynamic, string subject, string text, bool saveforAll, int AD_Window_ID, string folder, int attachmentID)
         {
-            X_AD_TextTemplate _textTemplate = new X_AD_TextTemplate(ctx, id, null);
+            X_VAF_TextTemplate _textTemplate = new X_VAF_TextTemplate(ctx, id, null);
             _textTemplate.Set_Value("VAF_Client_ID", VAF_Client_ID);
             _textTemplate.Set_Value("VAF_Org_ID", VAF_Org_ID);
             _textTemplate.Set_Value("Name", name);
@@ -504,7 +504,7 @@ namespace VIS.Models
                 //mAttachment.IsActive();
                 //mAttachment.SetAttachmentType("Z");
                 ////get first key coloumn
-                //mAttachment.SetRecord_ID(_textTemplate.GetAD_TextTemplate_ID());
+                //mAttachment.SetRecord_ID(_textTemplate.GetVAF_TextTemplate_ID());
                 //mAttachment.SetTextMsg(text);
                 //mAttachment.SetTitle(name);
                 //FileInfo[] files = null;
@@ -540,7 +540,7 @@ namespace VIS.Models
                 //    mAttachment.AddEntry("", null);
                 //}
                 //files = null;
-                return _textTemplate.GetAD_TextTemplate_ID();
+                return _textTemplate.GetVAF_TextTemplate_ID();
             }
             return 0;
         }
@@ -548,7 +548,7 @@ namespace VIS.Models
         //public SavedAttachmentInfo SavedAttachmentForFormat(int textTemplate_ID)
         //{
         //    List<string> entry = new List<string>();
-        //    string sql = "select MailAttachment1_ID from MailAttachment1 where vaf_tableview_id=(Select VAF_TableView_ID from VAF_TableView where tablename='AD_TextTemplate') and record_id=" + textTemplate_ID;
+        //    string sql = "select MailAttachment1_ID from MailAttachment1 where vaf_tableview_id=(Select VAF_TableView_ID from VAF_TableView where tablename='VAF_TextTemplate') and record_id=" + textTemplate_ID;
         //    int attach = Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
         //    MMailAttachment1 mattach = new MMailAttachment1(ctx, attach, null);
@@ -837,15 +837,15 @@ namespace VIS.Models
             List<RecordData> obj = null;
             string sql = @"SELECT NAME, NVL(SUBJECT,' ') AS SUBJECT, NVL(MAILTEXT,' ') as MAILTEXT,
                     NVL(CREATED,sysdate) AS CREATED, VAF_CLIENT_ID, VAF_ORG_ID, CREATEDBY, 
-                    NVL(ISACTIVE,'Y') AS ISACTIVE, NVL(ISHTML,'Y') AS ISHTML, AD_TEXTTEMPLATE_ID, 
+                    NVL(ISACTIVE,'Y') AS ISACTIVE, NVL(ISHTML,'Y') AS ISHTML, VAF_TEXTTEMPLATE_ID, 
                     NVL(UPDATED,sysdate) AS UPDATED, UPDATEDBY, AD_Window_ID, NVL(ISDYNAMICCONTENT,'N') AS ISDYNAMICCONTENT
-                    FROM AD_TextTemplate WHERE IsActive = 'Y' AND (AD_Window_ID IS NULL ";
+                    FROM VAF_TextTemplate WHERE IsActive = 'Y' AND (AD_Window_ID IS NULL ";
             if (window_ID > 0)
             {
                 sql += " OR AD_Window_ID=" + window_ID;
             }
             sql += ")";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "AD_TextTemplate", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_TextTemplate", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)

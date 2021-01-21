@@ -11,7 +11,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-   public  class MTableAccess:X_VAF_TableView_Access
+   public  class MTableAccess:X_VAF_TableView_Rights
     {
 
         /// <summary>

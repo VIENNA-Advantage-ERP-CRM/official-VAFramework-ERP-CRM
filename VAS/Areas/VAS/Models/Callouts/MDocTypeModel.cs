@@ -45,9 +45,9 @@ namespace VIS.Models
             Dictionary<string, object> result = null;
             string sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',d.IsDocNoControlled,"
             + "s.CurrentNext, d.DocBaseType, s.CurrentNextSys, "
-            + "s.AD_Sequence_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx, d.TreatAsDiscount "
+            + "s.VAF_Record_Seq_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx, d.TreatAsDiscount "
             + "FROM C_DocType d "
-            + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
+            + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
             + "WHERE C_DocType_ID=" + C_DocType_ID;		//	1
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -59,7 +59,7 @@ namespace VIS.Models
                 result["CurrentNext"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["CurrentNext"]);
                 result["CurrentNextSys"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["CurrentNextSys"]);
                 result["DocBaseType"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["DocBaseType"]);
-                result["AD_Sequence_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["AD_Sequence_ID"]);
+                result["VAF_Record_Seq_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Record_Seq_ID"]);
                 result["IsSOTrx"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsSOTrx"]);
                 result["IsReturnTrx"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["IsReturnTrx"]);
                 result["Value"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["value"]);

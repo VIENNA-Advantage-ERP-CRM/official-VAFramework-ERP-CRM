@@ -20,10 +20,10 @@ public X_CM_WebProject (Context ctx, int CM_WebProject_ID, Trx trxName) : base (
 {
 /** if (CM_WebProject_ID == 0)
 {
-SetAD_TreeCMC_ID (0);
-SetAD_TreeCMM_ID (0);
-SetAD_TreeCMS_ID (0);
-SetAD_TreeCMT_ID (0);
+SetVAF_TreeInfoCMC_ID (0);
+SetVAF_TreeInfoCMM_ID (0);
+SetVAF_TreeInfoCMS_ID (0);
+SetVAF_TreeInfoCMT_ID (0);
 SetCM_WebProject_ID (0);
 SetMeta_Author (null);	// @AD_User_Name@
 SetMeta_Content (null);	// 'text/html;
@@ -39,10 +39,10 @@ public X_CM_WebProject (Ctx ctx, int CM_WebProject_ID, Trx trxName) : base (ctx,
 {
 /** if (CM_WebProject_ID == 0)
 {
-SetAD_TreeCMC_ID (0);
-SetAD_TreeCMM_ID (0);
-SetAD_TreeCMS_ID (0);
-SetAD_TreeCMT_ID (0);
+SetVAF_TreeInfoCMC_ID (0);
+SetVAF_TreeInfoCMM_ID (0);
+SetVAF_TreeInfoCMS_ID (0);
+SetVAF_TreeInfoCMT_ID (0);
 SetCM_WebProject_ID (0);
 SetMeta_Author (null);	// @AD_User_Name@
 SetMeta_Content (null);	// 'text/html;
@@ -133,74 +133,74 @@ StringBuilder sb = new StringBuilder ("X_CM_WebProject[").Append(Get_ID()).Appen
 return sb.ToString();
 }
 
-/** AD_TreeCMC_ID VAF_Control_Ref_ID=184 */
-public static int AD_TREECMC_ID_VAF_Control_Ref_ID=184;
+/** VAF_TreeInfoCMC_ID VAF_Control_Ref_ID=184 */
+public static int VAF_TreeInfoCMC_ID_VAF_Control_Ref_ID=184;
 /** Set Container Tree.
-@param AD_TreeCMC_ID Container Tree */
-public void SetAD_TreeCMC_ID (int AD_TreeCMC_ID)
+@param VAF_TreeInfoCMC_ID Container Tree */
+public void SetVAF_TreeInfoCMC_ID (int VAF_TreeInfoCMC_ID)
 {
-if (AD_TreeCMC_ID < 1) throw new ArgumentException ("AD_TreeCMC_ID is mandatory.");
-Set_ValueNoCheck ("AD_TreeCMC_ID", AD_TreeCMC_ID);
+if (VAF_TreeInfoCMC_ID < 1) throw new ArgumentException ("VAF_TreeInfoCMC_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TreeInfoCMC_ID", VAF_TreeInfoCMC_ID);
 }
 /** Get Container Tree.
 @return Container Tree */
-public int GetAD_TreeCMC_ID() 
+public int GetVAF_TreeInfoCMC_ID() 
 {
-Object ii = Get_Value("AD_TreeCMC_ID");
+Object ii = Get_Value("VAF_TreeInfoCMC_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TreeCMM_ID VAF_Control_Ref_ID=184 */
-public static int AD_TREECMM_ID_VAF_Control_Ref_ID=184;
+/** VAF_TreeInfoCMM_ID VAF_Control_Ref_ID=184 */
+public static int VAF_TreeInfoCMM_ID_VAF_Control_Ref_ID=184;
 /** Set Media Tree.
-@param AD_TreeCMM_ID Media Tree */
-public void SetAD_TreeCMM_ID (int AD_TreeCMM_ID)
+@param VAF_TreeInfoCMM_ID Media Tree */
+public void SetVAF_TreeInfoCMM_ID (int VAF_TreeInfoCMM_ID)
 {
-if (AD_TreeCMM_ID < 1) throw new ArgumentException ("AD_TreeCMM_ID is mandatory.");
-Set_ValueNoCheck ("AD_TreeCMM_ID", AD_TreeCMM_ID);
+if (VAF_TreeInfoCMM_ID < 1) throw new ArgumentException ("VAF_TreeInfoCMM_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TreeInfoCMM_ID", VAF_TreeInfoCMM_ID);
 }
 /** Get Media Tree.
 @return Media Tree */
-public int GetAD_TreeCMM_ID() 
+public int GetVAF_TreeInfoCMM_ID() 
 {
-Object ii = Get_Value("AD_TreeCMM_ID");
+Object ii = Get_Value("VAF_TreeInfoCMM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TreeCMS_ID VAF_Control_Ref_ID=184 */
-public static int AD_TREECMS_ID_VAF_Control_Ref_ID=184;
+/** VAF_TreeInfoCMS_ID VAF_Control_Ref_ID=184 */
+public static int VAF_TreeInfoCMS_ID_VAF_Control_Ref_ID=184;
 /** Set Stage Tree.
-@param AD_TreeCMS_ID Stage Tree */
-public void SetAD_TreeCMS_ID (int AD_TreeCMS_ID)
+@param VAF_TreeInfoCMS_ID Stage Tree */
+public void SetVAF_TreeInfoCMS_ID (int VAF_TreeInfoCMS_ID)
 {
-if (AD_TreeCMS_ID < 1) throw new ArgumentException ("AD_TreeCMS_ID is mandatory.");
-Set_ValueNoCheck ("AD_TreeCMS_ID", AD_TreeCMS_ID);
+if (VAF_TreeInfoCMS_ID < 1) throw new ArgumentException ("VAF_TreeInfoCMS_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TreeInfoCMS_ID", VAF_TreeInfoCMS_ID);
 }
 /** Get Stage Tree.
 @return Stage Tree */
-public int GetAD_TreeCMS_ID() 
+public int GetVAF_TreeInfoCMS_ID() 
 {
-Object ii = Get_Value("AD_TreeCMS_ID");
+Object ii = Get_Value("VAF_TreeInfoCMS_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** AD_TreeCMT_ID VAF_Control_Ref_ID=184 */
-public static int AD_TREECMT_ID_VAF_Control_Ref_ID=184;
+/** VAF_TreeInfoCMT_ID VAF_Control_Ref_ID=184 */
+public static int VAF_TreeInfoCMT_ID_VAF_Control_Ref_ID=184;
 /** Set Template Tree.
-@param AD_TreeCMT_ID Template Tree */
-public void SetAD_TreeCMT_ID (int AD_TreeCMT_ID)
+@param VAF_TreeInfoCMT_ID Template Tree */
+public void SetVAF_TreeInfoCMT_ID (int VAF_TreeInfoCMT_ID)
 {
-if (AD_TreeCMT_ID < 1) throw new ArgumentException ("AD_TreeCMT_ID is mandatory.");
-Set_ValueNoCheck ("AD_TreeCMT_ID", AD_TreeCMT_ID);
+if (VAF_TreeInfoCMT_ID < 1) throw new ArgumentException ("VAF_TreeInfoCMT_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TreeInfoCMT_ID", VAF_TreeInfoCMT_ID);
 }
 /** Get Template Tree.
 @return Template Tree */
-public int GetAD_TreeCMT_ID() 
+public int GetVAF_TreeInfoCMT_ID() 
 {
-Object ii = Get_Value("AD_TreeCMT_ID");
+Object ii = Get_Value("VAF_TreeInfoCMT_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

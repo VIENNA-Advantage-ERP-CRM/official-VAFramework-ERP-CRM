@@ -20,7 +20,7 @@ public X_C_Element (Context ctx, int C_Element_ID, Trx trxName) : base (ctx, C_E
 {
 /** if (C_Element_ID == 0)
 {
-SetAD_Tree_ID (0);
+SetVAF_TreeInfo_ID (0);
 SetC_Element_ID (0);
 SetElementType (null);	// A
 SetIsBalancing (false);
@@ -33,7 +33,7 @@ public X_C_Element (Ctx ctx, int C_Element_ID, Trx trxName) : base (ctx, C_Eleme
 {
 /** if (C_Element_ID == 0)
 {
-SetAD_Tree_ID (0);
+SetVAF_TreeInfo_ID (0);
 SetC_Element_ID (0);
 SetElementType (null);	// A
 SetIsBalancing (false);
@@ -121,17 +121,17 @@ StringBuilder sb = new StringBuilder ("X_C_Element[").Append(Get_ID()).Append("]
 return sb.ToString();
 }
 /** Set Tree.
-@param AD_Tree_ID Identifies a Tree */
-public void SetAD_Tree_ID (int AD_Tree_ID)
+@param VAF_TreeInfo_ID Identifies a Tree */
+public void SetVAF_TreeInfo_ID (int VAF_TreeInfo_ID)
 {
-if (AD_Tree_ID < 1) throw new ArgumentException ("AD_Tree_ID is mandatory.");
-Set_ValueNoCheck ("AD_Tree_ID", AD_Tree_ID);
+if (VAF_TreeInfo_ID < 1) throw new ArgumentException ("VAF_TreeInfo_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TreeInfo_ID", VAF_TreeInfo_ID);
 }
 /** Get Tree.
 @return Identifies a Tree */
-public int GetAD_Tree_ID() 
+public int GetVAF_TreeInfo_ID() 
 {
-Object ii = Get_Value("AD_Tree_ID");
+Object ii = Get_Value("VAF_TreeInfo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

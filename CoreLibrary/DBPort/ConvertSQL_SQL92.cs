@@ -153,24 +153,24 @@ namespace VAdvantage.DBPort
 
             **  Multiple columns
                 SELECT tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
-                FROM AD_TreeNode tn, AD_TreeBar tb
-                WHERE tn.AD_Tree_ID=tb.AD_Tree_ID(+) AND tn.Node_ID=tb.Node_ID(+)
-                  AND tn.AD_Tree_ID=10
+                FROM VAF_TreeInfoChild tn, VAF_TreeInfoBar tb
+                WHERE tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID(+) AND tn.Node_ID=tb.Node_ID(+)
+                  AND tn.VAF_TreeInfo_ID=10
                 --  235 rows
                 SELECT	tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
-                FROM AD_TreeNode tn LEFT OUTER JOIN AD_TreeBar tb
-                  ON (tn.Node_ID=tb.Node_ID AND tn.AD_Tree_ID=tb.AD_Tree_ID AND tb.AD_User_ID=0)
-                WHERE tn.AD_Tree_ID=10
+                FROM VAF_TreeInfoChild tn LEFT OUTER JOIN VAF_TreeInfoBar tb
+                  ON (tn.Node_ID=tb.Node_ID AND tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID AND tb.AD_User_ID=0)
+                WHERE tn.VAF_TreeInfo_ID=10
 
                 SELECT tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
-                FROM AD_TreeNode tn, AD_TreeBar tb
-                WHERE tn.AD_Tree_ID=tb.AD_Tree_ID(+) AND tn.Node_ID=tb.Node_ID(+)
-                 AND tn.AD_Tree_ID=10 AND tb.AD_User_ID(+)=0
+                FROM VAF_TreeInfoChild tn, VAF_TreeInfoBar tb
+                WHERE tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID(+) AND tn.Node_ID=tb.Node_ID(+)
+                 AND tn.VAF_TreeInfo_ID=10 AND tb.AD_User_ID(+)=0
                 --  214 rows
                 SELECT tn.Node_ID,tn.Parent_ID,tn.SeqNo,tb.IsActive
-                FROM AD_TreeNode tn LEFT OUTER JOIN AD_TreeBar tb
-                  ON (tn.Node_ID=tb.Node_ID AND tn.AD_Tree_ID=tb.AD_Tree_ID AND tb.AD_User_ID=0)
-                WHERE tn.AD_Tree_ID=10
+                FROM VAF_TreeInfoChild tn LEFT OUTER JOIN VAF_TreeInfoBar tb
+                  ON (tn.Node_ID=tb.Node_ID AND tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID AND tb.AD_User_ID=0)
+                WHERE tn.VAF_TreeInfo_ID=10
 
              */
             StringBuilder newFrom = new StringBuilder();

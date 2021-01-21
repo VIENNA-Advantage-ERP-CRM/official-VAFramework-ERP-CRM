@@ -20,18 +20,18 @@ namespace VAdvantage.Model
     /// <summary>
     /// 
     /// </summary>
-    public class MSchedulerLog : X_AD_SchedulerLog, ViennaProcessorLog
+    public class MSchedulerLog : X_VAF_JobRun_Log, ViennaProcessorLog
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="parent">parent</param>
         /// <param name="summary">summary</param>
-        public MSchedulerLog(Ctx ctx, int AD_SchedulerLog_ID, Trx trxName)
-            : base(ctx, AD_SchedulerLog_ID, trxName)
+        public MSchedulerLog(Ctx ctx, int VAF_JobRun_Log_ID, Trx trxName)
+            : base(ctx, VAF_JobRun_Log_ID, trxName)
         {
 
-            if (AD_SchedulerLog_ID == 0)
+            if (VAF_JobRun_Log_ID == 0)
                 SetIsError(false);
         }	//	MSchedulerLog
 
@@ -54,11 +54,11 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="parent">parent</param>
         /// <param name="summary">summary</param>
-        public MSchedulerLog(X_AD_Scheduler parent, String summary)
+        public MSchedulerLog(X_VAF_JobRun_Plan parent, String summary)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetAD_Scheduler_ID(parent.GetAD_Scheduler_ID());
+            SetVAF_JobRun_Plan_ID(parent.GetVAF_JobRun_Plan_ID());
             SetSummary(summary);
         }	//	MSchedulerLog
 

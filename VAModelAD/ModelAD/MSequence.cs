@@ -17,7 +17,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MSequence : X_AD_Sequence
+    public class MSequence : X_VAF_Record_Seq
     {
         /**	Sequence for Table Document No's	*/
         private static String PREFIX_DOCSEQ = "DocumentNo_";
@@ -48,11 +48,11 @@ namespace VAdvantage.Model
         }
 
 
-        public MSequence(Ctx ctx, int AD_Sequence_ID, Trx trxName)
-            : base(ctx, AD_Sequence_ID, trxName)
+        public MSequence(Ctx ctx, int VAF_Record_Seq_ID, Trx trxName)
+            : base(ctx, VAF_Record_Seq_ID, trxName)
         {
 
-            if (AD_Sequence_ID == 0)
+            if (VAF_Record_Seq_ID == 0)
             {
                 //	setName (null);
                 //
@@ -152,13 +152,13 @@ namespace VAdvantage.Model
                 if (viennaSys && VAF_Client_ID > 11)
                     viennaSys = false;
 
-                String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, AD_Sequence_ID "
-                    + "FROM AD_Sequence "
+                String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, VAF_Record_Seq_ID "
+                    + "FROM VAF_Record_Seq "
                     + "WHERE Upper(Name)=Upper('" + TableName + "')"
                     + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' "
                     + " FOR UPDATE";
 
-                String updateSQL = "UPDATE AD_Sequence SET  CurrentNext = @CurrentNext@, CurrentNextSys = @CurrentNextSys@ "
+                String updateSQL = "UPDATE VAF_Record_Seq SET  CurrentNext = @CurrentNext@, CurrentNextSys = @CurrentNextSys@ "
                     + "WHERE Upper(Name)=Upper('" + TableName + "')"
                     + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' ";
 
@@ -235,13 +235,13 @@ namespace VAdvantage.Model
             if (viennaSys && VAF_Client_ID > 11)
                 viennaSys = false;
 
-            String selectSQL = "SELECT Export_ID, CurrentNextSys, IncrementNo, AD_Sequence_ID "
-                + "FROM AD_Sequence "
+            String selectSQL = "SELECT Export_ID, CurrentNextSys, IncrementNo, VAF_Record_Seq_ID "
+                + "FROM VAF_Record_Seq "
                 + "WHERE Upper(Name)=Upper('" + TableName + "')"
                 + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' "
                 + " FOR UPDATE";
 
-            String updateSQL = "UPDATE AD_Sequence SET  Export_ID = @CurrentNext@, CurrentNextSys = @CurrentNextSys@ "
+            String updateSQL = "UPDATE VAF_Record_Seq SET  Export_ID = @CurrentNext@, CurrentNextSys = @CurrentNextSys@ "
                    + "WHERE Upper(Name)=Upper('" + TableName + "')"
                    + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' ";
 
@@ -271,7 +271,7 @@ namespace VAdvantage.Model
 
                     for (int irow = 0; irow <= ds.Tables[0].Rows.Count - 1; irow++)
                     {
-                        //	int AD_Sequence_ID = dr.getInt(4);
+                        //	int VAF_Record_Seq_ID = dr.getInt(4);
                         //
                         int tempRetValue = -1;
                         int incrementNo = int.Parse(ds.Tables[0].Rows[0]["IncrementNo"].ToString());
@@ -349,13 +349,13 @@ namespace VAdvantage.Model
             // db_Name = VConnection.Get().Db_name;
             //  }
 
-            String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, AD_Sequence_ID "
-                + "FROM AD_Sequence "
+            String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, VAF_Record_Seq_ID "
+                + "FROM VAF_Record_Seq "
                 + "WHERE Upper(Name)=Upper('" + TableName + "')"
                 + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' "
                 + " FOR UPDATE";
 
-            String updateSQL = "UPDATE AD_Sequence SET  CurrentNext = @CurrentNext@, CurrentNextSys = @CurrentNextSys@ "
+            String updateSQL = "UPDATE VAF_Record_Seq SET  CurrentNext = @CurrentNext@, CurrentNextSys = @CurrentNextSys@ "
                 + "WHERE Upper(Name)=Upper('" + TableName + "')"
                 + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' ";
 
@@ -519,7 +519,7 @@ namespace VAdvantage.Model
                 viennaSys = false;
             //
 
-            int AD_Sequence_ID = seq.GetAD_Sequence_ID();
+            int VAF_Record_Seq_ID = seq.GetVAF_Record_Seq_ID();
             Boolean isStartNewYear = seq.IsStartNewYear();
             Boolean isStartNewMonth = seq.IsStartNewMonth();
 
@@ -546,9 +546,9 @@ namespace VAdvantage.Model
             if (isStartNewYear || isUseOrgLevel)
             {
                 selectSQL = "SELECT y.CurrentNext, s.CurrentNextSys, y.prefix, y.suffix, y.ADDYEARPREFIX, y.AddMonthYear "
-                        + "FROM AD_Sequence_No y, AD_Sequence s "
-                        + "WHERE y.AD_Sequence_ID = s.AD_Sequence_ID "
-                        + "AND s.AD_Sequence_ID = " + AD_Sequence_ID
+                        + "FROM VAF_Record_Seq_No y, VAF_Record_Seq s "
+                        + "WHERE y.VAF_Record_Seq_ID = s.VAF_Record_Seq_ID "
+                        + "AND s.VAF_Record_Seq_ID = " + VAF_Record_Seq_ID
                         + " AND y.CalendarYear = @param1"
                         + " AND y.VAF_Org_ID = @param2"
                         + " AND s.IsActive='Y' AND s.IsTableID='N' AND s.IsAutoSequence='Y' "
@@ -557,8 +557,8 @@ namespace VAdvantage.Model
             else
             {
                 selectSQL = "SELECT s.CurrentNext, s.CurrentNextSys "
-                        + "FROM AD_Sequence s "
-                        + "WHERE s.AD_Sequence_ID = " + AD_Sequence_ID
+                        + "FROM VAF_Record_Seq s "
+                        + "WHERE s.VAF_Record_Seq_ID = " + VAF_Record_Seq_ID
                         + " AND s.IsActive='Y' AND s.IsTableID='N' AND s.IsAutoSequence='Y' "
                         + "ORDER BY s.VAF_Client_ID DESC";
             }
@@ -653,19 +653,19 @@ namespace VAdvantage.Model
                 if (rs != null && rs.Tables.Count > 0 && rs.Tables[0].Rows.Count > 0)
                 {
                     if (s_log.IsLoggable(Level.FINE))
-                        s_log.Fine("AD_Sequence_ID=" + AD_Sequence_ID);
+                        s_log.Fine("VAF_Record_Seq_ID=" + VAF_Record_Seq_ID);
 
                     if (viennaSys)
                     {
                         next = int.Parse(rs.Tables[0].Rows[0]["CurrentNextSys"].ToString());
-                        updateSQL = "UPDATE AD_Sequence SET CurrentNextSys = CurrentNextSys + " + incrementNo + " WHERE AD_Sequence_ID = " + AD_Sequence_ID;
+                        updateSQL = "UPDATE VAF_Record_Seq SET CurrentNextSys = CurrentNextSys + " + incrementNo + " WHERE VAF_Record_Seq_ID = " + VAF_Record_Seq_ID;
                     }
                     else
                     {
                         if (isStartNewYear || isUseOrgLevel)
-                            updateSQL = "UPDATE AD_Sequence_No SET CurrentNext = CurrentNext + " + incrementNo + " WHERE AD_Sequence_ID= " + AD_Sequence_ID + " AND CalendarYear = '" + calendarYearMonth + "' AND VAF_Org_ID=" + docOrg_ID;
+                            updateSQL = "UPDATE VAF_Record_Seq_No SET CurrentNext = CurrentNext + " + incrementNo + " WHERE VAF_Record_Seq_ID= " + VAF_Record_Seq_ID + " AND CalendarYear = '" + calendarYearMonth + "' AND VAF_Org_ID=" + docOrg_ID;
                         else
-                            updateSQL = "UPDATE AD_Sequence SET CurrentNext = CurrentNext + " + incrementNo + " WHERE AD_Sequence_ID=" + AD_Sequence_ID;
+                            updateSQL = "UPDATE VAF_Record_Seq SET CurrentNext = CurrentNext + " + incrementNo + " WHERE VAF_Record_Seq_ID=" + VAF_Record_Seq_ID;
                         next = int.Parse(rs.Tables[0].Rows[0]["CurrentNext"].ToString());
                     }
 
@@ -690,8 +690,8 @@ namespace VAdvantage.Model
                     {	// create sequence (CurrentNo = StartNo + IncrementNo) for this year/org and return first number (=StartNo)
                         next = startNo;
 
-                        X_AD_Sequence_No seqno = new X_AD_Sequence_No(po.GetCtx(), 0, trxName);
-                        seqno.SetAD_Sequence_ID(AD_Sequence_ID);
+                        X_VAF_Record_Seq_No seqno = new X_VAF_Record_Seq_No(po.GetCtx(), 0, trxName);
+                        seqno.SetVAF_Record_Seq_ID(VAF_Record_Seq_ID);
                         seqno.SetVAF_Org_ID(docOrg_ID);
                         seqno.SetCalendarYear(calendarYearMonth);
                         seqno.SetCurrentNext(startNo + incrementNo);
@@ -791,8 +791,8 @@ namespace VAdvantage.Model
                 if (viennaSys && VAF_Client_ID > 11)
                     viennaSys = false;
                 //s_log.Severe("DocNo__" + Table_Name + "    " + trxIn.GetTrxName());
-                String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, AD_Sequence_ID "
-                    + "FROM AD_Sequence "
+                String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Record_Seq_ID "
+                    + "FROM VAF_Record_Seq "
                     + "WHERE Name='" + PREFIX_DOCSEQ + TableName + "'"
                     + " AND VAF_Client_ID = " + VAF_Client_ID
                     + " AND IsActive='Y' AND IsTableID='N' AND IsAutoSequence='Y' ";
@@ -803,7 +803,7 @@ namespace VAdvantage.Model
                 selectSQL += "FOR UPDATE";
 
 
-                String updateSQL = "UPDATE AD_Sequence SET  CurrentNext =@CurrentNext@ , CurrentNextSys = @CurrentNextSys@ WHERE Name='" + PREFIX_DOCSEQ + TableName + "'"
+                String updateSQL = "UPDATE VAF_Record_Seq SET  CurrentNext =@CurrentNext@ , CurrentNextSys = @CurrentNextSys@ WHERE Name='" + PREFIX_DOCSEQ + TableName + "'"
                     + " AND VAF_Client_ID = " + VAF_Client_ID
                     + " AND IsActive='Y' AND IsTableID='N' AND IsAutoSequence='Y' ";
 
@@ -957,8 +957,8 @@ namespace VAdvantage.Model
         //    if (viennaSys && VAF_Client_ID > 11)
         //        viennaSys = false;
 
-        //    String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, AD_Sequence_ID "
-        //        + "FROM AD_Sequence "
+        //    String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Record_Seq_ID "
+        //        + "FROM VAF_Record_Seq "
         //        + "WHERE Name='" + PREFIX_DOCSEQ + TableName + "'"
         //        + " AND VAF_Client_ID = " + VAF_Client_ID
         //        + " AND IsActive='Y' AND IsTableID='N' AND IsAutoSequence='Y' ";
@@ -969,7 +969,7 @@ namespace VAdvantage.Model
         //    selectSQL += "FOR UPDATE";
 
 
-        //    String updateSQL = "UPDATE AD_Sequence SET  CurrentNext =@CurrentNext@ , CurrentNextSys = @CurrentNextSys@ WHERE Name='" + PREFIX_DOCSEQ + TableName + "'"
+        //    String updateSQL = "UPDATE VAF_Record_Seq SET  CurrentNext =@CurrentNext@ , CurrentNextSys = @CurrentNextSys@ WHERE Name='" + PREFIX_DOCSEQ + TableName + "'"
         //        + " AND VAF_Client_ID = " + VAF_Client_ID
         //        + " AND IsActive='Y' AND IsTableID='N' AND IsAutoSequence='Y' ";
 
@@ -1108,8 +1108,8 @@ namespace VAdvantage.Model
         //    //if (CLogMgt.isLevel(LOGLEVEL))
         //      //  _log.Log(LOGLEVEL, TableName + " - ViennaSys=" + ViennaSys + " [" + trxName + "]");
 
-        //    String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, AD_Sequence_ID "
-        //        + "FROM AD_Sequence "
+        //    String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Record_Seq_ID "
+        //        + "FROM VAF_Record_Seq "
         //        + "WHERE Name='" + PREFIX_DOCSEQ + TableName + "'"
         //        //jz fix duplicated nextID  + " AND VAF_Client_ID IN (0,?)"
         //        + " AND VAF_Client_ID = " + VAF_Client_ID
@@ -1270,15 +1270,15 @@ namespace VAdvantage.Model
                 //	Check ViennaSys
                 Boolean viennaSys = false; // Ini.IsPropertyBool(Ini._VIENNASYS);
 
-                String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Client_ID, AD_Sequence_ID "
-                    + "FROM AD_Sequence "
-                    + "WHERE AD_Sequence_ID=" + dt.GetDocNoSequence_ID()
+                String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Client_ID, VAF_Record_Seq_ID "
+                    + "FROM VAF_Record_Seq "
+                    + "WHERE VAF_Record_Seq_ID=" + dt.GetDocNoSequence_ID()
                     + " AND IsActive='Y' AND IsTableID='N' AND IsAutoSequence='Y' ";
 
                 selectSQL += "FOR UPDATE ";
 
-                String updateSQL = "UPDATE AD_Sequence SET CurrentNext = @CurrentNext@, CurrentNextSys=@CurrentNextSys@ "
-                   + " WHERE AD_Sequence_ID=" + dt.GetDocNoSequence_ID()
+                String updateSQL = "UPDATE VAF_Record_Seq SET CurrentNext = @CurrentNext@, CurrentNextSys=@CurrentNextSys@ "
+                   + " WHERE VAF_Record_Seq_ID=" + dt.GetDocNoSequence_ID()
                    + " AND IsActive='Y' AND IsTableID='N' AND IsAutoSequence='Y' ";
 
                 Trx trx = null;
@@ -1313,7 +1313,7 @@ namespace VAdvantage.Model
                         int VAF_Client_ID = int.Parse(ds.Tables[0].Rows[0]["VAF_Client_ID"].ToString());
                         if (viennaSys && VAF_Client_ID > 11)
                             viennaSys = false;
-                        //	AD_Sequence_ID = dr.getInt(7);
+                        //	VAF_Record_Seq_ID = dr.getInt(7);
                         if (viennaSys)
                         {
                             next = int.Parse(ds.Tables[0].Rows[0]["CurrentNextSys"].ToString());
@@ -1449,9 +1449,9 @@ namespace VAdvantage.Model
         //    Boolean viennaSys = false; // Ini.IsPropertyBool(Ini._ViennaSYS);
         //    //if (CLogMgt.isLevel(LOGLEVEL))
         //    //_log.Log(LOGLEVEL, "DocType_ID=" + C_DocType_ID + " [" + trxName + "]");
-        //    String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Client_ID, AD_Sequence_ID "
-        //        + "FROM AD_Sequence "
-        //        + "WHERE AD_Sequence_ID=" + dt.GetDocNoSequence_ID()
+        //    String selectSQL = "SELECT CurrentNext, CurrentNextSys, IncrementNo, Prefix, Suffix, VAF_Client_ID, VAF_Record_Seq_ID "
+        //        + "FROM VAF_Record_Seq "
+        //        + "WHERE VAF_Record_Seq_ID=" + dt.GetDocNoSequence_ID()
         //        + " AND IsActive='Y' AND IsTableID='N' AND IsAutoSequence='Y' ";
         //    //	+ " FOR UPDATE";
         //    //
@@ -1505,7 +1505,7 @@ namespace VAdvantage.Model
         //            int VAF_Client_ID = int.Parse(ds.Tables[0].Rows[0]["VAF_Client_ID"].ToString());
         //            if (viennaSys && VAF_Client_ID > 11)
         //                viennaSys = false;
-        //            //	AD_Sequence_ID = dr.getInt(7);
+        //            //	VAF_Record_Seq_ID = dr.getInt(7);
         //            if (viennaSys)
         //            {
         //                next = int.Parse(ds.Tables[0].Rows[0]["CurrentNextSys"].ToString());
@@ -1612,7 +1612,7 @@ namespace VAdvantage.Model
         /// <returns>Sequence</returns>
         public static MSequence Get(Ctx ctx, String tableName, Trx trxName)
         {
-            String sql = "SELECT * FROM AD_Sequence "
+            String sql = "SELECT * FROM VAF_Record_Seq "
                 + "WHERE UPPER(Name)='" + tableName.ToUpper() + "'"
                 + " AND IsTableID='Y'";
             MSequence retValue = null;
@@ -1674,7 +1674,7 @@ namespace VAdvantage.Model
                 tableName = PREFIX_DOCSEQ + tableName;
             }
 
-            String sql = "SELECT * FROM AD_Sequence "
+            String sql = "SELECT * FROM VAF_Record_Seq "
                 + "WHERE UPPER(Name)='" + tableName.ToUpper() + "'"
                 + " AND IsTableID=@IsTableID";
             if (!tableID)
@@ -1745,7 +1745,7 @@ namespace VAdvantage.Model
                     + "WHERE ColumnName = 'DocumentNo' OR ColumnName = 'Value')"
                 //	Ability to run multiple times
                 + " AND 'DocumentNo_' || TableName NOT IN "
-                    + "(SELECT Name FROM AD_Sequence s "
+                    + "(SELECT Name FROM VAF_Record_Seq s "
                     + "WHERE s.VAF_Client_ID=@VAF_Client_ID)";
             int counter = 0;
             Boolean success = true;

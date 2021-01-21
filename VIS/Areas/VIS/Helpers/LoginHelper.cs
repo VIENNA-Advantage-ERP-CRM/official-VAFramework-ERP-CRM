@@ -320,7 +320,7 @@ namespace VIS.Helpers
                 cache[Common.Password_Valid_Upto_Key] = Common.GetPassword_Valid_Upto;
 
                 //then check setting in System Config, if found, then will replace default values.
-                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM AD_SysConfig WHERE IsActive='Y' AND Name in ('FAILED_LOGIN_COUNT','PASSWORD_VALID_UPTO') ");
+                DataSet ds = DB.ExecuteDataset("SELECT Name, Value FROM VAF_SysConfig WHERE IsActive='Y' AND Name in ('FAILED_LOGIN_COUNT','PASSWORD_VALID_UPTO') ");
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -511,16 +511,16 @@ namespace VIS.Helpers
                 return;
             }
             //	Do we look for trees?
-            if (role.GetAD_Tree_Org_ID() == 0)
+            if (role.GetVAF_TreeInfo_Org_ID() == 0)
             {
                 return;
             }
             //	Summary Org - Get Dependents
-            MTree tree = MTree.Get(ctx, role.GetAD_Tree_Org_ID(), null);
+            MTree tree = MTree.Get(ctx, role.GetVAF_TreeInfo_Org_ID(), null);
             String sql = "SELECT VAF_Client_ID, VAF_Org_ID, Name, IsSummary FROM VAF_Org "
                 + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
-                + " WHERE AD_Tree_ID='" + tree.GetAD_Tree_ID() + "' AND Parent_ID='" + Summary_Org_ID + "' AND IsActive='Y') "
+                + " WHERE VAF_TreeInfo_ID='" + tree.GetVAF_TreeInfo_ID() + "' AND Parent_ID='" + Summary_Org_ID + "' AND IsActive='Y') "
                 + "ORDER BY Name";
 
             IDataReader dr = DB.ExecuteReader(sql);

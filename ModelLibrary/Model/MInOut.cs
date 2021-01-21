@@ -1189,9 +1189,9 @@ namespace VAdvantage.Model
             if (C_DocType_ID == 0)
                 return;
             String sql = "SELECT d.DocBaseType, d.IsDocNoControlled, s.CurrentNext, d.IsReturnTrx "
-                + "FROM C_DocType d, AD_Sequence s "
+                + "FROM C_DocType d, VAF_Record_Seq s "
                 + "WHERE C_DocType_ID=" + C_DocType_ID		//	1
-                + " AND d.DocNoSequence_ID=s.AD_Sequence_ID(+)";
+                + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
             try
             {
                 DataSet ds = ExecuteQuery.ExecuteDataset(sql, null);

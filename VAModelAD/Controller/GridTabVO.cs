@@ -833,7 +833,7 @@ namespace VAdvantage.Controller
             //  View only returns IsActive='Y'
             String sql = "SELECT * FROM VAF_Tab_v WHERE AD_Window_ID=@windowID";
             if (!Env.IsBaseLanguage(ctx, "AD_Window"))
-                sql = "SELECT * FROM VAF_Tab_vt WHERE AD_Window_ID=@windowID"
+                sql = "SELECT * FROM VAF_Tab_vtl WHERE AD_Window_ID=@windowID"
                     + " AND VAF_Language='" + Env.GetVAF_Language(ctx) + "'";
             if (AD_UserDef_Win_ID != 0)
                 sql += " AND AD_UserDef_Win_ID=" + AD_UserDef_Win_ID;

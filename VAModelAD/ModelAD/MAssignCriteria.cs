@@ -288,11 +288,11 @@ namespace VAdvantage.Model
                 return null;
 
             //	Get Tree
-            int AD_Tree_ID = MTree.GetDefaultAD_Tree_ID(VAF_Client_ID, tableName);
-            if (AD_Tree_ID <= 0)
+            int VAF_TreeInfo_ID = MTree.GetDefaultVAF_TreeInfo_ID(VAF_Client_ID, tableName);
+            if (VAF_TreeInfo_ID <= 0)
                 return null;
 
-            MTree tree = new MTree(GetCtx(), AD_Tree_ID, false, true, null);
+            MTree tree = new MTree(GetCtx(), VAF_TreeInfo_ID, false, true, null);
             //VTreeNode node = tree.GetRootNode().findNode(id);
             //log.Finest("Root=" + node);
             //

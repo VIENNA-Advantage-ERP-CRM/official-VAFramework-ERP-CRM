@@ -66,21 +66,21 @@ namespace VAModelAD.Model
             StringBuilder sb = new StringBuilder("INSERT INTO ")
                 .Append(treeTableName)
                 .Append(" (VAF_Client_ID,VAF_Org_ID, IsActive,Created,CreatedBy,Updated,UpdatedBy, ")
-                .Append("AD_Tree_ID, Node_ID, Parent_ID, SeqNo) ")
+                .Append("VAF_TreeInfo_ID, Node_ID, Parent_ID, SeqNo) ")
                 //
                 .Append("SELECT t.VAF_Client_ID,0, 'Y', SysDate, 0, SysDate, 0,")
-                .Append("t.AD_Tree_ID, ").Append(id).Append(", 0, 999 ")
-                .Append("FROM AD_Tree t ")
+                .Append("t.VAF_TreeInfo_ID, ").Append(id).Append(", 0, 999 ")
+                .Append("FROM VAF_TreeInfo t ")
                 .Append("WHERE t.VAF_Client_ID=").Append(VAF_Client_ID).Append(" AND t.IsActive='Y'");
             //	Account Element Value handling
             if (C_Element_ID != 0)
                 sb.Append(" AND EXISTS (SELECT * FROM C_Element ae WHERE ae.C_Element_ID=")
-                    .Append(C_Element_ID).Append(" AND t.AD_Tree_ID=ae.AD_Tree_ID)");
+                    .Append(C_Element_ID).Append(" AND t.VAF_TreeInfo_ID=ae.VAF_TreeInfo_ID)");
             else	//	std trees
                 sb.Append(" AND t.IsAllNodes='Y' AND t.VAF_TableView_ID=").Append(VAF_TableView_ID);
             //	Duplicate Check
             sb.Append(" AND NOT EXISTS (SELECT * FROM ").Append(treeTableName).Append(" e ")
-                .Append("WHERE e.AD_Tree_ID=t.AD_Tree_ID AND Node_ID=").Append(id).Append(")");
+                .Append("WHERE e.VAF_TreeInfo_ID=t.VAF_TreeInfo_ID AND Node_ID=").Append(id).Append(")");
             //
             // Check applied to insert the node in treenode from organization units window in only default tree - Changed by Mohit asked by mukesh sir and ashish
             if (VAF_TableView_ID == X_VAF_Org.Table_ID)
@@ -90,8 +90,8 @@ namespace VAModelAD.Model
                 {
                     if (Org.IsOrgUnit())
                     {
-                        int DefaultTree_ID = MTree.GetDefaultAD_Tree_ID(po.GetVAF_Client_ID(), VAF_TableView_ID);
-                        sb.Append(" AND t.AD_Tree_ID=").Append(DefaultTree_ID);
+                        int DefaultTree_ID = MTree.GetDefaultVAF_TreeInfo_ID(po.GetVAF_Client_ID(), VAF_TableView_ID);
+                        sb.Append(" AND t.VAF_TreeInfo_ID=").Append(DefaultTree_ID);
                     }
                 }
             }
@@ -126,8 +126,8 @@ namespace VAModelAD.Model
             StringBuilder sb = new StringBuilder("DELETE FROM ")
                 .Append(treeTableName)
                 .Append(" n WHERE Node_ID=").Append(id)
-                .Append(" AND EXISTS (SELECT * FROM AD_Tree t ")
-                .Append("WHERE t.AD_Tree_ID=n.AD_Tree_ID AND t.VAF_TableView_ID=")
+                .Append(" AND EXISTS (SELECT * FROM VAF_TreeInfo t ")
+                .Append("WHERE t.VAF_TreeInfo_ID=n.VAF_TreeInfo_ID AND t.VAF_TableView_ID=")
                 .Append(VAF_TableView_ID).Append(")");
             //
             int no = DB.ExecuteQuery(sb.ToString(), null, po.Get_Trx());

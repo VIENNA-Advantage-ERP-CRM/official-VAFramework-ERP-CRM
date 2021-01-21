@@ -123,32 +123,32 @@ namespace VAdvantage.Model
         ///Parent Constructor
         /// </summary>
         /// <param name="client">client</param>
-        /// <param name="AD_Tree_Org_ID">org tree</param>
-        /// <param name="AD_Tree_BPartner_ID">bp tree</param>
-        /// <param name="AD_Tree_Project_ID">project tree</param>
-        /// <param name="AD_Tree_SalesRegion_ID">sr tree</param>
-        /// <param name="AD_Tree_Product_ID">product tree</param>
-        /// <param name="AD_Tree_Campaign_ID">campaign tree</param>
-        /// <param name="AD_Tree_Activity_ID">activity tree</param>
+        /// <param name="VAF_TreeInfo_Org_ID">org tree</param>
+        /// <param name="VAF_TreeInfo_BPartner_ID">bp tree</param>
+        /// <param name="VAF_TreeInfo_Project_ID">project tree</param>
+        /// <param name="VAF_TreeInfo_SalesRegion_ID">sr tree</param>
+        /// <param name="VAF_TreeInfo_Product_ID">product tree</param>
+        /// <param name="VAF_TreeInfo_Campaign_ID">campaign tree</param>
+        /// <param name="VAF_TreeInfo_Activity_ID">activity tree</param>
         /// <param name="trxName">transaction</param>
-        public MClientInfo(MClient client, int AD_Tree_Org_ID, int AD_Tree_BPartner_ID,
-            int AD_Tree_Project_ID, int AD_Tree_SalesRegion_ID, int AD_Tree_Product_ID,
-            int AD_Tree_Campaign_ID, int AD_Tree_Activity_ID, Trx trxName):base(client.GetCtx(),0,trxName)
+        public MClientInfo(MClient client, int VAF_TreeInfo_Org_ID, int VAF_TreeInfo_BPartner_ID,
+            int VAF_TreeInfo_Project_ID, int VAF_TreeInfo_SalesRegion_ID, int VAF_TreeInfo_Product_ID,
+            int VAF_TreeInfo_Campaign_ID, int VAF_TreeInfo_Activity_ID, Trx trxName):base(client.GetCtx(),0,trxName)
         {
             //super(client.getCtx(), 0, trxName);
             SetVAF_Client_ID(client.GetVAF_Client_ID());	//	to make sure
             SetVAF_Org_ID(0);
             SetIsDiscountLineAmt(false);
             //
-            SetAD_Tree_Menu_ID(10);		//	HARDCODED
+            SetVAF_TreeInfo_Menu_ID(10);		//	HARDCODED
             //
-            SetAD_Tree_Org_ID(AD_Tree_Org_ID);
-            SetAD_Tree_BPartner_ID(AD_Tree_BPartner_ID);
-            SetAD_Tree_Project_ID(AD_Tree_Project_ID);
-            SetAD_Tree_SalesRegion_ID(AD_Tree_SalesRegion_ID);
-            SetAD_Tree_Product_ID(AD_Tree_Product_ID);
-            SetAD_Tree_Campaign_ID(AD_Tree_Campaign_ID);
-            SetAD_Tree_Activity_ID(AD_Tree_Activity_ID);
+            SetVAF_TreeInfo_Org_ID(VAF_TreeInfo_Org_ID);
+            SetVAF_TreeInfo_BPartner_ID(VAF_TreeInfo_BPartner_ID);
+            SetVAF_TreeInfo_Project_ID(VAF_TreeInfo_Project_ID);
+            SetVAF_TreeInfo_SalesRegion_ID(VAF_TreeInfo_SalesRegion_ID);
+            SetVAF_TreeInfo_Product_ID(VAF_TreeInfo_Product_ID);
+            SetVAF_TreeInfo_Campaign_ID(VAF_TreeInfo_Campaign_ID);
+            SetVAF_TreeInfo_Activity_ID(VAF_TreeInfo_Activity_ID);
             //
             SetMatchRequirementI(MATCHREQUIREMENTI_None);
             SetMatchRequirementR(MATCHREQUIREMENTR_None);

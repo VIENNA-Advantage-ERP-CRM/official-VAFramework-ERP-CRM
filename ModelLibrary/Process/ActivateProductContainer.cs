@@ -113,7 +113,7 @@ namespace VAdvantage.Process
                     }
                 }
                 // Update setting as Container Applicable into the system
-                no = DB.ExecuteQuery("UPDATE AD_SysConfig SET VALUE = 'Y' WHERE Name='PRODUCT_CONTAINER_APPLICABLE'", null, Get_Trx());
+                no = DB.ExecuteQuery("UPDATE VAF_SysConfig SET VALUE = 'Y' WHERE Name='PRODUCT_CONTAINER_APPLICABLE'", null, Get_Trx());
             }
             else
             {
@@ -435,7 +435,7 @@ namespace VAdvantage.Process
         //                }
 
         //                // Update setting as Container Applicable into the system
-        //                no = DB.ExecuteQuery("UPDATE AD_SysConfig SET VALUE = 'Y' WHERE Name='PRODUCT_CONTAINER_APPLICABLE'", null, Get_Trx());
+        //                no = DB.ExecuteQuery("UPDATE VAF_SysConfig SET VALUE = 'Y' WHERE Name='PRODUCT_CONTAINER_APPLICABLE'", null, Get_Trx());
         //            }
         //            else
         //            {

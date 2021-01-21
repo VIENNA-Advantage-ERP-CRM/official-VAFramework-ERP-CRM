@@ -5623,12 +5623,12 @@ namespace VAdvantage.Model
             String sql = "SELECT d.HasCharges,'N',d.IsDocNoControlled,"
                 + "s.CurrentNext, d.DocBaseType "
                 /*//jz outer join
-                + "FROM C_DocType d, AD_Sequence s "
+                + "FROM C_DocType d, VAF_Record_Seq s "
                 + "WHERE C_DocType_ID=?"		//	1
-                + " AND d.DocNoSequence_ID=s.AD_Sequence_ID(+)";
+                + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
                 */
                 + "FROM C_DocType d "
-                + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
+                + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
                 + "WHERE C_DocType_ID=" + C_DocType_ID;		//	1
 
             IDataReader dr = null;

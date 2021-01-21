@@ -213,7 +213,7 @@ namespace VAdvantage.DataBase
         /// <summary>
         ///Default sql use to test whether a connection is still valid
         /// </summary>
-        // static String DEFAULT_CONN_TEST_SQL = "SELECT Version FROM AD_System";
+        // static String DEFAULT_CONN_TEST_SQL = "SELECT Version FROM VAF_System";
 
         /// <summary>
         ///// Is the database have sql extension that return a subset of the query result

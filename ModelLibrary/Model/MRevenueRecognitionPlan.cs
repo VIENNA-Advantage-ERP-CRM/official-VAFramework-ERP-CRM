@@ -100,7 +100,7 @@ namespace VAdvantage.Model
                     FROM	C_InvoiceLine 
                     WHERE 	C_InvoiceLine_ID=:new.C_InvoiceLine_ID;
                     --	Insert
-                    AD_Sequence_Next ('C_ServiceLevel', :new.VAF_Client_ID, v_NextNo);
+                    VAF_Record_Seq_Next ('C_ServiceLevel', :new.VAF_Client_ID, v_NextNo);
                     INSERT INTO C_ServiceLevel
                         (C_ServiceLevel_ID, C_RevenueRecognition_Plan_ID,
                         VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,

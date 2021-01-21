@@ -141,21 +141,21 @@ StringBuilder sb = new StringBuilder ("X_C_PaymentProcessor[").Append(Get_ID()).
 return sb.ToString();
 }
 
-/** AD_Sequence_ID VAF_Control_Ref_ID=128 */
-public static int AD_SEQUENCE_ID_VAF_Control_Ref_ID=128;
+/** VAF_Record_Seq_ID VAF_Control_Ref_ID=128 */
+public static int VAF_RECORD_SEQ_ID_VAF_Control_Ref_ID=128;
 /** Set Sequence.
-@param AD_Sequence_ID Document Sequence */
-public void SetAD_Sequence_ID (int AD_Sequence_ID)
+@param VAF_Record_Seq_ID Document Sequence */
+public void SetVAF_Record_Seq_ID (int VAF_Record_Seq_ID)
 {
-if (AD_Sequence_ID <= 0) Set_Value ("AD_Sequence_ID", null);
+if (VAF_Record_Seq_ID <= 0) Set_Value ("VAF_Record_Seq_ID", null);
 else
-Set_Value ("AD_Sequence_ID", AD_Sequence_ID);
+Set_Value ("VAF_Record_Seq_ID", VAF_Record_Seq_ID);
 }
 /** Get Sequence.
 @return Document Sequence */
-public int GetAD_Sequence_ID() 
+public int GetVAF_Record_Seq_ID() 
 {
-Object ii = Get_Value("AD_Sequence_ID");
+Object ii = Get_Value("VAF_Record_Seq_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -99,9 +99,9 @@ namespace VAdvantage.Process
                 int no = Util.GetValueOfInt(DB.ExecuteQuery(insert.ToString(), null, Get_Trx()));
                 if (no > 0)
                 {
-                    // Update curentNext in AD_Sequence 
+                    // Update curentNext in VAF_Record_Seq 
                     C_ProfitLossLines_ID += (no + 1);
-                    String updateSQL = "UPDATE AD_Sequence SET  CurrentNext = " + C_ProfitLossLines_ID + ", CurrentNextSys = " + C_ProfitLossLines_ID + " "
+                    String updateSQL = "UPDATE VAF_Record_Seq SET  CurrentNext = " + C_ProfitLossLines_ID + ", CurrentNextSys = " + C_ProfitLossLines_ID + " "
                     + " WHERE Upper(Name)=Upper('C_ProfitLossLines')"
                     + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' ";
                     DB.ExecuteQuery(updateSQL, null, Get_Trx());

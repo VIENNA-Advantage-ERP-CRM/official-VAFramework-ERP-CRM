@@ -21,15 +21,15 @@ namespace VAdvantage.Classes
     class VTreeMaintenance
     {
         Context ctx = Utility.Env.GetContext();
-        private int _AD_Tree_Id;
+        private int _VAF_TreeInfo_Id;
         private string _TreeType;
         private string nodeId;
 
 
-        public int AD_Tree_Id
+        public int VAF_TreeInfo_Id
         {
-            set { _AD_Tree_Id = value; }
-            get { return _AD_Tree_Id; }
+            set { _VAF_TreeInfo_Id = value; }
+            get { return _VAF_TreeInfo_Id; }
 
         }
         public string TreeType
@@ -52,8 +52,8 @@ namespace VAdvantage.Classes
         /// <returns>DataSet</returns>
         public DataSet GetClientTrees()
         {
-            //string sqlCmd = "select Name,AD_Tree_Id +'|'+treetype+'|'+IsAllNodes as AD_Tree_Id from Ad_Tree where VAF_Client_Id="+ctx.GetVAF_Client_ID()+" and TreeType in('MM','OO') order by Name";
-            string sqlCmd = "select Name,AD_Tree_Id ||'|'||treetype || '|'||IsAllNodes as AD_Tree_Id from Ad_Tree where VAF_Client_Id=" + ctx.GetVAF_Client_ID() + " and TreeType in('MM','OO') order by Name";
+            //string sqlCmd = "select Name,VAF_TreeInfo_Id +'|'+treetype+'|'+IsAllNodes as VAF_TreeInfo_Id from VAF_TreeInfo where VAF_Client_Id="+ctx.GetVAF_Client_ID()+" and TreeType in('MM','OO') order by Name";
+            string sqlCmd = "select Name,VAF_TreeInfo_Id ||'|'||treetype || '|'||IsAllNodes as VAF_TreeInfo_Id from VAF_TreeInfo where VAF_Client_Id=" + ctx.GetVAF_Client_ID() + " and TreeType in('MM','OO') order by Name";
             return ExecuteQuery.ExecuteDataset(sqlCmd);
         }
 
@@ -95,15 +95,15 @@ namespace VAdvantage.Classes
             int iCount=0;
             StringBuilder sqlCmd = new StringBuilder();
 
-            string tableName="AD_TREENODEMM";
+            string tableName="VAF_TreeInfoChildMenu";
             //check tree type
              if (TreeType == "OO")
             {
-                tableName= "AD_TREENODE";
+                tableName= "VAF_TreeInfoChild";
             }
            
-                 sqlCmd = new StringBuilder("insert into " + tableName + " (VAF_CLIENT_ID,VAF_ORG_ID,AD_TREE_ID,CREATEDBY," +
-                             "NODE_ID,SEQNO,PARENT_ID,UPDATEDBY) select " + ctx.GetVAF_Client_ID() + ",0," + _AD_Tree_Id + ",100,");
+                 sqlCmd = new StringBuilder("insert into " + tableName + " (VAF_CLIENT_ID,VAF_ORG_ID,VAF_TreeInfo_ID,CREATEDBY," +
+                             "NODE_ID,SEQNO,PARENT_ID,UPDATEDBY) select " + ctx.GetVAF_Client_ID() + ",0," + _VAF_TreeInfo_Id + ",100,");
 
             //if tree type MM then select from table VAF_MenuConfig else from VAF_Org
                      if (TreeType == "MM")
@@ -117,7 +117,7 @@ namespace VAdvantage.Classes
             //.....................................................
             //add which are not in tree
                      sqlCmd.Append(" not in(select NODE_ID from " +
-                           "" + tableName + " where AD_TREE_ID=" + _AD_Tree_Id + ")");
+                           "" + tableName + " where VAF_TreeInfo_ID=" + _VAF_TreeInfo_Id + ")");
                     
             //if nodeId is not blank i.e request is to add particular row
                      if (nodeId != "" && nodeId != null)
@@ -147,14 +147,14 @@ namespace VAdvantage.Classes
             //check tree type
             if (_TreeType == "MM")
             {
-                sqlCmd.Append(" AD_TREENODEMM ");
+                sqlCmd.Append(" VAF_TreeInfoChildMenu ");
             }
             else if (_TreeType == "OO")
             {
-                sqlCmd.Append(" AD_TREENODE ");
+                sqlCmd.Append(" VAF_TreeInfoChild ");
             }
 
-            sqlCmd.Append("where Ad_Tree_Id=" + _AD_Tree_Id + "");
+            sqlCmd.Append("where VAF_TreeInfo_Id=" + _VAF_TreeInfo_Id + "");
             
             //if tree type is MM then dont delete TreeMaintainence  node
             if (_TreeType == "MM")

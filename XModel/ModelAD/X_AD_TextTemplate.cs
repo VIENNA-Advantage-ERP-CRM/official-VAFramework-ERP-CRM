@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_TextTemplate
+/** Generated Model for VAF_TextTemplate
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_TextTemplate : PO
+public class X_VAF_TextTemplate : PO
 {
-public X_AD_TextTemplate (Context ctx, int AD_TextTemplate_ID, Trx trxName) : base (ctx, AD_TextTemplate_ID, trxName)
+public X_VAF_TextTemplate (Context ctx, int VAF_TextTemplate_ID, Trx trxName) : base (ctx, VAF_TextTemplate_ID, trxName)
 {
-/** if (AD_TextTemplate_ID == 0)
+/** if (VAF_TextTemplate_ID == 0)
 {
-SetAD_TextTemplate_ID (0);
+SetVAF_TextTemplate_ID (0);
 }
  */
 }
-public X_AD_TextTemplate (Ctx ctx, int AD_TextTemplate_ID, Trx trxName) : base (ctx, AD_TextTemplate_ID, trxName)
+public X_VAF_TextTemplate (Ctx ctx, int VAF_TextTemplate_ID, Trx trxName) : base (ctx, VAF_TextTemplate_ID, trxName)
 {
-/** if (AD_TextTemplate_ID == 0)
+/** if (VAF_TextTemplate_ID == 0)
 {
-SetAD_TextTemplate_ID (0);
+SetVAF_TextTemplate_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetAD_TextTemplate_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TextTemplate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TextTemplate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_AD_TextTemplate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TextTemplate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TextTemplate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_AD_TextTemplate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TextTemplate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_TextTemplate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_TextTemplate()
+static X_VAF_TextTemplate()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1280389047750L;
 public static int Table_ID;
  // =1000003;
 
-/** TableName=AD_TextTemplate */
-public static String Table_Name="AD_TextTemplate";
+/** TableName=VAF_TextTemplate */
+public static String Table_Name="VAF_TextTemplate";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -107,21 +107,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_TextTemplate[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_TextTemplate[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set AD_TextTemplate_ID.
-@param AD_TextTemplate_ID AD_TextTemplate_ID */
-public void SetAD_TextTemplate_ID (int AD_TextTemplate_ID)
+/** Set VAF_TextTemplate_ID.
+@param VAF_TextTemplate_ID VAF_TextTemplate_ID */
+public void SetVAF_TextTemplate_ID (int VAF_TextTemplate_ID)
 {
-if (AD_TextTemplate_ID < 1) throw new ArgumentException ("AD_TextTemplate_ID is mandatory.");
-Set_ValueNoCheck ("AD_TextTemplate_ID", AD_TextTemplate_ID);
+if (VAF_TextTemplate_ID < 1) throw new ArgumentException ("VAF_TextTemplate_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TextTemplate_ID", VAF_TextTemplate_ID);
 }
-/** Get AD_TextTemplate_ID.
-@return AD_TextTemplate_ID */
-public int GetAD_TextTemplate_ID() 
+/** Get VAF_TextTemplate_ID.
+@return VAF_TextTemplate_ID */
+public int GetVAF_TextTemplate_ID() 
 {
-Object ii = Get_Value("AD_TextTemplate_ID");
+Object ii = Get_Value("VAF_TextTemplate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -342,10 +342,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Config("Not Found Patent ElementValue=" + no);
             //
             sql = new StringBuilder("SELECT i.ParentElementValue_ID, i.I_ElementValue_ID,"
-                + " e.AD_Tree_ID, i.C_ElementValue_ID, i.Value||'-'||i.Name AS Info "
+                + " e.VAF_TreeInfo_ID, i.C_ElementValue_ID, i.Value||'-'||i.Name AS Info "
                 + "FROM I_ElementValue i"
                 + " INNER JOIN C_Element e ON (i.C_Element_ID=e.C_Element_ID) "
-                + "WHERE i.C_ElementValue_ID IS NOT NULL AND e.AD_Tree_ID IS NOT NULL"
+                + "WHERE i.C_ElementValue_ID IS NOT NULL AND e.VAF_TreeInfo_ID IS NOT NULL"
                 + " AND i.ParentElementValue_ID IS NOT NULL"
                 + " AND i.I_IsImported='Y' AND Processed='N' AND i.VAF_Client_ID=").Append(_VAF_Client_ID);
             int noParentUpdate = 0;
@@ -354,8 +354,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql.ToString(), Get_TrxName());
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 //
-                String updateSQL = "UPDATE AD_TreeNode SET Parent_ID=@param1, SeqNo=@param2 "
-                    + "WHERE AD_Tree_ID=@param3 AND Node_ID=@param4";
+                String updateSQL = "UPDATE VAF_TreeInfoChild SET Parent_ID=@param1, SeqNo=@param2 "
+                    + "WHERE VAF_TreeInfo_ID=@param3 AND Node_ID=@param4";
                 //PreparedStatement updateStmt = DataBase.prepareStatement(updateSQL, Get_TrxName());
                 SqlParameter[] param = new SqlParameter[4];
                 //IDataReader idr=null;

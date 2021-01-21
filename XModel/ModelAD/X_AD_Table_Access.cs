@@ -11,28 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAF_TableView_Access
+/** Generated Model for VAF_TableView_Rights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAF_TableView_Access : PO
+public class X_VAF_TableView_Rights : PO
 {
-public X_VAF_TableView_Access (Context ctx, int VAF_TableView_Access_ID, Trx trxName) : base (ctx, VAF_TableView_Access_ID, trxName)
+public X_VAF_TableView_Rights (Context ctx, int VAF_TableView_Rights_ID, Trx trxName) : base (ctx, VAF_TableView_Rights_ID, trxName)
 {
-/** if (VAF_TableView_Access_ID == 0)
-{
-SetVAF_Role_ID (0);
-SetVAF_TableView_ID (0);
-SetAccessTypeRule (null);	// A
-SetIsCanExport (false);
-SetIsCanReport (false);
-SetIsExclude (true);	// Y
-SetIsReadOnly (false);
-}
- */
-}
-public X_VAF_TableView_Access (Ctx ctx, int VAF_TableView_Access_ID, Trx trxName) : base (ctx, VAF_TableView_Access_ID, trxName)
-{
-/** if (VAF_TableView_Access_ID == 0)
+/** if (VAF_TableView_Rights_ID == 0)
 {
 SetVAF_Role_ID (0);
 SetVAF_TableView_ID (0);
@@ -44,12 +30,26 @@ SetIsReadOnly (false);
 }
  */
 }
+public X_VAF_TableView_Rights (Ctx ctx, int VAF_TableView_Rights_ID, Trx trxName) : base (ctx, VAF_TableView_Rights_ID, trxName)
+{
+/** if (VAF_TableView_Rights_ID == 0)
+{
+SetVAF_Role_ID (0);
+SetVAF_TableView_ID (0);
+SetAccessTypeRule (null);	// A
+SetIsCanExport (false);
+SetIsCanReport (false);
+SetIsExclude (true);	// Y
+SetIsReadOnly (false);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_TableView_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TableView_Rights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_VAF_TableView_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_TableView_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TableView_Rights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_VAF_TableView_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_VAF_TableView_Access (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_TableView_Rights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAF_TableView_Access()
+static X_VAF_TableView_Rights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389047609L;
 public static int Table_ID;
  // =565;
 
-/** TableName=VAF_TableView_Access */
-public static String Table_Name="VAF_TableView_Access";
+/** TableName=VAF_TableView_Rights */
+public static String Table_Name="VAF_TableView_Rights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAF_TableView_Access[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_TableView_Rights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.

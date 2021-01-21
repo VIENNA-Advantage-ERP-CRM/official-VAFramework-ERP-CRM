@@ -18,17 +18,17 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MSchedulerRecipient : X_AD_SchedulerRecipient
+    public class MSchedulerRecipient : X_VAF_JobRun_Recipient
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_SchedulerRecipient_ID">scheduler id</param>
+        /// <param name="VAF_JobRun_Recipient_ID">scheduler id</param>
         /// <param name="trxName">optional trans name</param>
-        public MSchedulerRecipient(Ctx ctx, int AD_SchedulerRecipient_ID,
+        public MSchedulerRecipient(Ctx ctx, int VAF_JobRun_Recipient_ID,
             Trx trxName)
-            : base(ctx, AD_SchedulerRecipient_ID, trxName)
+            : base(ctx, VAF_JobRun_Recipient_ID, trxName)
         {
             
         }	//	MSchedulerRecipient

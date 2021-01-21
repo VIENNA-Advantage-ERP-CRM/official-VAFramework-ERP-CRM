@@ -2306,7 +2306,7 @@ namespace VAdvantage.Model
                         }
 
                         //p_ctx.SetContext("VAF_AlterLogBatch", "");
-
+                        adLog.Replace("TO_DATE", "TO_TIMESTAMP");
                         no = DB.ExecuteQuery(adLog.ToString(), null, _trx);
                         adLog.Clear();
                     }
@@ -2677,6 +2677,7 @@ namespace VAdvantage.Model
 
                         //p_ctx.SetContext("VAF_AlterLogBatch", "");
                         //logbatch[session.GetAD_Session_ID()].Clear();
+                        adLog.Replace("TO_DATE", "TO_TIMESTAMP");
                         no = DB.ExecuteQuery(adLog.ToString(), null, _trx);
                         adLog.Clear();
                     }
@@ -3375,7 +3376,7 @@ namespace VAdvantage.Model
                     {
                         adLog.Append(" END; ");
                     }
-
+                    adLog.Replace("TO_DATE", "TO_TIMESTAMP");
                     no = DB.ExecuteQuery(adLog.ToString(), null, null);
                     adLog.Clear();
                 }

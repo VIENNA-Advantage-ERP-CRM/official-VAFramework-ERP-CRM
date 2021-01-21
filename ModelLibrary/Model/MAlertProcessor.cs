@@ -27,8 +27,8 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
-                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM VAF_AlertHandler WHERE VAF_AlertHandler_ID =" + dr["VAF_AlertHandler_ID"] + " )"));
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM VAF_Plan WHERE 
+                                                        VAF_Plan_ID = (SELECT VAF_Plan_ID FROM VAF_AlertHandler WHERE VAF_AlertHandler_ID =" + dr["VAF_AlertHandler_ID"] + " )"));
 
                     //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
                     if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
         {
             if (m_alerts != null && !reload)
                 return m_alerts;
-            String sql = "SELECT * FROM AD_Alert "
+            String sql = "SELECT * FROM VAF_Alert "
                 + "WHERE VAF_AlertHandler_ID=@VAF_AlertHandler_ID AND IsActive='Y'";
             List<MAlert> list = new List<MAlert>();
             try

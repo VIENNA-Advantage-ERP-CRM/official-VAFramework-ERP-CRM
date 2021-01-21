@@ -19,14 +19,14 @@ namespace VIS.Helpers
             List<ShortcutItemModel> lst = new List<ShortcutItemModel>();
 
 
-            bool isBaseLang = Env.IsBaseLanguage(ctx, "AD_Shortcut");
+            bool isBaseLang = Env.IsBaseLanguage(ctx, "VAF_Shortcut");
 
 
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             StringBuilder sql = new StringBuilder(@" SELECT o.Name AS Name, 
                                     o.VAF_Image_ID AS VAF_Image_ID,
                                   o.Classname AS ClassName  ,
-                                   o.AD_ShortCut_ID,
+                                   o.VAF_Shortcut_ID,
                                   o.Action  AS Action   ,
                                   (
                                   CASE
@@ -50,13 +50,13 @@ namespace VIS.Helpers
                                   CASE
                                     WHEN
                                      (SELECT COUNT(*)
-                                       FROM AD_Shortcut i
-                                      WHERE i.Parent_ID = o.AD_Shortcut_ID and IsChild = 'Y') >0
+                                       FROM VAF_Shortcut i
+                                      WHERE i.Parent_ID = o.VAF_Shortcut_ID and IsChild = 'Y') >0
                                     THEN 'Y'
                                     ELSE 'N'
-                                  END) AS HasChild, o.AD_Shortcut_ID as ID,  o.Url as Url,
+                                  END) AS HasChild, o.VAF_Shortcut_ID as ID,  o.Url as Url,
                                   
-                                  (SELECT COUNT(*) FROM AD_ShortcutParameter WHERE AD_ShortCut_ID=o.AD_ShortCut_ID) as hasPara,");
+                                  (SELECT COUNT(*) FROM VAF_ShortcutParameter WHERE VAF_Shortcut_ID=o.VAF_Shortcut_ID) as hasPara,");
 
             if (isBaseLang)
             {
@@ -66,10 +66,10 @@ namespace VIS.Helpers
             {
                 sql.Append(" COALESCE(trl.Name,o.Name) as Name2");
             }
-            sql.Append(" FROM AD_Shortcut o ");
+            sql.Append(" FROM VAF_Shortcut o ");
             if (!isBaseLang)
             {
-                sql.Append(" INNER JOIN AD_Shortcut_Trl trl ON o.AD_Shortcut_ID = trl.AD_Shortcut_ID AND trl.VAF_Language =")
+                sql.Append(" INNER JOIN VAF_Shortcut_TL trl ON o.VAF_Shortcut_ID = trl.VAF_Shortcut_ID AND trl.VAF_Language =")
                 .Append("'").Append(Env.GetVAF_Language(ctx)).Append("'");
             }
 
@@ -159,7 +159,7 @@ namespace VIS.Helpers
 
                 if (Util.GetValueOfInt(dr["HASPARA"]) > 0)
                 {
-                    string strSql = "SELECT parametername, parametervalue,ISENCRYPTED FROM AD_ShortCutParameter WHERE IsActive='Y' AND AD_ShortCut_ID=" + Util.GetValueOfInt(dr["AD_SHORTCUT_ID"]);
+                    string strSql = "SELECT parametername, parametervalue,ISENCRYPTED FROM VAF_ShortcutParameter WHERE IsActive='Y' AND VAF_Shortcut_ID=" + Util.GetValueOfInt(dr["VAF_Shortcut_ID"]);
                     IDataReader drPara = null;
                     try
                     {
@@ -268,12 +268,12 @@ namespace VIS.Helpers
             dr.Close();
         }
 
-        public static List<ShortcutItemModel> GetSettingItems(Ctx ctx, int AD_Shortcut_ID)
+        public static List<ShortcutItemModel> GetSettingItems(Ctx ctx, int VAF_Shortcut_ID)
         {
 
             List<ShortcutItemModel> lst = new List<ShortcutItemModel>();
 
-            bool isBaseLang = Env.IsBaseLanguage(ctx, "AD_Shortcut");
+            bool isBaseLang = Env.IsBaseLanguage(ctx, "VAF_Shortcut");
 
 
             string sql = @"SELECT o.Name AS Name,
@@ -296,22 +296,22 @@ namespace VIS.Helpers
                                     WHEN o.action ='F'
                                     THEN o.ad_workflow_id
                                     ELSE 0
-                                  END ) AS ActionID, o.ad_shortcut_id as ID,  o.Url as Url, 
-                                (SELECT COUNT(*) FROM AD_ShortcutParameter WHERE AD_ShortCut_ID=o.AD_ShortCut_ID) as hasPara,";
+                                  END ) AS ActionID, o.VAF_Shortcut_id as ID,  o.Url as Url, 
+                                (SELECT COUNT(*) FROM VAF_ShortcutParameter WHERE VAF_Shortcut_ID=o.VAF_Shortcut_ID) as hasPara,";
 
             if (isBaseLang)
             {
-                sql += " o.DisplayName as Name2 FROM AD_Shortcut o ";
+                sql += " o.DisplayName as Name2 FROM VAF_Shortcut o ";
             }
             else
             {
-                sql += " trl.Name as Name2 FROM AD_Shortcut o INNER JOIN AD_Shortcut_Trl trl ON o.AD_Shortcut_ID = trl.AD_Shortcut_ID "
+                sql += " trl.Name as Name2 FROM VAF_Shortcut o INNER JOIN VAF_Shortcut_TL trl ON o.VAF_Shortcut_ID = trl.VAF_Shortcut_ID "
                          + " AND trl.VAF_Language =  '" + Env.GetVAF_Language(ctx) + "' ";
             }
             sql += @" WHERE o.VAF_Client_ID = 0
                                   AND o.IsActive         ='Y'
                                   AND o.IsChild          = 'Y'
-                                 AND o.Parent_ID =  " + AD_Shortcut_ID + @"
+                                 AND o.Parent_ID =  " + VAF_Shortcut_ID + @"
                         AND (o.AD_Window_ID IS NULL OR EXISTS (SELECT * FROM AD_Window_Access w WHERE w.AD_Window_ID=o.AD_Window_ID AND w.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         AND (o.VAF_Page_ID IS NULL OR EXISTS (SELECT * FROM VAF_Page_Rights f WHERE f.VAF_Page_ID=o.VAF_Page_ID AND f.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))
                         AND (o.VAF_Job_ID IS NULL OR EXISTS (SELECT * FROM VAF_Job_Rights p WHERE p.VAF_Job_ID=o.VAF_Job_ID AND p.IsReadWrite='Y' and VAF_Role_ID=" + ctx.GetVAF_Role_ID() + @"))

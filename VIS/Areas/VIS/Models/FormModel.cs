@@ -427,7 +427,8 @@ namespace VIS.Models
                                 KeyNamePair pp = new KeyNamePair(windowList[i].AD_Window_ID, windowList[i].windowName);
                                 zoomList.Add(pp);
                                 // Use first window found. Ideally there should be just one matching
-                                break;
+                                //this break is remove by karan on 18 jan 2021, to show a record which can exist in more than one window.
+                                //break;
                             }
                         }
                     }
@@ -672,14 +673,14 @@ namespace VIS.Models
         }
 
 
-        public string UpdateTree(List<int> oldParentChildren, List<int> newParentChildren, int oldId, int newId, int AD_Tree_ID, string tableName)
+        public string UpdateTree(List<int> oldParentChildren, List<int> newParentChildren, int oldId, int newId, int VAF_TreeInfo_ID, string tableName)
         {
             string sql;
             for (var i = 0; i < oldParentChildren.Count; i++)
             {
                 //StringBuilder sql = new StringBuilder("UPDATE ");
                 sql = "UPDATE " + tableName + " SET Parent_ID=" + oldId + ", SeqNo=" + i + ", Updated=SysDate" +
-                                  " WHERE AD_Tree_ID=" + AD_Tree_ID + " AND Node_ID=" + oldParentChildren[i];
+                                  " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + " AND Node_ID=" + oldParentChildren[i];
                 //log.Fine(sql.ToString());
                 DB.ExecuteQuery(sql);
             }
@@ -692,7 +693,7 @@ namespace VIS.Models
                 {
                     sql = "UPDATE " + tableName + " SET Parent_ID=" + newId +
                     ", SeqNo=" + i + ", Updated=SysDate" +
-                     " WHERE AD_Tree_ID=" + AD_Tree_ID +
+                     " WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID +
                       " AND Node_ID=" + newParentChildren[i];
                     DB.ExecuteQuery(sql);
                 }
@@ -1218,7 +1219,7 @@ namespace VIS.Models
         {
             List<dynamic> retObj = new List<dynamic>();
             string qry = " SELECT PrimaryColor, OnPrimaryColor, SecondaryColor, OnSecondaryColor " +
-                                " , IsDefault, AD_Theme_ID  FROM AD_Theme WHERE IsActive='Y'";
+                                " , IsDefault, VAF_Theme_ID  FROM VAF_Theme WHERE IsActive='Y'";
             DataSet ds = DB.ExecuteDataset(qry);
 
             if (ds != null && ds.Tables.Count > 0)
@@ -1226,7 +1227,7 @@ namespace VIS.Models
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     dynamic obj = new ExpandoObject();
-                    obj.Id = Util.GetValueOfString(dr["AD_Theme_ID"]);
+                    obj.Id = Util.GetValueOfString(dr["VAF_Theme_ID"]);
                     obj.PColor = Util.GetValueOfString(dr["PrimaryColor"]);
                     obj.OnPColor = Util.GetValueOfString(dr["OnPrimaryColor"]);
                     obj.SColor = Util.GetValueOfString(dr["SecondaryColor"]);

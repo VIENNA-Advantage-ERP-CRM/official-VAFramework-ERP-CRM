@@ -65,7 +65,7 @@ namespace VAdvantage.Process
         private int _VAF_Client_ID = 0;
         private String _VAF_Language = null;
 
-        internal static List<String> lstTableHasDisplayCol = new List<string>() { "AD_WINDOW", "AD_FORM", "AD_SHORTCUT" };
+        internal static List<String> lstTableHasDisplayCol = new List<string>() { "AD_WINDOW", "AD_FORM", "VAF_Shortcut" };
 
         //XmlDeclaration xmlDec;
 

@@ -1603,7 +1603,7 @@ namespace VAdvantage.Process
             Execute("Synchronize Table with Element", sql, "  rows updated: ");
 
             /*
-            UPDATE VAF_TableView_Trl tt
+            UPDATE VAF_TableView_TL tt
               SET Name = (SELECT e.Name 
                 FROM VAF_TableView t INNER JOIN VAF_ColumnDic ex ON (t.TableName||'_ID'=ex.ColumnName)
                   INNER JOIN VAF_ColumnDic_TL e ON (ex.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID)
@@ -1615,7 +1615,7 @@ namespace VAdvantage.Process
                   AND tt.Name<>e.Name);
             DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);
             */
-            sql = "    UPDATE VAF_TableView_Trl tt " +
+            sql = "    UPDATE VAF_TableView_TL tt " +
                     "      SET Name = (SELECT e.Name " +
                     "        FROM VAF_TableView t INNER JOIN VAF_ColumnDic ex ON (t.TableName||'_ID'=ex.ColumnName) " +
                     "          INNER JOIN VAF_ColumnDic_TL e ON (ex.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID) " +
@@ -1654,7 +1654,7 @@ namespace VAdvantage.Process
             Execute("Synchronize Trl Table Name + Element", sql, "  rows updated: ");
 
             /*
-    UPDATE VAF_TableView_Trl tt
+    UPDATE VAF_TableView_TL tt
       SET Name = (SELECT e.Name || ' **'
         FROM VAF_TableView t INNER JOIN VAF_ColumnDic ex ON (SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=ex.ColumnName)
           INNER JOIN VAF_ColumnDic_TL e ON (ex.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID)
@@ -1666,7 +1666,7 @@ namespace VAdvantage.Process
           AND t.TableName LIKE '%_Trl'
           AND tt.Name<>e.Name);
     DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);			 */
-            sql = "    UPDATE VAF_TableView_Trl tt " +
+            sql = "    UPDATE VAF_TableView_TL tt " +
                     "      SET Name = (SELECT e.Name || ' **' " +
                     "        FROM VAF_TableView t INNER JOIN VAF_ColumnDic ex ON (SUBSTR(t.TableName,1,LENGTH(t.TableName)-4)||'_ID'=ex.ColumnName) " +
                     "          INNER JOIN VAF_ColumnDic_TL e ON (ex.VAF_ColumnDic_ID=e.VAF_ColumnDic_ID) " +
@@ -1677,7 +1677,7 @@ namespace VAdvantage.Process
                     "        WHERE tt.VAF_TableView_ID=t.VAF_TableView_ID AND tt.VAF_Language=e.VAF_Language " +
                     "          AND t.TableName LIKE '%_Trl' " +
                     "          AND tt.Name<>e.Name)";
-            Execute("Synchronize VAF_TableView_Trl", sql, "  rows updated: ");
+            Execute("Synchronize VAF_TableView_TL", sql, "  rows updated: ");
 
             sql = "UPDATE VAF_QuickSearchColumn ic " +
         "     SET Name = " +

@@ -154,7 +154,7 @@
         // get settings
         function init() {
                                                                                                
-            VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Home/GetSettingItems", { "AD_Shortcut_ID": id }, function (data) {
+            VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Home/GetSettingItems", { "VAF_Shortcut_ID": id }, function (data) {
                 Items = data;
                 var itm = null;
                 var html = ['<ul class="vis-userLinks-ListMenu">'];

@@ -25,12 +25,12 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MSystem : X_AD_System
+    public class MSystem : X_VAF_System
     {
         ////System - cached					
         private static MSystem _system = null;
         /**	Cache					*/
-        private static CCache<int, MSystem> cache = new CCache<int, MSystem>("AD_System", 30, 60);
+        private static CCache<int, MSystem> cache = new CCache<int, MSystem>("VAF_System", 30, 60);
 
         /// <summary>
         /// Load System Record
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
             if (_system == null)
             {
 
-                String sql = "SELECT * FROM AD_System ORDER BY AD_System_ID";	//	0 first
+                String sql = "SELECT * FROM VAF_System ORDER BY VAF_System_ID";	//	0 first
                 IDataReader idr = null;
                 try
                 {
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
                     + " ||'c'||(SELECT " + count + " FROM VAF_Column WHERE EntityType NOT IN ('C','D'))"
                     + " ||'t'||(SELECT " + count + " FROM VAF_TableView WHERE EntityType NOT IN ('C','D'))"
                     + " ||'f'||(SELECT " + count + " FROM VAF_Field WHERE EntityType NOT IN ('C','D'))"
-                    + " FROM AD_System";
+                    + " FROM VAF_System";
                 IDataReader idr = null;
                 try
                 {
@@ -604,7 +604,7 @@ namespace VAdvantage.Model
                .Append("UserName = '").Append(GetUserName()).Append("',")
                .Append("Password = '").Append(GetPassword()).Append("',")
                .Append("Summary = '").Append(GetSummary()).Append("'")
-               .Append(" WHERE AD_System_ID = ").Append(GetAD_System_ID());
+               .Append(" WHERE VAF_System_ID = ").Append(GetVAF_System_ID());
 
             log.Fine(sql.ToString());
 

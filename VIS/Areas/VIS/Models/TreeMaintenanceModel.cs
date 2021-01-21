@@ -35,13 +35,13 @@ namespace VIS.Models
         public List<TreeDataForCombo> TreeDataForCombo()
         {
             List<TreeDataForCombo> obj = new List<TreeDataForCombo>();
-            //string sql = "SELECT Name,description,treetype,isallnodes,AD_Tree_ID,VAF_TableView_ID FROM AD_Tree WHERE TreeType NOT IN ('BB','PC') ORDER BY AD_Tree_ID DESC";
-            string sql = "SELECT Name,description,treetype,isallnodes,AD_Tree_ID,VAF_TableView_ID FROM AD_Tree WHERE TreeType NOT IN ('BB','PC' ,'U1','U2','U3','U4','AY','CC','CT','CM','CS') AND IsActive='Y' ORDER BY AD_Tree_ID DESC";
+            //string sql = "SELECT Name,description,treetype,isallnodes,VAF_TreeInfo_ID,VAF_TableView_ID FROM VAF_TreeInfo WHERE TreeType NOT IN ('BB','PC') ORDER BY VAF_TreeInfo_ID DESC";
+            string sql = "SELECT Name,description,treetype,isallnodes,VAF_TreeInfo_ID,VAF_TableView_ID FROM VAF_TreeInfo WHERE TreeType NOT IN ('BB','PC' ,'U1','U2','U3','U4','AY','CC','CT','CM','CS') AND IsActive='Y' ORDER BY VAF_TreeInfo_ID DESC";
 
-            //            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "AD_Tree", true, true);
+            //            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_TreeInfo", true, true);
 
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "AD_Tree", true, true);
-            //            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "AD_Tree", true, false);
+            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_TreeInfo", true, true);
+            //            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_TreeInfo", true, false);
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
 
@@ -52,7 +52,7 @@ namespace VIS.Models
                     obj.Add(new TreeDataForCombo()
                     {
                         Name = System.Net.WebUtility.HtmlDecode(Convert.ToString(ds.Tables[0].Rows[i]["Name"])),
-                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["AD_Tree_ID"]),
+                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TreeInfo_ID"]),
                         TreeType = Convert.ToString(ds.Tables[0].Rows[i]["treetype"]),
                         IsAllNodes = Convert.ToString(ds.Tables[0].Rows[i]["isallnodes"]),
                     });
@@ -61,12 +61,12 @@ namespace VIS.Models
             return obj;
         }
 
-        public List<AllMenuData> LoadMenuData(Ctx _ctx, int pageLength, int pageNo, int AD_Tree_ID, string searchtext, string demandsMenu)
+        public List<AllMenuData> LoadMenuData(Ctx _ctx, int pageLength, int pageNo, int VAF_TreeInfo_ID, string searchtext, string demandsMenu)
         {
             List<AllMenuData> obj = new List<AllMenuData>();
             List<int> getNodeID = new List<int>();
 
-            MTree tree = new MTree(_ctx, AD_Tree_ID, null);
+            MTree tree = new MTree(_ctx, VAF_TreeInfo_ID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -111,7 +111,7 @@ namespace VIS.Models
                 string qry = "";
                 DataSet qryds = new DataSet();
 
-                qry = "SELECT node_id FROM " + tree.GetNodeTableName() + " WHERE IsActive='Y' AND AD_Tree_ID=" + AD_Tree_ID;
+                qry = "SELECT node_id FROM " + tree.GetNodeTableName() + " WHERE IsActive='Y' AND VAF_TreeInfo_ID=" + VAF_TreeInfo_ID;
                 qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -200,7 +200,7 @@ namespace VIS.Models
             }
 
 
-            // //string unlinkdata = "select * from M_Product where IsActive='Y' AND M_Pr_ID NOT IN (select NOde_ID FROM AD_TreeNodePR where AD_Tree_ID=" + AD_Tree_ID + ")";
+            // //string unlinkdata = "select * from M_Product where IsActive='Y' AND M_Pr_ID NOT IN (select NOde_ID FROM VAF_TreeInfoChildProd where VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ")";
             if (demandsMenu == "Unlinked")
             {
                 string tbname = tree.GetNodeTableName();
@@ -209,7 +209,7 @@ namespace VIS.Models
 
                 if (searchtext != "")
                 {
-                    unlinkdata = "SELECT " + TableName + @"_ID, description,issummary,Name, ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name))";
+                    unlinkdata = "SELECT " + TableName + @"_ID, description,issummary,Name, ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ") ORDER BY upper(name))";
 
                     // unlinkdata = "SELECT * FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " ) ORDER BY upper(name))";
                     executeqry = @"SELECT * FROM (
@@ -222,7 +222,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    unlinkdata = "SELECT  " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name)";
+                    unlinkdata = "SELECT  " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " where VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ") ORDER BY upper(name)";
 
 
                     //unlinkdata = "SELECT * FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID NOT IN (SELECT Node_ID FROM " + tbname + " ) ORDER BY upper(name)";
@@ -270,7 +270,7 @@ namespace VIS.Models
 
                 if (searchtext != "")
                 {
-                    unlinkdata = "SELECT " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name))";
+                    unlinkdata = "SELECT " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE  UPPER(Name) Like '%" + searchtext.ToUpper() + @"%' AND  IsActive='Y' AND " + TableName + "_ID IN (SELECT Node_ID FROM " + tbname + " where VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ") ORDER BY upper(name))";
                     executeqry = @"SELECT * FROM 
                      
                               ( " + unlinkdata + @" )
@@ -282,7 +282,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    unlinkdata = "SELECT  " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID  IN (SELECT Node_ID FROM " + tbname + " where AD_Tree_ID=" + AD_Tree_ID + ") ORDER BY upper(name)";
+                    unlinkdata = "SELECT  " + TableName + @"_ID, description,issummary,Name,ROW_NUMBER () OVER (ORDER BY " + TableName + @"_ID) row_num FROM " + TableName + " WHERE IsActive='Y' AND " + TableName + "_ID  IN (SELECT Node_ID FROM " + tbname + " where VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ") ORDER BY upper(name)";
 
                     executeqry = @"SELECT * FROM 
                                       ( " + unlinkdata + @"  )
@@ -319,13 +319,13 @@ namespace VIS.Models
             return obj;
         }
 
-        public Tree BindTree(Ctx _ctx, string treeType, int AD_Tree_ID, string isAllNodes, bool isSummary)
+        public Tree BindTree(Ctx _ctx, string treeType, int VAF_TreeInfo_ID, string isAllNodes, bool isSummary)
         {
-            objVTree = new MTree(_ctx, AD_Tree_ID, true, false, null, isSummary);
+            objVTree = new MTree(_ctx, VAF_TreeInfo_ID, true, false, null, isSummary);
             List<SetTree> setttreeobj = new List<SetTree>();
 
             SetTree trees = new SetTree();
-            trees.AD_Tree_ID = AD_Tree_ID;
+            trees.VAF_TreeInfo_ID = VAF_TreeInfo_ID;
             setttreeobj.Add(trees);
 
             Tree obj1 = new Tree();
@@ -373,7 +373,7 @@ namespace VIS.Models
                     if (trees.items == null)
                     {
                         trees.ImageSource = "Areas/VIS/Images/folder.png";
-                        //trees.AD_Tree_ID = trees.AD_Tree_ID;
+                        //trees.VAF_TreeInfo_ID = trees.VAF_TreeInfo_ID;
                         trees.id = trees.id;
                         trees.IsSummary = trees.IsSummary;
                         trees.NodeID = trees.NodeID;
@@ -483,7 +483,7 @@ namespace VIS.Models
             string[] stringArray = dragMenuNodeID.Split(',');
             string[] existitem = IsExistItem.Split(',');
 
-            //string sqlqq = "SELECT Max(seqNo) FROM " + tree.GetNodeTableName() + " WHERE parent_ID=" + summaryid + " AND AD_Tree_ID=" + treeID;
+            //string sqlqq = "SELECT Max(seqNo) FROM " + tree.GetNodeTableName() + " WHERE parent_ID=" + summaryid + " AND VAF_TreeInfo_ID=" + treeID;
             //object maxID = DB.ExecuteScalar(sqlqq);
             //int j = 0;
             //if (maxID != null && maxID != DBNull.Value)
@@ -494,7 +494,7 @@ namespace VIS.Models
             List<int> matchwithchild = new List<int>();
 
 
-            string getchild = "SELECT node_id FROM " + tree.GetNodeTableName() + " WHERE parent_id=" + summaryid + " AND ad_tree_id=" + treeID;
+            string getchild = "SELECT node_id FROM " + tree.GetNodeTableName() + " WHERE parent_id=" + summaryid + " AND VAF_TreeInfo_id=" + treeID;
 
             getchild = MRole.GetDefault(_ctx).AddAccessSQL(getchild, tree.GetNodeTableName(), true, false);
             DataSet dsgetparent = DB.ExecuteDataset(getchild, null, null);
@@ -511,11 +511,11 @@ namespace VIS.Models
 
             if (summaryid == 0)
             {
-                DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE (Parent_ID=" + summaryid + " OR Parent_ID IS NULL) AND AD_Tree_ID=" + treeID);
+                DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE (Parent_ID=" + summaryid + " OR Parent_ID IS NULL) AND VAF_TreeInfo_ID=" + treeID);
             }
             else
             {
-                DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE Parent_ID=" + summaryid + " AND AD_Tree_ID=" + treeID);
+                DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE Parent_ID=" + summaryid + " AND VAF_TreeInfo_ID=" + treeID);
             }
 
 
@@ -710,13 +710,13 @@ namespace VIS.Models
         //            //            {
         //            //                qry = @"SELECT mp.name,mp.issummary, mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //            //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @" 
-        //            //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";                
+        //            //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";                
         //            //            }
         //            //            else
         //            //            {
         //            //                qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //            //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-        //            //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + parentID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";              
+        //            //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + parentID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";              
         //            //            }
 
         //            string qryPaging = "";
@@ -736,9 +736,9 @@ namespace VIS.Models
         //                    {
         //                        int clientID = _ctx.GetVAF_Client_ID();
 
-        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
+        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
 
-        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".parent_id    =0  AND " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
+        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".parent_id    =0  AND " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
         //                        qryPaging = @"  SELECT * FROM
         //                            
         //(SELECT *  FROM
@@ -749,7 +749,7 @@ namespace VIS.Models
         //        FROM " + TableName + @" mp
         //      INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         //        ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-        //      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
+        //      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
         // ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno " + @"
         //)
         //    WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
@@ -758,14 +758,14 @@ namespace VIS.Models
         //  )
         //ORDER BY   seqno";
         //                        //ORDER BY COALESCE(parent_id,-1),  seqno";
-        //                        //  WHERE mp.Isactive='Y' AND  " + tree.GetNodeTableName() + ".parent_id=0 AND " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
+        //                        //  WHERE mp.Isactive='Y' AND  " + tree.GetNodeTableName() + ".parent_id=0 AND " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
         //                        qry = qryPaging;
         //                    }
         //                    else
-        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND Upper(mp.name) LIKE upper('%" + searchChildNode + "%')  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND Upper(mp.name) LIKE upper('%" + searchChildNode + "%')  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
         //                        qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND Upper(mp.name) LIKE upper('%" + searchChildNode + "%') ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
+        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND Upper(mp.name) LIKE upper('%" + searchChildNode + "%') ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
 
 
         //                        qryPaging = @"SELECT * FROM (
@@ -788,10 +788,10 @@ namespace VIS.Models
         //                    {
         //                        //                qry = @"SELECT mp.name,mp.issummary, mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //                        //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @" 
-        //                        //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+        //                        //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
         //                        int clientID = _ctx.GetVAF_Client_ID();
-        //                        //WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL)  AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
-        //                        //WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".parent_id    =0     AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
+        //                        //WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL)  AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
+        //                        //WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".parent_id    =0     AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
         //                        qryPaging = @"  SELECT * FROM
         //                            
         //(SELECT *  FROM
@@ -802,7 +802,7 @@ namespace VIS.Models
         //        FROM " + TableName + @" mp
         //      INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         //        ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-        //     WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL)  AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"
+        //     WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL)  AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"
         // ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno " + @"
         //)
         //    WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
@@ -814,10 +814,10 @@ namespace VIS.Models
         //                        qry = qryPaging;
         //                    }
         //                    else
-        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE mp.Isactive='Y' AND  " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE mp.Isactive='Y' AND  " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
         //                        qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
+        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
 
 
         //                        qryPaging = @"SELECT * FROM (
@@ -844,10 +844,10 @@ namespace VIS.Models
         //                    {
         //                        //                qry = @"SELECT mp.name,mp.issummary, mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //                        //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @" 
-        //                        //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+        //                        //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
         //                        int clientID = _ctx.GetVAF_Client_ID();
-        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
-        //                        //  WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  " + tree.GetNodeTableName() + ".parent_id    =0    AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
+        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
+        //                        //  WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  " + tree.GetNodeTableName() + ".parent_id    =0    AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
         //                        qryPaging = @"  SELECT * FROM
         //                            
         //(SELECT *  FROM
@@ -858,7 +858,7 @@ namespace VIS.Models
         //        FROM " + TableName + @" mp
         //      INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         //        ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-        //    WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"
+        //    WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"
         // ORDER BY   COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno " + @"
         //)
         //    WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
@@ -870,10 +870,10 @@ namespace VIS.Models
         //                        qry = qryPaging;
         //                    }
         //                    else
-        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
         //                        qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N'  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')     AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
+        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N'  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')     AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
 
 
         //                        qryPaging = @"SELECT * FROM (
@@ -894,10 +894,10 @@ namespace VIS.Models
         //                    {
         //                        //                qry = @"SELECT mp.name,mp.issummary, mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //                        //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @" 
-        //                        //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+        //                        //                           ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
         //                        int clientID = _ctx.GetVAF_Client_ID();
-        //                        //WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
-        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".parent_id    =0    AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
+        //                        //WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
+        //                        // WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".parent_id    =0    AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @")
         //                        qryPaging = @"  SELECT * FROM
         //                            
         //(SELECT *  FROM
@@ -908,7 +908,7 @@ namespace VIS.Models
         //        FROM " + TableName + @" mp
         //      INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         //        ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-        //    WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"
+        //    WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + @".VAF_Client_ID IN (0," + clientID + @") AND " + orgwhere + @"
         // ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno " + @"
         //)
         //    WHERE rownum < ((" + pageNo + @" * " + pageLength + @") + 1 )
@@ -920,10 +920,10 @@ namespace VIS.Models
         //                        qry = qryPaging;
         //                    }
         //                    else
-        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+        //                    {//ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
         //                        qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
         //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
+        //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
 
 
         //                        qryPaging = @"SELECT * FROM (
@@ -997,7 +997,7 @@ namespace VIS.Models
             //        FROM " + TableName + @" mp
             //      INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
             //        ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-            //    WHERE mp.Isactive='Y'  AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" 
+            //    WHERE mp.Isactive='Y'  AND  (" + tree.GetNodeTableName() + ".parent_id    =0   OR " + tree.GetNodeTableName() + ".parent_id IS NULL) AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" 
             // ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno " + @"
             //
             //)
@@ -1014,7 +1014,7 @@ namespace VIS.Models
             //            {
             //                qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
             //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-            //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y'  AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
+            //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y'  AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno ";
 
 
             //                qryPaging = @"SELECT * FROM (
@@ -1038,7 +1038,7 @@ namespace VIS.Models
         FROM " + TableName + @" mp
       INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-      WHERE mp.Isactive='Y'  AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)   AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" 
+      WHERE mp.Isactive='Y'  AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)   AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" 
  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
@@ -1052,7 +1052,7 @@ namespace VIS.Models
             {
                 qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y'  AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y'  AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
                 qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
@@ -1110,7 +1110,7 @@ namespace VIS.Models
         FROM " + TableName + @" mp
       INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)  AND " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @"  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
+      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)  AND " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @"  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%') 
  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
                         qry = qryPaging;
@@ -1121,7 +1121,7 @@ namespace VIS.Models
                     {
                         qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND Upper(mp.name) LIKE upper('%" + searchChildNode + "%') ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND Upper(mp.name) LIKE upper('%" + searchChildNode + "%') ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
                         qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
@@ -1137,7 +1137,7 @@ namespace VIS.Models
         FROM " + TableName + @" mp
       INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)     AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" 
+      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)     AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" 
  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
                         qry = qryPaging;
@@ -1147,7 +1147,7 @@ namespace VIS.Models
                     {
                         qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
                         qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
@@ -1168,7 +1168,7 @@ namespace VIS.Models
         FROM " + TableName + @" mp
       INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-      WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)    AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" 
+      WHERE mp.Isactive='Y' AND mp.issummary='N' AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')   AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)    AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" 
  ORDER BY   COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
@@ -1179,7 +1179,7 @@ namespace VIS.Models
                     {
                         qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N'  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')     AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N'  AND Upper(mp.name) LIKE upper('%" + searchChildNode + @"%')     AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
 
@@ -1196,7 +1196,7 @@ namespace VIS.Models
         FROM " + TableName + @" mp
       INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"
         ON mp." + TableName + @"_ID = " + tree.GetNodeTableName() + @".node_id
-      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)   AND  " + tree.GetNodeTableName() + @".ad_tree_id=" + treeID + @" 
+      WHERE mp.Isactive='Y' AND mp.issummary='N' AND  (" + tree.GetNodeTableName() + ".parent_id    =0 OR " + tree.GetNodeTableName() + ".parent_id IS NULL)   AND  " + tree.GetNodeTableName() + @".VAF_TreeInfo_id=" + treeID + @" 
  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
@@ -1209,7 +1209,7 @@ namespace VIS.Models
                     {
                         qry = @"SELECT mp.name, mp.issummary,mp." + TableName + @"_ID FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
                         qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
@@ -1299,7 +1299,7 @@ namespace VIS.Models
             }
 
 
-            DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+1 WHERE Parent_ID=" + ParentID + " AND AD_Tree_ID=" + treeID);
+            DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+1 WHERE Parent_ID=" + ParentID + " AND VAF_TreeInfo_ID=" + treeID);
 
             if (type == "PR")
             {
@@ -1364,7 +1364,7 @@ namespace VIS.Models
              bindornot = "true";            
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE ad_tree_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1372,7 +1372,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE ad_tree_menu_id=" + treeID;
+                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + treeID;
                     int checktenant = Convert.ToInt32(DB.ExecuteScalar(tenantCheck));
                     if (checktenant > 0)
                     {
@@ -1394,7 +1394,7 @@ namespace VIS.Models
 
             if (unlinkchild == "false")
             {
-                string getfirstParent = "select parent_ID  from " + nodeTreeTableName + " WHERE NODE_ID=" + nodeid + " AND AD_Tree_ID=" + treeID + " AND IsActive='Y'";
+                string getfirstParent = "select parent_ID  from " + nodeTreeTableName + " WHERE NODE_ID=" + nodeid + " AND VAF_TreeInfo_ID=" + treeID + " AND IsActive='Y'";
                 DataSet ds = DB.ExecuteDataset(getfirstParent, null, null);
                 if (type == "PR")
                 {
@@ -1436,16 +1436,16 @@ namespace VIS.Models
 
 
 
-                string sqls = "UPDATE " + nodeTreeTableName + " SET Parent_ID=" + Convert.ToString(ds.Tables[0].Rows[0]["parent_ID"]) + " WHERE Parent_ID=" + nodeid + " AND AD_Tree_ID=" + treeID;
+                string sqls = "UPDATE " + nodeTreeTableName + " SET Parent_ID=" + Convert.ToString(ds.Tables[0].Rows[0]["parent_ID"]) + " WHERE Parent_ID=" + nodeid + " AND VAF_TreeInfo_ID=" + treeID;
 
-                //string sqls = "UPDATE " + nodeTreeTableName + " SET Parent_ID=0 WHERE Parent_ID=" + nodeid + " AND AD_Tree_ID=" + treeID;
+                //string sqls = "UPDATE " + nodeTreeTableName + " SET Parent_ID=0 WHERE Parent_ID=" + nodeid + " AND VAF_TreeInfo_ID=" + treeID;
                 DB.ExecuteQuery(sqls);
             }
             else
             {
                 //                string qry = @"SELECT " + tree.GetNodeTableName() + @".node_id AS node_id ,mp.issummary FROM " + TableName + @" mp 
                 //                           INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeid + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
+                //                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeid + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + @".parent_id," + -1 + @"), " + tree.GetNodeTableName() + ".seqno";
 
                 //                qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                 //                DataSet ds = DB.ExecuteDataset(qry, null, null);
@@ -1571,15 +1571,15 @@ namespace VIS.Models
             // bindornot is false because menu bind with rol window or tenant window;
             if (bindornot == "false")
             {
-                string qrys = "DELETE FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
+                string qrys = "DELETE FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='N') AND NODE_ID NOT IN (" + menuArrays + ")";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='N') AND NODE_ID NOT IN (" + menuArrays + ")";
 
                 DB.ExecuteQuery(qrys);
 
                 qrys = @"SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
 
                 qrys = MRole.GetDefault(_ctx).AddAccessSQL(qrys, tree.GetNodeTableName(), true, false);
                 DataSet ds = DB.ExecuteDataset(qrys, null, null);
@@ -1592,9 +1592,9 @@ namespace VIS.Models
                         deleteChildNodes(tree, TableName, treeID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["node_ID"]));
                         if (i == ds.Tables[0].Rows.Count - 1)
                         {
-                            qrys = "DELETE FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
+                            qrys = "DELETE FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y') AND NODE_ID NOT IN (" + menuArrays + ")";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y') AND NODE_ID NOT IN (" + menuArrays + ")";
                             DB.ExecuteQuery(qrys);
                         }
                     }
@@ -1604,15 +1604,15 @@ namespace VIS.Models
             //----------------------------------
             else if (bindornot == "true")
             {
-                string qry = "DELETE FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
+                string qry = "DELETE FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='N')";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='N')";
 
                 DB.ExecuteQuery(qry);
 
                 qry = @"SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
 
                 qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                 DataSet ds = DB.ExecuteDataset(qry, null, null);
@@ -1625,9 +1625,9 @@ namespace VIS.Models
                         deleteChildNodes(tree, TableName, treeID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["node_ID"]));
                         if (i == ds.Tables[0].Rows.Count - 1)
                         {
-                            qry = "DELETE FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
+                            qry = "DELETE FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + TableName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y')";
+                             ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y')";
                             DB.ExecuteQuery(qry);
                         }
                     }
@@ -1673,9 +1673,9 @@ namespace VIS.Models
             DataSet dst = new DataSet();
             DataSet dsts = new DataSet();
 
-            string qry = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + tbName + @" mp 
+            string qry = "SELECT Node_ID FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID=" + nodeID + @" AND NODE_ID IN (SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + tbName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + tbName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='N')";
+                             ON mp." + tbName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='N')";
 
             dst = DB.ExecuteDataset(qry, null, null);
 
@@ -1708,7 +1708,7 @@ namespace VIS.Models
 
             qry = @"SELECT " + tree.GetNodeTableName() + @".node_id AS node_id  FROM " + tbName + @" mp 
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
-                             ON mp." + tbName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".ad_tree_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
+                             ON mp." + tbName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
 
             qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
             DataSet ds = DB.ExecuteDataset(qry, null, null);
@@ -1756,7 +1756,7 @@ namespace VIS.Models
             string menu_id = "";
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE ad_tree_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1764,7 +1764,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE ad_tree_menu_id=" + treeID;
+                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + treeID;
                     int checktenant = Convert.ToInt32(DB.ExecuteScalar(tenantCheck));
                     if (checktenant > 0)
                     {
@@ -1867,11 +1867,11 @@ namespace VIS.Models
 
             //if (ParentID == 0)
             //{
-            //    DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE (Parent_ID=" + ParentID + " OR Parent_ID IS NULL) AND AD_Tree_ID=" + treeID);
+            //    DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE (Parent_ID=" + ParentID + " OR Parent_ID IS NULL) AND VAF_TreeInfo_ID=" + treeID);
             //}
             //else
             //{
-            //    DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE Parent_ID=" + ParentID + " AND AD_Tree_ID=" + treeID);
+            //    DB.ExecuteQuery("UPDATE " + tree.GetNodeTableName() + "  SET Updated=Sysdate, seqNo=seqNo+" + (stringArray.Length + 1) + " WHERE Parent_ID=" + ParentID + " AND VAF_TreeInfo_ID=" + treeID);
             //}
 
 
@@ -1883,15 +1883,15 @@ namespace VIS.Models
 
                 if (ParentID == 0)
                 {
-                    //parentzero=  " WHERE AD_Tree_ID=" + treeID + " AND (Parent_ID=" + ParentID + " or Parent_ID is null)  AND Node_ID=" + Convert.ToInt32(stringArray[i]);
+                    //parentzero=  " WHERE VAF_TreeInfo_ID=" + treeID + " AND (Parent_ID=" + ParentID + " or Parent_ID is null)  AND Node_ID=" + Convert.ToInt32(stringArray[i]);
 
-                    parentzero = " WHERE AD_Tree_ID=" + treeID + " AND (Parent_ID=" + ParentID + " or Parent_ID is null)  AND Node_ID=" + Convert.ToInt32(stringArray[i]);
+                    parentzero = " WHERE VAF_TreeInfo_ID=" + treeID + " AND (Parent_ID=" + ParentID + " or Parent_ID is null)  AND Node_ID=" + Convert.ToInt32(stringArray[i]);
 
                     sql += treeTblName + " SET Parent_ID=0, SeqNo=" + i + ", Updated=SysDate" + parentzero;
                 }
                 else
                 {
-                    parentzero = " WHERE AD_Tree_ID=" + treeID + " AND Parent_ID=" + ParentID + "  AND Node_ID=" + Convert.ToInt32(stringArray[i]);
+                    parentzero = " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID=" + ParentID + "  AND Node_ID=" + Convert.ToInt32(stringArray[i]);
 
                     sql += treeTblName + " SET  SeqNo=" + i + ", Updated=SysDate" + parentzero;
                 }
@@ -1917,7 +1917,7 @@ namespace VIS.Models
 
             if (TableName == "VAF_MenuConfig")
             {
-                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE ad_tree_menu_id=" + treeID;
+                string rolCheck = @"SELECT count(*) FROM VAF_Role WHERE VAF_TreeInfo_menu_id=" + treeID;
                 int checkCount = Convert.ToInt32(DB.ExecuteScalar(rolCheck));
                 if (checkCount > 0)
                 {
@@ -1926,7 +1926,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE ad_tree_menu_id=" + treeID;
+                    string tenantCheck = @"SELECT count(*) FROM VAF_ClientDetail WHERE VAF_TreeInfo_menu_id=" + treeID;
                     int checktenant = Convert.ToInt32(DB.ExecuteScalar(tenantCheck));
                     if (checktenant > 0)
                     {
@@ -1937,7 +1937,7 @@ namespace VIS.Models
             }
 
             string getvalue = @"SELECT count(*) as count FROM " + treeTblName + @"
-                                WHERE AD_Tree_ID =" + treeID;
+                                WHERE VAF_TreeInfo_ID =" + treeID;
             getvalue = MRole.GetDefault(_ctx).AddAccessSQL(getvalue, tree.GetNodeTableName(), true, false);
             int counts = Convert.ToInt32(DB.ExecuteScalar(getvalue));
 
@@ -1946,20 +1946,20 @@ namespace VIS.Models
             if (bindornot == "false")
             {
                 string delquery = @"DELETE FROM " + treeTblName + @"
-                                WHERE AD_Tree_ID =" + treeID + " AND node_id NOT IN (" + menuId + ")";
+                                WHERE VAF_TreeInfo_ID =" + treeID + " AND node_id NOT IN (" + menuId + ")";
 
                 delquery = MRole.GetDefault(_ctx).AddAccessSQL(delquery, tree.GetNodeTableName(), true, false);
 
                 DB.ExecuteQuery(delquery);
 
-      string maxSeq = "SELECT MAX(seqno) FROM " + treeTblName + " WHERE AD_Tree_ID=" + treeID;
+      string maxSeq = "SELECT MAX(seqno) FROM " + treeTblName + " WHERE VAF_TreeInfo_ID=" + treeID;
       int seq = Convert.ToInt32(DB.ExecuteScalar(maxSeq));         
       seq += 1;
 
       for (int a = 0; a < menuId.Split(',').Length; a++)
       {
           seq += a;
-          string increaseSqe = "update " + treeTblName + " set seqno=" + seq + ",Updated=Sysdate,parent_ID=0 WHERE AD_Tree_ID=" + treeID + " AND node_id IN (" + menuId[a] + ")";
+          string increaseSqe = "update " + treeTblName + " set seqno=" + seq + ",Updated=Sysdate,parent_ID=0 WHERE VAF_TreeInfo_ID=" + treeID + " AND node_id IN (" + menuId[a] + ")";
           DB.ExecuteQuery(increaseSqe, null, null);
       }
 
@@ -1969,7 +1969,7 @@ namespace VIS.Models
             else
             {
                 string delquery = @"DELETE FROM " + treeTblName + @"
-                                WHERE AD_Tree_ID =" + treeID;
+                                WHERE VAF_TreeInfo_ID =" + treeID;
                 delquery = MRole.GetDefault(_ctx).AddAccessSQL(delquery, tree.GetNodeTableName(), true, false);
 
                 DB.ExecuteQuery(delquery);
@@ -2017,7 +2017,7 @@ namespace VIS.Models
     {
         public int id { get; set; }
         public string text { get; set; }
-        public int AD_Tree_ID { get; set; }
+        public int VAF_TreeInfo_ID { get; set; }
         public string TableName { get; set; }
         public bool IsSummary { get; set; }
         public int NodeID { get; set; }

@@ -20,7 +20,7 @@ public X_C_BP_EDI (Context ctx, int C_BP_EDI_ID, Trx trxName) : base (ctx, C_BP_
 {
 /** if (C_BP_EDI_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetC_BP_EDI_ID (0);
 SetC_BPartner_ID (0);
 SetCustomerNo (null);
@@ -42,7 +42,7 @@ public X_C_BP_EDI (Ctx ctx, int C_BP_EDI_ID, Trx trxName) : base (ctx, C_BP_EDI_
 {
 /** if (C_BP_EDI_ID == 0)
 {
-SetAD_Sequence_ID (0);
+SetVAF_Record_Seq_ID (0);
 SetC_BP_EDI_ID (0);
 SetC_BPartner_ID (0);
 SetCustomerNo (null);
@@ -139,20 +139,20 @@ StringBuilder sb = new StringBuilder ("X_C_BP_EDI[").Append(Get_ID()).Append("]"
 return sb.ToString();
 }
 
-/** AD_Sequence_ID VAF_Control_Ref_ID=128 */
-public static int AD_SEQUENCE_ID_VAF_Control_Ref_ID=128;
+/** VAF_Record_Seq_ID VAF_Control_Ref_ID=128 */
+public static int VAF_RECORD_SEQ_ID_VAF_Control_Ref_ID=128;
 /** Set Sequence.
-@param AD_Sequence_ID Document Sequence */
-public void SetAD_Sequence_ID (int AD_Sequence_ID)
+@param VAF_Record_Seq_ID Document Sequence */
+public void SetVAF_Record_Seq_ID (int VAF_Record_Seq_ID)
 {
-if (AD_Sequence_ID < 1) throw new ArgumentException ("AD_Sequence_ID is mandatory.");
-Set_Value ("AD_Sequence_ID", AD_Sequence_ID);
+if (VAF_Record_Seq_ID < 1) throw new ArgumentException ("VAF_Record_Seq_ID is mandatory.");
+Set_Value ("VAF_Record_Seq_ID", VAF_Record_Seq_ID);
 }
 /** Get Sequence.
 @return Document Sequence */
-public int GetAD_Sequence_ID() 
+public int GetVAF_Record_Seq_ID() 
 {
-Object ii = Get_Value("AD_Sequence_ID");
+Object ii = Get_Value("VAF_Record_Seq_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Scheduler_Para
+/** Generated Model for VAF_JobRun_Para
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Scheduler_Para : PO
+public class X_VAF_JobRun_Para : PO
 {
-public X_AD_Scheduler_Para (Context ctx, int AD_Scheduler_Para_ID, Trx trxName) : base (ctx, AD_Scheduler_Para_ID, trxName)
+public X_VAF_JobRun_Para (Context ctx, int VAF_JobRun_Para_ID, Trx trxName) : base (ctx, VAF_JobRun_Para_ID, trxName)
 {
-/** if (AD_Scheduler_Para_ID == 0)
+/** if (VAF_JobRun_Para_ID == 0)
 {
 SetVAF_Job_Para_ID (0);
-SetAD_Scheduler_ID (0);
+SetVAF_JobRun_Plan_ID (0);
 }
  */
 }
-public X_AD_Scheduler_Para (Ctx ctx, int AD_Scheduler_Para_ID, Trx trxName) : base (ctx, AD_Scheduler_Para_ID, trxName)
+public X_VAF_JobRun_Para (Ctx ctx, int VAF_JobRun_Para_ID, Trx trxName) : base (ctx, VAF_JobRun_Para_ID, trxName)
 {
-/** if (AD_Scheduler_Para_ID == 0)
+/** if (VAF_JobRun_Para_ID == 0)
 {
 SetVAF_Job_Para_ID (0);
-SetAD_Scheduler_ID (0);
+SetVAF_JobRun_Plan_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Scheduler_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Scheduler_Para (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_JobRun_Para (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_Scheduler_Para (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Scheduler_Para (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_JobRun_Para (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_Scheduler_Para (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Scheduler_Para (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_JobRun_Para (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Scheduler_Para()
+static X_VAF_JobRun_Para()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389047248L;
 public static int Table_ID;
  // =698;
 
-/** TableName=AD_Scheduler_Para */
-public static String Table_Name="AD_Scheduler_Para";
+/** TableName=VAF_JobRun_Para */
+public static String Table_Name="VAF_JobRun_Para";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Scheduler_Para[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_JobRun_Para[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Parameter.
@@ -128,17 +128,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Scheduler.
-@param AD_Scheduler_ID Schedule Processes */
-public void SetAD_Scheduler_ID (int AD_Scheduler_ID)
+@param VAF_JobRun_Plan_ID Schedule Processes */
+public void SetVAF_JobRun_Plan_ID (int VAF_JobRun_Plan_ID)
 {
-if (AD_Scheduler_ID < 1) throw new ArgumentException ("AD_Scheduler_ID is mandatory.");
-Set_ValueNoCheck ("AD_Scheduler_ID", AD_Scheduler_ID);
+if (VAF_JobRun_Plan_ID < 1) throw new ArgumentException ("VAF_JobRun_Plan_ID is mandatory.");
+Set_ValueNoCheck ("VAF_JobRun_Plan_ID", VAF_JobRun_Plan_ID);
 }
 /** Get Scheduler.
 @return Schedule Processes */
-public int GetAD_Scheduler_ID() 
+public int GetVAF_JobRun_Plan_ID() 
 {
-Object ii = Get_Value("AD_Scheduler_ID");
+Object ii = Get_Value("VAF_JobRun_Plan_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -146,7 +146,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_Scheduler_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_JobRun_Plan_ID().ToString());
 }
 /** Set Description.
 @param Description Optional short description of the record */

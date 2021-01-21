@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTreeNodeBP
  * Purpose        : (Disk) Tree Node Model BPartner
- * Class Used     : X_AD_TreeNodeBP
+ * Class Used     : X_VAF_TreeInfoChildBPart
  * Chronological    Development
  * Deepak           27-Nov-2009
   ******************************************************/
@@ -22,7 +22,7 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MTreeNodeBP : X_AD_TreeNodeBP
+    public class MTreeNodeBP : X_VAF_TreeInfoChildBPart
     {
         /**	Static Logger	*/
 	private static VLogger	_log	= VLogger.GetVLogger (typeof(MTreeNodeBP).FullName);
@@ -35,15 +35,15 @@ namespace VAdvantage.Model
 	public static MTreeNodeBP Get(MTree tree, int Node_ID)
 	{
 		MTreeNodeBP retValue = null;
-		String sql = "SELECT * FROM AD_TreeNodeBP WHERE AD_Tree_ID=@Param1 AND Node_ID=@Param2";
+		String sql = "SELECT * FROM VAF_TreeInfoChildBPart WHERE VAF_TreeInfo_ID=@Param1 AND Node_ID=@Param2";
 		SqlParameter[] Param=new SqlParameter[2];
         IDataReader idr=null;
         DataTable dt=null;
 		try
 		{
 			//pstmt = DataBase.prepareStatement (sql, tree.get_TrxName());
-			//pstmt.setInt (1, tree.getAD_Tree_ID());
-            Param[0]=new SqlParameter("@Param1",tree.GetAD_Tree_ID());
+			//pstmt.setInt (1, tree.getVAF_TreeInfo_ID());
+            Param[0]=new SqlParameter("@Param1",tree.GetVAF_TreeInfo_ID());
 			//pstmt.setInt (2, Node_ID);
             Param[1]=new SqlParameter("@Param2",Node_ID);
 			//ResultSet rs = pstmt.executeQuery ();
@@ -92,7 +92,7 @@ namespace VAdvantage.Model
 	{
 		//super (tree.getCtx(), 0, tree.get_TrxName());
 		SetClientOrg(tree);
-		SetAD_Tree_ID (tree.GetAD_Tree_ID());
+		SetVAF_TreeInfo_ID (tree.GetVAF_TreeInfo_ID());
 		SetNode_ID(Node_ID);
 		//	Add to root
 		SetParent_ID(0);
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
     {
         //super (tree.getCtx(), 0, tree.get_TrxName());
         SetClientOrg(tree);
-        SetAD_Tree_ID(tree.GetAD_Tree_ID());
+        SetVAF_TreeInfo_ID(tree.GetVAF_TreeInfo_ID());
         SetNode_ID(Node_ID);
         //	Add to root
         SetParent_ID(0);
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder("MTreeNodeBP[");
-		sb.Append("AD_Tree_ID=").Append(GetAD_Tree_ID())
+		sb.Append("VAF_TreeInfo_ID=").Append(GetVAF_TreeInfo_ID())
 			.Append(",C_BPartner_ID=").Append(GetNode_ID())
 			.Append(",Parent_ID=").Append(GetParent_ID())
 			.Append("]");

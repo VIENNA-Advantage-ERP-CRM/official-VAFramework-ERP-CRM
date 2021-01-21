@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class TreeMaintenance:ProcessEngine.SvrProcess
     {
     /**	Tree				*/
-	private int		m_AD_Tree_ID;
+	private int		m_VAF_TreeInfo_ID;
 	
 	/// <summary>
 	/// Prepare - e.g., get Parameters.
@@ -45,7 +45,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
 		}
-		m_AD_Tree_ID = GetRecord_ID();		//	from Window
+		m_VAF_TreeInfo_ID = GetRecord_ID();		//	from Window
 	}	//	prepare
 
 	/// <summary>
@@ -54,13 +54,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>Message (clear text)</returns>
 	protected override String DoIt()
 	{
-		log.Info("AD_Tree_ID=" + m_AD_Tree_ID);
-        if (m_AD_Tree_ID == 0)
+		log.Info("VAF_TreeInfo_ID=" + m_VAF_TreeInfo_ID);
+        if (m_VAF_TreeInfo_ID == 0)
         {
             throw new ArgumentException("Tree_ID = 0");
         }
-		MTree tree = new MTree (GetCtx(), m_AD_Tree_ID, Get_Trx());
-        if (tree == null || tree.GetAD_Tree_ID() == 0)
+		MTree tree = new MTree (GetCtx(), m_VAF_TreeInfo_ID, Get_Trx());
+        if (tree == null || tree.GetVAF_TreeInfo_ID() == 0)
         {
             throw new ArgumentException("No Tree -" + tree);
         }
@@ -91,7 +91,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		if (MTree.TREETYPE_ElementValue.Equals(tree.GetTreeType()))
 		{
 			String sql = "SELECT C_Element_ID FROM C_Element "
-				+ "WHERE AD_Tree_ID=" + tree.GetAD_Tree_ID();
+				+ "WHERE VAF_TreeInfo_ID=" + tree.GetVAF_TreeInfo_ID();
 			C_Element_ID = DataBase.DB.GetSQLValue(null, sql);
             if (C_Element_ID <= 0)
             {
@@ -102,7 +102,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Delete unused
 		StringBuilder sql1 = new StringBuilder();
 		sql1.Append("DELETE FROM ").Append(nodeTableName)
-			.Append(" WHERE AD_Tree_ID=").Append(tree.GetAD_Tree_ID())
+			.Append(" WHERE VAF_TreeInfo_ID=").Append(tree.GetVAF_TreeInfo_ID())
 			.Append(" AND Node_ID NOT IN (SELECT ").Append(sourceTableKey)
 			.Append(" FROM ").Append(sourceTableName)
 			.Append(" WHERE VAF_Client_ID IN (0,").Append(VAF_Client_ID).Append(")");
@@ -132,7 +132,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
         sql2.Append(" AND ").Append(sourceTableKey)
             .Append("  NOT IN (SELECT Node_ID FROM ").Append(nodeTableName)
-            .Append(" WHERE AD_Tree_ID=").Append(tree.GetAD_Tree_ID()).Append(")")
+            .Append(" WHERE VAF_TreeInfo_ID=").Append(tree.GetVAF_TreeInfo_ID()).Append(")")
             .Append(" ORDER BY Upper(name)");
 		log.Finer(sql2.ToString());
 		//
@@ -155,7 +155,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 int Node_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
                 PO node = null;
-                if (nodeTableName.Equals("AD_TreeNode"))
+                if (nodeTableName.Equals("VAF_TreeInfoChild"))
                 {
                   // node = new MTreeNode(tree, Node_ID);
 
@@ -165,7 +165,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //end
 
                 }
-                else if (nodeTableName.Equals("AD_TreeNodeBP"))
+                else if (nodeTableName.Equals("VAF_TreeInfoChildBPart"))
                 {
                    //node = new MTreeNodeBP(tree, Node_ID);
 
@@ -175,7 +175,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //end
 
                 }
-                else if (nodeTableName.Equals("AD_TreeNodePR"))
+                else if (nodeTableName.Equals("VAF_TreeInfoChildProd"))
                 {
                   //node = new MTreeNodePR(tree, Node_ID);
 
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 
                 }
-                else if (nodeTableName.Equals("AD_TreeNodeCMC"))
+                else if (nodeTableName.Equals("VAF_TreeInfoChildCMC"))
                 {
                    //node = new MTreeNodeCMC(tree, Node_ID);
 
@@ -197,7 +197,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 
                 }
-                else if (nodeTableName.Equals("AD_TreeNodeCMM"))
+                else if (nodeTableName.Equals("VAF_TreeInfoChildCMM"))
                 {
                   //node = new MTreeNodeCMM(tree, Node_ID);
 
@@ -208,7 +208,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 
                 }
-                else if (nodeTableName.Equals("AD_TreeNodeCMS"))
+                else if (nodeTableName.Equals("VAF_TreeInfoChildCMS"))
                 {
                   // node = new MTreeNodeCMS(tree, Node_ID);
 
@@ -218,7 +218,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //end
 
                 }
-                else if (nodeTableName.Equals("AD_TreeNodeCMT"))
+                else if (nodeTableName.Equals("VAF_TreeInfoChildCMT"))
                 {
                    //node = new MTreeNodeCMT(tree, Node_ID);
 
@@ -228,7 +228,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //end
 
                 }
-                else if (nodeTableName.Equals("AD_TreeNodeMM"))
+                else if (nodeTableName.Equals("VAF_TreeInfoChildMenu"))
                 {
                    // node = new MTreeNodeMM(tree, Node_ID);
                     

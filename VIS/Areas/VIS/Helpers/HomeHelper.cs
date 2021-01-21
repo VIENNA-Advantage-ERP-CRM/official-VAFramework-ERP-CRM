@@ -1176,15 +1176,15 @@ namespace VIS.Helpers
 
         public string SetNodeFavourite(int nodeID, Ctx ctx)
         {
-            int AD_Tree_ID = DB.GetSQLValue(null,
-                        "SELECT COALESCE(r.AD_Tree_Menu_ID, ci.AD_Tree_Menu_ID)"
+            int VAF_TreeInfo_ID = DB.GetSQLValue(null,
+                        "SELECT COALESCE(r.VAF_TreeInfo_Menu_ID, ci.VAF_TreeInfo_Menu_ID)"
                        + "FROM VAF_ClientDetail ci"
                        + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
                        + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID());
-            string sql = "INSERT INTO AD_TreeBar "
-                                 + "(AD_Tree_ID,AD_User_ID,Node_ID, "
+            string sql = "INSERT INTO VAF_TreeInfoBar "
+                                 + "(VAF_TreeInfo_ID,AD_User_ID,Node_ID, "
                                  + "VAF_Client_ID,VAF_Org_ID, "
-                                 + "IsActive,Created,CreatedBy,Updated,UpdatedBy)VALUES (" + AD_Tree_ID + "," + ctx.GetAD_User_ID() + "," + nodeID + ","
+                                 + "IsActive,Created,CreatedBy,Updated,UpdatedBy)VALUES (" + VAF_TreeInfo_ID + "," + ctx.GetAD_User_ID() + "," + nodeID + ","
                                  + ctx.GetVAF_Client_ID() + "," + ctx.GetVAF_Org_ID() + ","
                                  + "'Y',SysDate," + ctx.GetAD_User_ID() + ",SysDate," + ctx.GetAD_User_ID() + ")";
             //	if already exist, will result in ORA-00001: unique constraint 
@@ -1194,12 +1194,12 @@ namespace VIS.Helpers
 
         public string RemoveNodeFavourite(int nodeID, Ctx ctx)
         {
-            int AD_Tree_ID = DB.GetSQLValue(null,
-                        "SELECT COALESCE(r.AD_Tree_Menu_ID, ci.AD_Tree_Menu_ID)"
+            int VAF_TreeInfo_ID = DB.GetSQLValue(null,
+                        "SELECT COALESCE(r.VAF_TreeInfo_Menu_ID, ci.VAF_TreeInfo_Menu_ID)"
                        + "FROM VAF_ClientDetail ci"
                        + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
                        + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID());
-            string sql = sql = "DELETE FROM AD_TreeBar WHERE AD_Tree_ID=" + AD_Tree_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID()
+            string sql = sql = "DELETE FROM VAF_TreeInfoBar WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + " AND AD_User_ID=" + ctx.GetAD_User_ID()
                        + " AND Node_ID=" + nodeID;
             return DB.ExecuteQuery(sql, null).ToString();
 

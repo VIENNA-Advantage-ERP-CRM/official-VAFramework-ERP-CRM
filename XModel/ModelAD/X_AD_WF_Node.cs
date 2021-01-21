@@ -1278,21 +1278,21 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Set AD_TextTemplate_ID
+        /// Set VAF_TextTemplate_ID
         /// </summary>
-        /// <param name="AD_TextTemplate_ID">AD_TextTemplate_ID</param>
-        public void SetAD_TextTemplate_ID(int AD_TextTemplate_ID)
+        /// <param name="VAF_TextTemplate_ID">VAF_TextTemplate_ID</param>
+        public void SetVAF_TextTemplate_ID(int VAF_TextTemplate_ID)
         {
-            Set_Value("AD_TextTemplate_ID", AD_TextTemplate_ID);
+            Set_Value("VAF_TextTemplate_ID", VAF_TextTemplate_ID);
         }
 
         /// <summary>
-        /// Get AD_TextTemplate_ID
+        /// Get VAF_TextTemplate_ID
         /// </summary>
-        /// <returns>AD_TextTemplate_ID</returns>
-        public int GetAD_TextTemplate_ID()
+        /// <returns>VAF_TextTemplate_ID</returns>
+        public int GetVAF_TextTemplate_ID()
         {
-            Object ii = Get_Value("AD_TextTemplate_ID");
+            Object ii = Get_Value("VAF_TextTemplate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

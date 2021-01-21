@@ -81,7 +81,7 @@ namespace VAdvantage.Model
         private int AD_User_U_ID;
         private String AD_User_U_Name;
         private MCalendar m_calendar;
-        private int m_AD_Tree_Account_ID;
+        private int m_VAF_TreeInfo_Account_ID;
         private int C_Cycle_ID;
         //
         private bool m_hasProject = false;
@@ -172,7 +172,7 @@ namespace VAdvantage.Model
                 // return false;
                 return tInfo;
             }
-            m_AD_Tree_Account_ID = m_client.GetSetup_AD_Tree_Account_ID();
+            m_VAF_TreeInfo_Account_ID = m_client.GetSetup_VAF_TreeInfo_Account_ID();
 
             /**
              *  Create Org
@@ -502,9 +502,9 @@ namespace VAdvantage.Model
                     {
                         role.SetSupervisor_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["Supervisor_ID"]));
                     }
-                    if (ds.Tables[0].Rows[i]["AD_Tree_Menu_ID"] != null && ds.Tables[0].Rows[i]["AD_Tree_Menu_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_TreeInfo_Menu_ID"] != null && ds.Tables[0].Rows[i]["VAF_TreeInfo_Menu_ID"] != DBNull.Value)
                     {
-                        role.SetAD_Tree_Menu_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Tree_Menu_ID"]));
+                        role.SetVAF_TreeInfo_Menu_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TreeInfo_Menu_ID"]));
                     }
                     if (ds.Tables[0].Rows[i]["PreferenceType"] != null && ds.Tables[0].Rows[i]["PreferenceType"] != DBNull.Value)
                     {
@@ -526,9 +526,9 @@ namespace VAdvantage.Model
                     {
                         role.SetIsUseBPRestrictions(ds.Tables[0].Rows[i]["IsUseBPRestrictions"].ToString().Equals("Y") ? true : false);
                     }
-                    if (ds.Tables[0].Rows[i]["AD_Tree_Org_ID"] != null && ds.Tables[0].Rows[i]["AD_Tree_Org_ID"] != DBNull.Value)
+                    if (ds.Tables[0].Rows[i]["VAF_TreeInfo_Org_ID"] != null && ds.Tables[0].Rows[i]["VAF_TreeInfo_Org_ID"] != DBNull.Value)
                     {
-                        role.SetAD_Tree_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["AD_Tree_Org_ID"]));
+                        role.SetVAF_TreeInfo_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_TreeInfo_Org_ID"]));
                     }
                     if (ds.Tables[0].Rows[i]["IsUseUserOrgAccess"] != null && ds.Tables[0].Rows[i]["IsUseUserOrgAccess"] != DBNull.Value)
                     {
@@ -2602,7 +2602,7 @@ namespace VAdvantage.Model
             {
                 //********************Commented by Paramjeet Singh on date 19-oct-2015***********************//
 
-                //MElement element = new MElement(m_client, name, MElement.ELEMENTTYPE_Account, m_AD_Tree_Account_ID);
+                //MElement element = new MElement(m_client, name, MElement.ELEMENTTYPE_Account, m_VAF_TreeInfo_Account_ID);
 
 
 
@@ -2623,7 +2623,7 @@ namespace VAdvantage.Model
 
                 ////	Create Account Values
                 //m_nap = new NaturalAccountMap<String, MElementValue>(m_ctx, m_trx);
-                //MTree tree = MTree.Get(m_ctx, m_AD_Tree_Account_ID, m_trx);
+                //MTree tree = MTree.Get(m_ctx, m_VAF_TreeInfo_Account_ID, m_trx);
                 //String errMsg = m_nap.ParseFile(AccountingFile, GetVAF_Client_ID(), GetVAF_Org_ID(), C_Element_ID, tree);
                 //if (errMsg.Length != 0)
                 //{
@@ -3349,7 +3349,7 @@ namespace VAdvantage.Model
             else
             {
                 dt.SetIsDocNoControlled(true);
-                dt.SetDocNoSequence_ID(sequence.GetAD_Sequence_ID());
+                dt.SetDocNoSequence_ID(sequence.GetVAF_Record_Seq_ID());
             }
             dt.SetIsSOTrx();
             dt.SetIsReturnTrx(isReturnTrx);

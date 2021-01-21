@@ -304,7 +304,7 @@ namespace VAdvantage.Process
                             sql += " AND VAF_Client_ID=" + VAF_Client_ID;
                             //sql += " AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID();
                             //string finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(sql, tableName.ToString(), MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
-                            IDataReader idr = DB.ExecuteReader(sql);//+ " order by ad_texttemplate_id");                    
+                            IDataReader idr = DB.ExecuteReader(sql);//+ " order by VAF_TextTemplate_id");                    
                             DataTable dt = new DataTable();
                             dt.Load(idr);
                             idr.Close();

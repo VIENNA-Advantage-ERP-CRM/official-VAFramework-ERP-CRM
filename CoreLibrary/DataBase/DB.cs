@@ -1214,7 +1214,7 @@ namespace CoreLibrary.DataBase
         static public String MAIN_VERSION = "Release 3.0.0";
         /** Detail Version as date      Used for Client/Server		*/
         static public String DATE_VERSION = "2007-11-26";
-        /** Database Version as date    Compared with AD_System		*/
+        /** Database Version as date    Compared with VAF_System		*/
         static public String DB_VERSION = "2007-11-26";
 
         /** Product Name            */

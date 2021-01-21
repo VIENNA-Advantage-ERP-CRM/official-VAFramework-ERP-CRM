@@ -142,7 +142,7 @@ namespace ViennaAdvantage.Process
                    (nvl(max(t2.Currentamount),0)+((nvl(max(t1.Total),0)-nvl(max(t2.Currentamount),0)))) AS totalamount,t1.IsSummary as IsSummary,t1.isintermediatecode from ");
             _m_CaseSql.Append(@"(SELECT * from(Select distinct    c.AccountType,f.C_PROJECT_ID,
          a.parent_id,max(c.issummary) as IsSummary,c.isintermediatecode, a.node_id,c.vaf_client_id,c.vaf_org_id,c.value, c.name, CASE WHEN c.AccountType='E' THEN (NVL((SUM(f.amtacctdr)),0)-NVL((SUM(f.amtacctcr)),0)) ELSE (NVL((SUM(f.amtacctcr)),0)-NVL((SUM(f.amtacctdr)),0)) END AS Total");
-            sql.Append(" FROM ad_treenode a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id  INNER JOIN fact_acct_balance f ON (f.account_id =c.c_elementvalue_id  and f.GL_budget_id is null");
+            sql.Append(" FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id  INNER JOIN fact_acct_balance f ON (f.account_id =c.c_elementvalue_id  and f.GL_budget_id is null");
             SetDateAcct();
             _msql.Append(_m_OuterSql);
             _msql.Append(_m_CaseSql);
@@ -172,7 +172,7 @@ namespace ViennaAdvantage.Process
             //            t1.C_SalesRegion_ID,t1.C_Campaign_ID,t1.C_LocFrom_ID,t1.C_LocTo_ID  ,t1.User1_ID,t1.User2_ID,t1.UserElement1_ID,t1.UserElement2_ID,t1.ACCOUNTTYPE
             //            FROM(SELECT  g.gl_budget_id,a.parent_id,a.node_id,f.vaf_client_id,f.vaf_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,c.value AS value,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE,
             //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID, c.name,CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr))
-            //          Else (SUM(f.amtacctcr)-SUM(f.amtacctdr))END AS Total FROM ad_treenode a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
+            //          Else (SUM(f.amtacctcr)-SUM(f.amtacctdr))END AS Total FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
             //        ON(f.account_id     =c.c_elementvalue_id)  inner join gl_budget g on (f.gl_budget_id=g.gl_budget_id)  WHERE c.vaf_client_id=" + GetCtx().GetVAF_Client_ID() + "");
             //              SetDateAcct();
             //              sql.Append("  AND f.DATEACCT BETWEEN " + GlobalVariable.TO_DATE(_DateAcct_Yearly, true) + " AND " + GlobalVariable.TO_DATE(_DateAcct_To, true) + "");
@@ -180,7 +180,7 @@ namespace ViennaAdvantage.Process
             //              sql.Append(@"GROUP BY a.parent_id,a.node_id,c.value, c.name,c.AccountType, f.vaf_client_id,f.vaf_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,
             //            f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID,g.gl_budget_id) t1 inner JOIN (SELECT g.gl_budget_id,a.parent_id,a.node_id,c.value AS value,c.name, cASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr))
             //          else (SUM(f.amtacctcr)-SUM(f.amtacctdr)) END AS Currentamount,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE,
-            //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID FROM ad_treenode a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
+            //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c ON c.c_elementvalue_id = a.node_id LEFT OUTER JOIN fact_acct_balance f
             //       ON(f.account_id     =c.c_elementvalue_id)  inner join gl_budget g on (f.gl_budget_id=g.gl_budget_id) WHERE f.vaf_client_id=" + GetCtx().GetVAF_Client_ID() + "  AND f.DATEACCT BETWEEN " + GlobalVariable.TO_DATE(_DateAcct_From, true) + " and " + GlobalVariable.TO_DATE(_DateAcct_To, true) + @"
             //          GROUP BY c.value,c.name,c.AccountType,f.C_BPartner_ID,f.M_Product_ID,f.C_Project_ID,f.C_Activity_ID,c.ACCOUNTTYPE, f.vaf_client_id,f.vaf_org_id,f.Created,f.CreatedBy,f.Updated,f.UpdatedBy,
             //      f.C_SalesRegion_ID,f.C_Campaign_ID,f.C_LocFrom_ID,f.C_LocTo_ID  ,f.User1_ID,f.User2_ID,f.UserElement1_ID,f.UserElement2_ID,a.parent_id,a.node_id,g.gl_budget_id) t2 ON (t1.value=t2.value) ");
@@ -480,7 +480,7 @@ namespace ViennaAdvantage.Process
             //            m_parameterWhere.Append(@"SELECT distinct t1.parent_id,t1.vaf_client_id,t1.vaf_org_id,t1.value AS value,t1.parent_id ,t1.node_id,t1.name as name,t2.Currentamount    AS Currentamount,(nvl(t1.Total,0)-nvl(t2.Currentamount,0)) AS Previous,
             //                   (nvl(t2.Currentamount,0)+((nvl(t1.Total,0)-nvl(t2.Currentamount,0)))) AS totalamount from ");
 
-            //            m_parameterWhere.Append(@"(Select distinct  a.parent_id,max(c.issummary), a.node_id,f.vaf_client_id,f.vaf_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr)) ELSE (SUM(f.amtacctcr)-SUM(f.amtacctdr)) END AS Total  FROM ad_treenode a INNER JOIN c_elementvalue c
+            //            m_parameterWhere.Append(@"(Select distinct  a.parent_id,max(c.issummary), a.node_id,f.vaf_client_id,f.vaf_org_id,c.value, c.name, CASE WHEN c.AccountType='A' OR c.AccountType  ='E' THEN (SUM(f.amtacctdr)-SUM(f.amtacctcr)) ELSE (SUM(f.amtacctcr)-SUM(f.amtacctdr)) END AS Total  FROM VAF_TreeInfoChild a INNER JOIN c_elementvalue c
             //                       ON c.c_elementvalue_id = a.node_id  LEFT OUTER JOIN fact_acct_balance f ON (f.account_id =c.c_elementvalue_id ");
             //            SetDateAcct();
             //            sql.Append(" and f.DATEACCT BETWEEN " + _DateAcct_Yearly + " AND " + _DateAcct_To + " ");

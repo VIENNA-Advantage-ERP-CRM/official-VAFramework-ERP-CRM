@@ -8,10 +8,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MAlertRecipient : X_AD_AlertRecipient
+    public class MAlertRecipient : X_VAF_AlertRecipient
     {
-        public MAlertRecipient(Ctx ctx, int AD_AlertRecipient_ID, Trx trx)
-            : base(ctx, AD_AlertRecipient_ID, trx)
+        public MAlertRecipient(Ctx ctx, int VAF_AlertRecipient_ID, Trx trx)
+            : base(ctx, VAF_AlertRecipient_ID, trx)
         {
             
         }	//	MAlertRecipient

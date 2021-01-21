@@ -22,7 +22,7 @@ using VAModelAD.Model;
 
 namespace VAdvantage.Model
 {
-    public class MScheduler : X_AD_Scheduler, ViennaProcessor
+    public class MScheduler : X_VAF_JobRun_Plan, ViennaProcessor
     {
         /// <summary>
         /// Get Active
@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         {
 
             //List<MScheduler> list = new List<MScheduler>();
-            //String sql = "SELECT * FROM AD_Scheduler WHERE IsActive='Y'";
+            //String sql = "SELECT * FROM VAF_JobRun_Plan WHERE IsActive='Y'";
             //try
             //{
             //    DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql);
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
             // will not be run on the other system having different machine IP.
 
             List<MScheduler> list = new List<MScheduler>();
-            String sql = "SELECT * FROM AD_Scheduler WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAF_JobRun_Plan WHERE IsActive='Y'";
             string scheduleIP = null;
             try
             {
@@ -82,8 +82,8 @@ namespace VAdvantage.Model
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM AD_Schedule WHERE 
-                                                        AD_Schedule_ID = (SELECT AD_Schedule_ID FROM AD_Scheduler WHERE AD_Scheduler_ID =" + dr["AD_Scheduler_ID"] + " )"));
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM VAF_Plan WHERE 
+                                                        VAF_Plan_ID = (SELECT VAF_Plan_ID FROM VAF_JobRun_Plan WHERE VAF_JobRun_Plan_ID =" + dr["VAF_JobRun_Plan_ID"] + " )"));
 
                     //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
                     if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
@@ -113,13 +113,13 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Scheduler_ID">scheduler id</param>
+        /// <param name="VAF_JobRun_Plan_ID">scheduler id</param>
         /// <param name="trxName">optional transaction name</param>
-        public MScheduler(Ctx ctx, int AD_Scheduler_ID, Trx trxName)
-            : base(ctx, AD_Scheduler_ID, trxName)
+        public MScheduler(Ctx ctx, int VAF_JobRun_Plan_ID, Trx trxName)
+            : base(ctx, VAF_JobRun_Plan_ID, trxName)
         {
 
-            if (AD_Scheduler_ID == 0)
+            if (VAF_JobRun_Plan_ID == 0)
             {
                 //	setVAF_Job_ID (0);
                 //	setName (null);
@@ -182,14 +182,14 @@ namespace VAdvantage.Model
         {
             List<MSchedulerLog> list = new List<MSchedulerLog>();
             String sql = "SELECT * "
-                + "FROM AD_SchedulerLog "
-                + "WHERE AD_Scheduler_ID=@scheduleid "
+                + "FROM VAF_JobRun_Log "
+                + "WHERE VAF_JobRun_Plan_ID=@scheduleid "
                 + "ORDER BY Created DESC";
 
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -219,8 +219,8 @@ namespace VAdvantage.Model
         {
             if (GetKeepLogDays() < 1)
                 return 0;
-            String sql = "DELETE FROM AD_SchedulerLog "
-                + "WHERE AD_Scheduler_ID=" + GetAD_Scheduler_ID()
+            String sql = "DELETE FROM VAF_JobRun_Log "
+                + "WHERE VAF_JobRun_Plan_ID=" + GetVAF_JobRun_Plan_ID()
                 + " AND (Created+" + GetKeepLogDays() + ") < SysDate";
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             return no;
@@ -250,12 +250,12 @@ namespace VAdvantage.Model
             if (!reload && m_parameter != null)
                 return m_parameter;
             List<MSchedulerPara> list = new List<MSchedulerPara>();
-            String sql = "SELECT * FROM AD_Scheduler_Para WHERE AD_Scheduler_ID=@scheduleid AND IsActive='Y'";
+            String sql = "SELECT * FROM VAF_JobRun_Para WHERE VAF_JobRun_Plan_ID=@scheduleid AND IsActive='Y'";
             DataSet ds = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
                 ds = new DataSet();
                 ds = DataBase.DB.ExecuteDataset(sql, param);
 
@@ -289,11 +289,11 @@ namespace VAdvantage.Model
             if (!reload && m_recipients != null)
                 return m_recipients;
             List<MSchedulerRecipient> list = new List<MSchedulerRecipient>();
-            String sql = "SELECT * FROM AD_SchedulerRecipient WHERE AD_Scheduler_ID=@scheduleid AND IsActive='Y'";
+            String sql = "SELECT * FROM VAF_JobRun_Recipient WHERE VAF_JobRun_Plan_ID=@scheduleid AND IsActive='Y'";
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@scheduleid", GetAD_Scheduler_ID());
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -1053,9 +1053,9 @@ namespace VAdvantage.Model
             return sb.ToString();
         }	//	fillParameter
 
-        public DateTime[] CheckProcessTime(int AD_SCHEDULE_ID, MScheduler scheduler)
+        public DateTime[] CheckProcessTime(int VAF_Plan_ID, MScheduler scheduler)
         {
-            MSchedule schedule = new MSchedule(GetCtx(), AD_SCHEDULE_ID, Get_TrxName());
+            MSchedule schedule = new MSchedule(GetCtx(), VAF_Plan_ID, Get_TrxName());
             DateTime? dtNextRun;
             bool blNextDate = false;
             try

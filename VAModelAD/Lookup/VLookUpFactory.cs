@@ -747,7 +747,7 @@ namespace VAdvantage.Classes
                         displayColumn.Append("(").Append(embeddedSQL).Append(")");
                 }
                 //  number
-                else if (DisplayType.IsNumeric(ldc.DisplayType))
+                else if (DisplayType.IsNumeric(ldc.DisplayType)|| DisplayType.IsID(ldc.DisplayType))
                 {
                     displayColumn.Append(DataBase.DB.TO_CHAR(tableName + "." + ldc.ColumnName, ldc.DisplayType, language.GetVAF_Language()));
                 }

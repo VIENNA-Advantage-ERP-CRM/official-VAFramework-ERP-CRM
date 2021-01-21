@@ -99,20 +99,20 @@ namespace ViennaAdvantage.Process
             int client = Util.GetValueOfInt(GetVAF_Client_ID());
             int user = GetAD_User_ID();
 
-            sql = "select ad_tree_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
-            int ad_tree_id = 0;
+            sql = "select VAF_TreeInfo_id from c_element where c_element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
+            int VAF_TreeInfo_id = 0;
             MTree tree = null;
 
             try
             {
-                ad_tree_id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
-                tree = new MTree(GetCtx(), ad_tree_id, null);
+                VAF_TreeInfo_id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                tree = new MTree(GetCtx(), VAF_TreeInfo_id, null);
             }
             catch
             {
-                ad_tree_id = 0;
+                VAF_TreeInfo_id = 0;
             }
-            if (ad_tree_id == 0)
+            if (VAF_TreeInfo_id == 0)
             {
                 _message = Msg.GetMsg(GetCtx(), "TreeNotBind");
                 return _message;
@@ -134,7 +134,7 @@ namespace ViennaAdvantage.Process
                     if (dt != null && dt.Rows.Count > 0)
                     {
 
-                        //if (ad_tree_id == 0)
+                        //if (VAF_TreeInfo_id == 0)
                         //{
                         //    int tableID = Convert.ToInt32(DB.ExecuteScalar("select vaf_tableview_id from vaf_tableview where lower(tablename)='vactwz_elementvalue'"));
 
@@ -146,7 +146,7 @@ namespace ViennaAdvantage.Process
                         //    tree.SetVAF_TableView_ID(tableID);
                         //    //tree.SetTreeType("EV");
                         //    tree.Save();
-                        //    ad_tree_id = tree.Get_ID();
+                        //    VAF_TreeInfo_id = tree.Get_ID();
                         //}
                         MElementValue eleValue = null;
                         string key = "";
@@ -414,7 +414,7 @@ namespace ViennaAdvantage.Process
 
                                     //return msg;
                                 }
-                                VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), ad_tree_id, null);
+                                VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), VAF_TreeInfo_id, null);
                                 //C_ElementValue_ID = C_ElementValue_ID + 1;                                   
                                 VAdvantage.Model.MTreeNode mNode = VAdvantage.Model.MTreeNode.Get(obj, eleValue.Get_ID());
                                 if (mNode == null)

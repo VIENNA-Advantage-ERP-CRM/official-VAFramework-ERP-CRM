@@ -39,8 +39,8 @@ namespace VIS.Helpers
         public MTree GetMenuTree()
         {
 
-            int AD_Tree_ID = DB.GetSQLValue(null,
-          "SELECT COALESCE(r.AD_Tree_Menu_ID, ci.AD_Tree_Menu_ID)"
+            int VAF_TreeInfo_ID = DB.GetSQLValue(null,
+          "SELECT COALESCE(r.VAF_TreeInfo_Menu_ID, ci.VAF_TreeInfo_Menu_ID)"
                           + "FROM VAF_ClientDetail ci"
                           + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
                           + "WHERE VAF_Role_ID=" + _ctx.GetVAF_Role_ID());
@@ -48,13 +48,13 @@ namespace VIS.Helpers
             MRole.GetDefault(_ctx, true); // init MRole
 
 
-            if (AD_Tree_ID <= 0)
+            if (VAF_TreeInfo_ID <= 0)
             {
-                AD_Tree_ID = 10;	//Default Tree
+                VAF_TreeInfo_ID = 10;	//Default Tree
             }
 
-            return GetMenuTree(AD_Tree_ID, false);
-            //MTree vTree = new MTree(_ctx, AD_Tree_ID, false, true, null);
+            return GetMenuTree(VAF_TreeInfo_ID, false);
+            //MTree vTree = new MTree(_ctx, VAF_TreeInfo_ID, false, true, null);
             //return vTree;
         }
 
@@ -64,34 +64,34 @@ namespace VIS.Helpers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_Tree_ID"></param>
+        /// <param name="VAF_TreeInfo_ID"></param>
         /// <param name="editable"></param>
         /// <returns></returns>
 
-        public MTree GetMenuTree(int AD_Tree_ID, bool editable)
+        public MTree GetMenuTree(int VAF_TreeInfo_ID, bool editable)
         {
-            MTree vTree = new MTree(_ctx, AD_Tree_ID, editable, true, null);
+            MTree vTree = new MTree(_ctx, VAF_TreeInfo_ID, editable, true, null);
             return vTree;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AD_Tree_ID"></param>
+        /// <param name="VAF_TreeInfo_ID"></param>
         /// <param name="editable"></param>
         /// <returns></returns>
 
-        public MTree GetMenuTree(int AD_Tree_ID, bool editable, bool onDemandTree, int nodeID,int VAF_Tab_ID,int winNo)
+        public MTree GetMenuTree(int VAF_TreeInfo_ID, bool editable, bool onDemandTree, int nodeID,int VAF_Tab_ID,int winNo)
         {
             _onDemandTree = onDemandTree;
             MTree vTree = null;
             if (onDemandTree)
             {
-                vTree = new MTree(_ctx, AD_Tree_ID, editable, true, null, true, VAF_Tab_ID, winNo);
+                vTree = new MTree(_ctx, VAF_TreeInfo_ID, editable, true, null, true, VAF_Tab_ID, winNo);
             }
             else
             {
-                vTree = new MTree(_ctx, AD_Tree_ID, editable, true, null, nodeID, VAF_Tab_ID);
+                vTree = new MTree(_ctx, VAF_TreeInfo_ID, editable, true, null, nodeID, VAF_Tab_ID);
             }
             return vTree;
         }
@@ -334,21 +334,21 @@ namespace VIS.Helpers
             return h;
         }
 
-        public int updateTree(Ctx ctx, string nodeID, int oldParentID, int newParentID, int AD_Tree_ID)
+        public int updateTree(Ctx ctx, string nodeID, int oldParentID, int newParentID, int VAF_TreeInfo_ID)
         {
-            MTree trr = new MTree(ctx, AD_Tree_ID, null);
+            MTree trr = new MTree(ctx, VAF_TreeInfo_ID, null);
             string tableName = trr.GetNodeTableName();
 
 
             string[] selectedID = nodeID.Split(',');
 
 
-            string sql = "Update " + tableName + " SET SeqNo=Seqno+" + selectedID.Length + ", updated=SYSDATE WHERE AD_Tree_ID=" + AD_Tree_ID + " AND Parent_ID=" + newParentID;
+            string sql = "Update " + tableName + " SET SeqNo=Seqno+" + selectedID.Length + ", updated=SYSDATE WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + " AND Parent_ID=" + newParentID;
             DB.ExecuteQuery(sql);
 
             for (int i = 0; i < selectedID.Length; i++)
             {
-                DB.ExecuteQuery("UPDATE " + tableName + " SET Parent_ID=" + newParentID + ", seqNo=0, updated=SYSDATE WHERE AD_Tree_ID=" + AD_Tree_ID + " AND Node_ID=" + selectedID[i]);
+                DB.ExecuteQuery("UPDATE " + tableName + " SET Parent_ID=" + newParentID + ", seqNo=0, updated=SYSDATE WHERE VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + " AND Node_ID=" + selectedID[i]);
             }
 
             return 1;

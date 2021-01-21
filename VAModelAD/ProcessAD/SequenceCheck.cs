@@ -86,7 +86,7 @@ namespace VAdvantage.Process
             String sql = "SELECT TableName "
                 + "FROM VAF_TableView t "
                 + "WHERE IsActive='Y' AND IsView='N'"
-                + " AND NOT EXISTS (SELECT * FROM AD_Sequence s "
+                + " AND NOT EXISTS (SELECT * FROM VAF_Record_Seq s "
                 + "WHERE UPPER(s.Name)=UPPER(t.TableName) AND s.IsTableID='Y')";
             IDataReader idr = null;
             try
@@ -125,14 +125,14 @@ namespace VAdvantage.Process
             }
 
             //	Sync Table Name case
-            //jz replace s with AD_Sequence
-            sql = "UPDATE AD_Sequence "
+            //jz replace s with VAF_Record_Seq
+            sql = "UPDATE VAF_Record_Seq "
                 + "SET Name = (SELECT TableName FROM VAF_TableView t "
-                    + "WHERE t.IsView='N' AND UPPER(AD_Sequence.Name)=UPPER(t.TableName)) "
-                + "WHERE AD_Sequence.IsTableID='Y'"
+                    + "WHERE t.IsView='N' AND UPPER(VAF_Record_Seq.Name)=UPPER(t.TableName)) "
+                + "WHERE VAF_Record_Seq.IsTableID='Y'"
                 + " AND EXISTS (SELECT * FROM VAF_TableView t "
                     + "WHERE t.IsActive='Y' AND t.IsView='N'"
-                    + " AND UPPER(AD_Sequence.Name)=UPPER(t.TableName) AND AD_Sequence.Name<>t.TableName)";
+                    + " AND UPPER(VAF_Record_Seq.Name)=UPPER(t.TableName) AND VAF_Record_Seq.Name<>t.TableName)";
             int no = DataBase.DB.ExecuteQuery(sql, null, trxName);// DataBase.executeUpdate(sql, trxName);
             if (no > 0)
             {
@@ -151,7 +151,7 @@ namespace VAdvantage.Process
             }
             /** Find Duplicates 		 */
             sql = "SELECT TableName, s.Name "
-                + "FROM VAF_TableView t, AD_Sequence s "
+                + "FROM VAF_TableView t, VAF_Record_Seq s "
                 + "WHERE t.IsActive='Y' AND t.IsView='N'"
                 + " AND UPPER(s.Name)=UPPER(t.TableName) AND s.Name<>t.TableName";
             //
@@ -186,7 +186,7 @@ namespace VAdvantage.Process
         private static void CheckTableID(Ctx ctx, SvrProcess sp)
         {
             int IDRangeEnd = DataBase.DB.GetSQLValue(null,
-                "SELECT IDRangeEnd FROM AD_System");
+                "SELECT IDRangeEnd FROM VAF_System");
             if (IDRangeEnd <= 0)
             {
                 IDRangeEnd = DataBase.DB.GetSQLValue(null,
@@ -194,7 +194,7 @@ namespace VAdvantage.Process
             }
             _log.Info("IDRangeEnd = " + IDRangeEnd);
             //
-            String sql = "SELECT * FROM AD_Sequence "
+            String sql = "SELECT * FROM VAF_Record_Seq "
                 + "WHERE IsTableID='Y' "
                 + "ORDER BY Name";
             int counter = 0;

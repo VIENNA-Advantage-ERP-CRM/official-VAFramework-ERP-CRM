@@ -1113,7 +1113,7 @@ namespace VAdvantage.Model
 
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_VAF_TableView_Access.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
                 {
                     continue;
                 }
@@ -1173,7 +1173,7 @@ namespace VAdvantage.Model
             bool readOnly = false;
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_VAF_TableView_Access.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Accessing.Equals(_tableAccess[i].GetAccessTypeRule()))
                 {
                     continue;
                 }
@@ -1444,7 +1444,7 @@ namespace VAdvantage.Model
             }
             List<MTableAccess> list = new List<MTableAccess>();
 
-            string sql = "SELECT * FROM VAF_TableView_Access WHERE " +
+            string sql = "SELECT * FROM VAF_TableView_Rights WHERE " +
                          " VAF_Role_ID = " + GetVAF_Role_ID().ToString() + " AND IsActive='Y'";
 
             DataTable dt = null;
@@ -1772,7 +1772,7 @@ namespace VAdvantage.Model
             }
             list.Add(oa);
             //	Do we look for trees?
-            if (GetAD_Tree_Org_ID() == 0)
+            if (GetVAF_TreeInfo_Org_ID() == 0)
             {
                 return;
             }
@@ -1783,11 +1783,11 @@ namespace VAdvantage.Model
                 return;
             }
             //	Summary Org - Get Dependents
-            MTree tree = MTree.Get(GetCtx(), GetAD_Tree_Org_ID(), Get_TrxName());
+            MTree tree = MTree.Get(GetCtx(), GetVAF_TreeInfo_Org_ID(), Get_TrxName());
             String sql = "SELECT VAF_Client_ID, VAF_Org_ID FROM VAF_Org "
                 + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
-                + " WHERE AD_Tree_ID=" + tree.GetAD_Tree_ID() + " AND Parent_ID=" + oa.VAF_Org_ID + " AND IsActive='Y')";
+                + " WHERE VAF_TreeInfo_ID=" + tree.GetVAF_TreeInfo_ID() + " AND Parent_ID=" + oa.VAF_Org_ID + " AND IsActive='Y')";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -2567,7 +2567,7 @@ namespace VAdvantage.Model
             bool canReport = true;
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_VAF_TableView_Access.ACCESSTYPERULE_Reporting.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Reporting.Equals(_tableAccess[i].GetAccessTypeRule()))
                     continue;
                 if (_tableAccess[i].IsExclude())		//	Exclude
                 {
@@ -2617,7 +2617,7 @@ namespace VAdvantage.Model
             bool canExport = true;
             for (int i = 0; i < _tableAccess.Length; i++)
             {
-                if (!X_VAF_TableView_Access.ACCESSTYPERULE_Exporting.Equals(_tableAccess[i].GetAccessTypeRule()))
+                if (!X_VAF_TableView_Rights.ACCESSTYPERULE_Exporting.Equals(_tableAccess[i].GetAccessTypeRule()))
                 {
                     continue;
                 }

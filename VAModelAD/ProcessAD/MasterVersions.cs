@@ -517,8 +517,8 @@ namespace VAdvantage.Process
 
             log.Info("Master Version Insertion Query" + sbIns.ToString() + " :: Records Inserted ==>> " + CountIns);
 
-            // Update AD_Sequence for Version table to set max + 1 against version table
-            CountIns = DB.ExecuteQuery("UPDATE AD_Sequence SET CurrentNext = (SELECT (MAX(NVL(" + TableName + "_ID,0)) + 1) FROM " + TableName + ") WHERE LOWER(Name) = '" + TableName.Trim().ToLower() + "'", null, _trx);
+            // Update VAF_Record_Seq for Version table to set max + 1 against version table
+            CountIns = DB.ExecuteQuery("UPDATE VAF_Record_Seq SET CurrentNext = (SELECT (MAX(NVL(" + TableName + "_ID,0)) + 1) FROM " + TableName + ") WHERE LOWER(Name) = '" + TableName.Trim().ToLower() + "'", null, _trx);
 
             log.Info("Master Version Sequence Updated " + CountIns);
         }

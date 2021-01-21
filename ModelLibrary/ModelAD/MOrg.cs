@@ -212,13 +212,13 @@ namespace VAdvantage.Model
 
                     int orgTableID = MTable.Get_Table_ID("VAF_Org");
 
-                    string sql = "SELECT AD_Tree_ID FROM AD_Tree "
+                    string sql = "SELECT VAF_TreeInfo_ID FROM VAF_TreeInfo "
                       + "WHERE VAF_Client_ID=" + GetCtx().GetVAF_Client_ID() + " AND VAF_TableView_ID=" + orgTableID + " AND IsActive='Y' AND IsAllNodes='Y' "
-                      + "ORDER BY IsDefault DESC, AD_Tree_ID";
+                      + "ORDER BY IsDefault DESC, VAF_TreeInfo_ID";
 
-                    object AD_Tree_ID = DB.ExecuteScalar(sql, null, null);
+                    object VAF_TreeInfo_ID = DB.ExecuteScalar(sql, null, null);
 
-                    DB.ExecuteQuery("Update AD_TreeNode Set Parent_ID = 0 where Parent_ID=" + GetVAF_Org_ID() + " AND AD_Tree_ID=" + Util.GetValueOfInt(AD_Tree_ID));
+                    DB.ExecuteQuery("Update VAF_TreeInfoChild Set Parent_ID = 0 where Parent_ID=" + GetVAF_Org_ID() + " AND VAF_TreeInfo_ID=" + Util.GetValueOfInt(VAF_TreeInfo_ID));
 
                 }
             }

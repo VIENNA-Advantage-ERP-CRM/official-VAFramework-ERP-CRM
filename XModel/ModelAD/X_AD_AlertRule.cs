@@ -21,7 +21,7 @@ public X_VAF_AlertSetting (Context ctx, int VAF_AlertSetting_ID, Trx trxName) : 
 /** if (VAF_AlertSetting_ID == 0)
 {
 SetVAF_AlertSetting_ID (0);
-SetAD_Alert_ID (0);
+SetVAF_Alert_ID (0);
 SetFromClause (null);
 SetIsValid (true);	// Y
 SetName (null);
@@ -34,7 +34,7 @@ public X_VAF_AlertSetting (Ctx ctx, int VAF_AlertSetting_ID, Trx trxName) : base
 /** if (VAF_AlertSetting_ID == 0)
 {
 SetVAF_AlertSetting_ID (0);
-SetAD_Alert_ID (0);
+SetVAF_Alert_ID (0);
 SetFromClause (null);
 SetIsValid (true);	// Y
 SetName (null);
@@ -136,17 +136,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Alert.
-@param AD_Alert_ID Vienna Alert */
-public void SetAD_Alert_ID (int AD_Alert_ID)
+@param VAF_Alert_ID Vienna Alert */
+public void SetVAF_Alert_ID (int VAF_Alert_ID)
 {
-if (AD_Alert_ID < 1) throw new ArgumentException ("AD_Alert_ID is mandatory.");
-Set_ValueNoCheck ("AD_Alert_ID", AD_Alert_ID);
+if (VAF_Alert_ID < 1) throw new ArgumentException ("VAF_Alert_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Alert_ID", VAF_Alert_ID);
 }
 /** Get Alert.
 @return Vienna Alert */
-public int GetAD_Alert_ID() 
+public int GetVAF_Alert_ID() 
 {
-Object ii = Get_Value("AD_Alert_ID");
+Object ii = Get_Value("VAF_Alert_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

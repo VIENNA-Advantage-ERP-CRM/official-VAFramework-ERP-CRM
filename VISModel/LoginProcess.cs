@@ -733,16 +733,16 @@ namespace VAdvantage.Login
                 return;
             }
             //	Do we look for trees?
-            if (role.GetAD_Tree_Org_ID() == 0)
+            if (role.GetVAF_TreeInfo_Org_ID() == 0)
             {
                 return;
             }
             //	Summary Org - Get Dependents
-            MTree tree = MTree.Get(m_ctx, role.GetAD_Tree_Org_ID(), null);
+            MTree tree = MTree.Get(m_ctx, role.GetVAF_TreeInfo_Org_ID(), null);
             String sql = "SELECT VAF_Client_ID, VAF_Org_ID, Name, IsSummary FROM VAF_Org "
                 + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
-                + " WHERE AD_Tree_ID='" + tree.GetAD_Tree_ID() + "' AND Parent_ID='" + Summary_Org_ID + "' AND IsActive='Y') "
+                + " WHERE VAF_TreeInfo_ID='" + tree.GetVAF_TreeInfo_ID() + "' AND Parent_ID='" + Summary_Org_ID + "' AND IsActive='Y') "
                 + "ORDER BY Name";
 
             IDataReader dr = DataBase.DB.ExecuteReader(sql);
@@ -1061,7 +1061,7 @@ namespace VAdvantage.Login
         {
             //	Report Page Size Element
             m_ctx.SetContext("#REPORT_PAGE_SIZE", "500");
-            string sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE NAME = 'REPORT_PAGE_SIZE'";
+            string sql = "SELECT NAME, VALUE FROM VAF_SysConfig WHERE NAME = 'REPORT_PAGE_SIZE'";
             IDataReader dr = DataBase.DB.ExecuteReader(sql);
             while (dr.Read())
                 if (!string.IsNullOrEmpty(dr[1].ToString()))
@@ -1074,7 +1074,7 @@ namespace VAdvantage.Login
 
             //	Bulk Report Download
             m_ctx.SetContext("#BULK_REPORT_DOWNLOAD", "N");
-            sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE NAME = 'BULK_REPORT_DOWNLOAD'";
+            sql = "SELECT NAME, VALUE FROM VAF_SysConfig WHERE NAME = 'BULK_REPORT_DOWNLOAD'";
             dr = DataBase.DB.ExecuteReader(sql);
             while (dr.Read())
                 if (!string.IsNullOrEmpty(dr[1].ToString()))
@@ -1086,7 +1086,7 @@ namespace VAdvantage.Login
             dr.Close();
 
             // Set Default Value of System Config in Context
-            sql = "SELECT NAME, VALUE FROM AD_SysConfig WHERE ISACTIVE = 'Y' AND NAME NOT IN ('REPORT_PAGE_SIZE' , 'BULK_REPORT_DOWNLOAD')";
+            sql = "SELECT NAME, VALUE FROM VAF_SysConfig WHERE ISACTIVE = 'Y' AND NAME NOT IN ('REPORT_PAGE_SIZE' , 'BULK_REPORT_DOWNLOAD')";
             dr = DataBase.DB.ExecuteReader(sql);
             while (dr.Read())
                 if (!string.IsNullOrEmpty(dr[1].ToString()))

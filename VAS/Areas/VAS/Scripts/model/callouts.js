@@ -142,16 +142,16 @@
 
         var sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',"			//	1..3
             + "d.IsDocNoControlled,s.CurrentNext,s.CurrentNextSys,"     //  4..6
-            + "s.AD_Sequence_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx "              //	7..9
+            + "s.VAF_Record_Seq_ID,d.IsSOTrx, d.IsReturnTrx, d.value, d.IsBlanketTrx "              //	7..9
             + "FROM C_DocType d "
-            + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
+            + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
             + "WHERE C_DocType_ID=@param1";	//	#1
         var idr = null;
         //var param = new SqlParameter[1];
         var p = [];
 
         try {
-            var AD_Sequence_ID = 0;
+            var VAF_Record_Seq_ID = 0;
             //	Get old AD_SeqNo for comparison
             if (!newDocNo && Util.getValueOfInt(oldC_DocType_ID) != 0) {
                 p[0] = new VIS.DB.SqlParam("@param1", oldC_DocType_ID);
@@ -159,8 +159,8 @@
                 //param[0] = new SqlParameter("@param1", oldC_DocType_ID);
                 idr = VIS.DB.executeReader(sql, p);
                 if (idr.read()) {
-                    //AD_Sequence_ID = Util.getValueOfInt(idr.tables[0].rows[0].cells["currentnextsys"]);
-                    AD_Sequence_ID = Util.getValueOfInt(idr.get("currentnextsys"));
+                    //VAF_Record_Seq_ID = Util.getValueOfInt(idr.tables[0].rows[0].cells["currentnextsys"]);
+                    VAF_Record_Seq_ID = Util.getValueOfInt(idr.get("currentnextsys"));
                 }
                 idr.close();
             }
@@ -244,7 +244,7 @@
                 //	DocumentNo
                 if (idr.get("isdocnocontrolled") == "Y")			//	IsDocNoControlled
                 {
-                    if (!newDocNo && AD_Sequence_ID != Util.getValueOfInt(idr.get("ad_sequence_id")))
+                    if (!newDocNo && VAF_Record_Seq_ID != Util.getValueOfInt(idr.get("VAF_Record_Seq_id")))
                         newDocNo = true;
                     if (newDocNo)  //Temporaly Commented By Sarab
                         //if (Ini.isPropertyBool(Ini.P_VIENNASYS) && Env.getCtx().getVAF_Client_ID() < 1000000) 
@@ -11930,12 +11930,12 @@
         //var sql = "SELECT d.HasCharges,'N',d.IsDocNoControlled,"
         //    + "s.CurrentNext, d.DocBaseType "
         //    /*//jz outer join
-        //    + "FROM C_DocType d, AD_Sequence s "
+        //    + "FROM C_DocType d, VAF_Record_Seq s "
         //    + "WHERE C_DocType_ID=?"		//	1
-        //    + " AND d.DocNoSequence_ID=s.AD_Sequence_ID(+)";
+        //    + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
         //    */
         //    + "FROM C_DocType d "
-        //    + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
+        //    + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
         //    + "WHERE C_DocType_ID=" + C_DocType_ID;		//	1
 
         var paramString = C_DocType_ID.toString();
@@ -17113,9 +17113,9 @@
             return "";
         }
         var sql = "SELECT d.docBaseType, d.IsDocNoControlled, s.CurrentNext, d.IsReturnTrx "
-            + "FROM C_DocType d, AD_Sequence s "
+            + "FROM C_DocType d, VAF_Record_Seq s "
             + "WHERE C_DocType_ID=" + C_DocType_ID		//	1
-            + " AND d.DocNoSequence_ID=s.AD_Sequence_ID(+)";
+            + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)";
         var dr = null;
         try {
             ctx.setContext(windowNo, "C_DocTypeTarget_ID", C_DocType_ID);
@@ -19313,16 +19313,16 @@
 
             sql = "SELECT d.DocSubTypeSO,d.HasCharges,'N',"			//	1..3
                 + "d.IsDocNoControlled,s.CurrentNext,s.CurrentNextSys,"     //  4..6
-                + "s.AD_Sequence_ID,d.IsSOTrx, d.IsReturnTrx "              //	7..9
+                + "s.VAF_Record_Seq_ID,d.IsSOTrx, d.IsReturnTrx "              //	7..9
                 /*//jz right outer join
-                + "FROM C_DocType d, AD_Sequence s "
+                + "FROM C_DocType d, VAF_Record_Seq s "
                 + "WHERE C_DocType_ID=?"	//	#1
-                + " AND d.DocNoSequence_ID=s.AD_Sequence_ID(+)"; */
+                + " AND d.DocNoSequence_ID=s.VAF_Record_Seq_ID(+)"; */
                 + "FROM C_DocType d "
-                + "LEFT OUTER JOIN AD_Sequence s ON (d.DocNoSequence_ID=s.AD_Sequence_ID) "
+                + "LEFT OUTER JOIN VAF_Record_Seq s ON (d.DocNoSequence_ID=s.VAF_Record_Seq_ID) "
                 + "WHERE C_DocType_ID=";	//	#1
 
-            var AD_Sequence_ID = 0;
+            var VAF_Record_Seq_ID = 0;
             //DataSet ds = new DataSet();
             var ds = null;
             //	Get old AD_SeqNo for comparison
@@ -19333,7 +19333,7 @@
                 //ResultSet dr = ds.executeQuery();
                 for (var i = 0; i < ds.getTables()[0].rows.count; i++) {
                     // DataRow dr = ds.Tables[0].Rows[i];
-                    AD_Sequence_ID = Util.getValueOfInt(ds.getRows()[i].getCell("AD_Sequence_ID"));
+                    VAF_Record_Seq_ID = Util.getValueOfInt(ds.getRows()[i].getCell("VAF_Record_Seq_ID"));
                 }
             }
             else {
@@ -19399,7 +19399,7 @@
                 //	DocumentNo
                 if (dr[3].toString().equals("Y"))			//	IsDocNoControlled
                 {
-                    if (!newDocNo && AD_Sequence_ID != Util.getValueOfInt(ds.getRows()[i].getCell("AD_Sequence_ID")))
+                    if (!newDocNo && VAF_Record_Seq_ID != Util.getValueOfInt(ds.getRows()[i].getCell("VAF_Record_Seq_ID")))
                         newDocNo = true;
                     if (newDocNo)
                         try {

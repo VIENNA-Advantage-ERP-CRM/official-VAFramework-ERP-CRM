@@ -311,9 +311,9 @@ namespace VAdvantage.Model
                     + "WHERE l.VAF_Control_Ref_ID=120 AND l.VAF_CtrlRef_List_ID=t.VAF_CtrlRef_List_ID AND l.IsActive='Y' AND t.VAF_Language='" + language + "'";
 
             //  Tree IDs
-            int AD_Tree_Org_ID = 0, AD_Tree_BPartner_ID = 0, AD_Tree_Project_ID = 0,
-                AD_Tree_SalesRegion_ID = 0, AD_Tree_Product_ID = 0,
-                AD_Tree_Campaign_ID = 0, AD_Tree_Activity_ID = 0;
+            int VAF_TreeInfo_Org_ID = 0, VAF_TreeInfo_BPartner_ID = 0, VAF_TreeInfo_Project_ID = 0,
+                VAF_TreeInfo_SalesRegion_ID = 0, VAF_TreeInfo_Product_ID = 0,
+                VAF_TreeInfo_Campaign_ID = 0, VAF_TreeInfo_Activity_ID = 0;
 
             bool success = false;
             try
@@ -327,62 +327,62 @@ namespace VAdvantage.Model
                     try
                     {
                         String treeType = dr.Tables[0].Rows[i]["Value"].ToString();
-                        if (treeType.Equals(X_AD_Tree.TREETYPE_Other)
+                        if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Other)
                             || treeType.StartsWith("U"))
                             continue;
                         String name = GetName() + " " + dr.Tables[0].Rows[i]["Name"].ToString();
                         //
-                        if (treeType.Equals(X_AD_Tree.TREETYPE_Organization))
+                        if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Organization))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Org_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Org_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_BPartner))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_BPartner))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_BPartner_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_BPartner_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Project))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Project))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Project_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Project_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_SalesRegion))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_SalesRegion))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_SalesRegion_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_SalesRegion_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Product))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Product))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Product_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Product_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_ElementValue))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_ElementValue))
                         {
                             //commented by lakhwinder 
                             //do not crete Account Tree While tenant Creation
                             //tree = new MTree(this, name, treeType);
                             //success = tree.Save();
-                            //m_AD_Tree_Account_ID = tree.GetAD_Tree_ID();
+                            //m_VAF_TreeInfo_Account_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Campaign))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Campaign))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Campaign_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Campaign_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Activity))
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Activity))
                         {
                             tree = new MTree(this, name, treeType);
                             success = tree.Save();
-                            AD_Tree_Activity_ID = tree.GetAD_Tree_ID();
+                            VAF_TreeInfo_Activity_ID = tree.GetVAF_TreeInfo_ID();
                         }
-                        else if (treeType.Equals(X_AD_Tree.TREETYPE_Menu))	//	No Menu
+                        else if (treeType.Equals(X_VAF_TreeInfo.TREETYPE_Menu))	//	No Menu
                             success = true;
                         else	//	PC (Product Category), BB (BOM)
                         {
@@ -411,20 +411,20 @@ namespace VAdvantage.Model
 
             //	Create ClientInfo
             MClientInfo clientInfo = new MClientInfo(this,
-                AD_Tree_Org_ID, AD_Tree_BPartner_ID, AD_Tree_Project_ID,
-                AD_Tree_SalesRegion_ID, AD_Tree_Product_ID,
-                AD_Tree_Campaign_ID, AD_Tree_Activity_ID, Get_TrxName());
+                VAF_TreeInfo_Org_ID, VAF_TreeInfo_BPartner_ID, VAF_TreeInfo_Project_ID,
+                VAF_TreeInfo_SalesRegion_ID, VAF_TreeInfo_Product_ID,
+                VAF_TreeInfo_Campaign_ID, VAF_TreeInfo_Activity_ID, Get_TrxName());
             success = clientInfo.Save();
             return success;
         }	//	createTrees
 
         /** Client Info Setup Tree for Account	*/
-        private int m_AD_Tree_Account_ID;
+        private int m_VAF_TreeInfo_Account_ID;
 
-        public int GetSetup_AD_Tree_Account_ID()
+        public int GetSetup_VAF_TreeInfo_Account_ID()
         {
-            return m_AD_Tree_Account_ID;
-        }	//	getSetup_AD_Tree_Account_ID
+            return m_VAF_TreeInfo_Account_ID;
+        }	//	getSetup_VAF_TreeInfo_Account_ID
 
 
         /**
