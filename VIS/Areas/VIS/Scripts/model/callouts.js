@@ -14232,11 +14232,13 @@
             try {
                 this.setCalloutActive(true);
 
-                var invDate = new Date(mTab.getValue("DateInvoiced"));
-                var dueDate = new Date(mTab.getValue("DueDate"));
-                if (dueDate < invDate) {
-                    VIS.ADialog.error("DueDateLessThanInvoiceDate");
-                    mTab.setValue("DueDate","");
+                if (mTab.getValue("DateInvoiced") != null && mTab.getValue("DueDate") != null) {
+                    var invDate = new Date(mTab.getValue("DateInvoiced"));
+                    var dueDate = new Date(mTab.getValue("DueDate"));
+                    if (dueDate < invDate) {
+                        VIS.ADialog.error("DueDateLessThanInvoiceDate");
+                        mTab.setValue("DueDate", "");
+                    }
                 }
                 ctx = windowNo = mTab = mField = value = oldValue = null;
                 this.setCalloutActive(false);
